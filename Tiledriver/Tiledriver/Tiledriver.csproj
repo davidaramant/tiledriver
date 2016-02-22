@@ -45,6 +45,21 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Uwmf\Extensions.cs" />
+    <Compile Include="Uwmf\IUwmfEntry.cs" />
+    <Compile Include="Uwmf\Map.cs" />
+    <Compile Include="Uwmf\Plane.cs" />
+    <Compile Include="Uwmf\Planemap.cs" />
+    <Compile Include="Uwmf\PlanemapEntry.cs" />
+    <Compile Include="Uwmf\Sector.cs" />
+    <Compile Include="Uwmf\SectorId.cs" />
+    <Compile Include="Uwmf\Tag.cs" />
+    <Compile Include="Uwmf\Thing.cs" />
+    <Compile Include="Uwmf\Tile.cs" />
+    <Compile Include="Uwmf\TileId.cs" />
+    <Compile Include="Uwmf\Trigger.cs" />
+    <Compile Include="Uwmf\Zone.cs" />
+    <Compile Include="Uwmf\ZoneId.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
