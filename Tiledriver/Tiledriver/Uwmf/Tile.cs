@@ -4,8 +4,6 @@ namespace Tiledriver.Uwmf
 {
     public sealed class Tile : IUwmfEntry
     {
-        public TileId Id { get; set; }
-
         public string TextureNorth { get; set; }
         public string TextureSouth { get; set; }
         public string TextureWest { get; set; }

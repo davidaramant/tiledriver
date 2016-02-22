@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 
@@ -13,30 +14,31 @@ namespace Tiledriver.Uwmf
             return writer;
         }
 
-        private static StreamWriter InternalAttribute(this StreamWriter writer, string name, string value)
+        private static StreamWriter InternalAttribute(this StreamWriter writer, string name, string value, bool indent)
         {
-            writer.WriteLine($"{name} = {value};");
+            var indention = indent ? "\t" : String.Empty;
+            writer.WriteLine($"{indention}{name} = {value};");
             return writer;
         }
 
-        public static StreamWriter Attribute(this StreamWriter writer, string name, string value)
+        public static StreamWriter Attribute(this StreamWriter writer, string name, string value, bool indent = true)
         {
-            return InternalAttribute(writer, name, $"\"{value}\"");
+            return InternalAttribute(writer, name, $"\"{value}\"", indent);
         }
 
-        public static StreamWriter Attribute(this StreamWriter writer, string name, int value)
+        public static StreamWriter Attribute(this StreamWriter writer, string name, int value, bool indent = true)
         {
-            return InternalAttribute(writer, name, value.ToString(CultureInfo.InvariantCulture));
+            return InternalAttribute(writer, name, value.ToString(CultureInfo.InvariantCulture), indent);
         }
 
-        public static StreamWriter Attribute(this StreamWriter writer, string name, double value)
+        public static StreamWriter Attribute(this StreamWriter writer, string name, double value, bool indent = true)
         {
-            return InternalAttribute(writer, name, value.ToString(CultureInfo.InvariantCulture));
+            return InternalAttribute(writer, name, value.ToString(CultureInfo.InvariantCulture), indent);
         } 
 
-        public static StreamWriter Attribute(this StreamWriter writer, string name, bool value)
+        public static StreamWriter Attribute(this StreamWriter writer, string name, bool value, bool indent = true)
         {
-            return InternalAttribute(writer, name, value.ToString().ToLowerInvariant());
+            return InternalAttribute(writer, name, value.ToString().ToLowerInvariant(), indent);
         }
 
         public static StreamWriter Blocks(this StreamWriter writer, IEnumerable<IUwmfEntry> blocks)

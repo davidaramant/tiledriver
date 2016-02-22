@@ -25,11 +25,11 @@ namespace Tiledriver.Uwmf
         public StreamWriter Write(StreamWriter writer)
         {
             return writer.
-                Attribute("namespace", Namespace).
-                Attribute("tilesize", TileSize).
-                Attribute("name", Name).
-                Attribute("width", Width).
-                Attribute("height", Height).
+                Attribute("namespace", Namespace, indent: false).
+                Attribute("tilesize", TileSize, indent: false).
+                Attribute("name", Name, indent: false).
+                Attribute("width", Width, indent: false).
+                Attribute("height", Height, indent: false).
                 Blocks(Tiles).
                 Blocks(Sectors).
                 Blocks(Zones).

@@ -13,10 +13,10 @@ namespace Tiledriver.Uwmf
         {
             var tagPortion =
                 Tag != null ?
-                    $",{Tag}" :
+                    $",{(int)Tag}" :
                     String.Empty;
 
-            return ($"{{{Tile},{Sector},{Zone}{tagPortion}}}");
+            return ($"\t{{{(int)Tile},{(int)Sector},{(int)Zone}{tagPortion}}}");
         }
     }
 }
