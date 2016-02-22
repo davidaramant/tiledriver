@@ -7,13 +7,13 @@ namespace Tiledriver
     {
         static void Main(string[] args)
         {
-            using (var fs = File.OpenWrite("test.uwmf"))
+            using (var fs = File.Open("TEXTMAP.uwmf",FileMode.Create))
             using (var sw = new StreamWriter(fs))
             {
-                var emptyTile = new TileId(1);
-                var solidTile = new TileId(2);
-                var sectorId = new SectorId(1);
-                var zoneId = new ZoneId(1);
+                var emptyTile = new TileId(0);
+                var solidTile = new TileId(1);
+                var sectorId = new SectorId(0);
+                var zoneId = new ZoneId(0);
 
                 var map = new Map
                 {
@@ -62,25 +62,25 @@ namespace Tiledriver
                     {
                         Entries =
                         {
-                            new PlanemapEntry { Tile = solidTile, Sector = SectorId.NotSpecified, Zone = ZoneId.NotSpecified },
-                            new PlanemapEntry { Tile = solidTile, Sector = SectorId.NotSpecified, Zone = ZoneId.NotSpecified },
-                            new PlanemapEntry { Tile = solidTile, Sector = SectorId.NotSpecified, Zone = ZoneId.NotSpecified },
-                            new PlanemapEntry { Tile = solidTile, Sector = SectorId.NotSpecified, Zone = ZoneId.NotSpecified },
+                            new PlanemapEntry { Tile = solidTile, Sector = sectorId, Zone = ZoneId.NotSpecified },
+                            new PlanemapEntry { Tile = solidTile, Sector = sectorId, Zone = ZoneId.NotSpecified },
+                            new PlanemapEntry { Tile = solidTile, Sector = sectorId, Zone = ZoneId.NotSpecified },
+                            new PlanemapEntry { Tile = solidTile, Sector = sectorId, Zone = ZoneId.NotSpecified },
 
-                            new PlanemapEntry { Tile = solidTile, Sector = SectorId.NotSpecified, Zone = ZoneId.NotSpecified },
+                            new PlanemapEntry { Tile = solidTile, Sector = sectorId, Zone = ZoneId.NotSpecified },
                             new PlanemapEntry { Tile = emptyTile, Sector = sectorId, Zone = zoneId },
                             new PlanemapEntry { Tile = emptyTile, Sector = sectorId, Zone = zoneId },
-                            new PlanemapEntry { Tile = solidTile, Sector = SectorId.NotSpecified, Zone = ZoneId.NotSpecified },
+                            new PlanemapEntry { Tile = solidTile, Sector = sectorId, Zone = ZoneId.NotSpecified },
 
-                            new PlanemapEntry { Tile = solidTile, Sector = SectorId.NotSpecified, Zone = ZoneId.NotSpecified },
+                            new PlanemapEntry { Tile = solidTile, Sector = sectorId, Zone = ZoneId.NotSpecified },
                             new PlanemapEntry { Tile = emptyTile, Sector = sectorId, Zone = zoneId },
                             new PlanemapEntry { Tile = emptyTile, Sector = sectorId, Zone = zoneId },
-                            new PlanemapEntry { Tile = solidTile, Sector = SectorId.NotSpecified, Zone = ZoneId.NotSpecified },
+                            new PlanemapEntry { Tile = solidTile, Sector = sectorId, Zone = ZoneId.NotSpecified },
 
-                            new PlanemapEntry { Tile = solidTile, Sector = SectorId.NotSpecified, Zone = ZoneId.NotSpecified },
-                            new PlanemapEntry { Tile = solidTile, Sector = SectorId.NotSpecified, Zone = ZoneId.NotSpecified },
-                            new PlanemapEntry { Tile = solidTile, Sector = SectorId.NotSpecified, Zone = ZoneId.NotSpecified },
-                            new PlanemapEntry { Tile = solidTile, Sector = SectorId.NotSpecified, Zone = ZoneId.NotSpecified },
+                            new PlanemapEntry { Tile = solidTile, Sector = sectorId, Zone = ZoneId.NotSpecified },
+                            new PlanemapEntry { Tile = solidTile, Sector = sectorId, Zone = ZoneId.NotSpecified },
+                            new PlanemapEntry { Tile = solidTile, Sector = sectorId, Zone = ZoneId.NotSpecified },
+                            new PlanemapEntry { Tile = solidTile, Sector = sectorId, Zone = ZoneId.NotSpecified },
                         },
                     } },
                     Things =

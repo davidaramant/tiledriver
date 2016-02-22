@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Tiledriver.Uwmf
@@ -12,7 +13,7 @@ namespace Tiledriver.Uwmf
             return writer.
                 Line("planemap").
                 Line("{").
-                Blocks(Entries).
+                Line(String.Join(",\n",Entries)).
                 Line("}");
         }
     }
