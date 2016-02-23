@@ -8,6 +8,7 @@ namespace Tiledriver.Uwmf
         public double Y { get; set; }
         public double Z { get; set; }
 
+        // 0 - 359; 90 is South
         public int Angle { get; set; }
 
         public int Type { get; set; }
