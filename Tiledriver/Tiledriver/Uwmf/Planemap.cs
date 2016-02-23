@@ -8,6 +8,13 @@ namespace Tiledriver.Uwmf
     {
         public readonly List<PlanemapEntry> Entries = new List<PlanemapEntry>();
 
+        public Planemap(){}
+
+        public Planemap(IEnumerable<PlanemapEntry> entries)
+        {
+            Entries.AddRange(entries);
+        }
+
         public StreamWriter Write(StreamWriter writer)
         {
             return writer.
