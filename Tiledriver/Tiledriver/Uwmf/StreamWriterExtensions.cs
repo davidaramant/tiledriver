@@ -6,7 +6,7 @@ using System.IO;
 namespace Tiledriver.Uwmf
 {
     // TODO: Maybe all the StreamWriter stuff should use tasks instead
-    public static class Extensions
+    public static class StreamWriterExtensions
     {
         public static StreamWriter Line(this StreamWriter writer, string value)
         {
