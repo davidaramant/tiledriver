@@ -57,6 +57,7 @@
     <Compile Include="Uwmf\Tile.cs" />
     <Compile Include="Uwmf\Trigger.cs" />
     <Compile Include="Uwmf\Zone.cs" />
+    <Compile Include="WadFile.cs" />
     <Compile Include="Wolf3D\ThingId.cs" />
   </ItemGroup>
   <ItemGroup>
