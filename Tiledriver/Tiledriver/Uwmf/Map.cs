@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Tiledriver.Uwmf
 {
@@ -24,6 +26,8 @@ namespace Tiledriver.Uwmf
 
         public Stream WriteTo(Stream stream)
         {
+            CheckSemanticValidity();
+
             return stream.
                 Attribute("namespace", Namespace, indent: false).
                 Attribute("tilesize", TileSize, indent: false).
@@ -37,6 +41,18 @@ namespace Tiledriver.Uwmf
                 Blocks(Planemaps).
                 Blocks(Things).
                 Blocks(Triggers);
+        }
+
+        public void CheckSemanticValidity()
+        {
+            // TODO: Expand to check all planemaps
+            var expectedEntryCount = Width*Height;
+            var actualEntryCount = Planemaps.First().Entries.Count;
+
+            if (actualEntryCount != expectedEntryCount)
+            {
+                throw new InvalidOperationException($"Invalid number of planemap entries. Expected {expectedEntryCount} but got {actualEntryCount}.");
+            }
         }
     }
 }

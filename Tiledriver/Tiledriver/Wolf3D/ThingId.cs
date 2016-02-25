@@ -5,7 +5,7 @@
     /// </remarks>
     public enum ThingId
     {
-        Player1 = 1,
+        Player1Start = 1,
         PatrolPoint = 10,
         Guard = 11,
         Officer = 12,
