@@ -1,39 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using Tiledriver.Uwmf;
 
 namespace Tiledriver
 {
     public static class WadFile
     {
-        // HACK: HERE BE DRAGONS!
-        // This entire thing is an absolute abomination but it's good enough for now.
+        // HACK: This is very simplistic but good enough for now
         public static void Save(Map map, string path)
         {
             using (var fileStream = File.Open(path, FileMode.Create))
             {
                 WriteArray(fileStream, Encoding.ASCII.GetBytes("PWAD"));
                 WriteArray(fileStream, BitConverter.GetBytes(3));
-                // Fill in the directory offset later
+                // Fill in the directory offset later  
                 fileStream.Position += 4;
 
                 int firstEntryPosition = (int)fileStream.Position;
 
-                // This is idiotic thanks to the StreamWriter disposing the underlying stream
-                // TODO: Replace StreamWriter with something useable
-                using (var tempStream = new MemoryStream())
-                using (var streamWriter = new StreamWriter(tempStream))
-                {
-                    map.Write(streamWriter);
-                    streamWriter.Flush();
-                    tempStream.Position = 0;
-                    WriteArray(fileStream, tempStream.ToArray());
-                }
+                map.WriteTo(fileStream);
 
                 int directoryPosition = (int)fileStream.Position;
 

@@ -22,9 +22,9 @@ namespace Tiledriver.Uwmf
         public readonly List<Thing> Things = new List<Thing>();
         public readonly List<Trigger> Triggers = new List<Trigger>();
 
-        public StreamWriter Write(StreamWriter writer)
+        public Stream WriteTo(Stream stream)
         {
-            return writer.
+            return stream.
                 Attribute("namespace", Namespace, indent: false).
                 Attribute("tilesize", TileSize, indent: false).
                 Attribute("name", Name, indent: false).

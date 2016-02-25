@@ -21,9 +21,9 @@ namespace Tiledriver.Uwmf
         public bool Skill3 { get; set; }
         public bool Skill4 { get; set; }
 
-        public StreamWriter Write(StreamWriter writer)
+        public Stream WriteTo(Stream stream)
         {
-            return writer.
+            return stream.
                 Line("thing").
                 Line("{").
                 Attribute("x", X).

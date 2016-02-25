@@ -28,9 +28,9 @@ namespace Tiledriver.Uwmf
 
         public bool Secret { get; set; }
 
-        public StreamWriter Write(StreamWriter writer)
+        public Stream WriteTo(Stream stream)
         {
-            return writer.
+            return stream.
                 Line("trigger").
                 Line("{").
                 Attribute("x", X).

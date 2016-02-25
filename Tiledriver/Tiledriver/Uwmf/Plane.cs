@@ -6,9 +6,9 @@ namespace Tiledriver.Uwmf
     {
         public int Depth { get; set; }
 
-        public StreamWriter Write(StreamWriter writer)
+        public Stream WriteTo(Stream stream)
         {
-            return writer.
+            return stream.
                 Line("plane").
                 Line("{").
                 Attribute("depth", Depth).

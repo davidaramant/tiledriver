@@ -7,9 +7,9 @@ namespace Tiledriver.Uwmf
         public string TextureFloor { get; set; }
         public string TextureCeiling { get; set; }
 
-        public StreamWriter Write(StreamWriter writer)
+        public Stream WriteTo(Stream stream)
         {
-            return writer.
+            return stream.
                 Line("sector").
                 Line("{").
                 Attribute("texturefloor", TextureFloor).

@@ -4,9 +4,9 @@ namespace Tiledriver.Uwmf
 {
     public sealed class Zone : IUwmfEntry
     {
-        public StreamWriter Write(StreamWriter writer)
+        public Stream WriteTo(Stream stream)
         {
-            return writer.
+            return stream.
                 Line("zone").
                 Line("{").
                 Line("}");

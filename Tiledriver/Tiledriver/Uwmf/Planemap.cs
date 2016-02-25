@@ -15,9 +15,9 @@ namespace Tiledriver.Uwmf
             Entries.AddRange(entries);
         }
 
-        public StreamWriter Write(StreamWriter writer)
+        public Stream WriteTo(Stream stream)
         {
-            return writer.
+            return stream.
                 Line("planemap").
                 Line("{").
                 Line(String.Join(",\n",Entries)).
