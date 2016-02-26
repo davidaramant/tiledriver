@@ -26,7 +26,7 @@ var fileContents = ParseFile();
 foreach( var fieldType in fileContents.FieldTypes )
 { 
 #>
-        private readonly <#= fieldType.Type.FullName #> <#= fieldType.FieldName #>;
+        public readonly <#= fieldType.Type.FullName #> <#= fieldType.PropertyName #>;
 <# 
 }
 
@@ -75,7 +75,7 @@ foreach( var entry in fileContents.GetEntries() )
     foreach( var fieldType in fileContents.FieldTypes )
     {
 #>
-            <#= fieldType.FieldName #> = <#= fieldType.ArgumentName #>; 
+            <#= fieldType.PropertyName #> = <#= fieldType.ArgumentName #>; 
 <#
     }
 #>
