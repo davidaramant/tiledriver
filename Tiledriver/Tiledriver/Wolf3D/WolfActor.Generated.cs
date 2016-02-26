@@ -6,10 +6,10 @@
 namespace Tiledriver.Wolf3D
 {
     /// <summary>
-    /// WolfThing
+    /// WolfActor
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute( "RichEnumGenerator", "1.0.0.0" )]
-    public sealed partial class WolfThing
+    public sealed partial class WolfActor
     {
         private readonly string _instanceName;
         private readonly System.Int32 _id;
@@ -17,474 +17,474 @@ namespace Tiledriver.Wolf3D
         /// <summary>
         /// Player1Start
         /// </summary>
-        public static readonly WolfThing Player1Start = new WolfThing(
+        public static readonly WolfActor Player1Start = new WolfActor(
             instanceName: "Player1Start",
             id: 1  
         );
         /// <summary>
         /// PatrolPoint
         /// </summary>
-        public static readonly WolfThing PatrolPoint = new WolfThing(
+        public static readonly WolfActor PatrolPoint = new WolfActor(
             instanceName: "PatrolPoint",
             id: 10  
         );
         /// <summary>
         /// Guard
         /// </summary>
-        public static readonly WolfThing Guard = new WolfThing(
+        public static readonly WolfActor Guard = new WolfActor(
             instanceName: "Guard",
             id: 11  
         );
         /// <summary>
         /// Officer
         /// </summary>
-        public static readonly WolfThing Officer = new WolfThing(
+        public static readonly WolfActor Officer = new WolfActor(
             instanceName: "Officer",
             id: 12  
         );
         /// <summary>
         /// SSGuard
         /// </summary>
-        public static readonly WolfThing SSGuard = new WolfThing(
+        public static readonly WolfActor SSGuard = new WolfActor(
             instanceName: "SSGuard",
             id: 13  
         );
         /// <summary>
         /// Dog
         /// </summary>
-        public static readonly WolfThing Dog = new WolfThing(
+        public static readonly WolfActor Dog = new WolfActor(
             instanceName: "Dog",
             id: 14  
         );
         /// <summary>
         /// Mutant
         /// </summary>
-        public static readonly WolfThing Mutant = new WolfThing(
+        public static readonly WolfActor Mutant = new WolfActor(
             instanceName: "Mutant",
             id: 15  
         );
         /// <summary>
         /// Hans
         /// </summary>
-        public static readonly WolfThing Hans = new WolfThing(
+        public static readonly WolfActor Hans = new WolfActor(
             instanceName: "Hans",
             id: 16  
         );
         /// <summary>
         /// Schabbs
         /// </summary>
-        public static readonly WolfThing Schabbs = new WolfThing(
+        public static readonly WolfActor Schabbs = new WolfActor(
             instanceName: "Schabbs",
             id: 17  
         );
         /// <summary>
         /// FakeHitler
         /// </summary>
-        public static readonly WolfThing FakeHitler = new WolfThing(
+        public static readonly WolfActor FakeHitler = new WolfActor(
             instanceName: "FakeHitler",
             id: 18  
         );
         /// <summary>
         /// Hitler
         /// </summary>
-        public static readonly WolfThing Hitler = new WolfThing(
+        public static readonly WolfActor Hitler = new WolfActor(
             instanceName: "Hitler",
             id: 19  
         );
         /// <summary>
         /// Gretel
         /// </summary>
-        public static readonly WolfThing Gretel = new WolfThing(
+        public static readonly WolfActor Gretel = new WolfActor(
             instanceName: "Gretel",
             id: 20  
         );
         /// <summary>
         /// Gift
         /// </summary>
-        public static readonly WolfThing Gift = new WolfThing(
+        public static readonly WolfActor Gift = new WolfActor(
             instanceName: "Gift",
             id: 21  
         );
         /// <summary>
         /// Fatface
         /// </summary>
-        public static readonly WolfThing Fatface = new WolfThing(
+        public static readonly WolfActor Fatface = new WolfActor(
             instanceName: "Fatface",
             id: 22  
         );
         /// <summary>
         /// PacmanGhostBlinky
         /// </summary>
-        public static readonly WolfThing PacmanGhostBlinky = new WolfThing(
+        public static readonly WolfActor PacmanGhostBlinky = new WolfActor(
             instanceName: "PacmanGhostBlinky",
             id: 29  
         );
         /// <summary>
         /// PacmanGhostClyde
         /// </summary>
-        public static readonly WolfThing PacmanGhostClyde = new WolfThing(
+        public static readonly WolfActor PacmanGhostClyde = new WolfActor(
             instanceName: "PacmanGhostClyde",
             id: 30  
         );
         /// <summary>
         /// PacmanGhostPinky
         /// </summary>
-        public static readonly WolfThing PacmanGhostPinky = new WolfThing(
+        public static readonly WolfActor PacmanGhostPinky = new WolfActor(
             instanceName: "PacmanGhostPinky",
             id: 31  
         );
         /// <summary>
         /// PacmanGhostInky
         /// </summary>
-        public static readonly WolfThing PacmanGhostInky = new WolfThing(
+        public static readonly WolfActor PacmanGhostInky = new WolfActor(
             instanceName: "PacmanGhostInky",
             id: 32  
         );
         /// <summary>
         /// Puddle
         /// </summary>
-        public static readonly WolfThing Puddle = new WolfThing(
+        public static readonly WolfActor Puddle = new WolfActor(
             instanceName: "Puddle",
             id: 33  
         );
         /// <summary>
         /// GreenBarrel
         /// </summary>
-        public static readonly WolfThing GreenBarrel = new WolfThing(
+        public static readonly WolfActor GreenBarrel = new WolfActor(
             instanceName: "GreenBarrel",
             id: 34  
         );
         /// <summary>
         /// TableWithChairs
         /// </summary>
-        public static readonly WolfThing TableWithChairs = new WolfThing(
+        public static readonly WolfActor TableWithChairs = new WolfActor(
             instanceName: "TableWithChairs",
             id: 35  
         );
         /// <summary>
         /// FloorLamp
         /// </summary>
-        public static readonly WolfThing FloorLamp = new WolfThing(
+        public static readonly WolfActor FloorLamp = new WolfActor(
             instanceName: "FloorLamp",
             id: 36  
         );
         /// <summary>
         /// Chandelier
         /// </summary>
-        public static readonly WolfThing Chandelier = new WolfThing(
+        public static readonly WolfActor Chandelier = new WolfActor(
             instanceName: "Chandelier",
             id: 37  
         );
         /// <summary>
         /// HangedMan
         /// </summary>
-        public static readonly WolfThing HangedMan = new WolfThing(
+        public static readonly WolfActor HangedMan = new WolfActor(
             instanceName: "HangedMan",
             id: 38  
         );
         /// <summary>
         /// DogFood
         /// </summary>
-        public static readonly WolfThing DogFood = new WolfThing(
+        public static readonly WolfActor DogFood = new WolfActor(
             instanceName: "DogFood",
             id: 39  
         );
         /// <summary>
         /// WhitePillar
         /// </summary>
-        public static readonly WolfThing WhitePillar = new WolfThing(
+        public static readonly WolfActor WhitePillar = new WolfActor(
             instanceName: "WhitePillar",
             id: 40  
         );
         /// <summary>
         /// GreenPlant
         /// </summary>
-        public static readonly WolfThing GreenPlant = new WolfThing(
+        public static readonly WolfActor GreenPlant = new WolfActor(
             instanceName: "GreenPlant",
             id: 41  
         );
         /// <summary>
         /// SkeletonFlat
         /// </summary>
-        public static readonly WolfThing SkeletonFlat = new WolfThing(
+        public static readonly WolfActor SkeletonFlat = new WolfActor(
             instanceName: "SkeletonFlat",
             id: 42  
         );
         /// <summary>
         /// Sink
         /// </summary>
-        public static readonly WolfThing Sink = new WolfThing(
+        public static readonly WolfActor Sink = new WolfActor(
             instanceName: "Sink",
             id: 43  
         );
         /// <summary>
         /// BrownPlant
         /// </summary>
-        public static readonly WolfThing BrownPlant = new WolfThing(
+        public static readonly WolfActor BrownPlant = new WolfActor(
             instanceName: "BrownPlant",
             id: 44  
         );
         /// <summary>
         /// Vase
         /// </summary>
-        public static readonly WolfThing Vase = new WolfThing(
+        public static readonly WolfActor Vase = new WolfActor(
             instanceName: "Vase",
             id: 45  
         );
         /// <summary>
         /// Table
         /// </summary>
-        public static readonly WolfThing Table = new WolfThing(
+        public static readonly WolfActor Table = new WolfActor(
             instanceName: "Table",
             id: 46  
         );
         /// <summary>
         /// CeilingLight
         /// </summary>
-        public static readonly WolfThing CeilingLight = new WolfThing(
+        public static readonly WolfActor CeilingLight = new WolfActor(
             instanceName: "CeilingLight",
             id: 47  
         );
         /// <summary>
         /// KitchenStuff
         /// </summary>
-        public static readonly WolfThing KitchenStuff = new WolfThing(
+        public static readonly WolfActor KitchenStuff = new WolfActor(
             instanceName: "KitchenStuff",
             id: 48  
         );
         /// <summary>
         /// SuitOfArmor
         /// </summary>
-        public static readonly WolfThing SuitOfArmor = new WolfThing(
+        public static readonly WolfActor SuitOfArmor = new WolfActor(
             instanceName: "SuitOfArmor",
             id: 49  
         );
         /// <summary>
         /// EmptyCage
         /// </summary>
-        public static readonly WolfThing EmptyCage = new WolfThing(
+        public static readonly WolfActor EmptyCage = new WolfActor(
             instanceName: "EmptyCage",
             id: 50  
         );
         /// <summary>
         /// CageWithSkeleton
         /// </summary>
-        public static readonly WolfThing CageWithSkeleton = new WolfThing(
+        public static readonly WolfActor CageWithSkeleton = new WolfActor(
             instanceName: "CageWithSkeleton",
             id: 51  
         );
         /// <summary>
         /// Bones1
         /// </summary>
-        public static readonly WolfThing Bones1 = new WolfThing(
+        public static readonly WolfActor Bones1 = new WolfActor(
             instanceName: "Bones1",
             id: 52  
         );
         /// <summary>
         /// GoldKey
         /// </summary>
-        public static readonly WolfThing GoldKey = new WolfThing(
+        public static readonly WolfActor GoldKey = new WolfActor(
             instanceName: "GoldKey",
             id: 53  
         );
         /// <summary>
         /// SilverKey
         /// </summary>
-        public static readonly WolfThing SilverKey = new WolfThing(
+        public static readonly WolfActor SilverKey = new WolfActor(
             instanceName: "SilverKey",
             id: 54  
         );
         /// <summary>
         /// Bed
         /// </summary>
-        public static readonly WolfThing Bed = new WolfThing(
+        public static readonly WolfActor Bed = new WolfActor(
             instanceName: "Bed",
             id: 55  
         );
         /// <summary>
         /// Basket
         /// </summary>
-        public static readonly WolfThing Basket = new WolfThing(
+        public static readonly WolfActor Basket = new WolfActor(
             instanceName: "Basket",
             id: 56  
         );
         /// <summary>
         /// Food
         /// </summary>
-        public static readonly WolfThing Food = new WolfThing(
+        public static readonly WolfActor Food = new WolfActor(
             instanceName: "Food",
             id: 57  
         );
         /// <summary>
         /// FirstAidKit
         /// </summary>
-        public static readonly WolfThing FirstAidKit = new WolfThing(
+        public static readonly WolfActor FirstAidKit = new WolfActor(
             instanceName: "FirstAidKit",
             id: 58  
         );
         /// <summary>
         /// Clip
         /// </summary>
-        public static readonly WolfThing Clip = new WolfThing(
+        public static readonly WolfActor Clip = new WolfActor(
             instanceName: "Clip",
             id: 59  
         );
         /// <summary>
         /// MachineGun
         /// </summary>
-        public static readonly WolfThing MachineGun = new WolfThing(
+        public static readonly WolfActor MachineGun = new WolfActor(
             instanceName: "MachineGun",
             id: 60  
         );
         /// <summary>
         /// GatlingGun
         /// </summary>
-        public static readonly WolfThing GatlingGun = new WolfThing(
+        public static readonly WolfActor GatlingGun = new WolfActor(
             instanceName: "GatlingGun",
             id: 61  
         );
         /// <summary>
         /// Cross
         /// </summary>
-        public static readonly WolfThing Cross = new WolfThing(
+        public static readonly WolfActor Cross = new WolfActor(
             instanceName: "Cross",
             id: 62  
         );
         /// <summary>
         /// Chalice
         /// </summary>
-        public static readonly WolfThing Chalice = new WolfThing(
+        public static readonly WolfActor Chalice = new WolfActor(
             instanceName: "Chalice",
             id: 63  
         );
         /// <summary>
         /// ChestOfJewels
         /// </summary>
-        public static readonly WolfThing ChestOfJewels = new WolfThing(
+        public static readonly WolfActor ChestOfJewels = new WolfActor(
             instanceName: "ChestOfJewels",
             id: 64  
         );
         /// <summary>
         /// Crown
         /// </summary>
-        public static readonly WolfThing Crown = new WolfThing(
+        public static readonly WolfActor Crown = new WolfActor(
             instanceName: "Crown",
             id: 65  
         );
         /// <summary>
         /// ExtraLife
         /// </summary>
-        public static readonly WolfThing ExtraLife = new WolfThing(
+        public static readonly WolfActor ExtraLife = new WolfActor(
             instanceName: "ExtraLife",
             id: 66  
         );
         /// <summary>
         /// Blood
         /// </summary>
-        public static readonly WolfThing Blood = new WolfThing(
+        public static readonly WolfActor Blood = new WolfActor(
             instanceName: "Blood",
             id: 67  
         );
         /// <summary>
         /// Barrel
         /// </summary>
-        public static readonly WolfThing Barrel = new WolfThing(
+        public static readonly WolfActor Barrel = new WolfActor(
             instanceName: "Barrel",
             id: 68  
         );
         /// <summary>
         /// Well
         /// </summary>
-        public static readonly WolfThing Well = new WolfThing(
+        public static readonly WolfActor Well = new WolfActor(
             instanceName: "Well",
             id: 69  
         );
         /// <summary>
         /// EmptyWell
         /// </summary>
-        public static readonly WolfThing EmptyWell = new WolfThing(
+        public static readonly WolfActor EmptyWell = new WolfActor(
             instanceName: "EmptyWell",
             id: 70  
         );
         /// <summary>
         /// Gibs
         /// </summary>
-        public static readonly WolfThing Gibs = new WolfThing(
+        public static readonly WolfActor Gibs = new WolfActor(
             instanceName: "Gibs",
             id: 71  
         );
         /// <summary>
         /// Flag
         /// </summary>
-        public static readonly WolfThing Flag = new WolfThing(
+        public static readonly WolfActor Flag = new WolfActor(
             instanceName: "Flag",
             id: 72  
         );
         /// <summary>
         /// CallApogee
         /// </summary>
-        public static readonly WolfThing CallApogee = new WolfThing(
+        public static readonly WolfActor CallApogee = new WolfActor(
             instanceName: "CallApogee",
             id: 73  
         );
         /// <summary>
         /// Bones2
         /// </summary>
-        public static readonly WolfThing Bones2 = new WolfThing(
+        public static readonly WolfActor Bones2 = new WolfActor(
             instanceName: "Bones2",
             id: 74  
         );
         /// <summary>
         /// Bones3
         /// </summary>
-        public static readonly WolfThing Bones3 = new WolfThing(
+        public static readonly WolfActor Bones3 = new WolfActor(
             instanceName: "Bones3",
             id: 75  
         );
         /// <summary>
         /// Bones4
         /// </summary>
-        public static readonly WolfThing Bones4 = new WolfThing(
+        public static readonly WolfActor Bones4 = new WolfActor(
             instanceName: "Bones4",
             id: 76  
         );
         /// <summary>
         /// Pots
         /// </summary>
-        public static readonly WolfThing Pots = new WolfThing(
+        public static readonly WolfActor Pots = new WolfActor(
             instanceName: "Pots",
             id: 77  
         );
         /// <summary>
         /// Stove
         /// </summary>
-        public static readonly WolfThing Stove = new WolfThing(
+        public static readonly WolfActor Stove = new WolfActor(
             instanceName: "Stove",
             id: 78  
         );
         /// <summary>
         /// Spears
         /// </summary>
-        public static readonly WolfThing Spears = new WolfThing(
+        public static readonly WolfActor Spears = new WolfActor(
             instanceName: "Spears",
             id: 79  
         );
         /// <summary>
         /// Vines
         /// </summary>
-        public static readonly WolfThing Vines = new WolfThing(
+        public static readonly WolfActor Vines = new WolfActor(
             instanceName: "Vines",
             id: 80  
         );
         /// <summary>
         /// DeadGuard
         /// </summary>
-        public static readonly WolfThing DeadGuard = new WolfThing(
+        public static readonly WolfActor DeadGuard = new WolfActor(
             instanceName: "DeadGuard",
             id: 81  
         );
 
-        private WolfThing(
+        private WolfActor(
             string instanceName,
             System.Int32 id  
         )
@@ -507,7 +507,7 @@ namespace Tiledriver.Wolf3D
         /// <summary>
         /// Returns all the enumeration values.
         /// </summary>
-        public static System.Collections.Generic.IEnumerable<WolfThing> GetAll()
+        public static System.Collections.Generic.IEnumerable<WolfActor> GetAll()
         {
             yield return Player1Start;
             yield return PatrolPoint;

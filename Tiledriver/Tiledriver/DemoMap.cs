@@ -42,7 +42,7 @@ namespace Tiledriver
                 {
                     new Thing
                     {
-                        Type = WolfThing.Player1Start.Id,
+                        Type = WolfActor.Player1Start.Id,
                         X = 1.5,
                         Y = 1.5,
                         Skill1 = true,

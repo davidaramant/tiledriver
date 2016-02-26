@@ -1,6 +1,6 @@
 ﻿﻿<# 
     this.Namespace = "Tiledriver.Wolf3D";
-    this.ClassName = "WolfThing"; 
-    this.CsvFilePath = "WolfThing.csv";
+    this.ClassName = "WolfActor"; 
+    this.CsvFilePath = "WolfActor.csv";
 #>
 <#@ include file="..\EnumGenerator.t4" #>
