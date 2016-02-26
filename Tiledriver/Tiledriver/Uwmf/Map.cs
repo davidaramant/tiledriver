@@ -46,12 +46,28 @@ namespace Tiledriver.Uwmf
         public void CheckSemanticValidity()
         {
             // TODO: Expand to check all planemaps
-            var expectedEntryCount = Width*Height;
+            var expectedEntryCount = Width * Height;
             var actualEntryCount = Planemaps.First().Entries.Count;
 
             if (actualEntryCount != expectedEntryCount)
             {
                 throw new InvalidOperationException($"Invalid number of planemap entries. Expected {expectedEntryCount} but got {actualEntryCount}.");
+            }
+
+            CheckCollection(Planemaps.First().Entries, entry => (int)entry.Tile, Tiles.Count, "Tiles");
+            CheckCollection(Planemaps.First().Entries, entry => (int)entry.Sector, Sectors.Count, "Sectors");
+            CheckCollection(Planemaps.First().Entries, entry => (int)entry.Zone, Zones.Count, "Zones");
+        }
+
+        private static void CheckCollection(
+                    IEnumerable<PlanemapEntry> entries,
+                    Func<PlanemapEntry, int> idGrabber,
+                    int definedCount,
+                    string name)
+        {
+            if (entries.Select(idGrabber).Any(id => id >= definedCount))
+            {
+                throw new InvalidOperationException($"Invalid ids found for {name}.");
             }
         }
     }
