@@ -21,7 +21,7 @@ namespace TestRunner
                     $"Could not find {inputFile}.  " +
                     "Create this file in the output directory containing a single line with the full path to ECWolf.exe.  " +
                     "Do not quote the path.");
-            }
+            } 
 
             var ecWolfPath = File.ReadAllLines(inputFile).Single();
 

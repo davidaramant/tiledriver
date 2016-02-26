@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Tiledriver.Uwmf;
+using Tiledriver.Wolf3D;
 
 namespace Tiledriver
 {
@@ -41,7 +42,7 @@ namespace Tiledriver
                 {
                     new Thing
                     {
-                        Type = (int)Wolf3D.ThingId.Player1Start,
+                        Type = WolfThing.Player1Start.Id,
                         X = 1.5,
                         Y = 1.5,
                         Skill1 = true,

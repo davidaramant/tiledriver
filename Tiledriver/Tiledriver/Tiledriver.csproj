@@ -60,10 +60,30 @@
     <Compile Include="Uwmf\Zone.cs" />
     <Compile Include="WadFile.cs" />
     <Compile Include="Wolf3D\AllWolfTextures.cs" />
-    <Compile Include="Wolf3D\ThingId.cs" />
+    <Compile Include="Wolf3D\WolfThing.cs" />
+    <Compile Include="Wolf3D\WolfThing.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WolfThing.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Wolf3D\WolfThing.csv" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="EnumGenerator.t4">
+      <LastGenOutput>EnumGenerator1.Generated.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Wolf3D\WolfThing.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>WolfThing.Generated.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
