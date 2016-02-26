@@ -23,6 +23,14 @@ namespace Tiledriver
                         TextureEast = "GSTONEA2",
                         TextureWest = "GSTONEA2",
                     },
+                    new Tile
+                    {
+                        TextureNorth = "DOOR1_1",
+                        TextureSouth = "DOOR1_1",
+                        TextureEast = "SLOT1_1",
+                        TextureWest = "SLOT1_1",
+                        OffsetHorizontal = true,
+                    },
                 },
                 Sectors =
                 {
@@ -35,6 +43,7 @@ namespace Tiledriver
                 Zones =
                 {
                     new Zone { },
+                    new Zone { },
                 },
                 Planes = { new Plane { Depth = 64 } },
                 Planemaps = { new Planemap(CreateGeometry(width: 64, height: 64)) },
@@ -44,11 +53,41 @@ namespace Tiledriver
                     {
                         Type = WolfActor.Player1Start.Id,
                         X = 1.5,
-                        Y = 1.5,
+                        Y = 4.5,
+                        Angle = 90,
                         Skill1 = true,
                         Skill2 = true,
                         Skill3 = true,
                         Skill4 = true,
+                    },
+                    new Thing
+                    {
+                        Type = WolfActor.Guard.Id,
+                        X = 1.5,
+                        Y = 1.5,
+                        Angle = 270,
+                        Skill1 = true,
+                        Skill2 = true,
+                        Skill3 = true,
+                        Skill4 = true,
+                    }
+                },
+                Triggers =
+                {
+                    new Trigger
+                    {
+                        X = 1,
+                        Y = 3,
+                        Z = 0,
+                        Action = 1,
+                        Arg0 = 1,
+                        Arg1 = 16,
+                        Arg2 = 300,
+                        Arg3 = 0,
+                        Arg4 = 1,
+                        PlayerUse = true,
+                        Repeatable = true,
+                        MonsterUse = true,
                     },
                 }
             };
@@ -87,7 +126,23 @@ namespace Tiledriver
                 entries[height - 1, col] = solidTile;
             }
 
+            // Make a room
+            entries[1, 3] = solidTile;
+            entries[2, 3] = solidTile;
+            entries[3, 2] = solidTile;
+            entries[3, 3] = solidTile;
 
+            // Make the inside a different sound zone
+            entries[1, 1] = new PlanemapEntry(TileId.NotSpecified, 0, (ZoneId)1);
+            entries[1, 2] = new PlanemapEntry(TileId.NotSpecified, 0, (ZoneId)1);
+            entries[2, 1] = new PlanemapEntry(TileId.NotSpecified, 0, (ZoneId)1);
+            entries[2, 2] = new PlanemapEntry(TileId.NotSpecified, 0, (ZoneId)1);
+
+            //door
+            entries[3, 1] = new PlanemapEntry((TileId)1, 0, ZoneId.NotSpecified, (Tag)1);
+
+
+            // Return all the tiles in the correct order
             for (int row = 0; row < height; row++)
             {
                 for (int col = 0; col < width; col++)
