@@ -55,7 +55,12 @@ namespace Tiledriver.Generator
             var width = random.Next(5, 16);
             var height = random.Next(5, 16);
 
-            return null;
+            // TODO: Add in decoration walls
+            // TODO: Location
+            return new Room(
+                boundingBox: new Rectangle(x: 0, y: 0, width: width, height: height),
+                tiles: CreateBoxOfMapTiles(width, height, regionTheme.NormalWalls, random),
+                tagSequence: tagSequence);
         }
 
         private static MapTile[,] CreateBoxOfMapTiles(int width, int height, IEnumerable<TileTheme> wallChoices, Random random)
@@ -67,7 +72,7 @@ namespace Tiledriver.Generator
             // Top wall
             for (var col = 0; col < width; col++)
             {
-                entries[0, col] = MapTile.Textured(GetRandomTheme(wallChoices,random));
+                entries[0, col] = MapTile.Textured(GetRandomTheme(wallChoices, random));
             }
 
             for (var row = 1; row < height - 1; row++)
