@@ -161,7 +161,7 @@ namespace Tiledriver
 
             var bigRoom = new Room(
                 new Rectangle(x: 0, y: 0, width: 64, height: 64),
-                GetBox(width: 64, height: 64, theme: TileTheme.GrayStone),
+                GetBox(width: 64, height: 64, theme: TileTheme.GrayStone1),
                 tagSequence);
 
             bigRoom.AddThing(new Thing
@@ -181,7 +181,7 @@ namespace Tiledriver
 
             var littleRoom = new Room(
                 new Rectangle(x: 0, y: 0, width: 4, height: 4),
-                GetBox(4, 4, TileTheme.GrayStone),
+                GetBox(4, 4, TileTheme.GrayStone1),
                 tagSequence);
 
             littleRoom.AddThing(
@@ -201,6 +201,10 @@ namespace Tiledriver
             littleRoom.AddDoor(roomRow: 1, roomCol: 3, facingNorthSouth: false);
 
             sparseMap.AddRegion(littleRoom);
+
+            var purpleRoom = new Room(new Rectangle(20, 20, 6, 16), GetBox(6, 16, TileTheme.Purple), tagSequence);
+            purpleRoom.AddDoor(roomRow: 0, roomCol: 2, facingNorthSouth: true);
+            sparseMap.AddRegion(purpleRoom);
 
             return sparseMap.Compile();
         }

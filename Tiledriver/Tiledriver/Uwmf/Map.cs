@@ -64,6 +64,8 @@ namespace Tiledriver.Uwmf
             }
 
             // TODO: Check that none of the things are inside a wall
+
+            // TODO: Check that there is one and only one player 1 start
         }
 
         private static void CheckThatIdsAreDefined(
