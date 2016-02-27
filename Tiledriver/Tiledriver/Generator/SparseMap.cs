@@ -57,7 +57,11 @@ namespace Tiledriver.Generator
                         return new PlanemapEntry(TileId.NotSpecified, (SectorId)0, (ZoneId)indexedRegion.Item1);
 
                     case MapTileType.Textured:
-                        return new PlanemapEntry((TileId) tile.Theme.Id, (SectorId) 0, (ZoneId) indexedRegion.Item1);
+                        return new PlanemapEntry(
+                            (TileId) tile.Theme.Id, 
+                            (SectorId) 0, 
+                            (ZoneId) indexedRegion.Item1,
+                            tag: tile.Tag.HasValue ? (Tag)tile.Tag : Tag.Default);
 
                     default:
                         throw new Exception("Unknown map tile type.");

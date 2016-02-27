@@ -179,11 +179,9 @@ namespace Tiledriver
             sparseMap.AddRegion(bigRoom);
 
 
-            var littleRoomTiles = GetBox(4, 4, TileTheme.GrayStone);
-            littleRoomTiles[3,1] = MapTile.EmptyTile;
             var littleRoom = new Room(
-                new Rectangle(x:0,y:0,width:4,height:4),
-                littleRoomTiles,
+                new Rectangle(x: 0, y: 0, width: 4, height: 4),
+                GetBox(4, 4, TileTheme.GrayStone),
                 tagSequence);
 
             littleRoom.AddThing(
@@ -192,12 +190,16 @@ namespace Tiledriver
                     Type = WolfActor.Guard.Id,
                     X = 1.5,
                     Y = 1.5,
-                    Angle = 270,
+                    Angle = 90,
                     Skill1 = true,
                     Skill2 = true,
                     Skill3 = true,
                     Skill4 = true,
                 });
+
+            littleRoom.AddDoor(roomRow: 3, roomCol: 1, facingNorthSouth: true);
+            littleRoom.AddDoor(roomRow: 1, roomCol: 3, facingNorthSouth: false);
+
             sparseMap.AddRegion(littleRoom);
 
             return sparseMap.Compile();

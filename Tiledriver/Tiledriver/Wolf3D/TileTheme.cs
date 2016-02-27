@@ -43,10 +43,10 @@ namespace Tiledriver.Wolf3D
             id: 2,
             definition: new Tile
             {
-                TextureNorth = "DOOR1_2",
-                TextureSouth = "DOOR1_2",
-                TextureEast = "SLOT1_2",
-                TextureWest = "SLOT1_2",
+                TextureNorth = "SLOT1_2",
+                TextureSouth = "SLOT1_2",
+                TextureEast = "DOOR1_2",
+                TextureWest = "DOOR1_2",
                 OffsetVertical = true,
             });
 

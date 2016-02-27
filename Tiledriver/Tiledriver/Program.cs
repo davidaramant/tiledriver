@@ -9,7 +9,7 @@ namespace Tiledriver
         {
             using (var stream = File.OpenWrite("demo.uwmf"))
             {
-                DemoMap.Create().WriteTo(stream);
+                DemoMap.CreateWithSparseMap().WriteTo(stream);
             }
         }
     }
