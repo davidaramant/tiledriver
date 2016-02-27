@@ -47,6 +47,8 @@
     <Compile Include="DemoMap.cs" />
     <Compile Include="Generator\Direction.cs" />
     <Compile Include="Generator\IRegion.cs" />
+    <Compile Include="Generator\RandomGenerator.cs" />
+    <Compile Include="Generator\RegionShape.cs" />
     <Compile Include="Generator\RegionTheme.cs" />
     <Compile Include="Generator\RegionThing.cs" />
     <Compile Include="Generator\MapTile.cs" />

@@ -7,7 +7,7 @@ using Tiledriver.Wolf3D;
 
 namespace Tiledriver.Generator
 {
-    // TODO: Change how likely it is for each type of thing to be spawned
+    // TODO: Change how likely it is for each type of thing/wall to be spawned
     public sealed class RegionTheme
     {
         public readonly List<TileTheme> NormalWalls;

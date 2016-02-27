@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using Tiledriver.Generator;
 using Tiledriver.Uwmf;
 using Tiledriver.Wolf3D;
@@ -230,6 +232,64 @@ namespace Tiledriver
             }
 
             return entries;
+        }
+
+
+        public static Map CreateWithRandomRegions()
+        {
+            var tagSequence = new TagSequence();
+            var sparseMap = new SparseMap(64, 64);
+
+            var randomlyThemedRoom = new Room(
+                boundingBox: new Rectangle(0, 0, 16, 16),
+                tiles: CreateBoxOfMapTiles(16, 16, new[] { TileTheme.BlueBrickWall, TileTheme.BlueBrickSkull, TileTheme.BlueBrickSwastika }, new Random()),
+                tagSequence: tagSequence);
+            randomlyThemedRoom.AddThing(
+                new RegionThing(
+                    locationOffset: new Point(4, 4),
+                    actor: WolfActor.Player1Start,
+                    facing: Direction.NorthWest));
+
+            sparseMap.AddRegion(randomlyThemedRoom);
+
+            return sparseMap.Compile();
+        }
+
+        private static MapTile[,] CreateBoxOfMapTiles(int width, int height, IEnumerable<TileTheme> wallChoices, Random random)
+        {
+            // TODO: Probability distributions for wall themes
+
+            var entries = new MapTile[height, width];
+
+            // Top wall
+            for (var col = 0; col < width; col++)
+            {
+                entries[0, col] = MapTile.Textured(GetRandomTheme(wallChoices, random));
+            }
+
+            for (var row = 1; row < height - 1; row++)
+            {
+                entries[row, 0] = MapTile.Textured(GetRandomTheme(wallChoices, random));
+                for (var col = 1; col < width - 1; col++)
+                {
+                    entries[row, col] = MapTile.EmptyTile;
+                }
+                entries[row, width - 1] = MapTile.Textured(GetRandomTheme(wallChoices, random));
+            }
+
+            // bottom wall
+            for (var col = 0; col < width; col++)
+            {
+                entries[height - 1, col] = MapTile.Textured(GetRandomTheme(wallChoices, random));
+            }
+
+            return entries;
+        }
+
+        private static TileTheme GetRandomTheme(IEnumerable<TileTheme> options, Random random)
+        {
+            var choiceIndex = random.Next(options.Count());
+            return options.ElementAt(choiceIndex);
         }
     }
 }

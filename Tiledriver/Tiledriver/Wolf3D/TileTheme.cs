@@ -326,7 +326,7 @@ namespace Tiledriver.Wolf3D
                 TextureWest = "GLASS2",
             });
 
-        public static TileTheme BlueSkull = new TileTheme(
+        public static TileTheme BlueBrickSkull = new TileTheme(
             definition: new Tile
             {
                 TextureNorth = "BLUSKUL1",
@@ -344,7 +344,7 @@ namespace Tiledriver.Wolf3D
                 TextureWest = "GRYBRIK2",
             });
 
-        public static TileTheme BlueSwastika = new TileTheme(
+        public static TileTheme BlueBrickSwastika = new TileTheme(
             definition: new Tile
             {
                 TextureNorth = "BLUSWAS1",
@@ -380,7 +380,7 @@ namespace Tiledriver.Wolf3D
                 TextureWest = "GRYCRAK2",
             });
 
-        public static TileTheme BlueWall = new TileTheme(
+        public static TileTheme BlueBrickWall = new TileTheme(
             definition: new Tile
             {
                 TextureNorth = "BLUWALL1",
