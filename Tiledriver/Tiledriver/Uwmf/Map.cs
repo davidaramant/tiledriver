@@ -51,12 +51,19 @@ namespace Tiledriver.Uwmf
 
             if (actualEntryCount != expectedEntryCount)
             {
-                throw new InvalidOperationException($"Invalid number of planemap entries. Expected {expectedEntryCount} but got {actualEntryCount}.");
+                throw new MapConstructionException($"Invalid number of planemap entries. Expected {expectedEntryCount} but got {actualEntryCount}.");
             }
 
             CheckCollection(Planemaps.First().Entries, entry => (int)entry.Tile, Tiles.Count, "Tiles");
             CheckCollection(Planemaps.First().Entries, entry => (int)entry.Sector, Sectors.Count, "Sectors");
             CheckCollection(Planemaps.First().Entries, entry => (int)entry.Zone, Zones.Count, "Zones");
+
+            if (Things.Any(t => t.X < 0 || t.X >= Width || t.Y < 0 || t.Y >= Height))
+            {
+                throw new MapConstructionException("A Thing was placed outside the map bounds.");
+            }
+
+            // TODO: Check that none of the things are inside a wall
         }
 
         private static void CheckCollection(
@@ -67,7 +74,7 @@ namespace Tiledriver.Uwmf
         {
             if (entries.Select(idGrabber).Any(id => id >= definedCount))
             {
-                throw new InvalidOperationException($"Invalid ids found for {name}.");
+                throw new MapConstructionException($"Invalid ids found for {name}.");
             }
         }
     }

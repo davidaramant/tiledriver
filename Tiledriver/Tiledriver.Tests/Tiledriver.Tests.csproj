@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A32B1E60-62EE-4EF9-892B-1B8A3BB2396C}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{1C7E8F81-4AB2-470B-8646-EB09DF4130B2}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Tiledriver</RootNamespace>
-    <AssemblyName>Tiledriver</AssemblyName>
+    <RootNamespace>Tiledriver.Tests</RootNamespace>
+    <AssemblyName>Tiledriver.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -33,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,48 +45,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DemoMap.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Uwmf\MapConstructionException.cs" />
-    <Compile Include="Uwmf\StreamExtensions.cs" />
-    <Compile Include="Uwmf\IdWrappers.cs" />
-    <Compile Include="Uwmf\IUwmfEntry.cs" />
-    <Compile Include="Uwmf\Map.cs" />
-    <Compile Include="Uwmf\Plane.cs" />
-    <Compile Include="Uwmf\Planemap.cs" />
-    <Compile Include="Uwmf\PlanemapEntry.cs" />
-    <Compile Include="Uwmf\Sector.cs" />
-    <Compile Include="Uwmf\Thing.cs" />
-    <Compile Include="Uwmf\Tile.cs" />
-    <Compile Include="Uwmf\Trigger.cs" />
-    <Compile Include="Uwmf\Zone.cs" />
-    <Compile Include="WadFile.cs" />
-    <Compile Include="Wolf3D\AllWolfTextures.cs" />
-    <Compile Include="Wolf3D\WolfActor.cs" />
-    <Compile Include="Wolf3D\WolfActor.Generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>WolfActor.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Uwmf\MapValidityCheckingTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="Wolf3D\WolfActor.csv" />
+    <ProjectReference Include="..\Tiledriver\Tiledriver.csproj">
+      <Project>{a32b1e60-62ee-4ef9-892b-1b8a3bb2396c}</Project>
+      <Name>Tiledriver</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="EnumGenerator.t4">
-      <LastGenOutput>EnumGenerator1.Generated.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Wolf3D\WolfActor.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>WolfActor.Generated.cs</LastGenOutput>
-    </Content>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
