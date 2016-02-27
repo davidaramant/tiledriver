@@ -164,17 +164,10 @@ namespace Tiledriver
                 GetBox(width: 64, height: 64, theme: TileTheme.GrayStone1),
                 tagSequence);
 
-            bigRoom.AddThing(new Thing
-            {
-                Type = WolfActor.Player1Start.Id,
-                X = 1.5,
-                Y = 4.5,
-                Angle = 90,
-                Skill1 = true,
-                Skill2 = true,
-                Skill3 = true,
-                Skill4 = true,
-            });
+            bigRoom.AddThing(new RegionThing(
+                locationOffset: new Point(1, 4),
+                actor: WolfActor.Player1Start,
+                facing: Direction.North));
 
             sparseMap.AddRegion(bigRoom);
 
@@ -184,18 +177,11 @@ namespace Tiledriver
                 GetBox(4, 4, TileTheme.GrayStone1),
                 tagSequence);
 
-            littleRoom.AddThing(
-                new Thing
-                {
-                    Type = WolfActor.Guard.Id,
-                    X = 1.5,
-                    Y = 1.5,
-                    Angle = 90,
-                    Skill1 = true,
-                    Skill2 = true,
-                    Skill3 = true,
-                    Skill4 = true,
-                });
+
+            littleRoom.AddThing(new RegionThing(
+                locationOffset: new Point(1, 1),
+                actor: WolfActor.Guard,
+                facing: Direction.NorthWest));
 
             littleRoom.AddDoor(roomRow: 3, roomCol: 1, facingNorthSouth: true);
             littleRoom.AddDoor(roomRow: 1, roomCol: 3, facingNorthSouth: false);
@@ -204,6 +190,12 @@ namespace Tiledriver
 
             var purpleRoom = new Room(new Rectangle(20, 20, 6, 16), GetBox(6, 16, TileTheme.Purple), tagSequence);
             purpleRoom.AddDoor(roomRow: 0, roomCol: 2, facingNorthSouth: true);
+
+            purpleRoom.AddThing(new RegionThing(
+                locationOffset: new Point(2, 4),
+                actor: WolfActor.SSGuard,
+                facing: Direction.North));
+
             sparseMap.AddRegion(purpleRoom);
 
             return sparseMap.Compile();

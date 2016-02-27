@@ -12,8 +12,7 @@ namespace Tiledriver.Generator
     public sealed class Room : IRegion
     {
         private readonly TagSequence _tagSequence;
-        private readonly List<Thing> _things = new List<Thing>();
-
+        private readonly List<RegionThing> _things = new List<RegionThing>();
 
         // Row-major [row,col]
         private readonly MapTile[,] _tiles;
@@ -52,36 +51,43 @@ namespace Tiledriver.Generator
 
         public Rectangle BoundingBox { get; }
 
-        public void AddThing(Thing thing)
+        public void AddThing(RegionThing thing)
         {
             _things.Add(thing);
         }
 
         public IEnumerable<Thing> GetThings()
         {
-            return _things;
+            return _things.Select(t => new Thing
+            {
+                Type = t.Actor.Id,
+                X = BoundingBox.Left + t.LocationOffset.X + 0.5,
+                Y = BoundingBox.Top + t.LocationOffset.Y + 0.5,
+                Angle = (int)t.Facing,
+                Skill1 = true,
+                Skill2 = true,
+                Skill3 = true,
+                Skill4 = true,
+            });
         }
 
         public IEnumerable<Trigger> GetTriggers()
         {
-            foreach (var locatedDoor in _doors)
+            return _doors.Select(locatedDoor => new Trigger
             {
-                yield return new Trigger
-                {
-                    X = BoundingBox.Left + locatedDoor.Key.X,
-                    Y = BoundingBox.Top + locatedDoor.Key.Y,
-                    Z = 0,
-                    Action = 1, // Door action
-                    Arg0 = locatedDoor.Value.Tag, // Tag
-                    Arg1 = 16, // Speed
-                    Arg2 = 300, // Delay
-                    Arg3 = 0, // Lock
-                    Arg4 = locatedDoor.Value.FacingNorthSouth ? 1 : 0, 
-                    PlayerUse = true,
-                    Repeatable = true,
-                    MonsterUse = true,
-                };
-            }
+                X = BoundingBox.Left + locatedDoor.Key.X,
+                Y = BoundingBox.Top + locatedDoor.Key.Y,
+                Z = 0,
+                Action = 1, // Door action
+                Arg0 = locatedDoor.Value.Tag, // Tag
+                Arg1 = 16, // Speed
+                Arg2 = 300, // Delay
+                Arg3 = 0, // Lock
+                Arg4 = locatedDoor.Value.FacingNorthSouth ? 1 : 0, 
+                PlayerUse = true,
+                Repeatable = true,
+                MonsterUse = true,
+            });
         }
 
         public void AddDoor(int roomRow, int roomCol, bool facingNorthSouth)
