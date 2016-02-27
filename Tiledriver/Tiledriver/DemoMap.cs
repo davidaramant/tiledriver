@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Tiledriver.Generator;
 using Tiledriver.Uwmf;
 using Tiledriver.Wolf3D;
 
@@ -80,7 +81,7 @@ namespace Tiledriver
                         Y = 3,
                         Z = 0,
                         Action = 1,
-                        Arg0 = 1,
+                        Arg0 = 1, // Tag
                         Arg1 = 16, // Speed
                         Arg2 = 300, // Delay
                         Arg3 = 0, // Lock
@@ -150,6 +151,15 @@ namespace Tiledriver
                     yield return entries[row, col];
                 }
             }
+        }
+
+        public static Map CreateWithSparseMap()
+        {
+            var sparseMap = new SparseMap(64,64);
+
+
+
+            return sparseMap.Compile();
         }
     }
 }
