@@ -33,10 +33,35 @@ namespace Tiledriver.Wolf3D
                 TextureWest = "GSTONEA2",
             });
 
+        public static PrefabTile DoorFacingNorthSouth = new PrefabTile(
+            id: 1,
+            definition: new Tile
+            {
+                TextureNorth = "DOOR1_1",
+                TextureSouth = "DOOR1_1",
+                TextureEast = "SLOT1_1",
+                TextureWest = "SLOT1_1",
+                OffsetHorizontal = true,
+            });
+
+        public static PrefabTile DoorFacingEastWest = new PrefabTile(
+            id: 2,
+            definition: new Tile
+            {
+                TextureNorth = "DOOR1_2",
+                TextureSouth = "DOOR1_2",
+                TextureEast = "SLOT1_2",
+                TextureWest = "SLOT1_2",
+                OffsetVertical = true,
+            });
+
+
         public static IEnumerable<PrefabTile> GetAll()
         {
             // The Empty tile is a special case and should not be returned.
             yield return GrayStone;
+            yield return DoorFacingNorthSouth;
+            yield return DoorFacingEastWest;
         }
     }
 }

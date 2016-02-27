@@ -156,13 +156,15 @@ namespace Tiledriver
 
         public static Map CreateWithSparseMap()
         {
+            var tagSequence = new TagSequence();
             var sparseMap = new SparseMap(64, 64);
 
-            var room = new Room(
+            var bigRoom = new Room(
                 new Rectangle(x: 0, y: 0, width: 64, height: 64),
-                GetBox(width: 64, height: 64, wall: PrefabTile.GrayStone));
+                GetBox(width: 64, height: 64, wall: PrefabTile.GrayStone),
+                tagSequence);
 
-            room.AddThing(new Thing
+            bigRoom.AddThing(new Thing
             {
                 Type = WolfActor.Player1Start.Id,
                 X = 1.5,
@@ -174,7 +176,29 @@ namespace Tiledriver
                 Skill4 = true,
             });
 
-            sparseMap.AddRegion(room);
+            sparseMap.AddRegion(bigRoom);
+
+
+            var littleRoomTiles = GetBox(4, 4, PrefabTile.GrayStone);
+            littleRoomTiles[3,1] = PrefabTile.Empty;
+            var littleRoom = new Room(
+                new Rectangle(x:0,y:0,width:4,height:4),
+                littleRoomTiles,
+                tagSequence);
+
+            littleRoom.AddThing(
+                new Thing
+                {
+                    Type = WolfActor.Guard.Id,
+                    X = 1.5,
+                    Y = 1.5,
+                    Angle = 270,
+                    Skill1 = true,
+                    Skill2 = true,
+                    Skill3 = true,
+                    Skill4 = true,
+                });
+            sparseMap.AddRegion(littleRoom);
 
             return sparseMap.Compile();
         }
