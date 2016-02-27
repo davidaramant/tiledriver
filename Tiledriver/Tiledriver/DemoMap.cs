@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 using Tiledriver.Generator;
 using Tiledriver.Uwmf;
 using Tiledriver.Wolf3D;
@@ -155,11 +156,56 @@ namespace Tiledriver
 
         public static Map CreateWithSparseMap()
         {
-            var sparseMap = new SparseMap(64,64);
+            var sparseMap = new SparseMap(64, 64);
 
+            var room = new Room(
+                new Rectangle(x: 0, y: 0, width: 64, height: 64),
+                GetBox(width: 64, height: 64, wall: PrefabTile.GrayStone));
 
+            room.AddThing(new Thing
+            {
+                Type = WolfActor.Player1Start.Id,
+                X = 1.5,
+                Y = 4.5,
+                Angle = 90,
+                Skill1 = true,
+                Skill2 = true,
+                Skill3 = true,
+                Skill4 = true,
+            });
+
+            sparseMap.AddRegion(room);
 
             return sparseMap.Compile();
+        }
+
+        private static PrefabTile[,] GetBox(int width, int height, PrefabTile wall)
+        {
+            var entries = new PrefabTile[height, width];
+
+            // Top wall
+            for (var col = 0; col < width; col++)
+            {
+                entries[0, col] = wall;
+            }
+
+            for (var row = 1; row < height - 1; row++)
+            {
+                entries[row, 0] = wall;
+                for (var col = 1; col < width - 1; col++)
+                {
+                    entries[row, col] = PrefabTile.Empty;
+                }
+                entries[row, width - 1] = wall;
+            }
+
+            // bottom wall
+            for (var col = 0; col < width; col++)
+            {
+                entries[height - 1, col] = wall;
+            }
+
+            return entries;
         }
     }
 }

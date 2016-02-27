@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Tiledriver.Uwmf;
+using Tiledriver.Wolf3D;
 
 namespace Tiledriver.Generator
 {
@@ -16,6 +18,6 @@ namespace Tiledriver.Generator
 
         IEnumerable<Trigger> GetTriggers();
 
-        PlanemapEntry GetForPosition(int row, int col);
+        PrefabTile GetTileAtPosition(int mapRow, int mapCol);
     }
 }

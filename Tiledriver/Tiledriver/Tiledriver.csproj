@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="DemoMap.cs" />
     <Compile Include="Generator\IRegion.cs" />
+    <Compile Include="Generator\Room.cs" />
     <Compile Include="Generator\SparseMap.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
