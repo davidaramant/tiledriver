@@ -81,10 +81,10 @@ namespace Tiledriver
                         Z = 0,
                         Action = 1,
                         Arg0 = 1,
-                        Arg1 = 16,
-                        Arg2 = 300,
-                        Arg3 = 0,
-                        Arg4 = 1,
+                        Arg1 = 16, // Speed
+                        Arg2 = 300, // Delay
+                        Arg3 = 0, // Lock
+                        Arg4 = 1, // 1 for doors facing North/South, 0 for doors facing East/West
                         PlayerUse = true,
                         Repeatable = true,
                         MonsterUse = true,

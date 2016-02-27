@@ -7,6 +7,10 @@ namespace Tiledriver
     {
         static void Main(string[] args)
         {
+            using (var stream = File.OpenWrite("demo.uwmf"))
+            {
+                DemoMap.Create().WriteTo(stream);
+            }
         }
     }
 }
