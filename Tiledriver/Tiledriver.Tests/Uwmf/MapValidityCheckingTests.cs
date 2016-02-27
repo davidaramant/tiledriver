@@ -12,16 +12,29 @@ namespace Tiledriver.Tests.Uwmf
     public sealed class MapValidityCheckingTests
     {
         [Test]
+        public void ShouldNotThrowWithValidMap()
+        {
+            var map = DemoMap.Create();
+            Assert.DoesNotThrow(map.CheckSemanticValidity);
+        }
+
+        [Test]
         public void ShouldThrowIfThereAreTooFewPlanemapEntries()
         {
-            var map = new Map
-            {
-                Width = 4,
-                Height = 4,
-                Planes = { new Plane { Depth = 64 } },
-                Planemaps = { new Planemap(new[] { new PlanemapEntry(TileId.NotSpecified, SectorId.NotSpecified, ZoneId.NotSpecified), }) }
-            };
-            Assert.Throws<MapConstructionException>(() => map.WriteTo(null));
+            var map = DemoMap.Create();
+            map.Planemaps.First().Entries.RemoveAt(0);
+            Assert.Throws<MapConstructionException>(map.CheckSemanticValidity);
+        }
+
+        [Test]
+        public void ShouldThrowIfThereAreTooManyPlanemapEntries()
+        {
+            var map = DemoMap.Create();
+
+            var entries = map.Planemaps.First().Entries;
+
+            entries.Add(entries.First());
+            Assert.Throws<MapConstructionException>(map.CheckSemanticValidity);
         }
     }
 }
