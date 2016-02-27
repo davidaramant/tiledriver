@@ -54,9 +54,9 @@ namespace Tiledriver.Uwmf
                 throw new MapConstructionException($"Invalid number of planemap entries. Expected {expectedEntryCount} but got {actualEntryCount}.");
             }
 
-            CheckCollection(Planemaps.First().Entries, entry => (int)entry.Tile, Tiles.Count, "Tiles");
-            CheckCollection(Planemaps.First().Entries, entry => (int)entry.Sector, Sectors.Count, "Sectors");
-            CheckCollection(Planemaps.First().Entries, entry => (int)entry.Zone, Zones.Count, "Zones");
+            CheckThatIdsAreDefined(Planemaps.First().Entries, entry => (int)entry.Tile, Tiles.Count, "Tiles");
+            CheckThatIdsAreDefined(Planemaps.First().Entries, entry => (int)entry.Sector, Sectors.Count, "Sectors");
+            CheckThatIdsAreDefined(Planemaps.First().Entries, entry => (int)entry.Zone, Zones.Count, "Zones");
 
             if (Things.Any(t => t.X < 0 || t.X >= Width || t.Y < 0 || t.Y >= Height))
             {
@@ -66,7 +66,7 @@ namespace Tiledriver.Uwmf
             // TODO: Check that none of the things are inside a wall
         }
 
-        private static void CheckCollection(
+        private static void CheckThatIdsAreDefined(
                     IEnumerable<PlanemapEntry> entries,
                     Func<PlanemapEntry, int> idGrabber,
                     int definedCount,
