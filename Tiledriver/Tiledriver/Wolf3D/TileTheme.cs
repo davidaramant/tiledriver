@@ -7,23 +7,18 @@ using Tiledriver.Uwmf;
 
 namespace Tiledriver.Wolf3D
 {
-    // TODO: This should be renamed I guess
-    public sealed class PrefabTile
+    public sealed class TileTheme
     {
         public TileId Id { get; }
         public Tile Definition { get; }
 
-        private PrefabTile(int id, Tile definition)
+        private TileTheme(int id, Tile definition)
         {
             Id = (TileId)id;
             Definition = definition;
         }
 
-        public static PrefabTile NotSpecified = new PrefabTile(id: int.MinValue, definition: null);
-
-        public static PrefabTile Empty = new PrefabTile(id: -1, definition: null);
-
-        public static PrefabTile GrayStone = new PrefabTile(
+        public static TileTheme GrayStone = new TileTheme(
             id: 0,
             definition: new Tile
             {
@@ -33,7 +28,7 @@ namespace Tiledriver.Wolf3D
                 TextureWest = "GSTONEA2",
             });
 
-        public static PrefabTile DoorFacingNorthSouth = new PrefabTile(
+        public static TileTheme DoorFacingNorthSouth = new TileTheme(
             id: 1,
             definition: new Tile
             {
@@ -44,7 +39,7 @@ namespace Tiledriver.Wolf3D
                 OffsetHorizontal = true,
             });
 
-        public static PrefabTile DoorFacingEastWest = new PrefabTile(
+        public static TileTheme DoorFacingEastWest = new TileTheme(
             id: 2,
             definition: new Tile
             {
@@ -56,7 +51,7 @@ namespace Tiledriver.Wolf3D
             });
 
 
-        public static IEnumerable<PrefabTile> GetAll()
+        public static IEnumerable<TileTheme> GetAll()
         {
             // The Empty tile is a special case and should not be returned.
             yield return GrayStone;

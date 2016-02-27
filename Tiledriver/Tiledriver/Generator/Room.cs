@@ -16,7 +16,7 @@ namespace Tiledriver.Generator
 
 
         // Row-major [row,col]
-        private readonly PrefabTile[,] _tiles;
+        private readonly MapTile[,] _tiles;
         private readonly Dictionary<Point, Door> _doors = new Dictionary<Point, Door>();
 
         private struct Door
@@ -38,7 +38,7 @@ namespace Tiledriver.Generator
         /// <param name="tiles">The tiles in row-major order [row,col].</param>
         /// <param name="tagSequence">The tag sequence.</param>
         /// <exception cref="System.ArgumentOutOfRangeException">The size of the tiles array was wrong.</exception>
-        public Room(Rectangle boundingBox, PrefabTile[,] tiles, TagSequence tagSequence)
+        public Room(Rectangle boundingBox, MapTile[,] tiles, TagSequence tagSequence)
         {
             BoundingBox = boundingBox;
             if (tiles.GetLength(0) != boundingBox.Height ||
@@ -90,12 +90,14 @@ namespace Tiledriver.Generator
                 new Door(facingNorthSouth:facingNorthSouth,tag:_tagSequence.GetNext()));
         }
 
-        public PrefabTile GetTileAtPosition(int mapRow, int mapCol)
+        public MapTile GetTileAtPosition(int mapRow, int mapCol)
         {
             var roomPosition = new Point(x: mapCol - BoundingBox.Left, y: mapRow - BoundingBox.Top);
             if (_doors.ContainsKey(roomPosition))
             {
-                return _doors[roomPosition].FacingNorthSouth ? PrefabTile.DoorFacingNorthSouth : PrefabTile.DoorFacingEastWest;
+                return MapTile.Textured(
+                    _doors[roomPosition].FacingNorthSouth ? TileTheme.DoorFacingNorthSouth : TileTheme.DoorFacingEastWest,
+                    tag:_doors[roomPosition].Tag );
             }
 
             return _tiles[roomPosition.Y, roomPosition.X];

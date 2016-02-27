@@ -18,6 +18,6 @@ namespace Tiledriver.Generator
 
         IEnumerable<Trigger> GetTriggers();
 
-        PrefabTile GetTileAtPosition(int mapRow, int mapCol);
+        MapTile GetTileAtPosition(int mapRow, int mapCol);
     }
 }

@@ -46,10 +46,23 @@ namespace Tiledriver.Generator
             foreach (var indexedRegion in indexedRegionsForPosition.Reverse())
             {
                 var tile = indexedRegion.Item2.GetTileAtPosition(row, col);
-                if (tile != PrefabTile.NotSpecified)
+
+                switch (tile.Type)
                 {
-                    return new PlanemapEntry(tile.Id, (SectorId)0, (ZoneId)indexedRegion.Item1);
+                    case MapTileType.Null:
+                        // Do nothing
+                        break;
+
+                    case MapTileType.EmptySpace:
+                        return new PlanemapEntry(TileId.NotSpecified, (SectorId)0, (ZoneId)indexedRegion.Item1);
+
+                    case MapTileType.Textured:
+                        return new PlanemapEntry((TileId) tile.Theme.Id, (SectorId) 0, (ZoneId) indexedRegion.Item1);
+
+                    default:
+                        throw new Exception("Unknown map tile type.");
                 }
+
             }
 
             return fallbackEntry;
@@ -91,7 +104,7 @@ namespace Tiledriver.Generator
                 },
                 Planes = { new Plane { Depth = 64 } },
             };
-            map.Tiles.AddRange(PrefabTile.GetAll().OrderBy(t => t.Id).Select(t => t.Definition));
+            map.Tiles.AddRange(TileTheme.GetAll().OrderBy(t => t.Id).Select(t => t.Definition));
             map.Zones.AddRange(Enumerable.Repeat(new Zone(), _regions.Count));
             map.Planemaps.Add(new Planemap(GetEntries()));
             map.Things.AddRange(_regions.SelectMany(r => r.GetThings()));

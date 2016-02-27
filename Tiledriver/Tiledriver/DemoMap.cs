@@ -161,7 +161,7 @@ namespace Tiledriver
 
             var bigRoom = new Room(
                 new Rectangle(x: 0, y: 0, width: 64, height: 64),
-                GetBox(width: 64, height: 64, wall: PrefabTile.GrayStone),
+                GetBox(width: 64, height: 64, theme: TileTheme.GrayStone),
                 tagSequence);
 
             bigRoom.AddThing(new Thing
@@ -179,8 +179,8 @@ namespace Tiledriver
             sparseMap.AddRegion(bigRoom);
 
 
-            var littleRoomTiles = GetBox(4, 4, PrefabTile.GrayStone);
-            littleRoomTiles[3,1] = PrefabTile.Empty;
+            var littleRoomTiles = GetBox(4, 4, TileTheme.GrayStone);
+            littleRoomTiles[3,1] = MapTile.EmptyTile;
             var littleRoom = new Room(
                 new Rectangle(x:0,y:0,width:4,height:4),
                 littleRoomTiles,
@@ -203,30 +203,32 @@ namespace Tiledriver
             return sparseMap.Compile();
         }
 
-        private static PrefabTile[,] GetBox(int width, int height, PrefabTile wall)
+        private static MapTile[,] GetBox(int width, int height, TileTheme theme)
         {
-            var entries = new PrefabTile[height, width];
+            var entries = new MapTile[height, width];
+
+            var wallTile = MapTile.Textured(theme);
 
             // Top wall
             for (var col = 0; col < width; col++)
             {
-                entries[0, col] = wall;
+                entries[0, col] = wallTile;
             }
 
             for (var row = 1; row < height - 1; row++)
             {
-                entries[row, 0] = wall;
+                entries[row, 0] = wallTile;
                 for (var col = 1; col < width - 1; col++)
                 {
-                    entries[row, col] = PrefabTile.Empty;
+                    entries[row, col] = MapTile.EmptyTile;
                 }
-                entries[row, width - 1] = wall;
+                entries[row, width - 1] = wallTile;
             }
 
             // bottom wall
             for (var col = 0; col < width; col++)
             {
-                entries[height - 1, col] = wall;
+                entries[height - 1, col] = wallTile;
             }
 
             return entries;

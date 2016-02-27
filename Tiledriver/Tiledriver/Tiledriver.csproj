@@ -67,7 +67,7 @@
     <Compile Include="Uwmf\Zone.cs" />
     <Compile Include="WadFile.cs" />
     <Compile Include="Wolf3D\AllWolfTextures.cs" />
-    <Compile Include="Wolf3D\PrefabTile.cs" />
+    <Compile Include="Wolf3D\TileTheme.cs" />
     <Compile Include="Wolf3D\WolfActor.cs" />
     <Compile Include="Wolf3D\WolfActor.Generated.cs">
       <AutoGen>True</AutoGen>
