@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Drawing;
 
 namespace Tiledriver.Generator.SimpleGeometry
@@ -12,6 +13,7 @@ namespace Tiledriver.Generator.SimpleGeometry
     /// <remarks>
     /// The meaning of Room1/Room2 depend on their order and the type of connection.
     /// </remarks>
+    [DebuggerDisplay("Axis: {Axis}, Location: {Location}, Room1: {Room1}, Room2: {Room2}")]
     public sealed class RoomConnection
     {
         public RoomNode Room1 { get; }

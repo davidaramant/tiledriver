@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 
 namespace Tiledriver.Generator.SimpleGeometry
@@ -10,6 +11,7 @@ namespace Tiledriver.Generator.SimpleGeometry
         Hallway,
     }
 
+    [DebuggerDisplay("Bounds: {Bounds}, Type: {Type}")]
     public sealed class RoomNode
     {
         public Rectangle Bounds { get; }
@@ -26,16 +28,16 @@ namespace Tiledriver.Generator.SimpleGeometry
             switch (direction)
             {
                 case Direction.East:
-                    return new Point(x: Bounds.Right, y: random.Next(Bounds.Top, Bounds.Bottom + 1));
+                    return new Point(x: Bounds.RightEdge(), y: random.Next(Bounds.TopEdge(), Bounds.BottomEdge() + 1));
 
                 case Direction.North:
-                    return new Point(x: random.Next(Bounds.Left, Bounds.Right + 1), y: Bounds.Top);
+                    return new Point(x: random.Next(Bounds.LeftEdge(), Bounds.RightEdge() + 1), y: Bounds.TopEdge());
 
                 case Direction.West:
-                    return new Point(x: Bounds.Left, y: random.Next(Bounds.Top, Bounds.Bottom + 1));
+                    return new Point(x: Bounds.LeftEdge(), y: random.Next(Bounds.TopEdge(), Bounds.BottomEdge() + 1));
 
                 case Direction.South:
-                    return new Point(x: random.Next(Bounds.Left, Bounds.Right + 1), y: Bounds.Bottom);
+                    return new Point(x: random.Next(Bounds.LeftEdge(), Bounds.RightEdge() + 1), y: Bounds.BottomEdge());
 
                 default:
                     throw new InvalidOperationException("Can't handle that direction.");

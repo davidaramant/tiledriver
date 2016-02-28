@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Tiledriver.Generator;
+using Tiledriver.Generator.SimpleGeometry;
 using Tiledriver.Uwmf;
 using Tiledriver.Wolf3D;
 
@@ -313,6 +314,38 @@ namespace Tiledriver
         {
             var choiceIndex = random.Next(options.Count());
             return options.ElementAt(choiceIndex);
+        }
+
+
+        public static Map CreateRandomWithSparseMap()
+        {
+            Random random = new Random(0);
+            var tagSequence = new TagSequence();
+            var sparseMap = new SparseMap(64, 64);
+
+            var simpleGenerator = new SimpleGeometryCreator(
+                mapWidth: sparseMap.Width, 
+                mapHeight: sparseMap.Height,
+                random: random);
+
+
+
+            AbstractGeometry geometry = simpleGenerator.Create();
+            List<Room> rooms = RandomGenerator.BuildRoomsFromAbstractGeometry(geometry, random, tagSequence);
+            List<Room> hallways = RandomGenerator.BuildHallwaysFromAbstractGeometry(geometry, random, tagSequence);
+            foreach (Room room in hallways)
+            {
+                sparseMap.AddRegion(room);
+            }
+
+            rooms.First().AddThing(new RegionThing(new Point(1,1),WolfActor.Player1Start,Direction.East ));
+
+            foreach (Room room in rooms)
+            {
+                sparseMap.AddRegion(room);
+            }
+
+            return sparseMap.Compile();
         }
     }
 }

@@ -75,13 +75,13 @@ namespace Tiledriver.Generator.SimpleGeometry
             switch (directionFromOldRoom)
             {
                 case Direction.East:
-                    return RoomConnection.CreateEastWest(eastRoom: oldRoom, westRoom: newRoom, location: location);
-                case Direction.West:
                     return RoomConnection.CreateEastWest(eastRoom: newRoom, westRoom: oldRoom, location: location);
+                case Direction.West:
+                    return RoomConnection.CreateEastWest(eastRoom: oldRoom, westRoom: newRoom, location: location);
                 case Direction.North:
-                    return RoomConnection.CreateNorthSouth(northRoom: oldRoom, southRoom: newRoom, location: location);
-                case Direction.South:
                     return RoomConnection.CreateNorthSouth(northRoom: newRoom, southRoom: oldRoom, location: location);
+                case Direction.South:
+                    return RoomConnection.CreateNorthSouth(northRoom: oldRoom, southRoom: newRoom, location: location);
                 default:
                     throw new NotSupportedException();
             }
