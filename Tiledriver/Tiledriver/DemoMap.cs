@@ -203,7 +203,7 @@ namespace Tiledriver
 
             AbstractGeometry geometry = new AbstractGeometry();
             geometry.Rooms.Add(new Rectangle(20, 20, 6, 16));
-            geometry.Hallways.Add(new Rectangle(22, 11, 5, 10));
+            geometry.Hallways.Add(new Rectangle(22, 10, 5, 11));
             geometry.Doors.Add(new Point(23, 20));
             geometry.Doors.Add(new Point(23, 35));
             geometry.Doors.Add(new Point(25, 29));
