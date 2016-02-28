@@ -104,17 +104,12 @@ namespace Tiledriver.Generator
             return options.ElementAt(choiceIndex);
         }
 
-        private static RegionTheme GetRegionThemeForRoom(Random random, bool finalRoom = false)
+        private static RegionTheme GetRegionThemeForRoom(Random random)
         {
-            if (finalRoom)
-            {
-                return RegionTheme.EndRoom;
-            }
-            else
-            {
-                IEnumerable<RegionTheme> availableThemes = RegionTheme.GetAvailableThemes();
-                return availableThemes.ElementAt(random.Next(availableThemes.Count()));
-            }
+            IEnumerable<RegionTheme> availableThemes = RegionTheme.GetAvailableThemes();
+
+
+            return availableThemes.ElementAt(random.Next(availableThemes.Count()));
         }
 
         private static int GetNewProbability(Random random)
@@ -126,36 +121,20 @@ namespace Tiledriver.Generator
         public static List<Room> BuildRoomsFromAbstractGeometry(AbstractGeometry geometry, Random random, TagSequence tagSequence)
         {
             List<Room> rooms = new List<Room>();
-            bool needFinalRoom = true;
-
-            Point firstRoomCenter = new Point( (geometry.Rooms[0].Left + geometry.Rooms[0].Right) / 2,
-                (geometry.Rooms[0].Bottom + geometry.Rooms[0].Top) / 2 );
-
-            List<Rectangle> orderedRooms = geometry.Rooms.Select(x => x)
-                .OrderBy(room =>
-                {
-                    int x = (room.Left + room.Right) / 2 - firstRoomCenter.X;
-
-                    int y = (room.Bottom + room.Top) / 2 - firstRoomCenter.Y;
-                    return x * x + y * y;
-                }).ToList();
-
-            int roomCount = orderedRooms.Count();
-            for (int roomIndex = roomCount - 1; roomIndex >= 0; roomIndex--)
+            int roomCount = geometry.Rooms.Count;
+            for (int roomIndex = 0; roomIndex < roomCount; roomIndex++)
             {
-                Rectangle roomRectangle = orderedRooms[roomIndex];
+                Rectangle roomRectangle = geometry.Rooms[roomIndex];
+                bool finalRoom = roomIndex == roomCount - 1;
                 RegionTheme regionTheme;
-                bool finalRoom = false;
-                List<Point> roomDoors = GetRoomDoors(geometry, roomRectangle);
-                if(needFinalRoom)
+                if (finalRoom)
                 {
-                    if (roomDoors.Count == 1)
-                    {
-                        finalRoom = true;
-                        needFinalRoom = false;
-                    }
+                    regionTheme = RegionTheme.EndRoom;
                 }
-                regionTheme = GetRegionThemeForRoom(random, finalRoom);
+                else
+                {
+                    regionTheme = GetRegionThemeForRoom(random);
+                }
 
                 MapTile[,] tiles = new MapTile[roomRectangle.Height, roomRectangle.Width];
 
@@ -163,7 +142,7 @@ namespace Tiledriver.Generator
 
                 Room room = new Room(roomRectangle, tiles, tagSequence);
 
-                AddDoorsToRoom(roomDoors, roomRectangle, room);
+                AddDoorsToRoom(geometry, roomRectangle, room);
 
                 AddLightsToRoom(roomRectangle, room);
 
@@ -172,9 +151,6 @@ namespace Tiledriver.Generator
                 if (finalRoom)
                 {
                     room.AddEndgameTrigger();
-
-                    // TODO Change the tiles opposite of the door to sky
-
                 }
 
                 rooms.Add(room);
@@ -338,30 +314,20 @@ namespace Tiledriver.Generator
             return position;
         }
 
-        private static List<Point> GetRoomDoors(AbstractGeometry geometry, Rectangle roomRectangle)
+        private static void AddDoorsToRoom(AbstractGeometry geometry, Rectangle roomRectangle, Room room)
         {
-            List<Point> doors = new List<Point>();
             foreach (Point door in geometry.Doors)
             {
-                if (((door.X == roomRectangle.Left) || (door.X == roomRectangle.Right - 1))
+                if ((door.X == roomRectangle.Left) || (door.X == roomRectangle.Right - 1)
                     && (door.Y >= roomRectangle.Top) && (door.Y < roomRectangle.Bottom))
                 {
-                    doors.Add(new Point(door.X - roomRectangle.Left, door.Y - roomRectangle.Top));
+                    room.AddDoor(door.Y - roomRectangle.Top, door.X - roomRectangle.Left, false);
                 }
-                else if (((door.Y == roomRectangle.Top) || (door.Y == roomRectangle.Bottom - 1))
+                else if ((door.Y == roomRectangle.Top) || (door.Y == roomRectangle.Bottom - 1)
                     && (door.X >= roomRectangle.Left) && (door.X < roomRectangle.Right))
                 {
-                    doors.Add(new Point(door.X - roomRectangle.Left, door.Y - roomRectangle.Top));
+                    room.AddDoor(door.Y - roomRectangle.Top, door.X - roomRectangle.Left, true);
                 }
-            }
-            return doors;
-        }
-
-        private static void AddDoorsToRoom(List<Point> doors, Rectangle roomRectangle, Room room)
-        {
-            foreach (Point door in doors)
-            {
-                room.AddDoor(door.Y, door.X, (door.Y == 0) || (door.Y == roomRectangle.Height - 1));
             }
         }
 
