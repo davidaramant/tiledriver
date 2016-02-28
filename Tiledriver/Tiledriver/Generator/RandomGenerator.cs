@@ -125,7 +125,7 @@ namespace Tiledriver.Generator
             for (int roomIndex = 0; roomIndex < roomCount; roomIndex++)
             {
                 Rectangle roomRectangle = geometry.Rooms[roomIndex];
-                bool finalRoom = roomIndex == roomCount - 1;
+                bool finalRoom = false;//roomIndex == roomCount - 1;
                 RegionTheme regionTheme;
                 if (finalRoom)
                 {
