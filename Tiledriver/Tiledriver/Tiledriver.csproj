@@ -60,6 +60,7 @@
     <Compile Include="Generator\TagSequence.cs" />
     <Compile Include="Graphs\Edge.cs" />
     <Compile Include="Graphs\Graph.cs" />
+    <Compile Include="Graphs\WeightedEdge.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Uwmf\MapConstructionException.cs" />

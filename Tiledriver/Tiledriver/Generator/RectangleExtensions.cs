@@ -4,6 +4,19 @@ namespace Tiledriver.Generator
 {
     public static class RectangleExtensions
     {
+        public static bool PaddedIntersectsWith(this Rectangle source, Rectangle other, int padding)
+        {
+            var paddedSource = source.CopyWithPadding(padding);
+            var paddedOther = other.CopyWithPadding(padding);
+            
+            return paddedSource.IntersectsWith(paddedOther);
+        }
+
+        public static Rectangle CopyWithPadding(this Rectangle rect, int padding)
+        {
+            return new Rectangle(x: rect.X - padding, y: rect.Y - padding, width: rect.X + padding, height: rect.Y + padding);
+        }
+
         public static int? StraightDistanceFrom(this Rectangle source, Rectangle other)
         {
             // It's above

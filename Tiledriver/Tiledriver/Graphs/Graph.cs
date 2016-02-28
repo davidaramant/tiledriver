@@ -8,10 +8,10 @@ using System.Xml;
 
 namespace Tiledriver.Graphs
 {
-    public sealed class Graph<TNode,TCost> : IEnumerable<TNode>
+    public sealed class Graph<TNode,TEdge> : IEnumerable<TNode> where TEdge : Edge<TNode>
     {
         private readonly List<TNode> _nodes = new List<TNode>();
-        private readonly Dictionary<GraphEdge<TNode>, TCost> _weightedEdges = new Dictionary<GraphEdge<TNode>, TCost>();
+        private readonly HashSet<TEdge> _edges = new HashSet<TEdge>();
 
         public int NodeCount => _nodes.Count;
 
@@ -23,29 +23,29 @@ namespace Tiledriver.Graphs
         public void RemoveLastNode()
         {
             var lastNode = _nodes[_nodes.Count - 1];
-            _nodes.Remove(lastNode);
-            var edgesInvolvedWithLast = _weightedEdges.Keys.Where(edge => edge.Involves(lastNode)).ToArray();
+            Remove(lastNode);
+        }
+
+        public void Remove(TNode node)
+        {
+            _nodes.Remove(node);
+            var edgesInvolvedWithLast = _edges.Where(edge => edge.Involves(node)).ToArray();
             foreach (var edge in edgesInvolvedWithLast)
             {
-                _weightedEdges.Remove(edge);
+                _edges.Remove(edge);
             }
         }
 
-        public void AddWeightedEdge(TNode node1, TNode node2, TCost cost)
+        public void AddEdge(TEdge edge)
         {
-            var edge = new GraphEdge<TNode>(node1, node2);
-            AddWeightedEdge(edge,cost);
-        }
-
-        public void AddWeightedEdge(GraphEdge<TNode> edge, TCost cost)
-        {
-            if (_weightedEdges.ContainsKey(edge))
+            if (_edges.Contains(edge))
             {
                 throw new ArgumentException("Edge already exists");
             }
-            _weightedEdges.Add(edge, cost);
+            _edges.Add(edge);
         }
 
+        public IEnumerable<TEdge> AllEdges => _edges;
 
         public IEnumerator<TNode> GetEnumerator()
         {

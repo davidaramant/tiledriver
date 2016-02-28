@@ -10,56 +10,84 @@ namespace Tiledriver.Generator
 {
     public static class GeometryCreator
     {
-        public static AbstractGeometry Create(int width, int height, Random random)
+        public static AbstractGeometry Create(int mapWidth, int mapHeight, int maxNumberOfRooms, Random random)
         {
             const int maxErrorCount = 10;
-            const int maxNumberOfRooms = 5;
 
             // Make the rooms
-            var rooms = new Graph<Rectangle,int?>();
+            var roomsWithDistances = new Graph<Rectangle,WeightedEdge<Rectangle,int?>>();
 
             int currentErrorCount = 0;
-            while (rooms.NodeCount <= maxNumberOfRooms)
+            while (roomsWithDistances.NodeCount <= maxNumberOfRooms)
             {
                 if (currentErrorCount == maxErrorCount)
                 {
                     break;
                 }
 
-                var room = CreateRandomRectangle(mapWidth: width, mapHeight: height, random: random);
+                var room = CreateRandomRectangle(mapWidth: mapWidth, mapHeight: mapHeight, random: random);
 
-                if (rooms.Any(existingRegion => existingRegion.IntersectsWith(room)))
+                if (roomsWithDistances.Any(existingRegion => existingRegion.PaddedIntersectsWith(room, padding: 2)))
                 {
                     currentErrorCount++;
                     continue;
                 }
 
-                rooms.AddNode(room);
+                roomsWithDistances.AddNode(room);
                 currentErrorCount = 0;
             }
 
-            // Constuct all edges
-            var allEdges = new HashSet<GraphEdge<Rectangle>>();
-            foreach (var room1 in rooms)
+            // Constuct all edges and find distances between every room
+            var allEdges = new HashSet<Edge<Rectangle>>();
+            foreach (var room1 in roomsWithDistances)
             {
-                foreach (var room2 in rooms.Except(new[] {room1}))
+                foreach (var room2 in roomsWithDistances.Except(new[] { room1 }))
                 {
-                    allEdges.Add(new GraphEdge<Rectangle>(room1, room2));
+                    allEdges.Add(new WeightedEdge<Rectangle,int?>(room1, room2, room1.StraightDistanceFrom(room2)));
                 }
             }
 
-            // Find distances between every room
-            foreach (var edge in allEdges)
+            // If there are rooms without valid straight distances to other rooms, throw them out
+            var roomsWithoutValidDistances =
+                roomsWithDistances.Where(
+                    room => !roomsWithDistances.AllEdges.
+                        Where(weightedEdge => weightedEdge.Involves(room)).
+                        All(weightedEdge => weightedEdge.Cost.HasValue)).
+                    ToArray();
+            foreach (var lonelyRoom in roomsWithoutValidDistances)
             {
-                rooms.AddWeightedEdge(edge,edge.Node1.StraightDistanceFrom(edge.Node2));
+                roomsWithDistances.Remove(lonelyRoom);
             }
 
+            // Make the connection graph
+            var connectionGraph = new Graph<Rectangle,Edge<Rectangle>>();
+            foreach (var room in roomsWithDistances)
+            {
+                connectionGraph.AddNode(room);
+            }
+
+            // For every room, find the closest room
+            foreach (var room in roomsWithDistances)
+            {
+                var closestRoom =
+                    roomsWithDistances.AllEdges.
+                    Where(weightedEdge => weightedEdge.Involves(room)).
+                    Where(weightedEdge => weightedEdge.Cost.HasValue).
+                    OrderBy(weightedEdge => weightedEdge.Cost.Value).
+                    Single();
+
+
+            }
 
             // Make the hallways and place doors
 
 
 
-            return new AbstractGeometry();
+            var result = new AbstractGeometry();
+            result.Rooms.AddRange(roomsWithDistances);
+            //result.Hallways
+            //result.Doors
+            return result;
         }
 
         private static Rectangle CreateRandomRectangle(int mapWidth, int mapHeight, Random random)

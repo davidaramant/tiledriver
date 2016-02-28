@@ -2,12 +2,12 @@
 
 namespace Tiledriver.Graphs
 {
-    public sealed class GraphEdge<T>
+    public class Edge<T>
     {
         public readonly T Node1;
         public readonly T Node2;
 
-        public GraphEdge(T node1, T node2)
+        public Edge(T node1, T node2)
         {
             Node1 = node1;
             Node2 = node2;
@@ -19,7 +19,7 @@ namespace Tiledriver.Graphs
         }
 
         #region Equality stuff
-        private bool Equals(GraphEdge<T> other)
+        private bool Equals(Edge<T> other)
         {
             return EqualityComparer<T>.Default.Equals(Node1, other.Node1) && EqualityComparer<T>.Default.Equals(Node2, other.Node2);
         }
@@ -28,7 +28,7 @@ namespace Tiledriver.Graphs
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj is GraphEdge<T> && Equals((GraphEdge<T>)obj);
+            return obj is Edge<T> && Equals((Edge<T>)obj);
         }
 
         public override int GetHashCode()
@@ -39,12 +39,12 @@ namespace Tiledriver.Graphs
             }
         }
 
-        public static bool operator ==(GraphEdge<T> left, GraphEdge<T> right)
+        public static bool operator ==(Edge<T> left, Edge<T> right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(GraphEdge<T> left, GraphEdge<T> right)
+        public static bool operator !=(Edge<T> left, Edge<T> right)
         {
             return !Equals(left, right);
         }
