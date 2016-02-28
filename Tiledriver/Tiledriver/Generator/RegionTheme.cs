@@ -201,11 +201,15 @@ namespace Tiledriver.Generator
         public static readonly RegionTheme Kitchen = new RegionTheme(
             normalWalls: new[]
             {
-                TileTheme.Wood
+                TileTheme.GrayStone1,
+                TileTheme.GrayStone2,
+                TileTheme.GrayStone3
             },
             decorationWalls: new[]
             {
-                TileTheme.Wood
+                TileTheme.GrayStone1,
+                TileTheme.GrayStone2,
+                TileTheme.GrayStone3
             },
             orderedDecorations: new WolfActor[] {
                 WolfActor.Table
@@ -312,6 +316,28 @@ namespace Tiledriver.Generator
                 WolfActor.Guard,
                 WolfActor.Clip
             });
+        public static readonly RegionTheme EndRoom = new RegionTheme(
+            normalWalls: new[]
+            {
+                TileTheme.DaytimeSky,
+            },
+            decorationWalls: new[]
+            {
+                TileTheme.DaytimeSky
+            },
+            orderedDecorations: new WolfActor[] {
+                WolfActor.Vines
+            },
+            randomDecorations: new WolfActor[] {
+                WolfActor.GatlingGun,
+                WolfActor.ExtraLife
+            },
+            enemyTypes: new WolfActor[]
+            {
+                WolfActor.SSGuard,
+                WolfActor.Clip
+            });
+
 
         public static IEnumerable<RegionTheme> GetAvailableThemes()
         {
