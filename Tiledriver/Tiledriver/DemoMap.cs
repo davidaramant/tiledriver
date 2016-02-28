@@ -167,13 +167,7 @@ namespace Tiledriver
                 GetBox(width: 64, height: 64, theme: TileTheme.GrayStone1),
                 tagSequence);
 
-            bigRoom.AddThing(new RegionThing(
-                locationOffset: new Point(1, 4),
-                actor: WolfActor.Player1Start,
-                facing: Direction.North));
-
             sparseMap.AddRegion(bigRoom);
-
 
             var littleRoom = new Room(
                 new Rectangle(x: 0, y: 0, width: 4, height: 4),
@@ -202,11 +196,21 @@ namespace Tiledriver
             //sparseMap.AddRegion(purpleRoom);
 
             AbstractGeometry geometry = new AbstractGeometry();
-            geometry.Rooms.Add(new Rectangle(20, 20, 6, 16));
-            geometry.Hallways.Add(new Rectangle(22, 10, 5, 11));
-            geometry.Doors.Add(new Point(23, 20));
-            geometry.Doors.Add(new Point(23, 35));
-            geometry.Doors.Add(new Point(25, 29));
+            geometry.Rooms.Add(new Rectangle(6, 19, 6, 10));
+            geometry.Hallways.Add(new Rectangle(11, 21, 10, 5));
+            geometry.Doors.Add(new Point(6, 23));
+            geometry.Doors.Add(new Point(11, 23));
+            geometry.Doors.Add(new Point(20, 22));
+
+            geometry.Rooms.Add(new Rectangle(20, 17, 8, 15));
+            geometry.Doors.Add(new Point(24, 17));
+            geometry.Doors.Add(new Point(24, 31));
+
+            geometry.Hallways.Add(new Rectangle(22, 31, 5, 10));
+            geometry.Rooms.Add(new Rectangle(20, 40, 6, 16));
+            geometry.Doors.Add(new Point(23, 40));
+            geometry.Doors.Add(new Point(23, 55));
+            geometry.Doors.Add(new Point(25, 49));
             List<Room> rooms = RandomGenerator.BuildRoomsFromAbstractGeometry(geometry, random, tagSequence);
             List<Room> hallways = RandomGenerator.BuildHallwaysFromAbstractGeometry(geometry, random, tagSequence);
             foreach (Room room in hallways)

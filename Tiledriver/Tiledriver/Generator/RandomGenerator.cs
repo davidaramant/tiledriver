@@ -121,9 +121,21 @@ namespace Tiledriver.Generator
         public static List<Room> BuildRoomsFromAbstractGeometry(AbstractGeometry geometry, Random random, TagSequence tagSequence)
         {
             List<Room> rooms = new List<Room>();
-            foreach (Rectangle roomRectangle in geometry.Rooms)
+            int roomCount = geometry.Rooms.Count;
+            for (int roomIndex = 0; roomIndex < roomCount; roomIndex++)
             {
-                RegionTheme regionTheme = GetRegionThemeForRoom(random);
+                Rectangle roomRectangle = geometry.Rooms[roomIndex];
+                bool finalRoom = roomIndex == roomCount - 1;
+                RegionTheme regionTheme;
+                if (finalRoom)
+                {
+                    regionTheme = RegionTheme.EndRoom;
+                }
+                else
+                {
+                    regionTheme = GetRegionThemeForRoom(random);
+                }
+
                 MapTile[,] tiles = new MapTile[roomRectangle.Height, roomRectangle.Width];
 
                 BuildRoomWallsAndFloor(roomRectangle, tiles, regionTheme, random);
@@ -134,7 +146,12 @@ namespace Tiledriver.Generator
 
                 AddLightsToRoom(roomRectangle, room);
 
-                AddEnemiesAndDecorationsToRoom(random, roomRectangle, regionTheme, room);
+                AddEnemiesAndDecorationsToRoom(random, roomRectangle, regionTheme, room, 0 == roomIndex);
+
+                if (finalRoom)
+                {
+                    room.AddEndgameTrigger();
+                }
 
                 rooms.Add(room);
             }
@@ -162,7 +179,8 @@ namespace Tiledriver.Generator
             return rooms;
         }
 
-        private static void AddEnemiesAndDecorationsToRoom(Random random, Rectangle roomRectangle, RegionTheme regionTheme, Room room)
+
+        private static void AddEnemiesAndDecorationsToRoom(Random random, Rectangle roomRectangle, RegionTheme regionTheme, Room room, bool firstRoom)
         {
             // TODO: make sure decorations do not block doors?
 
@@ -175,8 +193,18 @@ namespace Tiledriver.Generator
 
             HashSet<Point> actorPositions = new HashSet<Point>();
 
-            // Place enemies
-            if (regionTheme.EnemyTypes.Count > 0)
+            if (firstRoom)
+            {
+                Point offset = new Point(random.Next(1, roomRectangle.Width - 1), random.Next(1, roomRectangle.Height - 1));
+                actorPositions.Add(offset);
+                room.AddThing(new RegionThing(
+                    locationOffset: offset,
+                    actor: WolfActor.Player1Start,
+                    facing: GetRandomDirection(random)));
+            }
+
+            // Place enemies (skip if first room)
+            if (!firstRoom && (regionTheme.EnemyTypes.Count > 0))
             {
                 int numEnemies = (roomRectangle.Width - 2) * (roomRectangle.Height - 2) / 16;
 

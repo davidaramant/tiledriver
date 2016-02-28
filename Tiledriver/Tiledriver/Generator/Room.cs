@@ -18,6 +18,8 @@ namespace Tiledriver.Generator
         private readonly MapTile[,] _tiles;
         private readonly Dictionary<Point, Door> _doors = new Dictionary<Point, Door>();
 
+        private bool hasEndgame = false;
+
         private struct Door
         {
             public readonly bool FacingNorthSouth;
@@ -73,7 +75,8 @@ namespace Tiledriver.Generator
 
         public IEnumerable<Trigger> GetTriggers()
         {
-            return _doors.Select(locatedDoor => new Trigger
+            List<Trigger> triggers = new List<Trigger>();
+            triggers.AddRange(_doors.Select(locatedDoor => new Trigger
             {
                 X = BoundingBox.Left + locatedDoor.Key.X,
                 Y = BoundingBox.Top + locatedDoor.Key.Y,
@@ -87,7 +90,20 @@ namespace Tiledriver.Generator
                 PlayerUse = true,
                 Repeatable = true,
                 MonsterUse = true,
-            });
+            }));
+            if (hasEndgame)
+            {
+                triggers.Add(new Trigger()
+                {
+                    X = (BoundingBox.Left + BoundingBox.Right) / 2,
+                    Y = (BoundingBox.Top + BoundingBox.Bottom) / 2,
+                    Z = 0,
+                    Action = 6, // Exit Victory Spin
+                    PlayerUse = true,
+                    PlayerCross = true
+                });
+            }
+            return triggers;
         }
 
         public void AddDoor(int roomRow, int roomCol, bool facingNorthSouth)
@@ -107,6 +123,11 @@ namespace Tiledriver.Generator
             }
 
             return _tiles[roomPosition.Y, roomPosition.X];
+        }
+
+        public void AddEndgameTrigger()
+        {
+            hasEndgame = true;
         }
     }
 }
