@@ -164,16 +164,77 @@ namespace Tiledriver.Generator
 
         private static void AddEnemiesAndDecorationsToRoom(Random random, Rectangle roomRectangle, RegionTheme regionTheme, Room room)
         {
-            // TODO: make sure decorations do not block doors?
+            HashSet<Point> usedPositions = new HashSet<Point>();
+            HashSet<int> decorationIndices;
+            WolfActor decoration;
+
+            // TODO: make sure decorations do not block doors? Simply add space beside door to list of "used spaces"?
 
             // Place ordered decorations against walls
-            if (regionTheme.OrderedDecorations.Count > 0 && GetNewProbability(random) <= OrderedDecorationProbability)
+            if (regionTheme.OrderedDecorations.Count > 0 )
             {
-                //TODO: pick decoration and add it similar to how wall decorations are added, but 1 step in from walls
+                // against top wall
+                if (GetNewProbability(random) <= OrderedDecorationProbability)
+                {
+                    decoration = GetRandomOrderedDecoration(regionTheme, random);
+                    decorationIndices = Determine2DObjectSymmetry(roomRectangle.Width, random);
+                    foreach (int index in decorationIndices )
+                    {
+                        Point position = new Point(index, 1);
+                        usedPositions.Add(position);
+                        room.AddThing(new RegionThing(
+                            locationOffset: position,
+                            actor: decoration,
+                            facing: GetRandomDirection(random)));
+                    }
+                }
+                // against bottom wall
+                if (GetNewProbability(random) <= OrderedDecorationProbability)
+                {
+                    decoration = GetRandomOrderedDecoration(regionTheme, random);
+                    decorationIndices = Determine2DObjectSymmetry(roomRectangle.Width, random);
+                    foreach (int index in decorationIndices)
+                    {
+                        Point position = new Point(index, roomRectangle.Height-2);
+                        usedPositions.Add(position);
+                        room.AddThing(new RegionThing(
+                            locationOffset: position,
+                            actor: decoration,
+                            facing: GetRandomDirection(random)));
+                    }
+                }
 
+                // against left wall
+                if (GetNewProbability(random) <= OrderedDecorationProbability)
+                {
+                    decoration = GetRandomOrderedDecoration(regionTheme, random);
+                    decorationIndices = Determine2DObjectSymmetry(roomRectangle.Height, random);
+                    foreach (int index in decorationIndices)
+                    {
+                        Point position = new Point(1, index);
+                        usedPositions.Add(position);
+                        room.AddThing(new RegionThing(
+                            locationOffset: position,
+                            actor: decoration,
+                            facing: GetRandomDirection(random)));
+                    }
+                }
+                // against right wall
+                if (GetNewProbability(random) <= OrderedDecorationProbability)
+                {
+                    decoration = GetRandomOrderedDecoration(regionTheme, random);
+                    decorationIndices = Determine2DObjectSymmetry(roomRectangle.Height, random);
+                    foreach (int index in decorationIndices)
+                    {
+                        Point position = new Point(roomRectangle.Width - 2, index);
+                        usedPositions.Add(position);
+                        room.AddThing(new RegionThing(
+                            locationOffset: position,
+                            actor: decoration,
+                            facing: GetRandomDirection(random)));
+                    }
+                }
             }
-
-            HashSet<Point> actorPositions = new HashSet<Point>();
 
             // Place enemies
             if (regionTheme.EnemyTypes.Count > 0)
@@ -182,8 +243,8 @@ namespace Tiledriver.Generator
 
                 for (int index = 0; index < numEnemies; index++)
                 {
-                    Point position = getUnusedRoomPosition(roomRectangle, room, actorPositions, random);
-                    actorPositions.Add(position);
+                    Point position = getUnusedRoomPosition(roomRectangle, room, usedPositions, random);
+                    usedPositions.Add(position);
                     room.AddThing(new RegionThing(
                         locationOffset: position,
                         actor: GetRandomEnemy(regionTheme, random),
@@ -197,8 +258,8 @@ namespace Tiledriver.Generator
                 int numDecorations = (roomRectangle.Width - 2) * (roomRectangle.Height - 2) / 16;
                 for (int index = 0; index < numDecorations; index++)
                 {
-                    Point position = getUnusedRoomPosition(roomRectangle, room, actorPositions, random);
-                    actorPositions.Add(position);
+                    Point position = getUnusedRoomPosition(roomRectangle, room, usedPositions, random);
+                    usedPositions.Add(position);
                     room.AddThing(new RegionThing(
                         locationOffset: position,
                         actor: GetRandomRandomDecoration(regionTheme, random),
@@ -331,7 +392,7 @@ namespace Tiledriver.Generator
         {
             // top wall
             TileTheme decoration = theme.DecorationWalls.Count > 0 ? theme.DecorationWalls[random.Next(theme.DecorationWalls.Count)] : null;
-            HashSet<int> decorationIndices = Determine2DObjectSymmetry(roomRectangle.Width, theme.DecorationWalls, random);
+            HashSet<int> decorationIndices = theme.DecorationWalls.Count > 0 ? Determine2DObjectSymmetry(roomRectangle.Width, random) : null;
             for (int index = 0; index < roomRectangle.Width; index++)
             {
                 if (decorationIndices.Contains(index))
@@ -346,7 +407,7 @@ namespace Tiledriver.Generator
 
             // bottom wall
             decoration = theme.DecorationWalls.Count > 0 ? theme.DecorationWalls[random.Next(theme.DecorationWalls.Count)] : null;
-            decorationIndices = Determine2DObjectSymmetry(roomRectangle.Width, theme.DecorationWalls, random);
+            decorationIndices = theme.DecorationWalls.Count > 0 ? Determine2DObjectSymmetry(roomRectangle.Width, random):null;
             for (int index = 0; index < roomRectangle.Width; index++)
             {
                 if (decorationIndices.Contains(index))
@@ -361,7 +422,7 @@ namespace Tiledriver.Generator
 
             // left wall
             decoration = theme.DecorationWalls.Count > 0 ? theme.DecorationWalls[random.Next(theme.DecorationWalls.Count)] : null;
-            decorationIndices = Determine2DObjectSymmetry(roomRectangle.Height, theme.DecorationWalls, random);
+            decorationIndices = theme.DecorationWalls.Count > 0 ? Determine2DObjectSymmetry(roomRectangle.Height, random) : null;
             for (int index = 1; index < roomRectangle.Height - 1; index++)
             {
                 if (decorationIndices.Contains(index))
@@ -376,7 +437,7 @@ namespace Tiledriver.Generator
 
             // right wall
             decoration = theme.DecorationWalls.Count > 0 ? theme.DecorationWalls[random.Next(theme.DecorationWalls.Count)] : null;
-            decorationIndices = Determine2DObjectSymmetry(roomRectangle.Height, theme.DecorationWalls, random);
+            decorationIndices = theme.DecorationWalls.Count > 0 ? Determine2DObjectSymmetry(roomRectangle.Height, random):null;
             for (int index = 1; index < roomRectangle.Height - 1; index++)
             {
                 if (decorationIndices.Contains(index))
@@ -400,10 +461,10 @@ namespace Tiledriver.Generator
 
         }
 
-        private static HashSet<int> Determine2DObjectSymmetry(int length, List<TileTheme> decorations, Random random)
+        private static HashSet<int> Determine2DObjectSymmetry(int length, Random random)
         {
             HashSet<int> indices = new HashSet<int>();
-            if ((decorations.Count > 0) && (GetNewProbability(random) < WallDecorationProbability))
+            if ( GetNewProbability(random) < WallDecorationProbability)
             {
                 int lengthWithoutCorners = length - 2;
                 if (lengthWithoutCorners >= 5)
