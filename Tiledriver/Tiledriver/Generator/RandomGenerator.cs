@@ -12,6 +12,8 @@ namespace Tiledriver.Generator
     public static class RandomGenerator
     {
         private static readonly int WallDecorationProbability = 100;
+        private static readonly int OrderedDecorationProbability = 66;
+        private static readonly int RandomDecorationProbability = 100;
 
         public static Map Create(int seed)
         {
@@ -104,12 +106,15 @@ namespace Tiledriver.Generator
 
         private static RegionTheme GetRegionThemeForRoom(Random random)
         {
-            var probability = random.Next(100);
+            IEnumerable<RegionTheme> availableThemes = RegionTheme.GetAvailableThemes();
 
-            if (probability < 50)
-                return RegionTheme.Dungeon;
-            else
-                return RegionTheme.OfficerLounge;
+
+            return availableThemes.ElementAt(random.Next(availableThemes.Count()));
+        }
+
+        private static int GetNewProbability(Random random)
+        {
+            return random.Next(100);
         }
 
         // TODO Make this private
@@ -121,48 +126,59 @@ namespace Tiledriver.Generator
                 RegionTheme regionTheme = GetRegionThemeForRoom(random);
                 MapTile[,] tiles = new MapTile[roomRectangle.Height, roomRectangle.Width];
 
-                BuildRoomWalls(roomRectangle, tiles, regionTheme, random);
-
-                for(int row = 1; row < roomRectangle.Height - 1; row++)
-                {
-                    for(int col = 1; col < roomRectangle.Width - 1; col++)
-                    {
-                        tiles[row, col] = MapTile.EmptyTile;
-                    }
-                }
+                BuildRoomWallsAndFloor(roomRectangle, tiles, regionTheme, random);
 
                 Room room = new Room(roomRectangle, tiles, tagSequence);
+
                 // Place doors
-                foreach (Point door in geometry.Doors)
+                AddDoorsToRoom(geometry, roomRectangle, room);
+
+                AddLightsToRoom(roomRectangle, room);
+
+                // Place ordered decorations against walls
+                if (regionTheme.OrderedDecorations.Count> 0 && GetNewProbability(random) <= OrderedDecorationProbability)
                 {
-                    if ((door.X == roomRectangle.Left) || (door.X == roomRectangle.Right - 1)
-                        && (door.Y >= roomRectangle.Top) && (door.Y < roomRectangle.Bottom))
-                    {
-                        room.AddDoor(door.Y - roomRectangle.Top, door.X - roomRectangle.Left, false);
-                    }
-                    else if ((door.Y == roomRectangle.Top) || (door.Y == roomRectangle.Bottom - 1)
-                        && (door.X >= roomRectangle.Left) && (door.X < roomRectangle.Right))
-                    {
-                        room.AddDoor(door.Y - roomRectangle.Top, door.X - roomRectangle.Left, true);
-                    }
+                    //TODO: pick decoration and add it similar to how wall decorations are added, but 1 step in from walls
+
                 }
+
+                HashSet<Point> actorPositions = new HashSet<Point>();
 
                 // Place enemies
                 if (regionTheme.EnemyTypes.Count > 0)
                 {
                     int numEnemies = (roomRectangle.Width - 2) * (roomRectangle.Height - 2) / 16;
-                    HashSet<Point> enemyPositions = new HashSet<Point>();
+
                     for (int index = 0; index < numEnemies; index++)
                     {
                         Point position;
                         do
                         {
                             position = new Point(random.Next(1, roomRectangle.Width - 1), random.Next(1, roomRectangle.Height - 1));
-                        } while (enemyPositions.Contains(position));
-                        enemyPositions.Add(position);
+                        } while (actorPositions.Contains(position));
+                        actorPositions.Add(position);
                         room.AddThing(new RegionThing(
                             locationOffset: position,
                             actor: GetRandomEnemy(regionTheme, random),
+                            facing: GetRandomDirection(random)));
+                    }
+                }
+
+                // Place random decorations
+                if (regionTheme.RandomDecorations.Count > 0)
+                {
+                    int numDecorations = (roomRectangle.Width - 2) * (roomRectangle.Height - 2) / 16;
+                    for (int index = 0; index < numDecorations; index++)
+                    {
+                        Point position;
+                        do
+                        {
+                            position = new Point(random.Next(1, roomRectangle.Width - 1), random.Next(1, roomRectangle.Height - 1));
+                        } while (actorPositions.Contains(position));
+                        actorPositions.Add(position);
+                        room.AddThing(new RegionThing(
+                            locationOffset: position,
+                            actor: GetRandomRandomDecoration(regionTheme, random),
                             facing: GetRandomDirection(random)));
                     }
                 }
@@ -171,6 +187,23 @@ namespace Tiledriver.Generator
             }
 
             return rooms;
+        }
+
+        private static void AddDoorsToRoom(AbstractGeometry geometry, Rectangle roomRectangle, Room room)
+        {
+            foreach (Point door in geometry.Doors)
+            {
+                if ((door.X == roomRectangle.Left) || (door.X == roomRectangle.Right - 1)
+                    && (door.Y >= roomRectangle.Top) && (door.Y < roomRectangle.Bottom))
+                {
+                    room.AddDoor(door.Y - roomRectangle.Top, door.X - roomRectangle.Left, false);
+                }
+                else if ((door.Y == roomRectangle.Top) || (door.Y == roomRectangle.Bottom - 1)
+                    && (door.X >= roomRectangle.Left) && (door.X < roomRectangle.Right))
+                {
+                    room.AddDoor(door.Y - roomRectangle.Top, door.X - roomRectangle.Left, true);
+                }
+            }
         }
 
         private static Direction GetRandomDirection(Random random)
@@ -197,9 +230,24 @@ namespace Tiledriver.Generator
             return Direction.SouthEast;
         }
 
+        private static WolfActor GetRandomActorFromList(List<WolfActor> themeList, Random random)
+        {
+            return themeList[random.Next(themeList.Count)];
+        }
+
         private static WolfActor GetRandomEnemy(RegionTheme regionTheme, Random random)
         {
-            return regionTheme.EnemyTypes[random.Next(regionTheme.EnemyTypes.Count)];
+            return GetRandomActorFromList(regionTheme.EnemyTypes, random);
+        }
+
+        private static WolfActor GetRandomOrderedDecoration(RegionTheme regionTheme, Random random)
+        {
+            return GetRandomActorFromList(regionTheme.OrderedDecorations, random);
+        }
+
+        private static WolfActor GetRandomRandomDecoration(RegionTheme regionTheme, Random random)
+        {
+            return GetRandomActorFromList(regionTheme.RandomDecorations, random);
         }
 
         public static List<Room> BuildHallwaysFromAbstractGeometry(AbstractGeometry geometry, Random random, TagSequence tagSequence)
@@ -210,15 +258,7 @@ namespace Tiledriver.Generator
                 RegionTheme regionTheme = GetRegionThemeForRoom(random);
                 MapTile[,] tiles = new MapTile[roomRectangle.Height, roomRectangle.Width];
 
-                BuildRoomWalls(roomRectangle, tiles, regionTheme, random);
-
-                for (int row = 1; row < roomRectangle.Height - 1; row++)
-                {
-                    for (int col = 1; col < roomRectangle.Width - 1; col++)
-                    {
-                        tiles[row, col] = MapTile.EmptyTile;
-                    }
-                }
+                BuildRoomWallsAndFloor(roomRectangle, tiles, regionTheme, random);
 
                 Room room = new Room(roomRectangle, tiles, tagSequence);
 
@@ -226,7 +266,7 @@ namespace Tiledriver.Generator
                 if (random.Next(2) > 0)
                 {
                     WolfActor ammoType = WolfActor.Clip;
-                    int probability = random.Next(100);
+                    int probability = GetNewProbability(random);
                     if (probability < 1)
                     {
                         ammoType = WolfActor.GatlingGun;
@@ -243,7 +283,7 @@ namespace Tiledriver.Generator
                 else
                 {
                     WolfActor healthType = WolfActor.DogFood;
-                    int probability = random.Next(100);
+                    int probability = GetNewProbability(random);
                     if (probability < 1)
                     {
                         healthType = WolfActor.ExtraLife;
@@ -269,7 +309,52 @@ namespace Tiledriver.Generator
             return rooms;
         }
 
-        private static void BuildRoomWalls(Rectangle roomRectangle, MapTile[,] tiles, RegionTheme theme, Random random)
+        private static void AddLightsToRoom(Rectangle roomRectangle, Room room)
+        {
+            int interiorWidth = roomRectangle.Width - 2;
+            int interiorHeight = roomRectangle.Height - 2;
+
+            bool horizontalIsOdd = interiorWidth % 2 != 0;
+            bool verticalIsOdd = interiorHeight % 2 != 0;
+
+            if( horizontalIsOdd && verticalIsOdd )
+            {
+                // rooms that are odd in both dimensions get lights evenly spaced
+                for (int row = 3; row < roomRectangle.Height - 1; row += 2)
+                {
+                    for (int col = 3; col < roomRectangle.Width - 1; col += 2)
+                    {
+                        room.AddThing(new RegionThing(
+                            locationOffset: new Point(col, row),
+                            actor: WolfActor.CeilingLight,
+                            facing: Direction.North));
+                    }
+                }
+            }
+            else if( !horizontalIsOdd && !verticalIsOdd && interiorWidth > 3 && interiorHeight > 3)
+            {
+                // rooms that are even in both dimensions get lights in the corners
+                room.AddThing(new RegionThing(
+                    locationOffset: new Point(1, 1),
+                    actor: WolfActor.CeilingLight,
+                    facing: Direction.North));
+                room.AddThing(new RegionThing(
+                    locationOffset: new Point(1, interiorHeight),
+                    actor: WolfActor.CeilingLight,
+                    facing: Direction.North));
+                room.AddThing(new RegionThing(
+                    locationOffset: new Point(interiorWidth, 1),
+                    actor: WolfActor.CeilingLight,
+                    facing: Direction.North));
+                room.AddThing(new RegionThing(
+                    locationOffset: new Point(interiorWidth, interiorHeight),
+                    actor: WolfActor.CeilingLight,
+                    facing: Direction.North));
+            }
+
+        }
+
+        private static void BuildRoomWallsAndFloor(Rectangle roomRectangle, MapTile[,] tiles, RegionTheme theme, Random random)
         {
             // top wall
             TileTheme decoration = theme.DecorationWalls.Count > 0 ? theme.DecorationWalls[random.Next(theme.DecorationWalls.Count)] : null;
@@ -330,12 +415,22 @@ namespace Tiledriver.Generator
                     tiles[index, roomRectangle.Width - 1] = MapTile.Textured(theme.NormalWalls[random.Next(theme.NormalWalls.Count)]);
                 }
             }
+
+            // Floor
+            for (int row = 1; row < roomRectangle.Height - 1; row++)
+            {
+                for (int col = 1; col < roomRectangle.Width - 1; col++)
+                {
+                    tiles[row, col] = MapTile.EmptyTile;
+                }
+            }
+
         }
 
         private static HashSet<int> Determine2DObjectSymmetry(int length, List<TileTheme> decorations, Random random)
         {
             HashSet<int> indices = new HashSet<int>();
-            if ((decorations.Count > 0) && (random.Next(100) < WallDecorationProbability))
+            if ((decorations.Count > 0) && (GetNewProbability(random) < WallDecorationProbability))
             {
                 int lengthWithoutCorners = length - 2;
                 if (lengthWithoutCorners >= 5)

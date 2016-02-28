@@ -42,23 +42,200 @@ namespace Tiledriver.Generator
             {
                 TileTheme.BlueStoneSign,
             },
-            orderedDecorations: new WolfActor[] { },
-            randomDecorations: new WolfActor[] { },
+            orderedDecorations: new WolfActor[] {
+                WolfActor.CeilingLight,
+            },
+            randomDecorations: new WolfActor[] {
+                WolfActor.EmptyCage,
+                WolfActor.CageWithSkeleton,
+                WolfActor.SkeletonFlat,
+                WolfActor.Blood,
+                WolfActor.Bones1,
+                WolfActor.Bones2,
+                WolfActor.Bones3,
+                WolfActor.Bones4
+            },
             enemyTypes: new WolfActor[]
             {
                 WolfActor.Guard,
-             } );
+                WolfActor.Guard,
+                WolfActor.Guard,
+                WolfActor.Guard,
+                WolfActor.Guard,
+                WolfActor.Guard,
+                WolfActor.Guard,
+                WolfActor.Guard,
+                WolfActor.Guard,
+                WolfActor.Guard,
+                WolfActor.Clip,
+                WolfActor.Clip,
+                WolfActor.Food,
+             });
+
+        public static readonly RegionTheme Kennel = new RegionTheme(
+            normalWalls: new[]
+            {
+                TileTheme.BlueStone1,
+                TileTheme.BlueStone2
+            },
+            decorationWalls: new[]{
+                TileTheme.BlueStone1,
+                TileTheme.BlueStone2
+            },
+            orderedDecorations: new WolfActor[] {
+                WolfActor.CeilingLight
+            },
+            randomDecorations: new WolfActor[] {
+                WolfActor.EmptyCage,
+                WolfActor.Basket
+            },
+            enemyTypes: new WolfActor[]
+            {
+                WolfActor.Dog,
+                WolfActor.Dog,
+                WolfActor.Dog,
+                WolfActor.Dog,
+                WolfActor.Dog,
+                WolfActor.DogFood
+             });
+
+        public static readonly RegionTheme Cells = new RegionTheme(
+            normalWalls: new[]
+            {
+                TileTheme.BlueStone1,
+                TileTheme.BlueStone2
+            },
+            decorationWalls: new[]
+            {
+                TileTheme.BlueStoneCellSkele,
+                TileTheme.BlueStoneEmptyCell
+            },
+            orderedDecorations: new WolfActor[] {
+                WolfActor.CeilingLight
+            },
+            randomDecorations: new WolfActor[] {
+                WolfActor.EmptyCage,
+                WolfActor.CageWithSkeleton,
+                WolfActor.SkeletonFlat,
+                WolfActor.Blood,
+                WolfActor.Bones1,
+                WolfActor.Bones2,
+                WolfActor.Bones3,
+                WolfActor.Bones4
+            },
+            enemyTypes: new WolfActor[]
+            {
+                WolfActor.Guard,
+                WolfActor.Guard,
+                WolfActor.Guard,
+                WolfActor.Guard,
+                WolfActor.Guard,
+                WolfActor.Guard,
+                WolfActor.Guard,
+                WolfActor.Guard,
+                WolfActor.Guard,
+                WolfActor.DogFood,
+                WolfActor.DogFood
+             });
 
         public static readonly RegionTheme OfficerLounge = new RegionTheme(
             normalWalls: new[]
             {
-                TileTheme.Wood,
+                TileTheme.Wood
             },
             decorationWalls: new[]
             {
                 TileTheme.WoodCross,
                 TileTheme.WoodEagle,
-                TileTheme.WoodHitler,
+                TileTheme.WoodHitler
+            },
+            orderedDecorations: new WolfActor[] {
+                WolfActor.SuitOfArmor,
+                WolfActor.BrownPlant,
+                WolfActor.Vase,
+                WolfActor.FloorLamp
+            },
+            randomDecorations: new WolfActor[] {
+                WolfActor.Table,
+                WolfActor.TableWithChairs
+            },
+            enemyTypes: new WolfActor[]
+            {
+                WolfActor.Guard,
+                WolfActor.Guard,
+                WolfActor.Guard,
+                WolfActor.SSGuard,
+                WolfActor.Dog,
+                WolfActor.Food
+            });
+
+        public static readonly RegionTheme DiningHall = new RegionTheme(
+            normalWalls: new[]
+            {
+                TileTheme.Wood
+            },
+            decorationWalls: new[]
+            {
+                TileTheme.WoodCross,
+                TileTheme.WoodEagle,
+                TileTheme.WoodHitler
+            },
+            orderedDecorations: new WolfActor[] {
+                WolfActor.Table,
+                WolfActor.TableWithChairs
+            },
+            randomDecorations: new WolfActor[] {
+                WolfActor.Food,
+                WolfActor.WhitePillar
+            },
+            enemyTypes: new WolfActor[]
+            {
+                WolfActor.Guard,
+                WolfActor.Guard,
+                WolfActor.Guard,
+                WolfActor.SSGuard,
+                WolfActor.Dog,
+                WolfActor.Food
+            });
+
+        public static readonly RegionTheme Kitchen = new RegionTheme(
+            normalWalls: new[]
+            {
+                TileTheme.Wood
+            },
+            decorationWalls: new[]
+            {
+                TileTheme.Wood
+            },
+            orderedDecorations: new WolfActor[] {
+                WolfActor.Table
+            },
+            randomDecorations: new WolfActor[] {
+                WolfActor.KitchenStuff,
+                WolfActor.Table,
+                WolfActor.TableWithChairs,
+                WolfActor.Stove,
+                WolfActor.Sink
+            },
+            enemyTypes: new WolfActor[]
+            {
+                WolfActor.Guard,
+                WolfActor.Guard,
+                WolfActor.Guard,
+                WolfActor.Food,
+                WolfActor.Food,
+                WolfActor.Food
+            });
+
+        public static readonly RegionTheme Office = new RegionTheme(
+            normalWalls: new[]
+            {
+                TileTheme.BrownMarble1,
+                TileTheme.BrownMarble2
+            },
+            decorationWalls: new[]
+            {
+                TileTheme.BrownMarbleFlag
             },
             orderedDecorations: new WolfActor[] { },
             randomDecorations: new WolfActor[] { },
@@ -68,7 +245,8 @@ namespace Tiledriver.Generator
                 WolfActor.Guard,
                 WolfActor.Guard,
                 WolfActor.SSGuard,
-                WolfActor.Dog
+                WolfActor.Officer,
+                WolfActor.Clip
             });
 
         public static readonly RegionTheme StoneHallway = new RegionTheme(
@@ -76,16 +254,76 @@ namespace Tiledriver.Generator
             {
                 TileTheme.GrayStone1,
                 TileTheme.GrayStone2,
-                TileTheme.GrayStone3,
+                TileTheme.GrayStone3
             },
             decorationWalls: new[]
             {
                 TileTheme.GrayStoneEagle,
                 TileTheme.GrayStoneHitler,
-                TileTheme.GrayStoneFlag,
+                TileTheme.GrayStoneFlag
             },
-            orderedDecorations: new WolfActor[] { },
-            randomDecorations: new WolfActor[] { },
-            enemyTypes: new WolfActor[] { });
+            orderedDecorations: new WolfActor[] {
+                WolfActor.CeilingLight
+            },
+            randomDecorations: new WolfActor[] {
+                WolfActor.Barrel,
+                WolfActor.GreenBarrel,
+                WolfActor.GreenPlant
+            },
+            enemyTypes: new WolfActor[]
+            {
+                WolfActor.Guard,
+                WolfActor.Guard,
+                WolfActor.Clip
+            });
+        public static readonly RegionTheme Armory = new RegionTheme(
+            normalWalls: new[]
+            {
+                TileTheme.GrayStone1,
+                TileTheme.GrayStone2,
+                TileTheme.GrayStone3
+            },
+            decorationWalls: new[]
+            {
+                TileTheme.GrayStone1,
+                TileTheme.GrayStone2,
+                TileTheme.GrayStone3
+            },
+            orderedDecorations: new WolfActor[] {
+                WolfActor.SuitOfArmor,
+                WolfActor.Spears,
+                WolfActor.Table
+            },
+            randomDecorations: new WolfActor[] {
+                WolfActor.Clip,
+                WolfActor.Clip,
+                WolfActor.Clip,
+                WolfActor.Clip,
+                WolfActor.Clip,
+                WolfActor.Clip,
+                WolfActor.Clip,
+                WolfActor.Clip,
+                WolfActor.Clip,
+                WolfActor.MachineGun
+            },
+            enemyTypes: new WolfActor[]
+            {
+                WolfActor.Guard,
+                WolfActor.Guard,
+                WolfActor.Clip
+            });
+
+        public static IEnumerable<RegionTheme> GetAvailableThemes()
+        {
+            yield return Dungeon;
+            yield return Kennel;
+            yield return Cells;
+            yield return OfficerLounge;
+            yield return DiningHall;
+            yield return Kitchen;
+            yield return Office;
+            yield return StoneHallway;
+            yield return Armory;
+        }
     }
 }
