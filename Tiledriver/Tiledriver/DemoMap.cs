@@ -338,8 +338,6 @@ namespace Tiledriver
                 sparseMap.AddRegion(room);
             }
 
-            rooms.First().AddThing(new RegionThing(new Point(1,1),WolfActor.Player1Start,Direction.East ));
-
             foreach (Room room in rooms)
             {
                 sparseMap.AddRegion(room);
