@@ -110,26 +110,27 @@ namespace Tiledriver.Generator.SimpleGeometry
             return new Rectangle(x: left, y: top, width: roomWidth, height: roomHeight);
         }
 
-        private Rectangle CreateHallwayBounds(Point startingPoint, Direction direction)
+        private Rectangle CreateHallwayBounds(Point startingPoint, Direction startingPointDirection)
         {
+            var width = 5;
             int length = _random.Next(3, 10);
 
-            switch (direction)
+            switch (startingPointDirection)
             {
                 case Direction.East:
-                    return new Rectangle(x: startingPoint.X, y: startingPoint.Y - 1, width: length, height: 3);
+                    return new Rectangle(x: startingPoint.X, y: startingPoint.Y - 2, width: length, height: width);
                 case Direction.West:
-                    return new Rectangle(x: startingPoint.X - length, y: startingPoint.Y - 1, width: length, height: 3);
+                    return new Rectangle(x: startingPoint.X - length + 1, y: startingPoint.Y - 2, width: length, height: width);
                 case Direction.North:
-                    return new Rectangle(x: startingPoint.X - 1, y: startingPoint.Y - length, width: 3, height: length);
+                    return new Rectangle(x: startingPoint.X - 2, y: startingPoint.Y - length + 1, width: width, height: length);
                 case Direction.South:
-                    return new Rectangle(x: startingPoint.X - 1, y: startingPoint.Y, width: 3, height: length);
+                    return new Rectangle(x: startingPoint.X - 2, y: startingPoint.Y, width: width, height: length);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        private Rectangle CreateRoomBounds(Point startingPoint, Direction direction)
+        private Rectangle CreateRoomBounds(Point startingPoint, Direction startingPointDirection)
         {
             var roomWidth = _random.Next(minValue: 5, maxValue: 16);
             var roomHeight = _random.Next(minValue: 5, maxValue: 16);
@@ -138,16 +139,16 @@ namespace Tiledriver.Generator.SimpleGeometry
 
             var offset = new Point();
 
-            switch (direction)
+            switch (startingPointDirection)
             {
                 case Direction.East:
                     offset = new Point(x: startingPoint.X, y: startingPoint.Y - roomHeight / 2);
                     break;
                 case Direction.West:
-                    offset = new Point(x: startingPoint.X - roomWidth, y: startingPoint.Y - roomHeight / 2);
+                    offset = new Point(x: startingPoint.X - roomWidth + 1, y: startingPoint.Y - roomHeight / 2);
                     break;
                 case Direction.North:
-                    offset = new Point(x: startingPoint.X - roomWidth / 2, y: startingPoint.Y - roomHeight);
+                    offset = new Point(x: startingPoint.X - roomWidth / 2, y: startingPoint.Y - roomHeight + 1);
                     break;
                 case Direction.South:
                     offset = new Point(x: startingPoint.X - roomWidth / 2, y: startingPoint.Y);
