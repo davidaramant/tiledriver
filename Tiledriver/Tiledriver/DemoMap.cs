@@ -209,8 +209,8 @@ namespace Tiledriver
             geometry.Hallways.Add(new Rectangle(22, 31, 5, 10));
             geometry.Rooms.Add(new Rectangle(20, 40, 6, 16));
             geometry.Doors.Add(new Point(24, 40));
-            geometry.Doors.Add(new Point(23, 55));
-            geometry.Doors.Add(new Point(25, 49));
+            //geometry.Doors.Add(new Point(23, 55));
+            //geometry.Doors.Add(new Point(25, 49));
 
             List<Room> rooms = RandomGenerator.BuildRoomsFromAbstractGeometry(geometry, random, tagSequence);
             List<Room> hallways = RandomGenerator.BuildHallwaysFromAbstractGeometry(geometry, random, tagSequence);
