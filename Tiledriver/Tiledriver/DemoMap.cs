@@ -158,6 +158,7 @@ namespace Tiledriver
 
         public static Map CreateWithSparseMap()
         {
+            Random random = new Random();
             var tagSequence = new TagSequence();
             var sparseMap = new SparseMap(64, 64);
 
@@ -190,15 +191,32 @@ namespace Tiledriver
 
             sparseMap.AddRegion(littleRoom);
 
-            var purpleRoom = new Room(new Rectangle(20, 20, 6, 16), GetBox(6, 16, TileTheme.Purple), tagSequence);
-            purpleRoom.AddDoor(roomRow: 0, roomCol: 2, facingNorthSouth: true);
+            //var purpleRoom = new Room(new Rectangle(20, 20, 6, 16), GetBox(6, 16, TileTheme.Purple), tagSequence);
+            //purpleRoom.AddDoor(roomRow: 0, roomCol: 2, facingNorthSouth: true);
 
-            purpleRoom.AddThing(new RegionThing(
-                locationOffset: new Point(2, 4),
-                actor: WolfActor.SSGuard,
-                facing: Direction.North));
+            //purpleRoom.AddThing(new RegionThing(
+            //    locationOffset: new Point(2, 4),
+            //    actor: WolfActor.SSGuard,
+            //    facing: Direction.North));
 
-            sparseMap.AddRegion(purpleRoom);
+            //sparseMap.AddRegion(purpleRoom);
+
+            AbstractGeometry geometry = new AbstractGeometry();
+            geometry.Rooms.Add(new Rectangle(20, 20, 6, 16));
+            geometry.Hallways.Add(new Rectangle(22, 11, 3, 10));
+            geometry.Doors.Add(new Point(23, 20));
+            geometry.Doors.Add(new Point(23, 35));
+            geometry.Doors.Add(new Point(25, 29));
+            List<Room> rooms = RandomGenerator.BuildRoomsFromAbstractGeometry(geometry, random, tagSequence);
+            List<Room> hallways = RandomGenerator.BuildHallwaysFromAbstractGeometry(geometry, random, tagSequence);
+            foreach (Room room in hallways)
+            {
+                sparseMap.AddRegion(room);
+            }
+            foreach (Room room in rooms)
+            {
+                sparseMap.AddRegion(room);
+            }
 
             return sparseMap.Compile();
         }

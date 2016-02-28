@@ -28,7 +28,7 @@ namespace TestRunner
             var wadFileName = Path.GetFullPath("demo.wad" );
 
             WadFile.Save(
-                DemoMap.CreateWithRandomRegions(),
+                DemoMap.CreateWithSparseMap(),
                 wadFileName);
 
             Process.Start(

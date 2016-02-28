@@ -44,7 +44,10 @@ namespace Tiledriver.Generator
             },
             orderedDecorations: new WolfActor[] { },
             randomDecorations: new WolfActor[] { },
-            enemyTypes: new WolfActor[] { } );
+            enemyTypes: new WolfActor[]
+            {
+                WolfActor.Guard,
+             } );
 
         public static readonly RegionTheme OfficerLounge = new RegionTheme(
             normalWalls: new[]
@@ -59,7 +62,14 @@ namespace Tiledriver.Generator
             },
             orderedDecorations: new WolfActor[] { },
             randomDecorations: new WolfActor[] { },
-            enemyTypes: new WolfActor[] { });
+            enemyTypes: new WolfActor[]
+            {
+                WolfActor.Guard,
+                WolfActor.Guard,
+                WolfActor.Guard,
+                WolfActor.SSGuard,
+                WolfActor.Dog
+            });
 
         public static readonly RegionTheme StoneHallway = new RegionTheme(
             normalWalls: new[]
