@@ -47,8 +47,10 @@
     <Compile Include="DemoMap.cs" />
     <Compile Include="Generator\AbstractGeometry.cs" />
     <Compile Include="Generator\Direction.cs" />
+    <Compile Include="Generator\GeometryCreator.cs" />
     <Compile Include="Generator\IRegion.cs" />
     <Compile Include="Generator\RandomGenerator.cs" />
+    <Compile Include="Generator\RectangleExtensions.cs" />
     <Compile Include="Generator\RegionShape.cs" />
     <Compile Include="Generator\RegionTheme.cs" />
     <Compile Include="Generator\RegionThing.cs" />
@@ -56,6 +58,8 @@
     <Compile Include="Generator\Room.cs" />
     <Compile Include="Generator\SparseMap.cs" />
     <Compile Include="Generator\TagSequence.cs" />
+    <Compile Include="Graphs\Edge.cs" />
+    <Compile Include="Graphs\Graph.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Uwmf\MapConstructionException.cs" />
