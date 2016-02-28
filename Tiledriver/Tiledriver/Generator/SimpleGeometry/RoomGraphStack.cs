@@ -7,13 +7,13 @@ namespace Tiledriver.Generator.SimpleGeometry
 {
     public sealed class RoomGraphStack
     {
-        private readonly RoomNode _room;
+        public readonly RoomNode LastAddedRoom;
         private readonly RoomConnection _connection;
         private readonly RoomGraphStack _tail;
 
         public RoomGraphStack(RoomNode room)
         {
-            _room = room;
+            LastAddedRoom = room;
         }
 
         private RoomGraphStack(
@@ -21,7 +21,7 @@ namespace Tiledriver.Generator.SimpleGeometry
             RoomGraphStack tail,
             RoomConnection connection)
         {
-            _room = node;
+            LastAddedRoom = node;
             _tail = tail;
             _connection = connection;
         }
@@ -108,9 +108,9 @@ namespace Tiledriver.Generator.SimpleGeometry
             var stackCell = this;
             while (stackCell != null)
             {
-                if (stackCell._room.Type == RoomType.Room)
+                if (stackCell.LastAddedRoom.Type == RoomType.Room)
                 {
-                    yield return stackCell._room.Bounds;
+                    yield return stackCell.LastAddedRoom.Bounds;
                 }
                 stackCell = stackCell._tail;
             }
@@ -121,9 +121,9 @@ namespace Tiledriver.Generator.SimpleGeometry
             var stackCell = this;
             while (stackCell != null)
             {
-                if (stackCell._room.Type == RoomType.Hallway)
+                if (stackCell.LastAddedRoom.Type == RoomType.Hallway)
                 {
-                    yield return stackCell._room.Bounds;
+                    yield return stackCell.LastAddedRoom.Bounds;
                 }
                 stackCell = stackCell._tail;
             }
@@ -144,7 +144,7 @@ namespace Tiledriver.Generator.SimpleGeometry
             var stackCell = this;
             while (stackCell != null)
             {
-                yield return stackCell._room.Bounds;
+                yield return stackCell.LastAddedRoom.Bounds;
                 stackCell = stackCell._tail;
             }
         }

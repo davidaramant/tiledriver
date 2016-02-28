@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,6 +13,8 @@ namespace Tiledriver.Generator.SimpleGeometry
         private readonly int _mapWidth;
         private readonly int _mapHeight;
         private readonly Random _random;
+
+        private const int MaxRecursionDepth = 5;
 
         public SimpleGeometryCreator(int mapWidth, int mapHeight, Random random)
         {
@@ -31,6 +34,7 @@ namespace Tiledriver.Generator.SimpleGeometry
                 if (result.Item1)
                 {
                     roomStack = result.Item2;
+                    roomStack = TryAddConnectedRooms(roomStack.LastAddedRoom, roomStack, depth: 0);
                 }
             }
 
@@ -39,6 +43,28 @@ namespace Tiledriver.Generator.SimpleGeometry
             results.Hallways.AddRange(roomStack.GetAllHallwayBounds());
             results.Doors.AddRange(roomStack.GetAllDoorLocations());
             return results;
+        }
+
+        private RoomGraphStack TryAddConnectedRooms(
+            RoomNode currentRoom,
+            RoomGraphStack roomStack,
+            int depth)
+        {
+            if (depth == MaxRecursionDepth)
+            {
+                return roomStack;
+            }
+
+            foreach (var direction in roomStack.GetOpenConnections(currentRoom))
+            {
+                var result = TryAddRoom(currentRoom, roomStack, direction);
+                if (result.Item1)
+                {
+                    roomStack = TryAddConnectedRooms(roomStack.LastAddedRoom, roomStack, depth: depth + 1);
+                }
+            }
+
+            return roomStack;
         }
 
         private Tuple<bool, RoomGraphStack> TryAddRoom(
@@ -101,8 +127,8 @@ namespace Tiledriver.Generator.SimpleGeometry
 
         private Rectangle CreateStartingRoomBounds()
         {
-            var roomWidth = _random.Next(minValue: 5, maxValue: 16);
-            var roomHeight = _random.Next(minValue: 5, maxValue: 16);
+            var roomWidth = _random.Next(minValue: 5, maxValue: 12);
+            var roomHeight = _random.Next(minValue: 5, maxValue: 12);
 
             var left = _random.Next(0, _mapWidth - roomWidth);
             var top = _random.Next(0, _mapHeight - roomHeight);
