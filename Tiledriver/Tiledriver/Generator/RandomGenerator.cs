@@ -169,6 +169,14 @@ namespace Tiledriver.Generator
             WolfActor decoration;
 
             // TODO: make sure decorations do not block doors? Simply add space beside door to list of "used spaces"?
+            List<Point> doorPositions = room.GetThings().Select(door => new Point((int)door.X, (int)door.Y)).ToList();
+            foreach(Point doorPosition in doorPositions)
+            {
+                usedPositions.Add(new Point(doorPosition.X+1, doorPosition.Y));
+                usedPositions.Add(new Point(doorPosition.X-1, doorPosition.Y));
+                usedPositions.Add(new Point(doorPosition.X, doorPosition.Y+1));
+                usedPositions.Add(new Point(doorPosition.X, doorPosition.Y-1));
+            }
 
             // Place ordered decorations against walls
             if (regionTheme.OrderedDecorations.Count > 0 )
@@ -181,11 +189,7 @@ namespace Tiledriver.Generator
                     foreach (int index in decorationIndices )
                     {
                         Point position = new Point(index, 1);
-                        usedPositions.Add(position);
-                        room.AddThing(new RegionThing(
-                            locationOffset: position,
-                            actor: decoration,
-                            facing: GetRandomDirection(random)));
+                        PlaceDecorationAtPositionIfUnused(random, room, usedPositions, decoration, position);
                     }
                 }
                 // against bottom wall
@@ -196,11 +200,7 @@ namespace Tiledriver.Generator
                     foreach (int index in decorationIndices)
                     {
                         Point position = new Point(index, roomRectangle.Height-2);
-                        usedPositions.Add(position);
-                        room.AddThing(new RegionThing(
-                            locationOffset: position,
-                            actor: decoration,
-                            facing: GetRandomDirection(random)));
+                        PlaceDecorationAtPositionIfUnused(random, room, usedPositions, decoration, position);
                     }
                 }
 
@@ -212,11 +212,7 @@ namespace Tiledriver.Generator
                     foreach (int index in decorationIndices)
                     {
                         Point position = new Point(1, index);
-                        usedPositions.Add(position);
-                        room.AddThing(new RegionThing(
-                            locationOffset: position,
-                            actor: decoration,
-                            facing: GetRandomDirection(random)));
+                        PlaceDecorationAtPositionIfUnused(random, room, usedPositions, decoration, position);
                     }
                 }
                 // against right wall
@@ -227,11 +223,7 @@ namespace Tiledriver.Generator
                     foreach (int index in decorationIndices)
                     {
                         Point position = new Point(roomRectangle.Width - 2, index);
-                        usedPositions.Add(position);
-                        room.AddThing(new RegionThing(
-                            locationOffset: position,
-                            actor: decoration,
-                            facing: GetRandomDirection(random)));
+                        PlaceDecorationAtPositionIfUnused(random, room, usedPositions, decoration, position);
                     }
                 }
             }
@@ -265,6 +257,18 @@ namespace Tiledriver.Generator
                         actor: GetRandomRandomDecoration(regionTheme, random),
                         facing: GetRandomDirection(random)));
                 }
+            }
+        }
+
+        private static void PlaceDecorationAtPositionIfUnused(Random random, Room room, HashSet<Point> usedPositions, WolfActor decoration, Point position)
+        {
+            if (!usedPositions.Contains(position))
+            {
+                usedPositions.Add(position);
+                room.AddThing(new RegionThing(
+                    locationOffset: position,
+                    actor: decoration,
+                    facing: GetRandomDirection(random)));
             }
         }
 
