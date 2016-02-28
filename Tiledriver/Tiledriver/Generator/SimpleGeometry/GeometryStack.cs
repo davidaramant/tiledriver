@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace Tiledriver.Generator.SimpleGeometry
 {
@@ -9,6 +10,8 @@ namespace Tiledriver.Generator.SimpleGeometry
 
         private readonly GeometrySlice _slice;
         private readonly GeometryStack _tail;
+
+        public Rectangle LastRoom => _slice.Room;
 
         private GeometryStack()
         {          
@@ -52,6 +55,14 @@ namespace Tiledriver.Generator.SimpleGeometry
                 }
                 stackCell = stackCell._tail;
             }
+        }
+
+        public bool DoesIntersect(Rectangle rectangle)
+        {
+            return
+                GetAllRooms().
+                Concat(GetAllHallways()).
+                Any(room => room.IntersectsWith(rectangle));
         }
     }
 }
