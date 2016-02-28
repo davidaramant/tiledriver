@@ -319,11 +319,11 @@ namespace Tiledriver.Generator
         public static readonly RegionTheme EndRoom = new RegionTheme(
             normalWalls: new[]
             {
-                TileTheme.DaytimeSky,
+                TileTheme.Purple,
             },
             decorationWalls: new[]
             {
-                TileTheme.DaytimeSky
+                TileTheme.Purple
             },
             orderedDecorations: new WolfActor[] {
                 WolfActor.Vines
