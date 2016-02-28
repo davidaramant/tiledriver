@@ -170,7 +170,7 @@ namespace Tiledriver.Generator
                 BuildRoomWallsAndFloor(roomRectangle, tiles, regionTheme, random);
 
                 Room room = new Room(roomRectangle, tiles, tagSequence);
-
+                AddDoorsToRoom(geometry, roomRectangle, room);
                 AddLightsToRoom(roomRectangle, room);
 
                 rooms.Add(room);
