@@ -22,55 +22,84 @@ namespace Tiledriver.Generator.SimpleGeometry
 
         public AbstractGeometry Create()
         {
-            //var startRoom = new GeometrySlice(CreateStartingRoom());
-            //var geometry = RoomGraphStack.Empty.Push(startRoom);
+            var startRoom = new RoomNode(CreateStartingRoomBounds(), RoomType.Room);
+            var roomStack = new RoomGraphStack(startRoom);
 
-            var directionsToTry = GetRandomDirections().ToArray();
-            foreach (var direction in directionsToTry)
+            foreach (var direction in roomStack.GetOpenConnections(startRoom))
             {
-                //TryAddRoom(startRoom, geometry, direction);
+                var result = TryAddRoom(startRoom, roomStack, direction);
+                if (result.Item1)
+                {
+                    roomStack = result.Item2;
+                }
             }
 
             var results = new AbstractGeometry();
+            results.Rooms.AddRange(roomStack.GetAllRoomBounds());
+            results.Hallways.AddRange(roomStack.GetAllHallwayBounds());
+            results.Doors.AddRange(roomStack.GetAllDoorLocations());
             return results;
         }
 
-        private IEnumerable<Direction> GetRandomDirections()
+        private Tuple<bool, RoomGraphStack> TryAddRoom(
+            RoomNode currentRoom,
+            RoomGraphStack roomStack,
+            Direction directionFromCurrentRoom)
         {
-            Func<bool> include = () => _random.Next(1) == 0;
+            var roomType = (_random.Next(0, 10) <= 7) ? RoomType.Room : RoomType.Hallway;
 
-            if (include())
-                yield return Direction.East;
-            if (include())
-                yield return Direction.South;
-            if (include())
-                yield return Direction.West;
-            if (include())
-                yield return Direction.North;
+            var connectionLocation = currentRoom.GetStartingPointFacing(directionFromCurrentRoom, _random);
+
+            var newRoom = CreateBoundsForTypeOfRoom(roomType, connectionLocation, directionFromCurrentRoom);
+
+            var newConnection = MakeNewConnection(
+                oldRoom: currentRoom,
+                newRoom: newRoom,
+                directionFromOldRoom: directionFromCurrentRoom,
+                location: connectionLocation);
+
+            if (roomStack.CanThisConnectedRoomBeAdded(newRoom, newConnection))
+            {
+                return Tuple.Create(true, roomStack.AddRoom(newRoom, newConnection));
+            }
+
+            return Tuple.Create(false, (RoomGraphStack)null);
         }
 
-        private Direction GetRandomDirection()
+        private static RoomConnection MakeNewConnection(
+            RoomNode oldRoom,
+            RoomNode newRoom,
+            Direction directionFromOldRoom,
+            Point location)
         {
-            return (Direction)(_random.Next(4) * 90);
+            switch (directionFromOldRoom)
+            {
+                case Direction.East:
+                    return RoomConnection.CreateEastWest(eastRoom: oldRoom, westRoom: newRoom, location: location);
+                case Direction.West:
+                    return RoomConnection.CreateEastWest(eastRoom: newRoom, westRoom: oldRoom, location: location);
+                case Direction.North:
+                    return RoomConnection.CreateNorthSouth(northRoom: oldRoom, southRoom: newRoom, location: location);
+                case Direction.South:
+                    return RoomConnection.CreateNorthSouth(northRoom: newRoom, southRoom: oldRoom, location: location);
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
-        //private void TryAddRoom(GeometrySlice currentSlice, GeometryStack geometry, Direction direction)
-        //{
-        //    var addHallway = _random.Next(0, 10) > 7;
+        private RoomNode CreateBoundsForTypeOfRoom(RoomType roomType, Point connectionLocation, Direction direction)
+        {
+            if (roomType == RoomType.Room)
+            {
+                return new RoomNode(CreateRoomBounds(connectionLocation, direction), roomType);
+            }
+            else
+            {
+                return new RoomNode(CreateHallwayBounds(connectionLocation, direction), roomType);
+            }
+        }
 
-        //    switch (direction)
-        //    {
-        //        case Direction.North:
-        //        case Direction.South:
-        //        case Direction.East:
-        //        case Direction.West:
-        //            break;
-        //        default:
-        //            throw new InvalidOperationException();
-        //    }
-        //}
-
-        private Rectangle CreateStartingRoom()
+        private Rectangle CreateStartingRoomBounds()
         {
             var roomWidth = _random.Next(minValue: 5, maxValue: 16);
             var roomHeight = _random.Next(minValue: 5, maxValue: 16);
@@ -81,9 +110,9 @@ namespace Tiledriver.Generator.SimpleGeometry
             return new Rectangle(x: left, y: top, width: roomWidth, height: roomHeight);
         }
 
-        private Rectangle CreateHallway(Point startingPoint, Direction direction)
+        private Rectangle CreateHallwayBounds(Point startingPoint, Direction direction)
         {
-            int length = _random.Next(3, 7);
+            int length = _random.Next(3, 10);
 
             switch (direction)
             {
@@ -100,7 +129,7 @@ namespace Tiledriver.Generator.SimpleGeometry
             }
         }
 
-        private Rectangle CreateRoom(Point startingPoint, Direction direction)
+        private Rectangle CreateRoomBounds(Point startingPoint, Direction direction)
         {
             var roomWidth = _random.Next(minValue: 5, maxValue: 16);
             var roomHeight = _random.Next(minValue: 5, maxValue: 16);

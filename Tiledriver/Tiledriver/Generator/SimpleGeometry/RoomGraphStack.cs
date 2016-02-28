@@ -7,13 +7,13 @@ namespace Tiledriver.Generator.SimpleGeometry
 {
     public sealed class RoomGraphStack
     {
-        private readonly RoomNode Room;
+        private readonly RoomNode _room;
         private readonly RoomConnection _connection;
         private readonly RoomGraphStack _tail;
 
         public RoomGraphStack(RoomNode room)
         {
-            Room = room;
+            _room = room;
         }
 
         private RoomGraphStack(
@@ -21,7 +21,7 @@ namespace Tiledriver.Generator.SimpleGeometry
             RoomGraphStack tail,
             RoomConnection connection)
         {
-            Room = node;
+            _room = node;
             _tail = tail;
             _connection = connection;
         }
@@ -50,7 +50,7 @@ namespace Tiledriver.Generator.SimpleGeometry
 
         public bool IsNewConnectionValid(RoomNode newRoom, RoomConnection newConnection)
         {
-            // Find out what this connection means.  It must be from an existing room in a given direction.
+            // Find out what this connection means.  It must be from an existing existingRoom in a given direction.
             RoomNode existingRoom = GetExistingRoomFromConnection(newRoom, newConnection);
             Direction direction = 0;
 
@@ -82,7 +82,7 @@ namespace Tiledriver.Generator.SimpleGeometry
                 return false;
             }
 
-            // The new room WILL intersect with the room it's being connected too, but it should intersect with any others
+            // The new existingRoom WILL intersect with the existingRoom it's being connected too, but it should intersect with any others
             return
                 GetAllRegions().
                 Except(new[] { GetExistingRoomFromConnection(newRoom, newConnection).Bounds }).
@@ -94,42 +94,42 @@ namespace Tiledriver.Generator.SimpleGeometry
             return newConnection.Room1 == newRoom ? newConnection.Room2 : newConnection.Room1;
         }
 
-        public IEnumerable<Direction> GetOpenConnections(RoomNode room)
+        public IEnumerable<Direction> GetOpenConnections(RoomNode existingRoom)
         {
             return
                 new[] { Direction.East, Direction.North, Direction.West, Direction.South }.
-                Where(direction => !DoesConnectionExistForExistingRoom(room, direction));
+                Where(direction => !DoesConnectionExistForExistingRoom(existingRoom, direction));
         }
 
         #region Aggregation methods
 
-        public IEnumerable<Rectangle> GetAllRooms()
+        public IEnumerable<Rectangle> GetAllRoomBounds()
         {
             var stackCell = this;
             while (stackCell != null)
             {
-                if (stackCell.Room.Type == RoomType.Room)
+                if (stackCell._room.Type == RoomType.Room)
                 {
-                    yield return stackCell.Room.Bounds;
+                    yield return stackCell._room.Bounds;
                 }
                 stackCell = stackCell._tail;
             }
         }
 
-        public IEnumerable<Rectangle> GetAllHallways()
+        public IEnumerable<Rectangle> GetAllHallwayBounds()
         {
             var stackCell = this;
             while (stackCell != null)
             {
-                if (stackCell.Room.Type == RoomType.Hallway)
+                if (stackCell._room.Type == RoomType.Hallway)
                 {
-                    yield return stackCell.Room.Bounds;
+                    yield return stackCell._room.Bounds;
                 }
                 stackCell = stackCell._tail;
             }
         }
 
-        public IEnumerable<Point> GetAllDoors()
+        public IEnumerable<Point> GetAllDoorLocations()
         {
             var stackCell = this;
             while (stackCell._connection != null)
@@ -144,7 +144,7 @@ namespace Tiledriver.Generator.SimpleGeometry
             var stackCell = this;
             while (stackCell != null)
             {
-                yield return stackCell.Room.Bounds;
+                yield return stackCell._room.Bounds;
                 stackCell = stackCell._tail;
             }
         }
@@ -152,7 +152,7 @@ namespace Tiledriver.Generator.SimpleGeometry
         private IEnumerable<RoomConnection> GetAllConnections()
         {
             var stackCell = this;
-            while (stackCell._connection != null) // The start room does not have a connection at that layer
+            while (stackCell._connection != null) // The start existingRoom does not have a connection at that layer
             {
                 yield return stackCell._connection;
                 stackCell = stackCell._tail;
