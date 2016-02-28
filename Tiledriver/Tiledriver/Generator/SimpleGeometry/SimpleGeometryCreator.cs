@@ -22,13 +22,13 @@ namespace Tiledriver.Generator.SimpleGeometry
 
         public AbstractGeometry Create()
         {
-            var startRoom = new GeometrySlice(CreateStartingRoom());
-            var geometry = GeometryStack.Empty.Push(startRoom);
+            //var startRoom = new GeometrySlice(CreateStartingRoom());
+            //var geometry = RoomGraphStack.Empty.Push(startRoom);
 
             var directionsToTry = GetRandomDirections().ToArray();
             foreach (var direction in directionsToTry)
             {
-                TryAddRoom(startRoom, geometry, direction);
+                //TryAddRoom(startRoom, geometry, direction);
             }
 
             var results = new AbstractGeometry();
@@ -54,21 +54,21 @@ namespace Tiledriver.Generator.SimpleGeometry
             return (Direction)(_random.Next(4) * 90);
         }
 
-        private void TryAddRoom(GeometrySlice currentSlice, GeometryStack geometry, Direction direction)
-        {
-            var addHallway = _random.Next(0, 10) > 7;
+        //private void TryAddRoom(GeometrySlice currentSlice, GeometryStack geometry, Direction direction)
+        //{
+        //    var addHallway = _random.Next(0, 10) > 7;
 
-            switch (direction)
-            {
-                case Direction.North:
-                case Direction.South:
-                case Direction.East:
-                case Direction.West:
-                    break;
-                default:
-                    throw new InvalidOperationException();
-            }
-        }
+        //    switch (direction)
+        //    {
+        //        case Direction.North:
+        //        case Direction.South:
+        //        case Direction.East:
+        //        case Direction.West:
+        //            break;
+        //        default:
+        //            throw new InvalidOperationException();
+        //    }
+        //}
 
         private Rectangle CreateStartingRoom()
         {
