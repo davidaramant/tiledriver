@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +26,7 @@ namespace Tiledriver.Generator.SimpleGeometry
 
         public AbstractGeometry Create()
         {
-            var startRoom = new RoomNode(CreateStartingRoomBounds(), RoomType.Room);
+            var startRoom = new RoomNode(TryMakingBoundsInsideMap(CreateStartingRoomBounds).Item2, RoomType.Room);
             var roomStack = new RoomGraphStack(startRoom);
 
             foreach (var direction in roomStack.GetOpenConnections(startRoom))
@@ -60,6 +61,7 @@ namespace Tiledriver.Generator.SimpleGeometry
                 var result = TryAddRoom(currentRoom, roomStack, direction);
                 if (result.Item1)
                 {
+                    roomStack = result.Item2;
                     roomStack = TryAddConnectedRooms(roomStack.LastAddedRoom, roomStack, depth: depth + 1);
                 }
             }
@@ -76,17 +78,22 @@ namespace Tiledriver.Generator.SimpleGeometry
 
             var connectionLocation = currentRoom.GetStartingPointFacing(directionFromCurrentRoom, _random);
 
-            var newRoom = CreateBoundsForTypeOfRoom(roomType, connectionLocation, directionFromCurrentRoom);
+            var newRoomResult = CreateRoomType(roomType, connectionLocation, directionFromCurrentRoom);
 
-            var newConnection = MakeNewConnection(
-                oldRoom: currentRoom,
-                newRoom: newRoom,
-                directionFromOldRoom: directionFromCurrentRoom,
-                location: connectionLocation);
-
-            if (roomStack.CanThisConnectedRoomBeAdded(newRoom, newConnection))
+            if (newRoomResult.Item1)
             {
-                return Tuple.Create(true, roomStack.AddRoom(newRoom, newConnection));
+                var newRoom = newRoomResult.Item2;
+
+                var newConnection = MakeNewConnection(
+                    oldRoom: currentRoom,
+                    newRoom: newRoom,
+                    directionFromOldRoom: directionFromCurrentRoom,
+                    location: connectionLocation);
+
+                if (roomStack.CanThisConnectedRoomBeAdded(newRoom, newConnection))
+                {
+                    return Tuple.Create(true, roomStack.AddRoom(newRoom, newConnection));
+                }
             }
 
             return Tuple.Create(false, (RoomGraphStack)null);
@@ -113,16 +120,18 @@ namespace Tiledriver.Generator.SimpleGeometry
             }
         }
 
-        private RoomNode CreateBoundsForTypeOfRoom(RoomType roomType, Point connectionLocation, Direction direction)
+        private Tuple<bool, RoomNode> CreateRoomType(RoomType roomType, Point connectionLocation, Direction direction)
         {
-            if (roomType == RoomType.Room)
-            {
-                return new RoomNode(CreateRoomBounds(connectionLocation, direction), roomType);
-            }
+            Func<Point, Direction, Rectangle> boundGenerator = roomType == RoomType.Room
+                ? (Func<Point, Direction, Rectangle>)CreateRoomBounds
+                : (Func<Point, Direction, Rectangle>)CreateHallwayBounds;
+
+            var boundResult = TryMakingBoundsInsideMap(() => boundGenerator(connectionLocation, direction));
+
+            if (boundResult.Item1)
+                return Tuple.Create(true, new RoomNode(boundResult.Item2, roomType));
             else
-            {
-                return new RoomNode(CreateHallwayBounds(connectionLocation, direction), roomType);
-            }
+                return Tuple.Create(false, (RoomNode)null);
         }
 
         private Rectangle CreateStartingRoomBounds()
@@ -134,6 +143,30 @@ namespace Tiledriver.Generator.SimpleGeometry
             var top = _random.Next(0, _mapHeight - roomHeight);
 
             return new Rectangle(x: left, y: top, width: roomWidth, height: roomHeight);
+        }
+
+        private Tuple<bool, Rectangle> TryMakingBoundsInsideMap(Func<Rectangle> boundsCreator)
+        {
+            const int MaxTries = 10;
+            int tries = 0;
+
+            Rectangle bounds;
+            do
+            {
+                bounds = boundsCreator();
+                tries++;
+
+                if (tries == MaxTries)
+                {
+                    return Tuple.Create(false, Rectangle.Empty);
+                }
+            } while (
+                bounds.LeftEdge() < 0 ||
+                bounds.RightEdge() >= _mapWidth ||
+                bounds.TopEdge() < 0 ||
+                bounds.BottomEdge() >= _mapHeight);
+
+            return Tuple.Create(true, bounds);
         }
 
         private Rectangle CreateHallwayBounds(Point startingPoint, Direction startingPointDirection)
