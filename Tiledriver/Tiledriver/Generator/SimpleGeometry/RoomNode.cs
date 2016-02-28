@@ -28,16 +28,16 @@ namespace Tiledriver.Generator.SimpleGeometry
             switch (direction)
             {
                 case Direction.East:
-                    return new Point(x: Bounds.RightEdge(), y: random.Next(Bounds.TopEdge(), Bounds.BottomEdge() + 1));
+                    return new Point(x: Bounds.RightEdge(), y: random.Next(Bounds.TopEdge() + 1, Bounds.BottomEdge()));
 
                 case Direction.North:
-                    return new Point(x: random.Next(Bounds.LeftEdge(), Bounds.RightEdge() + 1), y: Bounds.TopEdge());
+                    return new Point(x: random.Next(Bounds.LeftEdge() + 1, Bounds.RightEdge()), y: Bounds.TopEdge());
 
                 case Direction.West:
-                    return new Point(x: Bounds.LeftEdge(), y: random.Next(Bounds.TopEdge(), Bounds.BottomEdge() + 1));
+                    return new Point(x: Bounds.LeftEdge(), y: random.Next(Bounds.TopEdge(), Bounds.BottomEdge()));
 
                 case Direction.South:
-                    return new Point(x: random.Next(Bounds.LeftEdge(), Bounds.RightEdge() + 1), y: Bounds.BottomEdge());
+                    return new Point(x: random.Next(Bounds.LeftEdge() + 1, Bounds.RightEdge()), y: Bounds.BottomEdge());
 
                 default:
                     throw new InvalidOperationException("Can't handle that direction.");
