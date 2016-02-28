@@ -187,7 +187,7 @@ namespace Tiledriver.Generator
             WolfActor decoration;
 
             // TODO: make sure decorations do not block doors? Simply add space beside door to list of "used spaces"?
-            List<Point> doorPositions = room.GetThings().Select(door => new Point((int)door.X, (int)door.Y)).ToList();
+            List<Point> doorPositions = room.GetThings().Select(door => new Point((int)door.X - roomRectangle.Left, (int)door.Y - roomRectangle.Top)).ToList();
             foreach(Point doorPosition in doorPositions)
             {
                 usedPositions.Add(new Point(doorPosition.X+1, doorPosition.Y));
