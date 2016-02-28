@@ -86,7 +86,7 @@ namespace Tiledriver.Generator.SimpleGeometry
             return
                 GetAllRegions().
                 Except(new[] { GetExistingRoomFromConnection(newRoom, newConnection).Bounds }).
-                Any(room => !room.IntersectsWith(newRoom.Bounds));
+                All(room => !room.IntersectsWith(newRoom.Bounds));
         }
 
         private static RoomNode GetExistingRoomFromConnection(RoomNode newRoom, RoomConnection newConnection)
