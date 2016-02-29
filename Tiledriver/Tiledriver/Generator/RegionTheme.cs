@@ -338,6 +338,29 @@ namespace Tiledriver.Generator
                 WolfActor.Clip
             });
 
+        public static readonly RegionTheme HitlerRoom = new RegionTheme(
+            normalWalls: new[]
+            {
+                TileTheme.GrayBrick,
+                TileTheme.GrayBrickCrack,
+            },
+            decorationWalls: new[]
+            {
+                TileTheme.GrayBrickHitler,
+                TileTheme.GrayBrickMap
+            },
+            orderedDecorations: new WolfActor[] {
+                WolfActor.FirstAidKit
+            },
+            randomDecorations: new WolfActor[] {
+                WolfActor.GatlingGun,
+                WolfActor.Clip
+            },
+            enemyTypes: new WolfActor[]
+            {
+                WolfActor.Hitler
+            });
+
 
         public static IEnumerable<RegionTheme> GetAvailableThemes()
         {

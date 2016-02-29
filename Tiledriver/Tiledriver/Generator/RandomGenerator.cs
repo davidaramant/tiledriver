@@ -125,11 +125,12 @@ namespace Tiledriver.Generator
             for (int roomIndex = 0; roomIndex < roomCount; roomIndex++)
             {
                 Rectangle roomRectangle = geometry.Rooms[roomIndex];
-                bool finalRoom = false;//roomIndex == roomCount - 1;
+                bool isFirstRoom = roomIndex == roomCount - 1; 
+                bool isFinalRoom = 0 == roomIndex;
                 RegionTheme regionTheme;
-                if (finalRoom)
+                if (isFinalRoom)
                 {
-                    regionTheme = RegionTheme.EndRoom;
+                    regionTheme = RegionTheme.HitlerRoom;
                 }
                 else
                 {
@@ -146,11 +147,11 @@ namespace Tiledriver.Generator
 
                 AddLightsToRoom(roomRectangle, room);
 
-                AddEnemiesAndDecorationsToRoom(random, roomRectangle, regionTheme, room, 0 == roomIndex, geometry);
+                AddEnemiesAndDecorationsToRoom(random, roomRectangle, regionTheme, room, isFirstRoom, isFinalRoom, geometry);
 
-                if (finalRoom)
+                if (isFinalRoom)
                 {
-                    room.AddEndgameTrigger();
+                    //room.AddEndgameTrigger();
                 }
 
                 rooms.Add(room);
@@ -180,7 +181,7 @@ namespace Tiledriver.Generator
         }
 
 
-        private static void AddEnemiesAndDecorationsToRoom(Random random, Rectangle roomRectangle, RegionTheme regionTheme, Room room, bool firstRoom, AbstractGeometry geometry)
+        private static void AddEnemiesAndDecorationsToRoom(Random random, Rectangle roomRectangle, RegionTheme regionTheme, Room room, bool isFirstRoom, bool isFinalRoom, AbstractGeometry geometry)
         {
             HashSet<Point> usedPositions = new HashSet<Point>();
             HashSet<int> decorationIndices;
@@ -200,7 +201,7 @@ namespace Tiledriver.Generator
             if (regionTheme.OrderedDecorations.Count > 0 )
             {
                 // against top wall
-                if (GetNewProbability(random) <= OrderedDecorationProbability)
+                if (GetNewProbability(random) <= OrderedDecorationProbability || isFinalRoom )
                 {
                     decoration = GetRandomOrderedDecoration(regionTheme, random);
                     decorationIndices = Determine2DObjectSymmetry(roomRectangle.Width, random);
@@ -211,7 +212,7 @@ namespace Tiledriver.Generator
                     }
                 }
                 // against bottom wall
-                if (GetNewProbability(random) <= OrderedDecorationProbability)
+                if (GetNewProbability(random) <= OrderedDecorationProbability || isFinalRoom)
                 {
                     decoration = GetRandomOrderedDecoration(regionTheme, random);
                     decorationIndices = Determine2DObjectSymmetry(roomRectangle.Width, random);
@@ -223,7 +224,7 @@ namespace Tiledriver.Generator
                 }
 
                 // against left wall
-                if (GetNewProbability(random) <= OrderedDecorationProbability)
+                if (GetNewProbability(random) <= OrderedDecorationProbability || isFinalRoom)
                 {
                     decoration = GetRandomOrderedDecoration(regionTheme, random);
                     decorationIndices = Determine2DObjectSymmetry(roomRectangle.Height, random);
@@ -234,7 +235,7 @@ namespace Tiledriver.Generator
                     }
                 }
                 // against right wall
-                if (GetNewProbability(random) <= OrderedDecorationProbability)
+                if (GetNewProbability(random) <= OrderedDecorationProbability || isFinalRoom)
                 {
                     decoration = GetRandomOrderedDecoration(regionTheme, random);
                     decorationIndices = Determine2DObjectSymmetry(roomRectangle.Height, random);
@@ -246,7 +247,7 @@ namespace Tiledriver.Generator
                 }
             }
 
-            if (firstRoom)
+            if (isFirstRoom)
             {
                 Point offset = getUnusedRoomPosition(roomRectangle, room, usedPositions, random);
                 usedPositions.Add(offset);
@@ -257,25 +258,29 @@ namespace Tiledriver.Generator
             }
 
             // Place enemies (skip if first room)
-            if (!firstRoom && (regionTheme.EnemyTypes.Count > 0))
+            if (!isFirstRoom && (regionTheme.EnemyTypes.Count > 0))
             {
                 int numEnemies = (roomRectangle.Width - 2) * (roomRectangle.Height - 2) / 16;
 
                 for (int index = 0; index < numEnemies; index++)
                 {
-                    Point position = getUnusedRoomPosition(roomRectangle, room, usedPositions, random);
+                    Point position = isFinalRoom ? new Point(roomRectangle.Width/2, roomRectangle.Height/2) : getUnusedRoomPosition(roomRectangle, room, usedPositions, random);
                     usedPositions.Add(position);
                     room.AddThing(new RegionThing(
                         locationOffset: position,
                         actor: GetRandomEnemy(regionTheme, random),
-                        facing: GetRandomDirection(random)));
+                        facing: isFinalRoom ? Direction.North : GetRandomDirection(random)));
+                    if (isFinalRoom)
+                    {
+                        break;
+                    }
                 }
             }
 
             // Place random decorations
             if (regionTheme.RandomDecorations.Count > 0)
             {
-                int numDecorations = (roomRectangle.Width - 2) * (roomRectangle.Height - 2) / 16;
+                int numDecorations = (roomRectangle.Width - 2) * (roomRectangle.Height - 2) / (isFinalRoom ? 2 : 16);
                 for (int index = 0; index < numDecorations; index++)
                 {
                     Point position = getUnusedRoomPosition(roomRectangle, room, usedPositions, random);
