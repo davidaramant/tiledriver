@@ -74,7 +74,8 @@ namespace Tiledriver.Generator.SimpleGeometry
             RoomGraphStack roomStack,
             Direction directionFromCurrentRoom)
         {
-            var roomType = (_random.Next(0, 10) <= 7) ? RoomType.Room : RoomType.Hallway;
+            // HACK: Only do normal rooms because hallways don't get themed in an interesting way
+            var roomType = RoomType.Room;//(_random.Next(0, 10) <= 7) ? RoomType.Room : RoomType.Hallway;
 
             var connectionLocation = currentRoom.GetStartingPointFacing(directionFromCurrentRoom, _random);
 

@@ -94,7 +94,7 @@ namespace Tiledriver.Generator
         {
             var map = new Map
             {
-                Name = "Test Ouput",
+                Name = "Let's Kill Hitler",
                 Width = Width,
                 Height = Height,
                 TileSize = 64,
