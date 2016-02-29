@@ -146,7 +146,7 @@ namespace Tiledriver.Generator
 
                 AddLightsToRoom(roomRectangle, room);
 
-                AddEnemiesAndDecorationsToRoom(random, roomRectangle, regionTheme, room, 0 == roomIndex);
+                AddEnemiesAndDecorationsToRoom(random, roomRectangle, regionTheme, room, 0 == roomIndex, geometry);
 
                 if (finalRoom)
                 {
@@ -180,20 +180,20 @@ namespace Tiledriver.Generator
         }
 
 
-        private static void AddEnemiesAndDecorationsToRoom(Random random, Rectangle roomRectangle, RegionTheme regionTheme, Room room, bool firstRoom)
+        private static void AddEnemiesAndDecorationsToRoom(Random random, Rectangle roomRectangle, RegionTheme regionTheme, Room room, bool firstRoom, AbstractGeometry geometry)
         {
             HashSet<Point> usedPositions = new HashSet<Point>();
             HashSet<int> decorationIndices;
             WolfActor decoration;
 
             // TODO: make sure decorations do not block doors? Simply add space beside door to list of "used spaces"?
-            List<Point> doorPositions = room.GetThings().Select(door => new Point((int)door.X - roomRectangle.Left, (int)door.Y - roomRectangle.Top)).ToList();
+            List<Point> doorPositions = geometry.Doors.Select(door => new Point((int)door.X - roomRectangle.Left, (int)door.Y - roomRectangle.Top)).ToList();
             foreach(Point doorPosition in doorPositions)
             {
-                usedPositions.Add(new Point(doorPosition.X+1, doorPosition.Y));
-                usedPositions.Add(new Point(doorPosition.X-1, doorPosition.Y));
-                usedPositions.Add(new Point(doorPosition.X, doorPosition.Y+1));
-                usedPositions.Add(new Point(doorPosition.X, doorPosition.Y-1));
+                usedPositions.Add(new Point(doorPosition.X + 1, doorPosition.Y));
+                usedPositions.Add(new Point(doorPosition.X - 1, doorPosition.Y));
+                usedPositions.Add(new Point(doorPosition.X, doorPosition.Y + 1));
+                usedPositions.Add(new Point(doorPosition.X, doorPosition.Y - 1));
             }
 
             // Place ordered decorations against walls
