@@ -24,11 +24,13 @@ namespace Tiledriver.Generator
         {
             public readonly bool FacingNorthSouth;
             public readonly int Tag;
+            public readonly bool IsLocked;
 
-            public Door(bool facingNorthSouth, int tag)
+            public Door(bool facingNorthSouth, int tag, bool isLocked = false)
             {
                 FacingNorthSouth = facingNorthSouth;
                 Tag = tag;
+                IsLocked = isLocked;
             }
         }
 
@@ -85,8 +87,8 @@ namespace Tiledriver.Generator
                 Arg0 = locatedDoor.Value.Tag, // Tag
                 Arg1 = 16, // Speed
                 Arg2 = 300, // Delay
-                Arg3 = 0, // Lock
-                Arg4 = locatedDoor.Value.FacingNorthSouth ? 1 : 0, 
+                Arg3 = locatedDoor.Value.IsLocked ? 1 : 0, // Lock
+                Arg4 = locatedDoor.Value.FacingNorthSouth ? 1 : 0,
                 PlayerUse = true,
                 Repeatable = true,
                 MonsterUse = true,
@@ -106,10 +108,10 @@ namespace Tiledriver.Generator
             return triggers;
         }
 
-        public void AddDoor(int roomRow, int roomCol, bool facingNorthSouth)
+        public void AddDoor(int roomRow, int roomCol, bool facingNorthSouth, bool isLocked = false)
         {
             _doors.Add(new Point(x: roomCol, y: roomRow),
-                new Door(facingNorthSouth:facingNorthSouth,tag:_tagSequence.GetNext()));
+                new Door(facingNorthSouth: facingNorthSouth, tag: _tagSequence.GetNext(), isLocked: isLocked));
         }
 
         public MapTile GetTileAtPosition(int mapRow, int mapCol)
@@ -117,9 +119,20 @@ namespace Tiledriver.Generator
             var roomPosition = new Point(x: mapCol - BoundingBox.Left, y: mapRow - BoundingBox.Top);
             if (_doors.ContainsKey(roomPosition))
             {
-                return MapTile.Textured(
-                    _doors[roomPosition].FacingNorthSouth ? TileTheme.DoorFacingNorthSouth : TileTheme.DoorFacingEastWest,
-                    tag:_doors[roomPosition].Tag );
+                var door = _doors[roomPosition];
+
+                if (door.IsLocked)
+                {
+                    return MapTile.Textured(
+                        door.FacingNorthSouth ? TileTheme.LockedDoorFacingNorthSouth : TileTheme.LockedDoorFacingEastWest,
+                        tag: door.Tag);
+                }
+                else
+                {
+                    return MapTile.Textured(
+                        door.FacingNorthSouth ? TileTheme.DoorFacingNorthSouth : TileTheme.DoorFacingEastWest,
+                        tag: door.Tag);
+                }
             }
 
             return _tiles[roomPosition.Y, roomPosition.X];

@@ -57,6 +57,26 @@ namespace Tiledriver.Wolf3D
                 OffsetVertical = true,
             });
 
+        public static TileTheme LockedDoorFacingNorthSouth = new TileTheme(
+            definition: new Tile
+            {
+                TextureNorth = "DOOR3_1",
+                TextureSouth = "DOOR3_1",
+                TextureEast = "SLOT1_1",
+                TextureWest = "SLOT1_1",
+                OffsetHorizontal = true,
+            });
+
+        public static TileTheme LockedDoorFacingEastWest = new TileTheme(
+            definition: new Tile
+            {
+                TextureNorth = "SLOT3_2",
+                TextureSouth = "SLOT3_2",
+                TextureEast = "DOOR1_2",
+                TextureWest = "DOOR1_2",
+                OffsetVertical = true,
+            });
+
         public static TileTheme GrayStoneFlag = new TileTheme(
             definition: new Tile
             {
