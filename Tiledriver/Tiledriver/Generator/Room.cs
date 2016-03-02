@@ -25,12 +25,14 @@ namespace Tiledriver.Generator
             public readonly bool FacingNorthSouth;
             public readonly int Tag;
             public readonly bool IsLocked;
+            public readonly bool IsSecret;
 
-            public Door(bool facingNorthSouth, int tag, bool isLocked = false)
+            public Door(bool facingNorthSouth, int tag, bool isLocked = false, bool isSecret = false)
             {
                 FacingNorthSouth = facingNorthSouth;
                 Tag = tag;
                 IsLocked = isLocked;
+                IsSecret = isSecret;
             }
         }
 
@@ -92,6 +94,7 @@ namespace Tiledriver.Generator
                 PlayerUse = true,
                 Repeatable = true,
                 MonsterUse = true,
+                Secret = locatedDoor.Value.IsSecret
             }));
             if (hasEndgame)
             {
@@ -108,10 +111,10 @@ namespace Tiledriver.Generator
             return triggers;
         }
 
-        public void AddDoor(int roomRow, int roomCol, bool facingNorthSouth, bool isLocked = false)
+        public void AddDoor(int roomRow, int roomCol, bool facingNorthSouth, bool isLocked = false, bool isSecret = false)
         {
             _doors.Add(new Point(x: roomCol, y: roomRow),
-                new Door(facingNorthSouth: facingNorthSouth, tag: _tagSequence.GetNext(), isLocked: isLocked));
+                new Door(facingNorthSouth: facingNorthSouth, tag: _tagSequence.GetNext(), isLocked: isLocked, isSecret: isSecret));
         }
 
         public MapTile GetTileAtPosition(int mapRow, int mapCol)

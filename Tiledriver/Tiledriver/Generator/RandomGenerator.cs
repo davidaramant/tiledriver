@@ -128,6 +128,8 @@ namespace Tiledriver.Generator
                 bool isFirstRoom = roomIndex == roomCount - 1;
                 bool isFinalRoom = 0 == roomIndex;
                 bool isKeyRoom = roomCount/2 == roomIndex;
+                bool isSecret = isFinalRoom ? false : GetNewProbability(random) < 10;
+
                 RegionTheme regionTheme;
                 if (isFinalRoom)
                 {
@@ -144,7 +146,7 @@ namespace Tiledriver.Generator
 
                 Room room = new Room(roomRectangle, tiles, tagSequence);
 
-                AddDoorsToRoom(geometry, roomRectangle, room, isFinalRoom: isFinalRoom);
+                AddDoorsToRoom(geometry, roomRectangle, room, isLocked: isFinalRoom, isSecret: isSecret);
 
                 AddLightsToRoom(roomRectangle, room);
 
@@ -172,7 +174,7 @@ namespace Tiledriver.Generator
                 BuildRoomWallsAndFloor(roomRectangle, tiles, regionTheme, random);
 
                 Room room = new Room(roomRectangle, tiles, tagSequence);
-                AddDoorsToRoom(geometry, roomRectangle, room, isFinalRoom: false);
+                AddDoorsToRoom(geometry, roomRectangle, room, isLocked: false, isSecret: false);
                 AddLightsToRoom(roomRectangle, room);
 
                 rooms.Add(room);
@@ -338,19 +340,19 @@ namespace Tiledriver.Generator
             return position;
         }
 
-        private static void AddDoorsToRoom(AbstractGeometry geometry, Rectangle roomRectangle, Room room, bool isFinalRoom)
+        private static void AddDoorsToRoom(AbstractGeometry geometry, Rectangle roomRectangle, Room room, bool isLocked, bool isSecret)
         {
             foreach (Point door in geometry.Doors)
             {
                 if ((door.X == roomRectangle.Left) || (door.X == roomRectangle.Right - 1)
                     && (door.Y >= roomRectangle.Top) && (door.Y < roomRectangle.Bottom))
                 {
-                    room.AddDoor(door.Y - roomRectangle.Top, door.X - roomRectangle.Left, facingNorthSouth: false, isLocked: isFinalRoom);
+                    room.AddDoor(door.Y - roomRectangle.Top, door.X - roomRectangle.Left, facingNorthSouth: false, isLocked: isLocked, isSecret: isSecret);
                 }
                 else if ((door.Y == roomRectangle.Top) || (door.Y == roomRectangle.Bottom - 1)
                     && (door.X >= roomRectangle.Left) && (door.X < roomRectangle.Right))
                 {
-                    room.AddDoor(door.Y - roomRectangle.Top, door.X - roomRectangle.Left, facingNorthSouth: true, isLocked: isFinalRoom);
+                    room.AddDoor(door.Y - roomRectangle.Top, door.X - roomRectangle.Left, facingNorthSouth: true, isLocked: isLocked, isSecret: isSecret);
                 }
             }
         }
