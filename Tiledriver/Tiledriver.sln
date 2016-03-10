@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tiledriver", "Tiledriver\Tiledriver.csproj", "{A32B1E60-62EE-4EF9-892B-1B8A3BB2396C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRunner", "TestRunner\TestRunner.csproj", "{335AB7A0-117F-44DC-BDA0-665D850DF7B9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECWolfLauncher", "ECWolfLauncher\ECWolfLauncher.csproj", "{335AB7A0-117F-44DC-BDA0-665D850DF7B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
