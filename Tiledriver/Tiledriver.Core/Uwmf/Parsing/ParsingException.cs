@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Tiledriver.Uwmf.Parsing
+namespace Tiledriver.Core.Uwmf.Parsing
 {
     public sealed class ParsingException : Exception
     {

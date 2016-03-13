@@ -49,6 +49,7 @@
     <Compile Include="DemoMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Uwmf\Parsing\CharPosition.cs" />
+    <Compile Include="Uwmf\Parsing\Identifier.cs" />
     <Compile Include="Uwmf\Parsing\ILexer.cs" />
     <Compile Include="Uwmf\Parsing\ParsingException.cs" />
     <Compile Include="Uwmf\StreamExtensions.cs" />

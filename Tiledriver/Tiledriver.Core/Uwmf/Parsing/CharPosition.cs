@@ -3,7 +3,7 @@
 
 using System.Diagnostics;
 
-namespace Tiledriver.Uwmf.Parsing
+namespace Tiledriver.Core.Uwmf.Parsing
 {
     [DebuggerDisplay("{ToString()}")]
     public sealed class CharPosition

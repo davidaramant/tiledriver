@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Tiledriver.Uwmf.Parsing
+namespace Tiledriver.Core.Uwmf.Parsing
 {
     public enum BlockExpression
     {
@@ -13,7 +13,7 @@ namespace Tiledriver.Uwmf.Parsing
 
     public interface ILexer
     {
-        string ReadIdentifier();
+        Identifier ReadIdentifier();
 
         int ReadIntAssignment();
         double ReadDoubleAssignment();
@@ -22,7 +22,7 @@ namespace Tiledriver.Uwmf.Parsing
 
         void VerifyStartOfBlock();
 
-        Tuple<BlockExpression, string> ReadEndBlockOrIdentifier();
+        Tuple<BlockExpression, Identifier> ReadEndBlockOrIdentifier();
 
         void SkipAssignment();
     }
