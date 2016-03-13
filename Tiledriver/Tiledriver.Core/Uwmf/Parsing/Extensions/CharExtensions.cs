@@ -24,5 +24,21 @@ namespace Tiledriver.Core.Uwmf.Parsing.Extensions
         {
             return c == '/';
         }
+
+        public static bool IsEndOfAssignment(this char c)
+        {
+            return c == ';';
+        }
+
+        public static bool IsIntegerChar(this char c)
+        {
+            return
+                (c >= '0' && c <= '9') ||
+                (c >= 'a' && c <= 'f') ||
+                (c >= 'A' && c <= 'F') ||
+                c == '-' ||
+                c == '+' ||
+                c == 'x';
+        }
     }
 }

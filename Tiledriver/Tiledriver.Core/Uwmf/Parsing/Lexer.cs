@@ -2,6 +2,7 @@
 // Distributed under the GNU GPL v2. For full terms see the file LICENSE.
 
 using System;
+using System.Globalization;
 using System.Text;
 using Tiledriver.Core.Uwmf.Parsing.Extensions;
 
@@ -42,7 +43,39 @@ namespace Tiledriver.Core.Uwmf.Parsing
 
         public int ReadIntAssignment()
         {
-            throw new NotImplementedException();
+            const string eofMessage = "Unexpected end of file when reading integer.";
+            var buffer = new StringBuilder();
+
+            MovePastWhitespaceAndComments(eofMessage);
+
+            var startPosition = _reader.Current.Position;
+
+            while(!_reader.Current.Char.IsEndOfAssignment())
+            {
+                if (!_reader.Current.Char.IsIntegerChar())
+                {
+                    throw new ParsingException(_reader.Current.Position, $"Unexpected character while reading integer: {_reader.Current.Char}.");
+                }
+                buffer.Append(_reader.Current.Char);
+                _reader.MustReadChar(eofMessage);
+            }
+
+            var integerString = buffer.ToString();
+            int result;
+            if (integerString.StartsWith("0x", StringComparison.InvariantCulture))
+            {
+                if (int.TryParse(integerString.Substring(2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out result))
+                {
+                    return result;
+                }
+                throw new ParsingException(startPosition, "Malformed hex integer.");
+            }
+
+            if (int.TryParse(integerString, NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out result))
+            {
+                return result;
+            }
+            throw new ParsingException(startPosition, "Malformed integer.");
         }
 
         public double ReadDoubleAssignment()

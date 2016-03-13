@@ -1,9 +1,6 @@
 ﻿// Copyright (c) 2016 David Aramant
 // Distributed under the GNU GPL v2. For full terms see the file LICENSE.
 
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using NUnit.Framework;
 using Tiledriver.Core.Uwmf.Parsing;
 
@@ -42,6 +39,22 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
                 lexer.DetermineIfAssignmentOrStartBlock(),
                 Is.EqualTo(expectedType),
                 "Did not determine expression type correctly.");
+        }
+
+        [TestCase("64;", 64)]
+        [TestCase("8;", 8)]
+        [TestCase("08;", 8)]
+        [TestCase("+16;", 16)]
+        [TestCase("-16;", -16)]
+        [TestCase("0xFf;", 255)]
+        public void ShouldReadIntegerAssignment( string input, int expectedResult )
+        {
+            var lexer = new Lexer(new TestStringReader(input));
+
+            Assert.That(
+                lexer.ReadIntAssignment(),
+                Is.EqualTo(expectedResult),
+                "Did not read integer correctly.");
         }
     }
 }
