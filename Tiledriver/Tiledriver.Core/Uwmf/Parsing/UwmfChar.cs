@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2016 David Aramant
 // Distributed under the GNU GPL v2. For full terms see the file LICENSE.
 
+using System;
 using System.Diagnostics;
 
 namespace Tiledriver.Core.Uwmf.Parsing
@@ -14,6 +15,11 @@ namespace Tiledriver.Core.Uwmf.Parsing
 
         private UwmfChar(char c, bool endOfFile, CharPosition position)
         {
+            if (position == null)
+            {
+                throw new ArgumentNullException(nameof(position));
+            }
+
             Char = c;
             IsEndOfFile = endOfFile;
             Position = position;
@@ -26,7 +32,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 
         public static UwmfChar EndOfFile(CharPosition position)
         {
-            return new UwmfChar(c: ' ', endOfFile: true, position: position);
+            return new UwmfChar(c: '�', endOfFile: true, position: position);
         }
 
         public override string ToString()
