@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Tiledriver.Core.Uwmf.Parsing
 {
-    public sealed class UwmfCharReader
+    public sealed class UwmfCharReader : IUwmfCharReader
     {
         private readonly Stream _inputStream;
         private CharPosition _position = CharPosition.StartOfFile;
@@ -17,7 +17,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
             _inputStream = inputStream;
         }
 
-        public void MaybeReadAnother()
+        public void MaybeReadChar()
         {
             int readByte = _inputStream.ReadByte();
 
@@ -40,7 +40,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 
         public void MustReadChar(string endOfFileMessage)
         {
-            MaybeReadAnother();
+            MaybeReadChar();
 
             if (Current.IsEndOfFile)
             {

@@ -2,7 +2,6 @@
 // Distributed under the GNU GPL v2. For full terms see the file LICENSE.
 
 using System;
-using System.IO;
 using System.Text;
 using Tiledriver.Core.Uwmf.Parsing.Extensions;
 
@@ -10,11 +9,11 @@ namespace Tiledriver.Core.Uwmf.Parsing
 {
     public sealed class Lexer : ILexer
     {
-        private readonly UwmfCharReader _reader;
+        private readonly IUwmfCharReader _reader;
 
-        public Lexer(Stream inputStream)
+        public Lexer(IUwmfCharReader reader)
         {
-            _reader = new UwmfCharReader(inputStream);
+            _reader = reader;
         }
 
        public Identifier ReadIdentifier()
@@ -103,7 +102,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
                 case '/':
                     while (_reader.Current.Char != '\n')
                     {
-                        _reader.MaybeReadAnother();
+                        _reader.MaybeReadChar();
                     }
                     return;
 

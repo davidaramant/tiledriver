@@ -1,9 +1,6 @@
 ﻿// Copyright (c) 2016 David Aramant
 // Distributed under the GNU GPL v2. For full terms see the file LICENSE.
 
-using System;
-using System.IO;
-using System.Text;
 using NUnit.Framework;
 using Tiledriver.Core.Uwmf.Parsing;
 
@@ -21,25 +18,12 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
         {
             var expectedIdentifier = new Identifier("someproperty");
 
-            using (var inputStream = CreateTestStream(input))
-            {
-                var lexer = Create(inputStream);
+            var lexer = new Lexer(new TestStringReader(input));
 
-                Assert.That(
-                    lexer.ReadIdentifier(), 
-                    Is.EqualTo(expectedIdentifier), 
-                    "Did not read identifier.");
-            }
-        }
-
-        private static Stream CreateTestStream(string input)
-        {
-            return new MemoryStream(Encoding.ASCII.GetBytes(input));
-        }
-
-        private static ILexer Create(Stream input)
-        {
-            return new Lexer(input);
-        }
+            Assert.That(
+                lexer.ReadIdentifier(),
+                Is.EqualTo(expectedIdentifier),
+                "Did not read identifier.");
+        }        
     }
 }
