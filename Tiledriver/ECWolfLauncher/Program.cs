@@ -5,7 +5,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Tiledriver;
+using Tiledriver.Core;
 
 namespace TestRunner
 {

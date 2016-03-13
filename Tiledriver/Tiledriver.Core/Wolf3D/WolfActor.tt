@@ -1,5 +1,5 @@
 ﻿﻿<# 
-    this.Namespace = "Tiledriver.Wolf3D";
+    this.Namespace = "Tiledriver.Core.Wolf3D";
     this.ClassName = "WolfActor"; 
     this.CsvFilePath = "WolfActor.csv";
 #>

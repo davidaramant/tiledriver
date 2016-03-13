@@ -4,9 +4,9 @@
 using System;
 using System.IO;
 using System.Text;
-using Tiledriver.Uwmf;
+using Tiledriver.Core.Uwmf;
 
-namespace Tiledriver
+namespace Tiledriver.Core
 {
     public static class WadFile
     {

@@ -3,7 +3,7 @@
 
 using System.Collections.Generic;
 
-namespace Tiledriver.Wolf3D
+namespace Tiledriver.Core.Wolf3D
 {
     /// <summary>
     /// Temporary dumping ground until I figure out what to do with these.

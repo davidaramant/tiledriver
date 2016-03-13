@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Tiledriver.Uwmf
+namespace Tiledriver.Core.Uwmf
 {
     public sealed class Planemap : IUwmfEntry
     {

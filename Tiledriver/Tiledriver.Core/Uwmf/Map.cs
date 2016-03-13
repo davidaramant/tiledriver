@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Tiledriver.Uwmf
+namespace Tiledriver.Core.Uwmf
 {
     /// <summary>
     /// A UWMF map.

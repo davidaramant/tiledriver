@@ -3,7 +3,7 @@
 
 using System.IO;
 
-namespace Tiledriver.Uwmf
+namespace Tiledriver.Core.Uwmf
 {
     public interface IUwmfEntry
     {

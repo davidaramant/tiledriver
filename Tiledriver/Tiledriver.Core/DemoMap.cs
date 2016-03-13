@@ -2,10 +2,10 @@
 // Distributed under the GNU GPL v2. For full terms see the file LICENSE.
 
 using System.Collections.Generic;
-using Tiledriver.Uwmf;
-using Tiledriver.Wolf3D;
+using Tiledriver.Core.Uwmf;
+using Tiledriver.Core.Wolf3D;
 
-namespace Tiledriver
+namespace Tiledriver.Core
 {
     public static class DemoMap
     {

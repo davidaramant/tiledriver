@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Tiledriver.Uwmf
+namespace Tiledriver.Core.Uwmf
 {
     public sealed class PlanemapEntry
     {
