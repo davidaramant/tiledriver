@@ -1,6 +1,8 @@
 ﻿// Copyright (c) 2016 David Aramant
 // Distributed under the GNU GPL v2. For full terms see the file LICENSE.
 
+using System.IO;
+using System.Text;
 using NUnit.Framework;
 using Tiledriver.Core.Uwmf.Parsing;
 
@@ -18,7 +20,7 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
         {
             var expectedIdentifier = new Identifier("someproperty");
 
-            var lexer = new Lexer(new TestStringReader(input));
+            var lexer = new Lexer(CreateInput(input));
 
             Assert.That(
                 lexer.ReadIdentifier(),
@@ -33,7 +35,7 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
         {
             var input = prefix + (expectedType == ExpressionType.Assignment ? "=" : "{");
 
-            var lexer = new Lexer(new TestStringReader(input));
+            var lexer = new Lexer(CreateInput(input));
 
             Assert.That(
                 lexer.DetermineIfAssignmentOrStartBlock(),
@@ -45,7 +47,7 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
         [TestCase("}",ExpressionType.EndBlock)]
         public void ShouldDetermineIfIdentifierOrEndBlock(string input, ExpressionType expectedType)
         {
-            var lexer = new Lexer(new TestStringReader(input));
+            var lexer = new Lexer(CreateInput(input));
 
             Assert.That(
                 lexer.DetermineIfIdentifierOrEndBlock(),
@@ -61,7 +63,7 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
         [TestCase("0xFf;", 255)]
         public void ShouldReadIntegerAssignment( string input, int expectedResult )
         {
-            var lexer = new Lexer(new TestStringReader(input));
+            var lexer = new Lexer(CreateInput(input));
 
             Assert.That(
                 lexer.ReadIntegerAssignment(),
@@ -76,7 +78,7 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
         [TestCase("1e+9;", 1e+9d)]
         public void ShouldReadFloatingPointAssignment(string input, double expectedResult)
         {
-            var lexer = new Lexer(new TestStringReader(input));
+            var lexer = new Lexer(CreateInput(input));
 
             Assert.That(
                 lexer.ReadFloatingPointAssignment(),
@@ -88,7 +90,7 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
         [TestCase("false;", false)]
         public void ShouldReadBooleanAssignment(string input, bool expectedResult)
         {
-            var lexer = new Lexer(new TestStringReader(input));
+            var lexer = new Lexer(CreateInput(input));
 
             Assert.That(
                 lexer.ReadBooleanAssignment(),
@@ -101,7 +103,7 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
         [TestCase("\"\";", "")]
         public void ShouldReadStringAssignment(string input, string expectedResult)
         {
-            var lexer = new Lexer(new TestStringReader(input));
+            var lexer = new Lexer(CreateInput(input));
 
             Assert.That(
                 lexer.ReadStringAssignment(),
@@ -112,7 +114,7 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
         [Test]
         public void ShouldVerifyStartOfBlock()
         {
-            var lexer = new Lexer(new TestStringReader("{"));
+            var lexer = new Lexer(CreateInput("{"));
 
             Assert.DoesNotThrow(
                 lexer.VerifyStartOfBlock,
@@ -125,11 +127,16 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
         [TestCase("\"string\";")]
         public void ShouldMovePastAssignment(string input)
         {
-            var lexer = new Lexer(new TestStringReader(input));
+            var lexer = new Lexer(CreateInput(input));
 
             Assert.DoesNotThrow(
                 lexer.MovePastAssignment,
                 "Should not have thrown moving past assignment,");
+        }
+
+        private static IUwmfCharReader CreateInput(string input)
+        {
+            return new UwmfCharReader(new MemoryStream(Encoding.ASCII.GetBytes(input)));
         }
     }
 }

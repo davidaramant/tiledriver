@@ -165,6 +165,8 @@ namespace Tiledriver.Core.Uwmf.Parsing
                 _reader.MustReadChar(eofMessage);
             }
 
+            _reader.MustReadChar(eofMessage);
+
             if (_reader.Current.Char != ';')
             {
                 throw new ParsingException(_reader.Current.Position, "No end of expression found after string.");
