@@ -50,12 +50,12 @@ namespace Tiledriver.Core.Uwmf.Parsing
 
             var startPosition = _reader.Current.Position;
 
-            while(!_reader.Current.Char.IsEndOfAssignment())
+            while (!_reader.Current.Char.IsEndOfAssignment())
             {
                 if (!_reader.Current.Char.IsIntegerChar())
                 {
                     throw new ParsingException(
-                        _reader.Current.Position, 
+                        _reader.Current.Position,
                         $"Unexpected character while reading integer: {_reader.Current.Char}.");
                 }
                 buffer.Append(_reader.Current.Char);
@@ -94,7 +94,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
                 if (!_reader.Current.Char.IsFloatingPointChar())
                 {
                     throw new ParsingException(
-                        _reader.Current.Position, 
+                        _reader.Current.Position,
                         $"Unexpected character while reading floating point number: {_reader.Current.Char}.");
                 }
                 buffer.Append(_reader.Current.Char);
@@ -153,16 +153,21 @@ namespace Tiledriver.Core.Uwmf.Parsing
 
             if (_reader.Current.Char != '"')
             {
-                throw new ParsingException(startPosition,"Unexpected character when expecting string.");
+                throw new ParsingException(startPosition, "Unexpected character when expecting string.");
             }
 
             _reader.MustReadChar(eofMessage);
 
-            while (_reader.Current.Char!= '"')
+            while (_reader.Current.Char != '"')
             {
                 // TODO: Does ECWolf support escaped quotes?
                 buffer.Append(_reader.Current.Char);
                 _reader.MustReadChar(eofMessage);
+            }
+
+            if (_reader.Current.Char != ';')
+            {
+                throw new ParsingException(_reader.Current.Position, "No end of expression found after string.");
             }
 
             return buffer.ToString();
@@ -170,7 +175,14 @@ namespace Tiledriver.Core.Uwmf.Parsing
 
         public void VerifyStartOfBlock()
         {
-            throw new NotImplementedException();
+            const string eofMessage = "Unexpected end of file when reading start of block.";
+
+            MovePastWhitespaceAndComments(eofMessage);
+
+            if (_reader.Current.Char != '{')
+            {
+                throw new ParsingException(_reader.Current.Position, "Unexpected character when expecting start of block.");
+            }
         }
 
         public ExpressionType DetermineIfAssignmentOrStartBlock()
@@ -192,12 +204,34 @@ namespace Tiledriver.Core.Uwmf.Parsing
 
         public ExpressionType DetermineIfIdentifierOrEndBlock()
         {
-            throw new NotImplementedException();
+            MovePastWhitespaceAndComments("Unexpected end of file inside block");
+
+            if (_reader.Current.Char == '}')
+            {
+                return ExpressionType.EndBlock;
+            }
+            if (_reader.Current.Char.IsValidIdentifierStartChar())
+            {
+                return ExpressionType.Identifier;
+            }
+
+            throw new ParsingException(_reader.Current.Position, "Unexpected character inside block.");
         }
 
         public void MovePastAssignment()
         {
-            throw new NotImplementedException();
+            const string eofMessage = "Unexpected end of file inside assignment of unknown identifier.";
+            MovePastWhitespaceAndComments(eofMessage);
+
+            bool insideString = false;
+            while (!insideString && _reader.Current.Char != ';')
+            {
+                if (_reader.Current.Char == '"')
+                {
+                    insideString = !insideString;
+                }
+                _reader.MustReadChar(eofMessage);
+            }
         }
 
         private void MovePastWhitespaceAndComments(string eofMessage)

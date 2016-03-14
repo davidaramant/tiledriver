@@ -41,6 +41,18 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
                 "Did not determine expression type correctly.");
         }
 
+        [TestCase("identifier",ExpressionType.Identifier)]
+        [TestCase("}",ExpressionType.EndBlock)]
+        public void ShouldDetermineIfIdentifierOrEndBlock(string input, ExpressionType expectedType)
+        {
+            var lexer = new Lexer(new TestStringReader(input));
+
+            Assert.That(
+                lexer.DetermineIfIdentifierOrEndBlock(),
+                Is.EqualTo(expectedType),
+                "Did not determine if the next thing was an identifier or the end of a block.");
+        }
+
         [TestCase("64;", 64)]
         [TestCase("8;", 8)]
         [TestCase("08;", 8)]
@@ -86,6 +98,7 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
 
         [TestCase("\"Test String\";", "Test String")]
         [TestCase("\"0xFB010304\";", "0xFB010304")]
+        [TestCase("\"\";", "")]
         public void ShouldReadStringAssignment(string input, string expectedResult)
         {
             var lexer = new Lexer(new TestStringReader(input));
@@ -94,6 +107,29 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
                 lexer.ReadStringAssignment(),
                 Is.EqualTo(expectedResult),
                 "Did not read string correctly.");
+        }
+
+        [Test]
+        public void ShouldVerifyStartOfBlock()
+        {
+            var lexer = new Lexer(new TestStringReader("{"));
+
+            Assert.DoesNotThrow(
+                lexer.VerifyStartOfBlock,
+                "Should have verified a start of block.");
+        }
+
+        [TestCase("64;")]
+        [TestCase("true;")]
+        [TestCase("6.4;")]
+        [TestCase("\"string\";")]
+        public void ShouldMovePastAssignment(string input)
+        {
+            var lexer = new Lexer(new TestStringReader(input));
+
+            Assert.DoesNotThrow(
+                lexer.MovePastAssignment,
+                "Should not have thrown moving past assignment,");
         }
     }
 }
