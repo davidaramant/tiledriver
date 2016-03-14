@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2016 David Aramant
 // Distributed under the GNU GPL v2. For full terms see the file LICENSE.
 
+using System;
 using System.IO;
 using System.Text;
 using NUnit.Framework;
@@ -20,15 +21,13 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
         {
             var expectedIdentifier = new Identifier("someproperty");
 
-            var reader = CreateReader(input);
-            var lexer = new Lexer(reader);
-
-            Assert.That(
-                lexer.ReadIdentifier(),
-                Is.EqualTo(expectedIdentifier),
-                "Did not read identifier.");
-
-            VerifyReaderPosition(reader, expectedEndingLine, expectedEndingColumn);
+            RunTestAndVerifyResultingPosition(input, lexer =>
+                Assert.That(
+                    lexer.ReadIdentifier(),
+                    Is.EqualTo(expectedIdentifier),
+                    "Did not read identifier."),
+                expectedEndingLine,
+                expectedEndingColumn);
         }
 
         // TODO: This is stupid.  I don't think comments can really appear in all these places anyway.
@@ -52,15 +51,13 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
             int expectedEndingLine,
             int expectedEndingColumn)
         {
-            var reader = CreateReader(input);
-            var lexer = new Lexer(reader);
-
-            Assert.That(
-                lexer.DetermineIfAssignmentOrStartBlock(),
-                Is.EqualTo(expectedType),
-                "Did not determine expression type correctly.");
-
-            VerifyReaderPosition(reader, expectedEndingLine, expectedEndingColumn);
+            RunTestAndVerifyResultingPosition(input, lexer =>
+                Assert.That(
+                    lexer.DetermineIfAssignmentOrStartBlock(),
+                    Is.EqualTo(expectedType),
+                    "Did not determine expression type correctly."),
+                expectedEndingLine,
+                expectedEndingColumn);
         }
 
         [TestCase("id ", ExpressionType.Identifier, 1, 1)]
@@ -71,15 +68,13 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
             int expectedEndingLine,
             int expectedEndingColumn)
         {
-            var reader = CreateReader(input);
-            var lexer = new Lexer(reader);
-
-            Assert.That(
-                lexer.DetermineIfIdentifierOrEndBlock(),
-                Is.EqualTo(expectedType),
-                "Did not determine if the next thing was an identifier or the end of a block.");
-
-            VerifyReaderPosition(reader, expectedEndingLine, expectedEndingColumn);
+            RunTestAndVerifyResultingPosition(input, lexer =>
+                Assert.That(
+                    lexer.DetermineIfIdentifierOrEndBlock(),
+                    Is.EqualTo(expectedType),
+                    "Did not determine if the next thing was an identifier or the end of a block."),
+                expectedEndingLine,
+                expectedEndingColumn);
         }
 
         [TestCase("64;", 64, 1, 4)]
@@ -94,15 +89,13 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
             int expectedEndingLine,
             int expectedEndingColumn)
         {
-            var reader = CreateReader(input);
-            var lexer = new Lexer(reader);
-
-            Assert.That(
-                lexer.ReadIntegerAssignment(),
-                Is.EqualTo(expectedResult),
-                "Did not read integer correctly.");
-
-            VerifyReaderPosition(reader, expectedEndingLine, expectedEndingColumn);
+            RunTestAndVerifyResultingPosition(input, lexer =>
+                Assert.That(
+                    lexer.ReadIntegerAssignment(),
+                    Is.EqualTo(expectedResult),
+                    "Did not read integer correctly."),
+                expectedEndingLine,
+                expectedEndingColumn);
         }
 
         [TestCase("64;", 64d, 1, 4)]
@@ -116,15 +109,13 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
             int expectedEndingLine,
             int expectedEndingColumn)
         {
-            var reader = CreateReader(input);
-            var lexer = new Lexer(reader);
-
-            Assert.That(
-                lexer.ReadFloatingPointAssignment(),
-                Is.EqualTo(expectedResult),
-                "Did not read floating point number correctly.");
-
-            VerifyReaderPosition(reader, expectedEndingLine, expectedEndingColumn);
+            RunTestAndVerifyResultingPosition(input, lexer =>
+                Assert.That(
+                    lexer.ReadFloatingPointAssignment(),
+                    Is.EqualTo(expectedResult),
+                    "Did not read floating point number correctly."),
+                expectedEndingLine,
+                expectedEndingColumn);
         }
 
         [TestCase("true;", true, 1, 6)]
@@ -135,15 +126,13 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
             int expectedEndingLine,
             int expectedEndingColumn)
         {
-            var reader = CreateReader(input);
-            var lexer = new Lexer(reader);
-
-            Assert.That(
-                lexer.ReadBooleanAssignment(),
-                Is.EqualTo(expectedResult),
-                "Did not read Boolean correctly.");
-
-            VerifyReaderPosition(reader, expectedEndingLine, expectedEndingColumn);
+            RunTestAndVerifyResultingPosition(input, lexer =>
+                Assert.That(
+                    lexer.ReadBooleanAssignment(),
+                    Is.EqualTo(expectedResult),
+                    "Did not read Boolean correctly."),
+                expectedEndingLine,
+                expectedEndingColumn);
         }
 
         [TestCase("\"Test String\";", "Test String", 1, 15)]
@@ -155,15 +144,13 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
             int expectedEndingLine,
             int expectedEndingColumn)
         {
-            var reader = CreateReader(input);
-            var lexer = new Lexer(reader);
-
-            Assert.That(
-                lexer.ReadStringAssignment(),
-                Is.EqualTo(expectedResult),
-                "Did not read string correctly.");
-
-            VerifyReaderPosition(reader, expectedEndingLine, expectedEndingColumn);
+            RunTestAndVerifyResultingPosition(input, lexer =>
+                Assert.That(
+                    lexer.ReadStringAssignment(),
+                    Is.EqualTo(expectedResult),
+                    "Did not read string correctly."),
+                expectedEndingLine,
+                expectedEndingColumn);
         }
 
         [TestCase("{ ", 1, 2)]
@@ -173,14 +160,12 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
             int expectedEndingLine,
             int expectedEndingColumn)
         {
-            var reader = CreateReader(input);
-            var lexer = new Lexer(reader);
-
-            Assert.DoesNotThrow(
-                lexer.VerifyStartOfBlock,
-                "Should have verified a start of block.");
-
-            VerifyReaderPosition(reader, expectedEndingLine, expectedEndingColumn);
+            RunTestAndVerifyResultingPosition(input, lexer =>
+                Assert.DoesNotThrow(
+                    lexer.VerifyStartOfBlock,
+                    "Should have verified a start of block."),
+                expectedEndingLine,
+                expectedEndingColumn);
         }
 
         [TestCase("64;", 1, 4)]
@@ -192,14 +177,12 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
             int expectedEndingLine,
             int expectedEndingColumn)
         {
-            var reader = CreateReader(input);
-            var lexer = new Lexer(reader);
-
-            Assert.DoesNotThrow(
-                lexer.MovePastAssignment,
-                "Should not have thrown moving past assignment,");
-
-            VerifyReaderPosition(reader, expectedEndingLine, expectedEndingColumn);
+            RunTestAndVerifyResultingPosition(input, lexer =>
+                Assert.DoesNotThrow(
+                    lexer.MovePastAssignment,
+                    "Should not have thrown moving past assignment,"),
+                expectedEndingLine,
+                expectedEndingColumn);
         }
 
         private static IUwmfCharReader CreateReader(string input)
@@ -207,12 +190,21 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
             return new UwmfCharReader(new MemoryStream(Encoding.ASCII.GetBytes(input)));
         }
 
-        private static void VerifyReaderPosition(IUwmfCharReader reader, int expectedLine, int expectedColumn)
+        private static void RunTestAndVerifyResultingPosition(
+            string input, 
+            Action<Lexer> assertion,
+            int expectedLine, 
+            int expectedColumn)
         {
+            var reader = CreateReader(input);
+            var lexer = new Lexer(reader);
+
+            assertion(lexer);
+
             Assert.That(
-               reader.Current.Position.Line,
-               Is.EqualTo(expectedLine),
-               "Unexpected resulting line position of reader.");
+                reader.Current.Position.Line,
+                Is.EqualTo(expectedLine),
+                "Unexpected resulting line position of reader.");
 
             Assert.That(
                 reader.Current.Position.Column,
