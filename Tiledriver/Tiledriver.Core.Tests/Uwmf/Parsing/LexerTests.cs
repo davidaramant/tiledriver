@@ -83,5 +83,17 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
                 Is.EqualTo(expectedResult),
                 "Did not read Boolean correctly.");
         }
+
+        [TestCase("\"Test String\";", "Test String")]
+        [TestCase("\"0xFB010304\";", "0xFB010304")]
+        public void ShouldReadStringAssignment(string input, string expectedResult)
+        {
+            var lexer = new Lexer(new TestStringReader(input));
+
+            Assert.That(
+                lexer.ReadStringAssignment(),
+                Is.EqualTo(expectedResult),
+                "Did not read string correctly.");
+        }
     }
 }
