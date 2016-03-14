@@ -17,7 +17,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
             _inputStream = inputStream;
         }
 
-        public void MaybeReadChar()
+        public void Advance()
         {
             int readByte = _inputStream.ReadByte();
 
@@ -38,9 +38,9 @@ namespace Tiledriver.Core.Uwmf.Parsing
         }
 
 
-        public void MustReadChar(string endOfFileMessage)
+        public void AdvanceAndVerifyNotEoF(string endOfFileMessage)
         {
-            MaybeReadChar();
+            Advance();
 
             if (Current.IsEndOfFile)
             {

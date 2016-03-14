@@ -7,7 +7,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
     {
         UwmfChar Current { get; }
 
-        void MaybeReadChar();
-        void MustReadChar(string endOfFileMessage);
+        void Advance();
+        void AdvanceAndVerifyNotEoF(string endOfFileMessage);
     }
 }

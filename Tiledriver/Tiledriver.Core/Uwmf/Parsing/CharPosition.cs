@@ -6,14 +6,14 @@ using System.Diagnostics;
 namespace Tiledriver.Core.Uwmf.Parsing
 {
     [DebuggerDisplay("{ToString()}")]
-    public sealed class CharPosition
+    public struct CharPosition
     {
         public int Line { get; }
         public int Column { get; }
 
         public static readonly CharPosition StartOfFile = new CharPosition(line: 1, column: 1);
 
-        private CharPosition(int line, int column)
+        public CharPosition(int line, int column)
         {
             Line = line;
             Column = column;
