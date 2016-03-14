@@ -51,5 +51,18 @@ namespace Tiledriver.Core.Uwmf.Parsing.Extensions
                 c == 'E' ||
                 c == '.';
         }
+
+        public static bool IsBooleanChar(this char c)
+        {
+            return
+                c == 't' ||
+                c == 'r' ||
+                c == 'u' ||
+                c == 'e' ||
+                c == 'f' ||
+                c == 'a' ||
+                c == 'l' ||
+                c == 's';
+        }
     }
 }

@@ -111,9 +111,35 @@ namespace Tiledriver.Core.Uwmf.Parsing
             throw new ParsingException(startPosition, "Malformed floating point number.");
         }
 
-        public bool ReadBoolAssignment()
+        public bool ReadBooleanAssignment()
         {
-            throw new NotImplementedException();
+            const string eofMessage = "Unexpected end of file when reading Boolean.";
+            var buffer = new StringBuilder();
+
+            MovePastWhitespaceAndComments(eofMessage);
+
+            var startPosition = _reader.Current.Position;
+
+            while (!_reader.Current.Char.IsEndOfAssignment())
+            {
+                if (!_reader.Current.Char.IsBooleanChar())
+                {
+                    throw new ParsingException(
+                        _reader.Current.Position,
+                        $"Unexpected character while reading Boolean: {_reader.Current.Char}.");
+                }
+                buffer.Append(_reader.Current.Char);
+                _reader.MustReadChar(eofMessage);
+            }
+
+            var boolString = buffer.ToString();
+            bool result;
+
+            if (bool.TryParse(boolString, out result))
+            {
+                return result;
+            }
+            throw new ParsingException(startPosition, "Malformed Boolean.");
         }
 
         public string ReadStringAssignment()

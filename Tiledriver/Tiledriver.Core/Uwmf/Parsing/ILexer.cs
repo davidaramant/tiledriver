@@ -17,7 +17,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 
         int ReadIntegerAssignment();
         double ReadFloatingPointAssignment();
-        bool ReadBoolAssignment();
+        bool ReadBooleanAssignment();
         string ReadStringAssignment();
 
         void VerifyStartOfBlock();

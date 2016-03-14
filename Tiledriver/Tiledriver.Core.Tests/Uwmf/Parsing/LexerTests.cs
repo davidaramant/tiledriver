@@ -71,5 +71,17 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
                 Is.EqualTo(expectedResult),
                 "Did not read floating point number correctly.");
         }
+
+        [TestCase("true;", true)]
+        [TestCase("false;", false)]
+        public void ShouldReadBooleanAssignment(string input, bool expectedResult)
+        {
+            var lexer = new Lexer(new TestStringReader(input));
+
+            Assert.That(
+                lexer.ReadBooleanAssignment(),
+                Is.EqualTo(expectedResult),
+                "Did not read Boolean correctly.");
+        }
     }
 }
