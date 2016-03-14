@@ -15,8 +15,8 @@ namespace Tiledriver.Core.Uwmf.Parsing
     {
         Identifier ReadIdentifier();
 
-        int ReadIntAssignment();
-        double ReadDoubleAssignment();
+        int ReadIntegerAssignment();
+        double ReadFloatingPointAssignment();
         bool ReadBoolAssignment();
         string ReadStringAssignment();
 

@@ -52,9 +52,24 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
             var lexer = new Lexer(new TestStringReader(input));
 
             Assert.That(
-                lexer.ReadIntAssignment(),
+                lexer.ReadIntegerAssignment(),
                 Is.EqualTo(expectedResult),
                 "Did not read integer correctly.");
+        }
+
+        [TestCase("64;", 64d)]
+        [TestCase("6.4;", 6.4d)]
+        [TestCase("+1.6;", 1.6d)]
+        [TestCase("-1.6;", -1.6d)]
+        [TestCase("1e+9;", 1e+9d)]
+        public void ShouldReadFloatingPointAssignment(string input, double expectedResult)
+        {
+            var lexer = new Lexer(new TestStringReader(input));
+
+            Assert.That(
+                lexer.ReadFloatingPointAssignment(),
+                Is.EqualTo(expectedResult),
+                "Did not read floating point number correctly.");
         }
     }
 }

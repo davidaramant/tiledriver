@@ -40,5 +40,16 @@ namespace Tiledriver.Core.Uwmf.Parsing.Extensions
                 c == '+' ||
                 c == 'x';
         }
+
+        public static bool IsFloatingPointChar(this char c)
+        {
+            return
+                (c >= '0' && c <= '9') ||
+                c == '-' ||
+                c == '+' ||
+                c == 'e' ||
+                c == 'E' ||
+                c == '.';
+        }
     }
 }

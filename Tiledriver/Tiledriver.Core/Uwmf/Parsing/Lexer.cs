@@ -41,7 +41,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
             return new Identifier(buffer.ToString());
         }
 
-        public int ReadIntAssignment()
+        public int ReadIntegerAssignment()
         {
             const string eofMessage = "Unexpected end of file when reading integer.";
             var buffer = new StringBuilder();
@@ -54,7 +54,9 @@ namespace Tiledriver.Core.Uwmf.Parsing
             {
                 if (!_reader.Current.Char.IsIntegerChar())
                 {
-                    throw new ParsingException(_reader.Current.Position, $"Unexpected character while reading integer: {_reader.Current.Char}.");
+                    throw new ParsingException(
+                        _reader.Current.Position, 
+                        $"Unexpected character while reading integer: {_reader.Current.Char}.");
                 }
                 buffer.Append(_reader.Current.Char);
                 _reader.MustReadChar(eofMessage);
@@ -78,9 +80,35 @@ namespace Tiledriver.Core.Uwmf.Parsing
             throw new ParsingException(startPosition, "Malformed integer.");
         }
 
-        public double ReadDoubleAssignment()
+        public double ReadFloatingPointAssignment()
         {
-            throw new NotImplementedException();
+            const string eofMessage = "Unexpected end of file when reading floating point number.";
+            var buffer = new StringBuilder();
+
+            MovePastWhitespaceAndComments(eofMessage);
+
+            var startPosition = _reader.Current.Position;
+
+            while (!_reader.Current.Char.IsEndOfAssignment())
+            {
+                if (!_reader.Current.Char.IsFloatingPointChar())
+                {
+                    throw new ParsingException(
+                        _reader.Current.Position, 
+                        $"Unexpected character while reading floating point number: {_reader.Current.Char}.");
+                }
+                buffer.Append(_reader.Current.Char);
+                _reader.MustReadChar(eofMessage);
+            }
+
+            var doubleString = buffer.ToString();
+            double result;
+
+            if (double.TryParse(doubleString, NumberStyles.Float, CultureInfo.InvariantCulture, out result))
+            {
+                return result;
+            }
+            throw new ParsingException(startPosition, "Malformed floating point number.");
         }
 
         public bool ReadBoolAssignment()
