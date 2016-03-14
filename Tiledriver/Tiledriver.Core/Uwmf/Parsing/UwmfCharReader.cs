@@ -15,6 +15,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
         public UwmfCharReader(Stream inputStream)
         {
             _inputStream = inputStream;
+            Advance();
         }
 
         public void Advance()

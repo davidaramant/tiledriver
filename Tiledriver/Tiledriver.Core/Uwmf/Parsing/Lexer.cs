@@ -179,19 +179,6 @@ namespace Tiledriver.Core.Uwmf.Parsing
             return buffer.ToString();
         }
 
-        public void VerifyStartOfBlock()
-        {
-            const string eofMessage = "Unexpected end of file when reading start of block.";
-
-            MovePastWhitespaceAndComments(eofMessage);
-
-            if (_reader.Current.Char != '{')
-            {
-                throw new ParsingException(_reader.Current.Position, "Unexpected character when expecting start of block.");
-            }
-            _reader.AdvanceAndVerifyNotEoF("Unexpected end of file after opening block.");
-        }
-
         public ExpressionType DetermineIfAssignmentOrStartBlock()
         {
             const string eofMessage = "Unexpected end of file after identifier.";
@@ -248,8 +235,6 @@ namespace Tiledriver.Core.Uwmf.Parsing
 
         private void MovePastWhitespaceAndComments(string eofMessage)
         {
-            _reader.AdvanceAndVerifyNotEoF(eofMessage);
-
             while (char.IsWhiteSpace(_reader.Current.Char))
             {
                 _reader.AdvanceAndVerifyNotEoF(eofMessage);

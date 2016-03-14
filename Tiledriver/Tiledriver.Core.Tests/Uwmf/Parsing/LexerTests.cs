@@ -153,21 +153,6 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
                 expectedEndingColumn);
         }
 
-        [TestCase("{ ", 1, 2)]
-        [TestCase("     { ", 1, 7)]
-        public void ShouldVerifyStartOfBlock(
-            string input,
-            int expectedEndingLine,
-            int expectedEndingColumn)
-        {
-            RunTestAndVerifyResultingPosition(input, lexer =>
-                Assert.DoesNotThrow(
-                    lexer.VerifyStartOfBlock,
-                    "Should have verified a start of block."),
-                expectedEndingLine,
-                expectedEndingColumn);
-        }
-
         [TestCase("64;", 1, 4)]
         [TestCase("true;", 1, 6)]
         [TestCase("6.4;", 1, 5)]
@@ -185,15 +170,68 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
                 expectedEndingColumn);
         }
 
+        [Test]
+        public void ShouldTokenizeRealisticScenario()
+        {
+            var input = @"string = ""String"";
+int = 1;
+float = 1.5;
+flag = false;
+emptyBlock1{}
+emptyBlock2
+{
+}
+block
+{
+    unknownProperty = 5;
+}";
+
+            var reader = CreateReader(input);
+            var lexer = new Lexer(reader);
+
+            // Don't bother with assertion messages since the result will have to be inspected anyway.
+
+            Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("string")));
+            Assert.That(lexer.DetermineIfAssignmentOrStartBlock(), Is.EqualTo(ExpressionType.Assignment));
+            Assert.That(lexer.ReadStringAssignment(), Is.EqualTo("String"));
+
+            Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("int")));
+            Assert.That(lexer.DetermineIfAssignmentOrStartBlock(), Is.EqualTo(ExpressionType.Assignment));
+            Assert.That(lexer.ReadIntegerAssignment(), Is.EqualTo(1));
+
+            Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("float")));
+            Assert.That(lexer.DetermineIfAssignmentOrStartBlock(), Is.EqualTo(ExpressionType.Assignment));
+            Assert.That(lexer.ReadFloatingPointAssignment(), Is.EqualTo(1.5));
+
+            Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("flag")));
+            Assert.That(lexer.DetermineIfAssignmentOrStartBlock(), Is.EqualTo(ExpressionType.Assignment));
+            Assert.That(lexer.ReadBooleanAssignment(), Is.EqualTo(false));
+
+            Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("emptyBlock1")));
+            Assert.That(lexer.DetermineIfAssignmentOrStartBlock(), Is.EqualTo(ExpressionType.StartBlock));
+            Assert.That(lexer.DetermineIfIdentifierOrEndBlock(), Is.EqualTo(ExpressionType.EndBlock));
+
+            Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("emptyBlock2")));
+            Assert.That(lexer.DetermineIfAssignmentOrStartBlock(), Is.EqualTo(ExpressionType.StartBlock));
+            Assert.That(lexer.DetermineIfIdentifierOrEndBlock(), Is.EqualTo(ExpressionType.EndBlock));
+
+            Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("block")));
+            Assert.That(lexer.DetermineIfAssignmentOrStartBlock(), Is.EqualTo(ExpressionType.StartBlock));
+            Assert.That(lexer.DetermineIfIdentifierOrEndBlock(), Is.EqualTo(ExpressionType.Identifier));
+            Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("unknownProperty")));
+            Assert.DoesNotThrow(lexer.MovePastAssignment);
+            Assert.That(lexer.DetermineIfIdentifierOrEndBlock(), Is.EqualTo(ExpressionType.EndBlock));
+        }
+
         private static IUwmfCharReader CreateReader(string input)
         {
             return new UwmfCharReader(new MemoryStream(Encoding.ASCII.GetBytes(input)));
         }
 
         private static void RunTestAndVerifyResultingPosition(
-            string input, 
+            string input,
             Action<Lexer> assertion,
-            int expectedLine, 
+            int expectedLine,
             int expectedColumn)
         {
             var reader = CreateReader(input);

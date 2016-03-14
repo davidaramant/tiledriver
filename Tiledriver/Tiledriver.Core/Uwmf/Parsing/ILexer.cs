@@ -20,8 +20,6 @@ namespace Tiledriver.Core.Uwmf.Parsing
         bool ReadBooleanAssignment();
         string ReadStringAssignment();
 
-        void VerifyStartOfBlock();
-
         ExpressionType DetermineIfAssignmentOrStartBlock();
         ExpressionType DetermineIfIdentifierOrEndBlock();
 
