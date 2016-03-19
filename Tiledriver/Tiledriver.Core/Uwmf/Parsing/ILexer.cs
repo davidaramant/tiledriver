@@ -3,25 +3,30 @@
 
 namespace Tiledriver.Core.Uwmf.Parsing
 {
-    public enum ExpressionType
+    public enum TokenType
     {
+        Identifier,
+        Assignment,
+        EndOfAssignment,
         StartBlock,
         EndBlock,
-        Identifier,
-        Assignment
+        Comma,
+        EndOfFile,
+        Unknown
     }
 
     public interface ILexer
     {
         Identifier ReadIdentifier();
 
-        int ReadIntegerAssignment();
-        double ReadFloatingPointAssignment();
-        bool ReadBooleanAssignment();
-        string ReadStringAssignment();
+        int ReadIntegerNumber();
+        double ReadFloatingPointNumber();
+        bool ReadBoolean();
+        string ReadString();
 
-        ExpressionType DetermineIfAssignmentOrStartBlock();
-        ExpressionType DetermineIfIdentifierOrEndBlock();
+        void AdvanceOneCharacter();
+
+        TokenType DetermineNextToken();
 
         void MovePastAssignment();
     }

@@ -30,60 +30,36 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
                 expectedEndingColumn);
         }
 
-        // TODO: This is stupid.  I don't think comments can really appear in all these places anyway.
-        [TestCase("= ", ExpressionType.Assignment, 1, 2)]
-        [TestCase(" = ", ExpressionType.Assignment, 1, 3)]
-        [TestCase("\n= ", ExpressionType.Assignment, 2, 2)]
-        [TestCase("//comment\n= ", ExpressionType.Assignment, 2, 2)]
-        [TestCase("/* comment */= ", ExpressionType.Assignment, 1, 15)]
-        [TestCase("/* comment */   = ", ExpressionType.Assignment, 1, 18)]
-        [TestCase("/*\ncommentn\n*/\n  = ", ExpressionType.Assignment, 4, 4)]
-        [TestCase("{ ", ExpressionType.StartBlock, 1, 2)]
-        [TestCase(" { ", ExpressionType.StartBlock, 1, 3)]
-        [TestCase("\n{ ", ExpressionType.StartBlock, 2, 2)]
-        [TestCase("//comment\n{ ", ExpressionType.StartBlock, 2, 2)]
-        [TestCase("/* comment */{ ", ExpressionType.StartBlock, 1, 15)]
-        [TestCase("/* comment */   { ", ExpressionType.StartBlock, 1, 18)]
-        [TestCase("/*\ncommentn\n*/\n  { ", ExpressionType.StartBlock, 4, 4)]
-        public void ShouldDetermineIfAssignmentOrStartOfBlock(
+        [TestCase("id", TokenType.Identifier, 1, 1)]
+        [TestCase("=", TokenType.Assignment, 1, 1)]
+        [TestCase(";", TokenType.EndOfAssignment, 1, 1)]
+        [TestCase("{", TokenType.StartBlock, 1, 1)]
+        [TestCase("}", TokenType.EndBlock, 1, 1)]
+        [TestCase(",", TokenType.Comma, 1, 1)]
+        [TestCase("", TokenType.EndOfFile, 1, 1)]
+        [TestCase("1", TokenType.Unknown, 1, 1)]
+        public void ShouldDetermineTokenType(
             string input,
-            ExpressionType expectedType,
+            TokenType expectedType,
             int expectedEndingLine,
             int expectedEndingColumn)
         {
             RunTestAndVerifyResultingPosition(input, lexer =>
                 Assert.That(
-                    lexer.DetermineIfAssignmentOrStartBlock(),
+                    lexer.DetermineNextToken(),
                     Is.EqualTo(expectedType),
-                    "Did not determine expression type correctly."),
+                    "Did not determine token type."),
                 expectedEndingLine,
                 expectedEndingColumn);
         }
 
-        [TestCase("id ", ExpressionType.Identifier, 1, 1)]
-        [TestCase("}", ExpressionType.EndBlock, 1, 2)]
-        public void ShouldDetermineIfIdentifierOrEndBlock(
-            string input,
-            ExpressionType expectedType,
-            int expectedEndingLine,
-            int expectedEndingColumn)
-        {
-            RunTestAndVerifyResultingPosition(input, lexer =>
-                Assert.That(
-                    lexer.DetermineIfIdentifierOrEndBlock(),
-                    Is.EqualTo(expectedType),
-                    "Did not determine if the next thing was an identifier or the end of a block."),
-                expectedEndingLine,
-                expectedEndingColumn);
-        }
-
-        [TestCase("64;", 64, 1, 4)]
-        [TestCase("8;", 8, 1, 3)]
-        [TestCase("08;", 8, 1, 4)]
-        [TestCase("+16;", 16, 1, 5)]
-        [TestCase("-16;", -16, 1, 5)]
-        [TestCase("0xFf;", 255, 1, 6)]
-        public void ShouldReadIntegerAssignment(
+        [TestCase("64;", 64, 1, 3)]
+        [TestCase("8;", 8, 1, 2)]
+        [TestCase("08;", 8, 1, 3)]
+        [TestCase("+16;", 16, 1, 4)]
+        [TestCase("-16;", -16, 1, 4)]
+        [TestCase("0xFf;", 255, 1, 5)]
+        public void ShouldReadInteger(
             string input,
             int expectedResult,
             int expectedEndingLine,
@@ -91,19 +67,19 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
         {
             RunTestAndVerifyResultingPosition(input, lexer =>
                 Assert.That(
-                    lexer.ReadIntegerAssignment(),
+                    lexer.ReadIntegerNumber(),
                     Is.EqualTo(expectedResult),
                     "Did not read integer correctly."),
                 expectedEndingLine,
                 expectedEndingColumn);
         }
 
-        [TestCase("64;", 64d, 1, 4)]
-        [TestCase("6.4;", 6.4d, 1, 5)]
-        [TestCase("+1.6;", 1.6d, 1, 6)]
-        [TestCase("-1.6;", -1.6d, 1, 6)]
-        [TestCase("1e+9;", 1e+9d, 1, 6)]
-        public void ShouldReadFloatingPointAssignment(
+        [TestCase("64;", 64d, 1, 3)]
+        [TestCase("6.4;", 6.4d, 1, 4)]
+        [TestCase("+1.6;", 1.6d, 1, 5)]
+        [TestCase("-1.6;", -1.6d, 1, 5)]
+        [TestCase("1e+9;", 1e+9d, 1, 5)]
+        public void ShouldReadFloatingPointNumber(
             string input,
             double expectedResult,
             int expectedEndingLine,
@@ -111,16 +87,16 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
         {
             RunTestAndVerifyResultingPosition(input, lexer =>
                 Assert.That(
-                    lexer.ReadFloatingPointAssignment(),
+                    lexer.ReadFloatingPointNumber(),
                     Is.EqualTo(expectedResult),
                     "Did not read floating point number correctly."),
                 expectedEndingLine,
                 expectedEndingColumn);
         }
 
-        [TestCase("true;", true, 1, 6)]
-        [TestCase("false;", false, 1, 7)]
-        public void ShouldReadBooleanAssignment(
+        [TestCase("true;", true, 1, 5)]
+        [TestCase("false;", false, 1, 6)]
+        public void ShouldReadBoolean(
             string input,
             bool expectedResult,
             int expectedEndingLine,
@@ -128,17 +104,17 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
         {
             RunTestAndVerifyResultingPosition(input, lexer =>
                 Assert.That(
-                    lexer.ReadBooleanAssignment(),
+                    lexer.ReadBoolean(),
                     Is.EqualTo(expectedResult),
                     "Did not read Boolean correctly."),
                 expectedEndingLine,
                 expectedEndingColumn);
         }
 
-        [TestCase("\"Test String\";", "Test String", 1, 15)]
-        [TestCase("\"0xFB010304\";", "0xFB010304", 1, 14)]
-        [TestCase("\"\";", "", 1, 4)]
-        public void ShouldReadStringAssignment(
+        [TestCase("\"Test String\";", "Test String", 1, 14)]
+        [TestCase("\"0xFB010304\";", "0xFB010304", 1, 13)]
+        [TestCase("\"\";", "", 1, 3)]
+        public void ShouldReadString(
             string input,
             string expectedResult,
             int expectedEndingLine,
@@ -146,7 +122,7 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
         {
             RunTestAndVerifyResultingPosition(input, lexer =>
                 Assert.That(
-                    lexer.ReadStringAssignment(),
+                    lexer.ReadString(),
                     Is.EqualTo(expectedResult),
                     "Did not read string correctly."),
                 expectedEndingLine,
@@ -184,6 +160,11 @@ emptyBlock2
 block
 {
     unknownProperty = 5;
+}
+block2
+{
+    {1,2,3},
+    {4,5}
 }";
 
             var reader = CreateReader(input);
@@ -192,35 +173,84 @@ block
             // Don't bother with assertion messages since the result will have to be inspected anyway.
 
             Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("string")));
-            Assert.That(lexer.DetermineIfAssignmentOrStartBlock(), Is.EqualTo(ExpressionType.Assignment));
-            Assert.That(lexer.ReadStringAssignment(), Is.EqualTo("String"));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.Assignment));
+            lexer.AdvanceOneCharacter();
+            Assert.That(lexer.ReadString(), Is.EqualTo("String"));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.EndOfAssignment));
+            lexer.AdvanceOneCharacter();
 
             Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("int")));
-            Assert.That(lexer.DetermineIfAssignmentOrStartBlock(), Is.EqualTo(ExpressionType.Assignment));
-            Assert.That(lexer.ReadIntegerAssignment(), Is.EqualTo(1));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.Assignment));
+            lexer.AdvanceOneCharacter();
+            Assert.That(lexer.ReadIntegerNumber(), Is.EqualTo(1));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.EndOfAssignment));
+            lexer.AdvanceOneCharacter();
 
             Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("float")));
-            Assert.That(lexer.DetermineIfAssignmentOrStartBlock(), Is.EqualTo(ExpressionType.Assignment));
-            Assert.That(lexer.ReadFloatingPointAssignment(), Is.EqualTo(1.5));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.Assignment));
+            lexer.AdvanceOneCharacter();
+            Assert.That(lexer.ReadFloatingPointNumber(), Is.EqualTo(1.5));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.EndOfAssignment));
+            lexer.AdvanceOneCharacter();
 
             Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("flag")));
-            Assert.That(lexer.DetermineIfAssignmentOrStartBlock(), Is.EqualTo(ExpressionType.Assignment));
-            Assert.That(lexer.ReadBooleanAssignment(), Is.EqualTo(false));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.Assignment));
+            lexer.AdvanceOneCharacter();
+            Assert.That(lexer.ReadBoolean(), Is.EqualTo(false));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.EndOfAssignment));
+            lexer.AdvanceOneCharacter();
 
             Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("emptyBlock1")));
-            Assert.That(lexer.DetermineIfAssignmentOrStartBlock(), Is.EqualTo(ExpressionType.StartBlock));
-            Assert.That(lexer.DetermineIfIdentifierOrEndBlock(), Is.EqualTo(ExpressionType.EndBlock));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.StartBlock));
+            lexer.AdvanceOneCharacter();
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.EndBlock));
+            lexer.AdvanceOneCharacter();
 
             Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("emptyBlock2")));
-            Assert.That(lexer.DetermineIfAssignmentOrStartBlock(), Is.EqualTo(ExpressionType.StartBlock));
-            Assert.That(lexer.DetermineIfIdentifierOrEndBlock(), Is.EqualTo(ExpressionType.EndBlock));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.StartBlock));
+            lexer.AdvanceOneCharacter();
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.EndBlock));
+            lexer.AdvanceOneCharacter();
 
             Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("block")));
-            Assert.That(lexer.DetermineIfAssignmentOrStartBlock(), Is.EqualTo(ExpressionType.StartBlock));
-            Assert.That(lexer.DetermineIfIdentifierOrEndBlock(), Is.EqualTo(ExpressionType.Identifier));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.StartBlock));
+            lexer.AdvanceOneCharacter();
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.Identifier));
             Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("unknownProperty")));
             Assert.DoesNotThrow(lexer.MovePastAssignment);
-            Assert.That(lexer.DetermineIfIdentifierOrEndBlock(), Is.EqualTo(ExpressionType.EndBlock));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.EndBlock));
+            lexer.AdvanceOneCharacter();
+
+            Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("block2")));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.StartBlock));
+            lexer.AdvanceOneCharacter();
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.StartBlock));
+            lexer.AdvanceOneCharacter();
+            Assert.That( lexer.DetermineNextToken(), Is.EqualTo(TokenType.Unknown));
+            Assert.That( lexer.ReadIntegerNumber(), Is.EqualTo(1));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.Comma));
+            lexer.AdvanceOneCharacter();
+            Assert.That(lexer.ReadIntegerNumber(), Is.EqualTo(2));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.Comma));
+            lexer.AdvanceOneCharacter();
+            Assert.That(lexer.ReadIntegerNumber(), Is.EqualTo(3));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.EndBlock));
+            lexer.AdvanceOneCharacter();
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.Comma));
+            lexer.AdvanceOneCharacter();
+
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.StartBlock));
+            lexer.AdvanceOneCharacter();
+            Assert.That(lexer.ReadIntegerNumber(), Is.EqualTo(4));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.Comma));
+            lexer.AdvanceOneCharacter();
+            Assert.That(lexer.ReadIntegerNumber(), Is.EqualTo(5));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.EndBlock));
+            lexer.AdvanceOneCharacter();
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.EndBlock));
+            lexer.AdvanceOneCharacter();
+
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.EndOfFile));
         }
 
         private static IUwmfCharReader CreateReader(string input)

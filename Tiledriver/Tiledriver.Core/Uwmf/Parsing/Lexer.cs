@@ -20,7 +20,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
         public Identifier ReadIdentifier()
         {
             const string eofMessage = "Unexpected end of file when reading identifier.";
-            MovePastWhitespaceAndComments(eofMessage);
+            MovePastWhitespaceAndCommentsAndVerifyNotEoF(eofMessage);
 
             if (!_reader.Current.Char.IsValidIdentifierStartChar())
             {
@@ -41,27 +41,20 @@ namespace Tiledriver.Core.Uwmf.Parsing
             return new Identifier(buffer.ToString());
         }
 
-        public int ReadIntegerAssignment()
+        public int ReadIntegerNumber()
         {
             const string eofMessage = "Unexpected end of file when reading integer.";
 
-            MovePastWhitespaceAndComments(eofMessage);
+            MovePastWhitespaceAndCommentsAndVerifyNotEoF(eofMessage);
             var buffer = new StringBuilder();
 
             var startPosition = _reader.Current.Position;
 
-            while (!_reader.Current.Char.IsEndOfAssignment())
+            while (_reader.Current.Char.IsIntegerChar())
             {
-                if (!_reader.Current.Char.IsIntegerChar())
-                {
-                    throw new ParsingException(
-                        _reader.Current.Position,
-                        $"Unexpected character while reading integer: {_reader.Current.Char}.");
-                }
                 buffer.Append(_reader.Current.Char);
                 _reader.AdvanceAndVerifyNotEoF(eofMessage);
             }
-            _reader.Advance();
 
             var integerString = buffer.ToString();
             int result;
@@ -81,27 +74,20 @@ namespace Tiledriver.Core.Uwmf.Parsing
             throw new ParsingException(startPosition, "Malformed integer.");
         }
 
-        public double ReadFloatingPointAssignment()
+        public double ReadFloatingPointNumber()
         {
             const string eofMessage = "Unexpected end of file when reading floating point number.";
 
-            MovePastWhitespaceAndComments(eofMessage);
+            MovePastWhitespaceAndCommentsAndVerifyNotEoF(eofMessage);
 
             var startPosition = _reader.Current.Position;
             var buffer = new StringBuilder();
 
-            while (!_reader.Current.Char.IsEndOfAssignment())
+            while (_reader.Current.Char.IsFloatingPointChar())
             {
-                if (!_reader.Current.Char.IsFloatingPointChar())
-                {
-                    throw new ParsingException(
-                        _reader.Current.Position,
-                        $"Unexpected character while reading floating point number: {_reader.Current.Char}.");
-                }
                 buffer.Append(_reader.Current.Char);
                 _reader.AdvanceAndVerifyNotEoF(eofMessage);
             }
-            _reader.Advance();
 
             var doubleString = buffer.ToString();
             double result;
@@ -113,27 +99,20 @@ namespace Tiledriver.Core.Uwmf.Parsing
             throw new ParsingException(startPosition, "Malformed floating point number.");
         }
 
-        public bool ReadBooleanAssignment()
+        public bool ReadBoolean()
         {
             const string eofMessage = "Unexpected end of file when reading Boolean.";
 
-            MovePastWhitespaceAndComments(eofMessage);
+            MovePastWhitespaceAndCommentsAndVerifyNotEoF(eofMessage);
 
             var startPosition = _reader.Current.Position;
             var buffer = new StringBuilder();
 
-            while (!_reader.Current.Char.IsEndOfAssignment())
+            while (_reader.Current.Char.IsBooleanChar())
             {
-                if (!_reader.Current.Char.IsBooleanChar())
-                {
-                    throw new ParsingException(
-                        _reader.Current.Position,
-                        $"Unexpected character while reading Boolean: {_reader.Current.Char}.");
-                }
                 buffer.Append(_reader.Current.Char);
                 _reader.AdvanceAndVerifyNotEoF(eofMessage);
             }
-            _reader.Advance();
 
             var boolString = buffer.ToString();
             bool result;
@@ -145,11 +124,11 @@ namespace Tiledriver.Core.Uwmf.Parsing
             throw new ParsingException(startPosition, "Malformed Boolean.");
         }
 
-        public string ReadStringAssignment()
+        public string ReadString()
         {
             const string eofMessage = "Unexpected end of file when reading string.";
 
-            MovePastWhitespaceAndComments(eofMessage);
+            MovePastWhitespaceAndCommentsAndVerifyNotEoF(eofMessage);
 
             var startPosition = _reader.Current.Position;
             var buffer = new StringBuilder();
@@ -170,56 +149,48 @@ namespace Tiledriver.Core.Uwmf.Parsing
 
             _reader.AdvanceAndVerifyNotEoF(eofMessage);
 
-            if (_reader.Current.Char != ';')
-            {
-                throw new ParsingException(_reader.Current.Position, "No end of expression found after string.");
-            }
-            _reader.Advance();
-
             return buffer.ToString();
         }
 
-        public ExpressionType DetermineIfAssignmentOrStartBlock()
+        public TokenType DetermineNextToken()
         {
-            const string eofMessage = "Unexpected end of file after identifier.";
-
-            MovePastWhitespaceAndComments(eofMessage);
+            MovePastWhitespaceAndComments();
 
             switch (_reader.Current.Char)
             {
                 case '=':
-                    _reader.AdvanceAndVerifyNotEoF("Unexpected end of file after assignment.");
-                    return ExpressionType.Assignment;
+                    return TokenType.Assignment;
                 case '{':
-                    _reader.AdvanceAndVerifyNotEoF("Unexpected end of file after start of block.");
-                    return ExpressionType.StartBlock;
+                    return TokenType.StartBlock;
+                case '}':
+                    return TokenType.EndBlock;
+                case ';':
+                    return TokenType.EndOfAssignment;
+                case ',':
+                    return TokenType.Comma;
                 default:
-                    throw new ParsingException(_reader.Current.Position, "Unexpected character after identifier.");
+                    if (_reader.Current.Char.IsValidIdentifierStartChar())
+                    {
+                        return TokenType.Identifier;
+                    }
+                    if (_reader.Current.IsEndOfFile)
+                    {
+                        return TokenType.EndOfFile;
+                    }
+
+                    return TokenType.Unknown;
             }
         }
 
-        public ExpressionType DetermineIfIdentifierOrEndBlock()
+        public void AdvanceOneCharacter()
         {
-            MovePastWhitespaceAndComments("Unexpected end of file inside block");
-
-            if (_reader.Current.Char == '}')
-            {
-                _reader.Advance();
-                return ExpressionType.EndBlock;
-            }
-            if (_reader.Current.Char.IsValidIdentifierStartChar())
-            {
-                // Do not advance the reader.
-                return ExpressionType.Identifier;
-            }
-
-            throw new ParsingException(_reader.Current.Position, "Unexpected character inside block.");
+            _reader.Advance();
         }
 
         public void MovePastAssignment()
         {
             const string eofMessage = "Unexpected end of file inside assignment of unknown identifier.";
-            MovePastWhitespaceAndComments(eofMessage);
+            MovePastWhitespaceAndCommentsAndVerifyNotEoF(eofMessage);
 
             bool insideString = false;
             while (_reader.Current.Char != ';' || insideString)
@@ -233,7 +204,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
             _reader.Advance();
         }
 
-        private void MovePastWhitespaceAndComments(string eofMessage)
+        private void MovePastWhitespaceAndCommentsAndVerifyNotEoF(string eofMessage)
         {
             while (char.IsWhiteSpace(_reader.Current.Char))
             {
@@ -248,6 +219,25 @@ namespace Tiledriver.Core.Uwmf.Parsing
                 while (char.IsWhiteSpace(_reader.Current.Char))
                 {
                     _reader.AdvanceAndVerifyNotEoF(eofMessage);
+                }
+            }
+        }
+
+        private void MovePastWhitespaceAndComments()
+        {
+            while (char.IsWhiteSpace(_reader.Current.Char))
+            {
+                _reader.Advance();
+            }
+
+            if (_reader.Current.Char.IsStartOfComment())
+            {
+                SkipComment();
+                _reader.Advance();
+
+                while (char.IsWhiteSpace(_reader.Current.Char))
+                {
+                    _reader.Advance();
                 }
             }
         }
