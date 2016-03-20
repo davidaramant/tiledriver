@@ -13,6 +13,7 @@
 // Copyright (c) 2016 David Aramant
 // Distributed under the GNU GPL v2. For full terms see the file LICENSE.
 
+using System.Collections.Generic;
 using System.IO;
 
 namespace Tiledriver.Core.Uwmf
@@ -57,53 +58,80 @@ foreach( var blockDefinition in UwmfDefinitions.Blocks )
         public <#= property.TypeString #> <#= property.Name.NameWithFirstCapitalized #> {get; set; }
 <#
     }
+	// WRITE SUBBLOCKS
+	foreach( var subBlock in blockDefinition.SubBlocks )
+	{
+#>
+		public readonly List<<#= subBlock.NameWithFirstCapitalized #>> <#= subBlock.NameWithFirstCapitalized #>s = new List<<#= subBlock.NameWithFirstCapitalized #>>();
+<#
+    }
 #>
 
 		public Stream WriteTo(Stream stream)
         {
 			CheckSemanticValidity();
 
-            return stream.
-                Line("<#= blockDefinition.Name #>").
-                Line("{").
 <#
+	if( blockDefinition.IsSubBlock )
+	{
+#>
+            stream.Line("<#= blockDefinition.Name #>");
+            stream.Line("{");
+<#
+	}
+
     // WRITE ALL REQUIRED PROPERTIES
     foreach( var property in blockDefinition.Properties.Where( _ => _.IsRequired ) )
     {
 #>
-				Attribute( "<#= property.Name #>", <#= property.Name.NameAsField #> ).
+			stream.Attribute( "<#= property.Name #>", <#= property.Name.NameAsField #> );
 <#
 	}
     // WRITE INTEGER NUMBER OPTIONAL PROPERTIES
     foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired && _.Type == PropertyType.IntegerNumber ) )
     {
 #>
-				MaybeAttribute( <#= property.Name.NameWithFirstCapitalized #> != <#= property.DefaultAsString #>, "<#= property.Name #>", <#= property.Name.NameWithFirstCapitalized #> ).
+			stream.MaybeAttribute( <#= property.Name.NameWithFirstCapitalized #> != <#= property.DefaultAsString #>, "<#= property.Name #>", <#= property.Name.NameWithFirstCapitalized #> );
 <#
 	}
     // WRITE FLOATING POINT NUMBER OPTIONAL PROPERTIES
     foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired && _.Type == PropertyType.FloatingPointNumber ) )
     {
 #>
-				MaybeAttribute( <#= property.Name.NameWithFirstCapitalized #> != <#= property.DefaultAsString #>, "<#= property.Name #>", <#= property.Name.NameWithFirstCapitalized #> ).
+			stream.MaybeAttribute( <#= property.Name.NameWithFirstCapitalized #> != <#= property.DefaultAsString #>, "<#= property.Name #>", <#= property.Name.NameWithFirstCapitalized #> );
 <#
 	}
     // WRITE BOOLEAN OPTIONAL PROPERTIES
     foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired && _.Type == PropertyType.Boolean ) )
     {
 #>
-				MaybeAttribute( <#= property.Name.NameWithFirstCapitalized #> != <#= property.DefaultAsString #>, "<#= property.Name #>", <#= property.Name.NameWithFirstCapitalized #> ).
+			stream.MaybeAttribute( <#= property.Name.NameWithFirstCapitalized #> != <#= property.DefaultAsString #>, "<#= property.Name #>", <#= property.Name.NameWithFirstCapitalized #> );
 <#
 	}
     // WRITE STRING OPTIONAL PROPERTIES
     foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired && _.Type == PropertyType.String ) )
     {
 #>
-				MaybeAttribute( <#= property.Name.NameWithFirstCapitalized #> != <#= property.DefaultAsString #>, "<#= property.Name #>", <#= property.Name.NameWithFirstCapitalized #> ).
+			stream.MaybeAttribute( <#= property.Name.NameWithFirstCapitalized #> != <#= property.DefaultAsString #>, "<#= property.Name #>", <#= property.Name.NameWithFirstCapitalized #> );
 <#
     }
+	// WRITE SUBBLOCKS
+	foreach( var subBlock in blockDefinition.SubBlocks )
+	{
 #>
-                Line("}");		
+			stream.Blocks( <#= subBlock.NameWithFirstCapitalized #>s );
+<#
+    }
+
+	if( blockDefinition.IsSubBlock )
+	{
+#>
+            stream.Line("}");
+<#
+	}
+#>
+				
+			return stream;
 		}
 
 		public void CheckSemanticValidity()

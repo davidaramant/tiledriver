@@ -66,25 +66,14 @@ namespace Tiledriver.Core.Uwmf.Metadata
                 UwmfProperty.OptionalBoolean("monsterUse", false),
                 UwmfProperty.OptionalBoolean("repeatable", false),
                 UwmfProperty.OptionalBoolean("secret", false)),
-            new UwmfBlock("map1",
-                UwmfProperty.RequiredIntegerNumber("x"),
-                UwmfProperty.RequiredIntegerNumber("y"),
-                UwmfProperty.RequiredIntegerNumber("z"),
-                UwmfProperty.RequiredIntegerNumber("action"),
-                UwmfProperty.OptionalIntegerNumber("arg0",0),
-                UwmfProperty.OptionalIntegerNumber("arg1",0),
-                UwmfProperty.OptionalIntegerNumber("arg2",0),
-                UwmfProperty.OptionalIntegerNumber("arg3",0),
-                UwmfProperty.OptionalIntegerNumber("arg4",0),
-                UwmfProperty.OptionalBoolean("activateEast", true),
-                UwmfProperty.OptionalBoolean("activateNorth", true),
-                UwmfProperty.OptionalBoolean("activateWest", true),
-                UwmfProperty.OptionalBoolean("activateSouth", true),
-                UwmfProperty.OptionalBoolean("playerCross", false),
-                UwmfProperty.OptionalBoolean("playerUse", false),
-                UwmfProperty.OptionalBoolean("monsterUse", false),
-                UwmfProperty.OptionalBoolean("repeatable", false),
-                UwmfProperty.OptionalBoolean("secret", false)),
+            new UwmfBlock("map",
+                UwmfProperty.RequiredString("namespace"),
+                UwmfProperty.RequiredIntegerNumber("tileSize"),
+                UwmfProperty.RequiredString("name"),
+                UwmfProperty.RequiredIntegerNumber("width"),
+                UwmfProperty.RequiredIntegerNumber("height")).
+                HasSubBlocks("tile","sector","zone","plane","thing", "trigger").
+                IsTopLevel(),
         };
     }
 }
