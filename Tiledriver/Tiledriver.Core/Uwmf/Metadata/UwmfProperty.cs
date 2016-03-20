@@ -2,6 +2,7 @@
 // Distributed under the GNU GPL v2. For full terms see the file LICENSE.
 
 using System;
+using System.Diagnostics;
 
 namespace Tiledriver.Core.Uwmf.Metadata
 {
@@ -17,13 +18,57 @@ namespace Tiledriver.Core.Uwmf.Metadata
     {
         public Identifier Name { get; }
         public PropertyType Type { get; }
+
+        public string TypeString
+        {
+            get
+            {
+                switch (Type)
+                {
+                    case PropertyType.Boolean:
+                        return "bool";
+                    case PropertyType.FloatingPointNumber:
+                        return "double";
+                    case PropertyType.IntegerNumber:
+                        return "int";
+                    case PropertyType.String:
+                        return "string";
+                    default:
+                        throw new NotImplementedException("Unknown property type.");
+                }
+            }
+        }
+
         private readonly object _defaultValue;
-        public bool IsRequired => _defaultValue != null;
+
+        public string DefaultAsString
+        {
+            get
+            {
+                switch (Type)
+                {
+                    case PropertyType.IntegerNumber:
+                    case PropertyType.FloatingPointNumber:
+                        return _defaultValue.ToString();
+
+                    case PropertyType.Boolean:
+                        return _defaultValue.ToString().ToLowerInvariant();
+
+                    case PropertyType.String:
+                        return "\"" + _defaultValue + "\"";
+
+                    default:
+                        throw new NotImplementedException("Unknown property type.");
+                }
+            }
+        }
 
         public int DefaultIntegerNumber => GetDefaultValue<int>(PropertyType.IntegerNumber);
         public double DefaultFloatingPointNumber => GetDefaultValue<double>(PropertyType.FloatingPointNumber);
         public string DefaultString => GetDefaultValue<string>(PropertyType.String);
         public bool DefaultBoolean => GetDefaultValue<bool>(PropertyType.Boolean);
+
+        public bool IsRequired => _defaultValue == null;
 
         public UwmfProperty(string name, PropertyType type, object defaultValue = null)
         {

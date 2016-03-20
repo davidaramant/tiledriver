@@ -1,0 +1,125 @@
+﻿<#
+// Copyright (c) 2016 David Aramant
+// Distributed under the GNU GPL v2. For full terms see the file LICENSE.
+#>
+<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="$(SolutionDir)$(ProjectName)\bin\$(Configuration)\$(ProjectName).dll" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="Tiledriver.Core.Uwmf.Metadata" #>
+<#@ output extension=".cs" #>
+// Copyright (c) 2016 David Aramant
+// Distributed under the GNU GPL v2. For full terms see the file LICENSE.
+
+using System.IO;
+
+namespace Tiledriver.Core.Uwmf
+{
+<#
+foreach( var blockDefinition in UwmfDefinitions.Blocks )
+{
+#>
+    public sealed class <#= blockDefinition.Name.NameWithFirstCapitalized #> : IUwmfEntry
+    {
+<#
+    // WRITE REQUIRED FIELDS
+    foreach( var property in blockDefinition.Properties.Where( _ => _.IsRequired ) )
+    {
+#>
+        private bool <#= property.Name.NameAsField #>HasBeenSet = false;
+        private <#= property.TypeString #> <#= property.Name.NameAsField #>;
+<#
+    }
+	// WRITE OPTIONAL FIELDS
+    foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired ) )
+    {
+#>
+        private bool <#= property.Name.NameAsField #>HasBeenSet = false;
+        private <#= property.TypeString #> <#= property.Name.NameAsField #> = <#= property.DefaultAsString #>;
+<#
+    }
+#>
+
+<#
+    // WRITE PROPERTIES
+    foreach( var property in blockDefinition.Properties )
+    {
+#>
+        public <#= property.TypeString #> <#= property.Name.NameWithFirstCapitalized #>
+        {
+            get { return <#= property.Name.NameAsField #>; }
+            set 
+			{ 
+				<#= property.Name.NameAsField #>HasBeenSet = true;
+				<#= property.Name.NameAsField #> = value;
+			}
+        }
+<#
+    }
+#>
+
+		public Stream WriteTo(Stream stream)
+        {
+<#
+    // CHECK THAT ALL REQUIRED PROPERTIES HAVE BEEN SET
+    foreach( var property in blockDefinition.Properties.Where( _ => _.IsRequired ) )
+    {
+#>
+			if( ! <#= property.Name.NameAsField #>HasBeenSet )
+			{
+				throw new InvalidUwmfException("Did not set <#= property.Name.NameWithFirstCapitalized #> on <#= blockDefinition.Name.NameWithFirstCapitalized #>");
+			}
+<#
+    }
+#>
+
+            return stream.
+                Line("<#= blockDefinition.Name #>").
+                Line("{").
+<#
+    // WRITE ALL REQUIRED PROPERTIES
+    foreach( var property in blockDefinition.Properties.Where( _ => _.IsRequired ) )
+    {
+#>
+				Attribute( "<#= property.Name #>", <#= property.Name.NameAsField #> ).
+<#
+	}
+    // WRITE INTEGER NUMBER OPTIONAL PROPERTIES
+    foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired && _.Type == PropertyType.IntegerNumber ) )
+    {
+#>
+				MaybeAttribute( <#= property.Name.NameAsField #> != <#= property.DefaultAsString #>, "<#= property.Name #>", <#= property.Name.NameAsField #> ).
+<#
+	}
+    // WRITE FLOATING POINT NUMBER OPTIONAL PROPERTIES
+    foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired && _.Type == PropertyType.FloatingPointNumber ) )
+    {
+#>
+				MaybeAttribute( <#= property.Name.NameAsField #> != <#= property.DefaultAsString #>, "<#= property.Name #>", <#= property.Name.NameAsField #> ).
+<#
+	}
+    // WRITE BOOLEAN OPTIONAL PROPERTIES
+    foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired && _.Type == PropertyType.Boolean ) )
+    {
+#>
+				MaybeAttribute( <#= property.Name.NameAsField #> != <#= property.DefaultAsString #>, "<#= property.Name #>", <#= property.Name.NameAsField #> ).
+<#
+	}
+    // WRITE STRING OPTIONAL PROPERTIES
+    foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired && _.Type == PropertyType.String ) )
+    {
+#>
+				MaybeAttribute( <#= property.Name.NameAsField #> != <#= property.DefaultAsString #>, "<#= property.Name #>", <#= property.Name.NameAsField #> ).
+<#
+    }
+#>
+                Line("}");		
+		}
+    }
+
+<#
+}
+#>
+}

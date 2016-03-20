@@ -6,26 +6,28 @@ using System.Diagnostics;
 
 namespace Tiledriver.Core.Uwmf.Metadata
 {
-    [DebuggerDisplay("{_name}")]
+    [DebuggerDisplay("{Name}")]
     public sealed class Identifier
     {
-        private readonly string _name;
+        public string Name { get; }
+        public string NameWithFirstCapitalized => Char.ToUpperInvariant(Name[0]) + Name.Substring(1);
+        public string NameAsField => "_" + Name;
 
         public Identifier(string name)
         {
-            _name = name;
+            Name = name;
         }
 
         public override string ToString()
         {
-            return _name;
+            return Name;
         }
 
         #region Equality members
 
         private bool Equals(Identifier other)
         {
-            return string.Equals(_name, other._name, StringComparison.OrdinalIgnoreCase);
+            return string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase);
         }
 
         public override bool Equals(object obj)
@@ -37,7 +39,7 @@ namespace Tiledriver.Core.Uwmf.Metadata
 
         public override int GetHashCode()
         {
-            return (_name != null ? StringComparer.OrdinalIgnoreCase.GetHashCode(_name) : 0);
+            return (Name != null ? StringComparer.OrdinalIgnoreCase.GetHashCode(Name) : 0);
         }
 
         public static bool operator ==(Identifier left, Identifier right)

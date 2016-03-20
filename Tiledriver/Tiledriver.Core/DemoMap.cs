@@ -48,6 +48,8 @@ namespace Tiledriver.Core
                         Type = WolfActor.Player1Start.Id,
                         X = 1.5,
                         Y = 1.5,
+                        Z = 0,
+                        Angle = 0,
                         Skill1 = true,
                         Skill2 = true,
                         Skill3 = true,

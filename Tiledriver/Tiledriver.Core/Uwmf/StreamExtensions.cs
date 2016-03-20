@@ -46,6 +46,26 @@ namespace Tiledriver.Core.Uwmf
             return InternalAttribute(stream, name, value.ToString().ToLowerInvariant(), indent);
         }
 
+        public static Stream MaybeAttribute(this Stream stream, bool shouldWrite, string name, string value, bool indent = true)
+        {
+            return shouldWrite ? InternalAttribute(stream, name, $"\"{value}\"", indent) : stream;
+        }
+
+        public static Stream MaybeAttribute(this Stream stream, bool shouldWrite, string name, int value, bool indent = true)
+        {
+            return shouldWrite ? InternalAttribute(stream, name, value.ToString(CultureInfo.InvariantCulture), indent) : stream;
+        }
+
+        public static Stream MaybeAttribute(this Stream stream, bool shouldWrite, string name, double value, bool indent = true)
+        {
+            return shouldWrite ? InternalAttribute(stream, name, value.ToString(CultureInfo.InvariantCulture), indent) : stream;
+        }
+
+        public static Stream MaybeAttribute(this Stream stream, bool shouldWrite, string name, bool value, bool indent = true)
+        {
+            return shouldWrite ? InternalAttribute(stream, name, value.ToString().ToLowerInvariant(), indent) : stream;
+        }
+
         public static Stream Blocks(this Stream stream, IEnumerable<IUwmfEntry> blocks)
         {
             foreach (var block in blocks)
