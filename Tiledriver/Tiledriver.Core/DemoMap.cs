@@ -13,6 +13,7 @@ namespace Tiledriver.Core
         {
             var map = new Map
             {
+                Namespace = "Wolf3D",
                 Name = "Test Output",
                 Width = 64,
                 Height = 64,

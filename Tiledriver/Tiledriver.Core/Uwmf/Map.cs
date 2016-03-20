@@ -13,7 +13,7 @@ namespace Tiledriver.Core.Uwmf
     /// </summary>
     public sealed class Map : IUwmfEntry
     {
-        public const string Namespace = "Wolf3D";
+        public string Namespace { get; set; }
         public int TileSize { get; set; }
         public string Name { get; set; }
         public int Width { get; set; }
