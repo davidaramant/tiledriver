@@ -7,14 +7,14 @@ namespace Tiledriver.Core.Uwmf
 {
     public sealed class PlanemapEntry
     {
-        public TileId Tile { get; set; }
-        public SectorId Sector { get; set; }
-        public ZoneId Zone { get; set; }
-        public Tag Tag { get; set; }
+        public int Tile { get; set; }
+        public int Sector { get; set; }
+        public int Zone { get; set; }
+        public int Tag { get; set; }
 
         public PlanemapEntry(){}
 
-        public PlanemapEntry(TileId tile, SectorId sector, ZoneId zone, Tag tag = Tag.Default)
+        public PlanemapEntry(int tile, int sector, int zone, int tag = 0)
         {
             Tile = tile;
             Sector = sector;
@@ -25,7 +25,7 @@ namespace Tiledriver.Core.Uwmf
         public override string ToString()
         {
             var tagPortion =
-                Tag != Tag.Default ?
+                Tag != 0 ?
                     $",{(int)Tag}" :
                     String.Empty;
 

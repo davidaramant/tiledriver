@@ -67,7 +67,6 @@
     <Compile Include="Uwmf\Parsing\Lexer.cs" />
     <Compile Include="Uwmf\Parsing\ParsingException.cs" />
     <Compile Include="Uwmf\StreamExtensions.cs" />
-    <Compile Include="Uwmf\IdWrappers.cs" />
     <Compile Include="Uwmf\IUwmfEntry.cs" />
     <Compile Include="Uwmf\Map.cs" />
     <Compile Include="Uwmf\Planemap.cs" />

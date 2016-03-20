@@ -66,8 +66,8 @@ namespace Tiledriver.Core
         {
             var entries = new PlanemapEntry[height, width];
 
-            var solidTile = new PlanemapEntry(0, 0, ZoneId.NotSpecified);
-            var emptyTile = new PlanemapEntry(TileId.NotSpecified, 0, 0);
+            var solidTile = new PlanemapEntry(0, 0, -1);
+            var emptyTile = new PlanemapEntry(-1, 0, 0);
 
             // ### Build a big empty square
 
