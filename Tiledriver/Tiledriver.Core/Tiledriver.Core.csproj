@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="DemoMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Uwmf\Metadata\UwmfProperty.cs" />
     <Compile Include="Uwmf\Parsing\IUwmfCharReader.cs" />
     <Compile Include="Uwmf\Parsing\UwmfChar.cs" />
     <Compile Include="Uwmf\Parsing\Extensions\CharExtensions.cs" />
