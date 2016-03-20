@@ -5,15 +5,8 @@ using System;
 
 namespace Tiledriver.Core.Uwmf
 {
-    public sealed class TileSpace
+    public partial class TileSpace
     {
-        public int Tile { get; set; }
-        public int Sector { get; set; }
-        public int Zone { get; set; }
-        public int Tag { get; set; }
-
-        public TileSpace(){}
-
         public TileSpace(int tile, int sector, int zone, int tag = 0)
         {
             Tile = tile;

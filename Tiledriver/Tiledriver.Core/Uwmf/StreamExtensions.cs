@@ -75,6 +75,11 @@ namespace Tiledriver.Core.Uwmf
             return stream;
         }
 
+        public static void Blocks(this Stream stream, IEnumerable<TileSpace> tileSpaces)
+        {
+            stream.Line(String.Join(",\n", tileSpaces));
+        }
+
         public static Stream Block(this Stream stream, IUwmfEntry block)
         {
             block.WriteTo(stream);

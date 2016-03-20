@@ -2,6 +2,7 @@
 // Distributed under the GNU GPL v2. For full terms see the file LICENSE.
 
 using System.Collections.Generic;
+using System.Linq;
 using Tiledriver.Core.Uwmf;
 using Tiledriver.Core.Wolf3D;
 
@@ -41,7 +42,7 @@ namespace Tiledriver.Core
                     new Zone { },
                 },
                 Planes = { new Plane { Depth = 64 } },
-                Planemaps = { new Planemap(CreateGeometry(width: 64, height: 64)) },
+                PlaneMaps = { new PlaneMap( CreateGeometry(width: 64, height: 64) )},
                 Things =
                 {
                     new Thing

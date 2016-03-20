@@ -6,7 +6,8 @@ using System.IO;
 
 namespace Tiledriver.Core.Uwmf
 {
-    public sealed partial class Tile : IUwmfEntry
+    public sealed partial class Tile
+									: IUwmfEntry
     {
         private bool _textureEastHasBeenSet = false;
         private string _textureEast;
@@ -53,16 +54,16 @@ namespace Tiledriver.Core.Uwmf
 				_textureSouth = value;
 			}
         }
-        public bool BlockingEast {get; set; }
-        public bool BlockingNorth {get; set; }
-        public bool BlockingWest {get; set; }
-        public bool BlockingSouth {get; set; }
-        public bool OffsetVertical {get; set; }
-        public bool OffsetHorizontal {get; set; }
-        public bool DontOverlay {get; set; }
-        public int Mapped {get; set; }
-        public string SoundSequence {get; set; }
-        public string TextureOverhead {get; set; }
+        public bool BlockingEast { get; set; }
+        public bool BlockingNorth { get; set; }
+        public bool BlockingWest { get; set; }
+        public bool BlockingSouth { get; set; }
+        public bool OffsetVertical { get; set; }
+        public bool OffsetHorizontal { get; set; }
+        public bool DontOverlay { get; set; }
+        public int Mapped { get; set; }
+        public string SoundSequence { get; set; }
+        public string TextureOverhead { get; set; }
 
 		public Stream WriteTo(Stream stream)
         {
@@ -113,7 +114,8 @@ namespace Tiledriver.Core.Uwmf
 		partial void AdditionalSemanticChecks();
     }
 
-    public sealed partial class Sector : IUwmfEntry
+    public sealed partial class Sector
+									: IUwmfEntry
     {
         private bool _textureCeilingHasBeenSet = false;
         private string _textureCeiling;
@@ -168,7 +170,8 @@ namespace Tiledriver.Core.Uwmf
 		partial void AdditionalSemanticChecks();
     }
 
-    public sealed partial class Zone : IUwmfEntry
+    public sealed partial class Zone
+									: IUwmfEntry
     {
 
 
@@ -191,7 +194,8 @@ namespace Tiledriver.Core.Uwmf
 		partial void AdditionalSemanticChecks();
     }
 
-    public sealed partial class Plane : IUwmfEntry
+    public sealed partial class Plane
+									: IUwmfEntry
     {
         private bool _depthHasBeenSet = false;
         private int _depth;
@@ -230,7 +234,92 @@ namespace Tiledriver.Core.Uwmf
 		partial void AdditionalSemanticChecks();
     }
 
-    public sealed partial class Thing : IUwmfEntry
+    public sealed partial class TileSpace
+    {
+        private bool _tileHasBeenSet = false;
+        private int _tile;
+        private bool _sectorHasBeenSet = false;
+        private int _sector;
+        private bool _zoneHasBeenSet = false;
+        private int _zone;
+
+        public int Tile
+        {
+            get { return _tile; }
+            set 
+			{ 
+				_tileHasBeenSet = true;
+				_tile = value;
+			}
+        }
+        public int Sector
+        {
+            get { return _sector; }
+            set 
+			{ 
+				_sectorHasBeenSet = true;
+				_sector = value;
+			}
+        }
+        public int Zone
+        {
+            get { return _zone; }
+            set 
+			{ 
+				_zoneHasBeenSet = true;
+				_zone = value;
+			}
+        }
+        public int Tag { get; set; }
+
+		public void CheckSemanticValidity()
+		{
+			if( ! _tileHasBeenSet )
+			{
+				throw new InvalidUwmfException("Did not set Tile on TileSpace");
+			}
+			if( ! _sectorHasBeenSet )
+			{
+				throw new InvalidUwmfException("Did not set Sector on TileSpace");
+			}
+			if( ! _zoneHasBeenSet )
+			{
+				throw new InvalidUwmfException("Did not set Zone on TileSpace");
+			}
+			AdditionalSemanticChecks();
+		}
+
+		partial void AdditionalSemanticChecks();
+    }
+
+    public sealed partial class PlaneMap
+									: IUwmfEntry
+    {
+
+		public readonly List<TileSpace> TileSpaces = new List<TileSpace>();
+
+		public Stream WriteTo(Stream stream)
+        {
+			CheckSemanticValidity();
+
+            stream.Line("planeMap");
+            stream.Line("{");
+			stream.Blocks( TileSpaces );
+            stream.Line("}");
+				
+			return stream;
+		}
+
+		public void CheckSemanticValidity()
+		{
+			AdditionalSemanticChecks();
+		}
+
+		partial void AdditionalSemanticChecks();
+    }
+
+    public sealed partial class Thing
+									: IUwmfEntry
     {
         private bool _typeHasBeenSet = false;
         private int _type;
@@ -288,13 +377,13 @@ namespace Tiledriver.Core.Uwmf
 				_angle = value;
 			}
         }
-        public bool Ambush {get; set; }
-        public bool Patrol {get; set; }
-        public bool Skill1 {get; set; }
-        public bool Skill2 {get; set; }
-        public bool Skill3 {get; set; }
-        public bool Skill4 {get; set; }
-        public bool Skill5 {get; set; }
+        public bool Ambush { get; set; }
+        public bool Patrol { get; set; }
+        public bool Skill1 { get; set; }
+        public bool Skill2 { get; set; }
+        public bool Skill3 { get; set; }
+        public bool Skill4 { get; set; }
+        public bool Skill5 { get; set; }
 
 		public Stream WriteTo(Stream stream)
         {
@@ -347,7 +436,8 @@ namespace Tiledriver.Core.Uwmf
 		partial void AdditionalSemanticChecks();
     }
 
-    public sealed partial class Trigger : IUwmfEntry
+    public sealed partial class Trigger
+									: IUwmfEntry
     {
         private bool _xHasBeenSet = false;
         private int _x;
@@ -394,20 +484,20 @@ namespace Tiledriver.Core.Uwmf
 				_action = value;
 			}
         }
-        public int Arg0 {get; set; }
-        public int Arg1 {get; set; }
-        public int Arg2 {get; set; }
-        public int Arg3 {get; set; }
-        public int Arg4 {get; set; }
-        public bool ActivateEast {get; set; }
-        public bool ActivateNorth {get; set; }
-        public bool ActivateWest {get; set; }
-        public bool ActivateSouth {get; set; }
-        public bool PlayerCross {get; set; }
-        public bool PlayerUse {get; set; }
-        public bool MonsterUse {get; set; }
-        public bool Repeatable {get; set; }
-        public bool Secret {get; set; }
+        public int Arg0 { get; set; }
+        public int Arg1 { get; set; }
+        public int Arg2 { get; set; }
+        public int Arg3 { get; set; }
+        public int Arg4 { get; set; }
+        public bool ActivateEast { get; set; }
+        public bool ActivateNorth { get; set; }
+        public bool ActivateWest { get; set; }
+        public bool ActivateSouth { get; set; }
+        public bool PlayerCross { get; set; }
+        public bool PlayerUse { get; set; }
+        public bool MonsterUse { get; set; }
+        public bool Repeatable { get; set; }
+        public bool Secret { get; set; }
 
 		public Stream WriteTo(Stream stream)
         {
@@ -462,7 +552,8 @@ namespace Tiledriver.Core.Uwmf
 		partial void AdditionalSemanticChecks();
     }
 
-    public sealed partial class Map : IUwmfEntry
+    public sealed partial class Map
+									: IUwmfEntry
     {
         private bool _namespaceHasBeenSet = false;
         private string _namespace;
@@ -524,6 +615,7 @@ namespace Tiledriver.Core.Uwmf
 		public readonly List<Sector> Sectors = new List<Sector>();
 		public readonly List<Zone> Zones = new List<Zone>();
 		public readonly List<Plane> Planes = new List<Plane>();
+		public readonly List<PlaneMap> PlaneMaps = new List<PlaneMap>();
 		public readonly List<Thing> Things = new List<Thing>();
 		public readonly List<Trigger> Triggers = new List<Trigger>();
 
@@ -540,6 +632,7 @@ namespace Tiledriver.Core.Uwmf
 			stream.Blocks( Sectors );
 			stream.Blocks( Zones );
 			stream.Blocks( Planes );
+			stream.Blocks( PlaneMaps );
 			stream.Blocks( Things );
 			stream.Blocks( Triggers );
 				

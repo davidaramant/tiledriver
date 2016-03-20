@@ -34,6 +34,14 @@ namespace Tiledriver.Core.Uwmf.Metadata
             new UwmfBlock("zone"),
             new UwmfBlock("plane",
                 UwmfProperty.RequiredIntegerNumber("depth")),
+            new UwmfBlock("tileSpace",
+                UwmfProperty.RequiredIntegerNumber("tile"),
+                UwmfProperty.RequiredIntegerNumber("sector"),
+                UwmfProperty.RequiredIntegerNumber("zone"),
+                UwmfProperty.OptionalIntegerNumber("tag", 0)).
+                DisableNormalWriting(),
+            new UwmfBlock("planeMap").
+                HasSubBlocks("tileSpace"),
             new UwmfBlock("thing",
                 UwmfProperty.RequiredIntegerNumber("type"),
                 UwmfProperty.RequiredFloatingPointNumber("x"),
@@ -72,7 +80,7 @@ namespace Tiledriver.Core.Uwmf.Metadata
                 UwmfProperty.RequiredString("name"),
                 UwmfProperty.RequiredIntegerNumber("width"),
                 UwmfProperty.RequiredIntegerNumber("height")).
-                HasSubBlocks("tile","sector","zone","plane","thing", "trigger").
+                HasSubBlocks("tile", "sector", "zone", "plane", "planeMap", "thing", "trigger").
                 IsTopLevel(),
         };
     }

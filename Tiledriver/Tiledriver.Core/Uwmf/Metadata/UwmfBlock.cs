@@ -14,6 +14,7 @@ namespace Tiledriver.Core.Uwmf.Metadata
         public IEnumerable<UwmfProperty> Properties { get; }
         public IEnumerable<Identifier> SubBlocks => _subBlocks;
         public bool IsSubBlock { get; private set; } = true;
+        public bool NormalWriting { get; private set; } = true;
 
         public UwmfBlock(string name, params UwmfProperty[] properties)
         {
@@ -30,6 +31,12 @@ namespace Tiledriver.Core.Uwmf.Metadata
         public UwmfBlock IsTopLevel()
         {
             IsSubBlock = false;
+            return this;
+        }
+
+        public UwmfBlock DisableNormalWriting()
+        {
+            NormalWriting = false;
             return this;
         }
     }

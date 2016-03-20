@@ -22,7 +22,11 @@ namespace Tiledriver.Core.Uwmf
 foreach( var blockDefinition in UwmfDefinitions.Blocks )
 {
 #>
-    public sealed partial class <#= blockDefinition.Name.NameWithFirstCapitalized #> : IUwmfEntry
+    public sealed partial class <#= blockDefinition.Name.NameWithFirstCapitalized #>
+<# if( blockDefinition.NormalWriting ) 
+{ 
+#>									: IUwmfEntry
+<# }#>
     {
 <#
     // WRITE REQUIRED FIELDS
@@ -55,7 +59,7 @@ foreach( var blockDefinition in UwmfDefinitions.Blocks )
     foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired ) )
     {
 #>
-        public <#= property.TypeString #> <#= property.Name.NameWithFirstCapitalized #> {get; set; }
+        public <#= property.TypeString #> <#= property.Name.NameWithFirstCapitalized #> { get; set; }
 <#
     }
 	// WRITE SUBBLOCKS
@@ -65,6 +69,9 @@ foreach( var blockDefinition in UwmfDefinitions.Blocks )
 		public readonly List<<#= subBlock.NameWithFirstCapitalized #>> <#= subBlock.NameWithFirstCapitalized #>s = new List<<#= subBlock.NameWithFirstCapitalized #>>();
 <#
     }
+
+    if( blockDefinition.NormalWriting ) 
+	{ 
 #>
 
 		public Stream WriteTo(Stream stream)
@@ -133,6 +140,9 @@ foreach( var blockDefinition in UwmfDefinitions.Blocks )
 				
 			return stream;
 		}
+<#
+	} // End 'if' for NormalWriting
+#>
 
 		public void CheckSemanticValidity()
 		{
