@@ -54,7 +54,7 @@ namespace Tiledriver.Core.Uwmf
 
             if (actualEntryCount != expectedEntryCount)
             {
-                throw new InvalidOperationException($"Invalid number of planemap entries. Expected {expectedEntryCount} but got {actualEntryCount}.");
+                throw new InvalidUwmfException($"Invalid number of planemap entries. Expected {expectedEntryCount} but got {actualEntryCount}.");
             }
 
             CheckCollection(Planemaps.First().Entries, entry => (int)entry.Tile, Tiles.Count, "Tiles");
@@ -70,7 +70,7 @@ namespace Tiledriver.Core.Uwmf
         {
             if (entries.Select(idGrabber).Any(id => id >= definedCount))
             {
-                throw new InvalidOperationException($"Invalid ids found for {name}.");
+                throw new InvalidUwmfException($"Invalid ids found for {name}.");
             }
         }
     }
