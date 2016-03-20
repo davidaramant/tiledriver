@@ -15,7 +15,7 @@ namespace Tiledriver.Core.Uwmf.Metadata
 
     public sealed class UwmfProperty
     {
-        public string Name { get; }
+        public Identifier Name { get; }
         public PropertyType Type { get; }
         private readonly object _defaultValue;
         public bool IsRequired => _defaultValue != null;
@@ -27,7 +27,7 @@ namespace Tiledriver.Core.Uwmf.Metadata
 
         public UwmfProperty(string name, PropertyType type, object defaultValue = null)
         {
-            Name = name;
+            Name = new Identifier(name);
             Type = type;
             _defaultValue = defaultValue;
         }

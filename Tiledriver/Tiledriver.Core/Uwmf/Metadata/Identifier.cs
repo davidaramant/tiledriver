@@ -2,9 +2,11 @@
 // Distributed under the GNU GPL v2. For full terms see the file LICENSE.
 
 using System;
+using System.Diagnostics;
 
-namespace Tiledriver.Core.Uwmf.Parsing
+namespace Tiledriver.Core.Uwmf.Metadata
 {
+    [DebuggerDisplay("{_name}")]
     public sealed class Identifier
     {
         private readonly string _name;
@@ -12,6 +14,11 @@ namespace Tiledriver.Core.Uwmf.Parsing
         public Identifier(string name)
         {
             _name = name;
+        }
+
+        public override string ToString()
+        {
+            return _name;
         }
 
         #region Equality members

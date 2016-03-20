@@ -4,6 +4,7 @@
 using System;
 using System.Globalization;
 using System.Text;
+using Tiledriver.Core.Uwmf.Metadata;
 using Tiledriver.Core.Uwmf.Parsing.Extensions;
 
 namespace Tiledriver.Core.Uwmf.Parsing
