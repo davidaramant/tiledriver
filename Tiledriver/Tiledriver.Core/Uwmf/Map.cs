@@ -29,8 +29,8 @@ namespace Tiledriver.Core.Uwmf
         }
 
         private static void CheckCollection(
-            IEnumerable<PlanemapEntry> entries,
-            Func<PlanemapEntry, int> idGrabber,
+            IEnumerable<TileSpace> entries,
+            Func<TileSpace, int> idGrabber,
             int definedCount,
             string name)
         {

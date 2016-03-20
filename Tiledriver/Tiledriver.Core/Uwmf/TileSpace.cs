@@ -5,16 +5,16 @@ using System;
 
 namespace Tiledriver.Core.Uwmf
 {
-    public sealed class PlanemapEntry
+    public sealed class TileSpace
     {
         public int Tile { get; set; }
         public int Sector { get; set; }
         public int Zone { get; set; }
         public int Tag { get; set; }
 
-        public PlanemapEntry(){}
+        public TileSpace(){}
 
-        public PlanemapEntry(int tile, int sector, int zone, int tag = 0)
+        public TileSpace(int tile, int sector, int zone, int tag = 0)
         {
             Tile = tile;
             Sector = sector;

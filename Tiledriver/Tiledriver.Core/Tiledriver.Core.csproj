@@ -70,7 +70,7 @@
     <Compile Include="Uwmf\IUwmfEntry.cs" />
     <Compile Include="Uwmf\Map.cs" />
     <Compile Include="Uwmf\Planemap.cs" />
-    <Compile Include="Uwmf\PlanemapEntry.cs" />
+    <Compile Include="Uwmf\TileSpace.cs" />
     <Compile Include="WadFile.cs" />
     <Compile Include="Wolf3D\AllWolfTextures.cs" />
     <Compile Include="Wolf3D\WolfActor.cs" />

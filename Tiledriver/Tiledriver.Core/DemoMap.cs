@@ -62,12 +62,12 @@ namespace Tiledriver.Core
             return map;
         }
 
-        private static IEnumerable<PlanemapEntry> CreateGeometry(int width, int height)
+        private static IEnumerable<TileSpace> CreateGeometry(int width, int height)
         {
-            var entries = new PlanemapEntry[height, width];
+            var entries = new TileSpace[height, width];
 
-            var solidTile = new PlanemapEntry(0, 0, -1);
-            var emptyTile = new PlanemapEntry(-1, 0, 0);
+            var solidTile = new TileSpace(0, 0, -1);
+            var emptyTile = new TileSpace(-1, 0, 0);
 
             // ### Build a big empty square
 

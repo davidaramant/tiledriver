@@ -9,11 +9,11 @@ namespace Tiledriver.Core.Uwmf
 {
     public sealed class Planemap : IUwmfEntry
     {
-        public readonly List<PlanemapEntry> Entries = new List<PlanemapEntry>();
+        public readonly List<TileSpace> Entries = new List<TileSpace>();
 
         public Planemap(){}
 
-        public Planemap(IEnumerable<PlanemapEntry> entries)
+        public Planemap(IEnumerable<TileSpace> entries)
         {
             Entries.AddRange(entries);
         }
