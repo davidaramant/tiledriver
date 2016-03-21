@@ -14,18 +14,27 @@ namespace Tiledriver.Core.Uwmf
     {
         partial void AdditionalSemanticChecks()
         {
-            // TODO: Expand to check all planemaps
-            //var expectedEntryCount = Width * Height;
-            //var actualEntryCount = Planemaps.First().Entries.Count;
+            if (Planes.Count != PlaneMaps.Count)
+            {
+                throw new InvalidUwmfException("Unequal number of planes and planeMaps");
+            }
 
-            //if (actualEntryCount != expectedEntryCount)
-            //{
-            //    throw new InvalidUwmfException($"Invalid number of planemap entries. Expected {expectedEntryCount} but got {actualEntryCount}.");
-            //}
+            var expectedEntryCount = Width * Height;
 
-            //CheckCollection(Planemaps.First().Entries, entry => (int)entry.Tile, Tiles.Count, "Tiles");
-            //CheckCollection(Planemaps.First().Entries, entry => (int)entry.Sector, Sectors.Count, "Sectors");
-            //CheckCollection(Planemaps.First().Entries, entry => (int)entry.Zone, Zones.Count, "Zones");
+            foreach (var planeMap in PlaneMaps)
+            {
+                var actualEntryCount = planeMap.TileSpaces.Count;
+
+                if (actualEntryCount != expectedEntryCount)
+                {
+                    throw new InvalidUwmfException(
+                        $"Invalid number of planemap entries. Expected {expectedEntryCount} but got {actualEntryCount}.");
+                }
+
+                CheckCollection(planeMap.TileSpaces, entry => (int) entry.Tile, Tiles.Count, "Tiles");
+                CheckCollection(planeMap.TileSpaces, entry => (int) entry.Sector, Sectors.Count, "Sectors");
+                CheckCollection(planeMap.TileSpaces, entry => (int) entry.Zone, Zones.Count, "Zones");
+            }
         }
 
         private static void CheckCollection(
