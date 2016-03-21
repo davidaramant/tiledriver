@@ -74,16 +74,46 @@ namespace Tiledriver.Core.Uwmf
             WriteAttribute( stream,  "textureNorth", _textureNorth );
             WriteAttribute( stream,  "textureWest", _textureWest );
             WriteAttribute( stream,  "textureSouth", _textureSouth );
-            MaybeWriteAttribute( stream,  Mapped != 0, "mapped", Mapped );
-            MaybeWriteAttribute( stream,  BlockingEast != true, "blockingEast", BlockingEast );
-            MaybeWriteAttribute( stream,  BlockingNorth != true, "blockingNorth", BlockingNorth );
-            MaybeWriteAttribute( stream,  BlockingWest != true, "blockingWest", BlockingWest );
-            MaybeWriteAttribute( stream,  BlockingSouth != true, "blockingSouth", BlockingSouth );
-            MaybeWriteAttribute( stream,  OffsetVertical != false, "offsetVertical", OffsetVertical );
-            MaybeWriteAttribute( stream,  OffsetHorizontal != false, "offsetHorizontal", OffsetHorizontal );
-            MaybeWriteAttribute( stream,  DontOverlay != false, "dontOverlay", DontOverlay );
-            MaybeWriteAttribute( stream,  SoundSequence != "", "soundSequence", SoundSequence );
-            MaybeWriteAttribute( stream,  TextureOverhead != "", "textureOverhead", TextureOverhead );
+            if( BlockingEast != true )
+            {
+                WriteAttribute( stream, "blockingEast", BlockingEast );
+            }
+            if( BlockingNorth != true )
+            {
+                WriteAttribute( stream, "blockingNorth", BlockingNorth );
+            }
+            if( BlockingWest != true )
+            {
+                WriteAttribute( stream, "blockingWest", BlockingWest );
+            }
+            if( BlockingSouth != true )
+            {
+                WriteAttribute( stream, "blockingSouth", BlockingSouth );
+            }
+            if( OffsetVertical != false )
+            {
+                WriteAttribute( stream, "offsetVertical", OffsetVertical );
+            }
+            if( OffsetHorizontal != false )
+            {
+                WriteAttribute( stream, "offsetHorizontal", OffsetHorizontal );
+            }
+            if( DontOverlay != false )
+            {
+                WriteAttribute( stream, "dontOverlay", DontOverlay );
+            }
+            if( Mapped != 0 )
+            {
+                WriteAttribute( stream, "mapped", Mapped );
+            }
+            if( SoundSequence != "" )
+            {
+                WriteAttribute( stream, "soundSequence", SoundSequence );
+            }
+            if( TextureOverhead != "" )
+            {
+                WriteAttribute( stream, "textureOverhead", TextureOverhead );
+            }
             WriteLine( stream, "}");
                 
             return stream;
@@ -390,13 +420,34 @@ namespace Tiledriver.Core.Uwmf
             WriteAttribute( stream,  "y", _y );
             WriteAttribute( stream,  "z", _z );
             WriteAttribute( stream,  "angle", _angle );
-            MaybeWriteAttribute( stream,  Ambush != false, "ambush", Ambush );
-            MaybeWriteAttribute( stream,  Patrol != false, "patrol", Patrol );
-            MaybeWriteAttribute( stream,  Skill1 != false, "skill1", Skill1 );
-            MaybeWriteAttribute( stream,  Skill2 != false, "skill2", Skill2 );
-            MaybeWriteAttribute( stream,  Skill3 != false, "skill3", Skill3 );
-            MaybeWriteAttribute( stream,  Skill4 != false, "skill4", Skill4 );
-            MaybeWriteAttribute( stream,  Skill5 != false, "skill5", Skill5 );
+            if( Ambush != false )
+            {
+                WriteAttribute( stream, "ambush", Ambush );
+            }
+            if( Patrol != false )
+            {
+                WriteAttribute( stream, "patrol", Patrol );
+            }
+            if( Skill1 != false )
+            {
+                WriteAttribute( stream, "skill1", Skill1 );
+            }
+            if( Skill2 != false )
+            {
+                WriteAttribute( stream, "skill2", Skill2 );
+            }
+            if( Skill3 != false )
+            {
+                WriteAttribute( stream, "skill3", Skill3 );
+            }
+            if( Skill4 != false )
+            {
+                WriteAttribute( stream, "skill4", Skill4 );
+            }
+            if( Skill5 != false )
+            {
+                WriteAttribute( stream, "skill5", Skill5 );
+            }
             WriteLine( stream, "}");
                 
             return stream;
@@ -502,20 +553,62 @@ namespace Tiledriver.Core.Uwmf
             WriteAttribute( stream,  "y", _y );
             WriteAttribute( stream,  "z", _z );
             WriteAttribute( stream,  "action", _action );
-            MaybeWriteAttribute( stream,  Arg0 != 0, "arg0", Arg0 );
-            MaybeWriteAttribute( stream,  Arg1 != 0, "arg1", Arg1 );
-            MaybeWriteAttribute( stream,  Arg2 != 0, "arg2", Arg2 );
-            MaybeWriteAttribute( stream,  Arg3 != 0, "arg3", Arg3 );
-            MaybeWriteAttribute( stream,  Arg4 != 0, "arg4", Arg4 );
-            MaybeWriteAttribute( stream,  ActivateEast != true, "activateEast", ActivateEast );
-            MaybeWriteAttribute( stream,  ActivateNorth != true, "activateNorth", ActivateNorth );
-            MaybeWriteAttribute( stream,  ActivateWest != true, "activateWest", ActivateWest );
-            MaybeWriteAttribute( stream,  ActivateSouth != true, "activateSouth", ActivateSouth );
-            MaybeWriteAttribute( stream,  PlayerCross != false, "playerCross", PlayerCross );
-            MaybeWriteAttribute( stream,  PlayerUse != false, "playerUse", PlayerUse );
-            MaybeWriteAttribute( stream,  MonsterUse != false, "monsterUse", MonsterUse );
-            MaybeWriteAttribute( stream,  Repeatable != false, "repeatable", Repeatable );
-            MaybeWriteAttribute( stream,  Secret != false, "secret", Secret );
+            if( Arg0 != 0 )
+            {
+                WriteAttribute( stream, "arg0", Arg0 );
+            }
+            if( Arg1 != 0 )
+            {
+                WriteAttribute( stream, "arg1", Arg1 );
+            }
+            if( Arg2 != 0 )
+            {
+                WriteAttribute( stream, "arg2", Arg2 );
+            }
+            if( Arg3 != 0 )
+            {
+                WriteAttribute( stream, "arg3", Arg3 );
+            }
+            if( Arg4 != 0 )
+            {
+                WriteAttribute( stream, "arg4", Arg4 );
+            }
+            if( ActivateEast != true )
+            {
+                WriteAttribute( stream, "activateEast", ActivateEast );
+            }
+            if( ActivateNorth != true )
+            {
+                WriteAttribute( stream, "activateNorth", ActivateNorth );
+            }
+            if( ActivateWest != true )
+            {
+                WriteAttribute( stream, "activateWest", ActivateWest );
+            }
+            if( ActivateSouth != true )
+            {
+                WriteAttribute( stream, "activateSouth", ActivateSouth );
+            }
+            if( PlayerCross != false )
+            {
+                WriteAttribute( stream, "playerCross", PlayerCross );
+            }
+            if( PlayerUse != false )
+            {
+                WriteAttribute( stream, "playerUse", PlayerUse );
+            }
+            if( MonsterUse != false )
+            {
+                WriteAttribute( stream, "monsterUse", MonsterUse );
+            }
+            if( Repeatable != false )
+            {
+                WriteAttribute( stream, "repeatable", Repeatable );
+            }
+            if( Secret != false )
+            {
+                WriteAttribute( stream, "secret", Secret );
+            }
             WriteLine( stream, "}");
                 
             return stream;

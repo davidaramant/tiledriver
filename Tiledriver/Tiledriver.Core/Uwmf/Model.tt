@@ -90,32 +90,14 @@ foreach( var blockDefinition in UwmfDefinitions.Blocks )
             WriteAttribute( stream,  "<#= property.CamelCaseName #>", <#= property.FieldName #> );
 <#
     }
-    // WRITE INTEGER NUMBER OPTIONAL PROPERTIES
-    foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired && _.Type == PropertyType.IntegerNumber ) )
+    // WRITE OPTIONAL PROPERTIES
+    foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired ) )
     {
 #>
-            MaybeWriteAttribute( stream,  <#= property.PascalCaseName #> != <#= property.DefaultAsString #>, "<#= property.CamelCaseName #>", <#= property.PascalCaseName #> );
-<#
-    }
-    // WRITE FLOATING POINT NUMBER OPTIONAL PROPERTIES
-    foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired && _.Type == PropertyType.FloatingPointNumber ) )
-    {
-#>
-            MaybeWriteAttribute( stream,  <#= property.PascalCaseName #> != <#= property.DefaultAsString #>, "<#= property.CamelCaseName #>", <#= property.PascalCaseName #> );
-<#
-    }
-    // WRITE BOOLEAN OPTIONAL PROPERTIES
-    foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired && _.Type == PropertyType.Boolean ) )
-    {
-#>
-            MaybeWriteAttribute( stream,  <#= property.PascalCaseName #> != <#= property.DefaultAsString #>, "<#= property.CamelCaseName #>", <#= property.PascalCaseName #> );
-<#
-    }
-    // WRITE STRING OPTIONAL PROPERTIES
-    foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired && _.Type == PropertyType.String ) )
-    {
-#>
-            MaybeWriteAttribute( stream,  <#= property.PascalCaseName #> != <#= property.DefaultAsString #>, "<#= property.CamelCaseName #>", <#= property.PascalCaseName #> );
+            if( <#= property.PascalCaseName #> != <#= property.DefaultAsString #> )
+            {
+                WriteAttribute( stream, "<#= property.CamelCaseName #>", <#= property.PascalCaseName #> );
+            }
 <#
     }
     // WRITE SUBBLOCKS

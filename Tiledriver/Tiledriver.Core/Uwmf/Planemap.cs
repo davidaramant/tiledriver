@@ -19,6 +19,5 @@ namespace Tiledriver.Core.Uwmf
         {
             WriteLine(stream, String.Join(",\n", tileSpaces.Select(_ => _.AsString())));
         }
-
     }
 }
