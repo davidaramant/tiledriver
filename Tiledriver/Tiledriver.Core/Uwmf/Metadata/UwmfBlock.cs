@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Tiledriver.Core.Uwmf.Parsing;
 
 namespace Tiledriver.Core.Uwmf.Metadata
 {

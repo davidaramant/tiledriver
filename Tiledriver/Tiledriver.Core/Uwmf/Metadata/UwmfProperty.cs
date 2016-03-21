@@ -2,6 +2,7 @@
 // Distributed under the GNU GPL v2. For full terms see the file LICENSE.
 
 using System;
+using Tiledriver.Core.Uwmf.Parsing;
 
 namespace Tiledriver.Core.Uwmf.Metadata
 {

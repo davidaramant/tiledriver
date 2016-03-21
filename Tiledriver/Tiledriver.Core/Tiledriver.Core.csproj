@@ -62,7 +62,7 @@
     <Compile Include="Uwmf\Parsing\Extensions\CharExtensions.cs" />
     <Compile Include="Uwmf\Parsing\CharPosition.cs" />
     <Compile Include="Uwmf\Parsing\UwmfCharReader.cs" />
-    <Compile Include="Uwmf\Metadata\Identifier.cs" />
+    <Compile Include="Uwmf\Parsing\Identifier.cs" />
     <Compile Include="Uwmf\Parsing\ILexer.cs" />
     <Compile Include="Uwmf\Parsing\Lexer.cs" />
     <Compile Include="Uwmf\Parsing\ParsingException.cs" />
