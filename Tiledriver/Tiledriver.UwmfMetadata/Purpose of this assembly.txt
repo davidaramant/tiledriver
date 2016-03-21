@@ -1,0 +1,5 @@
+﻿This assembly holds metadata used to generate the UWMF data model and parser.
+
+Due to the way T4 templates work, it is extremely cumbersome for classes they consume to live in the same assembly they do.  T4 templates operate on a built DLL, which means that the DLL must exist on disk with the classes/methods it is expecting.  If it doesn't, it will fail to generate output, which will additionally cause compilation errors!
+
+Also, Tiledriver doesn't need the metadata information at runtime, so there is no reason to include it in the output.
