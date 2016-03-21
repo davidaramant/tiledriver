@@ -3,29 +3,26 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using Tiledriver.Core.Uwmf.Parsing;
 
-namespace Tiledriver.Core.Uwmf.Metadata
+namespace Tiledriver.UwmfMetadata
 {
-    public sealed class UwmfBlock
+    public sealed class UwmfBlock : NamedItem
     {
-        private readonly List<Identifier> _subBlocks = new List<Identifier>();
+        private readonly List<NamedItem> _subBlocks = new List<NamedItem>();
 
-        public Identifier Name { get; }
         public IEnumerable<UwmfProperty> Properties { get; }
-        public IEnumerable<Identifier> SubBlocks => _subBlocks;
+        public IEnumerable<NamedItem> SubBlocks => _subBlocks;
         public bool IsSubBlock { get; private set; } = true;
         public bool NormalWriting { get; private set; } = true;
 
-        public UwmfBlock(string name, params UwmfProperty[] properties)
+        public UwmfBlock(string name, params UwmfProperty[] properties) : base(name)
         {
-            Name = new Identifier(name);
             Properties = properties;
         }
 
         public UwmfBlock HasSubBlocks(params string[] names)
         {
-            _subBlocks.AddRange(names.Select(_ => new Identifier(_)));
+            _subBlocks.AddRange(names.Select(_ => new NamedItem(_)));
             return this;
         }
 

@@ -5,7 +5,6 @@ using System;
 using System.IO;
 using System.Text;
 using NUnit.Framework;
-using Tiledriver.Core.Uwmf.Metadata;
 using Tiledriver.Core.Uwmf.Parsing;
 
 namespace Tiledriver.Core.Tests.Uwmf.Parsing

@@ -4,11 +4,11 @@
 #>
 <#@ template debug="false" hostspecific="false" language="C#" #>
 <#@ assembly name="System.Core" #>
-<#@ assembly name="$(SolutionDir)$(ProjectName)\bin\$(Configuration)\$(ProjectName).dll" #>
+<#@ assembly name="$(SolutionDir)Tiledriver.UwmfMetadata\bin\$(Configuration)\Tiledriver.UwmfMetadata.dll" #>
 <#@ import namespace="System" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Collections.Generic" #>
-<#@ import namespace="Tiledriver.Core.Uwmf.Metadata" #>
+<#@ import namespace="Tiledriver.UwmfMetadata" #>
 <#@ output extension=".cs" #>
 // Copyright (c) 2016 David Aramant
 // Distributed under the GNU GPL v2. For full terms see the file LICENSE.
@@ -22,7 +22,7 @@ namespace Tiledriver.Core.Uwmf
 foreach( var blockDefinition in UwmfDefinitions.Blocks )
 {
 #>
-    public sealed partial class <#= blockDefinition.Name.NameWithFirstCapitalized #>
+    public sealed partial class <#= blockDefinition.PascalCaseName #>
 <# if( blockDefinition.NormalWriting ) 
 { 
 #>                                    : IUwmfEntry
@@ -33,8 +33,8 @@ foreach( var blockDefinition in UwmfDefinitions.Blocks )
     foreach( var property in blockDefinition.Properties.Where( _ => _.IsRequired ) )
     {
 #>
-        private bool <#= property.Name.NameAsField #>HasBeenSet = false;
-        private <#= property.TypeString #> <#= property.Name.NameAsField #>;
+        private bool <#= property.FieldName #>HasBeenSet = false;
+        private <#= property.TypeString #> <#= property.FieldName #>;
 <#
     }
 #>
@@ -44,13 +44,13 @@ foreach( var blockDefinition in UwmfDefinitions.Blocks )
     foreach( var property in blockDefinition.Properties.Where( _ => _.IsRequired ) )
     {
 #>
-        public <#= property.TypeString #> <#= property.Name.NameWithFirstCapitalized #>
+        public <#= property.TypeString #> <#= property.PascalCaseName #>
         {
-            get { return <#= property.Name.NameAsField #>; }
+            get { return <#= property.FieldName #>; }
             set 
             { 
-                <#= property.Name.NameAsField #>HasBeenSet = true;
-                <#= property.Name.NameAsField #> = value;
+                <#= property.FieldName #>HasBeenSet = true;
+                <#= property.FieldName #> = value;
             }
         }
 <#
@@ -59,14 +59,14 @@ foreach( var blockDefinition in UwmfDefinitions.Blocks )
     foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired ) )
     {
 #>
-        public <#= property.TypeString #> <#= property.Name.NameWithFirstCapitalized #> { get; set; } = <#= property.DefaultAsString #>;
+        public <#= property.TypeString #> <#= property.PascalCaseName #> { get; set; } = <#= property.DefaultAsString #>;
 <#
     }
     // WRITE SUBBLOCKS
     foreach( var subBlock in blockDefinition.SubBlocks )
     {
 #>
-        public readonly List<<#= subBlock.NameWithFirstCapitalized #>> <#= subBlock.NameWithFirstCapitalized #>s = new List<<#= subBlock.NameWithFirstCapitalized #>>();
+        public readonly List<<#= subBlock.PascalCaseName #>> <#= subBlock.PluralPascalCaseName #> = new List<<#= subBlock.PascalCaseName #>>();
 <#
     }
 
@@ -82,7 +82,7 @@ foreach( var blockDefinition in UwmfDefinitions.Blocks )
     if( blockDefinition.IsSubBlock )
     {
 #>
-            stream.Line("<#= blockDefinition.Name #>");
+            stream.Line("<#= blockDefinition.CamelCaseName #>");
             stream.Line("{");
 <#
     }
@@ -91,42 +91,42 @@ foreach( var blockDefinition in UwmfDefinitions.Blocks )
     foreach( var property in blockDefinition.Properties.Where( _ => _.IsRequired ) )
     {
 #>
-            stream.Attribute( "<#= property.Name #>", <#= property.Name.NameAsField #> );
+            stream.Attribute( "<#= property.CamelCaseName #>", <#= property.FieldName #> );
 <#
     }
     // WRITE INTEGER NUMBER OPTIONAL PROPERTIES
     foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired && _.Type == PropertyType.IntegerNumber ) )
     {
 #>
-            stream.MaybeAttribute( <#= property.Name.NameWithFirstCapitalized #> != <#= property.DefaultAsString #>, "<#= property.Name #>", <#= property.Name.NameWithFirstCapitalized #> );
+            stream.MaybeAttribute( <#= property.PascalCaseName #> != <#= property.DefaultAsString #>, "<#= property.CamelCaseName #>", <#= property.PascalCaseName #> );
 <#
     }
     // WRITE FLOATING POINT NUMBER OPTIONAL PROPERTIES
     foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired && _.Type == PropertyType.FloatingPointNumber ) )
     {
 #>
-            stream.MaybeAttribute( <#= property.Name.NameWithFirstCapitalized #> != <#= property.DefaultAsString #>, "<#= property.Name #>", <#= property.Name.NameWithFirstCapitalized #> );
+            stream.MaybeAttribute( <#= property.PascalCaseName #> != <#= property.DefaultAsString #>, "<#= property.CamelCaseName #>", <#= property.PascalCaseName #> );
 <#
     }
     // WRITE BOOLEAN OPTIONAL PROPERTIES
     foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired && _.Type == PropertyType.Boolean ) )
     {
 #>
-            stream.MaybeAttribute( <#= property.Name.NameWithFirstCapitalized #> != <#= property.DefaultAsString #>, "<#= property.Name #>", <#= property.Name.NameWithFirstCapitalized #> );
+            stream.MaybeAttribute( <#= property.PascalCaseName #> != <#= property.DefaultAsString #>, "<#= property.CamelCaseName #>", <#= property.PascalCaseName #> );
 <#
     }
     // WRITE STRING OPTIONAL PROPERTIES
     foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired && _.Type == PropertyType.String ) )
     {
 #>
-            stream.MaybeAttribute( <#= property.Name.NameWithFirstCapitalized #> != <#= property.DefaultAsString #>, "<#= property.Name #>", <#= property.Name.NameWithFirstCapitalized #> );
+            stream.MaybeAttribute( <#= property.PascalCaseName #> != <#= property.DefaultAsString #>, "<#= property.CamelCaseName #>", <#= property.PascalCaseName #> );
 <#
     }
     // WRITE SUBBLOCKS
     foreach( var subBlock in blockDefinition.SubBlocks )
     {
 #>
-            stream.Blocks( <#= subBlock.NameWithFirstCapitalized #>s );
+            stream.Blocks( <#= subBlock.PascalCaseName #>s );
 <#
     }
 
@@ -151,9 +151,9 @@ foreach( var blockDefinition in UwmfDefinitions.Blocks )
     foreach( var property in blockDefinition.Properties.Where( _ => _.IsRequired ) )
     {
 #>
-            if( ! <#= property.Name.NameAsField #>HasBeenSet )
+            if( ! <#= property.FieldName #>HasBeenSet )
             {
-                throw new InvalidUwmfException("Did not set <#= property.Name.NameWithFirstCapitalized #> on <#= blockDefinition.Name.NameWithFirstCapitalized #>");
+                throw new InvalidUwmfException("Did not set <#= property.PascalCaseName #> on <#= blockDefinition.PascalCaseName #>");
             }
 <#
     }

@@ -49,9 +49,6 @@
     <Compile Include="DemoMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Uwmf\InvalidUwmfException.cs" />
-    <Compile Include="Uwmf\Metadata\UwmfBlock.cs" />
-    <Compile Include="Uwmf\Metadata\UwmfDefinitions.cs" />
-    <Compile Include="Uwmf\Metadata\UwmfProperty.cs" />
     <Compile Include="Uwmf\Model.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -2,9 +2,8 @@
 // Distributed under the GNU GPL v2. For full terms see the file LICENSE.
 
 using System;
-using Tiledriver.Core.Uwmf.Parsing;
 
-namespace Tiledriver.Core.Uwmf.Metadata
+namespace Tiledriver.UwmfMetadata
 {
     public enum PropertyType
     {
@@ -14,9 +13,8 @@ namespace Tiledriver.Core.Uwmf.Metadata
         String,
     }
 
-    public sealed class UwmfProperty
+    public sealed class UwmfProperty : NamedItem
     {
-        public Identifier Name { get; }
         public PropertyType Type { get; }
 
         public string TypeString
@@ -70,9 +68,8 @@ namespace Tiledriver.Core.Uwmf.Metadata
 
         public bool IsRequired => _defaultValue == null;
 
-        public UwmfProperty(string name, PropertyType type, object defaultValue = null)
+        public UwmfProperty(string name, PropertyType type, object defaultValue = null) : base(name)
         {
-            Name = new Identifier(name);
             Type = type;
             _defaultValue = defaultValue;
         }

@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Tiledriver.Core.Uwmf.Metadata
+namespace Tiledriver.UwmfMetadata
 {
     /// <summary>
     /// The global properties and planemap are special cases
