@@ -22,11 +22,7 @@ namespace Tiledriver.Core.Uwmf
 foreach( var blockDefinition in UwmfDefinitions.Blocks )
 {
 #>
-    public sealed partial class <#= blockDefinition.PascalCaseName #>
-<# if( blockDefinition.NormalWriting ) 
-{ 
-#>                                    : IUwmfEntry
-<# }#>
+    public sealed partial class <#= blockDefinition.PascalCaseName #> : BaseUwmfBlock<# if( blockDefinition.NormalWriting ) { #>, IWriteableUwmfBlock<# }#> 
     {
 <#
     // WRITE REQUIRED FIELDS
@@ -82,8 +78,8 @@ foreach( var blockDefinition in UwmfDefinitions.Blocks )
     if( blockDefinition.IsSubBlock )
     {
 #>
-            stream.Line("<#= blockDefinition.CamelCaseName #>");
-            stream.Line("{");
+            WriteLine( stream, "<#= blockDefinition.CamelCaseName #>");
+            WriteLine( stream, "{");
 <#
     }
 
@@ -91,49 +87,49 @@ foreach( var blockDefinition in UwmfDefinitions.Blocks )
     foreach( var property in blockDefinition.Properties.Where( _ => _.IsRequired ) )
     {
 #>
-            stream.Attribute( "<#= property.CamelCaseName #>", <#= property.FieldName #> );
+            WriteAttribute( stream,  "<#= property.CamelCaseName #>", <#= property.FieldName #> );
 <#
     }
     // WRITE INTEGER NUMBER OPTIONAL PROPERTIES
     foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired && _.Type == PropertyType.IntegerNumber ) )
     {
 #>
-            stream.MaybeAttribute( <#= property.PascalCaseName #> != <#= property.DefaultAsString #>, "<#= property.CamelCaseName #>", <#= property.PascalCaseName #> );
+            MaybeWriteAttribute( stream,  <#= property.PascalCaseName #> != <#= property.DefaultAsString #>, "<#= property.CamelCaseName #>", <#= property.PascalCaseName #> );
 <#
     }
     // WRITE FLOATING POINT NUMBER OPTIONAL PROPERTIES
     foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired && _.Type == PropertyType.FloatingPointNumber ) )
     {
 #>
-            stream.MaybeAttribute( <#= property.PascalCaseName #> != <#= property.DefaultAsString #>, "<#= property.CamelCaseName #>", <#= property.PascalCaseName #> );
+            MaybeWriteAttribute( stream,  <#= property.PascalCaseName #> != <#= property.DefaultAsString #>, "<#= property.CamelCaseName #>", <#= property.PascalCaseName #> );
 <#
     }
     // WRITE BOOLEAN OPTIONAL PROPERTIES
     foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired && _.Type == PropertyType.Boolean ) )
     {
 #>
-            stream.MaybeAttribute( <#= property.PascalCaseName #> != <#= property.DefaultAsString #>, "<#= property.CamelCaseName #>", <#= property.PascalCaseName #> );
+            MaybeWriteAttribute( stream,  <#= property.PascalCaseName #> != <#= property.DefaultAsString #>, "<#= property.CamelCaseName #>", <#= property.PascalCaseName #> );
 <#
     }
     // WRITE STRING OPTIONAL PROPERTIES
     foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired && _.Type == PropertyType.String ) )
     {
 #>
-            stream.MaybeAttribute( <#= property.PascalCaseName #> != <#= property.DefaultAsString #>, "<#= property.CamelCaseName #>", <#= property.PascalCaseName #> );
+            MaybeWriteAttribute( stream,  <#= property.PascalCaseName #> != <#= property.DefaultAsString #>, "<#= property.CamelCaseName #>", <#= property.PascalCaseName #> );
 <#
     }
     // WRITE SUBBLOCKS
     foreach( var subBlock in blockDefinition.SubBlocks )
     {
 #>
-            stream.Blocks( <#= subBlock.PascalCaseName #>s );
+            WriteBlocks( stream,  <#= subBlock.PascalCaseName #>s );
 <#
     }
 
     if( blockDefinition.IsSubBlock )
     {
 #>
-            stream.Line("}");
+            WriteLine( stream, "}");
 <#
     }
 #>

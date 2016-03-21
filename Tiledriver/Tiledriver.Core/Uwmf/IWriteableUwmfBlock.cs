@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Tiledriver.Core.Uwmf
 {
-    public interface IUwmfEntry
+    public interface IWriteableUwmfBlock
     {
         Stream WriteTo(Stream stream);
     }

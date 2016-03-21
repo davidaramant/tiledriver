@@ -9,52 +9,50 @@ using System.Text;
 
 namespace Tiledriver.Core.Uwmf
 {
-    // TODO: Maybe all the Stream stuff should use tasks instead?
-    // TODO: This should really live somewhere else.
-    public static class StreamExtensions
+    public abstract class BaseUwmfBlock
     {
-        public static void Line(this Stream stream, string value)
+        protected static void WriteLine(Stream stream, string value)
         {
             var textBytes = Encoding.ASCII.GetBytes(value + "\n");
 
             stream.Write(textBytes, 0, textBytes.Length);
         }
 
-        private static void InternalAttribute(this Stream stream, string name, string value, bool indent)
+        private static void InternalAttribute(Stream stream, string name, string value, bool indent)
         {
             var indention = indent ? "\t" : String.Empty;
-            Line(stream, $"{indention}{name} = {value};");
+            WriteLine(stream, $"{indention}{name} = {value};");
         }
 
-        public static void Attribute(this Stream stream, string name, string value, bool indent = true)
+        protected static void WriteAttribute(Stream stream, string name, string value, bool indent = true)
         {
             InternalAttribute(stream, name, $"\"{value}\"", indent);
         }
 
-        public static void Attribute(this Stream stream, string name, int value, bool indent = true)
+        protected static void WriteAttribute(Stream stream, string name, int value, bool indent = true)
         {
             InternalAttribute(stream, name, value.ToString(CultureInfo.InvariantCulture), indent);
         }
 
-        public static void Attribute(this Stream stream, string name, double value, bool indent = true)
+        protected static void WriteAttribute(Stream stream, string name, double value, bool indent = true)
         {
             InternalAttribute(stream, name, value.ToString(CultureInfo.InvariantCulture), indent);
         }
 
-        public static void Attribute(this Stream stream, string name, bool value, bool indent = true)
+        protected static void WriteAttribute(Stream stream, string name, bool value, bool indent = true)
         {
             InternalAttribute(stream, name, value.ToString().ToLowerInvariant(), indent);
         }
 
-        public static void MaybeAttribute(this Stream stream, bool shouldWrite, string name, string value, bool indent = true)
+        protected static void MaybeWriteAttribute(Stream stream, bool shouldWrite, string name, string value, bool indent = true)
         {
-            if(shouldWrite )
-            { 
+            if (shouldWrite)
+            {
                 InternalAttribute(stream, name, $"\"{value}\"", indent);
             }
         }
 
-        public static void MaybeAttribute(this Stream stream, bool shouldWrite, string name, int value, bool indent = true)
+        protected static void MaybeWriteAttribute(Stream stream, bool shouldWrite, string name, int value, bool indent = true)
         {
             if (shouldWrite)
             {
@@ -62,7 +60,7 @@ namespace Tiledriver.Core.Uwmf
             }
         }
 
-        public static void MaybeAttribute(this Stream stream, bool shouldWrite, string name, double value, bool indent = true)
+        protected static void MaybeWriteAttribute(Stream stream, bool shouldWrite, string name, double value, bool indent = true)
         {
             if (shouldWrite)
             {
@@ -70,7 +68,7 @@ namespace Tiledriver.Core.Uwmf
             }
         }
 
-        public static void MaybeAttribute(this Stream stream, bool shouldWrite, string name, bool value, bool indent = true)
+        protected static void MaybeWriteAttribute(Stream stream, bool shouldWrite, string name, bool value, bool indent = true)
         {
             if (shouldWrite)
             {
@@ -78,17 +76,12 @@ namespace Tiledriver.Core.Uwmf
             }
         }
 
-        public static void Blocks(this Stream stream, IEnumerable<IUwmfEntry> blocks)
+        protected static void WriteBlocks(Stream stream, IEnumerable<IWriteableUwmfBlock> blocks)
         {
             foreach (var block in blocks)
             {
                 block.WriteTo(stream);
             }
-        }
-
-        public static void Blocks(this Stream stream, IEnumerable<TileSpace> tileSpaces)
-        {
-            stream.Line(String.Join(",\n", tileSpaces));
         }
     }
 }

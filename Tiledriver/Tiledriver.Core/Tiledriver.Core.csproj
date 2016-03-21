@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="DemoMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Uwmf\BaseUwmfBlock.cs" />
     <Compile Include="Uwmf\InvalidUwmfException.cs" />
     <Compile Include="Uwmf\Model.cs">
       <AutoGen>True</AutoGen>
@@ -64,8 +65,7 @@
     <Compile Include="Uwmf\Parsing\Lexer.cs" />
     <Compile Include="Uwmf\Parsing\ParsingException.cs" />
     <Compile Include="Uwmf\PlaneMap.cs" />
-    <Compile Include="Uwmf\StreamExtensions.cs" />
-    <Compile Include="Uwmf\IUwmfEntry.cs" />
+    <Compile Include="Uwmf\IWriteableUwmfBlock.cs" />
     <Compile Include="Uwmf\Map.cs" />
     <Compile Include="Uwmf\TileSpace.cs" />
     <Compile Include="WadFile.cs" />

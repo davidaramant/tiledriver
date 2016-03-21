@@ -6,8 +6,7 @@ using System.IO;
 
 namespace Tiledriver.Core.Uwmf
 {
-    public sealed partial class Tile
-                                    : IUwmfEntry
+    public sealed partial class Tile : BaseUwmfBlock, IWriteableUwmfBlock 
     {
         private bool _textureEastHasBeenSet = false;
         private string _textureEast;
@@ -69,23 +68,23 @@ namespace Tiledriver.Core.Uwmf
         {
             CheckSemanticValidity();
 
-            stream.Line("tile");
-            stream.Line("{");
-            stream.Attribute( "textureEast", _textureEast );
-            stream.Attribute( "textureNorth", _textureNorth );
-            stream.Attribute( "textureWest", _textureWest );
-            stream.Attribute( "textureSouth", _textureSouth );
-            stream.MaybeAttribute( Mapped != 0, "mapped", Mapped );
-            stream.MaybeAttribute( BlockingEast != true, "blockingEast", BlockingEast );
-            stream.MaybeAttribute( BlockingNorth != true, "blockingNorth", BlockingNorth );
-            stream.MaybeAttribute( BlockingWest != true, "blockingWest", BlockingWest );
-            stream.MaybeAttribute( BlockingSouth != true, "blockingSouth", BlockingSouth );
-            stream.MaybeAttribute( OffsetVertical != false, "offsetVertical", OffsetVertical );
-            stream.MaybeAttribute( OffsetHorizontal != false, "offsetHorizontal", OffsetHorizontal );
-            stream.MaybeAttribute( DontOverlay != false, "dontOverlay", DontOverlay );
-            stream.MaybeAttribute( SoundSequence != "", "soundSequence", SoundSequence );
-            stream.MaybeAttribute( TextureOverhead != "", "textureOverhead", TextureOverhead );
-            stream.Line("}");
+            WriteLine( stream, "tile");
+            WriteLine( stream, "{");
+            WriteAttribute( stream,  "textureEast", _textureEast );
+            WriteAttribute( stream,  "textureNorth", _textureNorth );
+            WriteAttribute( stream,  "textureWest", _textureWest );
+            WriteAttribute( stream,  "textureSouth", _textureSouth );
+            MaybeWriteAttribute( stream,  Mapped != 0, "mapped", Mapped );
+            MaybeWriteAttribute( stream,  BlockingEast != true, "blockingEast", BlockingEast );
+            MaybeWriteAttribute( stream,  BlockingNorth != true, "blockingNorth", BlockingNorth );
+            MaybeWriteAttribute( stream,  BlockingWest != true, "blockingWest", BlockingWest );
+            MaybeWriteAttribute( stream,  BlockingSouth != true, "blockingSouth", BlockingSouth );
+            MaybeWriteAttribute( stream,  OffsetVertical != false, "offsetVertical", OffsetVertical );
+            MaybeWriteAttribute( stream,  OffsetHorizontal != false, "offsetHorizontal", OffsetHorizontal );
+            MaybeWriteAttribute( stream,  DontOverlay != false, "dontOverlay", DontOverlay );
+            MaybeWriteAttribute( stream,  SoundSequence != "", "soundSequence", SoundSequence );
+            MaybeWriteAttribute( stream,  TextureOverhead != "", "textureOverhead", TextureOverhead );
+            WriteLine( stream, "}");
                 
             return stream;
         }
@@ -114,8 +113,7 @@ namespace Tiledriver.Core.Uwmf
         partial void AdditionalSemanticChecks();
     }
 
-    public sealed partial class Sector
-                                    : IUwmfEntry
+    public sealed partial class Sector : BaseUwmfBlock, IWriteableUwmfBlock 
     {
         private bool _textureCeilingHasBeenSet = false;
         private string _textureCeiling;
@@ -145,11 +143,11 @@ namespace Tiledriver.Core.Uwmf
         {
             CheckSemanticValidity();
 
-            stream.Line("sector");
-            stream.Line("{");
-            stream.Attribute( "textureCeiling", _textureCeiling );
-            stream.Attribute( "textureFloor", _textureFloor );
-            stream.Line("}");
+            WriteLine( stream, "sector");
+            WriteLine( stream, "{");
+            WriteAttribute( stream,  "textureCeiling", _textureCeiling );
+            WriteAttribute( stream,  "textureFloor", _textureFloor );
+            WriteLine( stream, "}");
                 
             return stream;
         }
@@ -170,8 +168,7 @@ namespace Tiledriver.Core.Uwmf
         partial void AdditionalSemanticChecks();
     }
 
-    public sealed partial class Zone
-                                    : IUwmfEntry
+    public sealed partial class Zone : BaseUwmfBlock, IWriteableUwmfBlock 
     {
 
 
@@ -179,9 +176,9 @@ namespace Tiledriver.Core.Uwmf
         {
             CheckSemanticValidity();
 
-            stream.Line("zone");
-            stream.Line("{");
-            stream.Line("}");
+            WriteLine( stream, "zone");
+            WriteLine( stream, "{");
+            WriteLine( stream, "}");
                 
             return stream;
         }
@@ -194,8 +191,7 @@ namespace Tiledriver.Core.Uwmf
         partial void AdditionalSemanticChecks();
     }
 
-    public sealed partial class Plane
-                                    : IUwmfEntry
+    public sealed partial class Plane : BaseUwmfBlock, IWriteableUwmfBlock 
     {
         private bool _depthHasBeenSet = false;
         private int _depth;
@@ -214,10 +210,10 @@ namespace Tiledriver.Core.Uwmf
         {
             CheckSemanticValidity();
 
-            stream.Line("plane");
-            stream.Line("{");
-            stream.Attribute( "depth", _depth );
-            stream.Line("}");
+            WriteLine( stream, "plane");
+            WriteLine( stream, "{");
+            WriteAttribute( stream,  "depth", _depth );
+            WriteLine( stream, "}");
                 
             return stream;
         }
@@ -234,7 +230,7 @@ namespace Tiledriver.Core.Uwmf
         partial void AdditionalSemanticChecks();
     }
 
-    public sealed partial class TileSpace
+    public sealed partial class TileSpace : BaseUwmfBlock 
     {
         private bool _tileHasBeenSet = false;
         private int _tile;
@@ -292,8 +288,7 @@ namespace Tiledriver.Core.Uwmf
         partial void AdditionalSemanticChecks();
     }
 
-    public sealed partial class PlaneMap
-                                    : IUwmfEntry
+    public sealed partial class PlaneMap : BaseUwmfBlock, IWriteableUwmfBlock 
     {
 
         public readonly List<TileSpace> TileSpaces = new List<TileSpace>();
@@ -302,10 +297,10 @@ namespace Tiledriver.Core.Uwmf
         {
             CheckSemanticValidity();
 
-            stream.Line("planeMap");
-            stream.Line("{");
-            stream.Blocks( TileSpaces );
-            stream.Line("}");
+            WriteLine( stream, "planeMap");
+            WriteLine( stream, "{");
+            WriteBlocks( stream,  TileSpaces );
+            WriteLine( stream, "}");
                 
             return stream;
         }
@@ -318,8 +313,7 @@ namespace Tiledriver.Core.Uwmf
         partial void AdditionalSemanticChecks();
     }
 
-    public sealed partial class Thing
-                                    : IUwmfEntry
+    public sealed partial class Thing : BaseUwmfBlock, IWriteableUwmfBlock 
     {
         private bool _typeHasBeenSet = false;
         private int _type;
@@ -389,21 +383,21 @@ namespace Tiledriver.Core.Uwmf
         {
             CheckSemanticValidity();
 
-            stream.Line("thing");
-            stream.Line("{");
-            stream.Attribute( "type", _type );
-            stream.Attribute( "x", _x );
-            stream.Attribute( "y", _y );
-            stream.Attribute( "z", _z );
-            stream.Attribute( "angle", _angle );
-            stream.MaybeAttribute( Ambush != false, "ambush", Ambush );
-            stream.MaybeAttribute( Patrol != false, "patrol", Patrol );
-            stream.MaybeAttribute( Skill1 != false, "skill1", Skill1 );
-            stream.MaybeAttribute( Skill2 != false, "skill2", Skill2 );
-            stream.MaybeAttribute( Skill3 != false, "skill3", Skill3 );
-            stream.MaybeAttribute( Skill4 != false, "skill4", Skill4 );
-            stream.MaybeAttribute( Skill5 != false, "skill5", Skill5 );
-            stream.Line("}");
+            WriteLine( stream, "thing");
+            WriteLine( stream, "{");
+            WriteAttribute( stream,  "type", _type );
+            WriteAttribute( stream,  "x", _x );
+            WriteAttribute( stream,  "y", _y );
+            WriteAttribute( stream,  "z", _z );
+            WriteAttribute( stream,  "angle", _angle );
+            MaybeWriteAttribute( stream,  Ambush != false, "ambush", Ambush );
+            MaybeWriteAttribute( stream,  Patrol != false, "patrol", Patrol );
+            MaybeWriteAttribute( stream,  Skill1 != false, "skill1", Skill1 );
+            MaybeWriteAttribute( stream,  Skill2 != false, "skill2", Skill2 );
+            MaybeWriteAttribute( stream,  Skill3 != false, "skill3", Skill3 );
+            MaybeWriteAttribute( stream,  Skill4 != false, "skill4", Skill4 );
+            MaybeWriteAttribute( stream,  Skill5 != false, "skill5", Skill5 );
+            WriteLine( stream, "}");
                 
             return stream;
         }
@@ -436,8 +430,7 @@ namespace Tiledriver.Core.Uwmf
         partial void AdditionalSemanticChecks();
     }
 
-    public sealed partial class Trigger
-                                    : IUwmfEntry
+    public sealed partial class Trigger : BaseUwmfBlock, IWriteableUwmfBlock 
     {
         private bool _xHasBeenSet = false;
         private int _x;
@@ -503,27 +496,27 @@ namespace Tiledriver.Core.Uwmf
         {
             CheckSemanticValidity();
 
-            stream.Line("trigger");
-            stream.Line("{");
-            stream.Attribute( "x", _x );
-            stream.Attribute( "y", _y );
-            stream.Attribute( "z", _z );
-            stream.Attribute( "action", _action );
-            stream.MaybeAttribute( Arg0 != 0, "arg0", Arg0 );
-            stream.MaybeAttribute( Arg1 != 0, "arg1", Arg1 );
-            stream.MaybeAttribute( Arg2 != 0, "arg2", Arg2 );
-            stream.MaybeAttribute( Arg3 != 0, "arg3", Arg3 );
-            stream.MaybeAttribute( Arg4 != 0, "arg4", Arg4 );
-            stream.MaybeAttribute( ActivateEast != true, "activateEast", ActivateEast );
-            stream.MaybeAttribute( ActivateNorth != true, "activateNorth", ActivateNorth );
-            stream.MaybeAttribute( ActivateWest != true, "activateWest", ActivateWest );
-            stream.MaybeAttribute( ActivateSouth != true, "activateSouth", ActivateSouth );
-            stream.MaybeAttribute( PlayerCross != false, "playerCross", PlayerCross );
-            stream.MaybeAttribute( PlayerUse != false, "playerUse", PlayerUse );
-            stream.MaybeAttribute( MonsterUse != false, "monsterUse", MonsterUse );
-            stream.MaybeAttribute( Repeatable != false, "repeatable", Repeatable );
-            stream.MaybeAttribute( Secret != false, "secret", Secret );
-            stream.Line("}");
+            WriteLine( stream, "trigger");
+            WriteLine( stream, "{");
+            WriteAttribute( stream,  "x", _x );
+            WriteAttribute( stream,  "y", _y );
+            WriteAttribute( stream,  "z", _z );
+            WriteAttribute( stream,  "action", _action );
+            MaybeWriteAttribute( stream,  Arg0 != 0, "arg0", Arg0 );
+            MaybeWriteAttribute( stream,  Arg1 != 0, "arg1", Arg1 );
+            MaybeWriteAttribute( stream,  Arg2 != 0, "arg2", Arg2 );
+            MaybeWriteAttribute( stream,  Arg3 != 0, "arg3", Arg3 );
+            MaybeWriteAttribute( stream,  Arg4 != 0, "arg4", Arg4 );
+            MaybeWriteAttribute( stream,  ActivateEast != true, "activateEast", ActivateEast );
+            MaybeWriteAttribute( stream,  ActivateNorth != true, "activateNorth", ActivateNorth );
+            MaybeWriteAttribute( stream,  ActivateWest != true, "activateWest", ActivateWest );
+            MaybeWriteAttribute( stream,  ActivateSouth != true, "activateSouth", ActivateSouth );
+            MaybeWriteAttribute( stream,  PlayerCross != false, "playerCross", PlayerCross );
+            MaybeWriteAttribute( stream,  PlayerUse != false, "playerUse", PlayerUse );
+            MaybeWriteAttribute( stream,  MonsterUse != false, "monsterUse", MonsterUse );
+            MaybeWriteAttribute( stream,  Repeatable != false, "repeatable", Repeatable );
+            MaybeWriteAttribute( stream,  Secret != false, "secret", Secret );
+            WriteLine( stream, "}");
                 
             return stream;
         }
@@ -552,8 +545,7 @@ namespace Tiledriver.Core.Uwmf
         partial void AdditionalSemanticChecks();
     }
 
-    public sealed partial class Map
-                                    : IUwmfEntry
+    public sealed partial class Map : BaseUwmfBlock, IWriteableUwmfBlock 
     {
         private bool _namespaceHasBeenSet = false;
         private string _namespace;
@@ -623,18 +615,18 @@ namespace Tiledriver.Core.Uwmf
         {
             CheckSemanticValidity();
 
-            stream.Attribute( "namespace", _namespace );
-            stream.Attribute( "tileSize", _tileSize );
-            stream.Attribute( "name", _name );
-            stream.Attribute( "width", _width );
-            stream.Attribute( "height", _height );
-            stream.Blocks( Tiles );
-            stream.Blocks( Sectors );
-            stream.Blocks( Zones );
-            stream.Blocks( Planes );
-            stream.Blocks( PlaneMaps );
-            stream.Blocks( Things );
-            stream.Blocks( Triggers );
+            WriteAttribute( stream,  "namespace", _namespace );
+            WriteAttribute( stream,  "tileSize", _tileSize );
+            WriteAttribute( stream,  "name", _name );
+            WriteAttribute( stream,  "width", _width );
+            WriteAttribute( stream,  "height", _height );
+            WriteBlocks( stream,  Tiles );
+            WriteBlocks( stream,  Sectors );
+            WriteBlocks( stream,  Zones );
+            WriteBlocks( stream,  Planes );
+            WriteBlocks( stream,  PlaneMaps );
+            WriteBlocks( stream,  Things );
+            WriteBlocks( stream,  Triggers );
                 
             return stream;
         }

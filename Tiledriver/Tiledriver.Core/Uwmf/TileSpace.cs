@@ -15,8 +15,10 @@ namespace Tiledriver.Core.Uwmf
             Tag = tag;
         }
 
-        public override string ToString()
+        public string AsString()
         {
+            CheckSemanticValidity();
+
             var tagPortion =
                 Tag != 0 ?
                     $",{(int)Tag}" :
