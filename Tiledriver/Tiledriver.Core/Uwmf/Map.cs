@@ -16,7 +16,7 @@ namespace Tiledriver.Core.Uwmf
         {
             if (Planes.Count != PlaneMaps.Count)
             {
-                throw new InvalidUwmfException("Unequal number of planes and planeMaps");
+                throw new InvalidUwmfException("Unequal number of planes and plane maps");
             }
 
             var expectedEntryCount = Width * Height;
@@ -28,12 +28,12 @@ namespace Tiledriver.Core.Uwmf
                 if (actualEntryCount != expectedEntryCount)
                 {
                     throw new InvalidUwmfException(
-                        $"Invalid number of planemap entries. Expected {expectedEntryCount} but got {actualEntryCount}.");
+                        $"Invalid number of tile spaces. Expected {expectedEntryCount} but got {actualEntryCount}.");
                 }
 
-                CheckCollection(planeMap.TileSpaces, entry => (int) entry.Tile, Tiles.Count, "Tiles");
-                CheckCollection(planeMap.TileSpaces, entry => (int) entry.Sector, Sectors.Count, "Sectors");
-                CheckCollection(planeMap.TileSpaces, entry => (int) entry.Zone, Zones.Count, "Zones");
+                CheckCollection(planeMap.TileSpaces, entry => entry.Tile, Tiles.Count, "Tiles");
+                CheckCollection(planeMap.TileSpaces, entry => entry.Sector, Sectors.Count, "Sectors");
+                CheckCollection(planeMap.TileSpaces, entry => entry.Zone, Zones.Count, "Zones");
             }
         }
 
@@ -43,6 +43,7 @@ namespace Tiledriver.Core.Uwmf
             int definedCount,
             string name)
         {
+            // TODO: Add something about which plane map this was found in
             if (entries.Select(idGrabber).Any(id => id >= definedCount))
             {
                 throw new InvalidUwmfException($"Invalid ids found for {name}.");

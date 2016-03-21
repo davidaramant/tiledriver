@@ -25,7 +25,7 @@ foreach( var blockDefinition in UwmfDefinitions.Blocks )
     public sealed partial class <#= blockDefinition.Name.NameWithFirstCapitalized #>
 <# if( blockDefinition.NormalWriting ) 
 { 
-#>									: IUwmfEntry
+#>                                    : IUwmfEntry
 <# }#>
     {
 <#
@@ -48,120 +48,120 @@ foreach( var blockDefinition in UwmfDefinitions.Blocks )
         {
             get { return <#= property.Name.NameAsField #>; }
             set 
-			{ 
-				<#= property.Name.NameAsField #>HasBeenSet = true;
-				<#= property.Name.NameAsField #> = value;
-			}
+            { 
+                <#= property.Name.NameAsField #>HasBeenSet = true;
+                <#= property.Name.NameAsField #> = value;
+            }
         }
 <#
     }
-	// WRITE OPTIONAL PROPERTIES
+    // WRITE OPTIONAL PROPERTIES
     foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired ) )
     {
 #>
         public <#= property.TypeString #> <#= property.Name.NameWithFirstCapitalized #> { get; set; }
 <#
     }
-	// WRITE SUBBLOCKS
-	foreach( var subBlock in blockDefinition.SubBlocks )
-	{
+    // WRITE SUBBLOCKS
+    foreach( var subBlock in blockDefinition.SubBlocks )
+    {
 #>
-		public readonly List<<#= subBlock.NameWithFirstCapitalized #>> <#= subBlock.NameWithFirstCapitalized #>s = new List<<#= subBlock.NameWithFirstCapitalized #>>();
+        public readonly List<<#= subBlock.NameWithFirstCapitalized #>> <#= subBlock.NameWithFirstCapitalized #>s = new List<<#= subBlock.NameWithFirstCapitalized #>>();
 <#
     }
 
     if( blockDefinition.NormalWriting ) 
-	{ 
+    { 
 #>
 
-		public Stream WriteTo(Stream stream)
+        public Stream WriteTo(Stream stream)
         {
-			CheckSemanticValidity();
+            CheckSemanticValidity();
 
 <#
-	if( blockDefinition.IsSubBlock )
-	{
+    if( blockDefinition.IsSubBlock )
+    {
 #>
             stream.Line("<#= blockDefinition.Name #>");
             stream.Line("{");
 <#
-	}
+    }
 
     // WRITE ALL REQUIRED PROPERTIES
     foreach( var property in blockDefinition.Properties.Where( _ => _.IsRequired ) )
     {
 #>
-			stream.Attribute( "<#= property.Name #>", <#= property.Name.NameAsField #> );
+            stream.Attribute( "<#= property.Name #>", <#= property.Name.NameAsField #> );
 <#
-	}
+    }
     // WRITE INTEGER NUMBER OPTIONAL PROPERTIES
     foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired && _.Type == PropertyType.IntegerNumber ) )
     {
 #>
-			stream.MaybeAttribute( <#= property.Name.NameWithFirstCapitalized #> != <#= property.DefaultAsString #>, "<#= property.Name #>", <#= property.Name.NameWithFirstCapitalized #> );
+            stream.MaybeAttribute( <#= property.Name.NameWithFirstCapitalized #> != <#= property.DefaultAsString #>, "<#= property.Name #>", <#= property.Name.NameWithFirstCapitalized #> );
 <#
-	}
+    }
     // WRITE FLOATING POINT NUMBER OPTIONAL PROPERTIES
     foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired && _.Type == PropertyType.FloatingPointNumber ) )
     {
 #>
-			stream.MaybeAttribute( <#= property.Name.NameWithFirstCapitalized #> != <#= property.DefaultAsString #>, "<#= property.Name #>", <#= property.Name.NameWithFirstCapitalized #> );
+            stream.MaybeAttribute( <#= property.Name.NameWithFirstCapitalized #> != <#= property.DefaultAsString #>, "<#= property.Name #>", <#= property.Name.NameWithFirstCapitalized #> );
 <#
-	}
+    }
     // WRITE BOOLEAN OPTIONAL PROPERTIES
     foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired && _.Type == PropertyType.Boolean ) )
     {
 #>
-			stream.MaybeAttribute( <#= property.Name.NameWithFirstCapitalized #> != <#= property.DefaultAsString #>, "<#= property.Name #>", <#= property.Name.NameWithFirstCapitalized #> );
+            stream.MaybeAttribute( <#= property.Name.NameWithFirstCapitalized #> != <#= property.DefaultAsString #>, "<#= property.Name #>", <#= property.Name.NameWithFirstCapitalized #> );
 <#
-	}
+    }
     // WRITE STRING OPTIONAL PROPERTIES
     foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired && _.Type == PropertyType.String ) )
     {
 #>
-			stream.MaybeAttribute( <#= property.Name.NameWithFirstCapitalized #> != <#= property.DefaultAsString #>, "<#= property.Name #>", <#= property.Name.NameWithFirstCapitalized #> );
+            stream.MaybeAttribute( <#= property.Name.NameWithFirstCapitalized #> != <#= property.DefaultAsString #>, "<#= property.Name #>", <#= property.Name.NameWithFirstCapitalized #> );
 <#
     }
-	// WRITE SUBBLOCKS
-	foreach( var subBlock in blockDefinition.SubBlocks )
-	{
+    // WRITE SUBBLOCKS
+    foreach( var subBlock in blockDefinition.SubBlocks )
+    {
 #>
-			stream.Blocks( <#= subBlock.NameWithFirstCapitalized #>s );
+            stream.Blocks( <#= subBlock.NameWithFirstCapitalized #>s );
 <#
     }
 
-	if( blockDefinition.IsSubBlock )
-	{
+    if( blockDefinition.IsSubBlock )
+    {
 #>
             stream.Line("}");
 <#
-	}
+    }
 #>
-				
-			return stream;
-		}
+                
+            return stream;
+        }
 <#
-	} // End 'if' for NormalWriting
+    } // End 'if' for NormalWriting
 #>
 
-		public void CheckSemanticValidity()
-		{
+        public void CheckSemanticValidity()
+        {
 <#
     // CHECK THAT ALL REQUIRED PROPERTIES HAVE BEEN SET
     foreach( var property in blockDefinition.Properties.Where( _ => _.IsRequired ) )
     {
 #>
-			if( ! <#= property.Name.NameAsField #>HasBeenSet )
-			{
-				throw new InvalidUwmfException("Did not set <#= property.Name.NameWithFirstCapitalized #> on <#= blockDefinition.Name.NameWithFirstCapitalized #>");
-			}
+            if( ! <#= property.Name.NameAsField #>HasBeenSet )
+            {
+                throw new InvalidUwmfException("Did not set <#= property.Name.NameWithFirstCapitalized #> on <#= blockDefinition.Name.NameWithFirstCapitalized #>");
+            }
 <#
     }
 #>
-			AdditionalSemanticChecks();
-		}
+            AdditionalSemanticChecks();
+        }
 
-		partial void AdditionalSemanticChecks();
+        partial void AdditionalSemanticChecks();
     }
 
 <#
