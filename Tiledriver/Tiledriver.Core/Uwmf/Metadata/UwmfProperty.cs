@@ -60,7 +60,7 @@ namespace Tiledriver.Core.Uwmf.Metadata
                         throw new NotImplementedException("Unknown property type.");
                 }
             }
-        }
+        } 
 
         public int DefaultIntegerNumber => GetDefaultValue<int>(PropertyType.IntegerNumber);
         public double DefaultFloatingPointNumber => GetDefaultValue<double>(PropertyType.FloatingPointNumber);

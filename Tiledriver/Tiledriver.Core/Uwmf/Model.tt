@@ -59,7 +59,7 @@ foreach( var blockDefinition in UwmfDefinitions.Blocks )
     foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired ) )
     {
 #>
-        public <#= property.TypeString #> <#= property.Name.NameWithFirstCapitalized #> { get; set; }
+        public <#= property.TypeString #> <#= property.Name.NameWithFirstCapitalized #> { get; set; } = <#= property.DefaultAsString #>;
 <#
     }
     // WRITE SUBBLOCKS

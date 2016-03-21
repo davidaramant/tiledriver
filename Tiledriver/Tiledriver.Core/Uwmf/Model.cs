@@ -54,16 +54,16 @@ namespace Tiledriver.Core.Uwmf
                 _textureSouth = value;
             }
         }
-        public bool BlockingEast { get; set; }
-        public bool BlockingNorth { get; set; }
-        public bool BlockingWest { get; set; }
-        public bool BlockingSouth { get; set; }
-        public bool OffsetVertical { get; set; }
-        public bool OffsetHorizontal { get; set; }
-        public bool DontOverlay { get; set; }
-        public int Mapped { get; set; }
-        public string SoundSequence { get; set; }
-        public string TextureOverhead { get; set; }
+        public bool BlockingEast { get; set; } = true;
+        public bool BlockingNorth { get; set; } = true;
+        public bool BlockingWest { get; set; } = true;
+        public bool BlockingSouth { get; set; } = true;
+        public bool OffsetVertical { get; set; } = false;
+        public bool OffsetHorizontal { get; set; } = false;
+        public bool DontOverlay { get; set; } = false;
+        public int Mapped { get; set; } = 0;
+        public string SoundSequence { get; set; } = "";
+        public string TextureOverhead { get; set; } = "";
 
         public Stream WriteTo(Stream stream)
         {
@@ -270,7 +270,7 @@ namespace Tiledriver.Core.Uwmf
                 _zone = value;
             }
         }
-        public int Tag { get; set; }
+        public int Tag { get; set; } = 0;
 
         public void CheckSemanticValidity()
         {
@@ -377,13 +377,13 @@ namespace Tiledriver.Core.Uwmf
                 _angle = value;
             }
         }
-        public bool Ambush { get; set; }
-        public bool Patrol { get; set; }
-        public bool Skill1 { get; set; }
-        public bool Skill2 { get; set; }
-        public bool Skill3 { get; set; }
-        public bool Skill4 { get; set; }
-        public bool Skill5 { get; set; }
+        public bool Ambush { get; set; } = false;
+        public bool Patrol { get; set; } = false;
+        public bool Skill1 { get; set; } = false;
+        public bool Skill2 { get; set; } = false;
+        public bool Skill3 { get; set; } = false;
+        public bool Skill4 { get; set; } = false;
+        public bool Skill5 { get; set; } = false;
 
         public Stream WriteTo(Stream stream)
         {
@@ -484,20 +484,20 @@ namespace Tiledriver.Core.Uwmf
                 _action = value;
             }
         }
-        public int Arg0 { get; set; }
-        public int Arg1 { get; set; }
-        public int Arg2 { get; set; }
-        public int Arg3 { get; set; }
-        public int Arg4 { get; set; }
-        public bool ActivateEast { get; set; }
-        public bool ActivateNorth { get; set; }
-        public bool ActivateWest { get; set; }
-        public bool ActivateSouth { get; set; }
-        public bool PlayerCross { get; set; }
-        public bool PlayerUse { get; set; }
-        public bool MonsterUse { get; set; }
-        public bool Repeatable { get; set; }
-        public bool Secret { get; set; }
+        public int Arg0 { get; set; } = 0;
+        public int Arg1 { get; set; } = 0;
+        public int Arg2 { get; set; } = 0;
+        public int Arg3 { get; set; } = 0;
+        public int Arg4 { get; set; } = 0;
+        public bool ActivateEast { get; set; } = true;
+        public bool ActivateNorth { get; set; } = true;
+        public bool ActivateWest { get; set; } = true;
+        public bool ActivateSouth { get; set; } = true;
+        public bool PlayerCross { get; set; } = false;
+        public bool PlayerUse { get; set; } = false;
+        public bool MonsterUse { get; set; } = false;
+        public bool Repeatable { get; set; } = false;
+        public bool Secret { get; set; } = false;
 
         public Stream WriteTo(Stream stream)
         {
