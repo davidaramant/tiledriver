@@ -18,22 +18,24 @@ namespace Tiledriver.Core.Uwmf.Parsing
     public static partial class Parser
     {
 <#
-foreach( var block in UwmfDefinitions.Blocks.Where( _ => _.NormalWriting ) )
+foreach( var block in UwmfDefinitions.Blocks.Where( _ => _.NormalReading ) )
 {
 #>
 		private static <#= block.PascalCaseName #> Parse<#= block.PascalCaseName #>( ILexer lexer )
 		{
 			var <#= block.CamelCaseName #> = new <#= block.PascalCaseName #>();
 
+			TokenType nextToken;
 <#
 	string expectedEndToken;
 	if( block.IsSubBlock )
 	{
 		expectedEndToken = "EndBlock";
 #>
-			if (lexer.DetermineNextToken() != TokenType.StartBlock)
+			nextToken = lexer.DetermineNextToken();
+			if (nextToken != TokenType.StartBlock)
             {
-                throw new ParsingException("Expecting start of block when parsing <#= block.PascalCaseName #>.");
+                throw new ParsingException($"Expecting start of block when parsing <#= block.PascalCaseName #> but found {nextToken}.");
             }
             lexer.AdvanceOneCharacter();
 
@@ -44,7 +46,6 @@ foreach( var block in UwmfDefinitions.Blocks.Where( _ => _.NormalWriting ) )
 		expectedEndToken = "EndOfFile";
 	}
 #>
-			TokenType nextToken;
             while ((nextToken = lexer.DetermineNextToken()) != TokenType.<#= expectedEndToken #>)
             {
 				if( nextToken == TokenType.Identifier )
@@ -76,7 +77,7 @@ foreach( var block in UwmfDefinitions.Blocks.Where( _ => _.NormalWriting ) )
 				}
 				else
 				{
-					throw new ParsingException("Unexpected token in <#= block.PascalCaseName #>.");
+					throw new ParsingException($"Unexpected token in <#= block.PascalCaseName #>: {nextToken}");
 				}
             }
 <#

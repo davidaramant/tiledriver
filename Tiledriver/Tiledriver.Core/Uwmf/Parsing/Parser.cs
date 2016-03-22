@@ -12,9 +12,41 @@ namespace Tiledriver.Core.Uwmf.Parsing
             return ParseMap(lexer);
         }
 
-        /// <remarks>
-        /// A TileSpace is a comma-separated list of numbers, unlike every other block.
-        /// </remarks>
+        #region PlaneMap/TileSpace parsing
+
+        private static PlaneMap ParsePlaneMap(ILexer lexer)
+        {
+            var planeMap = new PlaneMap();
+
+            TokenType nextToken;
+            nextToken = lexer.DetermineNextToken();
+            if (nextToken != TokenType.StartBlock)
+            {
+                throw new ParsingException($"Expecting start of block when parsing PlaneMap but found {nextToken}.");
+            }
+            lexer.AdvanceOneCharacter();
+
+            while ((nextToken = lexer.DetermineNextToken()) != TokenType.EndBlock)
+            {
+                if (nextToken == TokenType.StartBlock)
+                {
+                    planeMap.TileSpaces.Add(ParseTileSpace(lexer));
+                }
+                else if (nextToken == TokenType.Comma)
+                {
+                    lexer.AdvanceOneCharacter();
+                }
+                else
+                {
+                    throw new ParsingException($"Unexpected token in PlaneMap: {nextToken}");
+                }
+            }
+            lexer.AdvanceOneCharacter();
+
+            planeMap.CheckSemanticValidity();
+            return planeMap;
+        }
+
         private static TileSpace ParseTileSpace(ILexer lexer)
         {
             var tileSpace = new TileSpace();
@@ -31,11 +63,23 @@ namespace Tiledriver.Core.Uwmf.Parsing
             }
             tileSpace.Tile = lexer.ReadIntegerNumber();
 
+            if (lexer.DetermineNextToken() != TokenType.Comma)
+            {
+                throw new ParsingException("Expected comma after Tile number in TileSpace");
+            }
+            lexer.AdvanceOneCharacter();
+
             if (lexer.DetermineNextToken() != TokenType.Unknown)
             {
                 throw new ParsingException("Expected Sector number in TileSpace");
             }
             tileSpace.Sector = lexer.ReadIntegerNumber();
+
+            if (lexer.DetermineNextToken() != TokenType.Comma)
+            {
+                throw new ParsingException("Expected comma after Sector number in TileSpace");
+            }
+            lexer.AdvanceOneCharacter();
 
             if (lexer.DetermineNextToken() != TokenType.Unknown)
             {
@@ -52,7 +96,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 
             if (nextToken != TokenType.EndBlock)
             {
-                throw  new ParsingException("Unexpected token in TileSpace");
+                throw new ParsingException("Unexpected token in TileSpace");
             }
             lexer.AdvanceOneCharacter();
 
@@ -60,6 +104,9 @@ namespace Tiledriver.Core.Uwmf.Parsing
             return tileSpace;
         }
 
+        #endregion PlaneMap/TileSpace parsing
+
+        #region Assignment Parsing Methods
 
         private static int ParseIntegerNumberAssignment(ILexer lexer, string context)
         {
@@ -96,5 +143,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
             lexer.AdvanceOneCharacter();
             return result;
         }
+
+        #endregion Assignment Parsing Methods
     }
 }

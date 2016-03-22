@@ -15,6 +15,7 @@ namespace Tiledriver.UwmfMetadata
         public IEnumerable<NamedItem> SubBlocks => _subBlocks;
         public bool IsSubBlock { get; private set; } = true;
         public bool NormalWriting { get; private set; } = true;
+        public bool NormalReading { get; private set; } = true;
 
         public UwmfBlock(string name, params UwmfProperty[] properties) : base(name)
         {
@@ -35,6 +36,12 @@ namespace Tiledriver.UwmfMetadata
         public UwmfBlock DisableNormalWriting()
         {
             NormalWriting = false;
+            return this;
+        }
+
+        public UwmfBlock DisableNormalReading()
+        {
+            NormalReading = false;
             return this;
         }
 

@@ -39,9 +39,11 @@ namespace Tiledriver.UwmfMetadata
                 HasRequiredIntegerNumber("sector").
                 HasRequiredIntegerNumber("zone").
                 HasOptionalIntegerNumber("tag", 0).
-                DisableNormalWriting(),
+                DisableNormalWriting().
+                DisableNormalReading(),
             new UwmfBlock("planeMap").
-                HasSubBlocks("tileSpace"),
+                HasSubBlocks("tileSpace").
+                DisableNormalReading(),
             new UwmfBlock("thing").
                 HasRequiredIntegerNumber("type").
                 HasRequiredFloatingPointNumber("x").
