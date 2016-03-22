@@ -13,73 +13,73 @@ namespace Tiledriver.UwmfMetadata
     {
         public static readonly IEnumerable<UwmfBlock> Blocks = new[]
         {
-            new UwmfBlock("tile",
-                UwmfProperty.RequiredString("textureEast"),
-                UwmfProperty.RequiredString("textureNorth"),
-                UwmfProperty.RequiredString("textureWest"),
-                UwmfProperty.RequiredString("textureSouth"),
-                UwmfProperty.OptionalBoolean("blockingEast", true),
-                UwmfProperty.OptionalBoolean("blockingNorth", true),
-                UwmfProperty.OptionalBoolean("blockingWest", true),
-                UwmfProperty.OptionalBoolean("blockingSouth", true),
-                UwmfProperty.OptionalBoolean("offsetVertical", false),
-                UwmfProperty.OptionalBoolean("offsetHorizontal", false),
-                UwmfProperty.OptionalBoolean("dontOverlay", false),
-                UwmfProperty.OptionalIntegerNumber("mapped", 0),
-                UwmfProperty.OptionalString("soundSequence", String.Empty),
-                UwmfProperty.OptionalString("textureOverhead", String.Empty)),
-            new UwmfBlock("sector",
-                UwmfProperty.RequiredString("textureCeiling"),
-                UwmfProperty.RequiredString("textureFloor")),
+            new UwmfBlock("tile").
+                HasRequiredString("textureEast").
+                HasRequiredString("textureNorth").
+                HasRequiredString("textureWest").
+                HasRequiredString("textureSouth").
+                HasOptionalBoolean("blockingEast", true).
+                HasOptionalBoolean("blockingNorth", true).
+                HasOptionalBoolean("blockingWest", true).
+                HasOptionalBoolean("blockingSouth", true).
+                HasOptionalBoolean("offsetVertical", false).
+                HasOptionalBoolean("offsetHorizontal", false).
+                HasOptionalBoolean("dontOverlay", false).
+                HasOptionalIntegerNumber("mapped", 0).
+                HasOptionalString("soundSequence", String.Empty).
+                HasOptionalString("textureOverhead", String.Empty),
+            new UwmfBlock("sector").
+                HasRequiredString("textureCeiling").
+                HasRequiredString("textureFloor"),
             new UwmfBlock("zone"),
-            new UwmfBlock("plane",
-                UwmfProperty.RequiredIntegerNumber("depth")),
-            new UwmfBlock("tileSpace",
-                UwmfProperty.RequiredIntegerNumber("tile"),
-                UwmfProperty.RequiredIntegerNumber("sector"),
-                UwmfProperty.RequiredIntegerNumber("zone"),
-                UwmfProperty.OptionalIntegerNumber("tag", 0)).
+            new UwmfBlock("plane").
+                HasRequiredIntegerNumber("depth"),
+            new UwmfBlock("tileSpace").
+                HasRequiredIntegerNumber("tile").
+                HasRequiredIntegerNumber("sector").
+                HasRequiredIntegerNumber("zone").
+                HasOptionalIntegerNumber("tag", 0).
                 DisableNormalWriting(),
             new UwmfBlock("planeMap").
                 HasSubBlocks("tileSpace"),
-            new UwmfBlock("thing",
-                UwmfProperty.RequiredIntegerNumber("type"),
-                UwmfProperty.RequiredFloatingPointNumber("x"),
-                UwmfProperty.RequiredFloatingPointNumber("y"),
-                UwmfProperty.RequiredFloatingPointNumber("z"),
-                UwmfProperty.RequiredIntegerNumber("angle"),
-                UwmfProperty.OptionalBoolean("ambush", false),
-                UwmfProperty.OptionalBoolean("patrol", false),
-                UwmfProperty.OptionalBoolean("skill1", false),
-                UwmfProperty.OptionalBoolean("skill2", false),
-                UwmfProperty.OptionalBoolean("skill3", false),
-                UwmfProperty.OptionalBoolean("skill4", false),
-                UwmfProperty.OptionalBoolean("skill5", false)),
-            new UwmfBlock("trigger",
-                UwmfProperty.RequiredIntegerNumber("x"),
-                UwmfProperty.RequiredIntegerNumber("y"),
-                UwmfProperty.RequiredIntegerNumber("z"),
-                UwmfProperty.RequiredIntegerNumber("action"),
-                UwmfProperty.OptionalIntegerNumber("arg0",0),
-                UwmfProperty.OptionalIntegerNumber("arg1",0),
-                UwmfProperty.OptionalIntegerNumber("arg2",0),
-                UwmfProperty.OptionalIntegerNumber("arg3",0),
-                UwmfProperty.OptionalIntegerNumber("arg4",0),
-                UwmfProperty.OptionalBoolean("activateEast", true),
-                UwmfProperty.OptionalBoolean("activateNorth", true),
-                UwmfProperty.OptionalBoolean("activateWest", true),
-                UwmfProperty.OptionalBoolean("activateSouth", true),
-                UwmfProperty.OptionalBoolean("playerCross", false),
-                UwmfProperty.OptionalBoolean("playerUse", false),
-                UwmfProperty.OptionalBoolean("monsterUse", false),
-                UwmfProperty.OptionalBoolean("repeatable", false),
-                UwmfProperty.OptionalBoolean("secret", false)),
-            new UwmfBlock("map",
-                UwmfProperty.RequiredString("namespace"),
-                UwmfProperty.RequiredIntegerNumber("tileSize"),
-                UwmfProperty.RequiredString("name"),
-                UwmfProperty.RequiredIntegerNumber("width"),
-                UwmfProperty.RequiredIntegerNumber("height")).
+            new UwmfBlock("thing").
+                HasRequiredIntegerNumber("type").
+                HasRequiredFloatingPointNumber("x").
+                HasRequiredFloatingPointNumber("y").
+                HasRequiredFloatingPointNumber("z").
+                HasRequiredIntegerNumber("angle").
+                HasOptionalBoolean("ambush", false).
+                HasOptionalBoolean("patrol", false).
+                HasOptionalBoolean("skill1", false).
+                HasOptionalBoolean("skill2", false).
+                HasOptionalBoolean("skill3", false).
+                HasOptionalBoolean("skill4", false).
+                HasOptionalBoolean("skill5", false),
+            new UwmfBlock("trigger").
+                HasRequiredIntegerNumber("x").
+                HasRequiredIntegerNumber("y").
+                HasRequiredIntegerNumber("z").
+                HasRequiredIntegerNumber("action").
+                HasOptionalIntegerNumber("arg0",0).
+                HasOptionalIntegerNumber("arg1",0).
+                HasOptionalIntegerNumber("arg2",0).
+                HasOptionalIntegerNumber("arg3",0).
+                HasOptionalIntegerNumber("arg4",0).
+                HasOptionalBoolean("activateEast", true).
+                HasOptionalBoolean("activateNorth", true).
+                HasOptionalBoolean("activateWest", true).
+                HasOptionalBoolean("activateSouth", true).
+                HasOptionalBoolean("playerCross", false).
+                HasOptionalBoolean("playerUse", false).
+                HasOptionalBoolean("monsterUse", false).
+                HasOptionalBoolean("repeatable", false).
+                HasOptionalBoolean("secret", false),
+            new UwmfBlock("map").
+                HasRequiredString("namespace").
+                HasRequiredIntegerNumber("tileSize").
+                HasRequiredString("name").
+                HasRequiredIntegerNumber("width").
+                HasRequiredIntegerNumber("height").
                 HasSubBlocks("tile", "sector", "zone", "plane", "planeMap", "thing", "trigger").
                 IsTopLevel(),
         };
