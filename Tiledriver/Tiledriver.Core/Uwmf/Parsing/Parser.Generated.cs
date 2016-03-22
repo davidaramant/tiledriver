@@ -414,13 +414,8 @@ namespace Tiledriver.Core.Uwmf.Parsing
 		{
 			var map = new Map();
 
-			if (lexer.DetermineNextToken() != TokenType.StartBlock)
-            {
-                throw new ParsingException("Expecting start of block when parsing Map.");
-            }
-
 			TokenType nextToken;
-            while ((nextToken = lexer.DetermineNextToken()) != TokenType.EndBlock)
+            while ((nextToken = lexer.DetermineNextToken()) != TokenType.EndOfFile)
             {
 				if( nextToken == TokenType.Identifier )
 				{

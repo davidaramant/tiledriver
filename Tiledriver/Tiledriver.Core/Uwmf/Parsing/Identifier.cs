@@ -6,6 +6,7 @@ using System.Diagnostics;
 
 namespace Tiledriver.Core.Uwmf.Parsing
 {
+    // TODO: Kill this class and just normalize the names directly.
     [DebuggerDisplay("{Name}")]
     public sealed class Identifier
     {

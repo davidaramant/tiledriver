@@ -26,13 +26,26 @@ foreach( var block in UwmfDefinitions.Blocks )
 		{
 			var <#= block.CamelCaseName #> = new <#= block.PascalCaseName #>();
 
+<#
+	string expectedEndToken;
+	if( block.IsSubBlock )
+	{
+		expectedEndToken = "EndBlock";
+#>
 			if (lexer.DetermineNextToken() != TokenType.StartBlock)
             {
                 throw new ParsingException("Expecting start of block when parsing <#= block.PascalCaseName #>.");
             }
 
+<#
+	}
+	else
+	{
+		expectedEndToken = "EndOfFile";
+	}
+#>
 			TokenType nextToken;
-            while ((nextToken = lexer.DetermineNextToken()) != TokenType.EndBlock)
+            while ((nextToken = lexer.DetermineNextToken()) != TokenType.<#= expectedEndToken #>)
             {
 				if( nextToken == TokenType.Identifier )
 				{
