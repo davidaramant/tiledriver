@@ -31,26 +31,25 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
 
                 var roundTripped = Parser.Parse(new Lexer(new UwmfCharReader(stream)));
 
-                AssertEqual(roundTripped,map);
+                UwmfComparison.AssertEqual(roundTripped,map);
             }
         }
 
-        private static void AssertEqual(Map actual, Map expected)
+        [Test]
+        public void ShouldRoundTripDemoMap()
         {
-            Assert.That(actual.Namespace, Is.EqualTo(expected.Namespace),
-                "Namespace was not equal.");
+            var map = DemoMap.Create();
 
-            Assert.That(actual.Width, Is.EqualTo(expected.Width),
-                "Width was not equal.");
+            using (var stream = new MemoryStream())
+            {
+                map.WriteTo(stream);
 
-            Assert.That(actual.Height, Is.EqualTo(expected.Height),
-                "Height was not equal.");
+                stream.Position = 0;
 
-            Assert.That(actual.TileSize, Is.EqualTo(expected.TileSize),
-                "TileSize was not equal.");
+                var roundTripped = Parser.Parse(new Lexer(new UwmfCharReader(stream)));
 
-            Assert.That(actual.Name, Is.EqualTo(expected.Name),
-                "Name was not equal.");
+                UwmfComparison.AssertEqual(roundTripped, map);
+            }
         }
     }
 }
