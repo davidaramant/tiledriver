@@ -75,6 +75,8 @@ foreach( var blockDefinition in UwmfDefinitions.Blocks )
             CheckSemanticValidity();
 
 <#
+	var indent = blockDefinition.IsSubBlock ? "true" : "false";
+
     if( blockDefinition.IsSubBlock )
     {
 #>
@@ -87,7 +89,7 @@ foreach( var blockDefinition in UwmfDefinitions.Blocks )
     foreach( var property in blockDefinition.Properties.Where( _ => _.IsRequired ) )
     {
 #>
-            WriteAttribute( stream,  "<#= property.CamelCaseName #>", <#= property.FieldName #> );
+            WriteAttribute( stream,  "<#= property.CamelCaseName #>", <#= property.FieldName #>, indent: <#= indent #> );
 <#
     }
     // WRITE OPTIONAL PROPERTIES
@@ -96,7 +98,7 @@ foreach( var blockDefinition in UwmfDefinitions.Blocks )
 #>
             if( <#= property.PascalCaseName #> != <#= property.DefaultAsString #> )
             {
-                WriteAttribute( stream, "<#= property.CamelCaseName #>", <#= property.PascalCaseName #> );
+                WriteAttribute( stream, "<#= property.CamelCaseName #>", <#= property.PascalCaseName #>, indent: <#= indent #> );
             }
 <#
     }

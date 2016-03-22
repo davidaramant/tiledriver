@@ -70,49 +70,49 @@ namespace Tiledriver.Core.Uwmf
 
             WriteLine( stream, "tile");
             WriteLine( stream, "{");
-            WriteAttribute( stream,  "textureEast", _textureEast );
-            WriteAttribute( stream,  "textureNorth", _textureNorth );
-            WriteAttribute( stream,  "textureWest", _textureWest );
-            WriteAttribute( stream,  "textureSouth", _textureSouth );
+            WriteAttribute( stream,  "textureEast", _textureEast, indent: true );
+            WriteAttribute( stream,  "textureNorth", _textureNorth, indent: true );
+            WriteAttribute( stream,  "textureWest", _textureWest, indent: true );
+            WriteAttribute( stream,  "textureSouth", _textureSouth, indent: true );
             if( BlockingEast != true )
             {
-                WriteAttribute( stream, "blockingEast", BlockingEast );
+                WriteAttribute( stream, "blockingEast", BlockingEast, indent: true );
             }
             if( BlockingNorth != true )
             {
-                WriteAttribute( stream, "blockingNorth", BlockingNorth );
+                WriteAttribute( stream, "blockingNorth", BlockingNorth, indent: true );
             }
             if( BlockingWest != true )
             {
-                WriteAttribute( stream, "blockingWest", BlockingWest );
+                WriteAttribute( stream, "blockingWest", BlockingWest, indent: true );
             }
             if( BlockingSouth != true )
             {
-                WriteAttribute( stream, "blockingSouth", BlockingSouth );
+                WriteAttribute( stream, "blockingSouth", BlockingSouth, indent: true );
             }
             if( OffsetVertical != false )
             {
-                WriteAttribute( stream, "offsetVertical", OffsetVertical );
+                WriteAttribute( stream, "offsetVertical", OffsetVertical, indent: true );
             }
             if( OffsetHorizontal != false )
             {
-                WriteAttribute( stream, "offsetHorizontal", OffsetHorizontal );
+                WriteAttribute( stream, "offsetHorizontal", OffsetHorizontal, indent: true );
             }
             if( DontOverlay != false )
             {
-                WriteAttribute( stream, "dontOverlay", DontOverlay );
+                WriteAttribute( stream, "dontOverlay", DontOverlay, indent: true );
             }
             if( Mapped != 0 )
             {
-                WriteAttribute( stream, "mapped", Mapped );
+                WriteAttribute( stream, "mapped", Mapped, indent: true );
             }
             if( SoundSequence != "" )
             {
-                WriteAttribute( stream, "soundSequence", SoundSequence );
+                WriteAttribute( stream, "soundSequence", SoundSequence, indent: true );
             }
             if( TextureOverhead != "" )
             {
-                WriteAttribute( stream, "textureOverhead", TextureOverhead );
+                WriteAttribute( stream, "textureOverhead", TextureOverhead, indent: true );
             }
             WriteLine( stream, "}");
                 
@@ -175,8 +175,8 @@ namespace Tiledriver.Core.Uwmf
 
             WriteLine( stream, "sector");
             WriteLine( stream, "{");
-            WriteAttribute( stream,  "textureCeiling", _textureCeiling );
-            WriteAttribute( stream,  "textureFloor", _textureFloor );
+            WriteAttribute( stream,  "textureCeiling", _textureCeiling, indent: true );
+            WriteAttribute( stream,  "textureFloor", _textureFloor, indent: true );
             WriteLine( stream, "}");
                 
             return stream;
@@ -242,7 +242,7 @@ namespace Tiledriver.Core.Uwmf
 
             WriteLine( stream, "plane");
             WriteLine( stream, "{");
-            WriteAttribute( stream,  "depth", _depth );
+            WriteAttribute( stream,  "depth", _depth, indent: true );
             WriteLine( stream, "}");
                 
             return stream;
@@ -415,38 +415,38 @@ namespace Tiledriver.Core.Uwmf
 
             WriteLine( stream, "thing");
             WriteLine( stream, "{");
-            WriteAttribute( stream,  "type", _type );
-            WriteAttribute( stream,  "x", _x );
-            WriteAttribute( stream,  "y", _y );
-            WriteAttribute( stream,  "z", _z );
-            WriteAttribute( stream,  "angle", _angle );
+            WriteAttribute( stream,  "type", _type, indent: true );
+            WriteAttribute( stream,  "x", _x, indent: true );
+            WriteAttribute( stream,  "y", _y, indent: true );
+            WriteAttribute( stream,  "z", _z, indent: true );
+            WriteAttribute( stream,  "angle", _angle, indent: true );
             if( Ambush != false )
             {
-                WriteAttribute( stream, "ambush", Ambush );
+                WriteAttribute( stream, "ambush", Ambush, indent: true );
             }
             if( Patrol != false )
             {
-                WriteAttribute( stream, "patrol", Patrol );
+                WriteAttribute( stream, "patrol", Patrol, indent: true );
             }
             if( Skill1 != false )
             {
-                WriteAttribute( stream, "skill1", Skill1 );
+                WriteAttribute( stream, "skill1", Skill1, indent: true );
             }
             if( Skill2 != false )
             {
-                WriteAttribute( stream, "skill2", Skill2 );
+                WriteAttribute( stream, "skill2", Skill2, indent: true );
             }
             if( Skill3 != false )
             {
-                WriteAttribute( stream, "skill3", Skill3 );
+                WriteAttribute( stream, "skill3", Skill3, indent: true );
             }
             if( Skill4 != false )
             {
-                WriteAttribute( stream, "skill4", Skill4 );
+                WriteAttribute( stream, "skill4", Skill4, indent: true );
             }
             if( Skill5 != false )
             {
-                WriteAttribute( stream, "skill5", Skill5 );
+                WriteAttribute( stream, "skill5", Skill5, indent: true );
             }
             WriteLine( stream, "}");
                 
@@ -549,65 +549,65 @@ namespace Tiledriver.Core.Uwmf
 
             WriteLine( stream, "trigger");
             WriteLine( stream, "{");
-            WriteAttribute( stream,  "x", _x );
-            WriteAttribute( stream,  "y", _y );
-            WriteAttribute( stream,  "z", _z );
-            WriteAttribute( stream,  "action", _action );
+            WriteAttribute( stream,  "x", _x, indent: true );
+            WriteAttribute( stream,  "y", _y, indent: true );
+            WriteAttribute( stream,  "z", _z, indent: true );
+            WriteAttribute( stream,  "action", _action, indent: true );
             if( Arg0 != 0 )
             {
-                WriteAttribute( stream, "arg0", Arg0 );
+                WriteAttribute( stream, "arg0", Arg0, indent: true );
             }
             if( Arg1 != 0 )
             {
-                WriteAttribute( stream, "arg1", Arg1 );
+                WriteAttribute( stream, "arg1", Arg1, indent: true );
             }
             if( Arg2 != 0 )
             {
-                WriteAttribute( stream, "arg2", Arg2 );
+                WriteAttribute( stream, "arg2", Arg2, indent: true );
             }
             if( Arg3 != 0 )
             {
-                WriteAttribute( stream, "arg3", Arg3 );
+                WriteAttribute( stream, "arg3", Arg3, indent: true );
             }
             if( Arg4 != 0 )
             {
-                WriteAttribute( stream, "arg4", Arg4 );
+                WriteAttribute( stream, "arg4", Arg4, indent: true );
             }
             if( ActivateEast != true )
             {
-                WriteAttribute( stream, "activateEast", ActivateEast );
+                WriteAttribute( stream, "activateEast", ActivateEast, indent: true );
             }
             if( ActivateNorth != true )
             {
-                WriteAttribute( stream, "activateNorth", ActivateNorth );
+                WriteAttribute( stream, "activateNorth", ActivateNorth, indent: true );
             }
             if( ActivateWest != true )
             {
-                WriteAttribute( stream, "activateWest", ActivateWest );
+                WriteAttribute( stream, "activateWest", ActivateWest, indent: true );
             }
             if( ActivateSouth != true )
             {
-                WriteAttribute( stream, "activateSouth", ActivateSouth );
+                WriteAttribute( stream, "activateSouth", ActivateSouth, indent: true );
             }
             if( PlayerCross != false )
             {
-                WriteAttribute( stream, "playerCross", PlayerCross );
+                WriteAttribute( stream, "playerCross", PlayerCross, indent: true );
             }
             if( PlayerUse != false )
             {
-                WriteAttribute( stream, "playerUse", PlayerUse );
+                WriteAttribute( stream, "playerUse", PlayerUse, indent: true );
             }
             if( MonsterUse != false )
             {
-                WriteAttribute( stream, "monsterUse", MonsterUse );
+                WriteAttribute( stream, "monsterUse", MonsterUse, indent: true );
             }
             if( Repeatable != false )
             {
-                WriteAttribute( stream, "repeatable", Repeatable );
+                WriteAttribute( stream, "repeatable", Repeatable, indent: true );
             }
             if( Secret != false )
             {
-                WriteAttribute( stream, "secret", Secret );
+                WriteAttribute( stream, "secret", Secret, indent: true );
             }
             WriteLine( stream, "}");
                 
@@ -708,11 +708,11 @@ namespace Tiledriver.Core.Uwmf
         {
             CheckSemanticValidity();
 
-            WriteAttribute( stream,  "namespace", _namespace );
-            WriteAttribute( stream,  "tileSize", _tileSize );
-            WriteAttribute( stream,  "name", _name );
-            WriteAttribute( stream,  "width", _width );
-            WriteAttribute( stream,  "height", _height );
+            WriteAttribute( stream,  "namespace", _namespace, indent: false );
+            WriteAttribute( stream,  "tileSize", _tileSize, indent: false );
+            WriteAttribute( stream,  "name", _name, indent: false );
+            WriteAttribute( stream,  "width", _width, indent: false );
+            WriteAttribute( stream,  "height", _height, indent: false );
             WriteBlocks( stream,  Tiles );
             WriteBlocks( stream,  Sectors );
             WriteBlocks( stream,  Zones );

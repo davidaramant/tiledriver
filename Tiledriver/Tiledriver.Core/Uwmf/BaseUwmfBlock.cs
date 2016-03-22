@@ -24,22 +24,22 @@ namespace Tiledriver.Core.Uwmf
             WriteLine(stream, $"{indention}{name} = {value};");
         }
 
-        protected static void WriteAttribute(Stream stream, string name, string value, bool indent = true)
+        protected static void WriteAttribute(Stream stream, string name, string value, bool indent)
         {
             InternalAttribute(stream, name, $"\"{value}\"", indent);
         }
 
-        protected static void WriteAttribute(Stream stream, string name, int value, bool indent = true)
+        protected static void WriteAttribute(Stream stream, string name, int value, bool indent)
         {
             InternalAttribute(stream, name, value.ToString(CultureInfo.InvariantCulture), indent);
         }
 
-        protected static void WriteAttribute(Stream stream, string name, double value, bool indent = true)
+        protected static void WriteAttribute(Stream stream, string name, double value, bool indent)
         {
             InternalAttribute(stream, name, value.ToString(CultureInfo.InvariantCulture), indent);
         }
 
-        protected static void WriteAttribute(Stream stream, string name, bool value, bool indent = true)
+        protected static void WriteAttribute(Stream stream, string name, bool value, bool indent)
         {
             InternalAttribute(stream, name, value.ToString().ToLowerInvariant(), indent);
         }
