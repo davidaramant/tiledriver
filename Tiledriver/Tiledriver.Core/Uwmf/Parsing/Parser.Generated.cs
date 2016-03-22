@@ -21,7 +21,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
             {
 				if( nextToken == TokenType.Identifier )
 				{
-		            switch( lexer.ReadIdentifier().Name.ToLowerInvariant() )
+		            switch( lexer.ReadIdentifier().ToString() )
 					{
 						case "textureeast":
 							tile.TextureEast = ParseStringAssignment( lexer, "Tile.TextureEast" );
@@ -97,7 +97,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
             {
 				if( nextToken == TokenType.Identifier )
 				{
-		            switch( lexer.ReadIdentifier().Name.ToLowerInvariant() )
+		            switch( lexer.ReadIdentifier().ToString() )
 					{
 						case "textureceiling":
 							sector.TextureCeiling = ParseStringAssignment( lexer, "Sector.TextureCeiling" );
@@ -137,7 +137,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
             {
 				if( nextToken == TokenType.Identifier )
 				{
-		            switch( lexer.ReadIdentifier().Name.ToLowerInvariant() )
+		            switch( lexer.ReadIdentifier().ToString() )
 					{
 						default:
 							lexer.MovePastAssignment();
@@ -171,7 +171,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
             {
 				if( nextToken == TokenType.Identifier )
 				{
-		            switch( lexer.ReadIdentifier().Name.ToLowerInvariant() )
+		            switch( lexer.ReadIdentifier().ToString() )
 					{
 						case "depth":
 							plane.Depth = ParseIntegerNumberAssignment( lexer, "Plane.Depth" );
@@ -208,7 +208,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
             {
 				if( nextToken == TokenType.Identifier )
 				{
-		            switch( lexer.ReadIdentifier().Name.ToLowerInvariant() )
+		            switch( lexer.ReadIdentifier().ToString() )
 					{
 						case "type":
 							thing.Type = ParseIntegerNumberAssignment( lexer, "Thing.Type" );
@@ -278,7 +278,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
             {
 				if( nextToken == TokenType.Identifier )
 				{
-		            switch( lexer.ReadIdentifier().Name.ToLowerInvariant() )
+		            switch( lexer.ReadIdentifier().ToString() )
 					{
 						case "x":
 							trigger.X = ParseIntegerNumberAssignment( lexer, "Trigger.X" );
@@ -359,7 +359,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
             {
 				if( nextToken == TokenType.Identifier )
 				{
-		            switch( lexer.ReadIdentifier().Name.ToLowerInvariant() )
+		            switch( lexer.ReadIdentifier().ToString() )
 					{
 						case "namespace":
 							map.Namespace = ParseStringAssignment( lexer, "Map.Namespace" );

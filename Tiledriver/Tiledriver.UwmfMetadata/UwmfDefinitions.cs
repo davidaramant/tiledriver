@@ -6,9 +6,6 @@ using System.Collections.Generic;
 
 namespace Tiledriver.UwmfMetadata
 {
-    /// <summary>
-    /// The global properties and planemap are special cases
-    /// </summary>
     public static class UwmfDefinitions
     {
         public static readonly IEnumerable<UwmfBlock> Blocks = new[]

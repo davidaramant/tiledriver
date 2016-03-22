@@ -50,7 +50,7 @@ foreach( var block in UwmfDefinitions.Blocks.Where( _ => _.NormalReading ) )
             {
 				if( nextToken == TokenType.Identifier )
 				{
-		            switch( lexer.ReadIdentifier().Name.ToLowerInvariant() )
+		            switch( lexer.ReadIdentifier().ToString() )
 					{
 <#
 	foreach( var property in block.Properties )

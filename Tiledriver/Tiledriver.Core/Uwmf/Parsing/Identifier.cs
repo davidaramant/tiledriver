@@ -6,32 +6,26 @@ using System.Diagnostics;
 
 namespace Tiledriver.Core.Uwmf.Parsing
 {
-    // TODO: Kill this class and just normalize the names directly.
-    [DebuggerDisplay("{Name}")]
+    [DebuggerDisplay("{_name}")]
     public sealed class Identifier
     {
-        public string Name { get; }
+        private readonly string _name;
 
         public Identifier(string name)
         {
-            Name = name;
+            _name = name;
         }
 
         public override string ToString()
         {
-            return Name;
-        }
-
-        public bool Matches(string otherName)
-        {
-            return string.Equals(Name, otherName, StringComparison.OrdinalIgnoreCase);
+            return _name.ToLowerInvariant();
         }
 
         #region Equality members
 
         private bool Equals(Identifier other)
         {
-            return string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase);
+            return string.Equals(_name, other._name, StringComparison.InvariantCultureIgnoreCase);
         }
 
         public override bool Equals(object obj)
@@ -43,7 +37,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 
         public override int GetHashCode()
         {
-            return (Name != null ? StringComparer.OrdinalIgnoreCase.GetHashCode(Name) : 0);
+            return (_name != null ? StringComparer.InvariantCultureIgnoreCase.GetHashCode(_name) : 0);
         }
 
         public static bool operator ==(Identifier left, Identifier right)
