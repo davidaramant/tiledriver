@@ -5,7 +5,6 @@ namespace Tiledriver.Core.Uwmf.Parsing
 {
     public static partial class Parser
     {
-
 		private static Tile ParseTile( ILexer lexer )
 		{
 			var tile = new Tile();
@@ -14,6 +13,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
             {
                 throw new ParsingException("Expecting start of block when parsing Tile.");
             }
+            lexer.AdvanceOneCharacter();
 
 			TokenType nextToken;
             while ((nextToken = lexer.DetermineNextToken()) != TokenType.EndBlock)
@@ -74,6 +74,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 					throw new ParsingException("Unexpected token in Tile.");
 				}
             }
+			lexer.AdvanceOneCharacter();
 
 			tile.CheckSemanticValidity();
 			return tile;
@@ -87,6 +88,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
             {
                 throw new ParsingException("Expecting start of block when parsing Sector.");
             }
+            lexer.AdvanceOneCharacter();
 
 			TokenType nextToken;
             while ((nextToken = lexer.DetermineNextToken()) != TokenType.EndBlock)
@@ -111,6 +113,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 					throw new ParsingException("Unexpected token in Sector.");
 				}
             }
+			lexer.AdvanceOneCharacter();
 
 			sector.CheckSemanticValidity();
 			return sector;
@@ -124,6 +127,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
             {
                 throw new ParsingException("Expecting start of block when parsing Zone.");
             }
+            lexer.AdvanceOneCharacter();
 
 			TokenType nextToken;
             while ((nextToken = lexer.DetermineNextToken()) != TokenType.EndBlock)
@@ -142,6 +146,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 					throw new ParsingException("Unexpected token in Zone.");
 				}
             }
+			lexer.AdvanceOneCharacter();
 
 			zone.CheckSemanticValidity();
 			return zone;
@@ -155,6 +160,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
             {
                 throw new ParsingException("Expecting start of block when parsing Plane.");
             }
+            lexer.AdvanceOneCharacter();
 
 			TokenType nextToken;
             while ((nextToken = lexer.DetermineNextToken()) != TokenType.EndBlock)
@@ -176,52 +182,10 @@ namespace Tiledriver.Core.Uwmf.Parsing
 					throw new ParsingException("Unexpected token in Plane.");
 				}
             }
+			lexer.AdvanceOneCharacter();
 
 			plane.CheckSemanticValidity();
 			return plane;
-		}
-
-		private static TileSpace ParseTileSpace( ILexer lexer )
-		{
-			var tileSpace = new TileSpace();
-
-			if (lexer.DetermineNextToken() != TokenType.StartBlock)
-            {
-                throw new ParsingException("Expecting start of block when parsing TileSpace.");
-            }
-
-			TokenType nextToken;
-            while ((nextToken = lexer.DetermineNextToken()) != TokenType.EndBlock)
-            {
-				if( nextToken == TokenType.Identifier )
-				{
-		            switch( lexer.ReadIdentifier().Name.ToLowerInvariant() )
-					{
-						case "tile":
-							tileSpace.Tile = ParseIntegerNumberAssignment( lexer, "TileSpace.Tile" );
-							break;
-						case "sector":
-							tileSpace.Sector = ParseIntegerNumberAssignment( lexer, "TileSpace.Sector" );
-							break;
-						case "zone":
-							tileSpace.Zone = ParseIntegerNumberAssignment( lexer, "TileSpace.Zone" );
-							break;
-						case "tag":
-							tileSpace.Tag = ParseIntegerNumberAssignment( lexer, "TileSpace.Tag" );
-							break;
-						default:
-							lexer.MovePastAssignment();
-							break;
-					}
-				}
-				else
-				{
-					throw new ParsingException("Unexpected token in TileSpace.");
-				}
-            }
-
-			tileSpace.CheckSemanticValidity();
-			return tileSpace;
 		}
 
 		private static PlaneMap ParsePlaneMap( ILexer lexer )
@@ -232,6 +196,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
             {
                 throw new ParsingException("Expecting start of block when parsing PlaneMap.");
             }
+            lexer.AdvanceOneCharacter();
 
 			TokenType nextToken;
             while ((nextToken = lexer.DetermineNextToken()) != TokenType.EndBlock)
@@ -253,6 +218,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 					throw new ParsingException("Unexpected token in PlaneMap.");
 				}
             }
+			lexer.AdvanceOneCharacter();
 
 			planeMap.CheckSemanticValidity();
 			return planeMap;
@@ -266,6 +232,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
             {
                 throw new ParsingException("Expecting start of block when parsing Thing.");
             }
+            lexer.AdvanceOneCharacter();
 
 			TokenType nextToken;
             while ((nextToken = lexer.DetermineNextToken()) != TokenType.EndBlock)
@@ -320,6 +287,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 					throw new ParsingException("Unexpected token in Thing.");
 				}
             }
+			lexer.AdvanceOneCharacter();
 
 			thing.CheckSemanticValidity();
 			return thing;
@@ -333,6 +301,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
             {
                 throw new ParsingException("Expecting start of block when parsing Trigger.");
             }
+            lexer.AdvanceOneCharacter();
 
 			TokenType nextToken;
             while ((nextToken = lexer.DetermineNextToken()) != TokenType.EndBlock)
@@ -405,6 +374,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 					throw new ParsingException("Unexpected token in Trigger.");
 				}
             }
+			lexer.AdvanceOneCharacter();
 
 			trigger.CheckSemanticValidity();
 			return trigger;

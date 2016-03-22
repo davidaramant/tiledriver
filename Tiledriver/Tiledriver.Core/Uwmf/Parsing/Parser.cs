@@ -9,39 +9,57 @@ namespace Tiledriver.Core.Uwmf.Parsing
     {
         public static Map Parse(ILexer lexer)
         {
-            var map = new Map();
+            return ParseMap(lexer);
+        }
 
-            TokenType nextToken;
-            while ((nextToken = lexer.DetermineNextToken()) != TokenType.EndOfFile)
+        /// <remarks>
+        /// A TileSpace is a comma-separated list of numbers, unlike every other block.
+        /// </remarks>
+        private static TileSpace ParseTileSpace(ILexer lexer)
+        {
+            var tileSpace = new TileSpace();
+
+            if (lexer.DetermineNextToken() != TokenType.StartBlock)
             {
-                if (nextToken != TokenType.Identifier)
-                {
-                    throw new ParsingException("Expecting identifier when parsing map.");
-                }
+                throw new ParsingException("Expecting start of block when parsing Sector.");
+            }
+            lexer.AdvanceOneCharacter();
 
-                var identifier = lexer.ReadIdentifier();
-                if (identifier.Name == "namespace")
-                {
-                    if (lexer.DetermineNextToken() != TokenType.Assignment)
-                    {
-                        throw new ParsingException("Expecting assignment of map.namespace");
-                    }
-                    lexer.MovePastAssignment();
-                    map.Namespace = lexer.ReadString();
-                    if (lexer.DetermineNextToken() != TokenType.EndOfAssignment)
-                    {
-                        throw new ParsingException("Expecting assignment of map.namespace");
-                    }
-                    lexer.MovePastAssignment();
-                }
+            if (lexer.DetermineNextToken() != TokenType.Unknown)
+            {
+                throw new ParsingException("Expected Tile number in TileSpace");
+            }
+            tileSpace.Tile = lexer.ReadIntegerNumber();
 
+            if (lexer.DetermineNextToken() != TokenType.Unknown)
+            {
+                throw new ParsingException("Expected Sector number in TileSpace");
+            }
+            tileSpace.Sector = lexer.ReadIntegerNumber();
+
+            if (lexer.DetermineNextToken() != TokenType.Unknown)
+            {
+                throw new ParsingException("Expected Zone number in TileSpace");
+            }
+            tileSpace.Zone = lexer.ReadIntegerNumber();
+
+            var nextToken = lexer.DetermineNextToken();
+            if (nextToken == TokenType.Comma)
+            {
+                tileSpace.Tag = lexer.ReadIntegerNumber();
                 nextToken = lexer.DetermineNextToken();
             }
 
-            map.CheckSemanticValidity();
+            if (nextToken != TokenType.EndBlock)
+            {
+                throw  new ParsingException("Unexpected token in TileSpace");
+            }
+            lexer.AdvanceOneCharacter();
 
-            return map;
+            tileSpace.CheckSemanticValidity();
+            return tileSpace;
         }
+
 
         private static int ParseIntegerNumberAssignment(ILexer lexer, string context)
         {

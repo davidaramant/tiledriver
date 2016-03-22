@@ -17,9 +17,8 @@ namespace Tiledriver.Core.Uwmf.Parsing
 {
     public static partial class Parser
     {
-
 <#
-foreach( var block in UwmfDefinitions.Blocks )
+foreach( var block in UwmfDefinitions.Blocks.Where( _ => _.NormalWriting ) )
 {
 #>
 		private static <#= block.PascalCaseName #> Parse<#= block.PascalCaseName #>( ILexer lexer )
@@ -36,6 +35,7 @@ foreach( var block in UwmfDefinitions.Blocks )
             {
                 throw new ParsingException("Expecting start of block when parsing <#= block.PascalCaseName #>.");
             }
+            lexer.AdvanceOneCharacter();
 
 <#
 	}
@@ -79,6 +79,14 @@ foreach( var block in UwmfDefinitions.Blocks )
 					throw new ParsingException("Unexpected token in <#= block.PascalCaseName #>.");
 				}
             }
+<#
+	if( block.IsSubBlock )
+	{
+#>
+			lexer.AdvanceOneCharacter();
+<#
+	}
+#>
 
 			<#= block.CamelCaseName #>.CheckSemanticValidity();
 			return <#= block.CamelCaseName #>;
