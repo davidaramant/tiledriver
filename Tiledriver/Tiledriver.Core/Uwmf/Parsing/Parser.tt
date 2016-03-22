@@ -1,0 +1,78 @@
+﻿<#
+// Copyright (c) 2016 David Aramant
+// Distributed under the GNU GPL v2. For full terms see the file LICENSE.
+#>
+<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="$(SolutionDir)Tiledriver.UwmfMetadata\bin\$(Configuration)\Tiledriver.UwmfMetadata.dll" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="Tiledriver.UwmfMetadata" #>
+<#@ output extension="Generated.cs" #>
+// Copyright (c) 2016 David Aramant
+// Distributed under the GNU GPL v2. For full terms see the file LICENSE.
+
+namespace Tiledriver.Core.Uwmf.Parsing
+{
+    public static partial class Parser
+    {
+
+<#
+foreach( var block in UwmfDefinitions.Blocks )
+{
+#>
+		private static <#= block.PascalCaseName #> Parse<#= block.PascalCaseName #>( ILexer lexer )
+		{
+			var <#= block.CamelCaseName #> = new <#= block.PascalCaseName #>();
+
+			if (lexer.DetermineNextToken() != TokenType.StartBlock)
+            {
+                throw new ParsingException("Expecting start of block when parsing <#= block.PascalCaseName #>.");
+            }
+
+			TokenType nextToken;
+            while ((nextToken = lexer.DetermineNextToken()) != TokenType.EndBlock)
+            {
+				if( nextToken == TokenType.Identifier )
+				{
+		            switch( lexer.ReadIdentifier().Name.ToLowerInvariant() )
+					{
+<#
+	foreach( var property in block.Properties )
+	{
+#>
+						case "<#= property.LowerInvariantName #>":
+							<#= block.CamelCaseName #>.<#= property.PascalCaseName #> = Parse<#= property.TypeName #>Assignment( lexer, "<#= block.PascalCaseName #>.<#= property.PascalCaseName #>" );
+							break;
+<#
+	}
+	foreach( var subBlock in block.SubBlocks )
+	{
+#>
+						case "<#= subBlock.LowerInvariantName #>":
+							<#= block.CamelCaseName #>.<#= subBlock.PluralPascalCaseName #>.Add(Parse<#= subBlock.PascalCaseName #>(lexer));
+							break;
+<#
+	}
+#>
+						default:
+							lexer.MovePastAssignment();
+							break;
+					}
+				}
+				else
+				{
+					throw new ParsingException("Unexpected token in <#= block.PascalCaseName #>.");
+				}
+            }
+
+			<#= block.CamelCaseName #>.CheckSemanticValidity();
+			return <#= block.CamelCaseName #>;
+		}
+
+<#
+}
+#>
+	}
+}

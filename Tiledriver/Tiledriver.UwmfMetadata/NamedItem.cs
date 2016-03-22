@@ -16,5 +16,6 @@ namespace Tiledriver.UwmfMetadata
         public string PascalCaseName => Char.ToUpperInvariant(CamelCaseName[0]) + CamelCaseName.Substring(1);
         public string PluralPascalCaseName => PascalCaseName + "s";
         public string FieldName => "_" + CamelCaseName;
+        public string LowerInvariantName => CamelCaseName.ToLowerInvariant();
     }
 }

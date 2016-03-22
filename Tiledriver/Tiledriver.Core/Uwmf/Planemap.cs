@@ -10,6 +10,7 @@ namespace Tiledriver.Core.Uwmf
 {
     public partial class PlaneMap
     {
+        public PlaneMap() { }
         public PlaneMap(IEnumerable<TileSpace> spaces)
         {
             TileSpaces.AddRange(spaces);

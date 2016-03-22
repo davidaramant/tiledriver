@@ -37,6 +37,26 @@ namespace Tiledriver.UwmfMetadata
             }
         }
 
+        public string TypeName
+        {
+            get
+            {
+                switch (Type)
+                {
+                    case PropertyType.Boolean:
+                        return "Boolean";
+                    case PropertyType.FloatingPointNumber:
+                        return "FloatingPointNumber";
+                    case PropertyType.IntegerNumber:
+                        return "IntegerNumber";
+                    case PropertyType.String:
+                        return "String";
+                    default:
+                        throw new NotImplementedException("Unknown property type.");
+                }
+            }
+        }
+
         private readonly object _defaultValue;
 
         public string DefaultAsString

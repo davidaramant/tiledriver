@@ -9,7 +9,7 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="Tiledriver.UwmfMetadata" #>
-<#@ output extension=".cs" #>
+<#@ output extension="Generated.cs" #>
 // Copyright (c) 2016 David Aramant
 // Distributed under the GNU GPL v2. For full terms see the file LICENSE.
 

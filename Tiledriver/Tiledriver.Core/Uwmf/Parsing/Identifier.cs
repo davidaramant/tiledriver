@@ -10,8 +10,6 @@ namespace Tiledriver.Core.Uwmf.Parsing
     public sealed class Identifier
     {
         public string Name { get; }
-        public string NameWithFirstCapitalized => Char.ToUpperInvariant(Name[0]) + Name.Substring(1);
-        public string NameAsField => "_" + Name;
 
         public Identifier(string name)
         {
@@ -21,6 +19,11 @@ namespace Tiledriver.Core.Uwmf.Parsing
         public override string ToString()
         {
             return Name;
+        }
+
+        public bool Matches(string otherName)
+        {
+            return string.Equals(Name, otherName, StringComparison.OrdinalIgnoreCase);
         }
 
         #region Equality members
