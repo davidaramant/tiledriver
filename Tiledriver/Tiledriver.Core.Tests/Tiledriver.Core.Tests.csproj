@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Uwmf\Parsing\LexerTests.cs" />
+    <Compile Include="Uwmf\Parsing\ParserTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tiledriver.Core\Tiledriver.Core.csproj">
