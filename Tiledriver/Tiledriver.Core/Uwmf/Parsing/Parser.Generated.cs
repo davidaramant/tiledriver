@@ -65,6 +65,9 @@ namespace Tiledriver.Core.Uwmf.Parsing
 						case "textureoverhead":
 							tile.TextureOverhead = ParseStringAssignment( lexer, "Tile.TextureOverhead" );
 							break;
+						case "comment":
+							tile.Comment = ParseStringAssignment( lexer, "Tile.Comment" );
+							break;
 						default:
 							lexer.MovePastAssignment();
 							break;
@@ -105,6 +108,9 @@ namespace Tiledriver.Core.Uwmf.Parsing
 						case "texturefloor":
 							sector.TextureFloor = ParseStringAssignment( lexer, "Sector.TextureFloor" );
 							break;
+						case "comment":
+							sector.Comment = ParseStringAssignment( lexer, "Sector.Comment" );
+							break;
 						default:
 							lexer.MovePastAssignment();
 							break;
@@ -139,6 +145,9 @@ namespace Tiledriver.Core.Uwmf.Parsing
 				{
 		            switch( lexer.ReadIdentifier().ToString() )
 					{
+						case "comment":
+							zone.Comment = ParseStringAssignment( lexer, "Zone.Comment" );
+							break;
 						default:
 							lexer.MovePastAssignment();
 							break;
@@ -175,6 +184,9 @@ namespace Tiledriver.Core.Uwmf.Parsing
 					{
 						case "depth":
 							plane.Depth = ParseIntegerNumberAssignment( lexer, "Plane.Depth" );
+							break;
+						case "comment":
+							plane.Comment = ParseStringAssignment( lexer, "Plane.Comment" );
 							break;
 						default:
 							lexer.MovePastAssignment();
@@ -245,6 +257,9 @@ namespace Tiledriver.Core.Uwmf.Parsing
 							break;
 						case "skill5":
 							thing.Skill5 = ParseBooleanAssignment( lexer, "Thing.Skill5" );
+							break;
+						case "comment":
+							thing.Comment = ParseStringAssignment( lexer, "Thing.Comment" );
 							break;
 						default:
 							lexer.MovePastAssignment();
@@ -333,6 +348,9 @@ namespace Tiledriver.Core.Uwmf.Parsing
 							break;
 						case "secret":
 							trigger.Secret = ParseBooleanAssignment( lexer, "Trigger.Secret" );
+							break;
+						case "comment":
+							trigger.Comment = ParseStringAssignment( lexer, "Trigger.Comment" );
 							break;
 						default:
 							lexer.MovePastAssignment();

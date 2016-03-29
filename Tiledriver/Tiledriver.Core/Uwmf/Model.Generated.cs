@@ -63,6 +63,7 @@ namespace Tiledriver.Core.Uwmf
         public int Mapped { get; set; } = 0;
         public string SoundSequence { get; set; } = "";
         public string TextureOverhead { get; set; } = "";
+        public string Comment { get; set; } = "";
 
         public Stream WriteTo(Stream stream)
         {
@@ -70,10 +71,10 @@ namespace Tiledriver.Core.Uwmf
 
             WriteLine( stream, "tile");
             WriteLine( stream, "{");
-            WriteAttribute( stream,  "textureEast", _textureEast, indent: true );
-            WriteAttribute( stream,  "textureNorth", _textureNorth, indent: true );
-            WriteAttribute( stream,  "textureWest", _textureWest, indent: true );
-            WriteAttribute( stream,  "textureSouth", _textureSouth, indent: true );
+            WriteAttribute( stream, "textureEast", _textureEast, indent: true );
+            WriteAttribute( stream, "textureNorth", _textureNorth, indent: true );
+            WriteAttribute( stream, "textureWest", _textureWest, indent: true );
+            WriteAttribute( stream, "textureSouth", _textureSouth, indent: true );
             if( BlockingEast != true )
             {
                 WriteAttribute( stream, "blockingEast", BlockingEast, indent: true );
@@ -113,6 +114,10 @@ namespace Tiledriver.Core.Uwmf
             if( TextureOverhead != "" )
             {
                 WriteAttribute( stream, "textureOverhead", TextureOverhead, indent: true );
+            }
+            if( Comment != "" )
+            {
+                WriteAttribute( stream, "comment", Comment, indent: true );
             }
             WriteLine( stream, "}");
                 
@@ -168,6 +173,7 @@ namespace Tiledriver.Core.Uwmf
                 _textureFloor = value;
             }
         }
+        public string Comment { get; set; } = "";
 
         public Stream WriteTo(Stream stream)
         {
@@ -175,8 +181,12 @@ namespace Tiledriver.Core.Uwmf
 
             WriteLine( stream, "sector");
             WriteLine( stream, "{");
-            WriteAttribute( stream,  "textureCeiling", _textureCeiling, indent: true );
-            WriteAttribute( stream,  "textureFloor", _textureFloor, indent: true );
+            WriteAttribute( stream, "textureCeiling", _textureCeiling, indent: true );
+            WriteAttribute( stream, "textureFloor", _textureFloor, indent: true );
+            if( Comment != "" )
+            {
+                WriteAttribute( stream, "comment", Comment, indent: true );
+            }
             WriteLine( stream, "}");
                 
             return stream;
@@ -201,6 +211,7 @@ namespace Tiledriver.Core.Uwmf
     public sealed partial class Zone : BaseUwmfBlock, IWriteableUwmfBlock 
     {
 
+        public string Comment { get; set; } = "";
 
         public Stream WriteTo(Stream stream)
         {
@@ -208,6 +219,10 @@ namespace Tiledriver.Core.Uwmf
 
             WriteLine( stream, "zone");
             WriteLine( stream, "{");
+            if( Comment != "" )
+            {
+                WriteAttribute( stream, "comment", Comment, indent: true );
+            }
             WriteLine( stream, "}");
                 
             return stream;
@@ -235,6 +250,7 @@ namespace Tiledriver.Core.Uwmf
                 _depth = value;
             }
         }
+        public string Comment { get; set; } = "";
 
         public Stream WriteTo(Stream stream)
         {
@@ -242,7 +258,11 @@ namespace Tiledriver.Core.Uwmf
 
             WriteLine( stream, "plane");
             WriteLine( stream, "{");
-            WriteAttribute( stream,  "depth", _depth, indent: true );
+            WriteAttribute( stream, "depth", _depth, indent: true );
+            if( Comment != "" )
+            {
+                WriteAttribute( stream, "comment", Comment, indent: true );
+            }
             WriteLine( stream, "}");
                 
             return stream;
@@ -408,6 +428,7 @@ namespace Tiledriver.Core.Uwmf
         public bool Skill3 { get; set; } = false;
         public bool Skill4 { get; set; } = false;
         public bool Skill5 { get; set; } = false;
+        public string Comment { get; set; } = "";
 
         public Stream WriteTo(Stream stream)
         {
@@ -415,11 +436,11 @@ namespace Tiledriver.Core.Uwmf
 
             WriteLine( stream, "thing");
             WriteLine( stream, "{");
-            WriteAttribute( stream,  "type", _type, indent: true );
-            WriteAttribute( stream,  "x", _x, indent: true );
-            WriteAttribute( stream,  "y", _y, indent: true );
-            WriteAttribute( stream,  "z", _z, indent: true );
-            WriteAttribute( stream,  "angle", _angle, indent: true );
+            WriteAttribute( stream, "type", _type, indent: true );
+            WriteAttribute( stream, "x", _x, indent: true );
+            WriteAttribute( stream, "y", _y, indent: true );
+            WriteAttribute( stream, "z", _z, indent: true );
+            WriteAttribute( stream, "angle", _angle, indent: true );
             if( Ambush != false )
             {
                 WriteAttribute( stream, "ambush", Ambush, indent: true );
@@ -447,6 +468,10 @@ namespace Tiledriver.Core.Uwmf
             if( Skill5 != false )
             {
                 WriteAttribute( stream, "skill5", Skill5, indent: true );
+            }
+            if( Comment != "" )
+            {
+                WriteAttribute( stream, "comment", Comment, indent: true );
             }
             WriteLine( stream, "}");
                 
@@ -542,6 +567,7 @@ namespace Tiledriver.Core.Uwmf
         public bool MonsterUse { get; set; } = false;
         public bool Repeatable { get; set; } = false;
         public bool Secret { get; set; } = false;
+        public string Comment { get; set; } = "";
 
         public Stream WriteTo(Stream stream)
         {
@@ -549,10 +575,10 @@ namespace Tiledriver.Core.Uwmf
 
             WriteLine( stream, "trigger");
             WriteLine( stream, "{");
-            WriteAttribute( stream,  "x", _x, indent: true );
-            WriteAttribute( stream,  "y", _y, indent: true );
-            WriteAttribute( stream,  "z", _z, indent: true );
-            WriteAttribute( stream,  "action", _action, indent: true );
+            WriteAttribute( stream, "x", _x, indent: true );
+            WriteAttribute( stream, "y", _y, indent: true );
+            WriteAttribute( stream, "z", _z, indent: true );
+            WriteAttribute( stream, "action", _action, indent: true );
             if( Arg0 != 0 )
             {
                 WriteAttribute( stream, "arg0", Arg0, indent: true );
@@ -608,6 +634,10 @@ namespace Tiledriver.Core.Uwmf
             if( Secret != false )
             {
                 WriteAttribute( stream, "secret", Secret, indent: true );
+            }
+            if( Comment != "" )
+            {
+                WriteAttribute( stream, "comment", Comment, indent: true );
             }
             WriteLine( stream, "}");
                 
@@ -708,11 +738,11 @@ namespace Tiledriver.Core.Uwmf
         {
             CheckSemanticValidity();
 
-            WriteAttribute( stream,  "namespace", _namespace, indent: false );
-            WriteAttribute( stream,  "tileSize", _tileSize, indent: false );
-            WriteAttribute( stream,  "name", _name, indent: false );
-            WriteAttribute( stream,  "width", _width, indent: false );
-            WriteAttribute( stream,  "height", _height, indent: false );
+            WriteAttribute( stream, "namespace", _namespace, indent: false );
+            WriteAttribute( stream, "tileSize", _tileSize, indent: false );
+            WriteAttribute( stream, "name", _name, indent: false );
+            WriteAttribute( stream, "width", _width, indent: false );
+            WriteAttribute( stream, "height", _height, indent: false );
             WriteBlocks( stream,  Tiles );
             WriteBlocks( stream,  Sectors );
             WriteBlocks( stream,  Zones );

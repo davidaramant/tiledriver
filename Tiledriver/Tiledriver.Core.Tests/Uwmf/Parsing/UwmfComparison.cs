@@ -80,6 +80,11 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
 				Is.EqualTo( expected.TextureOverhead ),
 				"Found difference in Tile TextureOverhead" );
 
+			Assert.That(
+				actual.Comment,
+				Is.EqualTo( expected.Comment ),
+				"Found difference in Tile Comment" );
+
 		}
 
 		public static void AssertEqual( Sector actual, Sector expected )
@@ -94,10 +99,20 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
 				Is.EqualTo( expected.TextureFloor ),
 				"Found difference in Sector TextureFloor" );
 
+			Assert.That(
+				actual.Comment,
+				Is.EqualTo( expected.Comment ),
+				"Found difference in Sector Comment" );
+
 		}
 
 		public static void AssertEqual( Zone actual, Zone expected )
 		{
+			Assert.That(
+				actual.Comment,
+				Is.EqualTo( expected.Comment ),
+				"Found difference in Zone Comment" );
+
 		}
 
 		public static void AssertEqual( Plane actual, Plane expected )
@@ -106,6 +121,11 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
 				actual.Depth,
 				Is.EqualTo( expected.Depth ),
 				"Found difference in Plane Depth" );
+
+			Assert.That(
+				actual.Comment,
+				Is.EqualTo( expected.Comment ),
+				"Found difference in Plane Comment" );
 
 		}
 
@@ -211,6 +231,11 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
 				Is.EqualTo( expected.Skill5 ),
 				"Found difference in Thing Skill5" );
 
+			Assert.That(
+				actual.Comment,
+				Is.EqualTo( expected.Comment ),
+				"Found difference in Thing Comment" );
+
 		}
 
 		public static void AssertEqual( Trigger actual, Trigger expected )
@@ -304,6 +329,11 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
 				actual.Secret,
 				Is.EqualTo( expected.Secret ),
 				"Found difference in Trigger Secret" );
+
+			Assert.That(
+				actual.Comment,
+				Is.EqualTo( expected.Comment ),
+				"Found difference in Trigger Comment" );
 
 		}
 

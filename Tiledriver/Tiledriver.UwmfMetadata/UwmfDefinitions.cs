@@ -24,13 +24,17 @@ namespace Tiledriver.UwmfMetadata
                 HasOptionalBoolean("dontOverlay", false).
                 HasOptionalIntegerNumber("mapped", 0).
                 HasOptionalString("soundSequence", String.Empty).
-                HasOptionalString("textureOverhead", String.Empty),
+                HasOptionalString("textureOverhead", String.Empty).
+                HasOptionalString("comment", String.Empty),
             new UwmfBlock("sector").
                 HasRequiredString("textureCeiling").
-                HasRequiredString("textureFloor"),
-            new UwmfBlock("zone"),
+                HasRequiredString("textureFloor").
+                HasOptionalString("comment", String.Empty),
+            new UwmfBlock("zone").
+                HasOptionalString("comment", String.Empty),
             new UwmfBlock("plane").
-                HasRequiredIntegerNumber("depth"),
+                HasRequiredIntegerNumber("depth").
+                HasOptionalString("comment", String.Empty),
             new UwmfBlock("tileSpace").
                 HasRequiredIntegerNumber("tile").
                 HasRequiredIntegerNumber("sector").
@@ -53,7 +57,8 @@ namespace Tiledriver.UwmfMetadata
                 HasOptionalBoolean("skill2", false).
                 HasOptionalBoolean("skill3", false).
                 HasOptionalBoolean("skill4", false).
-                HasOptionalBoolean("skill5", false),
+                HasOptionalBoolean("skill5", false).
+                HasOptionalString("comment", String.Empty),
             new UwmfBlock("trigger").
                 HasRequiredIntegerNumber("x").
                 HasRequiredIntegerNumber("y").
@@ -72,7 +77,8 @@ namespace Tiledriver.UwmfMetadata
                 HasOptionalBoolean("playerUse", false).
                 HasOptionalBoolean("monsterUse", false).
                 HasOptionalBoolean("repeatable", false).
-                HasOptionalBoolean("secret", false),
+                HasOptionalBoolean("secret", false).
+                HasOptionalString("comment", String.Empty),
             new UwmfBlock("map").
                 HasRequiredString("namespace").
                 HasRequiredIntegerNumber("tileSize").

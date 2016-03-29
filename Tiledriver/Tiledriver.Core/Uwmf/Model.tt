@@ -89,7 +89,7 @@ foreach( var blockDefinition in UwmfDefinitions.Blocks )
     foreach( var property in blockDefinition.Properties.Where( _ => _.IsRequired ) )
     {
 #>
-            WriteAttribute( stream,  "<#= property.CamelCaseName #>", <#= property.FieldName #>, indent: <#= indent #> );
+            WriteAttribute( stream, "<#= property.CamelCaseName #>", <#= property.FieldName #>, indent: <#= indent #> );
 <#
     }
     // WRITE OPTIONAL PROPERTIES
