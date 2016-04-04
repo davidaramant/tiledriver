@@ -17,13 +17,13 @@ namespace Tiledriver.UwmfMetadata
         public bool NormalWriting { get; private set; } = true;
         public bool NormalReading { get; private set; } = true;
 
-        public UwmfBlock(string name, params UwmfProperty[] properties) : base(name)
+        public UwmfBlock(string name, params UwmfProperty[] properties) : base(name,name)
         {
         }
 
         public UwmfBlock HasSubBlocks(params string[] names)
         {
-            _subBlocks.AddRange(names.Select(_ => new NamedItem(_)));
+            _subBlocks.AddRange(names.Select(_ => new NamedItem(_,_)));
             return this;
         }
 
@@ -47,49 +47,50 @@ namespace Tiledriver.UwmfMetadata
 
         public UwmfBlock HasRequiredIntegerNumber(string name)
         {
-            _properties.Add(new UwmfProperty(name, PropertyType.IntegerNumber, defaultValue: null));
+            _properties.Add(new UwmfProperty(name, name, PropertyType.IntegerNumber, defaultValue: null));
             return this;
         }
 
         public UwmfBlock HasRequiredFloatingPointNumber(string name)
         {
-            _properties.Add(new UwmfProperty(name, PropertyType.FloatingPointNumber, defaultValue: null));
+            _properties.Add(new UwmfProperty(name, name, PropertyType.FloatingPointNumber, defaultValue: null));
             return this;
         }
 
-        public UwmfBlock HasRequiredString(string name)
+        public UwmfBlock HasRequiredString(string name, string uwmfName = null)
         {
-            _properties.Add(new UwmfProperty(name, PropertyType.String, defaultValue: null));
+            // 'namespace' is currently the only name that needs special handling.
+            _properties.Add(new UwmfProperty(name, uwmfName ?? name, PropertyType.String, defaultValue: null));
             return this;
         }
 
         public UwmfBlock HasRequiredBoolean(string name)
         {
-            _properties.Add(new UwmfProperty(name, PropertyType.Boolean, defaultValue: null));
+            _properties.Add(new UwmfProperty(name, name, PropertyType.Boolean, defaultValue: null));
             return this;
         }
 
         public UwmfBlock HasOptionalIntegerNumber(string name, int defaultValue)
         {
-            _properties.Add(new UwmfProperty(name, PropertyType.IntegerNumber, defaultValue: defaultValue));
+            _properties.Add(new UwmfProperty(name, name, PropertyType.IntegerNumber, defaultValue: defaultValue));
             return this;
         }
 
         public UwmfBlock HasOptionalFloatingPointNumber(string name, double defaultValue)
         {
-            _properties.Add(new UwmfProperty(name, PropertyType.FloatingPointNumber, defaultValue: defaultValue));
+            _properties.Add(new UwmfProperty(name, name, PropertyType.FloatingPointNumber, defaultValue: defaultValue));
             return this;
         }
 
         public UwmfBlock HasOptionalString(string name, string defaultValue)
         {
-            _properties.Add(new UwmfProperty(name, PropertyType.String, defaultValue: defaultValue));
+            _properties.Add(new UwmfProperty(name, name, PropertyType.String, defaultValue: defaultValue));
             return this;
         }
 
         public UwmfBlock HasOptionalBoolean(string name, bool defaultValue)
         {
-            _properties.Add(new UwmfProperty(name, PropertyType.Boolean, defaultValue: defaultValue));
+            _properties.Add(new UwmfProperty(name, name, PropertyType.Boolean, defaultValue: defaultValue));
             return this;
         }
     }

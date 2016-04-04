@@ -13,52 +13,53 @@ namespace Tiledriver.Core
         public static Map Create()
         {
             var map = new Map
-            {
-                Namespace = "Wolf3D",
-                Name = "Test Output",
-                Width = 64,
-                Height = 64,
-                TileSize = 64,
-                Tiles =
+            (
+                nameSpace: "Wolf3D",
+                name: "Test Output",
+                width: 64,
+                height: 64,
+                tileSize: 64,
+                tiles: new[]
                 {
                     new Tile
-                    {
-                        TextureNorth = "GSTONEA1",
-                        TextureSouth = "GSTONEA1",
-                        TextureEast = "GSTONEA2",
-                        TextureWest = "GSTONEA2",
-                    },
+                    (
+                        textureNorth: "GSTONEA1",
+                        textureSouth: "GSTONEA1",
+                        textureEast: "GSTONEA2",
+                        textureWest: "GSTONEA2"
+                    ),
                 },
-                Sectors =
+                sectors: new[]
                 {
                     new Sector
-                    {
-                        TextureCeiling = "#C0C0C0",
-                        TextureFloor = "#A0A0A0",
-                    }
+                    (
+                        textureCeiling: "#C0C0C0",
+                        textureFloor: "#A0A0A0"
+                    )
                 },
-                Zones =
+                zones: new[]
                 {
-                    new Zone { },
+                    new Zone(),
                 },
-                Planes = { new Plane { Depth = 64 } },
-                PlaneMaps = { new PlaneMap( CreateGeometry(width: 64, height: 64) )},
-                Things =
+                planes: new[] { new Plane(depth: 64) },
+                planeMaps: new[] { new PlaneMap(CreateGeometry(width: 64, height: 64)) },
+                things: new[]
                 {
                     new Thing
-                    {
-                        Type = WolfActor.Player1Start.Id,
-                        X = 1.5,
-                        Y = 1.5,
-                        Z = 0,
-                        Angle = 0,
-                        Skill1 = true,
-                        Skill2 = true,
-                        Skill3 = true,
-                        Skill4 = true,
-                    },
-                }
-            };
+                    (
+                        type: WolfActor.Player1Start.Id,
+                        x: 1.5,
+                        y: 1.5,
+                        z: 0,
+                        angle: 0,
+                        skill1: true,
+                        skill2: true,
+                        skill3: true,
+                        skill4: true
+                    ),
+                },
+                triggers: new Trigger[] { }
+            );
 
             return map;
         }

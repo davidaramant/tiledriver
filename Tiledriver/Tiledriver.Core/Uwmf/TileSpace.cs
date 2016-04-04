@@ -7,16 +7,6 @@ namespace Tiledriver.Core.Uwmf
 {
     public partial class TileSpace
     {
-        public TileSpace() { }
-
-        public TileSpace(int tile, int sector, int zone, int tag = 0)
-        {
-            Tile = tile;
-            Sector = sector;
-            Zone = zone;
-            Tag = tag;
-        }
-
         public string AsString()
         {
             CheckSemanticValidity();

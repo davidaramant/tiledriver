@@ -79,11 +79,29 @@ namespace Tiledriver.UwmfMetadata
                         throw new NotImplementedException("Unknown property type.");
                 }
             }
-        } 
+        }
+
+        public string DefaultAssignment
+        {
+            get
+            {
+                if (IsRequired)
+                    return String.Empty;
+
+                return $" = {DefaultAsString}";
+            }
+        }
 
         public bool IsRequired => _defaultValue == null;
 
-        public UwmfProperty(string name, PropertyType type, object defaultValue = null) : base(name)
+        public UwmfProperty(
+                string name, 
+                string uwmfName, 
+                PropertyType type, 
+                object defaultValue = null) : 
+                    base(
+                        uwmfName:uwmfName, 
+                        name:name)
         {
             Type = type;
             _defaultValue = defaultValue;

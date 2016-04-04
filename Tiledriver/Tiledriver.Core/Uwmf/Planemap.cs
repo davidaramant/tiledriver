@@ -10,12 +10,6 @@ namespace Tiledriver.Core.Uwmf
 {
     public partial class PlaneMap
     {
-        public PlaneMap() { }
-        public PlaneMap(IEnumerable<TileSpace> spaces)
-        {
-            TileSpaces.AddRange(spaces);
-        }
-
         private static void WriteBlocks(Stream stream, IEnumerable<TileSpace> tileSpaces)
         {
             WriteLine(stream, String.Join(",\n", tileSpaces.Select(_ => _.AsString())));

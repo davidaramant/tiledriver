@@ -19,25 +19,32 @@ using System.IO;
 namespace Tiledriver.Core.Uwmf
 {
 <#
-foreach( var blockDefinition in UwmfDefinitions.Blocks )
+foreach( var block in UwmfDefinitions.Blocks )
 {
 #>
-    public sealed partial class <#= blockDefinition.PascalCaseName #> : BaseUwmfBlock<# if( blockDefinition.NormalWriting ) { #>, IWriteableUwmfBlock<# }#> 
+    public sealed partial class <#= block.PascalCaseName #> : BaseUwmfBlock<# if( block.NormalWriting ) { #>, IWriteableUwmfBlock<# }#> 
     {
 <#
-    // WRITE REQUIRED FIELDS
-    foreach( var property in blockDefinition.Properties.Where( _ => _.IsRequired ) )
+    // ###################
+    // # REQUIRED FIELDS #
+    // ###################
+    foreach( var property in block.Properties.Where( _ => _.IsRequired ) )
     {
 #>
         private bool <#= property.FieldName #>HasBeenSet = false;
         private <#= property.TypeString #> <#= property.FieldName #>;
 <#
     }
+    // #######################
+    // # END REQUIRED FIELDS #
+    // #######################
 #>
 
 <#
-    // WRITE REQUIRED PROPERTIES
-    foreach( var property in blockDefinition.Properties.Where( _ => _.IsRequired ) )
+    // #######################
+    // # REQUIRED PROPERTIES #
+    // #######################
+    foreach( var property in block.Properties.Where( _ => _.IsRequired ) )
     {
 #>
         public <#= property.TypeString #> <#= property.PascalCaseName #>
@@ -51,22 +58,88 @@ foreach( var blockDefinition in UwmfDefinitions.Blocks )
         }
 <#
     }
-    // WRITE OPTIONAL PROPERTIES
-    foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired ) )
+    // ###########################
+    // # END REQUIRED PROPERTIES #
+    // ###########################
+
+    // #######################
+    // # OPTIONAL PROPERTIES #
+    // #######################
+    foreach( var property in block.Properties.Where( _ => !_.IsRequired ) )
     {
 #>
         public <#= property.TypeString #> <#= property.PascalCaseName #> { get; set; } = <#= property.DefaultAsString #>;
 <#
     }
-    // WRITE SUBBLOCKS
-    foreach( var subBlock in blockDefinition.SubBlocks )
+    // ###########################
+    // # END OPTIONAL PROPERTIES #
+    // ###########################
+
+    // #############
+    // # SUBBLOCKS #
+    // #############
+    foreach( var subBlock in block.SubBlocks )
     {
 #>
         public readonly List<<#= subBlock.PascalCaseName #>> <#= subBlock.PluralPascalCaseName #> = new List<<#= subBlock.PascalCaseName #>>();
 <#
     }
+    // #################
+    // # END SUBBLOCKS #
+    // #################
 
-    if( blockDefinition.NormalWriting ) 
+    // ################
+    // # CONSTRUCTORS #
+    // ################
+#>
+
+        public <#= block.PascalCaseName #>() { }
+
+        public <#= block.PascalCaseName #>(
+<#
+    var allParams = 
+        block.Properties.Select( 
+            p => $"{new string(' ', 12)}{p.TypeString} {p.CamelCaseName}{p.DefaultAssignment}" ).ToList();
+
+    foreach( var subBlock in block.SubBlocks )
+    {
+        allParams.Add( $"{new string(' ',12)}IEnumerable<{subBlock.PascalCaseName}> {subBlock.PluralCamelCaseName}" );
+    }
+
+    var constructorParams = 
+        String.Join( 
+            "," + Environment.NewLine, 
+            allParams );
+#>
+<#= constructorParams #>)
+        {
+<#
+    foreach( var property in block.Properties )
+    {
+#>
+            <#= property.PascalCaseName #> = <#= property.CamelCaseName #>;
+<#
+    }
+    foreach( var subBlock in block.SubBlocks )
+    {
+#>
+            <#= subBlock.PluralPascalCaseName #>.AddRange( <#= subBlock.PluralCamelCaseName #> );
+<#
+    }
+#>
+
+            AdditionalSemanticChecks();
+        }
+<#
+    // ####################
+    // # END CONSTRUCTORS #
+    // ####################
+
+    // ##################
+    // # WRITETO METHOD #
+    // ##################
+
+    if( block.NormalWriting ) 
     { 
 #>
 
@@ -75,42 +148,42 @@ foreach( var blockDefinition in UwmfDefinitions.Blocks )
             CheckSemanticValidity();
 
 <#
-	var indent = blockDefinition.IsSubBlock ? "true" : "false";
+    var indent = block.IsSubBlock ? "true" : "false";
 
-    if( blockDefinition.IsSubBlock )
+    if( block.IsSubBlock )
     {
 #>
-            WriteLine( stream, "<#= blockDefinition.CamelCaseName #>");
+            WriteLine( stream, "<#= block.UwmfName #>");
             WriteLine( stream, "{");
 <#
     }
 
     // WRITE ALL REQUIRED PROPERTIES
-    foreach( var property in blockDefinition.Properties.Where( _ => _.IsRequired ) )
+    foreach( var property in block.Properties.Where( _ => _.IsRequired ) )
     {
 #>
-            WriteAttribute( stream, "<#= property.CamelCaseName #>", <#= property.FieldName #>, indent: <#= indent #> );
+            WriteAttribute( stream, "<#= property.UwmfName #>", <#= property.FieldName #>, indent: <#= indent #> );
 <#
     }
     // WRITE OPTIONAL PROPERTIES
-    foreach( var property in blockDefinition.Properties.Where( _ => !_.IsRequired ) )
+    foreach( var property in block.Properties.Where( _ => !_.IsRequired ) )
     {
 #>
             if( <#= property.PascalCaseName #> != <#= property.DefaultAsString #> )
             {
-                WriteAttribute( stream, "<#= property.CamelCaseName #>", <#= property.PascalCaseName #>, indent: <#= indent #> );
+                WriteAttribute( stream, "<#= property.UwmfName #>", <#= property.PascalCaseName #>, indent: <#= indent #> );
             }
 <#
     }
     // WRITE SUBBLOCKS
-    foreach( var subBlock in blockDefinition.SubBlocks )
+    foreach( var subBlock in block.SubBlocks )
     {
 #>
-            WriteBlocks( stream,  <#= subBlock.PascalCaseName #>s );
+            WriteBlocks( stream,  <#= subBlock.PluralPascalCaseName #> );
 <#
     }
 
-    if( blockDefinition.IsSubBlock )
+    if( block.IsSubBlock )
     {
 #>
             WriteLine( stream, "}");
@@ -122,18 +195,25 @@ foreach( var blockDefinition in UwmfDefinitions.Blocks )
         }
 <#
     } // End 'if' for NormalWriting
+    // ######################
+    // # END WRITETO METHOD #
+    // ######################
+
+    // #########################
+    // # CHECKSEMANTICVALIDITY #
+    // #########################
 #>
 
         public void CheckSemanticValidity()
         {
 <#
     // CHECK THAT ALL REQUIRED PROPERTIES HAVE BEEN SET
-    foreach( var property in blockDefinition.Properties.Where( _ => _.IsRequired ) )
+    foreach( var property in block.Properties.Where( _ => _.IsRequired ) )
     {
 #>
             if( ! <#= property.FieldName #>HasBeenSet )
             {
-                throw new InvalidUwmfException("Did not set <#= property.PascalCaseName #> on <#= blockDefinition.PascalCaseName #>");
+                throw new InvalidUwmfException("Did not set <#= property.PascalCaseName #> on <#= block.PascalCaseName #>");
             }
 <#
     }
@@ -146,5 +226,8 @@ foreach( var blockDefinition in UwmfDefinitions.Blocks )
 
 <#
 }
+    // #############################
+    // # END CHECKSEMANTICVALIDITY #
+    // #############################
 #>
 }

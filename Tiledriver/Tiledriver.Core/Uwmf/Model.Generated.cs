@@ -65,6 +65,44 @@ namespace Tiledriver.Core.Uwmf
         public string TextureOverhead { get; set; } = "";
         public string Comment { get; set; } = "";
 
+        public Tile() { }
+
+        public Tile(
+            string textureEast,
+            string textureNorth,
+            string textureWest,
+            string textureSouth,
+            bool blockingEast = true,
+            bool blockingNorth = true,
+            bool blockingWest = true,
+            bool blockingSouth = true,
+            bool offsetVertical = false,
+            bool offsetHorizontal = false,
+            bool dontOverlay = false,
+            int mapped = 0,
+            string soundSequence = "",
+            string textureOverhead = "",
+            string comment = "")
+        {
+            TextureEast = textureEast;
+            TextureNorth = textureNorth;
+            TextureWest = textureWest;
+            TextureSouth = textureSouth;
+            BlockingEast = blockingEast;
+            BlockingNorth = blockingNorth;
+            BlockingWest = blockingWest;
+            BlockingSouth = blockingSouth;
+            OffsetVertical = offsetVertical;
+            OffsetHorizontal = offsetHorizontal;
+            DontOverlay = dontOverlay;
+            Mapped = mapped;
+            SoundSequence = soundSequence;
+            TextureOverhead = textureOverhead;
+            Comment = comment;
+
+            AdditionalSemanticChecks();
+        }
+
         public Stream WriteTo(Stream stream)
         {
             CheckSemanticValidity();
@@ -175,6 +213,20 @@ namespace Tiledriver.Core.Uwmf
         }
         public string Comment { get; set; } = "";
 
+        public Sector() { }
+
+        public Sector(
+            string textureCeiling,
+            string textureFloor,
+            string comment = "")
+        {
+            TextureCeiling = textureCeiling;
+            TextureFloor = textureFloor;
+            Comment = comment;
+
+            AdditionalSemanticChecks();
+        }
+
         public Stream WriteTo(Stream stream)
         {
             CheckSemanticValidity();
@@ -212,6 +264,16 @@ namespace Tiledriver.Core.Uwmf
     {
 
         public string Comment { get; set; } = "";
+
+        public Zone() { }
+
+        public Zone(
+            string comment = "")
+        {
+            Comment = comment;
+
+            AdditionalSemanticChecks();
+        }
 
         public Stream WriteTo(Stream stream)
         {
@@ -251,6 +313,18 @@ namespace Tiledriver.Core.Uwmf
             }
         }
         public string Comment { get; set; } = "";
+
+        public Plane() { }
+
+        public Plane(
+            int depth,
+            string comment = "")
+        {
+            Depth = depth;
+            Comment = comment;
+
+            AdditionalSemanticChecks();
+        }
 
         public Stream WriteTo(Stream stream)
         {
@@ -318,6 +392,22 @@ namespace Tiledriver.Core.Uwmf
         }
         public int Tag { get; set; } = 0;
 
+        public TileSpace() { }
+
+        public TileSpace(
+            int tile,
+            int sector,
+            int zone,
+            int tag = 0)
+        {
+            Tile = tile;
+            Sector = sector;
+            Zone = zone;
+            Tag = tag;
+
+            AdditionalSemanticChecks();
+        }
+
         public void CheckSemanticValidity()
         {
             if( ! _tileHasBeenSet )
@@ -342,6 +432,16 @@ namespace Tiledriver.Core.Uwmf
     {
 
         public readonly List<TileSpace> TileSpaces = new List<TileSpace>();
+
+        public PlaneMap() { }
+
+        public PlaneMap(
+            IEnumerable<TileSpace> tileSpaces)
+        {
+            TileSpaces.AddRange( tileSpaces );
+
+            AdditionalSemanticChecks();
+        }
 
         public Stream WriteTo(Stream stream)
         {
@@ -429,6 +529,40 @@ namespace Tiledriver.Core.Uwmf
         public bool Skill4 { get; set; } = false;
         public bool Skill5 { get; set; } = false;
         public string Comment { get; set; } = "";
+
+        public Thing() { }
+
+        public Thing(
+            int type,
+            double x,
+            double y,
+            double z,
+            int angle,
+            bool ambush = false,
+            bool patrol = false,
+            bool skill1 = false,
+            bool skill2 = false,
+            bool skill3 = false,
+            bool skill4 = false,
+            bool skill5 = false,
+            string comment = "")
+        {
+            Type = type;
+            X = x;
+            Y = y;
+            Z = z;
+            Angle = angle;
+            Ambush = ambush;
+            Patrol = patrol;
+            Skill1 = skill1;
+            Skill2 = skill2;
+            Skill3 = skill3;
+            Skill4 = skill4;
+            Skill5 = skill5;
+            Comment = comment;
+
+            AdditionalSemanticChecks();
+        }
 
         public Stream WriteTo(Stream stream)
         {
@@ -568,6 +702,52 @@ namespace Tiledriver.Core.Uwmf
         public bool Repeatable { get; set; } = false;
         public bool Secret { get; set; } = false;
         public string Comment { get; set; } = "";
+
+        public Trigger() { }
+
+        public Trigger(
+            int x,
+            int y,
+            int z,
+            int action,
+            int arg0 = 0,
+            int arg1 = 0,
+            int arg2 = 0,
+            int arg3 = 0,
+            int arg4 = 0,
+            bool activateEast = true,
+            bool activateNorth = true,
+            bool activateWest = true,
+            bool activateSouth = true,
+            bool playerCross = false,
+            bool playerUse = false,
+            bool monsterUse = false,
+            bool repeatable = false,
+            bool secret = false,
+            string comment = "")
+        {
+            X = x;
+            Y = y;
+            Z = z;
+            Action = action;
+            Arg0 = arg0;
+            Arg1 = arg1;
+            Arg2 = arg2;
+            Arg3 = arg3;
+            Arg4 = arg4;
+            ActivateEast = activateEast;
+            ActivateNorth = activateNorth;
+            ActivateWest = activateWest;
+            ActivateSouth = activateSouth;
+            PlayerCross = playerCross;
+            PlayerUse = playerUse;
+            MonsterUse = monsterUse;
+            Repeatable = repeatable;
+            Secret = secret;
+            Comment = comment;
+
+            AdditionalSemanticChecks();
+        }
 
         public Stream WriteTo(Stream stream)
         {
@@ -733,6 +913,38 @@ namespace Tiledriver.Core.Uwmf
         public readonly List<PlaneMap> PlaneMaps = new List<PlaneMap>();
         public readonly List<Thing> Things = new List<Thing>();
         public readonly List<Trigger> Triggers = new List<Trigger>();
+
+        public Map() { }
+
+        public Map(
+            string nameSpace,
+            int tileSize,
+            string name,
+            int width,
+            int height,
+            IEnumerable<Tile> tiles,
+            IEnumerable<Sector> sectors,
+            IEnumerable<Zone> zones,
+            IEnumerable<Plane> planes,
+            IEnumerable<PlaneMap> planeMaps,
+            IEnumerable<Thing> things,
+            IEnumerable<Trigger> triggers)
+        {
+            Namespace = nameSpace;
+            TileSize = tileSize;
+            Name = name;
+            Width = width;
+            Height = height;
+            Tiles.AddRange( tiles );
+            Sectors.AddRange( sectors );
+            Zones.AddRange( zones );
+            Planes.AddRange( planes );
+            PlaneMaps.AddRange( planeMaps );
+            Things.AddRange( things );
+            Triggers.AddRange( triggers );
+
+            AdditionalSemanticChecks();
+        }
 
         public Stream WriteTo(Stream stream)
         {

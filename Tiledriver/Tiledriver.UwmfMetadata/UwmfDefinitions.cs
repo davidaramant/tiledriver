@@ -80,7 +80,7 @@ namespace Tiledriver.UwmfMetadata
                 HasOptionalBoolean("secret", false).
                 HasOptionalString("comment", String.Empty),
             new UwmfBlock("map").
-                HasRequiredString("namespace").
+                HasRequiredString("nameSpace", uwmfName:"namespace").
                 HasRequiredIntegerNumber("tileSize").
                 HasRequiredString("name").
                 HasRequiredIntegerNumber("width").
