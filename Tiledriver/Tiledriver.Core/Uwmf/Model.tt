@@ -25,28 +25,14 @@ foreach( var block in UwmfDefinitions.Blocks )
     public sealed partial class <#= block.PascalCaseName #> : BaseUwmfBlock<# if( block.NormalWriting ) { #>, IWriteableUwmfBlock<# }#> 
     {
 <#
-    // ###################
-    // # REQUIRED FIELDS #
-    // ###################
-    foreach( var property in block.Properties.Where( _ => _.IsRequired ) )
-    {
-#>
-        private bool <#= property.FieldName #>HasBeenSet = false;
-        private <#= property.TypeString #> <#= property.FieldName #>;
-<#
-    }
-    // #######################
-    // # END REQUIRED FIELDS #
-    // #######################
-#>
-
-<#
     // #######################
     // # REQUIRED PROPERTIES #
     // #######################
     foreach( var property in block.Properties.Where( _ => _.IsRequired ) )
     {
 #>
+        private bool <#= property.FieldName #>HasBeenSet = false;
+        private <#= property.TypeString #> <#= property.FieldName #>;
         public <#= property.TypeString #> <#= property.PascalCaseName #>
         {
             get { return <#= property.FieldName #>; }

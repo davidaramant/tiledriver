@@ -10,13 +10,6 @@ namespace Tiledriver.Core.Uwmf
     {
         private bool _textureEastHasBeenSet = false;
         private string _textureEast;
-        private bool _textureNorthHasBeenSet = false;
-        private string _textureNorth;
-        private bool _textureWestHasBeenSet = false;
-        private string _textureWest;
-        private bool _textureSouthHasBeenSet = false;
-        private string _textureSouth;
-
         public string TextureEast
         {
             get { return _textureEast; }
@@ -26,6 +19,8 @@ namespace Tiledriver.Core.Uwmf
                 _textureEast = value;
             }
         }
+        private bool _textureNorthHasBeenSet = false;
+        private string _textureNorth;
         public string TextureNorth
         {
             get { return _textureNorth; }
@@ -35,6 +30,8 @@ namespace Tiledriver.Core.Uwmf
                 _textureNorth = value;
             }
         }
+        private bool _textureWestHasBeenSet = false;
+        private string _textureWest;
         public string TextureWest
         {
             get { return _textureWest; }
@@ -44,6 +41,8 @@ namespace Tiledriver.Core.Uwmf
                 _textureWest = value;
             }
         }
+        private bool _textureSouthHasBeenSet = false;
+        private string _textureSouth;
         public string TextureSouth
         {
             get { return _textureSouth; }
@@ -190,9 +189,6 @@ namespace Tiledriver.Core.Uwmf
     {
         private bool _textureCeilingHasBeenSet = false;
         private string _textureCeiling;
-        private bool _textureFloorHasBeenSet = false;
-        private string _textureFloor;
-
         public string TextureCeiling
         {
             get { return _textureCeiling; }
@@ -202,6 +198,8 @@ namespace Tiledriver.Core.Uwmf
                 _textureCeiling = value;
             }
         }
+        private bool _textureFloorHasBeenSet = false;
+        private string _textureFloor;
         public string TextureFloor
         {
             get { return _textureFloor; }
@@ -358,11 +356,6 @@ namespace Tiledriver.Core.Uwmf
     {
         private bool _tileHasBeenSet = false;
         private int _tile;
-        private bool _sectorHasBeenSet = false;
-        private int _sector;
-        private bool _zoneHasBeenSet = false;
-        private int _zone;
-
         public int Tile
         {
             get { return _tile; }
@@ -372,6 +365,8 @@ namespace Tiledriver.Core.Uwmf
                 _tile = value;
             }
         }
+        private bool _sectorHasBeenSet = false;
+        private int _sector;
         public int Sector
         {
             get { return _sector; }
@@ -381,6 +376,8 @@ namespace Tiledriver.Core.Uwmf
                 _sector = value;
             }
         }
+        private bool _zoneHasBeenSet = false;
+        private int _zone;
         public int Zone
         {
             get { return _zone; }
@@ -467,15 +464,6 @@ namespace Tiledriver.Core.Uwmf
     {
         private bool _typeHasBeenSet = false;
         private int _type;
-        private bool _xHasBeenSet = false;
-        private double _x;
-        private bool _yHasBeenSet = false;
-        private double _y;
-        private bool _zHasBeenSet = false;
-        private double _z;
-        private bool _angleHasBeenSet = false;
-        private int _angle;
-
         public int Type
         {
             get { return _type; }
@@ -485,6 +473,8 @@ namespace Tiledriver.Core.Uwmf
                 _type = value;
             }
         }
+        private bool _xHasBeenSet = false;
+        private double _x;
         public double X
         {
             get { return _x; }
@@ -494,6 +484,8 @@ namespace Tiledriver.Core.Uwmf
                 _x = value;
             }
         }
+        private bool _yHasBeenSet = false;
+        private double _y;
         public double Y
         {
             get { return _y; }
@@ -503,6 +495,8 @@ namespace Tiledriver.Core.Uwmf
                 _y = value;
             }
         }
+        private bool _zHasBeenSet = false;
+        private double _z;
         public double Z
         {
             get { return _z; }
@@ -512,6 +506,8 @@ namespace Tiledriver.Core.Uwmf
                 _z = value;
             }
         }
+        private bool _angleHasBeenSet = false;
+        private int _angle;
         public int Angle
         {
             get { return _angle; }
@@ -644,13 +640,6 @@ namespace Tiledriver.Core.Uwmf
     {
         private bool _xHasBeenSet = false;
         private int _x;
-        private bool _yHasBeenSet = false;
-        private int _y;
-        private bool _zHasBeenSet = false;
-        private int _z;
-        private bool _actionHasBeenSet = false;
-        private int _action;
-
         public int X
         {
             get { return _x; }
@@ -660,6 +649,8 @@ namespace Tiledriver.Core.Uwmf
                 _x = value;
             }
         }
+        private bool _yHasBeenSet = false;
+        private int _y;
         public int Y
         {
             get { return _y; }
@@ -669,6 +660,8 @@ namespace Tiledriver.Core.Uwmf
                 _y = value;
             }
         }
+        private bool _zHasBeenSet = false;
+        private int _z;
         public int Z
         {
             get { return _z; }
@@ -678,6 +671,8 @@ namespace Tiledriver.Core.Uwmf
                 _z = value;
             }
         }
+        private bool _actionHasBeenSet = false;
+        private int _action;
         public int Action
         {
             get { return _action; }
@@ -852,15 +847,6 @@ namespace Tiledriver.Core.Uwmf
     {
         private bool _namespaceHasBeenSet = false;
         private string _namespace;
-        private bool _tileSizeHasBeenSet = false;
-        private int _tileSize;
-        private bool _nameHasBeenSet = false;
-        private string _name;
-        private bool _widthHasBeenSet = false;
-        private int _width;
-        private bool _heightHasBeenSet = false;
-        private int _height;
-
         public string Namespace
         {
             get { return _namespace; }
@@ -870,6 +856,8 @@ namespace Tiledriver.Core.Uwmf
                 _namespace = value;
             }
         }
+        private bool _tileSizeHasBeenSet = false;
+        private int _tileSize;
         public int TileSize
         {
             get { return _tileSize; }
@@ -879,6 +867,8 @@ namespace Tiledriver.Core.Uwmf
                 _tileSize = value;
             }
         }
+        private bool _nameHasBeenSet = false;
+        private string _name;
         public string Name
         {
             get { return _name; }
@@ -888,6 +878,8 @@ namespace Tiledriver.Core.Uwmf
                 _name = value;
             }
         }
+        private bool _widthHasBeenSet = false;
+        private int _width;
         public int Width
         {
             get { return _width; }
@@ -897,6 +889,8 @@ namespace Tiledriver.Core.Uwmf
                 _width = value;
             }
         }
+        private bool _heightHasBeenSet = false;
+        private int _height;
         public int Height
         {
             get { return _height; }
