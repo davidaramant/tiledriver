@@ -927,6 +927,7 @@ namespace Tiledriver.Core.Uwmf
                 _height = value;
             }
         }
+        public string Comment { get; set; } = "";
         public readonly List<Tile> Tiles = new List<Tile>();
         public readonly List<Sector> Sectors = new List<Sector>();
         public readonly List<Zone> Zones = new List<Zone>();
@@ -945,6 +946,7 @@ namespace Tiledriver.Core.Uwmf
             string name,
             int width,
             int height,
+            string comment = "",
             IEnumerable<Tile> tiles,
             IEnumerable<Sector> sectors,
             IEnumerable<Zone> zones,
@@ -958,6 +960,7 @@ namespace Tiledriver.Core.Uwmf
             Name = name;
             Width = width;
             Height = height;
+            Comment = comment;
             Tiles.AddRange( tiles );
             Sectors.AddRange( sectors );
             Zones.AddRange( zones );
@@ -978,6 +981,10 @@ namespace Tiledriver.Core.Uwmf
             WriteProperty( stream, "name", _name, indent: false );
             WriteProperty( stream, "width", _width, indent: false );
             WriteProperty( stream, "height", _height, indent: false );
+            if( Comment != "" )
+            {
+                WriteProperty( stream, "comment", Comment, indent: false );
+            }
             foreach( var property in UnknownProperties )
             {
                 WritePropertyVerbatim( stream, (string)property.Name, property.Value, indent: false );

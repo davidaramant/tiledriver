@@ -316,6 +316,10 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
                 actual.Height,
                 Is.EqualTo( expected.Height ),
                 "Found difference in Map Height" );
+            Assert.That(
+                actual.Comment,
+                Is.EqualTo( expected.Comment ),
+                "Found difference in Map Comment" );
             AssertEqual(
                 actual.UnknownProperties,
                 expected.UnknownProperties,

@@ -394,6 +394,9 @@ namespace Tiledriver.Core.Uwmf.Parsing
 						case "height":
 							map.Height = ParseIntegerNumberAssignment( lexer, "Map.Height" );
 							break;
+						case "comment":
+							map.Comment = ParseStringAssignment( lexer, "Map.Comment" );
+							break;
 						case "tile":
 							map.Tiles.Add(ParseTile(lexer));
 							break;

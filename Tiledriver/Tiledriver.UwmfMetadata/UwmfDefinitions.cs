@@ -95,6 +95,7 @@ namespace Tiledriver.UwmfMetadata
                 HasRequiredString("name").
                 HasRequiredIntegerNumber("width").
                 HasRequiredIntegerNumber("height").
+                HasOptionalString("comment", String.Empty).
                 HasSubBlocks("tile", "sector", "zone", "plane", "planeMap", "thing", "trigger").
                 IsTopLevel(),
         };
