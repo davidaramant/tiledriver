@@ -63,6 +63,7 @@ namespace Tiledriver.Core.Uwmf
         public string SoundSequence { get; set; } = "";
         public string TextureOverhead { get; set; } = "";
         public string Comment { get; set; } = "";
+		public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
 
         public Tile() { }
 
@@ -210,6 +211,7 @@ namespace Tiledriver.Core.Uwmf
             }
         }
         public string Comment { get; set; } = "";
+		public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
 
         public Sector() { }
 
@@ -260,8 +262,8 @@ namespace Tiledriver.Core.Uwmf
 
     public sealed partial class Zone : BaseUwmfBlock, IWriteableUwmfBlock 
     {
-
         public string Comment { get; set; } = "";
+		public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
 
         public Zone() { }
 
@@ -300,7 +302,6 @@ namespace Tiledriver.Core.Uwmf
     {
         private bool _depthHasBeenSet = false;
         private int _depth;
-
         public int Depth
         {
             get { return _depth; }
@@ -311,6 +312,7 @@ namespace Tiledriver.Core.Uwmf
             }
         }
         public string Comment { get; set; } = "";
+		public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
 
         public Plane() { }
 
@@ -427,7 +429,6 @@ namespace Tiledriver.Core.Uwmf
 
     public sealed partial class PlaneMap : BaseUwmfBlock, IWriteableUwmfBlock 
     {
-
         public readonly List<TileSpace> TileSpaces = new List<TileSpace>();
 
         public PlaneMap() { }
@@ -525,6 +526,7 @@ namespace Tiledriver.Core.Uwmf
         public bool Skill4 { get; set; } = false;
         public bool Skill5 { get; set; } = false;
         public string Comment { get; set; } = "";
+		public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
 
         public Thing() { }
 
@@ -697,6 +699,7 @@ namespace Tiledriver.Core.Uwmf
         public bool Repeatable { get; set; } = false;
         public bool Secret { get; set; } = false;
         public string Comment { get; set; } = "";
+		public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
 
         public Trigger() { }
 
@@ -907,6 +910,8 @@ namespace Tiledriver.Core.Uwmf
         public readonly List<PlaneMap> PlaneMaps = new List<PlaneMap>();
         public readonly List<Thing> Things = new List<Thing>();
         public readonly List<Trigger> Triggers = new List<Trigger>();
+		public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
+		public List<UnknownBlock> UnknownBlocks { get; } = new List<UnknownBlock>();
 
         public Map() { }
 

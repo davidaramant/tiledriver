@@ -43,7 +43,7 @@ foreach( var block in UwmfDefinitions.Blocks )
             }
         }
 <#
-    }
+	}
     // ###########################
     // # END REQUIRED PROPERTIES #
     // ###########################
@@ -73,6 +73,25 @@ foreach( var block in UwmfDefinitions.Blocks )
     // #################
     // # END SUBBLOCKS #
     // #################
+
+	// #################
+	// # UNKNOWN STUFF #
+	// #################
+if( block.CanHaveUnknownFields )
+{
+#>
+		public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
+<#
+}
+if( block.CanHaveUnknownBlocks )
+{
+#>
+		public List<UnknownBlock> UnknownBlocks { get; } = new List<UnknownBlock>();
+<#
+}
+	// #####################
+	// # END UNKNOWN STUFF #
+	// #####################
 
     // ################
     // # CONSTRUCTORS #

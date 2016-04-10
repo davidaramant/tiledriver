@@ -4,7 +4,7 @@
 using System;
 using System.Diagnostics;
 
-namespace Tiledriver.Core.Uwmf.Parsing
+namespace Tiledriver.Core.Uwmf
 {
     [DebuggerDisplay("{_name}")]
     public sealed class Identifier
