@@ -18,30 +18,30 @@ namespace Tiledriver.Core.Uwmf
             stream.Write(textBytes, 0, textBytes.Length);
         }
 
-        private static void InternalAttribute(Stream stream, string name, string value, bool indent)
+        protected static void WritePropertyVerbatim(Stream stream, string name, string value, bool indent)
         {
             var indention = indent ? "\t" : String.Empty;
             WriteLine(stream, $"{indention}{name} = {value};");
         }
 
-        protected static void WriteAttribute(Stream stream, string name, string value, bool indent)
+        protected static void WriteProperty(Stream stream, string name, string value, bool indent)
         {
-            InternalAttribute(stream, name, $"\"{value}\"", indent);
+            WritePropertyVerbatim(stream, name, $"\"{value}\"", indent);
         }
 
-        protected static void WriteAttribute(Stream stream, string name, int value, bool indent)
+        protected static void WriteProperty(Stream stream, string name, int value, bool indent)
         {
-            InternalAttribute(stream, name, value.ToString(CultureInfo.InvariantCulture), indent);
+            WritePropertyVerbatim(stream, name, value.ToString(CultureInfo.InvariantCulture), indent);
         }
 
-        protected static void WriteAttribute(Stream stream, string name, double value, bool indent)
+        protected static void WriteProperty(Stream stream, string name, double value, bool indent)
         {
-            InternalAttribute(stream, name, value.ToString(CultureInfo.InvariantCulture), indent);
+            WritePropertyVerbatim(stream, name, value.ToString(CultureInfo.InvariantCulture), indent);
         }
 
-        protected static void WriteAttribute(Stream stream, string name, bool value, bool indent)
+        protected static void WriteProperty(Stream stream, string name, bool value, bool indent)
         {
-            InternalAttribute(stream, name, value.ToString().ToLowerInvariant(), indent);
+            WritePropertyVerbatim(stream, name, value.ToString().ToLowerInvariant(), indent);
         }
 
         protected static void WriteBlocks(Stream stream, IEnumerable<IWriteableUwmfBlock> blocks)

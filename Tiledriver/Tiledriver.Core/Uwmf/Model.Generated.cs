@@ -63,7 +63,7 @@ namespace Tiledriver.Core.Uwmf
         public string SoundSequence { get; set; } = "";
         public string TextureOverhead { get; set; } = "";
         public string Comment { get; set; } = "";
-		public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
+        public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
 
         public Tile() { }
 
@@ -109,53 +109,57 @@ namespace Tiledriver.Core.Uwmf
 
             WriteLine( stream, "tile");
             WriteLine( stream, "{");
-            WriteAttribute( stream, "textureEast", _textureEast, indent: true );
-            WriteAttribute( stream, "textureNorth", _textureNorth, indent: true );
-            WriteAttribute( stream, "textureWest", _textureWest, indent: true );
-            WriteAttribute( stream, "textureSouth", _textureSouth, indent: true );
+            WriteProperty( stream, "textureEast", _textureEast, indent: true );
+            WriteProperty( stream, "textureNorth", _textureNorth, indent: true );
+            WriteProperty( stream, "textureWest", _textureWest, indent: true );
+            WriteProperty( stream, "textureSouth", _textureSouth, indent: true );
             if( BlockingEast != true )
             {
-                WriteAttribute( stream, "blockingEast", BlockingEast, indent: true );
+                WriteProperty( stream, "blockingEast", BlockingEast, indent: true );
             }
             if( BlockingNorth != true )
             {
-                WriteAttribute( stream, "blockingNorth", BlockingNorth, indent: true );
+                WriteProperty( stream, "blockingNorth", BlockingNorth, indent: true );
             }
             if( BlockingWest != true )
             {
-                WriteAttribute( stream, "blockingWest", BlockingWest, indent: true );
+                WriteProperty( stream, "blockingWest", BlockingWest, indent: true );
             }
             if( BlockingSouth != true )
             {
-                WriteAttribute( stream, "blockingSouth", BlockingSouth, indent: true );
+                WriteProperty( stream, "blockingSouth", BlockingSouth, indent: true );
             }
             if( OffsetVertical != false )
             {
-                WriteAttribute( stream, "offsetVertical", OffsetVertical, indent: true );
+                WriteProperty( stream, "offsetVertical", OffsetVertical, indent: true );
             }
             if( OffsetHorizontal != false )
             {
-                WriteAttribute( stream, "offsetHorizontal", OffsetHorizontal, indent: true );
+                WriteProperty( stream, "offsetHorizontal", OffsetHorizontal, indent: true );
             }
             if( DontOverlay != false )
             {
-                WriteAttribute( stream, "dontOverlay", DontOverlay, indent: true );
+                WriteProperty( stream, "dontOverlay", DontOverlay, indent: true );
             }
             if( Mapped != 0 )
             {
-                WriteAttribute( stream, "mapped", Mapped, indent: true );
+                WriteProperty( stream, "mapped", Mapped, indent: true );
             }
             if( SoundSequence != "" )
             {
-                WriteAttribute( stream, "soundSequence", SoundSequence, indent: true );
+                WriteProperty( stream, "soundSequence", SoundSequence, indent: true );
             }
             if( TextureOverhead != "" )
             {
-                WriteAttribute( stream, "textureOverhead", TextureOverhead, indent: true );
+                WriteProperty( stream, "textureOverhead", TextureOverhead, indent: true );
             }
             if( Comment != "" )
             {
-                WriteAttribute( stream, "comment", Comment, indent: true );
+                WriteProperty( stream, "comment", Comment, indent: true );
+            }
+            foreach( var property in UnknownProperties )
+            {
+                WritePropertyVerbatim( stream, (string)property.Name, property.Value, indent: true );
             }
             WriteLine( stream, "}");
                 
@@ -211,7 +215,7 @@ namespace Tiledriver.Core.Uwmf
             }
         }
         public string Comment { get; set; } = "";
-		public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
+        public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
 
         public Sector() { }
 
@@ -233,11 +237,15 @@ namespace Tiledriver.Core.Uwmf
 
             WriteLine( stream, "sector");
             WriteLine( stream, "{");
-            WriteAttribute( stream, "textureCeiling", _textureCeiling, indent: true );
-            WriteAttribute( stream, "textureFloor", _textureFloor, indent: true );
+            WriteProperty( stream, "textureCeiling", _textureCeiling, indent: true );
+            WriteProperty( stream, "textureFloor", _textureFloor, indent: true );
             if( Comment != "" )
             {
-                WriteAttribute( stream, "comment", Comment, indent: true );
+                WriteProperty( stream, "comment", Comment, indent: true );
+            }
+            foreach( var property in UnknownProperties )
+            {
+                WritePropertyVerbatim( stream, (string)property.Name, property.Value, indent: true );
             }
             WriteLine( stream, "}");
                 
@@ -263,7 +271,7 @@ namespace Tiledriver.Core.Uwmf
     public sealed partial class Zone : BaseUwmfBlock, IWriteableUwmfBlock 
     {
         public string Comment { get; set; } = "";
-		public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
+        public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
 
         public Zone() { }
 
@@ -283,7 +291,11 @@ namespace Tiledriver.Core.Uwmf
             WriteLine( stream, "{");
             if( Comment != "" )
             {
-                WriteAttribute( stream, "comment", Comment, indent: true );
+                WriteProperty( stream, "comment", Comment, indent: true );
+            }
+            foreach( var property in UnknownProperties )
+            {
+                WritePropertyVerbatim( stream, (string)property.Name, property.Value, indent: true );
             }
             WriteLine( stream, "}");
                 
@@ -312,7 +324,7 @@ namespace Tiledriver.Core.Uwmf
             }
         }
         public string Comment { get; set; } = "";
-		public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
+        public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
 
         public Plane() { }
 
@@ -332,10 +344,14 @@ namespace Tiledriver.Core.Uwmf
 
             WriteLine( stream, "plane");
             WriteLine( stream, "{");
-            WriteAttribute( stream, "depth", _depth, indent: true );
+            WriteProperty( stream, "depth", _depth, indent: true );
             if( Comment != "" )
             {
-                WriteAttribute( stream, "comment", Comment, indent: true );
+                WriteProperty( stream, "comment", Comment, indent: true );
+            }
+            foreach( var property in UnknownProperties )
+            {
+                WritePropertyVerbatim( stream, (string)property.Name, property.Value, indent: true );
             }
             WriteLine( stream, "}");
                 
@@ -526,7 +542,7 @@ namespace Tiledriver.Core.Uwmf
         public bool Skill4 { get; set; } = false;
         public bool Skill5 { get; set; } = false;
         public string Comment { get; set; } = "";
-		public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
+        public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
 
         public Thing() { }
 
@@ -568,42 +584,46 @@ namespace Tiledriver.Core.Uwmf
 
             WriteLine( stream, "thing");
             WriteLine( stream, "{");
-            WriteAttribute( stream, "type", _type, indent: true );
-            WriteAttribute( stream, "x", _x, indent: true );
-            WriteAttribute( stream, "y", _y, indent: true );
-            WriteAttribute( stream, "z", _z, indent: true );
-            WriteAttribute( stream, "angle", _angle, indent: true );
+            WriteProperty( stream, "type", _type, indent: true );
+            WriteProperty( stream, "x", _x, indent: true );
+            WriteProperty( stream, "y", _y, indent: true );
+            WriteProperty( stream, "z", _z, indent: true );
+            WriteProperty( stream, "angle", _angle, indent: true );
             if( Ambush != false )
             {
-                WriteAttribute( stream, "ambush", Ambush, indent: true );
+                WriteProperty( stream, "ambush", Ambush, indent: true );
             }
             if( Patrol != false )
             {
-                WriteAttribute( stream, "patrol", Patrol, indent: true );
+                WriteProperty( stream, "patrol", Patrol, indent: true );
             }
             if( Skill1 != false )
             {
-                WriteAttribute( stream, "skill1", Skill1, indent: true );
+                WriteProperty( stream, "skill1", Skill1, indent: true );
             }
             if( Skill2 != false )
             {
-                WriteAttribute( stream, "skill2", Skill2, indent: true );
+                WriteProperty( stream, "skill2", Skill2, indent: true );
             }
             if( Skill3 != false )
             {
-                WriteAttribute( stream, "skill3", Skill3, indent: true );
+                WriteProperty( stream, "skill3", Skill3, indent: true );
             }
             if( Skill4 != false )
             {
-                WriteAttribute( stream, "skill4", Skill4, indent: true );
+                WriteProperty( stream, "skill4", Skill4, indent: true );
             }
             if( Skill5 != false )
             {
-                WriteAttribute( stream, "skill5", Skill5, indent: true );
+                WriteProperty( stream, "skill5", Skill5, indent: true );
             }
             if( Comment != "" )
             {
-                WriteAttribute( stream, "comment", Comment, indent: true );
+                WriteProperty( stream, "comment", Comment, indent: true );
+            }
+            foreach( var property in UnknownProperties )
+            {
+                WritePropertyVerbatim( stream, (string)property.Name, property.Value, indent: true );
             }
             WriteLine( stream, "}");
                 
@@ -699,7 +719,7 @@ namespace Tiledriver.Core.Uwmf
         public bool Repeatable { get; set; } = false;
         public bool Secret { get; set; } = false;
         public string Comment { get; set; } = "";
-		public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
+        public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
 
         public Trigger() { }
 
@@ -753,69 +773,73 @@ namespace Tiledriver.Core.Uwmf
 
             WriteLine( stream, "trigger");
             WriteLine( stream, "{");
-            WriteAttribute( stream, "x", _x, indent: true );
-            WriteAttribute( stream, "y", _y, indent: true );
-            WriteAttribute( stream, "z", _z, indent: true );
-            WriteAttribute( stream, "action", _action, indent: true );
+            WriteProperty( stream, "x", _x, indent: true );
+            WriteProperty( stream, "y", _y, indent: true );
+            WriteProperty( stream, "z", _z, indent: true );
+            WriteProperty( stream, "action", _action, indent: true );
             if( Arg0 != 0 )
             {
-                WriteAttribute( stream, "arg0", Arg0, indent: true );
+                WriteProperty( stream, "arg0", Arg0, indent: true );
             }
             if( Arg1 != 0 )
             {
-                WriteAttribute( stream, "arg1", Arg1, indent: true );
+                WriteProperty( stream, "arg1", Arg1, indent: true );
             }
             if( Arg2 != 0 )
             {
-                WriteAttribute( stream, "arg2", Arg2, indent: true );
+                WriteProperty( stream, "arg2", Arg2, indent: true );
             }
             if( Arg3 != 0 )
             {
-                WriteAttribute( stream, "arg3", Arg3, indent: true );
+                WriteProperty( stream, "arg3", Arg3, indent: true );
             }
             if( Arg4 != 0 )
             {
-                WriteAttribute( stream, "arg4", Arg4, indent: true );
+                WriteProperty( stream, "arg4", Arg4, indent: true );
             }
             if( ActivateEast != true )
             {
-                WriteAttribute( stream, "activateEast", ActivateEast, indent: true );
+                WriteProperty( stream, "activateEast", ActivateEast, indent: true );
             }
             if( ActivateNorth != true )
             {
-                WriteAttribute( stream, "activateNorth", ActivateNorth, indent: true );
+                WriteProperty( stream, "activateNorth", ActivateNorth, indent: true );
             }
             if( ActivateWest != true )
             {
-                WriteAttribute( stream, "activateWest", ActivateWest, indent: true );
+                WriteProperty( stream, "activateWest", ActivateWest, indent: true );
             }
             if( ActivateSouth != true )
             {
-                WriteAttribute( stream, "activateSouth", ActivateSouth, indent: true );
+                WriteProperty( stream, "activateSouth", ActivateSouth, indent: true );
             }
             if( PlayerCross != false )
             {
-                WriteAttribute( stream, "playerCross", PlayerCross, indent: true );
+                WriteProperty( stream, "playerCross", PlayerCross, indent: true );
             }
             if( PlayerUse != false )
             {
-                WriteAttribute( stream, "playerUse", PlayerUse, indent: true );
+                WriteProperty( stream, "playerUse", PlayerUse, indent: true );
             }
             if( MonsterUse != false )
             {
-                WriteAttribute( stream, "monsterUse", MonsterUse, indent: true );
+                WriteProperty( stream, "monsterUse", MonsterUse, indent: true );
             }
             if( Repeatable != false )
             {
-                WriteAttribute( stream, "repeatable", Repeatable, indent: true );
+                WriteProperty( stream, "repeatable", Repeatable, indent: true );
             }
             if( Secret != false )
             {
-                WriteAttribute( stream, "secret", Secret, indent: true );
+                WriteProperty( stream, "secret", Secret, indent: true );
             }
             if( Comment != "" )
             {
-                WriteAttribute( stream, "comment", Comment, indent: true );
+                WriteProperty( stream, "comment", Comment, indent: true );
+            }
+            foreach( var property in UnknownProperties )
+            {
+                WritePropertyVerbatim( stream, (string)property.Name, property.Value, indent: true );
             }
             WriteLine( stream, "}");
                 
@@ -910,8 +934,8 @@ namespace Tiledriver.Core.Uwmf
         public readonly List<PlaneMap> PlaneMaps = new List<PlaneMap>();
         public readonly List<Thing> Things = new List<Thing>();
         public readonly List<Trigger> Triggers = new List<Trigger>();
-		public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
-		public List<UnknownBlock> UnknownBlocks { get; } = new List<UnknownBlock>();
+        public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
+        public List<UnknownBlock> UnknownBlocks { get; } = new List<UnknownBlock>();
 
         public Map() { }
 
@@ -949,11 +973,15 @@ namespace Tiledriver.Core.Uwmf
         {
             CheckSemanticValidity();
 
-            WriteAttribute( stream, "namespace", _namespace, indent: false );
-            WriteAttribute( stream, "tileSize", _tileSize, indent: false );
-            WriteAttribute( stream, "name", _name, indent: false );
-            WriteAttribute( stream, "width", _width, indent: false );
-            WriteAttribute( stream, "height", _height, indent: false );
+            WriteProperty( stream, "namespace", _namespace, indent: false );
+            WriteProperty( stream, "tileSize", _tileSize, indent: false );
+            WriteProperty( stream, "name", _name, indent: false );
+            WriteProperty( stream, "width", _width, indent: false );
+            WriteProperty( stream, "height", _height, indent: false );
+            foreach( var property in UnknownProperties )
+            {
+                WritePropertyVerbatim( stream, (string)property.Name, property.Value, indent: false );
+            }
             WriteBlocks( stream,  Tiles );
             WriteBlocks( stream,  Sectors );
             WriteBlocks( stream,  Zones );
@@ -961,6 +989,7 @@ namespace Tiledriver.Core.Uwmf
             WriteBlocks( stream,  PlaneMaps );
             WriteBlocks( stream,  Things );
             WriteBlocks( stream,  Triggers );
+            WriteBlocks( stream,  UnknownBlocks );
                 
             return stream;
         }

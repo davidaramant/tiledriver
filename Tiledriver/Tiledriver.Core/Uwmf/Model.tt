@@ -43,7 +43,7 @@ foreach( var block in UwmfDefinitions.Blocks )
             }
         }
 <#
-	}
+    }
     // ###########################
     // # END REQUIRED PROPERTIES #
     // ###########################
@@ -74,24 +74,24 @@ foreach( var block in UwmfDefinitions.Blocks )
     // # END SUBBLOCKS #
     // #################
 
-	// #################
-	// # UNKNOWN STUFF #
-	// #################
+    // #################
+    // # UNKNOWN STUFF #
+    // #################
 if( block.CanHaveUnknownFields )
 {
 #>
-		public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
+        public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
 <#
 }
 if( block.CanHaveUnknownBlocks )
 {
 #>
-		public List<UnknownBlock> UnknownBlocks { get; } = new List<UnknownBlock>();
+        public List<UnknownBlock> UnknownBlocks { get; } = new List<UnknownBlock>();
 <#
 }
-	// #####################
-	// # END UNKNOWN STUFF #
-	// #####################
+    // #####################
+    // # END UNKNOWN STUFF #
+    // #####################
 
     // ################
     // # CONSTRUCTORS #
@@ -167,7 +167,7 @@ if( block.CanHaveUnknownBlocks )
     foreach( var property in block.Properties.Where( _ => _.IsRequired ) )
     {
 #>
-            WriteAttribute( stream, "<#= property.UwmfName #>", <#= property.FieldName #>, indent: <#= indent #> );
+            WriteProperty( stream, "<#= property.UwmfName #>", <#= property.FieldName #>, indent: <#= indent #> );
 <#
     }
     // WRITE OPTIONAL PROPERTIES
@@ -176,7 +176,17 @@ if( block.CanHaveUnknownBlocks )
 #>
             if( <#= property.PascalCaseName #> != <#= property.DefaultAsString #> )
             {
-                WriteAttribute( stream, "<#= property.UwmfName #>", <#= property.PascalCaseName #>, indent: <#= indent #> );
+                WriteProperty( stream, "<#= property.UwmfName #>", <#= property.PascalCaseName #>, indent: <#= indent #> );
+            }
+<#
+    }
+    // WRITE UNKNOWN PROPERTES
+    if( block.CanHaveUnknownFields )
+    {
+#>
+            foreach( var property in UnknownProperties )
+            {
+                WritePropertyVerbatim( stream, (string)property.Name, property.Value, indent: <#= indent #> );
             }
 <#
     }
@@ -187,7 +197,13 @@ if( block.CanHaveUnknownBlocks )
             WriteBlocks( stream,  <#= subBlock.PluralPascalCaseName #> );
 <#
     }
-
+    // WRITE UNKNOWN BLOCKS
+    if( block.CanHaveUnknownBlocks )
+    {
+#>
+            WriteBlocks( stream,  UnknownBlocks );
+<#
+    }
     if( block.IsSubBlock )
     {
 #>

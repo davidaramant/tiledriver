@@ -21,6 +21,11 @@ namespace Tiledriver.Core.Uwmf
             return _name.ToLowerInvariant();
         }
 
+        public static explicit operator string(Identifier id)
+        {
+            return id._name;
+        }
+
         #region Equality members
 
         private bool Equals(Identifier other)
