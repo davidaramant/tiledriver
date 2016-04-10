@@ -16,7 +16,7 @@ namespace Tiledriver.UwmfMetadata
         public bool IsSubBlock { get; private set; } = true;
         public bool NormalWriting { get; private set; } = true;
         public bool NormalReading { get; private set; } = true;
-        public bool CanHaveUnknownFields { get; private set; } = true;
+        public bool CanHaveUnknownProperties { get; private set; } = true;
         public bool CanHaveUnknownBlocks => !IsSubBlock;
 
         public UwmfBlock(string name) : base(name,name)
@@ -47,9 +47,9 @@ namespace Tiledriver.UwmfMetadata
             return this;
         }
 
-        public UwmfBlock CannotHaveUnknownFields()
+        public UwmfBlock CannotHaveUnknownProperties()
         {
-            CanHaveUnknownFields = false;
+            CanHaveUnknownProperties = false;
             return this;
         }
 

@@ -77,7 +77,7 @@ foreach( var block in UwmfDefinitions.Blocks )
     // #################
     // # UNKNOWN STUFF #
     // #################
-if( block.CanHaveUnknownFields )
+if( block.CanHaveUnknownProperties )
 {
 #>
         public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
@@ -181,7 +181,7 @@ if( block.CanHaveUnknownBlocks )
 <#
     }
     // WRITE UNKNOWN PROPERTES
-    if( block.CanHaveUnknownFields )
+    if( block.CanHaveUnknownProperties )
     {
 #>
             foreach( var property in UnknownProperties )

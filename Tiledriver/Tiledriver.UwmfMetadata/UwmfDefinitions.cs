@@ -46,12 +46,12 @@ namespace Tiledriver.UwmfMetadata
                 HasOptionalIntegerNumber("tag", 0).
                 DisableNormalWriting().
                 DisableNormalReading().
-                CannotHaveUnknownFields(),
+                CannotHaveUnknownProperties(),
 
             new UwmfBlock("planeMap").
                 HasSubBlocks("tileSpace").
                 DisableNormalReading().
-                CannotHaveUnknownFields(),
+                CannotHaveUnknownProperties(),
 
             new UwmfBlock("thing").
                 HasRequiredIntegerNumber("type").
