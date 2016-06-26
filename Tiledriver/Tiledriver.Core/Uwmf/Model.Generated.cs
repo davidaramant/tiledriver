@@ -946,14 +946,14 @@ namespace Tiledriver.Core.Uwmf
             string name,
             int width,
             int height,
-            string comment = "",
             IEnumerable<Tile> tiles,
             IEnumerable<Sector> sectors,
             IEnumerable<Zone> zones,
             IEnumerable<Plane> planes,
             IEnumerable<PlaneMap> planeMaps,
             IEnumerable<Thing> things,
-            IEnumerable<Trigger> triggers)
+            IEnumerable<Trigger> triggers,
+            string comment = "")
         {
             Namespace = nameSpace;
             TileSize = tileSize;

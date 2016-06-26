@@ -15,10 +15,11 @@ namespace Tiledriver.Core
             var map = new Map
             (
                 nameSpace: "Wolf3D",
+                tileSize: 64,
                 name: "Test Output",
                 width: 64,
                 height: 64,
-                tileSize: 64,
+                comment: "",
                 tiles: new[]
                 {
                     new Tile

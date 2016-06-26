@@ -103,13 +103,19 @@ if( block.CanHaveUnknownBlocks )
         public <#= block.PascalCaseName #>(
 <#
     var allParams = 
-        block.Properties.Select( 
-            p => $"{new string(' ', 12)}{p.TypeString} {p.CamelCaseName}{p.DefaultAssignment}" ).ToList();
+        block.Properties.Where( p=>p.IsRequired ).Select( 
+            p => $"{new string(' ', 12)}{p.TypeString} {p.CamelCaseName}" ).ToList();
 
     foreach( var subBlock in block.SubBlocks )
     {
         allParams.Add( $"{new string(' ',12)}IEnumerable<{subBlock.PascalCaseName}> {subBlock.PluralCamelCaseName}" );
     }
+
+    foreach (var p in block.Properties.Where(p => !p.IsRequired) )
+    {
+        allParams.Add($"{new string(' ', 12)}{p.TypeString} {p.CamelCaseName}{p.DefaultAssignment}");
+    }
+
 
     var constructorParams = 
         String.Join( 
