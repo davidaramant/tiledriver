@@ -18,6 +18,9 @@ namespace Tiledriver.Core.Uwmf.Parsing
     public static partial class Parser
     {
 <#
+// TODO: I think it doesn't read unknown properties/blocks????
+
+
 foreach( var block in UwmfDefinitions.Blocks.Where( _ => _.NormalReading ) )
 {
 #>
