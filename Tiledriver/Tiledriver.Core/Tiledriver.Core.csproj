@@ -38,6 +38,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,6 +48,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DemoMap.cs" />
+    <Compile Include="LevelGeometry\IRegion.cs" />
+    <Compile Include="LevelGeometry\MapTile.cs" />
+    <Compile Include="LevelGeometry\SparseMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Uwmf\BaseUwmfBlock.cs" />
     <Compile Include="Uwmf\InvalidUwmfException.cs" />
@@ -78,6 +82,8 @@
     <Compile Include="Uwmf\UnknownProperty.cs" />
     <Compile Include="WadFile.cs" />
     <Compile Include="Wolf3D\AllWolfTextures.cs" />
+    <Compile Include="Wolf3D\RegionTheme.cs" />
+    <Compile Include="Wolf3D\TileTheme.cs" />
     <Compile Include="Wolf3D\WolfActor.cs" />
     <Compile Include="Wolf3D\WolfActor.Generated.cs">
       <AutoGen>True</AutoGen>
@@ -111,6 +117,7 @@
       <LastGenOutput>WolfActor.Generated.cs</LastGenOutput>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
