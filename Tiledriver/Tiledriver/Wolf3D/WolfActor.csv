@@ -1,6 +1,6 @@
 Name,Id,Skill1Health,Skill2Health,Skill3Health,Skill4Health,Points,PickupAmmo,PickupHealth,Solid
 WolfThing,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean
-Player1Start,1,0,0,0,0,0,0,0,false
+$Player1Start,1,0,0,0,0,0,0,0,false
 PatrolPoint,10,0,0,0,0,0,0,0,false
 Guard,11,25,25,25,25,100,4,0,false
 Officer,12,50,50,50,50,400,4,0,false

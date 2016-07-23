@@ -66,7 +66,7 @@ namespace Tiledriver.Generator
         {
             return _things.Select(t => new Thing
             {
-                Type = t.Actor.Id,
+                Type = t.Actor.ToString(),
                 X = BoundingBox.Left + t.LocationOffset.X + 0.5,
                 Y = BoundingBox.Top + t.LocationOffset.Y + 0.5,
                 Angle = (int)t.Facing,
@@ -85,7 +85,7 @@ namespace Tiledriver.Generator
                 X = BoundingBox.Left + locatedDoor.Key.X,
                 Y = BoundingBox.Top + locatedDoor.Key.Y,
                 Z = 0,
-                Action = 1, // Door action
+                Action = "Door_Open", // Door action
                 Arg0 = locatedDoor.Value.Tag, // Tag
                 Arg1 = 16, // Speed
                 Arg2 = 300, // Delay
@@ -103,7 +103,7 @@ namespace Tiledriver.Generator
                     X = (BoundingBox.Left + BoundingBox.Right) / 2,
                     Y = (BoundingBox.Top + BoundingBox.Bottom) / 2,
                     Z = 0,
-                    Action = 6, // Exit Victory Spin
+                    Action = "Exit_VictorySpin", // Exit Victory Spin
                     PlayerUse = true,
                     PlayerCross = true
                 });

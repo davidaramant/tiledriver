@@ -56,7 +56,7 @@ namespace Tiledriver
                 {
                     new Thing
                     {
-                        Type = WolfActor.Player1Start.Id,
+                        Type = WolfActor.Player1Start.ToString(),
                         X = 1.5,
                         Y = 4.5,
                         Angle = 90,
@@ -67,7 +67,7 @@ namespace Tiledriver
                     },
                     new Thing
                     {
-                        Type = WolfActor.Guard.Id,
+                        Type = WolfActor.Guard.ToString(),
                         X = 1.5,
                         Y = 1.5,
                         Angle = 270,
@@ -84,7 +84,7 @@ namespace Tiledriver
                         X = 1,
                         Y = 3,
                         Z = 0,
-                        Action = 1,
+                        Action = "Door_Open",
                         Arg0 = 1, // Tag
                         Arg1 = 16, // Speed
                         Arg2 = 300, // Delay

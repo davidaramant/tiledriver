@@ -13,7 +13,7 @@ namespace Tiledriver.Uwmf
         public bool ActivateWest { get; set; } = true;
         public bool ActivateEast { get; set; } = true;
 
-        public int Action { get; set; }
+        public string Action { get; set; }
 
         public int Arg0 { get; set; }
         public int Arg1 { get; set; }

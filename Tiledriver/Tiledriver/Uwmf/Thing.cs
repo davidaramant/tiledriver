@@ -11,7 +11,7 @@ namespace Tiledriver.Uwmf
         // 0 - 359; 270 is South
         public int Angle { get; set; }
 
-        public int Type { get; set; }
+        public string Type { get; set; }
 
         public bool Ambush { get; set; }
         public bool Patrol { get; set; }

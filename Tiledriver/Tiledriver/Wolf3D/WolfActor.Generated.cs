@@ -23,10 +23,10 @@ namespace Tiledriver.Wolf3D
         public readonly System.Boolean Solid;
 
         /// <summary>
-        /// Player1Start
+        /// $Player1Start
         /// </summary>
         public static readonly WolfActor Player1Start = new WolfActor(
-            instanceName: "Player1Start",
+            instanceName: "$Player1Start",
             id: 1,   
             skill1Health: 0,   
             skill2Health: 0,   
