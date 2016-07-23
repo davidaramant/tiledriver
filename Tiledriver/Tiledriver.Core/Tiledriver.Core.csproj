@@ -90,17 +90,10 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Wolf3D\WolfActor.cs" />
-    <Compile Include="Wolf3D\WolfActor.Generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>WolfActor.tt</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Wolf3D\Actor.csv" />
-    <None Include="Wolf3D\WolfActor.csv" />
   </ItemGroup>
   <ItemGroup>
     <None Include="EnumGenerator.t4">
@@ -122,10 +115,6 @@
     <Content Include="Wolf3D\Actor.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Actor.Generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Wolf3D\WolfActor.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>WolfActor.Generated.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <ItemGroup />
