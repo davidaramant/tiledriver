@@ -1,0 +1,41 @@
+﻿<Controls:MetroWindow x:Class="Tiledriver.UwmfViewer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Tiledriver.UwmfViewer"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        mc:Ignorable="d"
+        Title="Tiledriver UWMF Viewer" Height="400" Width="600"
+                      BorderThickness="0"
+                      GlowBrush="Black"
+                      WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Ribbon x:Name="Ribbon"
+                SelectedIndex="0">
+            <Ribbon.ApplicationMenu>
+                <RibbonApplicationMenu KeyTip="F"
+                                       Label="File"
+                                       LargeImageSource="Images\file.png">
+                    <RibbonApplicationMenuItem x:Name="OpenMap"
+                                               Header="Open Map"
+                                               KeyTip="O"
+                                               ImageSource="Images\file.png"
+                                               Click="OpenMapFile" />
+                    <RibbonApplicationMenuItem x:Name="Quit"
+                                               Header="Quit"
+                                               KeyTip="Q"
+                                               Click="QuitApplication" />
+                </RibbonApplicationMenu>
+            </Ribbon.ApplicationMenu>
+            <RibbonTab Header="View"
+                       KeyTip="V">
+            </RibbonTab>
+        </Ribbon>
+        
+    </Grid>
+</Controls:MetroWindow>
