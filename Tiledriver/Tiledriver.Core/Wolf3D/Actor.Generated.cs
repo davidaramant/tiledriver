@@ -43,7 +43,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor AngelOfDeath = new Actor(
             instanceName: "AngelOfDeath",
             iD: 27,   
-            category: "Boss",   
+            category: "Bosses",   
             wolf3D: false,   
             prefix: ""  
         );
@@ -53,7 +53,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor DevilIncarnate = new Actor(
             instanceName: "DevilIncarnate",
             iD: 103,   
-            category: "Boss",   
+            category: "Bosses",   
             wolf3D: false,   
             prefix: ""  
         );
@@ -817,6 +817,686 @@ namespace Tiledriver.Core.Wolf3D
             wolf3D: false,   
             prefix: ""  
         );
+        /// <summary>
+        /// FakeHitler
+        /// </summary>
+        public static readonly Actor FakeHitler = new Actor(
+            instanceName: "FakeHitler",
+            iD: 18,   
+            category: "Bosses",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// MechaHitler
+        /// </summary>
+        public static readonly Actor MechaHitler = new Actor(
+            instanceName: "MechaHitler",
+            iD: 19,   
+            category: "Bosses",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Trans
+        /// </summary>
+        public static readonly Actor Trans = new Actor(
+            instanceName: "Trans",
+            iD: 23,   
+            category: "Bosses",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// SubmarineWilly
+        /// </summary>
+        public static readonly Actor SubmarineWilly = new Actor(
+            instanceName: "SubmarineWilly",
+            iD: 99,   
+            category: "Bosses",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// UberMutant
+        /// </summary>
+        public static readonly Actor UberMutant = new Actor(
+            instanceName: "UberMutant",
+            iD: 24,   
+            category: "Bosses",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// TheAxe
+        /// </summary>
+        public static readonly Actor TheAxe = new Actor(
+            instanceName: "TheAxe",
+            iD: 101,   
+            category: "Bosses",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Wilhelm
+        /// </summary>
+        public static readonly Actor Wilhelm = new Actor(
+            instanceName: "Wilhelm",
+            iD: 25,   
+            category: "Bosses",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// ProfessorQuarkblitz
+        /// </summary>
+        public static readonly Actor ProfessorQuarkblitz = new Actor(
+            instanceName: "ProfessorQuarkblitz",
+            iD: 100,   
+            category: "Bosses",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// DeathKnight
+        /// </summary>
+        public static readonly Actor DeathKnight = new Actor(
+            instanceName: "DeathKnight",
+            iD: 24,   
+            category: "Bosses",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Robot
+        /// </summary>
+        public static readonly Actor Robot = new Actor(
+            instanceName: "Robot",
+            iD: 102,   
+            category: "Bosses",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// SpearOfDestiny
+        /// </summary>
+        public static readonly Actor SpearOfDestiny = new Actor(
+            instanceName: "SpearOfDestiny",
+            iD: 92,   
+            category: "SpearOfDestiny",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// SpearOfDestiny2
+        /// </summary>
+        public static readonly Actor SpearOfDestiny2 = new Actor(
+            instanceName: "SpearOfDestiny2",
+            iD: 138,   
+            category: "SpearOfDestiny",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Clip
+        /// </summary>
+        public static readonly Actor Clip = new Actor(
+            instanceName: "Clip",
+            iD: 59,   
+            category: "Ammo",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// ClipBox
+        /// </summary>
+        public static readonly Actor ClipBox = new Actor(
+            instanceName: "ClipBox",
+            iD: 90,   
+            category: "Ammo",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// BlueClip
+        /// </summary>
+        public static readonly Actor BlueClip = new Actor(
+            instanceName: "BlueClip",
+            iD: 139,   
+            category: "Ammo",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// ClipBox2
+        /// </summary>
+        public static readonly Actor ClipBox2 = new Actor(
+            instanceName: "ClipBox2",
+            iD: 140,   
+            category: "Ammo",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Cross
+        /// </summary>
+        public static readonly Actor Cross = new Actor(
+            instanceName: "Cross",
+            iD: 62,   
+            category: "Treasure",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Radio
+        /// </summary>
+        public static readonly Actor Radio = new Actor(
+            instanceName: "Radio",
+            iD: 146,   
+            category: "Treasure",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Chalice
+        /// </summary>
+        public static readonly Actor Chalice = new Actor(
+            instanceName: "Chalice",
+            iD: 63,   
+            category: "Treasure",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Plutonium
+        /// </summary>
+        public static readonly Actor Plutonium = new Actor(
+            instanceName: "Plutonium",
+            iD: 147,   
+            category: "Treasure",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// ChestofJewels
+        /// </summary>
+        public static readonly Actor ChestofJewels = new Actor(
+            instanceName: "ChestofJewels",
+            iD: 64,   
+            category: "Treasure",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// ControlPanel
+        /// </summary>
+        public static readonly Actor ControlPanel = new Actor(
+            instanceName: "ControlPanel",
+            iD: 148,   
+            category: "Treasure",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Crown
+        /// </summary>
+        public static readonly Actor Crown = new Actor(
+            instanceName: "Crown",
+            iD: 65,   
+            category: "Treasure",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Bomb
+        /// </summary>
+        public static readonly Actor Bomb = new Actor(
+            instanceName: "Bomb",
+            iD: 149,   
+            category: "Treasure",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Hans
+        /// </summary>
+        public static readonly Actor Hans = new Actor(
+            instanceName: "Hans",
+            iD: 16,   
+            category: "Bosses",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Gretel
+        /// </summary>
+        public static readonly Actor Gretel = new Actor(
+            instanceName: "Gretel",
+            iD: 20,   
+            category: "Bosses",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Schabbs
+        /// </summary>
+        public static readonly Actor Schabbs = new Actor(
+            instanceName: "Schabbs",
+            iD: 17,   
+            category: "Bosses",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Gift
+        /// </summary>
+        public static readonly Actor Gift = new Actor(
+            instanceName: "Gift",
+            iD: 21,   
+            category: "Bosses",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// FatFace
+        /// </summary>
+        public static readonly Actor FatFace = new Actor(
+            instanceName: "FatFace",
+            iD: 22,   
+            category: "Bosses",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Blinky
+        /// </summary>
+        public static readonly Actor Blinky = new Actor(
+            instanceName: "Blinky",
+            iD: 29,   
+            category: "Ghosts",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Inky
+        /// </summary>
+        public static readonly Actor Inky = new Actor(
+            instanceName: "Inky",
+            iD: 32,   
+            category: "Ghosts",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Pinky
+        /// </summary>
+        public static readonly Actor Pinky = new Actor(
+            instanceName: "Pinky",
+            iD: 31,   
+            category: "Ghosts",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Clyde
+        /// </summary>
+        public static readonly Actor Clyde = new Actor(
+            instanceName: "Clyde",
+            iD: 30,   
+            category: "Ghosts",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Spectre
+        /// </summary>
+        public static readonly Actor Spectre = new Actor(
+            instanceName: "Spectre",
+            iD: 28,   
+            category: "Ghosts",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// GhoulishGhost
+        /// </summary>
+        public static readonly Actor GhoulishGhost = new Actor(
+            instanceName: "GhoulishGhost",
+            iD: 104,   
+            category: "Ghosts",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// RadioactiveMist
+        /// </summary>
+        public static readonly Actor RadioactiveMist = new Actor(
+            instanceName: "RadioactiveMist",
+            iD: 157,   
+            category: "Ghosts",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Guard
+        /// </summary>
+        public static readonly Actor Guard = new Actor(
+            instanceName: "Guard",
+            iD: 11,   
+            category: "Guards",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// GreenGuard
+        /// </summary>
+        public static readonly Actor GreenGuard = new Actor(
+            instanceName: "GreenGuard",
+            iD: 93,   
+            category: "Guards",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// DeadGuard
+        /// </summary>
+        public static readonly Actor DeadGuard = new Actor(
+            instanceName: "DeadGuard",
+            iD: 81,   
+            category: "Guards",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// DeadGreenGuard
+        /// </summary>
+        public static readonly Actor DeadGreenGuard = new Actor(
+            instanceName: "DeadGreenGuard",
+            iD: 98,   
+            category: "Guards",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Dog
+        /// </summary>
+        public static readonly Actor Dog = new Actor(
+            instanceName: "Dog",
+            iD: 14,   
+            category: "Guards",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Doberman
+        /// </summary>
+        public static readonly Actor Doberman = new Actor(
+            instanceName: "Doberman",
+            iD: 95,   
+            category: "Guards",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Officer
+        /// </summary>
+        public static readonly Actor Officer = new Actor(
+            instanceName: "Officer",
+            iD: 12,   
+            category: "Guards",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// LostOfficer
+        /// </summary>
+        public static readonly Actor LostOfficer = new Actor(
+            instanceName: "LostOfficer",
+            iD: 97,   
+            category: "Guards",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Mutant
+        /// </summary>
+        public static readonly Actor Mutant = new Actor(
+            instanceName: "Mutant",
+            iD: 15,   
+            category: "Guards",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// GunBat
+        /// </summary>
+        public static readonly Actor GunBat = new Actor(
+            instanceName: "GunBat",
+            iD: 96,   
+            category: "Guards",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// WolfensteinSS
+        /// </summary>
+        public static readonly Actor WolfensteinSS = new Actor(
+            instanceName: "WolfensteinSS",
+            iD: 13,   
+            category: "Guards",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Schutzstafell
+        /// </summary>
+        public static readonly Actor Schutzstafell = new Actor(
+            instanceName: "Schutzstafell",
+            iD: 94,   
+            category: "Guards",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// DogFood
+        /// </summary>
+        public static readonly Actor DogFood = new Actor(
+            instanceName: "DogFood",
+            iD: 39,   
+            category: "Health",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// DogFood2
+        /// </summary>
+        public static readonly Actor DogFood2 = new Actor(
+            instanceName: "DogFood2",
+            iD: 111,   
+            category: "Health",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Food
+        /// </summary>
+        public static readonly Actor Food = new Actor(
+            instanceName: "Food",
+            iD: 57,   
+            category: "Health",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Food2
+        /// </summary>
+        public static readonly Actor Food2 = new Actor(
+            instanceName: "Food2",
+            iD: 142,   
+            category: "Health",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Medikit
+        /// </summary>
+        public static readonly Actor Medikit = new Actor(
+            instanceName: "Medikit",
+            iD: 58,   
+            category: "Health",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Medikit2
+        /// </summary>
+        public static readonly Actor Medikit2 = new Actor(
+            instanceName: "Medikit2",
+            iD: 143,   
+            category: "Health",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// OneUp
+        /// </summary>
+        public static readonly Actor OneUp = new Actor(
+            instanceName: "OneUp",
+            iD: 66,   
+            category: "Health",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// OneUpPill
+        /// </summary>
+        public static readonly Actor OneUpPill = new Actor(
+            instanceName: "OneUpPill",
+            iD: 144,   
+            category: "Health",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Blood
+        /// </summary>
+        public static readonly Actor Blood = new Actor(
+            instanceName: "Blood",
+            iD: 67,   
+            category: "Health",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Blood2
+        /// </summary>
+        public static readonly Actor Blood2 = new Actor(
+            instanceName: "Blood2",
+            iD: 145,   
+            category: "Health",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Gibs
+        /// </summary>
+        public static readonly Actor Gibs = new Actor(
+            instanceName: "Gibs",
+            iD: 71,   
+            category: "Health",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// Gibs2
+        /// </summary>
+        public static readonly Actor Gibs2 = new Actor(
+            instanceName: "Gibs2",
+            iD: 126,   
+            category: "Health",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// GoldKey
+        /// </summary>
+        public static readonly Actor GoldKey = new Actor(
+            instanceName: "GoldKey",
+            iD: 53,   
+            category: "Keys",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// YellowKey
+        /// </summary>
+        public static readonly Actor YellowKey = new Actor(
+            instanceName: "YellowKey",
+            iD: 154,   
+            category: "Keys",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// SilverKey
+        /// </summary>
+        public static readonly Actor SilverKey = new Actor(
+            instanceName: "SilverKey",
+            iD: 54,   
+            category: "Keys",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// CyanKey
+        /// </summary>
+        public static readonly Actor CyanKey = new Actor(
+            instanceName: "CyanKey",
+            iD: 155,   
+            category: "Keys",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// MachineGun
+        /// </summary>
+        public static readonly Actor MachineGun = new Actor(
+            instanceName: "MachineGun",
+            iD: 60,   
+            category: "Weapons",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// BlueAK47
+        /// </summary>
+        public static readonly Actor BlueAK47 = new Actor(
+            instanceName: "BlueAK47",
+            iD: 141,   
+            category: "Weapons",   
+            wolf3D: false,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// GatlingGunUpgrade
+        /// </summary>
+        public static readonly Actor GatlingGunUpgrade = new Actor(
+            instanceName: "GatlingGunUpgrade",
+            iD: 61,   
+            category: "Weapons",   
+            wolf3D: true,   
+            prefix: ""  
+        );
+        /// <summary>
+        /// BlueGatlingGunUpgrade
+        /// </summary>
+        public static readonly Actor BlueGatlingGunUpgrade = new Actor(
+            instanceName: "BlueGatlingGunUpgrade",
+            iD: 156,   
+            category: "Weapons",   
+            wolf3D: false,   
+            prefix: ""  
+        );
 
         private Actor(
             string instanceName,
@@ -929,6 +1609,74 @@ namespace Tiledriver.Core.Wolf3D
             yield return BlueColumn;
             yield return BrownColumn;
             yield return DevilStatue;
+            yield return FakeHitler;
+            yield return MechaHitler;
+            yield return Trans;
+            yield return SubmarineWilly;
+            yield return UberMutant;
+            yield return TheAxe;
+            yield return Wilhelm;
+            yield return ProfessorQuarkblitz;
+            yield return DeathKnight;
+            yield return Robot;
+            yield return SpearOfDestiny;
+            yield return SpearOfDestiny2;
+            yield return Clip;
+            yield return ClipBox;
+            yield return BlueClip;
+            yield return ClipBox2;
+            yield return Cross;
+            yield return Radio;
+            yield return Chalice;
+            yield return Plutonium;
+            yield return ChestofJewels;
+            yield return ControlPanel;
+            yield return Crown;
+            yield return Bomb;
+            yield return Hans;
+            yield return Gretel;
+            yield return Schabbs;
+            yield return Gift;
+            yield return FatFace;
+            yield return Blinky;
+            yield return Inky;
+            yield return Pinky;
+            yield return Clyde;
+            yield return Spectre;
+            yield return GhoulishGhost;
+            yield return RadioactiveMist;
+            yield return Guard;
+            yield return GreenGuard;
+            yield return DeadGuard;
+            yield return DeadGreenGuard;
+            yield return Dog;
+            yield return Doberman;
+            yield return Officer;
+            yield return LostOfficer;
+            yield return Mutant;
+            yield return GunBat;
+            yield return WolfensteinSS;
+            yield return Schutzstafell;
+            yield return DogFood;
+            yield return DogFood2;
+            yield return Food;
+            yield return Food2;
+            yield return Medikit;
+            yield return Medikit2;
+            yield return OneUp;
+            yield return OneUpPill;
+            yield return Blood;
+            yield return Blood2;
+            yield return Gibs;
+            yield return Gibs2;
+            yield return GoldKey;
+            yield return YellowKey;
+            yield return SilverKey;
+            yield return CyanKey;
+            yield return MachineGun;
+            yield return BlueAK47;
+            yield return GatlingGunUpgrade;
+            yield return BlueGatlingGunUpgrade;
         }
     }
 }
