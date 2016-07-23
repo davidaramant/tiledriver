@@ -223,7 +223,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 		            switch( lexer.ReadIdentifier().ToString() )
 					{
 						case "type":
-							thing.Type = ParseIntegerNumberAssignment( lexer, "Thing.Type" );
+							thing.Type = ParseStringAssignment( lexer, "Thing.Type" );
 							break;
 						case "x":
 							thing.X = ParseFloatingPointNumberAssignment( lexer, "Thing.X" );
@@ -305,7 +305,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 							trigger.Z = ParseIntegerNumberAssignment( lexer, "Trigger.Z" );
 							break;
 						case "action":
-							trigger.Action = ParseIntegerNumberAssignment( lexer, "Trigger.Action" );
+							trigger.Action = ParseStringAssignment( lexer, "Trigger.Action" );
 							break;
 						case "arg0":
 							trigger.Arg0 = ParseIntegerNumberAssignment( lexer, "Trigger.Arg0" );

@@ -54,7 +54,7 @@ namespace Tiledriver.UwmfMetadata
                 CannotHaveUnknownProperties(),
 
             new UwmfBlock("thing").
-                HasRequiredIntegerNumber("type").
+                HasRequiredString("type").
                 HasRequiredFloatingPointNumber("x").
                 HasRequiredFloatingPointNumber("y").
                 HasRequiredFloatingPointNumber("z").
@@ -72,7 +72,7 @@ namespace Tiledriver.UwmfMetadata
                 HasRequiredIntegerNumber("x").
                 HasRequiredIntegerNumber("y").
                 HasRequiredIntegerNumber("z").
-                HasRequiredIntegerNumber("action").
+                HasRequiredString("action").
                 HasOptionalIntegerNumber("arg0",0).
                 HasOptionalIntegerNumber("arg1",0).
                 HasOptionalIntegerNumber("arg2",0).

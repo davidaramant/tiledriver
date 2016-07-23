@@ -480,8 +480,8 @@ namespace Tiledriver.Core.Uwmf
     public sealed partial class Thing : BaseUwmfBlock, IWriteableUwmfBlock 
     {
         private bool _typeHasBeenSet = false;
-        private int _type;
-        public int Type
+        private string _type;
+        public string Type
         {
             get { return _type; }
             set 
@@ -547,7 +547,7 @@ namespace Tiledriver.Core.Uwmf
         public Thing() { }
 
         public Thing(
-            int type,
+            string type,
             double x,
             double y,
             double z,
@@ -694,8 +694,8 @@ namespace Tiledriver.Core.Uwmf
             }
         }
         private bool _actionHasBeenSet = false;
-        private int _action;
-        public int Action
+        private string _action;
+        public string Action
         {
             get { return _action; }
             set 
@@ -727,7 +727,7 @@ namespace Tiledriver.Core.Uwmf
             int x,
             int y,
             int z,
-            int action,
+            string action,
             int arg0 = 0,
             int arg1 = 0,
             int arg2 = 0,

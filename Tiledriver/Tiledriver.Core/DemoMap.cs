@@ -48,7 +48,7 @@ namespace Tiledriver.Core
                 {
                     new Thing
                     (
-                        type: WolfActor.Player1Start.Id,
+                        type: WolfActor.Player1Start.ToString(),
                         x: 1.5,
                         y: 1.5,
                         z: 0,

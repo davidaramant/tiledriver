@@ -26,7 +26,7 @@ namespace Tiledriver.Core.Wolf3D
         /// Player1Start
         /// </summary>
         public static readonly WolfActor Player1Start = new WolfActor(
-            instanceName: "Player1Start",
+            instanceName: "$Player1Start",
             id: 1,   
             skill1Health: 0,   
             skill2Health: 0,   
