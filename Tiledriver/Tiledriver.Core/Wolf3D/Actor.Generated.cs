@@ -954,7 +954,7 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "ClipBox",
             iD: 90,   
             category: "Ammo",   
-            wolf3D: true,   
+            wolf3D: false,   
             prefix: ""  
         );
         /// <summary>

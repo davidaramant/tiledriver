@@ -13,13 +13,16 @@ namespace Tiledriver.Core
     {
         public static Map Create()
         {
+            const int width = 128;
+            const int height = 128;
+
             var map = new Map
             (
                 nameSpace: "Wolf3D",
                 tileSize: 64,
                 name: "Test Output",
-                width: 64,
-                height: 64,
+                width: width,
+                height: height,
                 comment: "",
                 tiles: new[]
                 {
@@ -69,7 +72,7 @@ namespace Tiledriver.Core
                     new Zone(),
                 },
                 planes: new[] { new Plane(depth: 64) },
-                planeMaps: new[] { new PlaneMap(CreateGeometry(width: 64, height: 64)) },
+                planeMaps: new[] { new PlaneMap(CreateGeometry(width: width, height: height)) },
                 things: new[]
                 {
                     new Thing
@@ -112,11 +115,11 @@ namespace Tiledriver.Core
             );
 
             // Make the starting nook
-            map.PlaneMaps[0].TileSpaces[1 * 64 + 2].Tile = 1;
-            map.PlaneMaps[0].TileSpaces[1 * 64 + 2].Tag = 1;
+            map.PlaneMaps[0].TileSpaces[1 * map.Width + 2].Tile = 1;
+            map.PlaneMaps[0].TileSpaces[1 * map.Width + 2].Tag = 1;
 
-            map.PlaneMaps[0].TileSpaces[2 * 64 + 1].Tile = 0;
-            map.PlaneMaps[0].TileSpaces[2 * 64 + 2].Tile = 0;
+            map.PlaneMaps[0].TileSpaces[2 * map.Width + 1].Tile = 0;
+            map.PlaneMaps[0].TileSpaces[2 * map.Width + 2].Tile = 0;
 
 
             GenerateThings(map);
@@ -127,12 +130,21 @@ namespace Tiledriver.Core
         private static void GenerateThings(Map map)
         {
             // Decorations
-            map.Things.AddRange(Actor.GetAll().Where(a => a.Category == "Decorations").Select((actor, i) =>
+            foreach (var indexedActorGroup in Actor.GetAll().Where(a => a.Category != "Special").GroupBy(a => a.Category).Select((group, index) => new { group, index }))
             {
-                var x = 4 + 4 * (int)(i / 60);
-                var y = 2 + (i % 60);
+                DrawActors(map, indexedActorGroup.group, indexedActorGroup.index * 8);
+            }
+            //DrawActors(map, Actor.GetAll().Where(a => a.Category == "Decorations"), 0);
+        }
 
-                map.PlaneMaps.First().TileSpaces[y * 64 + x].Sector = actor.Wolf3D ? 1 : 2;
+        private static void DrawActors(Map map, IEnumerable<Actor> actors, int offset)
+        {
+            map.Things.AddRange(actors.Select((actor, actorIndex) =>
+            {
+                var x = 4 + offset;
+                var y = 2 + actorIndex;
+
+                map.PlaneMaps[0].TileSpaces[y * map.Width + x].Sector = actor.Wolf3D ? 1 : 2;
 
                 return new Thing(
                     type: actor.ClassName,
@@ -143,10 +155,10 @@ namespace Tiledriver.Core
                     skill1: true,
                     skill2: true,
                     skill3: true,
-                    skill4: true);
+                    skill4: true,
+                    skill5: true,
+                    ambush: true);
             }));
-
-
         }
 
         private static IEnumerable<TileSpace> CreateGeometry(int width, int height)
