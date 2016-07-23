@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Tiledriver.UwmfViewer"
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:views="clr-namespace:Tiledriver.UwmfViewer.Views"
         mc:Ignorable="d"
-        Title="Tiledriver UWMF Viewer" Height="400" Width="600"
+        Title="Tiledriver UWMF Viewer" Height="800" Width="1600"
                       BorderThickness="0"
                       GlowBrush="Black"
                       WindowStartupLocation="CenterScreen">
@@ -16,11 +17,11 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <Ribbon x:Name="Ribbon"
-                SelectedIndex="0">
+                SelectedIndex="0"
+                Grid.Row="0">
             <Ribbon.ApplicationMenu>
                 <RibbonApplicationMenu KeyTip="F"
-                                       Label="File"
-                                       LargeImageSource="Images\file.png">
+                                       Label="File">
                     <RibbonApplicationMenuItem x:Name="OpenMap"
                                                Header="Open Map"
                                                KeyTip="O"
@@ -36,6 +37,7 @@
                        KeyTip="V">
             </RibbonTab>
         </Ribbon>
-        
+
+        <views:MapCanvas x:Name="MapCanvas" Grid.Row="1" />
     </Grid>
 </Controls:MetroWindow>
