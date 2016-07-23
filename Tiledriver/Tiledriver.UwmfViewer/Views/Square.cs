@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -7,41 +8,69 @@ using Tiledriver.UwmfViewer.Utilities;
 
 namespace Tiledriver.UwmfViewer.Views
 {
-    public class Square
+    public class SquareFactory
     {
-        private const int dimension = 8;
+        private int size = 32;
+        private Map map;
 
-        private int canvasX;
-        private int canvasY;
-
-        public Tile Tile { get; set; }
-
-        public Square(Map map, int x, int y)
+        public SquareFactory(Map map, int size)
         {
-            canvasX = x * dimension;
-            canvasY = y * dimension;
-
-            var tileSpace = map.TileSpaceAt(x, y);
-
-            Tile = map.TileAt(tileSpace.Tile);
+            this.map = map;
+            this.size = size;
         }
 
-        public UIElement ToUIElement()
+        public Square ForCoordinates(int x, int y)
         {
-            var rect = new Rectangle()
+            var tileSpace = map.TileSpaceAt(x, y);
+
+            var square = new Square(x, y, size)
             {
-                Height = dimension,
-                Width = dimension,
-                Fill = FillColor(),
-                Stroke = FillColor(),
-                StrokeThickness = 0,
-                Margin = new Thickness(0)
+                Tile = map.TileAt(tileSpace.Tile),
+                Sector = map.SectorAt(tileSpace.Sector),
+                Zone = tileSpace.Zone
             };
 
-            Canvas.SetLeft(rect, canvasX);
-            Canvas.SetTop(rect, canvasY);
+            return square;
+        }
+    }
 
-            return rect;
+    public class Square
+    {
+        private int canvasX;
+        private int canvasY;
+        private int size;
+
+        public Tile Tile { get; set; }
+        public Sector Sector { get; set; }
+        public int Zone { get; set; }
+
+        public Square(int x, int y, int size)
+        {
+            canvasX = x * size;
+            canvasY = y * size;
+            this.size = size;
+        }
+
+        public List<UIElement> ToUIElements()
+        {
+            return new List<UIElement>{
+                Wall()
+            };
+        }
+
+        public UIElement Wall()
+        {
+            var element = new Rectangle()
+                {
+                    Height = size,
+                    Width = size,
+                    Fill = FillColor()
+                };
+
+            Canvas.SetLeft(element, canvasX);
+            Canvas.SetTop(element, canvasY);
+
+            return element;
         }
 
         private SolidColorBrush FillColor()

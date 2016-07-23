@@ -26,7 +26,7 @@
                                                Header="Open Map"
                                                KeyTip="O"
                                                ImageSource="Images\file.png"
-                                               Click="OpenMapFile" />
+                                               Click="SelectMapFile" />
                     <RibbonApplicationMenuItem x:Name="Quit"
                                                Header="Quit"
                                                KeyTip="Q"

@@ -27,7 +27,7 @@ namespace Tiledriver.UwmfViewer
             }
         }
 
-        private void OpenMapFile(object sender, System.Windows.RoutedEventArgs e)
+        private void SelectMapFile(object sender, System.Windows.RoutedEventArgs e)
         {
             var dialog = new Microsoft.Win32.OpenFileDialog()
             {
@@ -37,10 +37,18 @@ namespace Tiledriver.UwmfViewer
             var result = dialog.ShowDialog();
             if (result == true && dialog.CheckFileExists)
             {
-                App.Current.MainWindow.Title = $"Tiledriver UWMF Viewer - {dialog.SafeFileName}";
-                using (var stream = dialog.OpenFile())
+                OpenMapFile(dialog.FileName);
+            }
+        }
+
+        private void OpenMapFile(string fileName)
+        {
+            if (File.Exists(fileName))
+            {
+                using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
                 {
                     vm.Map = Parser.Parse(new Lexer(new UwmfCharReader(stream)));
+                    App.Current.MainWindow.Title = $"Tiledriver UWMF Viewer - {vm.Map.Name}";
                 }
             }
         }
