@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2016 David Aramant
 // Distributed under the GNU GPL v2. For full terms see the file LICENSE.
 
+using System.ComponentModel;
 using System.IO;
 using NUnit.Framework;
 using Tiledriver.Core.Uwmf;
@@ -49,6 +50,15 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
                 var roundTripped = Parser.Parse(new Lexer(new UwmfCharReader(stream)));
 
                 UwmfComparison.AssertEqual(roundTripped, map);
+            }
+        }
+
+        [Test]
+        public void ShouldParseOldDemoMap()
+        {
+            using (var stream = File.OpenRead(Path.Combine("Uwmf", "Parsing", "TEXTMAP.txt")))
+            {
+                var map = Parser.Parse(new Lexer(new UwmfCharReader(stream)));
             }
         }
     }

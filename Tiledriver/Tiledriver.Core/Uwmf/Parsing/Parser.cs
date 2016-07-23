@@ -90,6 +90,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
             var nextToken = lexer.DetermineNextToken();
             if (nextToken == TokenType.Comma)
             {
+                lexer.AdvanceOneCharacter();
                 tileSpace.Tag = lexer.ReadIntegerNumber();
                 nextToken = lexer.DetermineNextToken();
             }
