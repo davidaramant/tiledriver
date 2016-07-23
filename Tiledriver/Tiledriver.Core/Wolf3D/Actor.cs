@@ -3,9 +3,7 @@
 
 namespace Tiledriver.Core.Wolf3D
 {
-    // TODO: Align the names with what ECWolf uses
-    // TODO: Should this be generated from the Decorate code instead?
-    public partial class WolfActor
+    public sealed partial class Actor
     {
         public string ClassName => Prefix + _instanceName;
     }

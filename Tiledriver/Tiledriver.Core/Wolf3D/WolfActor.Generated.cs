@@ -21,12 +21,13 @@ namespace Tiledriver.Core.Wolf3D
         public readonly System.Int32 PickupAmmo;
         public readonly System.Int32 PickupHealth;
         public readonly System.Boolean Solid;
+        public readonly System.String Prefix;
 
         /// <summary>
         /// Player1Start
         /// </summary>
         public static readonly WolfActor Player1Start = new WolfActor(
-            instanceName: "$Player1Start",
+            instanceName: "Player1Start",
             id: 1,   
             skill1Health: 0,   
             skill2Health: 0,   
@@ -35,7 +36,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: "$"  
         );
         /// <summary>
         /// PatrolPoint
@@ -50,7 +52,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// Guard
@@ -65,7 +68,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 100,   
             pickupAmmo: 4,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// Officer
@@ -80,7 +84,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 400,   
             pickupAmmo: 4,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// SSGuard
@@ -95,7 +100,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 500,   
             pickupAmmo: 4,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// Dog
@@ -110,7 +116,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 200,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// Mutant
@@ -125,7 +132,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 700,   
             pickupAmmo: 4,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// Hans
@@ -140,7 +148,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 5000,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// Schabbs
@@ -155,7 +164,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 5000,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// FakeHitler
@@ -170,7 +180,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 2000,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// Hitler
@@ -185,7 +196,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 5000,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// Gretel
@@ -200,7 +212,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 10000,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// Gift
@@ -215,7 +228,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 5000,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// Fatface
@@ -230,7 +244,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 5000,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// PacmanGhostBlinky
@@ -245,7 +260,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// PacmanGhostClyde
@@ -260,7 +276,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// PacmanGhostPinky
@@ -275,7 +292,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// PacmanGhostInky
@@ -290,7 +308,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// Puddle
@@ -305,7 +324,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// GreenBarrel
@@ -320,7 +340,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: true  
+            solid: true,   
+            prefix: ""  
         );
         /// <summary>
         /// TableWithChairs
@@ -335,7 +356,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: true  
+            solid: true,   
+            prefix: ""  
         );
         /// <summary>
         /// FloorLamp
@@ -350,7 +372,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: true  
+            solid: true,   
+            prefix: ""  
         );
         /// <summary>
         /// Chandelier
@@ -365,7 +388,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// HangedMan
@@ -380,7 +404,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: true  
+            solid: true,   
+            prefix: ""  
         );
         /// <summary>
         /// DogFood
@@ -395,7 +420,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 4,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// WhitePillar
@@ -410,7 +436,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: true  
+            solid: true,   
+            prefix: ""  
         );
         /// <summary>
         /// GreenPlant
@@ -425,7 +452,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: true  
+            solid: true,   
+            prefix: ""  
         );
         /// <summary>
         /// SkeletonFlat
@@ -440,7 +468,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// Sink
@@ -455,7 +484,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: true  
+            solid: true,   
+            prefix: ""  
         );
         /// <summary>
         /// BrownPlant
@@ -470,7 +500,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: true  
+            solid: true,   
+            prefix: ""  
         );
         /// <summary>
         /// Vase
@@ -485,7 +516,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: true  
+            solid: true,   
+            prefix: ""  
         );
         /// <summary>
         /// Table
@@ -500,7 +532,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: true  
+            solid: true,   
+            prefix: ""  
         );
         /// <summary>
         /// CeilingLight
@@ -515,7 +548,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// KitchenStuff
@@ -530,7 +564,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// SuitOfArmor
@@ -545,7 +580,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: true  
+            solid: true,   
+            prefix: ""  
         );
         /// <summary>
         /// EmptyCage
@@ -560,7 +596,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: true  
+            solid: true,   
+            prefix: ""  
         );
         /// <summary>
         /// CageWithSkeleton
@@ -575,7 +612,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: true  
+            solid: true,   
+            prefix: ""  
         );
         /// <summary>
         /// Bones1
@@ -590,7 +628,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// GoldKey
@@ -605,7 +644,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// SilverKey
@@ -620,7 +660,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// Bed
@@ -635,7 +676,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: true  
+            solid: true,   
+            prefix: ""  
         );
         /// <summary>
         /// Basket
@@ -650,7 +692,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// Food
@@ -665,7 +708,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 10,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// FirstAidKit
@@ -680,7 +724,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 58,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// Clip
@@ -695,7 +740,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 8,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// MachineGun
@@ -710,7 +756,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 6,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// GatlingGun
@@ -725,7 +772,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 6,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// Cross
@@ -740,7 +788,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 100,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// Chalice
@@ -755,7 +804,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 500,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// ChestOfJewels
@@ -770,7 +820,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 1000,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// Crown
@@ -785,7 +836,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 5000,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// ExtraLife
@@ -800,7 +852,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 25,   
             pickupHealth: 99,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// Blood
@@ -815,7 +868,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 1,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// Barrel
@@ -830,7 +884,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: true  
+            solid: true,   
+            prefix: ""  
         );
         /// <summary>
         /// Well
@@ -845,7 +900,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: true  
+            solid: true,   
+            prefix: ""  
         );
         /// <summary>
         /// EmptyWell
@@ -860,7 +916,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: true  
+            solid: true,   
+            prefix: ""  
         );
         /// <summary>
         /// Gibs
@@ -875,7 +932,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 1,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// Flag
@@ -890,7 +948,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: true  
+            solid: true,   
+            prefix: ""  
         );
         /// <summary>
         /// CallApogee
@@ -905,7 +964,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: true  
+            solid: true,   
+            prefix: ""  
         );
         /// <summary>
         /// Bones2
@@ -920,7 +980,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// Bones3
@@ -935,7 +996,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// Bones4
@@ -950,7 +1012,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// Pots
@@ -965,7 +1028,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// Stove
@@ -980,7 +1044,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: true  
+            solid: true,   
+            prefix: ""  
         );
         /// <summary>
         /// Spears
@@ -995,7 +1060,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: true  
+            solid: true,   
+            prefix: ""  
         );
         /// <summary>
         /// Vines
@@ -1010,7 +1076,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
         /// <summary>
         /// DeadGuard
@@ -1025,7 +1092,8 @@ namespace Tiledriver.Core.Wolf3D
             points: 0,   
             pickupAmmo: 0,   
             pickupHealth: 0,   
-            solid: false  
+            solid: false,   
+            prefix: ""  
         );
 
         private WolfActor(
@@ -1038,7 +1106,8 @@ namespace Tiledriver.Core.Wolf3D
             System.Int32 points,   
             System.Int32 pickupAmmo,   
             System.Int32 pickupHealth,   
-            System.Boolean solid  
+            System.Boolean solid,   
+            System.String prefix  
         )
         {
             _instanceName = instanceName;
@@ -1051,6 +1120,7 @@ namespace Tiledriver.Core.Wolf3D
             PickupAmmo = pickupAmmo; 
             PickupHealth = pickupHealth; 
             Solid = solid; 
+            Prefix = prefix; 
         }
 
         /// <summary>

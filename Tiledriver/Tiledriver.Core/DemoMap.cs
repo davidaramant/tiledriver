@@ -48,7 +48,7 @@ namespace Tiledriver.Core
                 {
                     new Thing
                     (
-                        type: WolfActor.Player1Start.ToString(),
+                        type: Actor.Player1Start.ClassName,
                         x: 1.5,
                         y: 1.5,
                         z: 0,
@@ -58,11 +58,38 @@ namespace Tiledriver.Core
                         skill3: true,
                         skill4: true
                     ),
-                },
+                }.Concat(GenerateThings()),
                 triggers: new Trigger[] { }
             );
 
             return map;
+        }
+
+        private static IEnumerable<Thing> GenerateThings()
+        {
+            return Actor.GetAll().Where(a => a.Category == "Decorations").SelectMany(((actor, i) => new[]
+            {
+                new Thing(
+                    type: actor.ClassName,
+                    x: 2.5 + 4*(int)(i / 60),
+                    y: 2.5 + (i % 60),
+                    z: 0,
+                    angle: 0,
+                    skill1: true,
+                    skill2: true,
+                    skill3: true,
+                    skill4: true),
+                new Thing(
+                    type: actor.Wolf3D? Actor.Barrel.ClassName : Actor.HangedMan.ClassName,
+                    x: 3.5 + 4*(int)(i / 60),
+                    y: 2.5 + (i % 60),
+                    z: 0,
+                    angle: 0,
+                    skill1: true,
+                    skill2: true,
+                    skill3: true,
+                    skill4: true),
+            }));
         }
 
         private static IEnumerable<TileSpace> CreateGeometry(int width, int height)
