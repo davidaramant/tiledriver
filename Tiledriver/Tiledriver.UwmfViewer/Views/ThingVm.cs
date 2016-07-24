@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -10,36 +11,38 @@ namespace Tiledriver.UwmfViewer.Views
 {
     public class ThingVm : MapItem
     {
-        private static ThingVm Default => new ThingVm(CIRCLE, Violet, White);
-        private static ThingVm PatrolPoint => new ThingVm(ARROW, Black, White, true);
-        private static ThingVm Player => new ThingVm(MAN, Black, Yellow, true);
-        private static ThingVm EnemyMan(Color fill) => new ThingVm(MAN, fill, White, true);
-        private static ThingVm Key(Color fill) => new ThingVm(KEY, fill, fill);
-        private static ThingVm PacmanGhost => new ThingVm(PACMAN_GHOST, GhostWhite, LightBlue);
-        private static ThingVm Decoration => new ThingVm(CIRCLE, LightGreen, Green);
 
         public Geometry Geometry { get; set; }
         public SolidColorBrush Fill { get; set; }
         public SolidColorBrush Stroke { get; set; }
         public bool ShouldRotate { get; set; }
         public Thing Thing { get; set; }
+        public string Category { get; set; }
 
-        private ThingVm(string path, Color fill, Color stroke, bool shouldRotate = false)
+        private ThingVm(Thing thing, string category, string path, Color fill, Color stroke, bool shouldRotate = false)
         {
             Geometry = Geometry.Parse(path);
             Fill = fill.ToBrush();
             Stroke = stroke.ToBrush();
             ShouldRotate = shouldRotate;
+            Thing = thing;
+            Category = category;
         }
 
         public static ThingVm Create(Thing thing, string category)
         {
-            var key = ThingVm.ShouldUseCategory.Contains(category) ? category : thing.Type;
+            var key = ShouldUseCategory.Contains(category) ? category : thing.Type;
 
-            var thingVm = ThingVm.Templates.ContainsKey(key) ? ThingVm.Templates[key] : ThingVm.Default;
-            thingVm.Thing = thing;
-
-            return thingVm;
+            if (Templates.ContainsKey(key))
+            {
+                var thingVm = Templates[key](thing, category);
+                return thingVm;
+            }
+            else
+            {
+                var thingVm = Default(thing, category);
+                return thingVm;
+            }
         }
 
         public override UIElement ToUIElement(int size)
@@ -71,7 +74,8 @@ namespace Tiledriver.UwmfViewer.Views
             get
             {
                 yield return new DetailProperties("Thing", "Type", Thing.Type);
-                
+                yield return new DetailProperties("Thing", "Category", Category);
+
                 yield return new DetailProperties("Position", "X", Thing.X.ToString());
                 yield return new DetailProperties("Position", "Y", Thing.Y.ToString());
                 yield return new DetailProperties("Position", "Angle", Thing.Angle.ToString());
@@ -97,14 +101,14 @@ namespace Tiledriver.UwmfViewer.Views
             "Weapons",
         };
 
-        private static Dictionary<string, ThingVm> Templates = new Dictionary<string, ThingVm>
+        private static Dictionary<string, Func<Thing,string,ThingVm>> Templates = new Dictionary<string, Func<Thing,string,ThingVm>>
         {
             // SPECIAL
-            { "$Player1Start", Player },
-            { "PatrolPoint", PatrolPoint },
+            { "$Player1Start", Player() },
+            { "PatrolPoint", PatrolPoint() },
             // GUARDS
-            { "DeadGuard", Decoration },
-            { "Dog", new ThingVm(DOG, Brown, SaddleBrown) },
+            { "DeadGuard", Decoration() },
+            { "Dog", Dog() },
             { "Guard", EnemyMan(SaddleBrown) },
             { "Officer", EnemyMan(White) },
             { "WolfensteinSS", EnemyMan(Blue) },
@@ -114,11 +118,25 @@ namespace Tiledriver.UwmfViewer.Views
             { "SilverKey", Key(Silver) },
             // THING CATEGORIES
             { "Bosses", EnemyMan(Red) },
-            { "Ghosts", PacmanGhost },
-            { "Decorations", Decoration },
-            { "Treasure", new ThingVm(CROWN, Gold, Gold) },
-            { "Health", new ThingVm(CROSS, Blue, White) },
-            { "Weapons", new ThingVm(GUN, Gray, LightGray) },
+            { "Ghosts", PacmanGhost() },
+            { "Decorations", Decoration() },
+            { "Treasure", Treasure() },
+            { "Health", Health() },
+            { "Weapons", Weapons() },
+            { "Ammo", Ammo() },
         };
+
+        private static Func<Thing,string,ThingVm> Default = (t,c) => new ThingVm(t, c, CIRCLE, Violet, White);
+        private static Func<Thing,string,ThingVm> PatrolPoint() => (t,c) => new ThingVm(t, c, ARROW, Black, White, true);
+        private static Func<Thing,string,ThingVm> Player() => (t,c) => new ThingVm(t, c, MAN, Black, Yellow, true);
+        private static Func<Thing,string,ThingVm> EnemyMan(Color fill) => (t,c) => new ThingVm(t, c, MAN, fill, White, true);
+        private static Func<Thing,string,ThingVm> Key(Color fill) => (t,c) => new ThingVm(t, c, KEY, fill, fill);
+        private static Func<Thing,string,ThingVm> PacmanGhost() => (t,c) => new ThingVm(t, c, PACMAN_GHOST, GhostWhite, LightBlue);
+        private static Func<Thing,string,ThingVm> Decoration() => (t,c) => new ThingVm(t, c, CIRCLE, LightGreen, Green);
+        private static Func<Thing,string,ThingVm> Dog() => (t,c) => new ThingVm(t, c, DOG, Brown, SaddleBrown);
+        private static Func<Thing,string,ThingVm> Treasure() => (t,c) => new ThingVm(t, c, CROWN, Gold, Gold);
+        private static Func<Thing,string,ThingVm> Health() => (t,c) => new ThingVm(t, c, CROSS, Blue, White);
+        private static Func<Thing,string,ThingVm> Weapons() => (t,c) => new ThingVm(t, c, GUN, Gray, LightGray);
+        private static Func<Thing, string, ThingVm> Ammo() => (t,c) => new ThingVm(t, c, AMMO, Gray, LightGray);
     }
 }
