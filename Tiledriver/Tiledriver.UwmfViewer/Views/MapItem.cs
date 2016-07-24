@@ -6,6 +6,8 @@ namespace Tiledriver.UwmfViewer.Views
     {
         public const string TRIANGLE = "M 16 0 L 28 32 L 4 32 Z";
         public const string SQUARE = "M 0 0 L 1 0 L 1 1 L 0 1 Z";
+        public const string EWDOOR = "M 0 0 L 1 0 L 1 2 L 0 2 Z";
+        public const string NSDOOR = "M 0 0 L 2 0 L 2 1 L 0 1 Z";
         public const string DIAMOND = "M 1 0 L 2 2 L 1 4 L 0 2 Z";
         public const string CIRCLE = "M0,0 A50,50 0 0 0 0,100 A50,50 0 0 0 0,0";
         public const string CROSS = "M 0 1 L 1 1 L 1 0 L 2 0 L 2 1 L 3 1 L 3 2 L 2 2 L 2 3 L 1 3 L 1 2 L 0 2 Z";
