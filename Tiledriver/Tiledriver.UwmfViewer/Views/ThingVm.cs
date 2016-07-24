@@ -69,12 +69,13 @@ namespace Tiledriver.UwmfViewer.Views
             return element;
         }
 
+        public override string DetailType => Thing?.Type ?? "Thing";
+
         public override IEnumerable<DetailProperties> Details
         {
             get
             {
-                yield return new DetailProperties("Thing", "Type", Thing.Type);
-                yield return new DetailProperties("Thing", "Category", Category);
+                yield return new DetailProperties(null, "Category", Category);
 
                 yield return new DetailProperties("Position", "X", Thing.X.ToString());
                 yield return new DetailProperties("Position", "Y", Thing.Y.ToString());

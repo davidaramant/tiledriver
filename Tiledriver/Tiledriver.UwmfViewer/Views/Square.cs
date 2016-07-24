@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -37,6 +38,8 @@ namespace Tiledriver.UwmfViewer.Views
 
             return element;
         }
+
+        public override string DetailType => Tile != null ? "Wall" : "Space";
 
         public override IEnumerable<DetailProperties> Details
         {
