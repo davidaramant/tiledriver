@@ -29,6 +29,7 @@ namespace Tiledriver.UwmfViewer.Views
         public void Update(Map map)
         {
             ClearDetailsPane();
+            FullArea.Children.Clear();
 
             FullArea.Height = map.Height * squareSize;
             FullArea.Width = map.Width * squareSize;
