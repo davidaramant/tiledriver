@@ -12,13 +12,18 @@
                       GlowBrush="Black"
                       WindowStartupLocation="CenterScreen">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*" />
+            <ColumnDefinition Width="1*" MaxWidth="300px" />
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
         <Ribbon x:Name="Ribbon"
                 SelectedIndex="0"
-                Grid.Row="0">
+                Grid.Row="0"
+                Grid.ColumnSpan="2">
             <Ribbon.ApplicationMenu>
                 <RibbonApplicationMenu KeyTip="F"
                                        Label="File">
@@ -38,6 +43,7 @@
             </RibbonTab>
         </Ribbon>
 
-        <views:MapCanvas x:Name="MapCanvas" Grid.Row="1" />
+        <views:MapCanvas x:Name="MapCanvas" Grid.Row="1" Grid.Column="0" />
+        <views:DetailView x:Name="DetailPane" Grid.Row="1" Grid.Column="1" />
     </Grid>
 </Controls:MetroWindow>

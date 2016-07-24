@@ -4,71 +4,38 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Tiledriver.Core.Uwmf;
-using Tiledriver.UwmfViewer.Utilities;
 
 namespace Tiledriver.UwmfViewer.Views
 {
-    public class SquareFactory
+    public class Square : MapItem
     {
-        private int size = 32;
-        private Map map;
-
-        public SquareFactory(Map map, int size)
-        {
-            this.map = map;
-            this.size = size;
-        }
-
-        public Square ForCoordinates(int x, int y)
-        {
-            var tileSpace = map.TileSpaceAt(x, y);
-
-            var square = new Square(x, y, size)
-            {
-                Tile = map.TileAt(tileSpace.Tile),
-                Sector = map.SectorAt(tileSpace.Sector),
-                Zone = tileSpace.Zone
-            };
-
-            return square;
-        }
-    }
-
-    public class Square
-    {
-        private int canvasX;
-        private int canvasY;
-        private int size;
+        private int x;
+        private int y;
 
         public Tile Tile { get; set; }
         public Sector Sector { get; set; }
         public int Zone { get; set; }
 
-        public Square(int x, int y, int size)
+        public Square(int x, int y)
         {
-            canvasX = x * size;
-            canvasY = y * size;
-            this.size = size;
+            this.x = x;
+            this.y = y;
         }
 
-        public List<UIElement> ToUIElements()
+        public override UIElement ToUIElement(int size)
         {
-            return new List<UIElement>{
-                Wall()
+            var element = new Path()
+            {
+                Height = size,
+                Width = size,
+                Fill = FillColor(),
+                Data = Geometry.Parse(MapItem.SQUARE),
+                Stroke = FillColor(),
+                Stretch = Stretch.Uniform
             };
-        }
 
-        public UIElement Wall()
-        {
-            var element = new Rectangle()
-                {
-                    Height = size,
-                    Width = size,
-                    Fill = FillColor()
-                };
-
-            Canvas.SetLeft(element, canvasX);
-            Canvas.SetTop(element, canvasY);
+            Canvas.SetLeft(element, x * size);
+            Canvas.SetTop(element, y * size);
 
             return element;
         }
