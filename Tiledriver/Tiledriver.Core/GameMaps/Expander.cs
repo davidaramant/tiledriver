@@ -54,6 +54,7 @@ namespace Tiledriver.Core.GameMaps
 
             var inputPos = 2;
 
+
             while (outputPos < outputLength)
             {
                 var copyPos = 0;
@@ -68,7 +69,7 @@ namespace Tiledriver.Core.GameMaps
                 }
                 else if (input[inputPos] == nearTag)
                 {
-                    copyPos = outputPos - (input[inputPos] * 2);
+                    copyPos = outputPos - (input[inputPos + 1] * 2);
                     inputPos += 2;
                 }
                 else if (input[inputPos] == farTag)
@@ -83,13 +84,13 @@ namespace Tiledriver.Core.GameMaps
                     continue;
                 }
 
-                if (outputPos + (length * 2) > outputLength)
+                if ((outputPos + (length * 2)) > outputLength)
                     break;
 
                 while (length-- > 0)
                 {
-                    output[outputPos++] = input[copyPos++];
-                    output[outputPos++] = input[copyPos++];
+                    output[outputPos++] = output[copyPos++];
+                    output[outputPos++] = output[copyPos++];
                 }
             }
 

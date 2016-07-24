@@ -16,7 +16,7 @@ namespace Tiledriver.Core.GameMaps
 
         public override string ToString()
         {
-            return $"Offset: {Offset:x8}, Length: {CompressedLength:x4}";
+            return $"Offset: {Offset:x8}, Length: {CompressedLength:x4} ({CompressedLength})";
         }
     }
 }
