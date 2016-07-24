@@ -23,11 +23,13 @@ namespace Tiledriver.UwmfViewer.Views
 
         public abstract UIElement ToUIElement(int size);
 
+        public Point Coordinates { get; set; }
+        public LayerType LayerType { get; set; }
+
+        public abstract string DetailType { get; }
         public abstract IEnumerable<DetailProperties> Details { get; }
 
-        public Point Coordinates { get; set; }
 
-        public LayerType LayerType { get; set; }
     }
 
     public class DetailProperties

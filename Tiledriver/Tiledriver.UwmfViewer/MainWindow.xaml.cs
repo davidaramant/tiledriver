@@ -15,6 +15,7 @@ namespace Tiledriver.UwmfViewer
 
             DataContext = vm;
             vm.PropertyChanged += SubscribeMapCanvasToMapChanges;
+            MapCanvas.NotifyNewMapItems += DetailPane.Update;
         }
 
         private void SubscribeMapCanvasToMapChanges(object sender, System.ComponentModel.PropertyChangedEventArgs e)
