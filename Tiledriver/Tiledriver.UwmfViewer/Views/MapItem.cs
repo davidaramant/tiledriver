@@ -18,11 +18,16 @@ namespace Tiledriver.UwmfViewer.Views
         public const string MAN = "M 8 0 L 11 2 L 11 8 L 16 16 L 0 16 L 5 8 L 5 2 Z";
         public const string ARROW = "M 8 0 L 16 8 L 11 8 L 11 16 L 5 16 L 5 8 L 0 8 Z";
         public const string PACMAN_GHOST = "M 8 0 L 12 2 L 14 6 L 16 16 L 13 16 L 11 12 L 9 16 L 7 16 L 5 12 L 3 16 L 0 16 L 2 6 L 4 2 Z";
+        public const string AMMO = "M 8 0 L 12 2 L 14 6 L 16 16 L 0 16 L 2 6 L 4 2 Z";
         public const string KEY = "M 0 12 L 0 7 L 9 7 L 12 4 L 16 8 L 12 12 L 9 9 L 2 9 L 2 12 Z";
 
         public abstract UIElement ToUIElement(int size);
 
         public abstract IEnumerable<DetailProperties> Details { get; }
+
+        public Point Coordinates { get; set; }
+
+        public LayerType LayerType { get; set; }
     }
 
     public class DetailProperties
