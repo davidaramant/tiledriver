@@ -31,8 +31,7 @@ namespace Tiledriver.UwmfViewer
         {
             var dialog = new Microsoft.Win32.OpenFileDialog()
             {
-                Multiselect = false,
-                FileName = "TEXTMAP.txt"
+                Multiselect = false
             };
             var result = dialog.ShowDialog();
             if (result == true && dialog.CheckFileExists)
