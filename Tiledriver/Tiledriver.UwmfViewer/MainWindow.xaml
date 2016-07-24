@@ -20,29 +20,15 @@
             <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <Ribbon x:Name="Ribbon"
-                SelectedIndex="0"
-                Grid.Row="0"
-                Grid.ColumnSpan="2">
-            <Ribbon.ApplicationMenu>
-                <RibbonApplicationMenu KeyTip="F"
-                                       Label="File">
-                    <RibbonApplicationMenuItem x:Name="OpenMap"
-                                               Header="Open Map"
-                                               KeyTip="O"
-                                               ImageSource="Images\file.png"
-                                               Click="SelectMapFile" />
-                    <RibbonApplicationMenuItem x:Name="Quit"
-                                               Header="Quit"
-                                               KeyTip="Q"
-                                               Click="QuitApplication" />
-                </RibbonApplicationMenu>
-            </Ribbon.ApplicationMenu>
-            <RibbonTab Header="View"
-                       KeyTip="V">
-            </RibbonTab>
-        </Ribbon>
-
+        <DockPanel Grid.Row="0"
+                   Grid.ColumnSpan="2">
+            <ToolBarTray DockPanel.Dock="Top">
+                <ToolBar>
+                    <Button Click="SelectMapFile"
+                            Content="Open Map" />
+                </ToolBar>
+            </ToolBarTray>
+        </DockPanel>
         <views:MapCanvas x:Name="MapCanvas" Grid.Row="1" Grid.Column="0" />
         <views:DetailView x:Name="DetailPane" Grid.Row="1" Grid.Column="1" />
     </Grid>
