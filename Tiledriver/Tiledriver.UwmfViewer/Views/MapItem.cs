@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 
 namespace Tiledriver.UwmfViewer.Views
 {
@@ -20,5 +21,23 @@ namespace Tiledriver.UwmfViewer.Views
         public const string KEY = "M 0 12 L 0 7 L 9 7 L 12 4 L 16 8 L 12 12 L 9 9 L 2 9 L 2 12 Z";
 
         public abstract UIElement ToUIElement(int size);
+
+        public abstract IEnumerable<DetailProperties> Details { get; }
+    }
+
+    public class DetailProperties
+    {
+        public string Category { get; }
+
+        public string Title { get; }
+
+        public string Value { get; }
+
+        public DetailProperties(string category, string title, string value)
+        {
+            Category = category;
+            Title = title;
+            Value = value;
+        }
     }
 }

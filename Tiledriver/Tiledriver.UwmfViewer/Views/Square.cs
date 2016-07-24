@@ -38,6 +38,42 @@ namespace Tiledriver.UwmfViewer.Views
             return element;
         }
 
+        public override IEnumerable<DetailProperties> Details
+        {
+            get
+            {
+                yield return new DetailProperties("Position", "X", x.ToString());
+                yield return new DetailProperties("Position", "Y", y.ToString());
+
+                if (Sector != null)
+                {
+                    yield return new DetailProperties("Sector", "CeilingTexture", Sector.TextureCeiling);
+                    yield return new DetailProperties("Sector", "FloorTexture", Sector.TextureFloor);
+                }
+
+                if (Zone >= 0)
+                {
+                    yield return new DetailProperties("Miscellaneous", "Zone", Zone.ToString());
+                }
+                
+                if (Tile != null)
+                {
+                    yield return new DetailProperties("Texture", "Texture North", Tile.TextureNorth);
+                    yield return new DetailProperties("Texture", "Texture East", Tile.TextureEast);
+                    yield return new DetailProperties("Texture", "Texture South", Tile.TextureSouth);
+                    yield return new DetailProperties("Texture", "Texture West", Tile.TextureWest);
+
+                    yield return new DetailProperties("Texture Offset", "Offset Vertical", Tile.OffsetVertical ? "Yes" : "No");
+                    yield return new DetailProperties("Texture Offset", "Offset Horizontal", Tile.OffsetHorizontal ? "Yes" : "No");
+
+                    yield return new DetailProperties("Texture Blocking", "Blocking North", Tile.BlockingNorth ? "Yes" : "No");
+                    yield return new DetailProperties("Texture Blocking", "Blocking East", Tile.BlockingEast ? "Yes" : "No");
+                    yield return new DetailProperties("Texture Blocking", "Blocking South", Tile.BlockingSouth ? "Yes" : "No");
+                    yield return new DetailProperties("Texture Blocking", "Blocking West", Tile.BlockingWest ? "Yes" : "No");
+                }
+            }
+        }
+
         private void SetProperties(Path element)
         {
             SolidColorBrush color;
