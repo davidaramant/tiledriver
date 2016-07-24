@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Windows;
 using Tiledriver.Core.Uwmf.Parsing;
 using Tiledriver.UwmfViewer.ViewModels;
@@ -8,6 +9,8 @@ namespace Tiledriver.UwmfViewer
     public partial class MainWindow
     {
         private MainVm vm = new MainVm();
+
+        private int tileSize = 24;
 
         public MainWindow()
         {
@@ -22,8 +25,20 @@ namespace Tiledriver.UwmfViewer
         {
             if (e.PropertyName.Equals(nameof(vm.Map)))
             {
-                MapCanvas.Update(vm.Map);
+                MapCanvas.Update(vm.Map, tileSize);
             }
+        }
+
+        private void ZoomIn(object sender, RoutedEventArgs e)
+        {
+            tileSize = Math.Min(tileSize + 8, 32);
+            MapCanvas.Update(vm.Map, tileSize);
+        }
+
+        private void ZoomOut(object sender, RoutedEventArgs e)
+        {
+            tileSize = Math.Max(tileSize - 8, 8);
+            MapCanvas.Update(vm.Map, tileSize);
         }
 
         private void SelectMapFile(object sender, RoutedEventArgs e)
