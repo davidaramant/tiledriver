@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using static System.Windows.Media.Colors;
 
 namespace Tiledriver.UwmfViewer.Views
 {
@@ -9,6 +12,7 @@ namespace Tiledriver.UwmfViewer.Views
         public DetailView()
         {
             InitializeComponent();
+            Panel.Margin = new Thickness(4);
         }
 
         internal void Update(object sender, MapItemEventArgs e)
@@ -18,7 +22,10 @@ namespace Tiledriver.UwmfViewer.Views
             // ITEM
             foreach (var mapItem in e.MapItems)
             {
-                var itemPanel = new StackPanel();
+                var itemPanel = new StackPanel()
+                {
+                    Margin = new Thickness(0, 0, 0, 16),
+                };
                 itemPanel.Children.Add(ItemHeader(mapItem.DetailType));
 
                 // CATEGORY
@@ -46,27 +53,16 @@ namespace Tiledriver.UwmfViewer.Views
             }
         }
 
-        private static Label TitleLabel(string title)
-        {
-            return new Label()
-            {
-                Content = title,
-            };
-        }
-
-        private static Label ValueLabel(string value)
-        {
-            return new Label()
-            {
-                Content = value,
-            };
-        }
-
         private static Label ItemHeader(string detailType)
         {
             return new Label()
             {
                 Content = detailType,
+                FontSize = 16,
+                FontWeight = FontWeights.Bold,
+                Foreground = Blue.ToBrush(),
+                BorderBrush = LightGray.ToBrush(),
+                BorderThickness = new Thickness(0, 0, 0, 0.5)
             };
         }
 
@@ -75,6 +71,26 @@ namespace Tiledriver.UwmfViewer.Views
             return new Label()
             {
                 Content = categoryKey,
+                FontWeight = FontWeights.Bold,
+                Foreground = Color.FromRgb(64,64,64).ToBrush(),
+            };
+        }
+
+        private static Label TitleLabel(string title)
+        {
+            return new Label()
+            {
+                Content = title,
+                Margin = new Thickness(16, 0, 0, 0),
+                Width = 96,
+            };
+        }
+
+        private static Label ValueLabel(string value)
+        {
+            return new Label()
+            {
+                Content = value,
             };
         }
     }
