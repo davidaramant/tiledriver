@@ -48,7 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GameMaps\RlewExpanderTests.cs" />
+    <Compile Include="GameMaps\ExpanderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Uwmf\Parsing\LexerTests.cs" />
     <Compile Include="Uwmf\Parsing\UwmfComparison.cs" />

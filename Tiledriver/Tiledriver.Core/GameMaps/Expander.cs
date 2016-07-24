@@ -6,9 +6,12 @@ using System.Collections.Generic;
 
 namespace Tiledriver.Core.GameMaps
 {
-    public static class RlewExpander
+    /// <summary>
+    /// Methods for decompressing RLEW encoding and Carmack compression.
+    /// </summary>
+    public static class Expander
     {
-        public static byte[] Uncompress(ushort marker, byte[] input)
+        public static byte[] DecompressRlew(ushort marker, byte[] input)
         {
             var result = new List<byte>(input.Length);
             int inputPosition = 0;

@@ -51,7 +51,7 @@
     <Compile Include="GameMaps\MapHeader.cs" />
     <Compile Include="GameMaps\OffsetData.cs" />
     <Compile Include="GameMaps\PlaneMetadata.cs" />
-    <Compile Include="GameMaps\RlewExpander.cs" />
+    <Compile Include="GameMaps\Expander.cs" />
     <Compile Include="LevelGeometry\IRegion.cs" />
     <Compile Include="LevelGeometry\MapTile.cs" />
     <Compile Include="LevelGeometry\SparseMap.cs" />

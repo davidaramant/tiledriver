@@ -9,13 +9,13 @@ using Tiledriver.Core.GameMaps;
 namespace Tiledriver.Core.Tests.GameMaps
 {
     [TestFixture]
-    public sealed class RlewExpanderTests
+    public sealed class ExpanderTests
     {
         [Test]
         public void ShouldPassThroughBytesWithNoMarker()
         {
             var input = Enumerable.Repeat<byte>(0xFF, 40).ToArray();
-            var expanded = RlewExpander.Uncompress(0xABCD, input);
+            var expanded = Expander.DecompressRlew(0xABCD, input);
             Assert.That(expanded, Is.EqualTo(input), "Should not have mutated array.");
         }
 
@@ -23,7 +23,7 @@ namespace Tiledriver.Core.Tests.GameMaps
         public void ShouldExpandASimpleSubstitution()
         {
             var input = new byte[] { 0xCD, 0xAB, 0x08, 0x00, 0xFF, 0xFF };
-            var expanded = RlewExpander.Uncompress(0xABCD, input);
+            var expanded = Expander.DecompressRlew(0xABCD, input);
             Assert.That(expanded, Is.EqualTo(Enumerable.Repeat<byte>(0xFF, 16).ToArray()), "Should have expanded array.");
         }
 
@@ -31,7 +31,7 @@ namespace Tiledriver.Core.Tests.GameMaps
         public void ShouldExpandWithPrefix()
         {
             var input = new byte[] { 0x1A, 0x2B, 0xCD, 0xAB, 0x08, 0x00, 0xFF, 0xFF };
-            var expanded = RlewExpander.Uncompress(0xABCD, input);
+            var expanded = Expander.DecompressRlew(0xABCD, input);
             Assert.That(expanded, Is.EqualTo(new byte[] { 0x1A, 0x2B }.Concat(Enumerable.Repeat<byte>(0xFF, 16)).ToArray()), "Should have expanded array.");
         }
 
@@ -39,7 +39,7 @@ namespace Tiledriver.Core.Tests.GameMaps
         public void ShouldExpandWithAppendix()
         {
             var input = new byte[] { 0xCD, 0xAB, 0x08, 0x00, 0xFF, 0xFF, 0x1A, 0x2B };
-            var expanded = RlewExpander.Uncompress(0xABCD, input);
+            var expanded = Expander.DecompressRlew(0xABCD, input);
             Assert.That(expanded, Is.EqualTo(Enumerable.Repeat<byte>(0xFF, 16).Concat(new byte[] { 0x1A, 0x2B }).ToArray()), "Should have expanded array.");
         }
 
@@ -54,7 +54,7 @@ namespace Tiledriver.Core.Tests.GameMaps
                 Concat(Repeat(new byte[] { 0x11, 0x22 }, 4)).
                 Concat(new byte[] { 0x33, 0x44 }).ToArray();
 
-            var expanded = RlewExpander.Uncompress(0xABCD, input);
+            var expanded = Expander.DecompressRlew(0xABCD, input);
             Assert.That(expanded, Is.EqualTo(expected), "Should have expanded array.");
         }
 
