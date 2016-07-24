@@ -1,5 +1,4 @@
-﻿using System;
-using Tiledriver.Core.Uwmf;
+﻿using Tiledriver.Core.Uwmf;
 
 namespace Tiledriver.UwmfViewer.ViewModels
 {

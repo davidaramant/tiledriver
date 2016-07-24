@@ -1,12 +1,10 @@
 ﻿using System.IO;
+using System.Windows;
 using Tiledriver.Core.Uwmf.Parsing;
 using Tiledriver.UwmfViewer.ViewModels;
 
 namespace Tiledriver.UwmfViewer
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow
     {
         private MainVm vm = new MainVm();
@@ -19,7 +17,7 @@ namespace Tiledriver.UwmfViewer
             vm.PropertyChanged += SubscribeMapCanvasToMapChanges;
         }
 
-        public void SubscribeMapCanvasToMapChanges(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void SubscribeMapCanvasToMapChanges(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName.Equals(nameof(vm.Map)))
             {
@@ -27,7 +25,7 @@ namespace Tiledriver.UwmfViewer
             }
         }
 
-        private void SelectMapFile(object sender, System.Windows.RoutedEventArgs e)
+        private void SelectMapFile(object sender, RoutedEventArgs e)
         {
             var dialog = new Microsoft.Win32.OpenFileDialog()
             {
@@ -42,19 +40,18 @@ namespace Tiledriver.UwmfViewer
 
         private void OpenMapFile(string fileName)
         {
-            if (File.Exists(fileName))
+            if (!File.Exists(fileName)) return;
+
+            using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
             {
-                using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
-                {
-                    vm.Map = Parser.Parse(new Lexer(new UwmfCharReader(stream)));
-                    App.Current.MainWindow.Title = $"Tiledriver UWMF Viewer - {vm.Map.Name}";
-                }
+                vm.Map = Parser.Parse(new Lexer(new UwmfCharReader(stream)));
+                Application.Current.MainWindow.Title = $"Tiledriver UWMF Viewer - {vm.Map.Name}";
             }
         }
 
-        private void QuitApplication(object sender, System.Windows.RoutedEventArgs e)
+        private void QuitApplication(object sender, RoutedEventArgs e)
         {
-            App.Current.Shutdown();
+            Application.Current.Shutdown();
         }
     }
 }
