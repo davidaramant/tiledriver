@@ -9,7 +9,7 @@ namespace Tiledriver.UwmfViewer.Views
 {
     public partial class MapCanvas
     {
-        private readonly int squareSize = 32;
+        private readonly int squareSize = 24;
         private List<MapItem> MapItems = new List<MapItem>();
 
         public event EventHandler<MapItemEventArgs> NotifyNewMapItems;
@@ -28,6 +28,8 @@ namespace Tiledriver.UwmfViewer.Views
 
         public void Update(Map map)
         {
+            ClearDetailsPane();
+
             FullArea.Height = map.Height * squareSize;
             FullArea.Width = map.Width * squareSize;
             MapItems = new List<MapItem>();
@@ -54,6 +56,11 @@ namespace Tiledriver.UwmfViewer.Views
             {
                 FullArea.Children.Add(mapItem.ToUIElement(squareSize));
             }
+        }
+
+        private void ClearDetailsPane()
+        {
+            NotifyNewMapItems?.Invoke(this, new MapItemEventArgs(new List<MapItem>()));
         }
 
         private void HandleEventAt(Point coordinate)
