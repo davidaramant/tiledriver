@@ -10,9 +10,9 @@ namespace Tiledriver.UwmfViewer.Views
 {
     public partial class MapCanvas
     {
-        private int squareSize = 32;
+        private readonly int squareSize = 32;
         private Point lastTileCoordinate = new Point(0, 0);
-        private List<TileCoordinateDetails> CoordinateDetails = new List<TileCoordinateDetails>();
+        private List<MapItem> MapItems = new List<MapItem>();
 
         public MapCanvas()
         {
@@ -26,7 +26,7 @@ namespace Tiledriver.UwmfViewer.Views
                 if (!currentTileCoordinate.Equals(lastTileCoordinate))
                 {
                     lastTileCoordinate = currentTileCoordinate;
-                    var details = CoordinateDetails.Where(i => i.LayerType == LayerType.Thing)
+                    var details = MapItems.Where(i => i.LayerType == LayerType.Thing)
                         .Where(i => i.Coordinates.Equals(currentTileCoordinate))
                         .ToList();
 
@@ -39,35 +39,24 @@ namespace Tiledriver.UwmfViewer.Views
         {
             FullArea.Height = map.Height * squareSize;
             FullArea.Width = map.Width * squareSize;
-            CoordinateDetails = new List<TileCoordinateDetails>();
+            MapItems = new List<MapItem>();
+
             var factory = new MapItemFactory(map);
 
             for (var x = 0; x < map.Width; x++)
             {
                 for (var y = 0; y < map.Height; y++)
                 {
-                    var mapItem = factory.VmForCoordinates(x, y);
-                    CoordinateDetails.Add(new TileCoordinateDetails
-                    {
-                        LayerType = LayerType.Tile,
-                        Coordinates = new Point(x, y),
-                        Details = mapItem.Details.ToList()
-                    });
-                    Add(mapItem.ToUIElement(squareSize));
+                    MapItems.Add(factory.VmForCoordinates(x, y));
                 }
             }
-            
-            map.Things.ForEach(t =>
+
+            foreach (var thing in map.Things)
             {
-                var mapItem = factory.VmForThing(t);
-                CoordinateDetails.Add(new TileCoordinateDetails
-                {
-                    LayerType = LayerType.Thing,
-                    Coordinates = new Point(Math.Floor(t.X), Math.Floor(t.Y)),
-                    Details = mapItem.Details.ToList()
-                });
-                Add(mapItem.ToUIElement(squareSize));
-            });
+                MapItems.Add(factory.VmForThing(thing));
+            }
+            
+            DrawMapItems();
         }
 
         private void WriteDetails(IEnumerable<DetailProperties> details)
@@ -81,9 +70,12 @@ namespace Tiledriver.UwmfViewer.Views
 
         }
 
-        private void Add(UIElement element)
+        private void DrawMapItems()
         {
-            FullArea.Children.Add(element);
+            foreach (var mapItem in MapItems)
+            {
+                FullArea.Children.Add(mapItem.ToUIElement(squareSize));
+            }
         }
     }
 
@@ -91,14 +83,5 @@ namespace Tiledriver.UwmfViewer.Views
     {
         Tile,
         Thing
-    }
-
-    public class TileCoordinateDetails
-    {
-        public Point Coordinates { get; set; }
-
-        public LayerType LayerType { get; set; }
-
-        public IEnumerable<DetailProperties> Details { get; set; }
     }
 }

@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using Tiledriver.Core.Uwmf;
 using Tiledriver.Core.Wolf3D;
 using Tiledriver.UwmfViewer.Utilities;
@@ -19,7 +21,11 @@ namespace Tiledriver.UwmfViewer.Views
         public ThingVm VmForThing(Thing thing)
         {
             var category = actors.SingleOrDefault(a => a.ClassName == thing.Type)?.Category;
-            return ThingVm.Create(thing, category);
+            var thingVm = ThingVm.Create(thing, category);
+
+            thingVm.LayerType = LayerType.Thing;
+                    thingVm.Coordinates = new Point(Math.Floor(thing.X), Math.Floor(thing.Y));
+            return thingVm;
         }
 
         public Square VmForCoordinates(int x, int y)
@@ -29,7 +35,9 @@ namespace Tiledriver.UwmfViewer.Views
             {
                 Tile = map.TileAt(tileSpace.Tile),
                 Sector = map.SectorAt(tileSpace.Sector),
-                Zone = tileSpace.Zone
+                Zone = tileSpace.Zone,
+                LayerType = LayerType.Tile,
+                Coordinates = new Point(x, y),
             };
         }
     }
