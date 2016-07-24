@@ -19,7 +19,7 @@ namespace Tiledriver.UwmfViewer.ViewModels
 
         public void NotifySet<T>(ref T existing, T value, [CallerMemberName] string propertyName = "")
         {
-            if (existing?.Equals(value) ?? value != null)
+            if (!existing?.Equals(value) ?? value != null)
             {
                 existing = value;
                 NotifyPropertyChanged(propertyName);
