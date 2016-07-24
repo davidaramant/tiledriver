@@ -28,11 +28,9 @@ namespace Tiledriver.UwmfViewer.Views
             {
                 Height = size,
                 Width = size,
-                Fill = FillColor(),
-                Data = Geometry.Parse(MapItem.SQUARE),
-                Stroke = FillColor(),
                 Stretch = Stretch.Uniform
             };
+            SetProperties(element);
 
             Canvas.SetLeft(element, x * size);
             Canvas.SetTop(element, y * size);
@@ -40,22 +38,34 @@ namespace Tiledriver.UwmfViewer.Views
             return element;
         }
 
-        private SolidColorBrush FillColor()
+        private void SetProperties(Path element)
         {
+            SolidColorBrush color;
+            string path;
             if (Tile == null)
             {
-                return Colors.Black.ToBrush();
+                color = Colors.Black.ToBrush();
+                path = MapItem.SQUARE;
+            }
+            else if (Tile.TextureNorth.StartsWith("DOOR"))
+            {
+                color = Colors.Gray.ToBrush();
+                path = MapItem.NSDOOR;
+            }
+            else if (Tile.TextureNorth.StartsWith("SLOT"))
+            {
+                color = Colors.Gray.ToBrush();
+                path = MapItem.EWDOOR;
+            }
+            else
+            {
+                color = Colors.LightGray.ToBrush();
+                path = MapItem.SQUARE;
             }
 
-            if (Tile.TextureNorth.StartsWith("DOOR"))
-            {
-                return Colors.DarkBlue.ToBrush();
-            }
-            if (Tile.TextureNorth.StartsWith("SLOT"))
-            {
-                return Colors.DarkBlue.ToBrush();
-            }
-            return Colors.LightGray.ToBrush();
+            element.Fill = color;
+            element.Stroke = color;
+            element.Data = Geometry.Parse(path);
         }
     }
 }
