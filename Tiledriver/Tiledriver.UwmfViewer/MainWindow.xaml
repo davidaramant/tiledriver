@@ -22,8 +22,11 @@
             <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
+        <views:MapCanvas x:Name="MapCanvas"
+                         Grid.RowSpan="2"
+                         Grid.Column="0" />
         <DockPanel Grid.Row="0"
-                   Grid.ColumnSpan="2">
+                   Grid.Column="1">
             <ToolBarTray DockPanel.Dock="Top">
                 <ToolBar>
                     <Button Click="SelectMapFile"
@@ -40,9 +43,6 @@
                 </ToolBar>
             </ToolBarTray>
         </DockPanel>
-        <views:MapCanvas x:Name="MapCanvas"
-                         Grid.Row="1"
-                         Grid.Column="0" />
         <views:DetailView x:Name="DetailPane"
                           Grid.Row="1"
                           Grid.Column="1" />

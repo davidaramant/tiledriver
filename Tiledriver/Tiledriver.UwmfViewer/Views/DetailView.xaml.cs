@@ -60,7 +60,7 @@ namespace Tiledriver.UwmfViewer.Views
                 Content = detailType,
                 FontSize = 16,
                 FontWeight = FontWeights.Bold,
-                Foreground = Blue.ToBrush(),
+                Foreground = Red.ToBrush(),
                 BorderBrush = LightGray.ToBrush(),
                 BorderThickness = new Thickness(0, 0, 0, 0.5)
             };
