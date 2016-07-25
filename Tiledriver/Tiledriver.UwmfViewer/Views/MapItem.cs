@@ -23,21 +23,18 @@ namespace Tiledriver.UwmfViewer.Views
 
         public abstract UIElement ToUIElement(int size);
 
-        public Point Coordinates { get; set; }
-        public LayerType LayerType { get; set; }
+        public Point Coordinates { get; internal set; }
+        public LayerType LayerType { get; internal set; }
+        public bool ShouldAddToCanvas { get; internal set; } = true;
 
         public abstract string DetailType { get; }
         public abstract IEnumerable<DetailProperties> Details { get; }
-
-
     }
 
     public class DetailProperties
     {
         public string Category { get; }
-
         public string Title { get; }
-
         public string Value { get; }
 
         public DetailProperties(string category, string title, string value)

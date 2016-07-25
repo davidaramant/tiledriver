@@ -11,31 +11,30 @@ namespace Tiledriver.UwmfViewer.Views
 {
     public class ThingVm : MapItem
     {
-
-        public Geometry Geometry { get; set; }
-        public SolidColorBrush Fill { get; set; }
-        public SolidColorBrush Stroke { get; set; }
-        public bool ShouldRotate { get; set; }
-        public Thing Thing { get; set; }
-        public string Category { get; set; }
+        private readonly Thing thing;
+        private readonly string category;
+        private readonly Geometry geometry;
+        private readonly SolidColorBrush fill;
+        private readonly SolidColorBrush stroke;
+        private readonly bool shouldRotate;
 
         private ThingVm(Thing thing, string category, string path, Color fill, Color stroke, bool shouldRotate = false)
         {
-            Geometry = Geometry.Parse(path);
-            Fill = fill.ToBrush();
-            Stroke = stroke.ToBrush();
-            ShouldRotate = shouldRotate;
-            Thing = thing;
-            Category = category;
+            this.thing = thing;
+            this.category = category;
+            geometry = Geometry.Parse(path);
+            this.fill = fill.ToBrush();
+            this.stroke = stroke.ToBrush();
+            this.shouldRotate = shouldRotate;
         }
 
         public static ThingVm Create(Thing thing, string category)
         {
-            var key = ShouldUseCategory.Contains(category) ? category : thing.Type;
+            var key = shouldUseCategory.Contains(category) ? category : thing.Type;
 
-            if (Templates.ContainsKey(key))
+            if (templates.ContainsKey(key))
             {
-                var thingVm = Templates[key](thing, category);
+                var thingVm = templates[key](thing, category);
                 return thingVm;
             }
             else
@@ -51,47 +50,47 @@ namespace Tiledriver.UwmfViewer.Views
             {
                 Height = size / 2,
                 Width = size / 2,
-                Data = Geometry,
-                Fill = Fill,
-                Stroke = Stroke,
+                Data = geometry,
+                Fill = fill,
+                Stroke = stroke,
                 StrokeThickness = 2,
                 Stretch = Stretch.Uniform
             };
 
-            if (ShouldRotate)
+            if (shouldRotate)
             {
-                element.RenderTransform = new RotateTransform((450 - Thing.Angle) % 360, element.Width / 2, element.Height / 2);
+                element.RenderTransform = new RotateTransform((450 - thing.Angle) % 360, element.Width / 2, element.Height / 2);
             }
 
-            Canvas.SetLeft(element, Thing.X * size - element.Width / 2);
-            Canvas.SetTop(element, Thing.Y * size - element.Height / 2);
+            Canvas.SetLeft(element, thing.X * size - element.Width / 2);
+            Canvas.SetTop(element, thing.Y * size - element.Height / 2);
 
             return element;
         }
 
-        public override string DetailType => Thing?.Type ?? "Thing";
+        public override string DetailType => thing?.Type ?? "Thing";
 
         public override IEnumerable<DetailProperties> Details
         {
             get
             {
-                yield return new DetailProperties(null, "Category", Category);
+                yield return new DetailProperties(null, "Category", category);
 
-                yield return new DetailProperties("Position", "X", Thing.X.ToString());
-                yield return new DetailProperties("Position", "Y", Thing.Y.ToString());
-                yield return new DetailProperties("Position", "Angle", Thing.Angle.ToString());
+                yield return new DetailProperties("Position", "X", thing.X.ToString());
+                yield return new DetailProperties("Position", "Y", thing.Y.ToString());
+                yield return new DetailProperties("Position", "Angle", thing.Angle.ToString());
 
-                yield return new DetailProperties("Skill Level", "Level 1", Thing.Skill1 ? "Yes" : "No");
-                yield return new DetailProperties("Skill Level", "Level 2", Thing.Skill2 ? "Yes" : "No");
-                yield return new DetailProperties("Skill Level", "Level 3", Thing.Skill3 ? "Yes" : "No");
-                yield return new DetailProperties("Skill Level", "Level 4", Thing.Skill4 ? "Yes" : "No");
+                yield return new DetailProperties("Skill Level", "Level 1", thing.Skill1 ? "Yes" : "No");
+                yield return new DetailProperties("Skill Level", "Level 2", thing.Skill2 ? "Yes" : "No");
+                yield return new DetailProperties("Skill Level", "Level 3", thing.Skill3 ? "Yes" : "No");
+                yield return new DetailProperties("Skill Level", "Level 4", thing.Skill4 ? "Yes" : "No");
 
-                yield return new DetailProperties("Special", "Ambush", Thing.Ambush ? "Yes" : "No");
-                yield return new DetailProperties("Special", "Patrol", Thing.Patrol ? "Yes" : "No");
+                yield return new DetailProperties("Special", "Ambush", thing.Ambush ? "Yes" : "No");
+                yield return new DetailProperties("Special", "Patrol", thing.Patrol ? "Yes" : "No");
             }
         }
 
-        public static List<string> ShouldUseCategory = new List<string>
+        private static List<string> shouldUseCategory = new List<string>
         {
             "Bosses",
             "Decorations",
@@ -102,7 +101,7 @@ namespace Tiledriver.UwmfViewer.Views
             "Weapons",
         };
 
-        private static Dictionary<string, Func<Thing,string,ThingVm>> Templates = new Dictionary<string, Func<Thing,string,ThingVm>>
+        private static Dictionary<string, Func<Thing,string,ThingVm>> templates = new Dictionary<string, Func<Thing,string,ThingVm>>
         {
             // SPECIAL
             { "$Player1Start", Player() },
