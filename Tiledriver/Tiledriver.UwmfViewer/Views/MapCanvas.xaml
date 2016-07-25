@@ -8,8 +8,8 @@
              d:DesignHeight="64"
              d:DesignWidth="64">
     <ScrollViewer Background="Black"
-                  HorizontalScrollBarVisibility="Auto"
-                  VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Visible"
+                  VerticalScrollBarVisibility="Visible"
                   PanningMode="Both">
         <Canvas x:Name="FullArea"
                 SnapsToDevicePixels="True"
