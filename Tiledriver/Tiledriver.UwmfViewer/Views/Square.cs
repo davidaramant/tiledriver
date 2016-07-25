@@ -10,17 +10,19 @@ namespace Tiledriver.UwmfViewer.Views
 {
     public class Square : MapItem
     {
-        private int x;
-        private int y;
+        private readonly int x;
+        private readonly int y;
+        private readonly Tile tile;
+        private readonly Sector sector;
+        private readonly int zone;
 
-        public Tile Tile { get; set; }
-        public Sector Sector { get; set; }
-        public int Zone { get; set; }
-
-        public Square(int x, int y)
+        public Square(int x, int y, Tile tile, Sector sector, int zone)
         {
             this.x = x;
             this.y = y;
+            this.tile = tile;
+            this.sector = sector;
+            this.zone = zone;
         }
 
         public override UIElement ToUIElement(int size)
@@ -39,7 +41,7 @@ namespace Tiledriver.UwmfViewer.Views
             return element;
         }
 
-        public override string DetailType => Tile != null ? "Wall" : "Space";
+        public override string DetailType => tile != null ? "Wall" : "Space";
 
         public override IEnumerable<DetailProperties> Details
         {
@@ -48,31 +50,31 @@ namespace Tiledriver.UwmfViewer.Views
                 yield return new DetailProperties("Position", "X", x.ToString());
                 yield return new DetailProperties("Position", "Y", y.ToString());
 
-                if (Sector != null)
+                if (sector != null)
                 {
-                    yield return new DetailProperties("Sector", "CeilingTexture", Sector.TextureCeiling);
-                    yield return new DetailProperties("Sector", "FloorTexture", Sector.TextureFloor);
+                    yield return new DetailProperties("Sector", "CeilingTexture", sector.TextureCeiling);
+                    yield return new DetailProperties("Sector", "FloorTexture", sector.TextureFloor);
                 }
 
-                if (Zone >= 0)
+                if (zone >= 0)
                 {
-                    yield return new DetailProperties("Miscellaneous", "Zone", Zone.ToString());
+                    yield return new DetailProperties("Miscellaneous", "Zone", zone.ToString());
                 }
                 
-                if (Tile != null)
+                if (tile != null)
                 {
-                    yield return new DetailProperties("Texture", "Texture North", Tile.TextureNorth);
-                    yield return new DetailProperties("Texture", "Texture East", Tile.TextureEast);
-                    yield return new DetailProperties("Texture", "Texture South", Tile.TextureSouth);
-                    yield return new DetailProperties("Texture", "Texture West", Tile.TextureWest);
+                    yield return new DetailProperties("Texture", "Texture North", tile.TextureNorth);
+                    yield return new DetailProperties("Texture", "Texture East", tile.TextureEast);
+                    yield return new DetailProperties("Texture", "Texture South", tile.TextureSouth);
+                    yield return new DetailProperties("Texture", "Texture West", tile.TextureWest);
 
-                    yield return new DetailProperties("Texture Offset", "Offset Vertical", Tile.OffsetVertical ? "Yes" : "No");
-                    yield return new DetailProperties("Texture Offset", "Offset Horizontal", Tile.OffsetHorizontal ? "Yes" : "No");
+                    yield return new DetailProperties("Texture Offset", "Offset Vertical", tile.OffsetVertical ? "Yes" : "No");
+                    yield return new DetailProperties("Texture Offset", "Offset Horizontal", tile.OffsetHorizontal ? "Yes" : "No");
 
-                    yield return new DetailProperties("Texture Blocking", "Blocking North", Tile.BlockingNorth ? "Yes" : "No");
-                    yield return new DetailProperties("Texture Blocking", "Blocking East", Tile.BlockingEast ? "Yes" : "No");
-                    yield return new DetailProperties("Texture Blocking", "Blocking South", Tile.BlockingSouth ? "Yes" : "No");
-                    yield return new DetailProperties("Texture Blocking", "Blocking West", Tile.BlockingWest ? "Yes" : "No");
+                    yield return new DetailProperties("Texture Blocking", "Blocking North", tile.BlockingNorth ? "Yes" : "No");
+                    yield return new DetailProperties("Texture Blocking", "Blocking East", tile.BlockingEast ? "Yes" : "No");
+                    yield return new DetailProperties("Texture Blocking", "Blocking South", tile.BlockingSouth ? "Yes" : "No");
+                    yield return new DetailProperties("Texture Blocking", "Blocking West", tile.BlockingWest ? "Yes" : "No");
                 }
             }
         }
@@ -81,17 +83,17 @@ namespace Tiledriver.UwmfViewer.Views
         {
             SolidColorBrush color;
             string path;
-            if (Tile == null)
+            if (tile == null)
             {
                 color = Colors.Black.ToBrush();
                 path = MapItem.SQUARE;
             }
-            else if (Tile.TextureNorth.StartsWith("DOOR"))
+            else if (tile.TextureNorth.StartsWith("DOOR"))
             {
                 color = Colors.Gray.ToBrush();
                 path = MapItem.NSDOOR;
             }
-            else if (Tile.TextureNorth.StartsWith("SLOT"))
+            else if (tile.TextureNorth.StartsWith("SLOT"))
             {
                 color = Colors.Gray.ToBrush();
                 path = MapItem.EWDOOR;
