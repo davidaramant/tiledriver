@@ -44,18 +44,21 @@ namespace Tiledriver.UwmfViewer.Views
             {
                 for (var y = 0; y < map.Height; y++)
                 {
-                    MapItems.Add(factory.VmForCoordinates(x, y));
+                    AddMapItem(factory.VmForCoordinates(x, y));
                 }
             }
 
             // Things
             foreach (var thing in map.Things)
             {
-                MapItems.Add(factory.VmForThing(thing));
+                AddMapItem(factory.VmForThing(thing));
             }
+        }
 
-            // Add to canvas
-            foreach (var mapItem in MapItems)
+        private void AddMapItem(MapItem mapItem)
+        {
+            MapItems.Add(mapItem);
+            if (mapItem.ShouldAddToCanvas)
             {
                 FullArea.Children.Add(mapItem.ToUIElement(squareSize));
             }
@@ -68,7 +71,7 @@ namespace Tiledriver.UwmfViewer.Views
 
         private void HandleEventAt(Point coordinate)
         {
-            var filteredMapItems = MapItems//.Where(i => i.LayerType == LayerType.Thing)
+            var filteredMapItems = MapItems
                 .Where(i => i.Coordinates.Equals(coordinate))
                 .ToList();
 
