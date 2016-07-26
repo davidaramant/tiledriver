@@ -32,11 +32,15 @@
                 </ToolBar>
                 <ToolBar>
                     <Label Content="Zoom" Foreground="Gray" />
-                    <Button Click="ZoomIn"
+                    <Button x:Name="ZoomInButton"
+                            Click="ZoomIn"
                             Content="  IN  "
+                            IsEnabled="False"
                             FontWeight="ExtraBold" />
-                    <Button Click="ZoomOut"
+                    <Button x:Name="ZoomOutButton"
+                            Click="ZoomOut"
                             Content="  OUT  "
+                            IsEnabled="False"
                             FontWeight="ExtraBold" />
                 </ToolBar>
             </ToolBarTray>

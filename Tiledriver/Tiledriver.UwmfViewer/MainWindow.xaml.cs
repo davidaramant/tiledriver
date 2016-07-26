@@ -26,18 +26,24 @@ namespace Tiledriver.UwmfViewer
             if (e.PropertyName.Equals(nameof(vm.Map)))
             {
                 MapCanvas.Update(vm.Map, tileSize);
+                ZoomInButton.IsEnabled = true;
+                ZoomOutButton.IsEnabled = true;
             }
         }
 
         private void ZoomIn(object sender, RoutedEventArgs e)
         {
+            ZoomOutButton.IsEnabled = true;
             tileSize = Math.Min(tileSize + 8, 32);
+            if (tileSize == 32) ZoomInButton.IsEnabled = false;
             MapCanvas.Update(vm.Map, tileSize);
         }
 
         private void ZoomOut(object sender, RoutedEventArgs e)
         {
+            ZoomInButton.IsEnabled = true;
             tileSize = Math.Max(tileSize - 8, 8);
+            if (tileSize == 8) ZoomOutButton.IsEnabled = false;
             MapCanvas.Update(vm.Map, tileSize);
         }
 
