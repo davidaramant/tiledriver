@@ -23,13 +23,15 @@ namespace Tiledriver.UwmfViewer.Views
             this.thing = thing;
             this.category = category;
 
-            var key = shouldUseCategory.Contains(category) ? category : thing.Type;
-            var template = templates.ContainsKey(key) ? templates[key] : Default;
+            var template = templates.ContainsKey(thing.Type) ? templates[thing.Type] : templates.ContainsKey(category ?? "") ? templates[category] : Default;
 
             geometry = template.Geometry;
             fill = template.Fill;
             stroke = template.Stroke;
             shouldRotate = template.ShouldRotate;
+
+            Coordinates = new Point(Math.Floor(thing.X), Math.Floor(thing.Y));
+            LayerType = LayerType.Thing;
         }
 
         public override Path CreatePath(int size)
@@ -58,8 +60,8 @@ namespace Tiledriver.UwmfViewer.Views
 
         public override double Left(double size) => thing.X * size - Width(size) / 2;
         public override double Top(double size) => thing.Y * size - Height(size) / 2;
-        public override double Height(double size) => size / 2;
-        public override double Width(double size) => size / 2;
+        public override double Height(double size) => size / 1.6;
+        public override double Width(double size) => size / 1.6;
 
         public override string DetailType => thing?.Type ?? "Thing";
 
@@ -83,24 +85,13 @@ namespace Tiledriver.UwmfViewer.Views
             }
         }
 
-        private static List<string> shouldUseCategory = new List<string>
-        {
-            "Bosses",
-            "Decorations",
-            "Ammo",
-            "Treasure",
-            "Ghosts",
-            "Health",
-            "Weapons",
-        };
-
         private static Dictionary<string, ThingVmTemplate> templates = new Dictionary<string, ThingVmTemplate>
         {
             // SPECIAL
             { "$Player1Start", Player() },
             { "PatrolPoint", PatrolPoint() },
             // GUARDS
-            { "DeadGuard", Decoration() },
+            { "DeadGuard", Circle(Brown, SaddleBrown) },
             { "Dog", Dog() },
             { "Guard", EnemyMan(SaddleBrown) },
             { "Officer", EnemyMan(White) },
@@ -109,10 +100,14 @@ namespace Tiledriver.UwmfViewer.Views
             // KEYS
             { "GoldKey", Key(Gold) },
             { "SilverKey", Key(Silver) },
-            // THING CATEGORIES
-            { "Bosses", EnemyMan(Red) },
+            // DECORATIONS
+            { "WhitePillar", Circle(White, LightGray) },
+            { "CeilingLight", Circle(LightYellow, LightGoldenrodYellow) },
+            
+            // CATEGORIES
+            { "Bosses", Boss() },
             { "Ghosts", PacmanGhost() },
-            { "Decorations", Decoration() },
+            { "Decorations", Circle(Green, LightGreen) },
             { "Treasure", Treasure() },
             { "Health", Health() },
             { "Weapons", Weapons() },
@@ -124,9 +119,10 @@ namespace Tiledriver.UwmfViewer.Views
         private static ThingVmTemplate Player() => new ThingVmTemplate(MAN, Black, Yellow, true);
         private static ThingVmTemplate PatrolPoint() => new ThingVmTemplate(ARROW, Black, White, true);
         private static ThingVmTemplate EnemyMan(Color fill) => new ThingVmTemplate(MAN, fill, White, true);
+        private static ThingVmTemplate Boss() => new ThingVmTemplate(BOSS, Red, White, true);
         private static ThingVmTemplate Key(Color fill) => new ThingVmTemplate(KEY, fill, fill);
         private static ThingVmTemplate PacmanGhost() => new ThingVmTemplate(PACMAN_GHOST, GhostWhite, LightBlue);
-        private static ThingVmTemplate Decoration() => new ThingVmTemplate(CIRCLE, LightGreen, Green);
+        private static ThingVmTemplate Circle(Color fill, Color stroke) => new ThingVmTemplate(CIRCLE, fill, stroke);
         private static ThingVmTemplate Dog() => new ThingVmTemplate(DOG, Brown, SaddleBrown);
         private static ThingVmTemplate Treasure() => new ThingVmTemplate(CROWN, Gold, Gold);
         private static ThingVmTemplate Health() => new ThingVmTemplate(CROSS, Blue, White);

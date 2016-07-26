@@ -23,6 +23,8 @@ namespace Tiledriver.UwmfViewer.Views
             this.tile = tile;
             this.sector = sector;
             this.zone = zone;
+            Coordinates = new Point(x, y);
+            LayerType = LayerType.Tile;
         }
 
         public override Path CreatePath(int size)
@@ -34,7 +36,7 @@ namespace Tiledriver.UwmfViewer.Views
                 Stretch = Stretch.Uniform
             };
             SetProperties(element);
-            
+
             Canvas.SetLeft(element, Left(size));
             Canvas.SetTop(element, Top(size));
 
@@ -48,7 +50,7 @@ namespace Tiledriver.UwmfViewer.Views
 
         public override bool ShouldAddToCanvas => tile != null;
 
-        public override string DetailType => tile != null ? "Wall" : "Space";
+        public override string DetailType => tile == null ? "Space" : (tile.TextureNorth.StartsWith("DOOR") || tile.TextureNorth.StartsWith("SLOT")) ? "Door" : "Wall";
 
         public override IEnumerable<DetailProperties> Details
         {
@@ -107,7 +109,7 @@ namespace Tiledriver.UwmfViewer.Views
             }
             else
             {
-                color = Colors.LightGray.ToBrush();
+                color = Colors.DarkGray.ToBrush();
                 path = MapItem.SQUARE;
             }
 
