@@ -22,7 +22,9 @@
         </Grid.RowDefinitions>
         <views:MapCanvas x:Name="MapCanvas"
                          Grid.RowSpan="2"
-                         Grid.Column="0" />
+                         Grid.Column="0"
+                         BorderThickness="0,0,0.5,0"
+                         BorderBrush="{StaticResource GrayNormalBrush}" />
         <DockPanel Grid.Row="0"
                    Grid.Column="1">
             <ToolBarTray DockPanel.Dock="Top">
@@ -31,7 +33,7 @@
                             Content="Open Map" />
                 </ToolBar>
                 <ToolBar>
-                    <Label Content="Zoom" Foreground="Gray" />
+                    <Label Content="Zoom" Foreground="{StaticResource GrayNormalBrush}" />
                     <Button x:Name="ZoomInButton"
                             ToolTip="+"
                             Click="ZoomIn"
