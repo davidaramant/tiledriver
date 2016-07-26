@@ -72,7 +72,7 @@ namespace Tiledriver.UwmfViewer.Views
             {
                 Content = categoryKey,
                 FontWeight = FontWeights.Bold,
-                Foreground = Color.FromRgb(64,64,64).ToBrush(),
+                Foreground = Gray.ToBrush(),
             };
         }
 
