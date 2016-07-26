@@ -74,6 +74,16 @@ namespace Tiledriver.UwmfViewer
             }
         }
 
+        private void SelectDefaultMapFile(object sender, RoutedEventArgs e)
+        {
+            OpenMapFile(System.AppDomain.CurrentDomain.BaseDirectory + "..\\..\\FIXEDTEXTMAP.txt");
+        }
+
+        private void SelectDemoMapFile(object sender, RoutedEventArgs e)
+        {
+            OpenMapFile(System.AppDomain.CurrentDomain.BaseDirectory + "..\\..\\thingdemo.txt");
+        }
+
         private void OpenMapFile(string fileName)
         {
             if (!File.Exists(fileName)) return;
