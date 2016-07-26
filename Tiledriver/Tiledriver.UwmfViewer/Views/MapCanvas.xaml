@@ -7,8 +7,7 @@
              mc:Ignorable="d"
              d:DesignHeight="64"
              d:DesignWidth="64">
-    <ScrollViewer Background="Black"
-                  HorizontalScrollBarVisibility="Visible"
+    <ScrollViewer HorizontalScrollBarVisibility="Visible"
                   VerticalScrollBarVisibility="Visible"
                   PanningMode="Both">
         <Canvas x:Name="FullArea"

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using Tiledriver.Core.Uwmf;
-using static System.Diagnostics.Debug;
+using static System.Windows.Media.Colors;
 
 namespace Tiledriver.UwmfViewer.Views
 {
@@ -32,10 +32,11 @@ namespace Tiledriver.UwmfViewer.Views
 
             ClearDetailsPane();
             FullArea.Children.Clear();
+            MapItems = new List<MapItem>();
 
             FullArea.Height = map.Height * squareSize;
             FullArea.Width = map.Width * squareSize;
-            MapItems = new List<MapItem>();
+            FullArea.Background = Black.ToBrush();
 
             var factory = new MapItemFactory(map);
 
@@ -60,7 +61,7 @@ namespace Tiledriver.UwmfViewer.Views
             MapItems.Add(mapItem);
             if (mapItem.ShouldAddToCanvas)
             {
-                FullArea.Children.Add(mapItem.ToUIElement(squareSize));
+                FullArea.Children.Add(mapItem.CreatePath(squareSize));
             }
         }
 
@@ -75,18 +76,7 @@ namespace Tiledriver.UwmfViewer.Views
                 .Where(i => i.Coordinates.Equals(coordinate))
                 .ToList();
 
-            filteredMapItems.ForEach(i => DebugDetails(i.Details));
             ShowDetails(filteredMapItems);
-        }
-
-        private void DebugDetails(IEnumerable<DetailProperties> mapItems)
-        {
-            WriteLine("\n========================================");
-            foreach (var item in mapItems)
-            {
-                WriteLine($"{item.Category} :: {item.Title} :: {item.Value}");
-            }
-            WriteLine("========================================\n");
         }
 
         private void ShowDetails(List<MapItem> mapItems)

@@ -21,12 +21,11 @@ namespace Tiledriver.UwmfViewer.Views
         public ThingVm VmForThing(Thing thing)
         {
             var category = actors.SingleOrDefault(a => a.ClassName == thing.Type)?.Category;
-            var thingVm = ThingVm.Create(thing, category);
-
-            thingVm.LayerType = LayerType.Thing;
-            thingVm.Coordinates = new Point(Math.Floor(thing.X), Math.Floor(thing.Y));
-
-            return thingVm;
+            return new ThingVm(thing, category)
+            {
+                LayerType = LayerType.Thing,
+                Coordinates = new Point(Math.Floor(thing.X), Math.Floor(thing.Y)),
+            };
         }
 
         public Square VmForCoordinates(int x, int y)

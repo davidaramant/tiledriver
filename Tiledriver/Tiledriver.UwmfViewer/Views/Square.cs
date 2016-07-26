@@ -25,21 +25,28 @@ namespace Tiledriver.UwmfViewer.Views
             this.zone = zone;
         }
 
-        public override UIElement ToUIElement(int size)
+        public override Path CreatePath(int size)
         {
-            var element = new Path()
+            element = new Path()
             {
-                Height = size,
-                Width = size,
+                Width = Width(size),
+                Height = Width(size),
                 Stretch = Stretch.Uniform
             };
             SetProperties(element);
-
-            Canvas.SetLeft(element, x * size);
-            Canvas.SetTop(element, y * size);
+            
+            Canvas.SetLeft(element, Left(size));
+            Canvas.SetTop(element, Top(size));
 
             return element;
         }
+
+        public override double Left(double size) => x * size;
+        public override double Top(double size) => y * size;
+        public override double Height(double size) => size;
+        public override double Width(double size) => size;
+
+        public override bool ShouldAddToCanvas => tile != null;
 
         public override string DetailType => tile != null ? "Wall" : "Space";
 
