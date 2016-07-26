@@ -26,7 +26,9 @@ namespace Tiledriver.UwmfViewer.Views
                 {
                     Margin = new Thickness(0, 0, 0, 16),
                 };
-                itemPanel.Children.Add(ItemHeader(mapItem.DetailType));
+                
+                itemPanel.Children.Add(HeaderPanel(mapItem));
+                itemPanel.Children.Add(new Separator());
 
                 // CATEGORY
                 foreach (var category in mapItem.Details.GroupBy(d => d.Category))
@@ -53,6 +55,21 @@ namespace Tiledriver.UwmfViewer.Views
             }
         }
 
+        private static StackPanel HeaderPanel(MapItem mapItem)
+        {
+            var headerPanel = new StackPanel() {
+                Orientation = Orientation.Horizontal,
+            };
+
+            var path = mapItem.CreatePath(24);
+            path.Margin = new Thickness(4, 0, 4, 0);
+            headerPanel.Children.Add(path);
+
+            headerPanel.Children.Add(ItemHeader(mapItem.DetailType));
+
+            return headerPanel;
+        }
+
         private static Label ItemHeader(string detailType)
         {
             return new Label()
@@ -61,8 +78,6 @@ namespace Tiledriver.UwmfViewer.Views
                 FontSize = 16,
                 FontWeight = FontWeights.Bold,
                 Foreground = Red.ToBrush(),
-                BorderBrush = LightGray.ToBrush(),
-                BorderThickness = new Thickness(0, 0, 0, 0.5)
             };
         }
 
