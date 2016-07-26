@@ -123,7 +123,7 @@ namespace Tiledriver.UwmfViewer.Views
         private static ThingVmTemplate Key(Color fill) => new ThingVmTemplate(KEY, fill, fill);
         private static ThingVmTemplate PacmanGhost() => new ThingVmTemplate(PACMAN_GHOST, GhostWhite, LightBlue);
         private static ThingVmTemplate Circle(Color fill, Color stroke) => new ThingVmTemplate(CIRCLE, fill, stroke);
-        private static ThingVmTemplate Dog() => new ThingVmTemplate(DOG, Brown, SaddleBrown);
+        private static ThingVmTemplate Dog() => new ThingVmTemplate(DOG, Brown, SaddleBrown, shouldRotate:true);
         private static ThingVmTemplate Treasure() => new ThingVmTemplate(CROWN, Gold, Gold);
         private static ThingVmTemplate Health() => new ThingVmTemplate(CROSS, Blue, White);
         private static ThingVmTemplate Weapons() => new ThingVmTemplate(GUN, Gray, LightGray);
