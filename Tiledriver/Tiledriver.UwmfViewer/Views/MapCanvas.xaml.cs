@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Shapes;
 using Tiledriver.Core.Uwmf;
-using static System.Windows.Media.Colors;
 
 namespace Tiledriver.UwmfViewer.Views
 {
     public partial class MapCanvas
     {
         private int squareSize = 24;
-        private List<MapItem> MapItems = new List<MapItem>();
+        private List<MapItem> mapItems = new List<MapItem>();
+        private Path selectionMarker;
 
         public event EventHandler<MapItemEventArgs> NotifyNewMapItems;
 
@@ -21,8 +24,7 @@ namespace Tiledriver.UwmfViewer.Views
             FullArea.MouseUp += (sender, args) =>
             {
                 var pos = args.GetPosition(FullArea);
-                var currentTileCoordinate = new Point((int)pos.X / squareSize, (int)pos.Y / squareSize);
-                HandleEventAt(currentTileCoordinate);
+                HandleEventAt(new Point((int)pos.X / squareSize, (int)pos.Y / squareSize));
             };
         }
 
@@ -32,11 +34,12 @@ namespace Tiledriver.UwmfViewer.Views
 
             ClearDetailsPane();
             FullArea.Children.Clear();
-            MapItems = new List<MapItem>();
+            mapItems = new List<MapItem>();
+            selectionMarker = CreateSelectionMarker(squareSize);
 
             FullArea.Height = map.Height * squareSize;
             FullArea.Width = map.Width * squareSize;
-            FullArea.Background = Black.ToBrush();
+            FullArea.Background = Colors.Black.ToBrush();
 
             var factory = new MapItemFactory(map);
 
@@ -45,38 +48,58 @@ namespace Tiledriver.UwmfViewer.Views
             {
                 for (var y = 0; y < map.Height; y++)
                 {
-                    AddMapItem(factory.VmForCoordinates(x, y));
+                    AddMapItem(factory.BuildSquare(x, y));
                 }
             }
 
             // Things
             foreach (var thing in map.Things)
             {
-                AddMapItem(factory.VmForThing(thing));
+                AddMapItem(factory.BuildThing(thing));
             }
         }
 
         private void AddMapItem(MapItem mapItem)
         {
-            MapItems.Add(mapItem);
+            mapItems.Add(mapItem);
             if (mapItem.ShouldAddToCanvas)
             {
                 FullArea.Children.Add(mapItem.CreatePath(squareSize));
             }
         }
 
-        private void ClearDetailsPane()
-        {
-            NotifyNewMapItems?.Invoke(this, new MapItemEventArgs(new List<MapItem>()));
-        }
-
         private void HandleEventAt(Point coordinate)
         {
-            var filteredMapItems = MapItems
+            FullArea.Children.Remove(selectionMarker);
+            Canvas.SetLeft(selectionMarker, coordinate.X * squareSize);
+            Canvas.SetTop(selectionMarker, coordinate.Y * squareSize);
+            FullArea.Children.Add(selectionMarker);
+
+            var filteredMapItems = mapItems
                 .Where(i => i.Coordinates.Equals(coordinate))
                 .ToList();
 
             ShowDetails(filteredMapItems);
+        }
+
+        private static Path CreateSelectionMarker(int size)
+        {
+            return new Path()
+            {
+                Height = size,
+                Width = size,
+                Data = Geometry.Parse(MapItem.SQUARE),
+                Fill = Colors.Transparent.ToBrush(),
+                Stroke = Colors.Red.ToBrush(),
+                StrokeThickness = 1,
+                Stretch = Stretch.Uniform,
+                Tag = Guid.NewGuid()
+            };
+        }
+
+        private void ClearDetailsPane()
+        {
+            ShowDetails(new List<MapItem>());
         }
 
         private void ShowDetails(List<MapItem> mapItems)
