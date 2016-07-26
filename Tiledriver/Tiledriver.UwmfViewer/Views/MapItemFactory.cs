@@ -18,25 +18,18 @@ namespace Tiledriver.UwmfViewer.Views
             this.map = map;
         }
 
-        public ThingVm VmForThing(Thing thing)
+        public ThingVm BuildThing(Thing thing)
         {
             var category = actors.SingleOrDefault(a => a.ClassName == thing.Type)?.Category;
-            return new ThingVm(thing, category)
-            {
-                LayerType = LayerType.Thing,
-                Coordinates = new Point(Math.Floor(thing.X), Math.Floor(thing.Y)),
-            };
+            return new ThingVm(thing, category);
         }
 
-        public Square VmForCoordinates(int x, int y)
+        public Square BuildSquare(int x, int y)
         {
             var tileSpace = map.TileSpaceAt(x, y);
             var tile = map.TileAt(tileSpace.Tile);
             var sector = map.SectorAt(tileSpace.Sector);
-            return new Square(x, y, tile, sector, tileSpace.Zone)
-            {
-                LayerType = LayerType.Tile
-            };
+            return new Square(x, y, tile, sector, tileSpace.Zone);
         }
     }
 }
