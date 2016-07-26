@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
+using System.Windows.Input;
 using Tiledriver.Core.Uwmf.Parsing;
 using Tiledriver.UwmfViewer.ViewModels;
 
@@ -19,6 +20,19 @@ namespace Tiledriver.UwmfViewer
             DataContext = vm;
             vm.PropertyChanged += SubscribeMapCanvasToMapChanges;
             MapCanvas.NotifyNewMapItems += DetailPane.Update;
+            KeyDown += MainWindow_KeyDown;
+        }
+
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.OemPlus || e.Key == Key.OemFinish)
+            {
+                ZoomIn(sender, e);
+            }
+            if (e.Key == Key.OemMinus)
+            {
+                ZoomOut(sender, e);
+            }
         }
 
         private void SubscribeMapCanvasToMapChanges(object sender, System.ComponentModel.PropertyChangedEventArgs e)

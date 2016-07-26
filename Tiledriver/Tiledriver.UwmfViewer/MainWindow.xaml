@@ -14,7 +14,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="240" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -33,11 +33,13 @@
                 <ToolBar>
                     <Label Content="Zoom" Foreground="Gray" />
                     <Button x:Name="ZoomInButton"
+                            ToolTip="+"
                             Click="ZoomIn"
                             Content="  IN  "
                             IsEnabled="False"
                             FontWeight="ExtraBold" />
                     <Button x:Name="ZoomOutButton"
+                            ToolTip="-"
                             Click="ZoomOut"
                             Content="  OUT  "
                             IsEnabled="False"
