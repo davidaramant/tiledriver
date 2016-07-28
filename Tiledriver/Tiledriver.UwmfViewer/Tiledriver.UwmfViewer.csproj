@@ -68,15 +68,18 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ViewModels\BaseNotifyingVm.cs" />
+    <Compile Include="ViewModels\DetailProperties.cs" />
+    <Compile Include="ViewModels\LayerType.cs" />
     <Compile Include="ViewModels\MainVm.cs" />
     <Compile Include="Utilities\MapExtensions.cs" />
+    <Compile Include="ViewModels\MapCanvasVm.cs" />
     <Compile Include="Views\DetailView.xaml.cs">
       <DependentUpon>DetailView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MapItem.cs" />
-    <Compile Include="Views\MapItemFactory.cs" />
-    <Compile Include="Views\Square.cs" />
-    <Compile Include="Views\ThingVm.cs" />
+    <Compile Include="ViewModels\MapItemVm.cs" />
+    <Compile Include="ViewModels\MapItemVmFactory.cs" />
+    <Compile Include="ViewModels\SquareVm.cs" />
+    <Compile Include="ViewModels\ThingVm.cs" />
     <Compile Include="Views\ViewExtensions.cs" />
     <Compile Include="Views\MapCanvas.xaml.cs">
       <DependentUpon>MapCanvas.xaml</DependentUpon>

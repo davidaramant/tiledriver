@@ -6,13 +6,14 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Tiledriver.Core.Uwmf;
+using Tiledriver.UwmfViewer.ViewModels;
 
 namespace Tiledriver.UwmfViewer.Views
 {
     public partial class MapCanvas
     {
         private int squareSize = 24;
-        private List<MapItem> mapItems = new List<MapItem>();
+        private List<MapItemVm> mapItems = new List<MapItemVm>();
         private Path selectionMarker;
 
         public event EventHandler<MapItemEventArgs> NotifyNewMapItems;
@@ -34,14 +35,14 @@ namespace Tiledriver.UwmfViewer.Views
 
             ClearDetailsPane();
             FullArea.Children.Clear();
-            mapItems = new List<MapItem>();
+            mapItems = new List<MapItemVm>();
             selectionMarker = CreateSelectionMarker(squareSize);
 
             FullArea.Height = map.Height * squareSize;
             FullArea.Width = map.Width * squareSize;
             FullArea.Background = Colors.Black.ToBrush();
 
-            var factory = new MapItemFactory(map);
+            var factory = new MapItemVmFactory(map);
 
             // Squares
             for (var x = 0; x < map.Width; x++)
@@ -59,7 +60,7 @@ namespace Tiledriver.UwmfViewer.Views
             }
         }
 
-        private void AddMapItem(MapItem mapItem)
+        private void AddMapItem(MapItemVm mapItem)
         {
             mapItems.Add(mapItem);
             if (mapItem.ShouldAddToCanvas)
@@ -88,7 +89,7 @@ namespace Tiledriver.UwmfViewer.Views
             {
                 Height = size,
                 Width = size,
-                Data = Geometry.Parse(MapItem.SQUARE),
+                Data = Geometry.Parse(MapItemVm.SQUARE),
                 Fill = Colors.Transparent.ToBrush(),
                 Stroke = Colors.Red.ToBrush(),
                 StrokeThickness = 1,
@@ -99,26 +100,20 @@ namespace Tiledriver.UwmfViewer.Views
 
         private void ClearDetailsPane()
         {
-            ShowDetails(new List<MapItem>());
+            ShowDetails(new List<MapItemVm>());
         }
 
-        private void ShowDetails(List<MapItem> mapItems)
+        private void ShowDetails(List<MapItemVm> mapItems)
         {
             NotifyNewMapItems?.Invoke(this, new MapItemEventArgs(mapItems));
         }
     }
 
-    public enum LayerType
-    {
-        Tile,
-        Thing
-    }
-
     public class MapItemEventArgs : EventArgs
     {
-        public IEnumerable<MapItem> MapItems { get; }
+        public IEnumerable<MapItemVm> MapItems { get; }
 
-        public MapItemEventArgs(IEnumerable<MapItem> mapItems)
+        public MapItemEventArgs(IEnumerable<MapItemVm> mapItems)
         {
             MapItems = mapItems;
         }
