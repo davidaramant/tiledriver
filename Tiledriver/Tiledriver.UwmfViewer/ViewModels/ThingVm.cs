@@ -5,11 +5,12 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Tiledriver.Core.Uwmf;
+using Tiledriver.UwmfViewer.Views;
 using static System.Windows.Media.Colors;
 
-namespace Tiledriver.UwmfViewer.Views
+namespace Tiledriver.UwmfViewer.ViewModels
 {
-    public class ThingVm : MapItem
+    public class ThingVm : MapItemVm
     {
         private readonly Thing thing;
         private readonly string category;

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Tiledriver.UwmfViewer.ViewModels;
 using static System.Windows.Media.Colors;
 
 namespace Tiledriver.UwmfViewer.Views
@@ -55,7 +56,7 @@ namespace Tiledriver.UwmfViewer.Views
             }
         }
 
-        private static StackPanel HeaderPanel(MapItem mapItem)
+        private static StackPanel HeaderPanel(MapItemVm mapItem)
         {
             var headerPanel = new StackPanel() {
                 Orientation = Orientation.Horizontal,

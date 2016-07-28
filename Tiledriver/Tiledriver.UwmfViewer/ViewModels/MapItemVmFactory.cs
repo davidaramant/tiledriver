@@ -5,15 +5,16 @@ using System.Windows;
 using Tiledriver.Core.Uwmf;
 using Tiledriver.Core.Wolf3D;
 using Tiledriver.UwmfViewer.Utilities;
+using Tiledriver.UwmfViewer.ViewModels;
 
-namespace Tiledriver.UwmfViewer.Views
+namespace Tiledriver.UwmfViewer.ViewModels
 {
-    public class MapItemFactory
+    public class MapItemVmFactory
     {
         private Map map;
         private IEnumerable<Actor> actors = Actor.GetAll().Where(a => a.Wolf3D);
 
-        public MapItemFactory(Map map)
+        public MapItemVmFactory(Map map)
         {
             this.map = map;
         }
@@ -24,12 +25,12 @@ namespace Tiledriver.UwmfViewer.Views
             return new ThingVm(thing, category);
         }
 
-        public Square BuildSquare(int x, int y)
+        public SquareVm BuildSquare(int x, int y)
         {
             var tileSpace = map.TileSpaceAt(x, y);
             var tile = map.TileAt(tileSpace.Tile);
             var sector = map.SectorAt(tileSpace.Sector);
-            return new Square(x, y, tile, sector, tileSpace.Zone);
+            return new SquareVm(x, y, tile, sector, tileSpace.Zone);
         }
     }
 }

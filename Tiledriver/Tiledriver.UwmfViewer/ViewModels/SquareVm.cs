@@ -5,10 +5,11 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Tiledriver.Core.Uwmf;
+using Tiledriver.UwmfViewer.Views;
 
-namespace Tiledriver.UwmfViewer.Views
+namespace Tiledriver.UwmfViewer.ViewModels
 {
-    public class Square : MapItem
+    public class SquareVm : MapItemVm
     {
         private readonly int x;
         private readonly int y;
@@ -16,7 +17,7 @@ namespace Tiledriver.UwmfViewer.Views
         private readonly Sector sector;
         private readonly int zone;
 
-        public Square(int x, int y, Tile tile, Sector sector, int zone)
+        public SquareVm(int x, int y, Tile tile, Sector sector, int zone)
         {
             this.x = x;
             this.y = y;
@@ -95,22 +96,22 @@ namespace Tiledriver.UwmfViewer.Views
             if (tile == null)
             {
                 color = Colors.Black.ToBrush();
-                path = MapItem.SQUARE;
+                path = MapItemVm.SQUARE;
             }
             else if (tile.TextureNorth.StartsWith("DOOR"))
             {
                 color = Colors.Gray.ToBrush();
-                path = MapItem.NSDOOR;
+                path = MapItemVm.NSDOOR;
             }
             else if (tile.TextureNorth.StartsWith("SLOT"))
             {
                 color = Colors.Gray.ToBrush();
-                path = MapItem.EWDOOR;
+                path = MapItemVm.EWDOOR;
             }
             else
             {
                 color = Colors.DarkGray.ToBrush();
-                path = MapItem.SQUARE;
+                path = MapItemVm.SQUARE;
             }
 
             element.Fill = color;
