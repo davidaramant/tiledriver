@@ -13,6 +13,8 @@ namespace Tiledriver.UwmfViewer
 
         private int tileSize = 24;
 
+        private string packagedMapFilesDir = System.AppDomain.CurrentDomain.BaseDirectory + "..\\..\\MapFiles\\";
+
         public MainWindow()
         {
             InitializeComponent();
@@ -76,12 +78,12 @@ namespace Tiledriver.UwmfViewer
 
         private void SelectDefaultMapFile(object sender, RoutedEventArgs e)
         {
-            OpenMapFile(System.AppDomain.CurrentDomain.BaseDirectory + "..\\..\\FIXEDTEXTMAP.txt");
+            OpenMapFile(packagedMapFilesDir + "FIXEDTEXTMAP.txt");
         }
 
         private void SelectDemoMapFile(object sender, RoutedEventArgs e)
         {
-            OpenMapFile(System.AppDomain.CurrentDomain.BaseDirectory + "..\\..\\thingdemo.txt");
+            OpenMapFile(packagedMapFilesDir + "thingdemo.txt");
         }
 
         private void OpenMapFile(string fileName)
