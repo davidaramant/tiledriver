@@ -3,9 +3,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
 
-namespace Tiledriver.UwmfViewer.Views
+namespace Tiledriver.UwmfViewer.ViewModels
 {
-    public abstract class MapItem
+    public abstract class MapItemVm
     {
         public const string TRIANGLE = "M 16 0 L 28 32 L 4 32 Z";
         public const string SQUARE = "M 0 0 L 1 0 L 1 1 L 0 1 Z";
@@ -51,20 +51,6 @@ namespace Tiledriver.UwmfViewer.Views
                 Canvas.SetLeft(element, Left(size));
                 Canvas.SetTop(element, Top(size));
             }
-        }
-    }
-
-    public class DetailProperties
-    {
-        public string Category { get; }
-        public string Title { get; }
-        public string Value { get; }
-
-        public DetailProperties(string category, string title, string value)
-        {
-            Category = category;
-            Title = title;
-            Value = value;
         }
     }
 }
