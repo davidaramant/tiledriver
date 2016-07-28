@@ -2,6 +2,7 @@
 ** Expander.cs
 **
 **---------------------------------------------------------------------------
+** Copyright (c) 2013, Braden Obrzut
 ** Copyright (c) 2016, David Aramant
 ** All rights reserved.
 **
@@ -73,6 +74,9 @@ namespace Tiledriver.Core.GameMaps
             return result;
         }
 
+        /// <remarks>
+        /// This method was transcribed from wolfmapcommon.cpp in the ECWolf source code.
+        /// </remarks>
         public static byte[] DecompressCarmack(byte[] input)
         {
             const byte nearTag = 0xA7;
