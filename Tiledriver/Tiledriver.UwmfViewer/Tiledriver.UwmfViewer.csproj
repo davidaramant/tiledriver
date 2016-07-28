@@ -147,10 +147,10 @@
     <Resource Include="Images\file.PNG" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="FIXEDTEXTMAP.txt" />
+    <Resource Include="MapFiles\FIXEDTEXTMAP.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="thingdemo.txt" />
+    <Resource Include="MapFiles\thingdemo.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
