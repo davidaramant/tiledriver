@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,7 +14,7 @@ namespace Tiledriver.UwmfViewer.Views
     public partial class MapCanvas
     {
         private int squareSize = 24;
-        private List<MapItemVm> mapItems = new List<MapItemVm>();
+        private ObservableCollection<MapItemVm> mapItems = new ObservableCollection<MapItemVm>();
         private Path selectionMarker;
 
         public event EventHandler<MapItemEventArgs> NotifyNewMapItems;
@@ -35,7 +36,7 @@ namespace Tiledriver.UwmfViewer.Views
 
             ClearDetailsPane();
             FullArea.Children.Clear();
-            mapItems = new List<MapItemVm>();
+            mapItems = new ObservableCollection<MapItemVm>();
             selectionMarker = CreateSelectionMarker(squareSize);
 
             FullArea.Height = map.Height * squareSize;
@@ -76,9 +77,8 @@ namespace Tiledriver.UwmfViewer.Views
             Canvas.SetTop(selectionMarker, coordinate.Y * squareSize);
             FullArea.Children.Add(selectionMarker);
 
-            var filteredMapItems = mapItems
-                .Where(i => i.Coordinates.Equals(coordinate))
-                .ToList();
+            var filteredMapItems = new ObservableCollection<MapItemVm>(mapItems
+                .Where(i => i.Coordinates.Equals(coordinate)));
 
             ShowDetails(filteredMapItems);
         }
@@ -100,10 +100,10 @@ namespace Tiledriver.UwmfViewer.Views
 
         private void ClearDetailsPane()
         {
-            ShowDetails(new List<MapItemVm>());
+            ShowDetails(new ObservableCollection<MapItemVm>());
         }
 
-        private void ShowDetails(List<MapItemVm> mapItems)
+        private void ShowDetails(ObservableCollection<MapItemVm> mapItems)
         {
             NotifyNewMapItems?.Invoke(this, new MapItemEventArgs(mapItems));
         }
@@ -111,9 +111,9 @@ namespace Tiledriver.UwmfViewer.Views
 
     public class MapItemEventArgs : EventArgs
     {
-        public IEnumerable<MapItemVm> MapItems { get; }
+        public ObservableCollection<MapItemVm> MapItems { get; }
 
-        public MapItemEventArgs(IEnumerable<MapItemVm> mapItems)
+        public MapItemEventArgs(ObservableCollection<MapItemVm> mapItems)
         {
             MapItems = mapItems;
         }
