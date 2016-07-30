@@ -67,8 +67,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\HexToBrushConverter.cs" />
+    <Compile Include="Converters\EmptyStringVisibilityConverter.cs" />
     <Compile Include="ViewModels\BaseNotifyingVm.cs" />
     <Compile Include="ViewModels\DetailProperties.cs" />
+    <Compile Include="ViewModels\DetailViewVm.cs" />
     <Compile Include="ViewModels\LayerType.cs" />
     <Compile Include="ViewModels\MainVm.cs" />
     <Compile Include="Utilities\MapExtensions.cs" />
@@ -152,6 +155,7 @@
   <ItemGroup>
     <Resource Include="MapFiles\thingdemo.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
