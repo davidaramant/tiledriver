@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
@@ -27,9 +28,11 @@ namespace Tiledriver.UwmfViewer.ViewModels
         public Point Coordinates { get; internal set; }
         public LayerType LayerType { get; internal set; }
         public virtual bool ShouldAddToCanvas => true;
+        public Path Thumbnail => CreatePath(24);
 
         public abstract string DetailType { get; }
         public abstract IEnumerable<DetailProperties> Details { get; }
+        public Dictionary<string, List<DetailProperties>> GroupedDetails => Details.GroupBy(d => d.Category).ToDictionary(g => g.Key ?? "", g => g.ToList());
 
         protected Path element;
         public abstract Path CreatePath(int size);
