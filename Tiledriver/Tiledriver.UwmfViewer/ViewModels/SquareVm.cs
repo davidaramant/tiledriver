@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Tiledriver.Core.Uwmf;
-using Tiledriver.UwmfViewer.Views;
+using static Tiledriver.UwmfViewer.Views.Palette;
 
 namespace Tiledriver.UwmfViewer.ViewModels
 {
@@ -91,32 +90,26 @@ namespace Tiledriver.UwmfViewer.ViewModels
 
         private void SetProperties(Path element)
         {
-            SolidColorBrush color;
-            string path;
             if (tile == null)
             {
-                color = Colors.Black.ToBrush();
-                path = MapItemVm.SQUARE;
+                element.Fill = element.Stroke = Black;
+                element.Data = MapItemVm.SQUARE;
             }
             else if (tile.TextureNorth.StartsWith("DOOR"))
             {
-                color = Colors.Gray.ToBrush();
-                path = MapItemVm.NSDOOR;
+                element.Fill = element.Stroke = Gray;
+                element.Data = MapItemVm.NSDOOR;
             }
             else if (tile.TextureNorth.StartsWith("SLOT"))
             {
-                color = Colors.Gray.ToBrush();
-                path = MapItemVm.EWDOOR;
+                element.Fill = element.Stroke = Gray;
+                element.Data = MapItemVm.EWDOOR;
             }
             else
             {
-                color = Colors.DarkGray.ToBrush();
-                path = MapItemVm.SQUARE;
+                element.Fill = element.Stroke = DarkGray;
+                element.Data = MapItemVm.SQUARE;
             }
-
-            element.Fill = color;
-            element.Stroke = color;
-            element.Data = Geometry.Parse(path);
         }
     }
 }
