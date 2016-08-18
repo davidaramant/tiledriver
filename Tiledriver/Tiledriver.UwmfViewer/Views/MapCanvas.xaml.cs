@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -64,7 +63,7 @@ namespace Tiledriver.UwmfViewer.Views
         private void AddMapItem(MapItemVm mapItem)
         {
             mapItems.Add(mapItem);
-            if (mapItem.ShouldAddToCanvas)
+            //if (mapItem.ShouldAddToCanvas)
             {
                 FullArea.Children.Add(mapItem.CreatePath(squareSize));
             }
@@ -89,7 +88,7 @@ namespace Tiledriver.UwmfViewer.Views
             {
                 Height = size,
                 Width = size,
-                Data = Geometry.Parse(MapItemVm.SQUARE),
+                Data = MapItemVm.SQUARE,
                 Fill = Colors.Transparent.ToBrush(),
                 Stroke = Colors.Red.ToBrush(),
                 StrokeThickness = 1,

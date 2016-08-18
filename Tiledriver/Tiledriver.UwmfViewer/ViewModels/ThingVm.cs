@@ -6,7 +6,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using Tiledriver.Core.Uwmf;
 using Tiledriver.UwmfViewer.Views;
-using static System.Windows.Media.Colors;
+using static Tiledriver.UwmfViewer.Views.Palette;
 
 namespace Tiledriver.UwmfViewer.ViewModels
 {
@@ -116,14 +116,13 @@ namespace Tiledriver.UwmfViewer.ViewModels
         };
 
         private static ThingVmTemplate Default => new ThingVmTemplate(CIRCLE, Violet, White);
-
-        private static ThingVmTemplate Player() => new ThingVmTemplate(MAN, Black, Yellow, true);
+        private static ThingVmTemplate Player() => new ThingVmTemplate(MAN, Transparent, Yellow, true);
         private static ThingVmTemplate PatrolPoint() => new ThingVmTemplate(ARROW, Black, White, true);
-        private static ThingVmTemplate EnemyMan(Color fill) => new ThingVmTemplate(MAN, fill, White, true);
+        private static ThingVmTemplate EnemyMan(SolidColorBrush fill) => new ThingVmTemplate(MAN, fill, White, true);
         private static ThingVmTemplate Boss() => new ThingVmTemplate(BOSS, Red, White, true);
-        private static ThingVmTemplate Key(Color fill) => new ThingVmTemplate(KEY, fill, fill);
+        private static ThingVmTemplate Key(SolidColorBrush fill) => new ThingVmTemplate(KEY, fill, fill);
         private static ThingVmTemplate PacmanGhost() => new ThingVmTemplate(PACMAN_GHOST, GhostWhite, LightBlue);
-        private static ThingVmTemplate Circle(Color fill, Color stroke) => new ThingVmTemplate(CIRCLE, fill, stroke);
+        private static ThingVmTemplate Circle(SolidColorBrush fill, SolidColorBrush stroke) => new ThingVmTemplate(CIRCLE, fill, stroke);
         private static ThingVmTemplate Dog() => new ThingVmTemplate(DOG, Brown, SaddleBrown, shouldRotate:true);
         private static ThingVmTemplate Treasure() => new ThingVmTemplate(CROWN, Gold, Gold);
         private static ThingVmTemplate Health() => new ThingVmTemplate(CROSS, Blue, White);
@@ -137,11 +136,11 @@ namespace Tiledriver.UwmfViewer.ViewModels
             public SolidColorBrush Stroke { get; }
             public bool ShouldRotate { get; }
 
-            public ThingVmTemplate(string path, Color fill, Color stroke, bool shouldRotate = false)
+            public ThingVmTemplate(Geometry geometry, SolidColorBrush fill, SolidColorBrush stroke, bool shouldRotate = false)
             {
-                Geometry = Geometry.Parse(path);
-                Fill = fill.ToBrush();
-                Stroke = stroke.ToBrush();
+                Geometry = geometry;
+                Fill = fill;
+                Stroke = stroke;
                 ShouldRotate = shouldRotate;
             }
         }
