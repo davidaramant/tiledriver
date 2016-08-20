@@ -55,7 +55,7 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
         [Test]
         public void ShouldParseOldDemoMap()
         {
-            using (var stream = File.OpenRead(Path.Combine("Uwmf", "Parsing", "TEXTMAP.txt")))
+            using (var stream = File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "Uwmf", "Parsing", "TEXTMAP.txt")))
             {
                 var map = Parser.Parse(new Lexer(new UwmfCharReader(stream)));
             }
