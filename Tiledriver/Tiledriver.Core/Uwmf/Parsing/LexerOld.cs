@@ -8,11 +8,11 @@ using Tiledriver.Core.Uwmf.Parsing.Extensions;
 
 namespace Tiledriver.Core.Uwmf.Parsing
 {
-    public sealed class Lexer : ILexer
+    public sealed class LexerOld : ILexerOld
     {
         private readonly IUwmfCharReader _reader;
 
-        public Lexer(IUwmfCharReader reader)
+        public LexerOld(IUwmfCharReader reader)
         {
             _reader = reader;
         }
@@ -152,33 +152,33 @@ namespace Tiledriver.Core.Uwmf.Parsing
             return buffer.ToString();
         }
 
-        public TokenType DetermineNextToken()
+        public TokenTypeOld DetermineNextToken()
         {
             MovePastWhitespaceAndComments();
 
             switch (_reader.Current.Char)
             {
                 case '=':
-                    return TokenType.Assignment;
+                    return TokenTypeOld.Assignment;
                 case '{':
-                    return TokenType.StartBlock;
+                    return TokenTypeOld.StartBlock;
                 case '}':
-                    return TokenType.EndBlock;
+                    return TokenTypeOld.EndBlock;
                 case ';':
-                    return TokenType.EndOfAssignment;
+                    return TokenTypeOld.EndOfAssignment;
                 case ',':
-                    return TokenType.Comma;
+                    return TokenTypeOld.Comma;
                 default:
                     if (_reader.Current.Char.IsValidIdentifierStartChar())
                     {
-                        return TokenType.Identifier;
+                        return TokenTypeOld.Identifier;
                     }
                     if (_reader.Current.IsEndOfFile)
                     {
-                        return TokenType.EndOfFile;
+                        return TokenTypeOld.EndOfFile;
                     }
 
-                    return TokenType.Unknown;
+                    return TokenTypeOld.Unknown;
             }
         }
 

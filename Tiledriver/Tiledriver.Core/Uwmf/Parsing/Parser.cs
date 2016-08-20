@@ -7,99 +7,99 @@ namespace Tiledriver.Core.Uwmf.Parsing
 {
     public static partial class Parser
     {
-        public static Map Parse(ILexer lexer)
+        public static Map Parse(ILexerOld lexerOld)
         {
-            return ParseMap(lexer);
+            return ParseMap(lexerOld);
         }
 
         #region PlaneMap/TileSpace parsing
 
-        private static PlaneMap ParsePlaneMap(ILexer lexer)
+        private static PlaneMap ParsePlaneMap(ILexerOld lexerOld)
         {
             var planeMap = new PlaneMap();
 
-            TokenType nextToken;
-            nextToken = lexer.DetermineNextToken();
-            if (nextToken != TokenType.StartBlock)
+            TokenTypeOld nextToken;
+            nextToken = lexerOld.DetermineNextToken();
+            if (nextToken != TokenTypeOld.StartBlock)
             {
                 throw new ParsingException($"Expecting start of block when parsing PlaneMap but found {nextToken}.");
             }
-            lexer.AdvanceOneCharacter();
+            lexerOld.AdvanceOneCharacter();
 
-            while ((nextToken = lexer.DetermineNextToken()) != TokenType.EndBlock)
+            while ((nextToken = lexerOld.DetermineNextToken()) != TokenTypeOld.EndBlock)
             {
-                if (nextToken == TokenType.StartBlock)
+                if (nextToken == TokenTypeOld.StartBlock)
                 {
-                    planeMap.TileSpaces.Add(ParseTileSpace(lexer));
+                    planeMap.TileSpaces.Add(ParseTileSpace(lexerOld));
                 }
-                else if (nextToken == TokenType.Comma)
+                else if (nextToken == TokenTypeOld.Comma)
                 {
-                    lexer.AdvanceOneCharacter();
+                    lexerOld.AdvanceOneCharacter();
                 }
                 else
                 {
                     throw new ParsingException($"Unexpected token in PlaneMap: {nextToken}");
                 }
             }
-            lexer.AdvanceOneCharacter();
+            lexerOld.AdvanceOneCharacter();
 
             planeMap.CheckSemanticValidity();
             return planeMap;
         }
 
-        private static TileSpace ParseTileSpace(ILexer lexer)
+        private static TileSpace ParseTileSpace(ILexerOld lexerOld)
         {
             var tileSpace = new TileSpace();
 
-            if (lexer.DetermineNextToken() != TokenType.StartBlock)
+            if (lexerOld.DetermineNextToken() != TokenTypeOld.StartBlock)
             {
                 throw new ParsingException("Expecting start of block when parsing Sector.");
             }
-            lexer.AdvanceOneCharacter();
+            lexerOld.AdvanceOneCharacter();
 
-            if (lexer.DetermineNextToken() != TokenType.Unknown)
+            if (lexerOld.DetermineNextToken() != TokenTypeOld.Unknown)
             {
                 throw new ParsingException("Expected Tile number in TileSpace");
             }
-            tileSpace.Tile = lexer.ReadIntegerNumber();
+            tileSpace.Tile = lexerOld.ReadIntegerNumber();
 
-            if (lexer.DetermineNextToken() != TokenType.Comma)
+            if (lexerOld.DetermineNextToken() != TokenTypeOld.Comma)
             {
                 throw new ParsingException("Expected comma after Tile number in TileSpace");
             }
-            lexer.AdvanceOneCharacter();
+            lexerOld.AdvanceOneCharacter();
 
-            if (lexer.DetermineNextToken() != TokenType.Unknown)
+            if (lexerOld.DetermineNextToken() != TokenTypeOld.Unknown)
             {
                 throw new ParsingException("Expected Sector number in TileSpace");
             }
-            tileSpace.Sector = lexer.ReadIntegerNumber();
+            tileSpace.Sector = lexerOld.ReadIntegerNumber();
 
-            if (lexer.DetermineNextToken() != TokenType.Comma)
+            if (lexerOld.DetermineNextToken() != TokenTypeOld.Comma)
             {
                 throw new ParsingException("Expected comma after Sector number in TileSpace");
             }
-            lexer.AdvanceOneCharacter();
+            lexerOld.AdvanceOneCharacter();
 
-            if (lexer.DetermineNextToken() != TokenType.Unknown)
+            if (lexerOld.DetermineNextToken() != TokenTypeOld.Unknown)
             {
                 throw new ParsingException("Expected Zone number in TileSpace");
             }
-            tileSpace.Zone = lexer.ReadIntegerNumber();
+            tileSpace.Zone = lexerOld.ReadIntegerNumber();
 
-            var nextToken = lexer.DetermineNextToken();
-            if (nextToken == TokenType.Comma)
+            var nextToken = lexerOld.DetermineNextToken();
+            if (nextToken == TokenTypeOld.Comma)
             {
-                lexer.AdvanceOneCharacter();
-                tileSpace.Tag = lexer.ReadIntegerNumber();
-                nextToken = lexer.DetermineNextToken();
+                lexerOld.AdvanceOneCharacter();
+                tileSpace.Tag = lexerOld.ReadIntegerNumber();
+                nextToken = lexerOld.DetermineNextToken();
             }
 
-            if (nextToken != TokenType.EndBlock)
+            if (nextToken != TokenTypeOld.EndBlock)
             {
                 throw new ParsingException("Unexpected token in TileSpace");
             }
-            lexer.AdvanceOneCharacter();
+            lexerOld.AdvanceOneCharacter();
 
             tileSpace.CheckSemanticValidity();
             return tileSpace;
@@ -109,39 +109,39 @@ namespace Tiledriver.Core.Uwmf.Parsing
 
         #region Assignment Parsing Methods
 
-        private static int ParseIntegerNumberAssignment(ILexer lexer, string context)
+        private static int ParseIntegerNumberAssignment(ILexerOld lexerOld, string context)
         {
-            return ParseAssignment(lexer, l => l.ReadIntegerNumber(), context);
+            return ParseAssignment(lexerOld, l => l.ReadIntegerNumber(), context);
         }
 
-        private static double ParseFloatingPointNumberAssignment(ILexer lexer, string context)
+        private static double ParseFloatingPointNumberAssignment(ILexerOld lexerOld, string context)
         {
-            return ParseAssignment(lexer, l => l.ReadFloatingPointNumber(), context);
+            return ParseAssignment(lexerOld, l => l.ReadFloatingPointNumber(), context);
         }
 
-        private static bool ParseBooleanAssignment(ILexer lexer, string context)
+        private static bool ParseBooleanAssignment(ILexerOld lexerOld, string context)
         {
-            return ParseAssignment(lexer, l => l.ReadBoolean(), context);
+            return ParseAssignment(lexerOld, l => l.ReadBoolean(), context);
         }
 
-        private static string ParseStringAssignment(ILexer lexer, string context)
+        private static string ParseStringAssignment(ILexerOld lexerOld, string context)
         {
-            return ParseAssignment(lexer, l => l.ReadString(), context);
+            return ParseAssignment(lexerOld, l => l.ReadString(), context);
         }
 
-        private static T ParseAssignment<T>(ILexer lexer, Func<ILexer, T> readValue, string context)
+        private static T ParseAssignment<T>(ILexerOld lexerOld, Func<ILexerOld, T> readValue, string context)
         {
-            if (lexer.DetermineNextToken() != TokenType.Assignment)
+            if (lexerOld.DetermineNextToken() != TokenTypeOld.Assignment)
             {
                 throw new ParsingException($"Expecting assignment of {context}");
             }
-            lexer.AdvanceOneCharacter();
-            T result = readValue(lexer);
-            if (lexer.DetermineNextToken() != TokenType.EndOfAssignment)
+            lexerOld.AdvanceOneCharacter();
+            T result = readValue(lexerOld);
+            if (lexerOld.DetermineNextToken() != TokenTypeOld.EndOfAssignment)
             {
                 throw new ParsingException($"Missing end of assignment of {context}");
             }
-            lexer.AdvanceOneCharacter();
+            lexerOld.AdvanceOneCharacter();
             return result;
         }
 

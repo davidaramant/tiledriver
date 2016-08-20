@@ -3,7 +3,7 @@
 
 namespace Tiledriver.Core.Uwmf.Parsing
 {
-    public enum TokenType
+    public enum TokenTypeOld
     {
         Identifier,
         Assignment,
@@ -15,7 +15,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
         Unknown
     }
 
-    public interface ILexer
+    public interface ILexerOld
     {
         Identifier ReadIdentifier();
 
@@ -26,7 +26,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 
         void AdvanceOneCharacter();
 
-        TokenType DetermineNextToken();
+        TokenTypeOld DetermineNextToken();
 
         void MovePastAssignment();
     }

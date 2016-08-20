@@ -79,8 +79,8 @@
     <Compile Include="Uwmf\Parsing\CharPosition.cs" />
     <Compile Include="Uwmf\Parsing\UwmfCharReader.cs" />
     <Compile Include="Uwmf\Identifier.cs" />
-    <Compile Include="Uwmf\Parsing\ILexer.cs" />
-    <Compile Include="Uwmf\Parsing\Lexer.cs" />
+    <Compile Include="Uwmf\Parsing\ILexerOld.cs" />
+    <Compile Include="Uwmf\Parsing\LexerOld.cs" />
     <Compile Include="Uwmf\Parsing\ParsingException.cs" />
     <Compile Include="Uwmf\PlaneMap.cs" />
     <Compile Include="Uwmf\IWriteableUwmfBlock.cs" />

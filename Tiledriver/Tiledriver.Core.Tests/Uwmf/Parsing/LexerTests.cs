@@ -31,24 +31,24 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
                 expectedEndingColumn);
         }
 
-        [TestCase("id", TokenType.Identifier, 1, 1)]
-        [TestCase("=", TokenType.Assignment, 1, 1)]
-        [TestCase(";", TokenType.EndOfAssignment, 1, 1)]
-        [TestCase("{", TokenType.StartBlock, 1, 1)]
-        [TestCase("}", TokenType.EndBlock, 1, 1)]
-        [TestCase(",", TokenType.Comma, 1, 1)]
-        [TestCase("", TokenType.EndOfFile, 1, 1)]
-        [TestCase("1", TokenType.Unknown, 1, 1)]
+        [TestCase("id", TokenTypeOld.Identifier, 1, 1)]
+        [TestCase("=", TokenTypeOld.Assignment, 1, 1)]
+        [TestCase(";", TokenTypeOld.EndOfAssignment, 1, 1)]
+        [TestCase("{", TokenTypeOld.StartBlock, 1, 1)]
+        [TestCase("}", TokenTypeOld.EndBlock, 1, 1)]
+        [TestCase(",", TokenTypeOld.Comma, 1, 1)]
+        [TestCase("", TokenTypeOld.EndOfFile, 1, 1)]
+        [TestCase("1", TokenTypeOld.Unknown, 1, 1)]
         public void ShouldDetermineTokenType(
             string input,
-            TokenType expectedType,
+            TokenTypeOld expectedTypeOld,
             int expectedEndingLine,
             int expectedEndingColumn)
         {
             RunTestAndVerifyResultingPosition(input, lexer =>
                 Assert.That(
                     lexer.DetermineNextToken(),
-                    Is.EqualTo(expectedType),
+                    Is.EqualTo(expectedTypeOld),
                     "Did not determine token type."),
                 expectedEndingLine,
                 expectedEndingColumn);
@@ -169,89 +169,89 @@ block2
 }";
 
             var reader = CreateReader(input);
-            var lexer = new Lexer(reader);
+            var lexer = new LexerOld(reader);
 
             // Don't bother with assertion messages since the result will have to be inspected anyway.
 
             Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("string")));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.Assignment));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.Assignment));
             lexer.AdvanceOneCharacter();
             Assert.That(lexer.ReadString(), Is.EqualTo("String"));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.EndOfAssignment));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.EndOfAssignment));
             lexer.AdvanceOneCharacter();
 
             Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("int")));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.Assignment));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.Assignment));
             lexer.AdvanceOneCharacter();
             Assert.That(lexer.ReadIntegerNumber(), Is.EqualTo(1));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.EndOfAssignment));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.EndOfAssignment));
             lexer.AdvanceOneCharacter();
 
             Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("float")));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.Assignment));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.Assignment));
             lexer.AdvanceOneCharacter();
             Assert.That(lexer.ReadFloatingPointNumber(), Is.EqualTo(1.5));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.EndOfAssignment));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.EndOfAssignment));
             lexer.AdvanceOneCharacter();
 
             Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("flag")));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.Assignment));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.Assignment));
             lexer.AdvanceOneCharacter();
             Assert.That(lexer.ReadBoolean(), Is.EqualTo(false));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.EndOfAssignment));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.EndOfAssignment));
             lexer.AdvanceOneCharacter();
 
             Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("emptyBlock1")));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.StartBlock));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.StartBlock));
             lexer.AdvanceOneCharacter();
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.EndBlock));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.EndBlock));
             lexer.AdvanceOneCharacter();
 
             Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("emptyBlock2")));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.StartBlock));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.StartBlock));
             lexer.AdvanceOneCharacter();
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.EndBlock));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.EndBlock));
             lexer.AdvanceOneCharacter();
 
             Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("block")));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.StartBlock));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.StartBlock));
             lexer.AdvanceOneCharacter();
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.Identifier));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.Identifier));
             Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("unknownProperty")));
             Assert.DoesNotThrow(lexer.MovePastAssignment);
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.EndBlock));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.EndBlock));
             lexer.AdvanceOneCharacter();
 
             Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("block2")));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.StartBlock));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.StartBlock));
             lexer.AdvanceOneCharacter();
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.StartBlock));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.StartBlock));
             lexer.AdvanceOneCharacter();
-            Assert.That( lexer.DetermineNextToken(), Is.EqualTo(TokenType.Unknown));
+            Assert.That( lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.Unknown));
             Assert.That( lexer.ReadIntegerNumber(), Is.EqualTo(1));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.Comma));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.Comma));
             lexer.AdvanceOneCharacter();
             Assert.That(lexer.ReadIntegerNumber(), Is.EqualTo(2));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.Comma));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.Comma));
             lexer.AdvanceOneCharacter();
             Assert.That(lexer.ReadIntegerNumber(), Is.EqualTo(3));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.EndBlock));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.EndBlock));
             lexer.AdvanceOneCharacter();
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.Comma));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.Comma));
             lexer.AdvanceOneCharacter();
 
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.StartBlock));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.StartBlock));
             lexer.AdvanceOneCharacter();
             Assert.That(lexer.ReadIntegerNumber(), Is.EqualTo(4));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.Comma));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.Comma));
             lexer.AdvanceOneCharacter();
             Assert.That(lexer.ReadIntegerNumber(), Is.EqualTo(5));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.EndBlock));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.EndBlock));
             lexer.AdvanceOneCharacter();
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.EndBlock));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.EndBlock));
             lexer.AdvanceOneCharacter();
 
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenType.EndOfFile));
+            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.EndOfFile));
         }
 
         private static IUwmfCharReader CreateReader(string input)
@@ -261,12 +261,12 @@ block2
 
         private static void RunTestAndVerifyResultingPosition(
             string input,
-            Action<Lexer> assertion,
+            Action<LexerOld> assertion,
             int expectedLine,
             int expectedColumn)
         {
             var reader = CreateReader(input);
-            var lexer = new Lexer(reader);
+            var lexer = new LexerOld(reader);
 
             assertion(lexer);
 

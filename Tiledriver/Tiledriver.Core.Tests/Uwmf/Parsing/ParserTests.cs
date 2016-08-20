@@ -29,7 +29,7 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
 
                 stream.Position = 0;
 
-                var roundTripped = Parser.Parse(new Lexer(new UwmfCharReader(stream)));
+                var roundTripped = Parser.Parse(new LexerOld(new UwmfCharReader(stream)));
 
                 UwmfComparison.AssertEqual(roundTripped,map);
             }
@@ -46,7 +46,7 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
 
                 stream.Position = 0;
 
-                var roundTripped = Parser.Parse(new Lexer(new UwmfCharReader(stream)));
+                var roundTripped = Parser.Parse(new LexerOld(new UwmfCharReader(stream)));
 
                 UwmfComparison.AssertEqual(roundTripped, map);
             }
@@ -57,7 +57,7 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
         {
             using (var stream = File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "Uwmf", "Parsing", "TEXTMAP.txt")))
             {
-                var map = Parser.Parse(new Lexer(new UwmfCharReader(stream)));
+                var map = Parser.Parse(new LexerOld(new UwmfCharReader(stream)));
             }
         }
     }
