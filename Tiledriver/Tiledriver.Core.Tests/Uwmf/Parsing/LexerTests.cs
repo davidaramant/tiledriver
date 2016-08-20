@@ -1,11 +1,8 @@
 ﻿// Copyright (c) 2016, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using System;
-using System.IO;
-using System.Text;
+using System.Linq;
 using NUnit.Framework;
-using Tiledriver.Core.Uwmf;
 using Tiledriver.Core.Uwmf.Parsing;
 
 namespace Tiledriver.Core.Tests.Uwmf.Parsing
@@ -13,272 +10,121 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
     [TestFixture]
     public sealed class LexerTests
     {
-        [TestCase("someproperty = 10;", 1, 13)]
-        [TestCase("      someProperty=10;", 1, 19)]
-        [TestCase("      SOMEPROPERTY=10;", 1, 19)]
-        [TestCase("/* comment */ someProperty = 10;", 1, 27)]
-        [TestCase("// comment\nsomeProperty = 10;", 2, 13)]
-        public void ShouldReadIdentifier(string input, int expectedEndingLine, int expectedEndingColumn)
+        [TestCase("someProperty = 10;")]
+        [TestCase("      someProperty=10;")]
+        [TestCase("      someProperty  = 10 ;")]
+        public void ShouldIgnoreWhitespace(string input)
         {
-            var expectedIdentifier = new Identifier("someproperty");
-
-            RunTestAndVerifyResultingPosition(input, lexer =>
-                Assert.That(
-                    lexer.ReadIdentifier(),
-                    Is.EqualTo(expectedIdentifier),
-                    "Did not read identifier."),
-                expectedEndingLine,
-                expectedEndingColumn);
+            VerifyLexing(input,
+                Token.Identifier("someProperty"),
+                Token.Equal,
+                Token.Integer(10),
+                Token.Semicolon);
         }
 
-        [TestCase("id", TokenTypeOld.Identifier, 1, 1)]
-        [TestCase("=", TokenTypeOld.Assignment, 1, 1)]
-        [TestCase(";", TokenTypeOld.EndOfAssignment, 1, 1)]
-        [TestCase("{", TokenTypeOld.StartBlock, 1, 1)]
-        [TestCase("}", TokenTypeOld.EndBlock, 1, 1)]
-        [TestCase(",", TokenTypeOld.Comma, 1, 1)]
-        [TestCase("", TokenTypeOld.EndOfFile, 1, 1)]
-        [TestCase("1", TokenTypeOld.Unknown, 1, 1)]
-        public void ShouldDetermineTokenType(
-            string input,
-            TokenTypeOld expectedTypeOld,
-            int expectedEndingLine,
-            int expectedEndingColumn)
+        [TestCase("someProperty = 10;")]
+        [TestCase("someProperty = 0010;")]
+        [TestCase("someProperty = 0xa;")]
+        [TestCase("someProperty = +10;")]
+        public void ShouldLexIntegers(string input)
         {
-            RunTestAndVerifyResultingPosition(input, lexer =>
-                Assert.That(
-                    lexer.DetermineNextToken(),
-                    Is.EqualTo(expectedTypeOld),
-                    "Did not determine token type."),
-                expectedEndingLine,
-                expectedEndingColumn);
+            VerifyLexing(input,
+                Token.Identifier("someProperty"),
+                Token.Equal,
+                Token.Integer(10),
+                Token.Semicolon);
         }
 
-        [TestCase("64;", 64, 1, 3)]
-        [TestCase("8;", 8, 1, 2)]
-        [TestCase("08;", 8, 1, 3)]
-        [TestCase("+16;", 16, 1, 4)]
-        [TestCase("-16;", -16, 1, 4)]
-        [TestCase("0xFf;", 255, 1, 5)]
-        public void ShouldReadInteger(
-            string input,
-            int expectedResult,
-            int expectedEndingLine,
-            int expectedEndingColumn)
+        [TestCase("someProperty = 10.5;")]
+        [TestCase("someProperty = +10.5;")]
+        [TestCase("someProperty = 1.05e1;")]
+        public void ShouldLexDoubles(string input)
         {
-            RunTestAndVerifyResultingPosition(input, lexer =>
-                Assert.That(
-                    lexer.ReadIntegerNumber(),
-                    Is.EqualTo(expectedResult),
-                    "Did not read integer correctly."),
-                expectedEndingLine,
-                expectedEndingColumn);
+            VerifyLexing(input,
+                Token.Identifier("someProperty"),
+                Token.Equal,
+                Token.Double(10.5),
+                Token.Semicolon);
         }
 
-        [TestCase("64;", 64d, 1, 3)]
-        [TestCase("6.4;", 6.4d, 1, 4)]
-        [TestCase("+1.6;", 1.6d, 1, 5)]
-        [TestCase("-1.6;", -1.6d, 1, 5)]
-        [TestCase("1e+9;", 1e+9d, 1, 5)]
-        public void ShouldReadFloatingPointNumber(
-            string input,
-            double expectedResult,
-            int expectedEndingLine,
-            int expectedEndingColumn)
+        [TestCase("someProperty = true;", true)]
+        [TestCase("someProperty = false;", false)]
+        public void ShouldLexBooleans(string input, bool boolValue)
         {
-            RunTestAndVerifyResultingPosition(input, lexer =>
-                Assert.That(
-                    lexer.ReadFloatingPointNumber(),
-                    Is.EqualTo(expectedResult),
-                    "Did not read floating point number correctly."),
-                expectedEndingLine,
-                expectedEndingColumn);
+            VerifyLexing(input,
+                Token.Identifier("someProperty"),
+                Token.Equal,
+                boolValue ? Token.BooleanTrue : Token.BooleanFalse,
+                Token.Semicolon);
         }
 
-        [TestCase("true;", true, 1, 5)]
-        [TestCase("false;", false, 1, 6)]
-        public void ShouldReadBoolean(
-            string input,
-            bool expectedResult,
-            int expectedEndingLine,
-            int expectedEndingColumn)
+        [TestCase("someProperty = \"true\";", "true")]
+        [TestCase("someProperty = \"0xFB010304\";", "0xFB010304")]
+        [TestCase("someProperty = \"\";", "")]
+        public void ShouldLexStrings(string input, string stringValue)
         {
-            RunTestAndVerifyResultingPosition(input, lexer =>
-                Assert.That(
-                    lexer.ReadBoolean(),
-                    Is.EqualTo(expectedResult),
-                    "Did not read Boolean correctly."),
-                expectedEndingLine,
-                expectedEndingColumn);
-        }
-
-        [TestCase("\"Test String\";", "Test String", 1, 14)]
-        [TestCase("\"0xFB010304\";", "0xFB010304", 1, 13)]
-        [TestCase("\"\";", "", 1, 3)]
-        public void ShouldReadString(
-            string input,
-            string expectedResult,
-            int expectedEndingLine,
-            int expectedEndingColumn)
-        {
-            RunTestAndVerifyResultingPosition(input, lexer =>
-                Assert.That(
-                    lexer.ReadString(),
-                    Is.EqualTo(expectedResult),
-                    "Did not read string correctly."),
-                expectedEndingLine,
-                expectedEndingColumn);
-        }
-
-        [TestCase("64;", 1, 4)]
-        [TestCase("true;", 1, 6)]
-        [TestCase("6.4;", 1, 5)]
-        [TestCase("\"string\";", 1, 10)]
-        public void ShouldMovePastAssignment(
-            string input,
-            int expectedEndingLine,
-            int expectedEndingColumn)
-        {
-            RunTestAndVerifyResultingPosition(input, lexer =>
-                Assert.DoesNotThrow(
-                    lexer.MovePastAssignment,
-                    "Should not have thrown moving past assignment,"),
-                expectedEndingLine,
-                expectedEndingColumn);
+            VerifyLexing(input,
+                Token.Identifier("someProperty"),
+                Token.Equal,
+                Token.String(stringValue),
+                Token.Semicolon);
         }
 
         [Test]
-        public void ShouldTokenizeRealisticScenario()
+        public void ShouldLexEmptyBlock()
         {
-            var input = @"string = ""String"";
-int = 1;
-float = 1.5;
-flag = false;
-emptyBlock1{}
-emptyBlock2
-{
-}
-block
-{
-    unknownProperty = 5;
-}
-block2
-{
-    {1,2,3},
-    {4,5}
-}";
-
-            var reader = CreateReader(input);
-            var lexer = new LexerOld(reader);
-
-            // Don't bother with assertion messages since the result will have to be inspected anyway.
-
-            Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("string")));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.Assignment));
-            lexer.AdvanceOneCharacter();
-            Assert.That(lexer.ReadString(), Is.EqualTo("String"));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.EndOfAssignment));
-            lexer.AdvanceOneCharacter();
-
-            Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("int")));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.Assignment));
-            lexer.AdvanceOneCharacter();
-            Assert.That(lexer.ReadIntegerNumber(), Is.EqualTo(1));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.EndOfAssignment));
-            lexer.AdvanceOneCharacter();
-
-            Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("float")));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.Assignment));
-            lexer.AdvanceOneCharacter();
-            Assert.That(lexer.ReadFloatingPointNumber(), Is.EqualTo(1.5));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.EndOfAssignment));
-            lexer.AdvanceOneCharacter();
-
-            Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("flag")));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.Assignment));
-            lexer.AdvanceOneCharacter();
-            Assert.That(lexer.ReadBoolean(), Is.EqualTo(false));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.EndOfAssignment));
-            lexer.AdvanceOneCharacter();
-
-            Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("emptyBlock1")));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.StartBlock));
-            lexer.AdvanceOneCharacter();
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.EndBlock));
-            lexer.AdvanceOneCharacter();
-
-            Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("emptyBlock2")));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.StartBlock));
-            lexer.AdvanceOneCharacter();
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.EndBlock));
-            lexer.AdvanceOneCharacter();
-
-            Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("block")));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.StartBlock));
-            lexer.AdvanceOneCharacter();
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.Identifier));
-            Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("unknownProperty")));
-            Assert.DoesNotThrow(lexer.MovePastAssignment);
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.EndBlock));
-            lexer.AdvanceOneCharacter();
-
-            Assert.That(lexer.ReadIdentifier(), Is.EqualTo(new Identifier("block2")));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.StartBlock));
-            lexer.AdvanceOneCharacter();
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.StartBlock));
-            lexer.AdvanceOneCharacter();
-            Assert.That( lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.Unknown));
-            Assert.That( lexer.ReadIntegerNumber(), Is.EqualTo(1));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.Comma));
-            lexer.AdvanceOneCharacter();
-            Assert.That(lexer.ReadIntegerNumber(), Is.EqualTo(2));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.Comma));
-            lexer.AdvanceOneCharacter();
-            Assert.That(lexer.ReadIntegerNumber(), Is.EqualTo(3));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.EndBlock));
-            lexer.AdvanceOneCharacter();
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.Comma));
-            lexer.AdvanceOneCharacter();
-
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.StartBlock));
-            lexer.AdvanceOneCharacter();
-            Assert.That(lexer.ReadIntegerNumber(), Is.EqualTo(4));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.Comma));
-            lexer.AdvanceOneCharacter();
-            Assert.That(lexer.ReadIntegerNumber(), Is.EqualTo(5));
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.EndBlock));
-            lexer.AdvanceOneCharacter();
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.EndBlock));
-            lexer.AdvanceOneCharacter();
-
-            Assert.That(lexer.DetermineNextToken(), Is.EqualTo(TokenTypeOld.EndOfFile));
+            VerifyLexing("block { }",
+                Token.Identifier("block"),
+                Token.OpenParen,
+                Token.CloseParen);
         }
 
-        private static IUwmfCharReader CreateReader(string input)
+        [Test]
+        public void ShouldLexBlockWithAssignments()
         {
-            return new UwmfCharReader(new MemoryStream(Encoding.ASCII.GetBytes(input)));
+            VerifyLexing("block { id1 = 1; id2 = false; }",
+                Token.Identifier("block"),
+                Token.OpenParen,
+                Token.Identifier("id1"),
+                Token.Equal,
+                Token.Integer(1),
+                Token.Semicolon,
+                Token.Identifier("id2"),
+                Token.Equal,
+                Token.BooleanFalse,
+                Token.Semicolon,
+                Token.CloseParen);
         }
 
-        private static void RunTestAndVerifyResultingPosition(
-            string input,
-            Action<LexerOld> assertion,
-            int expectedLine,
-            int expectedColumn)
+        [Test]
+        public void ShouldLexBlockWithArrays()
         {
-            var reader = CreateReader(input);
-            var lexer = new LexerOld(reader);
+            VerifyLexing("block { {1,2},{3,4} }",
+                Token.Identifier("block"),
+                Token.OpenParen,
 
-            assertion(lexer);
+                Token.OpenParen,
+                Token.Integer(1),
+                Token.Comma,
+                Token.Integer(2),
+                Token.CloseParen,
 
-            Assert.That(
-                reader.Current.Position.Line,
-                Is.EqualTo(expectedLine),
-                "Unexpected resulting line position of reader.");
+                Token.Comma,
 
-            Assert.That(
-                reader.Current.Position.Column,
-                Is.EqualTo(expectedColumn),
-                "Unexpected resulting column position of reader.");
+                Token.OpenParen,
+                Token.Integer(3),
+                Token.Comma,
+                Token.Integer(4),
+                Token.CloseParen,
+
+                Token.CloseParen);
+        }
+
+        private static void VerifyLexing(string input, params Token[] expectedTokens)
+        {
+            var actualTokens = new UwmfLexer().Builder.Tokenize(input).Select(t => t.Item2).ToArray();
+
+            Assert.That(actualTokens, Is.EqualTo(expectedTokens), $"Did not correct tokenize {input}");
         }
     }
 }

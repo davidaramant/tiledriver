@@ -18,10 +18,11 @@ namespace Tiledriver.Core.Uwmf.Parsing
         BooleanFalse,
         OpenParen,
         CloseParen,
+        Comma,
     }
 
     [DebuggerDisplay("{ToString()}")]
-    public sealed class Token
+    public sealed class Token : IEquatable<Token>
     {
         private readonly object _value;
         public TokenType Type { get; }
@@ -125,5 +126,31 @@ namespace Tiledriver.Core.Uwmf.Parsing
         public static readonly Token Semicolon = new Token(TokenType.Semicolon, null);
         public static readonly Token OpenParen = new Token(TokenType.OpenParen, null);
         public static readonly Token CloseParen = new Token(TokenType.CloseParen, null);
+        public static readonly Token Comma = new Token(TokenType.Comma, null);
+
+        #region Equality members
+
+        public bool Equals(Token other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Equals(_value, other._value) && Type == other.Type;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj is Token && Equals((Token)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return ((_value?.GetHashCode() ?? 0) * 397) ^ (int)Type;
+            }
+        }
+        #endregion Equality members
     }
 }

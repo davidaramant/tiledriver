@@ -70,6 +70,8 @@
     <Compile Include="Uwmf\Parsing\Assignment.cs" />
     <Compile Include="Uwmf\Parsing\Block.cs" />
     <Compile Include="Uwmf\Parsing\IUwmfCharReader.cs" />
+    <Compile Include="Uwmf\Parsing\IUwmfLexer.cs" />
+    <Compile Include="Uwmf\Parsing\UwmfLexer.cs" />
     <Compile Include="Uwmf\Parsing\Parser.cs" />
     <Compile Include="Uwmf\Parsing\Parser.Generated.cs">
       <AutoGen>True</AutoGen>
