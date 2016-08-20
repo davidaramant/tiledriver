@@ -67,6 +67,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="Uwmf\Parsing\Assignment.cs" />
+    <Compile Include="Uwmf\Parsing\Block.cs" />
     <Compile Include="Uwmf\Parsing\IUwmfCharReader.cs" />
     <Compile Include="Uwmf\Parsing\Parser.cs" />
     <Compile Include="Uwmf\Parsing\Parser.Generated.cs">
@@ -74,6 +76,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Parser.tt</DependentUpon>
     </Compile>
+    <Compile Include="Uwmf\Parsing\Token.cs" />
     <Compile Include="Uwmf\Parsing\UwmfChar.cs" />
     <Compile Include="Uwmf\Parsing\Extensions\CharExtensions.cs" />
     <Compile Include="Uwmf\Parsing\CharPosition.cs" />
