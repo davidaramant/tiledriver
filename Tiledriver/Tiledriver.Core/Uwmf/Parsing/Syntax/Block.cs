@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Tiledriver.Core.Uwmf.Parsing
+namespace Tiledriver.Core.Uwmf.Parsing.Syntax
 {
     [DebuggerDisplay("{ToString()}")]
     public sealed class Block : IEnumerable<Assignment>

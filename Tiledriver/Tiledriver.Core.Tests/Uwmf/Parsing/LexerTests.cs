@@ -122,7 +122,7 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
 
         private static void VerifyLexing(string input, params Token[] expectedTokens)
         {
-            var actualTokens = new UwmfLexer().Builder.Tokenize(input).Select(t => t.Item2).ToArray();
+            var actualTokens = UwmfLexer.BuildLexer().Tokenize(input).Select(t => t.Item2).ToArray();
 
             Assert.That(actualTokens, Is.EqualTo(expectedTokens), $"Did not correct tokenize {input}");
         }

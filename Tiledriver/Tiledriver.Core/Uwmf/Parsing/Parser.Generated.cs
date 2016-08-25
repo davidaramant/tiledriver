@@ -13,7 +13,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 			nextToken = lexerOld.DetermineNextToken();
 			if (nextToken != TokenTypeOld.StartBlock)
             {
-                throw new ParsingException($"Expecting start of block when parsing Tile but found {nextToken}.");
+                throw new UwmfParsingException($"Expecting start of block when parsing Tile but found {nextToken}.");
             }
             lexerOld.AdvanceOneCharacter();
 
@@ -75,7 +75,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 				}
 				else
 				{
-					throw new ParsingException($"Unexpected token in Tile: {nextToken}");
+					throw new UwmfParsingException($"Unexpected token in Tile: {nextToken}");
 				}
             }
 			lexerOld.AdvanceOneCharacter();
@@ -92,7 +92,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 			nextToken = lexerOld.DetermineNextToken();
 			if (nextToken != TokenTypeOld.StartBlock)
             {
-                throw new ParsingException($"Expecting start of block when parsing Sector but found {nextToken}.");
+                throw new UwmfParsingException($"Expecting start of block when parsing Sector but found {nextToken}.");
             }
             lexerOld.AdvanceOneCharacter();
 
@@ -118,7 +118,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 				}
 				else
 				{
-					throw new ParsingException($"Unexpected token in Sector: {nextToken}");
+					throw new UwmfParsingException($"Unexpected token in Sector: {nextToken}");
 				}
             }
 			lexerOld.AdvanceOneCharacter();
@@ -135,7 +135,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 			nextToken = lexerOld.DetermineNextToken();
 			if (nextToken != TokenTypeOld.StartBlock)
             {
-                throw new ParsingException($"Expecting start of block when parsing Zone but found {nextToken}.");
+                throw new UwmfParsingException($"Expecting start of block when parsing Zone but found {nextToken}.");
             }
             lexerOld.AdvanceOneCharacter();
 
@@ -155,7 +155,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 				}
 				else
 				{
-					throw new ParsingException($"Unexpected token in Zone: {nextToken}");
+					throw new UwmfParsingException($"Unexpected token in Zone: {nextToken}");
 				}
             }
 			lexerOld.AdvanceOneCharacter();
@@ -172,7 +172,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 			nextToken = lexerOld.DetermineNextToken();
 			if (nextToken != TokenTypeOld.StartBlock)
             {
-                throw new ParsingException($"Expecting start of block when parsing Plane but found {nextToken}.");
+                throw new UwmfParsingException($"Expecting start of block when parsing Plane but found {nextToken}.");
             }
             lexerOld.AdvanceOneCharacter();
 
@@ -195,7 +195,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 				}
 				else
 				{
-					throw new ParsingException($"Unexpected token in Plane: {nextToken}");
+					throw new UwmfParsingException($"Unexpected token in Plane: {nextToken}");
 				}
             }
 			lexerOld.AdvanceOneCharacter();
@@ -212,7 +212,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 			nextToken = lexerOld.DetermineNextToken();
 			if (nextToken != TokenTypeOld.StartBlock)
             {
-                throw new ParsingException($"Expecting start of block when parsing Thing but found {nextToken}.");
+                throw new UwmfParsingException($"Expecting start of block when parsing Thing but found {nextToken}.");
             }
             lexerOld.AdvanceOneCharacter();
 
@@ -268,7 +268,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 				}
 				else
 				{
-					throw new ParsingException($"Unexpected token in Thing: {nextToken}");
+					throw new UwmfParsingException($"Unexpected token in Thing: {nextToken}");
 				}
             }
 			lexerOld.AdvanceOneCharacter();
@@ -285,7 +285,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 			nextToken = lexerOld.DetermineNextToken();
 			if (nextToken != TokenTypeOld.StartBlock)
             {
-                throw new ParsingException($"Expecting start of block when parsing Trigger but found {nextToken}.");
+                throw new UwmfParsingException($"Expecting start of block when parsing Trigger but found {nextToken}.");
             }
             lexerOld.AdvanceOneCharacter();
 
@@ -359,7 +359,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 				}
 				else
 				{
-					throw new ParsingException($"Unexpected token in Trigger: {nextToken}");
+					throw new UwmfParsingException($"Unexpected token in Trigger: {nextToken}");
 				}
             }
 			lexerOld.AdvanceOneCharacter();
@@ -425,7 +425,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 				}
 				else
 				{
-					throw new ParsingException($"Unexpected token in Map: {nextToken}");
+					throw new UwmfParsingException($"Unexpected token in Map: {nextToken}");
 				}
             }
 

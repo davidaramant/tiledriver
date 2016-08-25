@@ -8,6 +8,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 {
     public enum TokenType
     {
+        EndOfFile,
         Identifier,
         Equal,
         Semicolon,
@@ -127,6 +128,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
         public static readonly Token OpenParen = new Token(TokenType.OpenParen, null);
         public static readonly Token CloseParen = new Token(TokenType.CloseParen, null);
         public static readonly Token Comma = new Token(TokenType.Comma, null);
+        public static readonly Token EndOfFile = new Token(TokenType.EndOfFile, null);
 
         #region Equality members
 

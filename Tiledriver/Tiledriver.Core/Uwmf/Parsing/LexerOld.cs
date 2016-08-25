@@ -24,7 +24,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 
             if (!_reader.Current.Char.IsValidIdentifierStartChar())
             {
-                throw new ParsingException(_reader.Current.Position, "Invalid start of identifier.");
+                throw new UwmfParsingException(_reader.Current.Position, "Invalid start of identifier.");
             }
 
             var buffer = new StringBuilder();
@@ -64,14 +64,14 @@ namespace Tiledriver.Core.Uwmf.Parsing
                 {
                     return result;
                 }
-                throw new ParsingException(startPosition, "Malformed hex integer.");
+                throw new UwmfParsingException(startPosition, "Malformed hex integer.");
             }
 
             if (int.TryParse(integerString, NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out result))
             {
                 return result;
             }
-            throw new ParsingException(startPosition, "Malformed integer.");
+            throw new UwmfParsingException(startPosition, "Malformed integer.");
         }
 
         public double ReadFloatingPointNumber()
@@ -96,7 +96,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
             {
                 return result;
             }
-            throw new ParsingException(startPosition, "Malformed floating point number.");
+            throw new UwmfParsingException(startPosition, "Malformed floating point number.");
         }
 
         public bool ReadBoolean()
@@ -121,7 +121,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
             {
                 return result;
             }
-            throw new ParsingException(startPosition, "Malformed Boolean.");
+            throw new UwmfParsingException(startPosition, "Malformed Boolean.");
         }
 
         public string ReadString()
@@ -135,7 +135,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 
             if (_reader.Current.Char != '"')
             {
-                throw new ParsingException(startPosition, "Unexpected character when expecting string.");
+                throw new UwmfParsingException(startPosition, "Unexpected character when expecting string.");
             }
 
             _reader.AdvanceAndVerifyNotEoF(eofMessage);
@@ -290,7 +290,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
                     }
 
                 default:
-                    throw new ParsingException(_reader.Current.Position, "Malformed comment.");
+                    throw new UwmfParsingException(_reader.Current.Position, "Malformed comment.");
             }
         }
     }

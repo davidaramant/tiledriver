@@ -5,13 +5,13 @@ using System;
 
 namespace Tiledriver.Core.Uwmf.Parsing
 {
-    public sealed class ParsingException : Exception
+    public sealed class UwmfParsingException : Exception
     {
-        public ParsingException(string message) : base(message)
+        public UwmfParsingException(string message) : base(message)
         {            
         }
 
-        public ParsingException(CharPosition position, string message) : base($"{position}: {message}")
+        public UwmfParsingException(CharPosition position, string message) : base($"{position}: {message}")
         {            
         }
     }

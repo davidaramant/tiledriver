@@ -45,7 +45,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 
             if (Current.IsEndOfFile)
             {
-                throw new ParsingException(Current.Position, endOfFileMessage);
+                throw new UwmfParsingException(Current.Position, endOfFileMessage);
             }
         }
     }

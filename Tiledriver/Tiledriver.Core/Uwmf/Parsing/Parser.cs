@@ -22,7 +22,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
             nextToken = lexerOld.DetermineNextToken();
             if (nextToken != TokenTypeOld.StartBlock)
             {
-                throw new ParsingException($"Expecting start of block when parsing PlaneMap but found {nextToken}.");
+                throw new UwmfParsingException($"Expecting start of block when parsing PlaneMap but found {nextToken}.");
             }
             lexerOld.AdvanceOneCharacter();
 
@@ -38,7 +38,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
                 }
                 else
                 {
-                    throw new ParsingException($"Unexpected token in PlaneMap: {nextToken}");
+                    throw new UwmfParsingException($"Unexpected token in PlaneMap: {nextToken}");
                 }
             }
             lexerOld.AdvanceOneCharacter();
@@ -53,37 +53,37 @@ namespace Tiledriver.Core.Uwmf.Parsing
 
             if (lexerOld.DetermineNextToken() != TokenTypeOld.StartBlock)
             {
-                throw new ParsingException("Expecting start of block when parsing Sector.");
+                throw new UwmfParsingException("Expecting start of block when parsing Sector.");
             }
             lexerOld.AdvanceOneCharacter();
 
             if (lexerOld.DetermineNextToken() != TokenTypeOld.Unknown)
             {
-                throw new ParsingException("Expected Tile number in TileSpace");
+                throw new UwmfParsingException("Expected Tile number in TileSpace");
             }
             tileSpace.Tile = lexerOld.ReadIntegerNumber();
 
             if (lexerOld.DetermineNextToken() != TokenTypeOld.Comma)
             {
-                throw new ParsingException("Expected comma after Tile number in TileSpace");
+                throw new UwmfParsingException("Expected comma after Tile number in TileSpace");
             }
             lexerOld.AdvanceOneCharacter();
 
             if (lexerOld.DetermineNextToken() != TokenTypeOld.Unknown)
             {
-                throw new ParsingException("Expected Sector number in TileSpace");
+                throw new UwmfParsingException("Expected Sector number in TileSpace");
             }
             tileSpace.Sector = lexerOld.ReadIntegerNumber();
 
             if (lexerOld.DetermineNextToken() != TokenTypeOld.Comma)
             {
-                throw new ParsingException("Expected comma after Sector number in TileSpace");
+                throw new UwmfParsingException("Expected comma after Sector number in TileSpace");
             }
             lexerOld.AdvanceOneCharacter();
 
             if (lexerOld.DetermineNextToken() != TokenTypeOld.Unknown)
             {
-                throw new ParsingException("Expected Zone number in TileSpace");
+                throw new UwmfParsingException("Expected Zone number in TileSpace");
             }
             tileSpace.Zone = lexerOld.ReadIntegerNumber();
 
@@ -97,7 +97,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
 
             if (nextToken != TokenTypeOld.EndBlock)
             {
-                throw new ParsingException("Unexpected token in TileSpace");
+                throw new UwmfParsingException("Unexpected token in TileSpace");
             }
             lexerOld.AdvanceOneCharacter();
 
@@ -133,13 +133,13 @@ namespace Tiledriver.Core.Uwmf.Parsing
         {
             if (lexerOld.DetermineNextToken() != TokenTypeOld.Assignment)
             {
-                throw new ParsingException($"Expecting assignment of {context}");
+                throw new UwmfParsingException($"Expecting assignment of {context}");
             }
             lexerOld.AdvanceOneCharacter();
             T result = readValue(lexerOld);
             if (lexerOld.DetermineNextToken() != TokenTypeOld.EndOfAssignment)
             {
-                throw new ParsingException($"Missing end of assignment of {context}");
+                throw new UwmfParsingException($"Missing end of assignment of {context}");
             }
             lexerOld.AdvanceOneCharacter();
             return result;
