@@ -8,7 +8,6 @@ namespace Tiledriver.Core.Uwmf
 {
     public sealed partial class Tile : BaseUwmfBlock, IWriteableUwmfBlock
     {
-
         private bool _textureEastHasBeenSet = false;
         private string _textureEast;
         public string TextureEast
@@ -20,7 +19,6 @@ namespace Tiledriver.Core.Uwmf
                 _textureEast = value;
             }
         }
-
         private bool _textureNorthHasBeenSet = false;
         private string _textureNorth;
         public string TextureNorth
@@ -32,7 +30,6 @@ namespace Tiledriver.Core.Uwmf
                 _textureNorth = value;
             }
         }
-
         private bool _textureWestHasBeenSet = false;
         private string _textureWest;
         public string TextureWest
@@ -44,7 +41,6 @@ namespace Tiledriver.Core.Uwmf
                 _textureWest = value;
             }
         }
-
         private bool _textureSouthHasBeenSet = false;
         private string _textureSouth;
         public string TextureSouth
@@ -70,22 +66,21 @@ namespace Tiledriver.Core.Uwmf
         public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
         public Tile() { }
         public Tile(
-                    string textureEast,
-                    string textureNorth,
-                    string textureWest,
-                    string textureSouth,
-                    bool blockingEast = true,
-                    bool blockingNorth = true,
-                    bool blockingWest = true,
-                    bool blockingSouth = true,
-                    bool offsetVertical = false,
-                    bool offsetHorizontal = false,
-                    bool dontOverlay = false,
-                    int mapped = 0,
-                    string soundSequence = "",
-                    string textureOverhead = "",
-                    string comment = ""
-        )
+            string textureEast,
+            string textureNorth,
+            string textureWest,
+            string textureSouth,
+            bool blockingEast = true,
+            bool blockingNorth = true,
+            bool blockingWest = true,
+            bool blockingSouth = true,
+            bool offsetVertical = false,
+            bool offsetHorizontal = false,
+            bool dontOverlay = false,
+            int mapped = 0,
+            string soundSequence = "",
+            string textureOverhead = "",
+            string comment = "")
         {
             TextureEast = textureEast;
             TextureNorth = textureNorth;
@@ -145,7 +140,6 @@ namespace Tiledriver.Core.Uwmf
 
     public sealed partial class Sector : BaseUwmfBlock, IWriteableUwmfBlock
     {
-
         private bool _textureCeilingHasBeenSet = false;
         private string _textureCeiling;
         public string TextureCeiling
@@ -157,7 +151,6 @@ namespace Tiledriver.Core.Uwmf
                 _textureCeiling = value;
             }
         }
-
         private bool _textureFloorHasBeenSet = false;
         private string _textureFloor;
         public string TextureFloor
@@ -173,10 +166,9 @@ namespace Tiledriver.Core.Uwmf
         public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
         public Sector() { }
         public Sector(
-                    string textureCeiling,
-                    string textureFloor,
-                    string comment = ""
-        )
+            string textureCeiling,
+            string textureFloor,
+            string comment = "")
         {
             TextureCeiling = textureCeiling;
             TextureFloor = textureFloor;
@@ -214,8 +206,7 @@ namespace Tiledriver.Core.Uwmf
         public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
         public Zone() { }
         public Zone(
-                    string comment = ""
-        )
+            string comment = "")
         {
             Comment = comment;
             AdditionalSemanticChecks();
@@ -243,7 +234,6 @@ namespace Tiledriver.Core.Uwmf
 
     public sealed partial class Plane : BaseUwmfBlock, IWriteableUwmfBlock
     {
-
         private bool _depthHasBeenSet = false;
         private int _depth;
         public int Depth
@@ -259,9 +249,8 @@ namespace Tiledriver.Core.Uwmf
         public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
         public Plane() { }
         public Plane(
-                    int depth,
-                    string comment = ""
-        )
+            int depth,
+            string comment = "")
         {
             Depth = depth;
             Comment = comment;
@@ -292,7 +281,6 @@ namespace Tiledriver.Core.Uwmf
 
     public sealed partial class TileSpace : BaseUwmfBlock
     {
-
         private bool _tileHasBeenSet = false;
         private int _tile;
         public int Tile
@@ -304,7 +292,6 @@ namespace Tiledriver.Core.Uwmf
                 _tile = value;
             }
         }
-
         private bool _sectorHasBeenSet = false;
         private int _sector;
         public int Sector
@@ -316,7 +303,6 @@ namespace Tiledriver.Core.Uwmf
                 _sector = value;
             }
         }
-
         private bool _zoneHasBeenSet = false;
         private int _zone;
         public int Zone
@@ -331,11 +317,10 @@ namespace Tiledriver.Core.Uwmf
         public int Tag { get; set; } = 0;
         public TileSpace() { }
         public TileSpace(
-                    int tile,
-                    int sector,
-                    int zone,
-                    int tag = 0
-        )
+            int tile,
+            int sector,
+            int zone,
+            int tag = 0)
         {
             Tile = tile;
             Sector = sector;
@@ -359,8 +344,7 @@ namespace Tiledriver.Core.Uwmf
         public readonly List<TileSpace> TileSpaces = new List<TileSpace>();
         public PlaneMap() { }
         public PlaneMap(
-                    IEnumerable<TileSpace> tileSpaces
-        )
+            IEnumerable<TileSpace> tileSpaces)
         {
             TileSpaces.AddRange(tileSpaces);
             AdditionalSemanticChecks();
@@ -384,7 +368,6 @@ namespace Tiledriver.Core.Uwmf
 
     public sealed partial class Thing : BaseUwmfBlock, IWriteableUwmfBlock
     {
-
         private bool _typeHasBeenSet = false;
         private string _type;
         public string Type
@@ -396,7 +379,6 @@ namespace Tiledriver.Core.Uwmf
                 _type = value;
             }
         }
-
         private bool _xHasBeenSet = false;
         private double _x;
         public double X
@@ -408,7 +390,6 @@ namespace Tiledriver.Core.Uwmf
                 _x = value;
             }
         }
-
         private bool _yHasBeenSet = false;
         private double _y;
         public double Y
@@ -420,7 +401,6 @@ namespace Tiledriver.Core.Uwmf
                 _y = value;
             }
         }
-
         private bool _zHasBeenSet = false;
         private double _z;
         public double Z
@@ -432,7 +412,6 @@ namespace Tiledriver.Core.Uwmf
                 _z = value;
             }
         }
-
         private bool _angleHasBeenSet = false;
         private int _angle;
         public int Angle
@@ -455,20 +434,19 @@ namespace Tiledriver.Core.Uwmf
         public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
         public Thing() { }
         public Thing(
-                    string type,
-                    double x,
-                    double y,
-                    double z,
-                    int angle,
-                    bool ambush = false,
-                    bool patrol = false,
-                    bool skill1 = false,
-                    bool skill2 = false,
-                    bool skill3 = false,
-                    bool skill4 = false,
-                    bool skill5 = false,
-                    string comment = ""
-        )
+            string type,
+            double x,
+            double y,
+            double z,
+            int angle,
+            bool ambush = false,
+            bool patrol = false,
+            bool skill1 = false,
+            bool skill2 = false,
+            bool skill3 = false,
+            bool skill4 = false,
+            bool skill5 = false,
+            string comment = "")
         {
             Type = type;
             X = x;
@@ -525,7 +503,6 @@ namespace Tiledriver.Core.Uwmf
 
     public sealed partial class Trigger : BaseUwmfBlock, IWriteableUwmfBlock
     {
-
         private bool _xHasBeenSet = false;
         private int _x;
         public int X
@@ -537,7 +514,6 @@ namespace Tiledriver.Core.Uwmf
                 _x = value;
             }
         }
-
         private bool _yHasBeenSet = false;
         private int _y;
         public int Y
@@ -549,7 +525,6 @@ namespace Tiledriver.Core.Uwmf
                 _y = value;
             }
         }
-
         private bool _zHasBeenSet = false;
         private int _z;
         public int Z
@@ -561,7 +536,6 @@ namespace Tiledriver.Core.Uwmf
                 _z = value;
             }
         }
-
         private bool _actionHasBeenSet = false;
         private string _action;
         public string Action
@@ -591,26 +565,25 @@ namespace Tiledriver.Core.Uwmf
         public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
         public Trigger() { }
         public Trigger(
-                    int x,
-                    int y,
-                    int z,
-                    string action,
-                    int arg0 = 0,
-                    int arg1 = 0,
-                    int arg2 = 0,
-                    int arg3 = 0,
-                    int arg4 = 0,
-                    bool activateEast = true,
-                    bool activateNorth = true,
-                    bool activateWest = true,
-                    bool activateSouth = true,
-                    bool playerCross = false,
-                    bool playerUse = false,
-                    bool monsterUse = false,
-                    bool repeatable = false,
-                    bool secret = false,
-                    string comment = ""
-        )
+            int x,
+            int y,
+            int z,
+            string action,
+            int arg0 = 0,
+            int arg1 = 0,
+            int arg2 = 0,
+            int arg3 = 0,
+            int arg4 = 0,
+            bool activateEast = true,
+            bool activateNorth = true,
+            bool activateWest = true,
+            bool activateSouth = true,
+            bool playerCross = false,
+            bool playerUse = false,
+            bool monsterUse = false,
+            bool repeatable = false,
+            bool secret = false,
+            string comment = "")
         {
             X = x;
             Y = y;
@@ -678,7 +651,6 @@ namespace Tiledriver.Core.Uwmf
 
     public sealed partial class Map : BaseUwmfBlock, IWriteableUwmfBlock
     {
-
         private bool _namespaceHasBeenSet = false;
         private string _namespace;
         public string Namespace
@@ -690,7 +662,6 @@ namespace Tiledriver.Core.Uwmf
                 _namespace = value;
             }
         }
-
         private bool _tileSizeHasBeenSet = false;
         private int _tileSize;
         public int TileSize
@@ -702,7 +673,6 @@ namespace Tiledriver.Core.Uwmf
                 _tileSize = value;
             }
         }
-
         private bool _nameHasBeenSet = false;
         private string _name;
         public string Name
@@ -714,7 +684,6 @@ namespace Tiledriver.Core.Uwmf
                 _name = value;
             }
         }
-
         private bool _widthHasBeenSet = false;
         private int _width;
         public int Width
@@ -726,7 +695,6 @@ namespace Tiledriver.Core.Uwmf
                 _width = value;
             }
         }
-
         private bool _heightHasBeenSet = false;
         private int _height;
         public int Height
@@ -750,20 +718,19 @@ namespace Tiledriver.Core.Uwmf
         public List<UnknownBlock> UnknownBlocks { get; } = new List<UnknownBlock>();
         public Map() { }
         public Map(
-                    string nameSpace,
-                    int tileSize,
-                    string name,
-                    int width,
-                    int height,
-                    IEnumerable<Tile> tiles,
-                    IEnumerable<Sector> sectors,
-                    IEnumerable<Zone> zones,
-                    IEnumerable<Plane> planes,
-                    IEnumerable<PlaneMap> planeMaps,
-                    IEnumerable<Thing> things,
-                    IEnumerable<Trigger> triggers,
-                    string comment = ""
-        )
+            string nameSpace,
+            int tileSize,
+            string name,
+            int width,
+            int height,
+            IEnumerable<Tile> tiles,
+            IEnumerable<Sector> sectors,
+            IEnumerable<Zone> zones,
+            IEnumerable<Plane> planes,
+            IEnumerable<PlaneMap> planeMaps,
+            IEnumerable<Thing> things,
+            IEnumerable<Trigger> triggers,
+            string comment = "")
         {
             Namespace = nameSpace;
             TileSize = tileSize;

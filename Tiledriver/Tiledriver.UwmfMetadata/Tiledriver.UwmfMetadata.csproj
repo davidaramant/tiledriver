@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IndentedWriter.cs" />
     <Compile Include="ModelGenerator.cs" />
     <Compile Include="NamedItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
