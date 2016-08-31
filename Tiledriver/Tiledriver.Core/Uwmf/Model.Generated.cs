@@ -341,7 +341,7 @@ namespace Tiledriver.Core.Uwmf
 
     public sealed partial class PlaneMap : BaseUwmfBlock, IWriteableUwmfBlock
     {
-        public readonly List<TileSpace> TileSpaces = new List<TileSpace>();
+        public List<TileSpace> TileSpaces { get; } = new List<TileSpace>();
         public PlaneMap() { }
         public PlaneMap(
             IEnumerable<TileSpace> tileSpaces)
@@ -354,7 +354,7 @@ namespace Tiledriver.Core.Uwmf
             CheckSemanticValidity();
             WriteLine(stream, "planeMap");
             WriteLine(stream, "{");
-            WriteBlocks(stream, TileSpaces);
+            WriteBlocks(stream, TileSpaces );
             WriteLine(stream, "}");
             return stream;
         }
@@ -707,13 +707,13 @@ namespace Tiledriver.Core.Uwmf
             }
         }
         public string Comment { get; set; } = "";
-        public readonly List<Tile> Tiles = new List<Tile>();
-        public readonly List<Sector> Sectors = new List<Sector>();
-        public readonly List<Zone> Zones = new List<Zone>();
-        public readonly List<Plane> Planes = new List<Plane>();
-        public readonly List<PlaneMap> PlaneMaps = new List<PlaneMap>();
-        public readonly List<Thing> Things = new List<Thing>();
-        public readonly List<Trigger> Triggers = new List<Trigger>();
+        public List<Tile> Tiles { get; } = new List<Tile>();
+        public List<Sector> Sectors { get; } = new List<Sector>();
+        public List<Zone> Zones { get; } = new List<Zone>();
+        public List<Plane> Planes { get; } = new List<Plane>();
+        public List<PlaneMap> PlaneMaps { get; } = new List<PlaneMap>();
+        public List<Thing> Things { get; } = new List<Thing>();
+        public List<Trigger> Triggers { get; } = new List<Trigger>();
         public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
         public List<UnknownBlock> UnknownBlocks { get; } = new List<UnknownBlock>();
         public Map() { }
@@ -760,13 +760,13 @@ namespace Tiledriver.Core.Uwmf
             {
                 WritePropertyVerbatim(stream, (string)property.Name, property.Value, indent: false);
             }
-            WriteBlocks(stream, Tiles);
-            WriteBlocks(stream, Sectors);
-            WriteBlocks(stream, Zones);
-            WriteBlocks(stream, Planes);
-            WriteBlocks(stream, PlaneMaps);
-            WriteBlocks(stream, Things);
-            WriteBlocks(stream, Triggers);
+            WriteBlocks(stream, Tiles );
+            WriteBlocks(stream, Sectors );
+            WriteBlocks(stream, Zones );
+            WriteBlocks(stream, Planes );
+            WriteBlocks(stream, PlaneMaps );
+            WriteBlocks(stream, Things );
+            WriteBlocks(stream, Triggers );
             WriteBlocks(stream, UnknownBlocks);
             return stream;
         }

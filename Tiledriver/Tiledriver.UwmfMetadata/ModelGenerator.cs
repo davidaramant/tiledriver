@@ -54,7 +54,7 @@ namespace Tiledriver.Core.Uwmf");
                 foreach (var subBlock in block.SubBlocks)
                 {
                     sb.Line(
-                        $"public readonly List<{subBlock.PascalCaseName}> {subBlock.PluralPascalCaseName} = new List<{subBlock.PascalCaseName}>();");
+                        $"public List<{subBlock.PascalCaseName}> {subBlock.PluralPascalCaseName} {{ get; }} = new List<{subBlock.PascalCaseName}>();");
                 }
 
                 // Unknown stuff
