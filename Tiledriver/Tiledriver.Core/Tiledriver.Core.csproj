@@ -36,6 +36,10 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Functional.Maybe, Version=1.0.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Functional.Maybe.1.0.8\lib\portable-net40+win+MonoAndroid10+xamarinios10+MonoTouch10\Functional.Maybe.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Piglet, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Piglet.1.4.0\lib\net40\Piglet.dll</HintPath>
       <Private>True</Private>

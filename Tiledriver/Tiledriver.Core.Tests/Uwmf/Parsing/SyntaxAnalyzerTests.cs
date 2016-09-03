@@ -22,7 +22,7 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
             var result = syntaxAnalzer.Analyze(new UwmfLexer(new StringReader(input)));
 
             Assert.That(
-                result.GlobalAssignments.ToArray(),
+                result.GetGlobalAssignments().ToArray(),
                 Is.EqualTo(new[] { new Assignment(new Identifier("prop"), Token.Integer(1)) }),
                 "Did not parse the assignment.");
         }
@@ -36,7 +36,7 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
             var result = syntaxAnalzer.Analyze(new UwmfLexer(new StringReader(input)));
 
             Assert.That(
-                result.GlobalAssignments.ToArray(),
+                result.GetGlobalAssignments().ToArray(),
                 Is.EqualTo(new[]
                 {
                     new Assignment(new Identifier("prop"), Token.Integer(1)),
@@ -100,7 +100,7 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
                 }), "Did not parse assignments.");
 
             Assert.That(
-                result.GlobalAssignments.ToArray(),
+                result.GetGlobalAssignments().ToArray(),
                 Is.EqualTo(new[]
                 {
                     new Assignment(new Identifier("gProp"), Token.Integer(1)),

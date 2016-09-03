@@ -1,34 +1,39 @@
 ﻿// Copyright (c) 2016, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Functional.Maybe;
 
 namespace Tiledriver.Core.Uwmf.Parsing.Syntax
 {
     [DebuggerDisplay("{ToString()}")]
     public sealed class Block : IEnumerable<Assignment>
     {
-        private readonly List<Assignment> _properties;
+        private readonly Dictionary<Identifier, Token> _properties;
         public Identifier Name { get; }
+
+        public Maybe<Token> GetValueFor(string name)
+        {
+            return GetValueFor(new Identifier(name));
+        }
+
+        public Maybe<Token> GetValueFor(Identifier name)
+        {
+            return _properties.Lookup(name);
+        }
 
         public Block(Identifier name, IEnumerable<Assignment> propertyAssignments)
         {
             Name = name;
-            _properties = propertyAssignments.ToList();
-
-            if (_properties.Select(p => p.Name).Distinct().Count() != _properties.Count)
-            {
-                throw new ArgumentException($"Duplicate property assignments found in {Name}", nameof(propertyAssignments));
-            }
+            _properties = propertyAssignments.ToDictionary(a => a.Name, a => a.Value);
         }
 
         public IEnumerator<Assignment> GetEnumerator()
         {
-            return _properties.GetEnumerator();
+            return _properties.Select(pair => new Assignment(pair.Key, pair.Value)).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -36,6 +41,6 @@ namespace Tiledriver.Core.Uwmf.Parsing.Syntax
             return GetEnumerator();
         }
 
-        public override string ToString() => Name + "\n" + string.Join("\n", _properties.Select(u => $"* {u}"));
+        public override string ToString() => Name + "\n" + string.Join("\n", _properties.Select(u => $"* {u.Key} = {u.Value}"));
     }
 }
