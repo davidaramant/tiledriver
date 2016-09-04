@@ -7,7 +7,7 @@ using Functional.Maybe;
 
 namespace Tiledriver.Core.Uwmf.Parsing.Syntax
 {
-    public sealed class UwmfSyntaxTree
+    public sealed class UwmfSyntaxTree : IHaveAssignments
     {
         private readonly Dictionary<Identifier, Token> _globalAssignments;
 

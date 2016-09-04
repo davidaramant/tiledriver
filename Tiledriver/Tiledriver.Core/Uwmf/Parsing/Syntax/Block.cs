@@ -10,7 +10,7 @@ using Functional.Maybe;
 namespace Tiledriver.Core.Uwmf.Parsing.Syntax
 {
     [DebuggerDisplay("{ToString()}")]
-    public sealed class Block : IEnumerable<Assignment>
+    public sealed class Block : IEnumerable<Assignment>, IHaveAssignments
     {
         private readonly Dictionary<Identifier, Token> _properties;
         public Identifier Name { get; }

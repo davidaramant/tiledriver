@@ -43,6 +43,7 @@
     <Compile Include="IndentedWriter.cs" />
     <Compile Include="ModelGenerator.cs" />
     <Compile Include="NamedItem.cs" />
+    <Compile Include="ParserGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UwmfBlock.cs" />
     <Compile Include="UwmfDefinitions.cs" />

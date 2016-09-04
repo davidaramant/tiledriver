@@ -2,149 +2,118 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System;
+using System.Linq;
+using Functional.Maybe;
+using Tiledriver.Core.Uwmf.Parsing.Syntax;
 
 namespace Tiledriver.Core.Uwmf.Parsing
 {
     public static partial class Parser
     {
-        public static Map Parse(ILexerOld lexerOld)
+        public static Map Parse(UwmfSyntaxTree syntaxTree)
         {
-            return ParseMap(lexerOld);
+            var map = new Map();
+
+            SetGlobalAssignments(map, syntaxTree);
+            SetBlocks(map, syntaxTree);
+            map.PlaneMaps.AddRange(syntaxTree.ArrayBlocks.Select(ParsePlaneMap));
+
+            map.CheckSemanticValidity();
+
+            return map;
         }
 
-        #region PlaneMap/TileSpace parsing
+        static partial void SetGlobalAssignments(Map map, UwmfSyntaxTree tree);
+        static partial void SetBlocks(Map map, UwmfSyntaxTree tree);
 
-        private static PlaneMap ParsePlaneMap(ILexerOld lexerOld)
+        private static PlaneMap ParsePlaneMap(ArrayBlock arrayBlock)
         {
-            var planeMap = new PlaneMap();
-
-            TokenTypeOld nextToken;
-            nextToken = lexerOld.DetermineNextToken();
-            if (nextToken != TokenTypeOld.StartBlock)
-            {
-                throw new UwmfParsingException($"Expecting start of block when parsing PlaneMap but found {nextToken}.");
-            }
-            lexerOld.AdvanceOneCharacter();
-
-            while ((nextToken = lexerOld.DetermineNextToken()) != TokenTypeOld.EndBlock)
-            {
-                if (nextToken == TokenTypeOld.StartBlock)
+            return new PlaneMap(
+                arrayBlock.Select(tuple =>
                 {
-                    planeMap.TileSpaces.Add(ParseTileSpace(lexerOld));
-                }
-                else if (nextToken == TokenTypeOld.Comma)
-                {
-                    lexerOld.AdvanceOneCharacter();
-                }
-                else
-                {
-                    throw new UwmfParsingException($"Unexpected token in PlaneMap: {nextToken}");
-                }
-            }
-            lexerOld.AdvanceOneCharacter();
+                    if (tuple.Count < 3 || tuple.Count > 4)
+                    {
+                        throw new UwmfParsingException("Invalid number of entries inside a tilespace.");
+                    }
 
-            planeMap.CheckSemanticValidity();
-            return planeMap;
+                    return new TileSpace(
+                        tile: tuple[0],
+                        sector: tuple[1],
+                        zone: tuple[2],
+                        tag: tuple.ElementAtOrDefault(3));
+                }));
         }
 
-        private static TileSpace ParseTileSpace(ILexerOld lexerOld)
+        private static void SetRequiredString(Maybe<Token> maybeToken, Action<string> setter, string blockName, string parameterName)
         {
-            var tileSpace = new TileSpace();
-
-            if (lexerOld.DetermineNextToken() != TokenTypeOld.StartBlock)
-            {
-                throw new UwmfParsingException("Expecting start of block when parsing Sector.");
-            }
-            lexerOld.AdvanceOneCharacter();
-
-            if (lexerOld.DetermineNextToken() != TokenTypeOld.Unknown)
-            {
-                throw new UwmfParsingException("Expected Tile number in TileSpace");
-            }
-            tileSpace.Tile = lexerOld.ReadIntegerNumber();
-
-            if (lexerOld.DetermineNextToken() != TokenTypeOld.Comma)
-            {
-                throw new UwmfParsingException("Expected comma after Tile number in TileSpace");
-            }
-            lexerOld.AdvanceOneCharacter();
-
-            if (lexerOld.DetermineNextToken() != TokenTypeOld.Unknown)
-            {
-                throw new UwmfParsingException("Expected Sector number in TileSpace");
-            }
-            tileSpace.Sector = lexerOld.ReadIntegerNumber();
-
-            if (lexerOld.DetermineNextToken() != TokenTypeOld.Comma)
-            {
-                throw new UwmfParsingException("Expected comma after Sector number in TileSpace");
-            }
-            lexerOld.AdvanceOneCharacter();
-
-            if (lexerOld.DetermineNextToken() != TokenTypeOld.Unknown)
-            {
-                throw new UwmfParsingException("Expected Zone number in TileSpace");
-            }
-            tileSpace.Zone = lexerOld.ReadIntegerNumber();
-
-            var nextToken = lexerOld.DetermineNextToken();
-            if (nextToken == TokenTypeOld.Comma)
-            {
-                lexerOld.AdvanceOneCharacter();
-                tileSpace.Tag = lexerOld.ReadIntegerNumber();
-                nextToken = lexerOld.DetermineNextToken();
-            }
-
-            if (nextToken != TokenTypeOld.EndBlock)
-            {
-                throw new UwmfParsingException("Unexpected token in TileSpace");
-            }
-            lexerOld.AdvanceOneCharacter();
-
-            tileSpace.CheckSemanticValidity();
-            return tileSpace;
+            setter(
+                maybeToken.
+                OrElse(() => new UwmfParsingException($"{parameterName} was not set on {blockName}")).
+                TryAsString().
+                OrElse(() => new UwmfParsingException($"{parameterName} in {blockName} was not a string.")));
         }
 
-        #endregion PlaneMap/TileSpace parsing
-
-        #region Assignment Parsing Methods
-
-        private static int ParseIntegerNumberAssignment(ILexerOld lexerOld, string context)
+        private static void SetRequiredFloatingPointNumber(Maybe<Token> maybeToken, Action<double> setter, string blockName, string parameterName)
         {
-            return ParseAssignment(lexerOld, l => l.ReadIntegerNumber(), context);
+            setter(
+                maybeToken.
+                OrElse(() => new UwmfParsingException($"{parameterName} was not set on {blockName}")).
+                TryAsDouble().
+                OrElse(() => new UwmfParsingException($"{parameterName} in {blockName} was not a floating point value.")));
         }
 
-        private static double ParseFloatingPointNumberAssignment(ILexerOld lexerOld, string context)
+        private static void SetRequiredIntegerNumber(Maybe<Token> maybeToken, Action<int> setter, string blockName, string parameterName)
         {
-            return ParseAssignment(lexerOld, l => l.ReadFloatingPointNumber(), context);
+            setter(
+                maybeToken.
+                OrElse(() => new UwmfParsingException($"{parameterName} was not set on {blockName}")).
+                TryAsInt().
+                OrElse(() => new UwmfParsingException($"{parameterName} in {blockName} was not an integer.")));
         }
 
-        private static bool ParseBooleanAssignment(ILexerOld lexerOld, string context)
+        private static void SetRequiredBoolean(Maybe<Token> maybeToken, Action<bool> setter, string blockName, string parameterName)
         {
-            return ParseAssignment(lexerOld, l => l.ReadBoolean(), context);
+            setter(
+                maybeToken.
+                OrElse(() => new UwmfParsingException($"{parameterName} was not set on {blockName}")).
+                TryAsBool().
+                OrElse(() => new UwmfParsingException($"{parameterName} in {blockName} was not a boolean.")));
         }
 
-        private static string ParseStringAssignment(ILexerOld lexerOld, string context)
+        private static void SetOptionalString(Maybe<Token> maybeToken, Action<string> setter, string blockName, string parameterName)
         {
-            return ParseAssignment(lexerOld, l => l.ReadString(), context);
+            maybeToken.
+                Select(token =>
+                    token.TryAsString().
+                    OrElse(() => new UwmfParsingException($"{parameterName} in {blockName} was not a string.")))
+                .Do(setter);
         }
 
-        private static T ParseAssignment<T>(ILexerOld lexerOld, Func<ILexerOld, T> readValue, string context)
+        private static void SetOptionalFloatingPointNumber(Maybe<Token> maybeToken, Action<double> setter, string blockName, string parameterName)
         {
-            if (lexerOld.DetermineNextToken() != TokenTypeOld.Assignment)
-            {
-                throw new UwmfParsingException($"Expecting assignment of {context}");
-            }
-            lexerOld.AdvanceOneCharacter();
-            T result = readValue(lexerOld);
-            if (lexerOld.DetermineNextToken() != TokenTypeOld.EndOfAssignment)
-            {
-                throw new UwmfParsingException($"Missing end of assignment of {context}");
-            }
-            lexerOld.AdvanceOneCharacter();
-            return result;
+            maybeToken.
+                Select(token =>
+                    token.TryAsDouble().
+                    OrElse(() => new UwmfParsingException($"{parameterName} in {blockName} was not a floating point value.")))
+                .Do(setter);
         }
 
-        #endregion Assignment Parsing Methods
+        private static void SetOptionalIntegerNumber(Maybe<Token> maybeToken, Action<int> setter, string blockName, string parameterName)
+        {
+            maybeToken.
+                Select(token =>
+                    token.TryAsInt().
+                    OrElse(() => new UwmfParsingException($"{parameterName} in {blockName} was not an integer.")))
+                .Do(setter);
+        }
+
+        private static void SetOptionalBoolean(Maybe<Token> maybeToken, Action<bool> setter, string blockName, string parameterName)
+        {
+            maybeToken.
+                Select(token =>
+                    token.TryAsBool().
+                    OrElse(() => new UwmfParsingException($"{parameterName} in {blockName} was not a boolean.")))
+                .Do(setter);
+        }
     }
 }

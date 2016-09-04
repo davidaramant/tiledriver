@@ -25,13 +25,13 @@ namespace Tiledriver.Core.Uwmf.Parsing
     [DebuggerDisplay("{ToString()}")]
     public sealed class Token : IEquatable<Token>
     {
-        private readonly object _value;
+        public object Value { get; }
         public TokenType Type { get; }
 
         private Token(TokenType type, object value)
         {
             Type = type;
-            _value = value;
+            Value = value;
         }
 
         public bool IsValue =>
@@ -49,7 +49,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
                 {
                     throw new InvalidOperationException($"Tried to access a {Type} token value as a string.");
                 }
-                return (string)_value;
+                return (string)Value;
             }
         }
 
@@ -61,7 +61,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
                 {
                     throw new InvalidOperationException($"Tried to access a {Type} token value as an integer.");
                 }
-                return (int)_value;
+                return (int)Value;
             }
         }
 
@@ -69,11 +69,15 @@ namespace Tiledriver.Core.Uwmf.Parsing
         {
             get
             {
-                if (Type != TokenType.Double)
+                switch (Type)
                 {
-                    throw new InvalidOperationException($"Tried to access a {Type} token value as a double.");
+                    case TokenType.Double:
+                        return (double)Value;
+                    case TokenType.Integer:
+                        return (int)Value;
+                    default:
+                        throw new InvalidOperationException($"Tried to access a {Type} token value as a double.");
                 }
-                return (double)_value;
             }
         }
 
@@ -85,7 +89,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
                 {
                     throw new InvalidOperationException($"Tried to access a {Type} token value as a boolean.");
                 }
-                return (bool)_value;
+                return (bool)Value;
             }
         }
 
@@ -97,7 +101,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
                 case TokenType.String:
                 case TokenType.Integer:
                 case TokenType.Double:
-                    return $"{Type}: {_value}";
+                    return $"{Type}: {Value}";
 
                 default:
                     return Type.ToString();
@@ -136,7 +140,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Equals(_value, other._value) && Type == other.Type;
+            return Equals(Value, other.Value) && Type == other.Type;
         }
 
         public override bool Equals(object obj)
@@ -150,7 +154,7 @@ namespace Tiledriver.Core.Uwmf.Parsing
         {
             unchecked
             {
-                return ((_value?.GetHashCode() ?? 0) * 397) ^ (int)Type;
+                return ((Value?.GetHashCode() ?? 0) * 397) ^ (int)Type;
             }
         }
         #endregion Equality members

@@ -74,9 +74,10 @@
     <Compile Include="Uwmf\Parsing\Syntax\ArrayBlock.cs" />
     <Compile Include="Uwmf\Parsing\Syntax\Assignment.cs" />
     <Compile Include="Uwmf\Parsing\Syntax\Block.cs" />
-    <Compile Include="Uwmf\Parsing\IUwmfCharReader.cs" />
     <Compile Include="Uwmf\Parsing\IUwmfLexer.cs" />
+    <Compile Include="Uwmf\Parsing\Syntax\IHaveAssignments.cs" />
     <Compile Include="Uwmf\Parsing\Syntax\SyntaxAnalyzer.cs" />
+    <Compile Include="Uwmf\Parsing\Syntax\SyntaxExtensions.cs" />
     <Compile Include="Uwmf\Parsing\UwmfLexer.cs" />
     <Compile Include="Uwmf\Parsing\Parser.cs" />
     <Compile Include="Uwmf\Parsing\Parser.Generated.cs">
@@ -85,13 +86,8 @@
       <DependentUpon>Parser.tt</DependentUpon>
     </Compile>
     <Compile Include="Uwmf\Parsing\Token.cs" />
-    <Compile Include="Uwmf\Parsing\UwmfChar.cs" />
     <Compile Include="Uwmf\Parsing\Extensions\CharExtensions.cs" />
-    <Compile Include="Uwmf\Parsing\CharPosition.cs" />
-    <Compile Include="Uwmf\Parsing\UwmfCharReader.cs" />
     <Compile Include="Uwmf\Identifier.cs" />
-    <Compile Include="Uwmf\Parsing\ILexerOld.cs" />
-    <Compile Include="Uwmf\Parsing\LexerOld.cs" />
     <Compile Include="Uwmf\Parsing\UwmfParsingException.cs" />
     <Compile Include="Uwmf\Parsing\Syntax\UwmfSyntaxTree.cs" />
     <Compile Include="Uwmf\PlaneMap.cs" />

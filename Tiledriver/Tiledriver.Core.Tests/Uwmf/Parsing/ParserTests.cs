@@ -2,9 +2,11 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System.IO;
+using System.Text;
 using NUnit.Framework;
 using Tiledriver.Core.Uwmf;
 using Tiledriver.Core.Uwmf.Parsing;
+using Tiledriver.Core.Uwmf.Parsing.Syntax;
 
 namespace Tiledriver.Core.Tests.Uwmf.Parsing
 {
@@ -29,9 +31,12 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
 
                 stream.Position = 0;
 
-                var roundTripped = Parser.Parse(new LexerOld(new UwmfCharReader(stream)));
-
-                UwmfComparison.AssertEqual(roundTripped,map);
+                using (var textReader = new StreamReader(stream))
+                {
+                    var sa = new SyntaxAnalyzer();
+                    var roundTripped = Parser.Parse(sa.Analyze(new UwmfLexer(textReader)));
+                    UwmfComparison.AssertEqual(roundTripped, map);
+                }
             }
         }
 
@@ -46,9 +51,13 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
 
                 stream.Position = 0;
 
-                var roundTripped = Parser.Parse(new LexerOld(new UwmfCharReader(stream)));
+                using (var textReader = new StreamReader(stream,Encoding.ASCII))
+                {
+                    var sa = new SyntaxAnalyzer();
+                    var roundTripped = Parser.Parse(sa.Analyze(new UwmfLexer(textReader)));
 
-                UwmfComparison.AssertEqual(roundTripped, map);
+                    UwmfComparison.AssertEqual(roundTripped, map);
+                }
             }
         }
 
@@ -56,8 +65,10 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
         public void ShouldParseOldDemoMap()
         {
             using (var stream = File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "Uwmf", "Parsing", "TEXTMAP.txt")))
+            using (var textReader = new StreamReader(stream, Encoding.ASCII))
             {
-                var map = Parser.Parse(new LexerOld(new UwmfCharReader(stream)));
+                var sa = new SyntaxAnalyzer();
+                var map = Parser.Parse(sa.Analyze(new UwmfLexer(textReader)));
             }
         }
     }

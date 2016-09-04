@@ -1,437 +1,121 @@
 ﻿// Copyright (c) 2016, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
+using Tiledriver.Core.Uwmf.Parsing.Syntax;
+
 namespace Tiledriver.Core.Uwmf.Parsing
 {
     public static partial class Parser
     {
-		private static Tile ParseTile( ILexerOld lexerOld )
-		{
-			var tile = new Tile();
-
-			TokenTypeOld nextToken;
-			nextToken = lexerOld.DetermineNextToken();
-			if (nextToken != TokenTypeOld.StartBlock)
+        static partial void SetGlobalAssignments(Map map, UwmfSyntaxTree tree)
+        {
+            SetRequiredString(tree.GetValueFor("Namespace"), value => map.Namespace = value, "Map", "Namespace");
+            SetRequiredIntegerNumber(tree.GetValueFor("TileSize"), value => map.TileSize = value, "Map", "TileSize");
+            SetRequiredString(tree.GetValueFor("Name"), value => map.Name = value, "Map", "Name");
+            SetRequiredIntegerNumber(tree.GetValueFor("Width"), value => map.Width = value, "Map", "Width");
+            SetRequiredIntegerNumber(tree.GetValueFor("Height"), value => map.Height = value, "Map", "Height");
+            SetOptionalString(tree.GetValueFor("Comment"), value => map.Comment = value, "Map", "Comment");
+        }
+        static partial void SetBlocks(Map map, UwmfSyntaxTree tree)
+        {
+            var tileName = new Identifier("tile");
+            var sectorName = new Identifier("sector");
+            var zoneName = new Identifier("zone");
+            var planeName = new Identifier("plane");
+            var thingName = new Identifier("thing");
+            var triggerName = new Identifier("trigger");
+            foreach (var block in tree.Blocks)
             {
-                throw new UwmfParsingException($"Expecting start of block when parsing Tile but found {nextToken}.");
+                if (block.Name == tileName) map.Tiles.Add(ParseTile(block));
+                if (block.Name == sectorName) map.Sectors.Add(ParseSector(block));
+                if (block.Name == zoneName) map.Zones.Add(ParseZone(block));
+                if (block.Name == planeName) map.Planes.Add(ParsePlane(block));
+                if (block.Name == thingName) map.Things.Add(ParseThing(block));
+                if (block.Name == triggerName) map.Triggers.Add(ParseTrigger(block));
             }
-            lexerOld.AdvanceOneCharacter();
-
-            while ((nextToken = lexerOld.DetermineNextToken()) != TokenTypeOld.EndBlock)
-            {
-				if( nextToken == TokenTypeOld.Identifier )
-				{
-		            switch( lexerOld.ReadIdentifier().ToString() )
-					{
-						case "textureeast":
-							tile.TextureEast = ParseStringAssignment( lexerOld, "Tile.TextureEast" );
-							break;
-						case "texturenorth":
-							tile.TextureNorth = ParseStringAssignment( lexerOld, "Tile.TextureNorth" );
-							break;
-						case "texturewest":
-							tile.TextureWest = ParseStringAssignment( lexerOld, "Tile.TextureWest" );
-							break;
-						case "texturesouth":
-							tile.TextureSouth = ParseStringAssignment( lexerOld, "Tile.TextureSouth" );
-							break;
-						case "blockingeast":
-							tile.BlockingEast = ParseBooleanAssignment( lexerOld, "Tile.BlockingEast" );
-							break;
-						case "blockingnorth":
-							tile.BlockingNorth = ParseBooleanAssignment( lexerOld, "Tile.BlockingNorth" );
-							break;
-						case "blockingwest":
-							tile.BlockingWest = ParseBooleanAssignment( lexerOld, "Tile.BlockingWest" );
-							break;
-						case "blockingsouth":
-							tile.BlockingSouth = ParseBooleanAssignment( lexerOld, "Tile.BlockingSouth" );
-							break;
-						case "offsetvertical":
-							tile.OffsetVertical = ParseBooleanAssignment( lexerOld, "Tile.OffsetVertical" );
-							break;
-						case "offsethorizontal":
-							tile.OffsetHorizontal = ParseBooleanAssignment( lexerOld, "Tile.OffsetHorizontal" );
-							break;
-						case "dontoverlay":
-							tile.DontOverlay = ParseBooleanAssignment( lexerOld, "Tile.DontOverlay" );
-							break;
-						case "mapped":
-							tile.Mapped = ParseIntegerNumberAssignment( lexerOld, "Tile.Mapped" );
-							break;
-						case "soundsequence":
-							tile.SoundSequence = ParseStringAssignment( lexerOld, "Tile.SoundSequence" );
-							break;
-						case "textureoverhead":
-							tile.TextureOverhead = ParseStringAssignment( lexerOld, "Tile.TextureOverhead" );
-							break;
-						case "comment":
-							tile.Comment = ParseStringAssignment( lexerOld, "Tile.Comment" );
-							break;
-						default:
-							lexerOld.MovePastAssignment();
-							break;
-					}
-				}
-				else
-				{
-					throw new UwmfParsingException($"Unexpected token in Tile: {nextToken}");
-				}
-            }
-			lexerOld.AdvanceOneCharacter();
-
-			tile.CheckSemanticValidity();
-			return tile;
-		}
-
-		private static Sector ParseSector( ILexerOld lexerOld )
-		{
-			var sector = new Sector();
-
-			TokenTypeOld nextToken;
-			nextToken = lexerOld.DetermineNextToken();
-			if (nextToken != TokenTypeOld.StartBlock)
-            {
-                throw new UwmfParsingException($"Expecting start of block when parsing Sector but found {nextToken}.");
-            }
-            lexerOld.AdvanceOneCharacter();
-
-            while ((nextToken = lexerOld.DetermineNextToken()) != TokenTypeOld.EndBlock)
-            {
-				if( nextToken == TokenTypeOld.Identifier )
-				{
-		            switch( lexerOld.ReadIdentifier().ToString() )
-					{
-						case "textureceiling":
-							sector.TextureCeiling = ParseStringAssignment( lexerOld, "Sector.TextureCeiling" );
-							break;
-						case "texturefloor":
-							sector.TextureFloor = ParseStringAssignment( lexerOld, "Sector.TextureFloor" );
-							break;
-						case "comment":
-							sector.Comment = ParseStringAssignment( lexerOld, "Sector.Comment" );
-							break;
-						default:
-							lexerOld.MovePastAssignment();
-							break;
-					}
-				}
-				else
-				{
-					throw new UwmfParsingException($"Unexpected token in Sector: {nextToken}");
-				}
-            }
-			lexerOld.AdvanceOneCharacter();
-
-			sector.CheckSemanticValidity();
-			return sector;
-		}
-
-		private static Zone ParseZone( ILexerOld lexerOld )
-		{
-			var zone = new Zone();
-
-			TokenTypeOld nextToken;
-			nextToken = lexerOld.DetermineNextToken();
-			if (nextToken != TokenTypeOld.StartBlock)
-            {
-                throw new UwmfParsingException($"Expecting start of block when parsing Zone but found {nextToken}.");
-            }
-            lexerOld.AdvanceOneCharacter();
-
-            while ((nextToken = lexerOld.DetermineNextToken()) != TokenTypeOld.EndBlock)
-            {
-				if( nextToken == TokenTypeOld.Identifier )
-				{
-		            switch( lexerOld.ReadIdentifier().ToString() )
-					{
-						case "comment":
-							zone.Comment = ParseStringAssignment( lexerOld, "Zone.Comment" );
-							break;
-						default:
-							lexerOld.MovePastAssignment();
-							break;
-					}
-				}
-				else
-				{
-					throw new UwmfParsingException($"Unexpected token in Zone: {nextToken}");
-				}
-            }
-			lexerOld.AdvanceOneCharacter();
-
-			zone.CheckSemanticValidity();
-			return zone;
-		}
-
-		private static Plane ParsePlane( ILexerOld lexerOld )
-		{
-			var plane = new Plane();
-
-			TokenTypeOld nextToken;
-			nextToken = lexerOld.DetermineNextToken();
-			if (nextToken != TokenTypeOld.StartBlock)
-            {
-                throw new UwmfParsingException($"Expecting start of block when parsing Plane but found {nextToken}.");
-            }
-            lexerOld.AdvanceOneCharacter();
-
-            while ((nextToken = lexerOld.DetermineNextToken()) != TokenTypeOld.EndBlock)
-            {
-				if( nextToken == TokenTypeOld.Identifier )
-				{
-		            switch( lexerOld.ReadIdentifier().ToString() )
-					{
-						case "depth":
-							plane.Depth = ParseIntegerNumberAssignment( lexerOld, "Plane.Depth" );
-							break;
-						case "comment":
-							plane.Comment = ParseStringAssignment( lexerOld, "Plane.Comment" );
-							break;
-						default:
-							lexerOld.MovePastAssignment();
-							break;
-					}
-				}
-				else
-				{
-					throw new UwmfParsingException($"Unexpected token in Plane: {nextToken}");
-				}
-            }
-			lexerOld.AdvanceOneCharacter();
-
-			plane.CheckSemanticValidity();
-			return plane;
-		}
-
-		private static Thing ParseThing( ILexerOld lexerOld )
-		{
-			var thing = new Thing();
-
-			TokenTypeOld nextToken;
-			nextToken = lexerOld.DetermineNextToken();
-			if (nextToken != TokenTypeOld.StartBlock)
-            {
-                throw new UwmfParsingException($"Expecting start of block when parsing Thing but found {nextToken}.");
-            }
-            lexerOld.AdvanceOneCharacter();
-
-            while ((nextToken = lexerOld.DetermineNextToken()) != TokenTypeOld.EndBlock)
-            {
-				if( nextToken == TokenTypeOld.Identifier )
-				{
-		            switch( lexerOld.ReadIdentifier().ToString() )
-					{
-						case "type":
-							thing.Type = ParseStringAssignment( lexerOld, "Thing.Type" );
-							break;
-						case "x":
-							thing.X = ParseFloatingPointNumberAssignment( lexerOld, "Thing.X" );
-							break;
-						case "y":
-							thing.Y = ParseFloatingPointNumberAssignment( lexerOld, "Thing.Y" );
-							break;
-						case "z":
-							thing.Z = ParseFloatingPointNumberAssignment( lexerOld, "Thing.Z" );
-							break;
-						case "angle":
-							thing.Angle = ParseIntegerNumberAssignment( lexerOld, "Thing.Angle" );
-							break;
-						case "ambush":
-							thing.Ambush = ParseBooleanAssignment( lexerOld, "Thing.Ambush" );
-							break;
-						case "patrol":
-							thing.Patrol = ParseBooleanAssignment( lexerOld, "Thing.Patrol" );
-							break;
-						case "skill1":
-							thing.Skill1 = ParseBooleanAssignment( lexerOld, "Thing.Skill1" );
-							break;
-						case "skill2":
-							thing.Skill2 = ParseBooleanAssignment( lexerOld, "Thing.Skill2" );
-							break;
-						case "skill3":
-							thing.Skill3 = ParseBooleanAssignment( lexerOld, "Thing.Skill3" );
-							break;
-						case "skill4":
-							thing.Skill4 = ParseBooleanAssignment( lexerOld, "Thing.Skill4" );
-							break;
-						case "skill5":
-							thing.Skill5 = ParseBooleanAssignment( lexerOld, "Thing.Skill5" );
-							break;
-						case "comment":
-							thing.Comment = ParseStringAssignment( lexerOld, "Thing.Comment" );
-							break;
-						default:
-							lexerOld.MovePastAssignment();
-							break;
-					}
-				}
-				else
-				{
-					throw new UwmfParsingException($"Unexpected token in Thing: {nextToken}");
-				}
-            }
-			lexerOld.AdvanceOneCharacter();
-
-			thing.CheckSemanticValidity();
-			return thing;
-		}
-
-		private static Trigger ParseTrigger( ILexerOld lexerOld )
-		{
-			var trigger = new Trigger();
-
-			TokenTypeOld nextToken;
-			nextToken = lexerOld.DetermineNextToken();
-			if (nextToken != TokenTypeOld.StartBlock)
-            {
-                throw new UwmfParsingException($"Expecting start of block when parsing Trigger but found {nextToken}.");
-            }
-            lexerOld.AdvanceOneCharacter();
-
-            while ((nextToken = lexerOld.DetermineNextToken()) != TokenTypeOld.EndBlock)
-            {
-				if( nextToken == TokenTypeOld.Identifier )
-				{
-		            switch( lexerOld.ReadIdentifier().ToString() )
-					{
-						case "x":
-							trigger.X = ParseIntegerNumberAssignment( lexerOld, "Trigger.X" );
-							break;
-						case "y":
-							trigger.Y = ParseIntegerNumberAssignment( lexerOld, "Trigger.Y" );
-							break;
-						case "z":
-							trigger.Z = ParseIntegerNumberAssignment( lexerOld, "Trigger.Z" );
-							break;
-						case "action":
-							trigger.Action = ParseStringAssignment( lexerOld, "Trigger.Action" );
-							break;
-						case "arg0":
-							trigger.Arg0 = ParseIntegerNumberAssignment( lexerOld, "Trigger.Arg0" );
-							break;
-						case "arg1":
-							trigger.Arg1 = ParseIntegerNumberAssignment( lexerOld, "Trigger.Arg1" );
-							break;
-						case "arg2":
-							trigger.Arg2 = ParseIntegerNumberAssignment( lexerOld, "Trigger.Arg2" );
-							break;
-						case "arg3":
-							trigger.Arg3 = ParseIntegerNumberAssignment( lexerOld, "Trigger.Arg3" );
-							break;
-						case "arg4":
-							trigger.Arg4 = ParseIntegerNumberAssignment( lexerOld, "Trigger.Arg4" );
-							break;
-						case "activateeast":
-							trigger.ActivateEast = ParseBooleanAssignment( lexerOld, "Trigger.ActivateEast" );
-							break;
-						case "activatenorth":
-							trigger.ActivateNorth = ParseBooleanAssignment( lexerOld, "Trigger.ActivateNorth" );
-							break;
-						case "activatewest":
-							trigger.ActivateWest = ParseBooleanAssignment( lexerOld, "Trigger.ActivateWest" );
-							break;
-						case "activatesouth":
-							trigger.ActivateSouth = ParseBooleanAssignment( lexerOld, "Trigger.ActivateSouth" );
-							break;
-						case "playercross":
-							trigger.PlayerCross = ParseBooleanAssignment( lexerOld, "Trigger.PlayerCross" );
-							break;
-						case "playeruse":
-							trigger.PlayerUse = ParseBooleanAssignment( lexerOld, "Trigger.PlayerUse" );
-							break;
-						case "monsteruse":
-							trigger.MonsterUse = ParseBooleanAssignment( lexerOld, "Trigger.MonsterUse" );
-							break;
-						case "repeatable":
-							trigger.Repeatable = ParseBooleanAssignment( lexerOld, "Trigger.Repeatable" );
-							break;
-						case "secret":
-							trigger.Secret = ParseBooleanAssignment( lexerOld, "Trigger.Secret" );
-							break;
-						case "comment":
-							trigger.Comment = ParseStringAssignment( lexerOld, "Trigger.Comment" );
-							break;
-						default:
-							lexerOld.MovePastAssignment();
-							break;
-					}
-				}
-				else
-				{
-					throw new UwmfParsingException($"Unexpected token in Trigger: {nextToken}");
-				}
-            }
-			lexerOld.AdvanceOneCharacter();
-
-			trigger.CheckSemanticValidity();
-			return trigger;
-		}
-
-		private static Map ParseMap( ILexerOld lexerOld )
-		{
-			var map = new Map();
-
-			TokenTypeOld nextToken;
-            while ((nextToken = lexerOld.DetermineNextToken()) != TokenTypeOld.EndOfFile)
-            {
-				if( nextToken == TokenTypeOld.Identifier )
-				{
-		            switch( lexerOld.ReadIdentifier().ToString() )
-					{
-						case "namespace":
-							map.Namespace = ParseStringAssignment( lexerOld, "Map.Namespace" );
-							break;
-						case "tilesize":
-							map.TileSize = ParseIntegerNumberAssignment( lexerOld, "Map.TileSize" );
-							break;
-						case "name":
-							map.Name = ParseStringAssignment( lexerOld, "Map.Name" );
-							break;
-						case "width":
-							map.Width = ParseIntegerNumberAssignment( lexerOld, "Map.Width" );
-							break;
-						case "height":
-							map.Height = ParseIntegerNumberAssignment( lexerOld, "Map.Height" );
-							break;
-						case "comment":
-							map.Comment = ParseStringAssignment( lexerOld, "Map.Comment" );
-							break;
-						case "tile":
-							map.Tiles.Add(ParseTile(lexerOld));
-							break;
-						case "sector":
-							map.Sectors.Add(ParseSector(lexerOld));
-							break;
-						case "zone":
-							map.Zones.Add(ParseZone(lexerOld));
-							break;
-						case "plane":
-							map.Planes.Add(ParsePlane(lexerOld));
-							break;
-						case "planemap":
-							map.PlaneMaps.Add(ParsePlaneMap(lexerOld));
-							break;
-						case "thing":
-							map.Things.Add(ParseThing(lexerOld));
-							break;
-						case "trigger":
-							map.Triggers.Add(ParseTrigger(lexerOld));
-							break;
-						default:
-							lexerOld.MovePastAssignment();
-							break;
-					}
-				}
-				else
-				{
-					throw new UwmfParsingException($"Unexpected token in Map: {nextToken}");
-				}
-            }
-
-			map.CheckSemanticValidity();
-			return map;
-		}
-
-	}
+        }
+        private static Tile ParseTile(Block block)
+        {
+            var parsedBlock = new Tile();
+            SetRequiredString(block.GetValueFor("TextureEast"), value => parsedBlock.TextureEast = value, "Tile", "TextureEast");
+            SetRequiredString(block.GetValueFor("TextureNorth"), value => parsedBlock.TextureNorth = value, "Tile", "TextureNorth");
+            SetRequiredString(block.GetValueFor("TextureWest"), value => parsedBlock.TextureWest = value, "Tile", "TextureWest");
+            SetRequiredString(block.GetValueFor("TextureSouth"), value => parsedBlock.TextureSouth = value, "Tile", "TextureSouth");
+            SetOptionalBoolean(block.GetValueFor("BlockingEast"), value => parsedBlock.BlockingEast = value, "Tile", "BlockingEast");
+            SetOptionalBoolean(block.GetValueFor("BlockingNorth"), value => parsedBlock.BlockingNorth = value, "Tile", "BlockingNorth");
+            SetOptionalBoolean(block.GetValueFor("BlockingWest"), value => parsedBlock.BlockingWest = value, "Tile", "BlockingWest");
+            SetOptionalBoolean(block.GetValueFor("BlockingSouth"), value => parsedBlock.BlockingSouth = value, "Tile", "BlockingSouth");
+            SetOptionalBoolean(block.GetValueFor("OffsetVertical"), value => parsedBlock.OffsetVertical = value, "Tile", "OffsetVertical");
+            SetOptionalBoolean(block.GetValueFor("OffsetHorizontal"), value => parsedBlock.OffsetHorizontal = value, "Tile", "OffsetHorizontal");
+            SetOptionalBoolean(block.GetValueFor("DontOverlay"), value => parsedBlock.DontOverlay = value, "Tile", "DontOverlay");
+            SetOptionalIntegerNumber(block.GetValueFor("Mapped"), value => parsedBlock.Mapped = value, "Tile", "Mapped");
+            SetOptionalString(block.GetValueFor("SoundSequence"), value => parsedBlock.SoundSequence = value, "Tile", "SoundSequence");
+            SetOptionalString(block.GetValueFor("TextureOverhead"), value => parsedBlock.TextureOverhead = value, "Tile", "TextureOverhead");
+            SetOptionalString(block.GetValueFor("Comment"), value => parsedBlock.Comment = value, "Tile", "Comment");
+            return parsedBlock;
+        }
+        private static Sector ParseSector(Block block)
+        {
+            var parsedBlock = new Sector();
+            SetRequiredString(block.GetValueFor("TextureCeiling"), value => parsedBlock.TextureCeiling = value, "Sector", "TextureCeiling");
+            SetRequiredString(block.GetValueFor("TextureFloor"), value => parsedBlock.TextureFloor = value, "Sector", "TextureFloor");
+            SetOptionalString(block.GetValueFor("Comment"), value => parsedBlock.Comment = value, "Sector", "Comment");
+            return parsedBlock;
+        }
+        private static Zone ParseZone(Block block)
+        {
+            var parsedBlock = new Zone();
+            SetOptionalString(block.GetValueFor("Comment"), value => parsedBlock.Comment = value, "Zone", "Comment");
+            return parsedBlock;
+        }
+        private static Plane ParsePlane(Block block)
+        {
+            var parsedBlock = new Plane();
+            SetRequiredIntegerNumber(block.GetValueFor("Depth"), value => parsedBlock.Depth = value, "Plane", "Depth");
+            SetOptionalString(block.GetValueFor("Comment"), value => parsedBlock.Comment = value, "Plane", "Comment");
+            return parsedBlock;
+        }
+        private static Thing ParseThing(Block block)
+        {
+            var parsedBlock = new Thing();
+            SetRequiredString(block.GetValueFor("Type"), value => parsedBlock.Type = value, "Thing", "Type");
+            SetRequiredFloatingPointNumber(block.GetValueFor("X"), value => parsedBlock.X = value, "Thing", "X");
+            SetRequiredFloatingPointNumber(block.GetValueFor("Y"), value => parsedBlock.Y = value, "Thing", "Y");
+            SetRequiredFloatingPointNumber(block.GetValueFor("Z"), value => parsedBlock.Z = value, "Thing", "Z");
+            SetRequiredIntegerNumber(block.GetValueFor("Angle"), value => parsedBlock.Angle = value, "Thing", "Angle");
+            SetOptionalBoolean(block.GetValueFor("Ambush"), value => parsedBlock.Ambush = value, "Thing", "Ambush");
+            SetOptionalBoolean(block.GetValueFor("Patrol"), value => parsedBlock.Patrol = value, "Thing", "Patrol");
+            SetOptionalBoolean(block.GetValueFor("Skill1"), value => parsedBlock.Skill1 = value, "Thing", "Skill1");
+            SetOptionalBoolean(block.GetValueFor("Skill2"), value => parsedBlock.Skill2 = value, "Thing", "Skill2");
+            SetOptionalBoolean(block.GetValueFor("Skill3"), value => parsedBlock.Skill3 = value, "Thing", "Skill3");
+            SetOptionalBoolean(block.GetValueFor("Skill4"), value => parsedBlock.Skill4 = value, "Thing", "Skill4");
+            SetOptionalBoolean(block.GetValueFor("Skill5"), value => parsedBlock.Skill5 = value, "Thing", "Skill5");
+            SetOptionalString(block.GetValueFor("Comment"), value => parsedBlock.Comment = value, "Thing", "Comment");
+            return parsedBlock;
+        }
+        private static Trigger ParseTrigger(Block block)
+        {
+            var parsedBlock = new Trigger();
+            SetRequiredIntegerNumber(block.GetValueFor("X"), value => parsedBlock.X = value, "Trigger", "X");
+            SetRequiredIntegerNumber(block.GetValueFor("Y"), value => parsedBlock.Y = value, "Trigger", "Y");
+            SetRequiredIntegerNumber(block.GetValueFor("Z"), value => parsedBlock.Z = value, "Trigger", "Z");
+            SetRequiredString(block.GetValueFor("Action"), value => parsedBlock.Action = value, "Trigger", "Action");
+            SetOptionalIntegerNumber(block.GetValueFor("Arg0"), value => parsedBlock.Arg0 = value, "Trigger", "Arg0");
+            SetOptionalIntegerNumber(block.GetValueFor("Arg1"), value => parsedBlock.Arg1 = value, "Trigger", "Arg1");
+            SetOptionalIntegerNumber(block.GetValueFor("Arg2"), value => parsedBlock.Arg2 = value, "Trigger", "Arg2");
+            SetOptionalIntegerNumber(block.GetValueFor("Arg3"), value => parsedBlock.Arg3 = value, "Trigger", "Arg3");
+            SetOptionalIntegerNumber(block.GetValueFor("Arg4"), value => parsedBlock.Arg4 = value, "Trigger", "Arg4");
+            SetOptionalBoolean(block.GetValueFor("ActivateEast"), value => parsedBlock.ActivateEast = value, "Trigger", "ActivateEast");
+            SetOptionalBoolean(block.GetValueFor("ActivateNorth"), value => parsedBlock.ActivateNorth = value, "Trigger", "ActivateNorth");
+            SetOptionalBoolean(block.GetValueFor("ActivateWest"), value => parsedBlock.ActivateWest = value, "Trigger", "ActivateWest");
+            SetOptionalBoolean(block.GetValueFor("ActivateSouth"), value => parsedBlock.ActivateSouth = value, "Trigger", "ActivateSouth");
+            SetOptionalBoolean(block.GetValueFor("PlayerCross"), value => parsedBlock.PlayerCross = value, "Trigger", "PlayerCross");
+            SetOptionalBoolean(block.GetValueFor("PlayerUse"), value => parsedBlock.PlayerUse = value, "Trigger", "PlayerUse");
+            SetOptionalBoolean(block.GetValueFor("MonsterUse"), value => parsedBlock.MonsterUse = value, "Trigger", "MonsterUse");
+            SetOptionalBoolean(block.GetValueFor("Repeatable"), value => parsedBlock.Repeatable = value, "Trigger", "Repeatable");
+            SetOptionalBoolean(block.GetValueFor("Secret"), value => parsedBlock.Secret = value, "Trigger", "Secret");
+            SetOptionalString(block.GetValueFor("Comment"), value => parsedBlock.Comment = value, "Trigger", "Comment");
+            return parsedBlock;
+        }
+    }
 }

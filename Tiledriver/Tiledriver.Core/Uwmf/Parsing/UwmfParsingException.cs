@@ -10,9 +10,5 @@ namespace Tiledriver.Core.Uwmf.Parsing
         public UwmfParsingException(string message) : base(message)
         {            
         }
-
-        public UwmfParsingException(CharPosition position, string message) : base($"{position}: {message}")
-        {            
-        }
     }
 }

@@ -40,17 +40,17 @@ namespace Tiledriver.UwmfMetadata
                 HasOptionalString("comment", String.Empty),
 
             new UwmfBlock("tileSpace").
+                DisableNormalWriting().
+                DisableNormalReading().
                 HasRequiredIntegerNumber("tile").
                 HasRequiredIntegerNumber("sector").
                 HasRequiredIntegerNumber("zone").
                 HasOptionalIntegerNumber("tag", 0).
-                DisableNormalWriting().
-                DisableNormalReading().
                 CannotHaveUnknownProperties(),
 
             new UwmfBlock("planeMap").
-                HasSubBlocks("tileSpace").
                 DisableNormalReading().
+                HasSubBlocks("tileSpace").
                 CannotHaveUnknownProperties(),
 
             new UwmfBlock("thing").
@@ -90,6 +90,7 @@ namespace Tiledriver.UwmfMetadata
                 HasOptionalString("comment", String.Empty),
 
             new UwmfBlock("map").
+                DisableNormalReading().
                 HasRequiredString("nameSpace", uwmfName:"namespace").
                 HasRequiredIntegerNumber("tileSize").
                 HasRequiredString("name").
