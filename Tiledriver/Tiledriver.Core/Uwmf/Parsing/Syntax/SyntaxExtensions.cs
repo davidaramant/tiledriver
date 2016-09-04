@@ -46,8 +46,9 @@ namespace Tiledriver.Core.Uwmf.Parsing.Syntax
             switch (token.Type)
             {
                 case TokenType.BooleanFalse:
+                    return false.ToMaybe();
                 case TokenType.BooleanTrue:
-                    return ((bool)token.Value).ToMaybe();
+                    return true.ToMaybe();
                 default:
                     return Maybe<bool>.Nothing;
             }

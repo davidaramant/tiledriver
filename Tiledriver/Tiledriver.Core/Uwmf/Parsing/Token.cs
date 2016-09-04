@@ -85,11 +85,15 @@ namespace Tiledriver.Core.Uwmf.Parsing
         {
             get
             {
-                if (!(Type == TokenType.BooleanTrue || Type == TokenType.BooleanFalse))
+                switch (Type)
                 {
-                    throw new InvalidOperationException($"Tried to access a {Type} token value as a boolean.");
+                    case TokenType.BooleanFalse:
+                        return false;
+                    case TokenType.BooleanTrue:
+                        return true;
+                    default:
+                        throw new InvalidOperationException($"Tried to access a {Type} token value as a boolean.");
                 }
-                return (bool)Value;
             }
         }
 

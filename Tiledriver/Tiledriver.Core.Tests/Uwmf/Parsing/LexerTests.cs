@@ -22,28 +22,31 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
                 Token.Semicolon);
         }
 
-        [TestCase("someProperty = 10;")]
-        [TestCase("someProperty = 0010;")]
-        [TestCase("someProperty = 0xa;")]
-        [TestCase("someProperty = +10;")]
-        public void ShouldLexIntegers(string input)
+        [TestCase("someProperty = 0;", 0)]
+        [TestCase("someProperty = 10;", 10)]
+        [TestCase("someProperty = 0010;", 10)]
+        [TestCase("someProperty = 0xa;", 10)]
+        [TestCase("someProperty = +10;", 10)]
+        [TestCase("someProperty = -10;", -10)]
+        public void ShouldLexIntegers(string input, int value)
         {
             VerifyLexing(input,
                 Token.Identifier("someProperty"),
                 Token.Equal,
-                Token.Integer(10),
+                Token.Integer(value),
                 Token.Semicolon);
         }
 
-        [TestCase("someProperty = 10.5;")]
-        [TestCase("someProperty = +10.5;")]
-        [TestCase("someProperty = 1.05e1;")]
-        public void ShouldLexDoubles(string input)
+        [TestCase("someProperty = 10.5;", 10.5)]
+        [TestCase("someProperty = +10.5;", 10.5)]
+        [TestCase("someProperty = 1.05e1;", 10.5)]
+        [TestCase("someProperty = 1e10;", 1e10)]
+        public void ShouldLexDoubles(string input, double value)
         {
             VerifyLexing(input,
                 Token.Identifier("someProperty"),
                 Token.Equal,
-                Token.Double(10.5),
+                Token.Double(value),
                 Token.Semicolon);
         }
 

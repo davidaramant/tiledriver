@@ -143,23 +143,5 @@ namespace Tiledriver.Core.Tests.Uwmf.Parsing
             Assert.That(block[1], Is.EqualTo(new[] { 4, 5, 6 }));
             Assert.That(block[2], Is.EqualTo(new[] { 7, 8, 9, 10 }));
         }
-
-        [Test]
-        public void ShouldParseArrayBlockWithNegativeNumbers()
-        {
-            var input = "block\n{\n\t{-1,0,-1},\n\t{4,5,6},\n\t{7,8,9,10}\n}";
-
-            var syntaxAnalzer = new SyntaxAnalyzer();
-            var result = syntaxAnalzer.Analyze(new UwmfLexer(new StringReader(input)));
-
-            Assert.That(result.ArrayBlocks, Has.Count.EqualTo(1), "Did not parse out a block");
-
-            var block = result.ArrayBlocks.First();
-
-            Assert.That(block.Name, Is.EqualTo(new Identifier("block")), "Did not get correct name.");
-            Assert.That(block[0], Is.EqualTo(new[] { -1, 0, -1 }));
-            Assert.That(block[1], Is.EqualTo(new[] { 4, 5, 6 }));
-            Assert.That(block[2], Is.EqualTo(new[] { 7, 8, 9, 10 }));
-        }
     }
 }

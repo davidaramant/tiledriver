@@ -59,25 +59,23 @@ namespace Tiledriver.Core.Uwmf.Parsing
                 configurator.Token(@"true", f => Token.BooleanTrue);
                 configurator.Token(@"false", f => Token.BooleanFalse);
 
-                configurator.Token(@"[A-Za-z_]+[A-Za-z0-9_]*", Token.Identifier);
-                configurator.Token(@"=", f => Token.Equal);
-                configurator.Token(@";", f => Token.Semicolon);
-
-                // Hex Integer
-                configurator.Token(@"0x[0-9A-Fa-f]+", f => Token.Integer(int.Parse(f.Substring(2, f.Length - 2), NumberStyles.HexNumber)));
-                // Signed Integer
-                configurator.Token(@"[+-]?[1-9]+[0-9]*", f => Token.Integer(int.Parse(f)));
-                // Zero-Prepended Integer
-                configurator.Token(@"0[0-9]+", f => Token.Integer(int.Parse(f)));
-
-
-                configurator.Token(@"[+-]?\d+\.\d*([eE][+-]?\d+)?", f => Token.Double(double.Parse(f)));
-
-                configurator.Token("\"(\\\\.|[^\"])*\"", f => Token.String(f.Substring(1, f.Length - 2)));
-
                 configurator.Token(@"\{", f => Token.OpenParen);
                 configurator.Token(@"\}", f => Token.CloseParen);
                 configurator.Token(@",", f => Token.Comma);
+                configurator.Token(@"=", f => Token.Equal);
+                configurator.Token(@";", f => Token.Semicolon);
+
+                configurator.Token(@"[A-Za-z_]+[A-Za-z0-9_]*", Token.Identifier);
+
+                configurator.Token(@"[+-]?\d+[eE][+-]?\d+", f => Token.Double(double.Parse(f)));
+                configurator.Token(@"[+-]?\d+\.\d+[eE][+-]?\d+", f => Token.Double(double.Parse(f)));
+                configurator.Token(@"[+-]?\d+\.\d+", f => Token.Double(double.Parse(f)));
+
+                // Hex Integer
+                configurator.Token(@"0x[0-9A-Fa-f]+", f => Token.Integer(int.Parse(f.Substring(2, f.Length - 2), NumberStyles.HexNumber)));
+                configurator.Token(@"[+-]?[0-9]+", f => Token.Integer(int.Parse(f)));
+
+                configurator.Token("\"(\\\\.|[^\"])*\"", f => Token.String(f.Substring(1, f.Length - 2)));
 
                 // Ignores all white space
                 configurator.Ignore(@"\s+");
