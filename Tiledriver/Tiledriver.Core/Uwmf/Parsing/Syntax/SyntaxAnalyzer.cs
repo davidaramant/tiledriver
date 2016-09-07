@@ -21,7 +21,7 @@ namespace Tiledriver.Core.Uwmf.Parsing.Syntax
 
                 if (idToken.Type == TokenType.EndOfFile) break;
 
-                var name = new Identifier(idToken.ValueAsString);
+                var name = idToken.TryAsIdentifier().Value;
 
                 var nextToken = lexer.MustReadTokenOfTypes(TokenType.Equal, TokenType.OpenParen);
                 if (nextToken.Type == TokenType.Equal)
@@ -36,7 +36,7 @@ namespace Tiledriver.Core.Uwmf.Parsing.Syntax
                     switch (firstBlockToken.Type)
                     {
                         case TokenType.Identifier:
-                            var assignmentName = new Identifier(firstBlockToken.ValueAsString);
+                            var assignmentName = firstBlockToken.TryAsIdentifier().Value;
                             var assignment = ParseAssignment(assignmentName, lexer);
                             blocks.Add(ParseBlock(name, assignment, lexer));
                             break;
@@ -81,14 +81,14 @@ namespace Tiledriver.Core.Uwmf.Parsing.Syntax
             var firstToken = lexer.MustReadTokenOfTypes(TokenType.Integer, TokenType.CloseParen);
             if (firstToken.Type == TokenType.CloseParen) return tuple;
 
-            tuple.Add(firstToken.ValueAsInt);
+            tuple.Add(firstToken.TryAsInt().Value);
 
             while (true)
             {
                 var token = lexer.MustReadTokenOfTypes(TokenType.Comma, TokenType.CloseParen);
                 if (token.Type == TokenType.CloseParen) return tuple;
 
-                tuple.Add(lexer.MustReadTokenOfTypes(TokenType.Integer).ValueAsInt);
+                tuple.Add(lexer.MustReadTokenOfTypes(TokenType.Integer).TryAsInt().Value);
             }
         }
 
@@ -106,8 +106,8 @@ namespace Tiledriver.Core.Uwmf.Parsing.Syntax
                 }
                 else
                 {
-                    var assignmentName = token.ValueAsString;
-                    assignments.Add(ParseAssignment(new Identifier(assignmentName), lexer));
+                    var assignmentName = token.TryAsIdentifier().Value;
+                    assignments.Add(ParseAssignment(assignmentName, lexer));
                 }
             }
         }

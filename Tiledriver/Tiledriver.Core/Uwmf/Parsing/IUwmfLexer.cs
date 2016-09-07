@@ -6,6 +6,5 @@ namespace Tiledriver.Core.Uwmf.Parsing
     public interface IUwmfLexer
     {
         Token MustReadTokenOfTypes(params TokenType[] types);
-        Token MustReadValueToken();
     }
 }

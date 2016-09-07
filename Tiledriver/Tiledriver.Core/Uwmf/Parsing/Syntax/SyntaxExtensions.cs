@@ -7,23 +7,39 @@ namespace Tiledriver.Core.Uwmf.Parsing.Syntax
 {
     public static class SyntaxExtensions
     {
+        public static Token MustReadValueToken(this IUwmfLexer lexer)
+        {
+            return lexer.MustReadTokenOfTypes(
+                TokenType.BooleanFalse,
+                TokenType.BooleanTrue,
+                TokenType.Double,
+                TokenType.Integer,
+                TokenType.String);
+        }
+
+        public static Maybe<Identifier> TryAsIdentifier(this Token token)
+        {
+            if (token.Type == TokenType.Identifier)
+            {
+                return new Identifier((string)token.Value).ToMaybe();
+            }
+            return Maybe<Identifier>.Nothing;
+        }
+
         public static Maybe<string> TryAsString(this Token token)
         {
-            switch (token.Type)
+            if (token.Type == TokenType.String)
             {
-                case TokenType.String:
-                case TokenType.Identifier:
-                    return ((string) token.Value).ToMaybe();
-                default:
-                    return Maybe<string>.Nothing;
+                return ((string)token.Value).ToMaybe();
             }
+            return Maybe<string>.Nothing;
         }
 
         public static Maybe<int> TryAsInt(this Token token)
         {
             if (token.Type == TokenType.Integer)
             {
-                return ((int) token.Value).ToMaybe();
+                return ((int)token.Value).ToMaybe();
             }
             return Maybe<int>.Nothing;
         }

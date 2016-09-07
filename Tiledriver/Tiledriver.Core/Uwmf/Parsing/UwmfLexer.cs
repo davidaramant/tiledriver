@@ -41,16 +41,6 @@ namespace Tiledriver.Core.Uwmf.Parsing
             return token;
         }
 
-        public Token MustReadValueToken()
-        {
-            var token = ReadToken();
-            if (!token.IsValue)
-            {
-                throw new UwmfParsingException($"Line {_lexer.CurrentLineNumber}: Expected value but got {token.Type}");
-            }
-            return token;
-        }
-
         public static ILexer<Token> BuildLexer()
         {
             return LexerFactory<Token>.Configure(configurator =>
