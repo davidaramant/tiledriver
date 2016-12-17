@@ -8,9 +8,9 @@ namespace Tiledriver.Metadata
 {
     public static class UwmfDefinitions
     {
-        public static readonly IEnumerable<UwmfBlock> Blocks = new[]
+        public static readonly IEnumerable<BlockData> Blocks = new[]
         {
-            new UwmfBlock("tile").
+            new BlockData("tile").
                 HasRequiredString("textureEast").
                 HasRequiredString("textureNorth").
                 HasRequiredString("textureWest").
@@ -27,19 +27,19 @@ namespace Tiledriver.Metadata
                 HasOptionalString("textureOverhead", String.Empty).
                 HasOptionalString("comment", String.Empty),
 
-            new UwmfBlock("sector").
+            new BlockData("sector").
                 HasRequiredString("textureCeiling").
                 HasRequiredString("textureFloor").
                 HasOptionalString("comment", String.Empty),
 
-            new UwmfBlock("zone").
+            new BlockData("zone").
                 HasOptionalString("comment", String.Empty),
 
-            new UwmfBlock("plane").
+            new BlockData("plane").
                 HasRequiredIntegerNumber("depth").
                 HasOptionalString("comment", String.Empty),
 
-            new UwmfBlock("tileSpace").
+            new BlockData("tileSpace").
                 DisableNormalWriting().
                 DisableNormalReading().
                 HasRequiredIntegerNumber("tile").
@@ -48,12 +48,12 @@ namespace Tiledriver.Metadata
                 HasOptionalIntegerNumber("tag", 0).
                 CannotHaveUnknownProperties(),
 
-            new UwmfBlock("planeMap").
+            new BlockData("planeMap").
                 DisableNormalReading().
                 HasSubBlocks("tileSpace").
                 CannotHaveUnknownProperties(),
 
-            new UwmfBlock("thing").
+            new BlockData("thing").
                 HasRequiredString("type").
                 HasRequiredFloatingPointNumber("x").
                 HasRequiredFloatingPointNumber("y").
@@ -68,7 +68,7 @@ namespace Tiledriver.Metadata
                 HasOptionalBoolean("skill5", false).
                 HasOptionalString("comment", String.Empty),
 
-            new UwmfBlock("trigger").
+            new BlockData("trigger").
                 HasRequiredIntegerNumber("x").
                 HasRequiredIntegerNumber("y").
                 HasRequiredIntegerNumber("z").
@@ -89,7 +89,7 @@ namespace Tiledriver.Metadata
                 HasOptionalBoolean("secret", false).
                 HasOptionalString("comment", String.Empty),
 
-            new UwmfBlock("map").
+            new BlockData("map").
                 DisableNormalReading().
                 HasRequiredString("nameSpace", uwmfName:"namespace").
                 HasRequiredIntegerNumber("tileSize").

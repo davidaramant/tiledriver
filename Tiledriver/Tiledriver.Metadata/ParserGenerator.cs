@@ -40,9 +40,9 @@ OpenParen();
             return output.CloseParen().GetString();
         }
 
-        private static void WritePropertyAssignments(UwmfBlock block, IndentedWriter output, string assignmentHolder, string owner)
+        private static void WritePropertyAssignments(BlockData blockData, IndentedWriter output, string assignmentHolder, string owner)
         {
-            foreach (var property in block.Properties)
+            foreach (var property in blockData.Properties)
             {
                 var level = property.IsRequired ? "Required" : "Optional";
 
@@ -50,7 +50,7 @@ OpenParen();
                     $"Set{level}{property.TypeName}(" +
                     $"{assignmentHolder}.GetValueFor(\"{property.PascalCaseName}\"), " +
                     $"value => {owner}.{property.PascalCaseName} = value, " +
-                    $"\"{block.PascalCaseName}\", " +
+                    $"\"{blockData.PascalCaseName}\", " +
                     $"\"{property.PascalCaseName}\");");
             }
         }

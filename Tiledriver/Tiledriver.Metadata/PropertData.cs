@@ -13,7 +13,7 @@ namespace Tiledriver.Metadata
         String,
     }
 
-    public sealed class UwmfProperty : NamedItem
+    public sealed class PropertData : NamedItem
     {
         public PropertyType Type { get; }
 
@@ -81,20 +81,11 @@ namespace Tiledriver.Metadata
             }
         }
 
-        public string DefaultAssignment
-        {
-            get
-            {
-                if (IsRequired)
-                    return String.Empty;
-
-                return $" = {DefaultAsString}";
-            }
-        }
+        public string DefaultAssignment => IsRequired ? string.Empty : $" = {DefaultAsString}";
 
         public bool IsRequired => _defaultValue == null;
 
-        public UwmfProperty(
+        public PropertData(
                 string name, 
                 string uwmfName, 
                 PropertyType type, 
