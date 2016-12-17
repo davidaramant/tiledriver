@@ -23,21 +23,21 @@ namespace Tiledriver.Metadata
                 HasOptionalBoolean("offsetHorizontal", false).
                 HasOptionalBoolean("dontOverlay", false).
                 HasOptionalIntegerNumber("mapped", 0).
-                HasOptionalString("soundSequence", String.Empty).
-                HasOptionalString("textureOverhead", String.Empty).
-                HasOptionalString("comment", String.Empty),
+                HasOptionalString("soundSequence", string.Empty).
+                HasOptionalString("textureOverhead", string.Empty).
+                HasOptionalString("comment", string.Empty),
 
             new BlockData("sector").
                 HasRequiredString("textureCeiling").
                 HasRequiredString("textureFloor").
-                HasOptionalString("comment", String.Empty),
+                HasOptionalString("comment", string.Empty),
 
             new BlockData("zone").
-                HasOptionalString("comment", String.Empty),
+                HasOptionalString("comment", string.Empty),
 
             new BlockData("plane").
                 HasRequiredIntegerNumber("depth").
-                HasOptionalString("comment", String.Empty),
+                HasOptionalString("comment", string.Empty),
 
             new BlockData("tileSpace").
                 DisableNormalWriting().
@@ -66,7 +66,7 @@ namespace Tiledriver.Metadata
                 HasOptionalBoolean("skill3", false).
                 HasOptionalBoolean("skill4", false).
                 HasOptionalBoolean("skill5", false).
-                HasOptionalString("comment", String.Empty),
+                HasOptionalString("comment", string.Empty),
 
             new BlockData("trigger").
                 HasRequiredIntegerNumber("x").
@@ -87,7 +87,7 @@ namespace Tiledriver.Metadata
                 HasOptionalBoolean("monsterUse", false).
                 HasOptionalBoolean("repeatable", false).
                 HasOptionalBoolean("secret", false).
-                HasOptionalString("comment", String.Empty),
+                HasOptionalString("comment", string.Empty),
 
             new BlockData("map").
                 DisableNormalReading().
@@ -96,7 +96,7 @@ namespace Tiledriver.Metadata
                 HasRequiredString("name").
                 HasRequiredIntegerNumber("width").
                 HasRequiredIntegerNumber("height").
-                HasOptionalString("comment", String.Empty).
+                HasOptionalString("comment", string.Empty).
                 HasSubBlocks("tile", "sector", "zone", "plane", "planeMap", "thing", "trigger").
                 IsTopLevel(),
         };

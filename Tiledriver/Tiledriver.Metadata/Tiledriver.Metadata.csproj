@@ -47,7 +47,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BlockData.cs" />
     <Compile Include="UwmfDefinitions.cs" />
-    <Compile Include="PropertData.cs" />
+    <Compile Include="PropertyData.cs" />
+    <Compile Include="XlatDefinitions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Purpose of this assembly.txt" />

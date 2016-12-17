@@ -13,7 +13,7 @@ namespace Tiledriver.Metadata
         String,
     }
 
-    public sealed class PropertData : NamedItem
+    public sealed class PropertyData : NamedItem
     {
         public PropertyType Type { get; }
 
@@ -85,7 +85,7 @@ namespace Tiledriver.Metadata
 
         public bool IsRequired => _defaultValue == null;
 
-        public PropertData(
+        public PropertyData(
                 string name, 
                 string uwmfName, 
                 PropertyType type, 
