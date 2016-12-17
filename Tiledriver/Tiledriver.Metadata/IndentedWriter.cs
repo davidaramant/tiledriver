@@ -4,7 +4,7 @@
 using System;
 using System.Text;
 
-namespace Tiledriver.UwmfMetadata
+namespace Tiledriver.Metadata
 {
     public sealed class IndentedWriter
     {

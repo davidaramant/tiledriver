@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Tiledriver.UwmfMetadata
+namespace Tiledriver.Metadata
 {
     public enum PropertyType
     {

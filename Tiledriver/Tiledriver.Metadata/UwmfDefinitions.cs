@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Tiledriver.UwmfMetadata
+namespace Tiledriver.Metadata
 {
     public static class UwmfDefinitions
     {

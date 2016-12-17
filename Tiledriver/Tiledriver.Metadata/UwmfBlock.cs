@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Tiledriver.UwmfMetadata
+namespace Tiledriver.Metadata
 {
     public sealed class UwmfBlock : NamedItem
     {

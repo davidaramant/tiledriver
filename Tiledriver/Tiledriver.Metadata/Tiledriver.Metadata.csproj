@@ -7,8 +7,8 @@
     <ProjectGuid>{BF48DC65-248A-452B-BD2A-AE45EDE28C10}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Tiledriver.UwmfMetadata</RootNamespace>
-    <AssemblyName>Tiledriver.UwmfMetadata</AssemblyName>
+    <RootNamespace>Tiledriver.Metadata</RootNamespace>
+    <AssemblyName>Tiledriver.Metadata</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

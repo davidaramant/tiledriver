@@ -4,10 +4,10 @@
 #>
 <#@ template debug="false" hostspecific="false" language="C#" #>
 <#@ assembly name="System.Core" #>
-<#@ assembly name="$(SolutionDir)Tiledriver.UwmfMetadata\bin\$(Configuration)\Tiledriver.UwmfMetadata.dll" #>
+<#@ assembly name="$(SolutionDir)Tiledriver.Metadata\bin\$(Configuration)\Tiledriver.Metadata.dll" #>
 <#@ import namespace="System" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Collections.Generic" #>
-<#@ import namespace="Tiledriver.UwmfMetadata" #>
+<#@ import namespace="Tiledriver.Metadata" #>
 <#@ output extension="Generated.cs" #>
 <#= ParserGenerator.GetText() #>

@@ -4,7 +4,7 @@
 using System;
 using System.Linq;
 
-namespace Tiledriver.UwmfMetadata
+namespace Tiledriver.Metadata
 {
     public static class ModelGenerator
     {
