@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Tiledriver.Core.Uwmf;
+using Tiledriver.Core.FormatModels.Text.Uwmf;
 using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core

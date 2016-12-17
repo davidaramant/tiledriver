@@ -2,7 +2,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System.Collections.Generic;
-using Tiledriver.Core.Uwmf;
+using Tiledriver.Core.FormatModels.Text.Uwmf;
 
 namespace Tiledriver.Core.Wolf3D
 {

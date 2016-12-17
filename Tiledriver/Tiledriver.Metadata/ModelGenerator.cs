@@ -18,7 +18,7 @@ namespace Tiledriver.Metadata
 using System.Collections.Generic;
 using System.IO;
 
-namespace Tiledriver.Core.Uwmf");
+namespace Tiledriver.Core.FormatModels.Text.Uwmf");
 
             output.OpenParen();
             foreach (var block in UwmfDefinitions.Blocks)

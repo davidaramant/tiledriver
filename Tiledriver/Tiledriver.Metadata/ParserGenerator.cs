@@ -14,9 +14,9 @@ namespace Tiledriver.Metadata
 @"// Copyright (c) 2016, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using Tiledriver.Core.Uwmf.Parsing.Syntax;
+using Tiledriver.Core.FormatModels.Text.Uwmf.Parsing.Syntax;
 
-namespace Tiledriver.Core.Uwmf.Parsing").
+namespace Tiledriver.Core.FormatModels.Text.Uwmf.Parsing").
 OpenParen().
 Line("public static partial class Parser").
 OpenParen();
