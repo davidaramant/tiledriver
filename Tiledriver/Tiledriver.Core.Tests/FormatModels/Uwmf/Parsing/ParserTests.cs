@@ -51,7 +51,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
 
                 stream.Position = 0;
 
-                using (var textReader = new StreamReader(stream,Encoding.ASCII))
+                using (var textReader = new StreamReader(stream, Encoding.ASCII))
                 {
                     var sa = new SyntaxAnalyzer();
                     var roundTripped = Parser.Parse(sa.Analyze(new UwmfLexer(textReader)));
@@ -64,7 +64,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
         [Test]
         public void ShouldParseOldDemoMap()
         {
-            using (var stream = File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "Uwmf", "Parsing", "TEXTMAP.txt")))
+            using (var stream = File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "Uwmf", "Parsing", "TEXTMAP.txt")))
             using (var textReader = new StreamReader(stream, Encoding.ASCII))
             {
                 var sa = new SyntaxAnalyzer();

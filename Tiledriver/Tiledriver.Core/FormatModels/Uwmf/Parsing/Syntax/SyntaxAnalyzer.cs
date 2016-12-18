@@ -9,7 +9,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing.Syntax
 {
     public sealed class SyntaxAnalyzer
     {
-        public UwmfSyntaxTree Analyze(IUwmfLexer lexer)
+        public UwmfSyntaxTree Analyze(ILexer lexer)
         {
             var globalAssignments = new List<Assignment>();
             var blocks = new List<Block>();
@@ -50,14 +50,14 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing.Syntax
                             break;
 
                         default:
-                            throw new UwmfParsingException("This can't happen.");
+                            throw new ParsingException("This can't happen.");
                     }
                 }
             }
             return new UwmfSyntaxTree(globalAssignments, blocks, arrayBlocks);
         }
 
-        private static ArrayBlock ParseArrayBlock(Identifier blockName, IUwmfLexer lexer)
+        private static ArrayBlock ParseArrayBlock(Identifier blockName, ILexer lexer)
         {
             var tuples = new List<IReadOnlyList<int>>
             {
@@ -73,7 +73,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing.Syntax
             return new ArrayBlock(blockName, tuples);
         }
 
-        private static IReadOnlyList<int> ReadTuple(IUwmfLexer lexer)
+        private static IReadOnlyList<int> ReadTuple(ILexer lexer)
         {
             var tuple = new List<int>();
             // This assumes the opening paren has already been read.
@@ -92,7 +92,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing.Syntax
             }
         }
 
-        private static Block ParseBlock(Identifier blockName, Assignment firstAssigment, IUwmfLexer lexer)
+        private static Block ParseBlock(Identifier blockName, Assignment firstAssigment, ILexer lexer)
         {
             var assignments = new List<Assignment> { firstAssigment };
 
@@ -112,14 +112,14 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing.Syntax
             }
         }
 
-        private static Assignment ParseAssignment(Identifier name, IUwmfLexer lexer)
+        private static Assignment ParseAssignment(Identifier name, ILexer lexer)
         {
             lexer.MustReadTokenOfTypes(TokenType.Equal);
 
             return ParseGlobalAssignment(name, lexer);
         }
 
-        private static Assignment ParseGlobalAssignment(Identifier name, IUwmfLexer lexer)
+        private static Assignment ParseGlobalAssignment(Identifier name, ILexer lexer)
         {
             var valueToken = lexer.MustReadValueToken();
 

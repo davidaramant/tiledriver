@@ -3,11 +3,11 @@
 
 using System;
 
-namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
+namespace Tiledriver.Core.FormatModels.Common
 {
-    public sealed class UwmfParsingException : Exception
+    public sealed class ParsingException : Exception
     {
-        public UwmfParsingException(string message) : base(message)
+        public ParsingException(string message) : base(message)
         {            
         }
     }

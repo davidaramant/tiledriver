@@ -8,7 +8,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing.Syntax
 {
     public static class SyntaxExtensions
     {
-        public static Token MustReadValueToken(this IUwmfLexer lexer)
+        public static Token MustReadValueToken(this ILexer lexer)
         {
             return lexer.MustReadTokenOfTypes(
                 TokenType.BooleanFalse,

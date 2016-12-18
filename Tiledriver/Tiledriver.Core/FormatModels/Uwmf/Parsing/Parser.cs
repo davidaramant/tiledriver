@@ -4,6 +4,7 @@
 using System;
 using System.Linq;
 using Functional.Maybe;
+using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Uwmf.Parsing.Syntax;
 
 namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
@@ -33,7 +34,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
                 {
                     if (tuple.Count < 3 || tuple.Count > 4)
                     {
-                        throw new UwmfParsingException("Invalid number of entries inside a tilespace.");
+                        throw new ParsingException("Invalid number of entries inside a tilespace.");
                     }
 
                     return new TileSpace(
@@ -48,36 +49,36 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
         {
             setter(
                 maybeToken.
-                OrElse(() => new UwmfParsingException($"{parameterName} was not set on {blockName}")).
+                OrElse(() => new ParsingException($"{parameterName} was not set on {blockName}")).
                 TryAsString().
-                OrElse(() => new UwmfParsingException($"{parameterName} in {blockName} was not a string.")));
+                OrElse(() => new ParsingException($"{parameterName} in {blockName} was not a string.")));
         }
 
         private static void SetRequiredFloatingPointNumber(Maybe<Token> maybeToken, Action<double> setter, string blockName, string parameterName)
         {
             setter(
                 maybeToken.
-                OrElse(() => new UwmfParsingException($"{parameterName} was not set on {blockName}")).
+                OrElse(() => new ParsingException($"{parameterName} was not set on {blockName}")).
                 TryAsDouble().
-                OrElse(() => new UwmfParsingException($"{parameterName} in {blockName} was not a floating point value.")));
+                OrElse(() => new ParsingException($"{parameterName} in {blockName} was not a floating point value.")));
         }
 
         private static void SetRequiredIntegerNumber(Maybe<Token> maybeToken, Action<int> setter, string blockName, string parameterName)
         {
             setter(
                 maybeToken.
-                OrElse(() => new UwmfParsingException($"{parameterName} was not set on {blockName}")).
+                OrElse(() => new ParsingException($"{parameterName} was not set on {blockName}")).
                 TryAsInt().
-                OrElse(() => new UwmfParsingException($"{parameterName} in {blockName} was not an integer.")));
+                OrElse(() => new ParsingException($"{parameterName} in {blockName} was not an integer.")));
         }
 
         private static void SetRequiredBoolean(Maybe<Token> maybeToken, Action<bool> setter, string blockName, string parameterName)
         {
             setter(
                 maybeToken.
-                OrElse(() => new UwmfParsingException($"{parameterName} was not set on {blockName}")).
+                OrElse(() => new ParsingException($"{parameterName} was not set on {blockName}")).
                 TryAsBool().
-                OrElse(() => new UwmfParsingException($"{parameterName} in {blockName} was not a boolean.")));
+                OrElse(() => new ParsingException($"{parameterName} in {blockName} was not a boolean.")));
         }
 
         private static void SetOptionalString(Maybe<Token> maybeToken, Action<string> setter, string blockName, string parameterName)
@@ -85,7 +86,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
             maybeToken.
                 Select(token =>
                     token.TryAsString().
-                    OrElse(() => new UwmfParsingException($"{parameterName} in {blockName} was not a string.")))
+                    OrElse(() => new ParsingException($"{parameterName} in {blockName} was not a string.")))
                 .Do(setter);
         }
 
@@ -94,7 +95,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
             maybeToken.
                 Select(token =>
                     token.TryAsDouble().
-                    OrElse(() => new UwmfParsingException($"{parameterName} in {blockName} was not a floating point value.")))
+                    OrElse(() => new ParsingException($"{parameterName} in {blockName} was not a floating point value.")))
                 .Do(setter);
         }
 
@@ -103,7 +104,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
             maybeToken.
                 Select(token =>
                     token.TryAsInt().
-                    OrElse(() => new UwmfParsingException($"{parameterName} in {blockName} was not an integer.")))
+                    OrElse(() => new ParsingException($"{parameterName} in {blockName} was not an integer.")))
                 .Do(setter);
         }
 
@@ -112,7 +113,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
             maybeToken.
                 Select(token =>
                     token.TryAsBool().
-                    OrElse(() => new UwmfParsingException($"{parameterName} in {blockName} was not a boolean.")))
+                    OrElse(() => new ParsingException($"{parameterName} in {blockName} was not a boolean.")))
                 .Do(setter);
         }
     }

@@ -4,8 +4,11 @@
 using System;
 using System.Diagnostics;
 
-namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
+namespace Tiledriver.Core.FormatModels.Common
 {
+    /// <summary>
+    /// Both UWMF and XLAT tokens
+    /// </summary>
     public enum TokenType
     {
         EndOfFile,
@@ -20,6 +23,11 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
         OpenParen,
         CloseParen,
         Comma,
+
+        // Used in XLAT
+        Meta,
+        // Used in XLAT
+        Pipe,
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -34,7 +42,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
             Value = value;
         }
 
-        public override string ToString() => $"{Type}: {Value}";
+        public override string ToString() => Type + (Value != null ? $": {Value}" : string.Empty);
 
         public static Token Identifier(string id)
         {
@@ -61,6 +69,8 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
         public static readonly Token CloseParen = new Token(TokenType.CloseParen, null);
         public static readonly Token Comma = new Token(TokenType.Comma, null);
         public static readonly Token EndOfFile = new Token(TokenType.EndOfFile, null);
+        public static readonly Token Meta = new Token(TokenType.Meta, null);
+        public static readonly Token Pipe = new Token(TokenType.Pipe, null);
 
         #region Equality members
 

@@ -3,9 +3,9 @@
 
 using System;
 using System.Diagnostics;
-using Tiledriver.Core.FormatModels.Common;
+using JetBrains.Annotations;
 
-namespace Tiledriver.Core.FormatModels.Uwmf.Parsing.Syntax
+namespace Tiledriver.Core.FormatModels.Common
 {
     [DebuggerDisplay("{Name} = {Value}")]
     public sealed class Assignment : IEquatable<Assignment>
@@ -13,10 +13,8 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing.Syntax
         public Identifier Name { get; }
         public Token Value { get; }
 
-        public Assignment(Identifier name, Token value)
+        public Assignment([NotNull]Identifier name, [NotNull]Token value)
         {
-            Debug.Assert(name != null, "name != null");
-            Debug.Assert(value != null, "value != null");
             Name = name;
             Value = value;
         }

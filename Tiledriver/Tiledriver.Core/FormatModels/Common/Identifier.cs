@@ -3,6 +3,7 @@
 
 using System;
 using System.Diagnostics;
+using JetBrains.Annotations;
 
 namespace Tiledriver.Core.FormatModels.Common
 {
@@ -11,9 +12,8 @@ namespace Tiledriver.Core.FormatModels.Common
     {
         private readonly string _name;
 
-        public Identifier(string name)
+        public Identifier([NotNull]string name)
         {
-            Debug.Assert(name != null, "name != null");
             _name = name;
         }
 

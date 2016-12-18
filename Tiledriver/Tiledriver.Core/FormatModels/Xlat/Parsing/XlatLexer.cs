@@ -7,14 +7,14 @@ using JetBrains.Annotations;
 using Piglet.Lexer;
 using Tiledriver.Core.FormatModels.Common;
 
-namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
+namespace Tiledriver.Core.FormatModels.Xlat.Parsing
 {
-    public sealed class UwmfLexer : BaseLexer
+    public sealed class XlatLexer : BaseLexer
     {
-        public UwmfLexer([NotNull]TextReader reader) : base(BuildLexer(), reader)
+        public XlatLexer([NotNull]TextReader reader) : base(BuildLexer(), reader)
         {
         }
-        
+
         public static ILexer<Token> BuildLexer()
         {
             return LexerFactory<Token>.Configure(configurator =>
@@ -28,6 +28,8 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
                 configurator.Token(@",", f => Token.Comma);
                 configurator.Token(@"=", f => Token.Equal);
                 configurator.Token(@";", f => Token.Semicolon);
+                configurator.Token(@"$", f => Token.Meta);
+                configurator.Token(@"\|", f => Token.Pipe);
 
                 configurator.Token(@"[A-Za-z_]+[A-Za-z0-9_]*", Token.Identifier);
 

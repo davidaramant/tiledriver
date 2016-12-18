@@ -3,12 +3,12 @@
 
 using System.Linq;
 using NUnit.Framework;
-using Tiledriver.Core.FormatModels.Uwmf.Parsing;
+using Piglet.Lexer;
+using Tiledriver.Core.FormatModels.Common;
 
-namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
+namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Common
 {
-    [TestFixture]
-    public sealed class LexerTests
+    public abstract class BaseLexerTests
     {
         [TestCase("someProperty = 10;")]
         [TestCase("      someProperty=10;")]
@@ -123,11 +123,25 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
                 Token.CloseParen);
         }
 
-        private static void VerifyLexing(string input, params Token[] expectedTokens)
+        [TestCase("// Comment\r\nsomeProperty = 10;")]
+        [TestCase("// Comment\nsomeProperty = 10;")]
+        [TestCase("someProperty = 10; // Comment")]
+        public void ShouldIgnoreComments(string input)
         {
-            var actualTokens = UwmfLexer.BuildLexer().Tokenize(input).Select(t => t.Item2).ToArray();
+            VerifyLexing(input,
+                Token.Identifier("someProperty"),
+                Token.Equal,
+                Token.Integer(10),
+                Token.Semicolon);
+        }
+
+        protected void VerifyLexing(string input, params Token[] expectedTokens)
+        {
+            var actualTokens = BuildLexer().Tokenize(input).Select(t => t.Item2).ToArray();
 
             Assert.That(actualTokens, Is.EqualTo(expectedTokens), $"Did not correct tokenize {input}");
         }
+
+        protected abstract ILexer<Token> BuildLexer();
     }
 }

@@ -61,8 +61,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FormatModels\GameMaps\ExpanderTests.cs" />
+    <Compile Include="FormatModels\Uwmf\Common\BaseLexerTests.cs" />
+    <Compile Include="FormatModels\Xlat\Parsing\XlatLexerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FormatModels\Uwmf\Parsing\LexerTests.cs" />
+    <Compile Include="FormatModels\Uwmf\Parsing\UwmfLexerTests.cs" />
     <Compile Include="FormatModels\Uwmf\Parsing\SyntaxAnalyzerTests.cs" />
     <Compile Include="FormatModels\Uwmf\Parsing\UwmfComparison.cs" />
     <Compile Include="FormatModels\Uwmf\Parsing\UwmfComparison.Generated.cs">
@@ -86,6 +88,9 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>UwmfComparison.Generated.cs</LastGenOutput>
     </Content>
+    <Content Include="FormatModels\Xlat\Parsing\wolf3d.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -93,6 +98,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -60,10 +60,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DemoMap.cs" />
+    <Compile Include="FormatModels\Common\BaseLexer.cs" />
     <Compile Include="FormatModels\GameMaps\MapHeader.cs" />
     <Compile Include="FormatModels\GameMaps\OffsetData.cs" />
     <Compile Include="FormatModels\GameMaps\PlaneMetadata.cs" />
     <Compile Include="FormatModels\GameMaps\Expander.cs" />
+    <Compile Include="FormatModels\Xlat\Parsing\XlatLexer.cs" />
     <Compile Include="LevelGeometry\IRegion.cs" />
     <Compile Include="LevelGeometry\MapTile.cs" />
     <Compile Include="LevelGeometry\SparseMap.cs" />
@@ -76,9 +78,9 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="FormatModels\Uwmf\Parsing\Syntax\ArrayBlock.cs" />
-    <Compile Include="FormatModels\Uwmf\Parsing\Syntax\Assignment.cs" />
+    <Compile Include="FormatModels\Common\Assignment.cs" />
     <Compile Include="FormatModels\Uwmf\Parsing\Syntax\Block.cs" />
-    <Compile Include="FormatModels\Uwmf\Parsing\IUwmfLexer.cs" />
+    <Compile Include="FormatModels\Common\ILexer.cs" />
     <Compile Include="FormatModels\Uwmf\Parsing\Syntax\IHaveAssignments.cs" />
     <Compile Include="FormatModels\Uwmf\Parsing\Syntax\SyntaxAnalyzer.cs" />
     <Compile Include="FormatModels\Uwmf\Parsing\Syntax\SyntaxExtensions.cs" />
@@ -89,9 +91,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Parser.tt</DependentUpon>
     </Compile>
-    <Compile Include="FormatModels\Uwmf\Parsing\Token.cs" />
+    <Compile Include="FormatModels\Common\Token.cs" />
     <Compile Include="FormatModels\Common\Identifier.cs" />
-    <Compile Include="FormatModels\Uwmf\Parsing\UwmfParsingException.cs" />
+    <Compile Include="FormatModels\Common\ParsingException.cs" />
     <Compile Include="FormatModels\Uwmf\Parsing\Syntax\UwmfSyntaxTree.cs" />
     <Compile Include="FormatModels\Uwmf\PlaneMap.cs" />
     <Compile Include="FormatModels\Uwmf\IWriteableUwmfBlock.cs" />
@@ -137,9 +139,7 @@
       <LastGenOutput>Actor.Generated.cs</LastGenOutput>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="FormatModels\Xlat\Parsing\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
