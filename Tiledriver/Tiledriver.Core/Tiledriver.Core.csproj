@@ -68,37 +68,37 @@
     <Compile Include="LevelGeometry\MapTile.cs" />
     <Compile Include="LevelGeometry\SparseMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FormatModels\Text\Uwmf\BaseUwmfBlock.cs" />
-    <Compile Include="FormatModels\Text\Uwmf\InvalidUwmfException.cs" />
-    <Compile Include="FormatModels\Text\Uwmf\Model.Generated.cs">
+    <Compile Include="FormatModels\Uwmf\BaseUwmfBlock.cs" />
+    <Compile Include="FormatModels\Uwmf\InvalidUwmfException.cs" />
+    <Compile Include="FormatModels\Uwmf\Model.Generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="FormatModels\Text\Uwmf\Parsing\Syntax\ArrayBlock.cs" />
-    <Compile Include="FormatModels\Text\Uwmf\Parsing\Syntax\Assignment.cs" />
-    <Compile Include="FormatModels\Text\Uwmf\Parsing\Syntax\Block.cs" />
-    <Compile Include="FormatModels\Text\Uwmf\Parsing\IUwmfLexer.cs" />
-    <Compile Include="FormatModels\Text\Uwmf\Parsing\Syntax\IHaveAssignments.cs" />
-    <Compile Include="FormatModels\Text\Uwmf\Parsing\Syntax\SyntaxAnalyzer.cs" />
-    <Compile Include="FormatModels\Text\Uwmf\Parsing\Syntax\SyntaxExtensions.cs" />
-    <Compile Include="FormatModels\Text\Uwmf\Parsing\UwmfLexer.cs" />
-    <Compile Include="FormatModels\Text\Uwmf\Parsing\Parser.cs" />
-    <Compile Include="FormatModels\Text\Uwmf\Parsing\Parser.Generated.cs">
+    <Compile Include="FormatModels\Uwmf\Parsing\Syntax\ArrayBlock.cs" />
+    <Compile Include="FormatModels\Uwmf\Parsing\Syntax\Assignment.cs" />
+    <Compile Include="FormatModels\Uwmf\Parsing\Syntax\Block.cs" />
+    <Compile Include="FormatModels\Uwmf\Parsing\IUwmfLexer.cs" />
+    <Compile Include="FormatModels\Uwmf\Parsing\Syntax\IHaveAssignments.cs" />
+    <Compile Include="FormatModels\Uwmf\Parsing\Syntax\SyntaxAnalyzer.cs" />
+    <Compile Include="FormatModels\Uwmf\Parsing\Syntax\SyntaxExtensions.cs" />
+    <Compile Include="FormatModels\Uwmf\Parsing\UwmfLexer.cs" />
+    <Compile Include="FormatModels\Uwmf\Parsing\Parser.cs" />
+    <Compile Include="FormatModels\Uwmf\Parsing\Parser.Generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Parser.tt</DependentUpon>
     </Compile>
-    <Compile Include="FormatModels\Text\Uwmf\Parsing\Token.cs" />
-    <Compile Include="FormatModels\Text\Identifier.cs" />
-    <Compile Include="FormatModels\Text\Uwmf\Parsing\UwmfParsingException.cs" />
-    <Compile Include="FormatModels\Text\Uwmf\Parsing\Syntax\UwmfSyntaxTree.cs" />
-    <Compile Include="FormatModels\Text\Uwmf\PlaneMap.cs" />
-    <Compile Include="FormatModels\Text\Uwmf\IWriteableUwmfBlock.cs" />
-    <Compile Include="FormatModels\Text\Uwmf\Map.cs" />
-    <Compile Include="FormatModels\Text\Uwmf\TileSpace.cs" />
-    <Compile Include="FormatModels\Text\Uwmf\UnknownBlock.cs" />
-    <Compile Include="FormatModels\Text\Uwmf\UnknownProperty.cs" />
+    <Compile Include="FormatModels\Uwmf\Parsing\Token.cs" />
+    <Compile Include="FormatModels\Common\Identifier.cs" />
+    <Compile Include="FormatModels\Uwmf\Parsing\UwmfParsingException.cs" />
+    <Compile Include="FormatModels\Uwmf\Parsing\Syntax\UwmfSyntaxTree.cs" />
+    <Compile Include="FormatModels\Uwmf\PlaneMap.cs" />
+    <Compile Include="FormatModels\Uwmf\IWriteableUwmfBlock.cs" />
+    <Compile Include="FormatModels\Uwmf\Map.cs" />
+    <Compile Include="FormatModels\Uwmf\TileSpace.cs" />
+    <Compile Include="FormatModels\Uwmf\UnknownBlock.cs" />
+    <Compile Include="FormatModels\Uwmf\UnknownProperty.cs" />
     <Compile Include="WadFile.cs" />
     <Compile Include="Wolf3D\Actor.cs" />
     <Compile Include="Wolf3D\AllWolfTextures.cs" />
@@ -124,11 +124,11 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FormatModels\Text\Uwmf\Model.tt">
+    <Content Include="FormatModels\Uwmf\Model.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Model.Generated.cs</LastGenOutput>
     </Content>
-    <Content Include="FormatModels\Text\Uwmf\Parsing\Parser.tt">
+    <Content Include="FormatModels\Uwmf\Parsing\Parser.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Parser.Generated.cs</LastGenOutput>
     </Content>
@@ -138,7 +138,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="FormatModels\Text\Xlat\Parsing\" />
+    <Folder Include="FormatModels\Xlat\Parsing\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

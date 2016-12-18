@@ -1,0 +1,84 @@
+﻿<#
+// Copyright (c) 2016, David Aramant
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+#>
+<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="$(SolutionDir)Tiledriver.Metadata\bin\$(Configuration)\Tiledriver.Metadata.dll" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="Tiledriver.Metadata" #>
+<#@ output extension=".cs" #>
+// Copyright (c) 2016, David Aramant
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+
+using Tiledriver.Core.FormatModels.Uwmf;
+using NUnit.Framework;
+
+namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
+{
+    public static partial class UwmfComparison
+    {
+<#
+foreach( var block in UwmfDefinitions.Blocks )
+{
+#>
+        public static void AssertEqual( <#= block.PascalCaseName #> actual, <#= block.PascalCaseName #> expected )
+        {
+<#
+    foreach( var property in block.Properties )
+    {
+#>
+            Assert.That(
+                actual.<#= property.PascalCaseName #>,
+                Is.EqualTo( expected.<#= property.PascalCaseName #> ),
+                "Found difference in <#= block.PascalCaseName #> <#= property.PascalCaseName #>" );
+<#
+    }
+    if( block.CanHaveUnknownProperties )
+    {
+#>
+            AssertEqual(
+                actual.UnknownProperties,
+                expected.UnknownProperties,
+                "<#= block.PascalCaseName #>" );
+<#
+    }
+    foreach( var subBlock in block.SubBlocks )
+    {
+#>
+            Assert.That(
+                actual.<#= subBlock.PluralPascalCaseName #>.Count,
+                Is.EqualTo( expected.<#= subBlock.PluralPascalCaseName #>.Count ),
+                "Found unequal number of <#= block.PascalCaseName #> <#= subBlock.PluralPascalCaseName #>" );
+            for( int i = 0; i < expected.<#= subBlock.PluralPascalCaseName #>.Count; i++ )
+            {
+                AssertEqual( 
+                    actual.<#= subBlock.PluralPascalCaseName #>[i],
+                    expected.<#= subBlock.PluralPascalCaseName #>[i] );
+            }
+<#
+    }
+    if( block.CanHaveUnknownBlocks )
+    {
+#>
+            Assert.That(
+                actual.UnknownBlocks.Count,
+                Is.EqualTo( expected.UnknownBlocks.Count ),
+                "Found unequal number of <#= block.PascalCaseName #> UnknownBlocks" );
+            for( int i = 0; i < expected.UnknownBlocks.Count; i++ )
+            {
+                AssertEqual( 
+                    actual.UnknownBlocks[i],
+                    expected.UnknownBlocks[i] );
+            }
+<#
+    }
+#>
+        }
+<#
+}
+#>
+    }
+}

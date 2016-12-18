@@ -4,7 +4,7 @@
 using System;
 using System.IO;
 using System.Text;
-using Tiledriver.Core.FormatModels.Text.Uwmf;
+using Tiledriver.Core.FormatModels.Uwmf;
 
 namespace Tiledriver.Core
 {

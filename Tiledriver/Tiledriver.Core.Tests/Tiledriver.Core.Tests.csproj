@@ -62,15 +62,15 @@
   <ItemGroup>
     <Compile Include="FormatModels\GameMaps\ExpanderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FormatModels\Text\Uwmf\Parsing\LexerTests.cs" />
-    <Compile Include="FormatModels\Text\Uwmf\Parsing\SyntaxAnalyzerTests.cs" />
-    <Compile Include="FormatModels\Text\Uwmf\Parsing\UwmfComparison.cs" />
-    <Compile Include="FormatModels\Text\Uwmf\Parsing\UwmfComparison.Generated.cs">
+    <Compile Include="FormatModels\Uwmf\Parsing\LexerTests.cs" />
+    <Compile Include="FormatModels\Uwmf\Parsing\SyntaxAnalyzerTests.cs" />
+    <Compile Include="FormatModels\Uwmf\Parsing\UwmfComparison.cs" />
+    <Compile Include="FormatModels\Uwmf\Parsing\UwmfComparison.Generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>UwmfComparison.Generated.tt</DependentUpon>
     </Compile>
-    <Compile Include="FormatModels\Text\Uwmf\Parsing\ParserTests.cs" />
+    <Compile Include="FormatModels\Uwmf\Parsing\ParserTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tiledriver.Core\Tiledriver.Core.csproj">
@@ -79,10 +79,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FormatModels\Text\Uwmf\Parsing\TEXTMAP.txt">
+    <Content Include="FormatModels\Uwmf\Parsing\TEXTMAP.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="FormatModels\Text\Uwmf\Parsing\UwmfComparison.Generated.tt">
+    <Content Include="FormatModels\Uwmf\Parsing\UwmfComparison.Generated.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>UwmfComparison.Generated.cs</LastGenOutput>
     </Content>

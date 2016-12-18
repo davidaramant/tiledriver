@@ -3,7 +3,7 @@
 
 using System.Collections.Generic;
 using System.Drawing;
-using Tiledriver.Core.FormatModels.Text.Uwmf;
+using Tiledriver.Core.FormatModels.Uwmf;
 
 namespace Tiledriver.Core.LevelGeometry
 {
