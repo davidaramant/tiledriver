@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Functional.Maybe, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Functional.Maybe.1.1.1\lib\net45\Functional.Maybe.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="JetBrains.Annotations, Version=10.2.1.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <HintPath>..\packages\JetBrains.Annotations.10.2.1\lib\net\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
@@ -53,6 +57,7 @@
     <Compile Include="UwmfDefinitions.cs" />
     <Compile Include="PropertyData.cs" />
     <Compile Include="XlatDefinitions.cs" />
+    <Compile Include="XlatModelGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Purpose of this assembly.txt" />

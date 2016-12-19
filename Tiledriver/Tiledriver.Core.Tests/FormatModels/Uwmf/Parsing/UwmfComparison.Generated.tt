@@ -27,54 +27,30 @@ foreach( var block in UwmfDefinitions.Blocks )
         public static void AssertEqual( <#= block.PascalCaseName #> actual, <#= block.PascalCaseName #> expected )
         {
 <#
-    foreach( var property in block.Properties )
+    foreach( var property in block.Properties.Where( p => p.ScalarField ) )
     {
 #>
             Assert.That(
-                actual.<#= property.PascalCaseName #>,
-                Is.EqualTo( expected.<#= property.PascalCaseName #> ),
-                "Found difference in <#= block.PascalCaseName #> <#= property.PascalCaseName #>" );
+                actual.<#= property.PropertyName #>,
+                Is.EqualTo( expected.<#= property.PropertyName #> ),
+                "Found difference in <#= block.PascalCaseName #> <#= property.PropertyName #>" );
 <#
     }
-    if( block.CanHaveUnknownProperties )
-    {
-#>
-            AssertEqual(
-                actual.UnknownProperties,
-                expected.UnknownProperties,
-                "<#= block.PascalCaseName #>" );
-<#
-    }
-    foreach( var subBlock in block.SubBlocks )
+    foreach( var subBlock in block.Properties.Where( p => !p.ScalarField ) )
     {
 #>
             Assert.That(
-                actual.<#= subBlock.PluralPascalCaseName #>.Count,
-                Is.EqualTo( expected.<#= subBlock.PluralPascalCaseName #>.Count ),
-                "Found unequal number of <#= block.PascalCaseName #> <#= subBlock.PluralPascalCaseName #>" );
-            for( int i = 0; i < expected.<#= subBlock.PluralPascalCaseName #>.Count; i++ )
+                actual.<#= subBlock.PropertyName #>.Count,
+                Is.EqualTo( expected.<#= subBlock.PropertyName #>.Count ),
+                "Found unequal number of <#= block.PascalCaseName #> <#= subBlock.PropertyName #>" );
+            for( int i = 0; i < expected.<#= subBlock.PropertyName #>.Count; i++ )
             {
                 AssertEqual( 
-                    actual.<#= subBlock.PluralPascalCaseName #>[i],
-                    expected.<#= subBlock.PluralPascalCaseName #>[i] );
+                    actual.<#= subBlock.PropertyName #>[i],
+                    expected.<#= subBlock.PropertyName #>[i] );
             }
 <#
-    }
-    if( block.CanHaveUnknownBlocks )
-    {
-#>
-            Assert.That(
-                actual.UnknownBlocks.Count,
-                Is.EqualTo( expected.UnknownBlocks.Count ),
-                "Found unequal number of <#= block.PascalCaseName #> UnknownBlocks" );
-            for( int i = 0; i < expected.UnknownBlocks.Count; i++ )
-            {
-                AssertEqual( 
-                    actual.UnknownBlocks[i],
-                    expected.UnknownBlocks[i] );
-            }
-<#
-    }
+    }  
 #>
         }
 <#

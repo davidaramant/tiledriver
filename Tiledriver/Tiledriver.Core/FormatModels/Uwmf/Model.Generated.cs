@@ -3,6 +3,8 @@
 
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using Tiledriver.Core.Extensions;
 
 namespace Tiledriver.Core.FormatModels.Uwmf
 {
@@ -80,7 +82,8 @@ namespace Tiledriver.Core.FormatModels.Uwmf
             int mapped = 0,
             string soundSequence = "",
             string textureOverhead = "",
-            string comment = "")
+            string comment = "",
+            IEnumerable<UnknownProperty> unknownProperties = null)
         {
             TextureEast = textureEast;
             TextureNorth = textureNorth;
@@ -97,6 +100,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf
             SoundSequence = soundSequence;
             TextureOverhead = textureOverhead;
             Comment = comment;
+            UnknownProperties.AddRange(unknownProperties ?? Enumerable.Empty<UnknownProperty>());
             AdditionalSemanticChecks();
         }
         public Stream WriteTo(Stream stream)
@@ -168,11 +172,13 @@ namespace Tiledriver.Core.FormatModels.Uwmf
         public Sector(
             string textureCeiling,
             string textureFloor,
-            string comment = "")
+            string comment = "",
+            IEnumerable<UnknownProperty> unknownProperties = null)
         {
             TextureCeiling = textureCeiling;
             TextureFloor = textureFloor;
             Comment = comment;
+            UnknownProperties.AddRange(unknownProperties ?? Enumerable.Empty<UnknownProperty>());
             AdditionalSemanticChecks();
         }
         public Stream WriteTo(Stream stream)
@@ -206,9 +212,11 @@ namespace Tiledriver.Core.FormatModels.Uwmf
         public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
         public Zone() { }
         public Zone(
-            string comment = "")
+            string comment = "",
+            IEnumerable<UnknownProperty> unknownProperties = null)
         {
             Comment = comment;
+            UnknownProperties.AddRange(unknownProperties ?? Enumerable.Empty<UnknownProperty>());
             AdditionalSemanticChecks();
         }
         public Stream WriteTo(Stream stream)
@@ -250,10 +258,12 @@ namespace Tiledriver.Core.FormatModels.Uwmf
         public Plane() { }
         public Plane(
             int depth,
-            string comment = "")
+            string comment = "",
+            IEnumerable<UnknownProperty> unknownProperties = null)
         {
             Depth = depth;
             Comment = comment;
+            UnknownProperties.AddRange(unknownProperties ?? Enumerable.Empty<UnknownProperty>());
             AdditionalSemanticChecks();
         }
         public Stream WriteTo(Stream stream)
@@ -446,7 +456,8 @@ namespace Tiledriver.Core.FormatModels.Uwmf
             bool skill3 = false,
             bool skill4 = false,
             bool skill5 = false,
-            string comment = "")
+            string comment = "",
+            IEnumerable<UnknownProperty> unknownProperties = null)
         {
             Type = type;
             X = x;
@@ -461,6 +472,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf
             Skill4 = skill4;
             Skill5 = skill5;
             Comment = comment;
+            UnknownProperties.AddRange(unknownProperties ?? Enumerable.Empty<UnknownProperty>());
             AdditionalSemanticChecks();
         }
         public Stream WriteTo(Stream stream)
@@ -583,7 +595,8 @@ namespace Tiledriver.Core.FormatModels.Uwmf
             bool monsterUse = false,
             bool repeatable = false,
             bool secret = false,
-            string comment = "")
+            string comment = "",
+            IEnumerable<UnknownProperty> unknownProperties = null)
         {
             X = x;
             Y = y;
@@ -604,6 +617,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf
             Repeatable = repeatable;
             Secret = secret;
             Comment = comment;
+            UnknownProperties.AddRange(unknownProperties ?? Enumerable.Empty<UnknownProperty>());
             AdditionalSemanticChecks();
         }
         public Stream WriteTo(Stream stream)
@@ -651,15 +665,15 @@ namespace Tiledriver.Core.FormatModels.Uwmf
 
     public sealed partial class Map : BaseUwmfBlock, IWriteableUwmfBlock
     {
-        private bool _namespaceHasBeenSet = false;
-        private string _namespace;
-        public string Namespace
+        private bool _nameSpaceHasBeenSet = false;
+        private string _nameSpace;
+        public string NameSpace
         {
-            get { return _namespace; }
+            get { return _nameSpace; }
             set
             {
-                _namespaceHasBeenSet = true;
-                _namespace = value;
+                _nameSpaceHasBeenSet = true;
+                _nameSpace = value;
             }
         }
         private bool _tileSizeHasBeenSet = false;
@@ -730,14 +744,15 @@ namespace Tiledriver.Core.FormatModels.Uwmf
             IEnumerable<PlaneMap> planeMaps,
             IEnumerable<Thing> things,
             IEnumerable<Trigger> triggers,
-            string comment = "")
+            string comment = "",
+            IEnumerable<UnknownProperty> unknownProperties = null,
+            IEnumerable<UnknownBlock> unknownBlocks = null)
         {
-            Namespace = nameSpace;
+            NameSpace = nameSpace;
             TileSize = tileSize;
             Name = name;
             Width = width;
             Height = height;
-            Comment = comment;
             Tiles.AddRange(tiles);
             Sectors.AddRange(sectors);
             Zones.AddRange(zones);
@@ -745,12 +760,15 @@ namespace Tiledriver.Core.FormatModels.Uwmf
             PlaneMaps.AddRange(planeMaps);
             Things.AddRange(things);
             Triggers.AddRange(triggers);
+            Comment = comment;
+            UnknownProperties.AddRange(unknownProperties ?? Enumerable.Empty<UnknownProperty>());
+            UnknownBlocks.AddRange(unknownBlocks ?? Enumerable.Empty<UnknownBlock>());
             AdditionalSemanticChecks();
         }
         public Stream WriteTo(Stream stream)
         {
             CheckSemanticValidity();
-            WriteProperty(stream, "namespace", _namespace, indent: false);
+            WriteProperty(stream, "namespace", _nameSpace, indent: false);
             WriteProperty(stream, "tileSize", _tileSize, indent: false);
             WriteProperty(stream, "name", _name, indent: false);
             WriteProperty(stream, "width", _width, indent: false);
@@ -767,12 +785,12 @@ namespace Tiledriver.Core.FormatModels.Uwmf
             WriteBlocks(stream, PlaneMaps );
             WriteBlocks(stream, Things );
             WriteBlocks(stream, Triggers );
-            WriteBlocks(stream, UnknownBlocks);
+            WriteBlocks(stream, UnknownBlocks );
             return stream;
         }
         public void CheckSemanticValidity()
         {
-            if (!_namespaceHasBeenSet) throw new InvalidUwmfException("Did not set Namespace on Map");
+            if (!_nameSpaceHasBeenSet) throw new InvalidUwmfException("Did not set NameSpace on Map");
             if (!_tileSizeHasBeenSet) throw new InvalidUwmfException("Did not set TileSize on Map");
             if (!_nameHasBeenSet) throw new InvalidUwmfException("Did not set Name on Map");
             if (!_widthHasBeenSet) throw new InvalidUwmfException("Did not set Width on Map");

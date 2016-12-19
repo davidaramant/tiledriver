@@ -60,11 +60,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DemoMap.cs" />
+    <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="FormatModels\Common\BaseLexer.cs" />
     <Compile Include="FormatModels\GameMaps\MapHeader.cs" />
     <Compile Include="FormatModels\GameMaps\OffsetData.cs" />
     <Compile Include="FormatModels\GameMaps\PlaneMetadata.cs" />
     <Compile Include="FormatModels\GameMaps\Expander.cs" />
+    <Compile Include="FormatModels\Xlat\InvalidXlatException.cs" />
+    <Compile Include="FormatModels\Xlat\Model.Generated.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="FormatModels\Xlat\Parsing\XlatLexer.cs" />
     <Compile Include="LevelGeometry\IRegion.cs" />
     <Compile Include="LevelGeometry\MapTile.cs" />
@@ -133,6 +140,10 @@
     <Content Include="FormatModels\Uwmf\Parsing\Parser.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Parser.Generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="FormatModels\Xlat\Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Model.Generated.cs</LastGenOutput>
     </Content>
     <Content Include="Wolf3D\Actor.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

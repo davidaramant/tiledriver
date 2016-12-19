@@ -22,43 +22,45 @@ namespace Tiledriver.Metadata
                 HasOptionalBoolean("offsetVertical", false).
                 HasOptionalBoolean("offsetHorizontal", false).
                 HasOptionalBoolean("dontOverlay", false).
-                HasOptionalIntegerNumber("mapped", 0).
+                HasOptionalInteger("mapped", 0).
                 HasOptionalString("soundSequence", string.Empty).
                 HasOptionalString("textureOverhead", string.Empty).
-                HasOptionalString("comment", string.Empty),
+                HasOptionalString("comment", string.Empty).
+                CanHaveUnknownProperties(),
 
             new BlockData("sector").
                 HasRequiredString("textureCeiling").
                 HasRequiredString("textureFloor").
-                HasOptionalString("comment", string.Empty),
+                HasOptionalString("comment", string.Empty).
+                CanHaveUnknownProperties(),
 
             new BlockData("zone").
-                HasOptionalString("comment", string.Empty),
+                HasOptionalString("comment", string.Empty).
+                CanHaveUnknownProperties(),
 
             new BlockData("plane").
-                HasRequiredIntegerNumber("depth").
-                HasOptionalString("comment", string.Empty),
+                HasRequiredInteger("depth").
+                HasOptionalString("comment", string.Empty).
+                CanHaveUnknownProperties(),
 
             new BlockData("tileSpace").
                 DisableNormalWriting().
                 DisableNormalReading().
-                HasRequiredIntegerNumber("tile").
-                HasRequiredIntegerNumber("sector").
-                HasRequiredIntegerNumber("zone").
-                HasOptionalIntegerNumber("tag", 0).
-                CannotHaveUnknownProperties(),
+                HasRequiredInteger("tile").
+                HasRequiredInteger("sector").
+                HasRequiredInteger("zone").
+                HasOptionalInteger("tag", 0),
 
             new BlockData("planeMap").
                 DisableNormalReading().
-                HasSubBlocks("tileSpace").
-                CannotHaveUnknownProperties(),
+                HasSubBlockLists("tileSpace"),
 
             new BlockData("thing").
                 HasRequiredString("type").
-                HasRequiredFloatingPointNumber("x").
-                HasRequiredFloatingPointNumber("y").
-                HasRequiredFloatingPointNumber("z").
-                HasRequiredIntegerNumber("angle").
+                HasRequiredDouble("x").
+                HasRequiredDouble("y").
+                HasRequiredDouble("z").
+                HasRequiredInteger("angle").
                 HasOptionalBoolean("ambush", false).
                 HasOptionalBoolean("patrol", false).
                 HasOptionalBoolean("skill1", false).
@@ -66,18 +68,19 @@ namespace Tiledriver.Metadata
                 HasOptionalBoolean("skill3", false).
                 HasOptionalBoolean("skill4", false).
                 HasOptionalBoolean("skill5", false).
-                HasOptionalString("comment", string.Empty),
+                HasOptionalString("comment", string.Empty).
+                CanHaveUnknownProperties(),
 
             new BlockData("trigger").
-                HasRequiredIntegerNumber("x").
-                HasRequiredIntegerNumber("y").
-                HasRequiredIntegerNumber("z").
+                HasRequiredInteger("x").
+                HasRequiredInteger("y").
+                HasRequiredInteger("z").
                 HasRequiredString("action").
-                HasOptionalIntegerNumber("arg0",0).
-                HasOptionalIntegerNumber("arg1",0).
-                HasOptionalIntegerNumber("arg2",0).
-                HasOptionalIntegerNumber("arg3",0).
-                HasOptionalIntegerNumber("arg4",0).
+                HasOptionalInteger("arg0",0).
+                HasOptionalInteger("arg1",0).
+                HasOptionalInteger("arg2",0).
+                HasOptionalInteger("arg3",0).
+                HasOptionalInteger("arg4",0).
                 HasOptionalBoolean("activateEast", true).
                 HasOptionalBoolean("activateNorth", true).
                 HasOptionalBoolean("activateWest", true).
@@ -87,17 +90,20 @@ namespace Tiledriver.Metadata
                 HasOptionalBoolean("monsterUse", false).
                 HasOptionalBoolean("repeatable", false).
                 HasOptionalBoolean("secret", false).
-                HasOptionalString("comment", string.Empty),
+                HasOptionalString("comment", string.Empty).
+                CanHaveUnknownProperties(),
 
             new BlockData("map").
                 DisableNormalReading().
                 HasRequiredString("nameSpace", uwmfName:"namespace").
-                HasRequiredIntegerNumber("tileSize").
+                HasRequiredInteger("tileSize").
                 HasRequiredString("name").
-                HasRequiredIntegerNumber("width").
-                HasRequiredIntegerNumber("height").
+                HasRequiredInteger("width").
+                HasRequiredInteger("height").
                 HasOptionalString("comment", string.Empty).
-                HasSubBlocks("tile", "sector", "zone", "plane", "planeMap", "thing", "trigger").
+                HasSubBlockLists("tile", "sector", "zone", "plane", "planeMap", "thing", "trigger").
+                CanHaveUnknownProperties().
+                CanHaveUnknownBlocks().
                 IsTopLevel(),
         };
     }

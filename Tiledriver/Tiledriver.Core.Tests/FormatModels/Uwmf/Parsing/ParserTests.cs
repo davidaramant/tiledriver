@@ -18,7 +18,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
         {
             var map = new Map
             {
-                Namespace = "1",
+                NameSpace = "1",
                 Width = 2,
                 Height = 3,
                 TileSize = 4,

@@ -43,12 +43,12 @@ OpenParen();
 
         private static void WritePropertyAssignments(BlockData blockData, IndentedWriter output, string assignmentHolder, string owner)
         {
-            foreach (var property in blockData.Properties)
+            foreach (var property in blockData.Properties.Where(p => p.ScalarField))
             {
                 var level = property.IsRequired ? "Required" : "Optional";
 
                 output.Line(
-                    $"Set{level}{property.TypeName}(" +
+                    $"Set{level}{property.UwmfTypeMethod}(" +
                     $"{assignmentHolder}.GetValueFor(\"{property.PascalCaseName}\"), " +
                     $"value => {owner}.{property.PascalCaseName} = value, " +
                     $"\"{blockData.PascalCaseName}\", " +

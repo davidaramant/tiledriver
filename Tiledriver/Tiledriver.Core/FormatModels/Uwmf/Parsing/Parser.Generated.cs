@@ -10,7 +10,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
     {
         static partial void SetGlobalAssignments(Map map, UwmfSyntaxTree tree)
         {
-            SetRequiredString(tree.GetValueFor("Namespace"), value => map.Namespace = value, "Map", "Namespace");
+            SetRequiredString(tree.GetValueFor("NameSpace"), value => map.NameSpace = value, "Map", "NameSpace");
             SetRequiredIntegerNumber(tree.GetValueFor("TileSize"), value => map.TileSize = value, "Map", "TileSize");
             SetRequiredString(tree.GetValueFor("Name"), value => map.Name = value, "Map", "Name");
             SetRequiredIntegerNumber(tree.GetValueFor("Width"), value => map.Width = value, "Map", "Width");

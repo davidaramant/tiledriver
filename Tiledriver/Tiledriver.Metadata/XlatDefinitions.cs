@@ -17,76 +17,33 @@ namespace Tiledriver.Metadata
                 DisableNormalReading().
                 HasOptionalBoolean("fillzone",false).
                 HasRequiredString("action").
-                HasSubBlocks("trigger"),
-
-            new BlockData("tile").
-                HasRequiredString("textureEast").
-                HasRequiredString("textureNorth").
-                HasRequiredString("textureWest").
-                HasRequiredString("textureSouth").
-                HasOptionalBoolean("blockingEast", true).
-                HasOptionalBoolean("blockingNorth", true).
-                HasOptionalBoolean("blockingWest", true).
-                HasOptionalBoolean("blockingSouth", true).
-                HasOptionalBoolean("offsetVertical", false).
-                HasOptionalBoolean("offsetHorizontal", false).
-                HasOptionalBoolean("dontOverlay", false).
-                HasOptionalIntegerNumber("mapped", 0).
-                HasOptionalString("soundSequence", string.Empty).
-                HasOptionalString("textureOverhead", string.Empty).
-                HasOptionalString("comment", string.Empty),
-
-            new BlockData("trigger").
-                HasRequiredString("action").
-                HasOptionalIntegerNumber("arg0",0).
-                HasOptionalIntegerNumber("arg1",0).
-                HasOptionalIntegerNumber("arg2",0).
-                HasOptionalIntegerNumber("arg3",0).
-                HasOptionalIntegerNumber("arg4",0).
-                HasOptionalBoolean("activateEast", true).
-                HasOptionalBoolean("activateNorth", true).
-                HasOptionalBoolean("activateWest", true).
-                HasOptionalBoolean("activateSouth", true).
-                HasOptionalBoolean("playerCross", false).
-                HasOptionalBoolean("playerUse", false).
-                HasOptionalBoolean("monsterUse", false).
-                HasOptionalBoolean("repeatable", false).
-                HasOptionalBoolean("secret", false).
-                HasOptionalString("comment", string.Empty),
-
-            new BlockData("zone").
-                HasOptionalString("comment", string.Empty),
-
-            new BlockData("elevator"),
+                HasSubBlock("trigger"),
 
             new BlockData("thingDefinition").
                 DisableNormalReading().
-                HasRequiredIntegerNumber("oldnum").
+                HasRequiredUshort("oldnum").
                 HasRequiredString("actor").
-                HasRequiredIntegerNumber("angles").
+                HasRequiredInteger("angles").
                 HasRequiredBoolean("holowall").
                 HasRequiredBoolean("pathing").
-                HasRequiredIntegerNumber("minskill"),
+                HasRequiredInteger("minskill"),
 
-            new BlockData("ceiling").
+            new BlockData("tiles",className:"TileMappings").
                 DisableNormalReading().
-                HasRequiredString("flat"),
-
-            new BlockData("floor").
-                DisableNormalReading().
-                HasRequiredString("flat"),
-
-            new BlockData("tiles").
-                HasSubBlocks("tile", "trigger", "zone" ).
+                HasMappedSubBlocks("ambushModzone", "changeTriggerModzone", "tile", "trigger", "zone" ).
                 IsTopLevel(),
 
-            new BlockData("things").
-                HasSubBlocks("elevator", "trigger", "thingDefinition").
+            new BlockData("things",className:"ThingMappings").
+                DisableNormalReading().
+                HasRequiredUshortSet("elevator").
+                HasMappedSubBlocks("trigger").
+                HasSubBlockLists("thingDefinition").
                 IsTopLevel(),
 
-            new BlockData("flats").
+            new BlockData("flats",className:"FlatMappings").
                 DisableNormalReading().
-                HasSubBlocks("ceiling", "floor").
+                HasRequiredStringList("ceiling").
+                HasRequiredStringList("floor").
                 IsTopLevel(),
         };
     }

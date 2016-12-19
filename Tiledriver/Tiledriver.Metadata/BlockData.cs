@@ -9,23 +9,54 @@ namespace Tiledriver.Metadata
     public sealed class BlockData : NamedItem
     {
         private readonly List<PropertyData> _properties = new List<PropertyData>();
-        private readonly List<NamedItem> _subBlocks = new List<NamedItem>();
 
         public IEnumerable<PropertyData> Properties => _properties;
-        public IEnumerable<NamedItem> SubBlocks => _subBlocks;
         public bool IsSubBlock { get; private set; } = true;
         public bool NormalWriting { get; private set; } = true;
         public bool NormalReading { get; private set; } = true;
-        public bool CanHaveUnknownProperties { get; private set; } = true;
-        public bool CanHaveUnknownBlocks => !IsSubBlock;
+        public bool SupportsUnknownProperties { get; private set; } = false;
+        public bool SupportsUnknownBlocks { get; private set; } = false;
+
+        public IEnumerable<PropertyData> OrderedProperties()
+        {
+            return Properties.Where(p => p.IsRequired).Concat(Properties.Where(p => !p.IsRequired));
+        }
 
         public BlockData(string name) : base(name,name)
         {
         }
 
-        public BlockData HasSubBlocks(params string[] names)
+        public BlockData(string xlatName, string className) : base(xlatName, className)
         {
-            _subBlocks.AddRange(names.Select(_ => new NamedItem(_,_)));
+        }
+
+        public BlockData HasSubBlockLists(params string[] names)
+        {
+            _properties.AddRange(names.Select(name=>new PropertyData(name, name, PropertyType.BlockList, defaultValue: null)));
+            return this;
+        }
+
+        public BlockData HasRequiredUshortSet(string name)
+        {
+            _properties.Add(new PropertyData(name, name, PropertyType.UshortSet, defaultValue: null));
+            return this;
+        }
+
+        public BlockData HasRequiredStringList(string name)
+        {
+            _properties.Add(new PropertyData(name, name, PropertyType.StringList, defaultValue: null));
+            return this;
+        }
+
+        public BlockData HasMappedSubBlocks(params string[] names)
+        {
+            _properties.AddRange(names.Select(name => new PropertyData(name, name, PropertyType.MappedBlockList, defaultValue: null)));
+            return this;
+        }
+
+        public BlockData HasSubBlock(string name)
+        {
+            _properties.Add(new PropertyData(name, name, PropertyType.Block, defaultValue: null));
             return this;
         }
 
@@ -47,21 +78,35 @@ namespace Tiledriver.Metadata
             return this;
         }
 
-        public BlockData CannotHaveUnknownProperties()
+        public BlockData CanHaveUnknownProperties()
         {
-            CanHaveUnknownProperties = false;
+            SupportsUnknownProperties = true;
+            _properties.Add(new PropertyData("unknownProperties", "unknownProperties", PropertyType.UnknownProperties, defaultValue: "null"));
             return this;
         }
 
-        public BlockData HasRequiredIntegerNumber(string name)
+        public BlockData CanHaveUnknownBlocks()
         {
-            _properties.Add(new PropertyData(name, name, PropertyType.IntegerNumber, defaultValue: null));
+            SupportsUnknownBlocks = true;
+            _properties.Add(new PropertyData("unknownBlocks", "unknownBlocks", PropertyType.UnknownBlocks, defaultValue: "null"));
             return this;
         }
 
-        public BlockData HasRequiredFloatingPointNumber(string name)
+        public BlockData HasRequiredInteger(string name)
         {
-            _properties.Add(new PropertyData(name, name, PropertyType.FloatingPointNumber, defaultValue: null));
+            _properties.Add(new PropertyData(name, name, PropertyType.Integer, defaultValue: null));
+            return this;
+        }
+
+        public BlockData HasRequiredUshort(string name)
+        {
+            _properties.Add(new PropertyData(name, name, PropertyType.Ushort, defaultValue: null));
+            return this;
+        }
+
+        public BlockData HasRequiredDouble(string name)
+        {
+            _properties.Add(new PropertyData(name, name, PropertyType.Double, defaultValue: null));
             return this;
         }
 
@@ -78,15 +123,15 @@ namespace Tiledriver.Metadata
             return this;
         }
 
-        public BlockData HasOptionalIntegerNumber(string name, int defaultValue)
+        public BlockData HasOptionalInteger(string name, int defaultValue)
         {
-            _properties.Add(new PropertyData(name, name, PropertyType.IntegerNumber, defaultValue: defaultValue));
+            _properties.Add(new PropertyData(name, name, PropertyType.Integer, defaultValue: defaultValue));
             return this;
         }
 
-        public BlockData HasOptionalFloatingPointNumber(string name, double defaultValue)
+        public BlockData HasOptionalDouble(string name, double defaultValue)
         {
-            _properties.Add(new PropertyData(name, name, PropertyType.FloatingPointNumber, defaultValue: defaultValue));
+            _properties.Add(new PropertyData(name, name, PropertyType.Double, defaultValue: defaultValue));
             return this;
         }
 

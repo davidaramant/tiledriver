@@ -1,12 +1,12 @@
 ﻿// Copyright (c) 2016, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using System;
 using System.Linq;
+using Functional.Maybe;
 
 namespace Tiledriver.Metadata
 {
-    public static class UwmfModelGenerator
+    public static class XlatModelGenerator
     {
         public static string GetText()
         {
@@ -16,27 +16,27 @@ namespace Tiledriver.Metadata
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Tiledriver.Core.Extensions;
+using Tiledriver.Core.FormatModels.Uwmf;
 
-namespace Tiledriver.Core.FormatModels.Uwmf");
-
+namespace Tiledriver.Core.FormatModels.Xlat");
             output.OpenParen();
-            foreach (var block in UwmfDefinitions.Blocks)
+
+            // TODO: There needs to be some better stuff in BlockData to more easily expose all the 8 billion properties here
+
+            foreach (var block in XlatDefinitions.Blocks)
             {
-                var normalWriteInheritance = block.NormalWriting ? ", IWriteableUwmfBlock" : String.Empty;
-                output.Line($"public sealed partial class {block.PascalCaseName} : BaseUwmfBlock{normalWriteInheritance}");
+                output.Line($"public sealed partial class {block.PascalCaseName}");
                 output.OpenParen();
 
                 WriteProperties(block, output);
                 WriteConstructors(output, block);
-                WriteWriteToMethod(block, output);
                 WriteSemanticValidityMethods(output, block);
 
                 output.CloseParen();
                 output.Line();
             } // end classes
+
             output.CloseParen(); // End namespace
 
             return output.GetString();
@@ -86,58 +86,6 @@ namespace Tiledriver.Core.FormatModels.Uwmf");
 
             sb.Line(@"AdditionalSemanticChecks();");
             sb.CloseParen();
-        }
-
-        private static void WriteWriteToMethod(BlockData blockData, IndentedWriter sb)
-        {
-            if (!blockData.NormalWriting) return;
-
-            sb.Line(@"public Stream WriteTo(Stream stream)").
-                OpenParen().
-                Line("CheckSemanticValidity();");
-
-            var indent = blockData.IsSubBlock ? "true" : "false";
-
-            if (blockData.IsSubBlock)
-            {
-                sb.Line($"WriteLine(stream, \"{blockData.UwmfName}\");");
-                sb.Line("WriteLine(stream, \"{\");");
-            }
-
-            // WRITE ALL REQUIRED PROPERTIES
-            foreach (var property in blockData.Properties.Where(_ => _.ScalarField && _.IsRequired))
-            {
-                sb.Line(
-                    $"WriteProperty(stream, \"{property.UwmfName}\", {property.FieldName}, indent: {indent});");
-            }
-            // WRITE OPTIONAL PROPERTIES
-            foreach (var property in blockData.Properties.Where(_ => _.ScalarField && !_.IsRequired))
-            {
-                sb.Line(
-                    $"if ({property.PascalCaseName} != {property.DefaultAsString}) WriteProperty(stream, \"{property.UwmfName}\", {property.PascalCaseName}, indent: {indent});");
-            }
-
-            // WRITE UNKNOWN PROPERTES
-            if (blockData.SupportsUnknownProperties)
-            {
-                sb.Line($"foreach (var property in UnknownProperties)").
-                    OpenParen().
-                    Line($"WritePropertyVerbatim(stream, (string)property.Name, property.Value, indent: {indent});").
-                    CloseParen();
-            }
-
-            // WRITE SUBBLOCKS
-            foreach (var subBlock in blockData.Properties.Where(p => p.IsUwmfSubBlockList))
-            {
-                sb.Line($"WriteBlocks(stream, {subBlock.PropertyName} );");
-            }
-
-            if (blockData.IsSubBlock)
-            {
-                sb.Line("WriteLine(stream, \"}\");");
-            }
-            sb.Line("return stream;").
-                CloseParen();
         }
 
         private static void WriteSemanticValidityMethods(IndentedWriter output, BlockData blockData)

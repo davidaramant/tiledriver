@@ -7,18 +7,18 @@ namespace Tiledriver.Metadata
 {
     public class NamedItem
     {
-        public NamedItem(string uwmfName, string name)
+        public NamedItem(string uwmfName, string className)
         {
             UwmfName = uwmfName;
-            CamelCaseName = name;
+            CamelCaseName = className;
         }
 
         public string UwmfName { get; }
         public string CamelCaseName { get; }
-        public string PluralCamelCaseName => UwmfName + "s";
-        public string PascalCaseName => Char.ToUpperInvariant(UwmfName[0]) + UwmfName.Substring(1);
+        public string PluralCamelCaseName => CamelCaseName + "s";
+        public string PascalCaseName => Char.ToUpperInvariant(CamelCaseName[0]) + CamelCaseName.Substring(1);
         public string PluralPascalCaseName => PascalCaseName + "s";
-        public string FieldName => "_" + UwmfName;
-        public string LowerInvariantName => UwmfName.ToLowerInvariant();
+        public string FieldName => "_" + CamelCaseName;
+        public string LowerInvariantName => CamelCaseName.ToLowerInvariant();
     }
 }

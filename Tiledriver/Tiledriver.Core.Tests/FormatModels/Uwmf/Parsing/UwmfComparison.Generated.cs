@@ -70,10 +70,16 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
                 actual.Comment,
                 Is.EqualTo( expected.Comment ),
                 "Found difference in Tile Comment" );
-            AssertEqual(
-                actual.UnknownProperties,
-                expected.UnknownProperties,
-                "Tile" );
+            Assert.That(
+                actual.UnknownProperties.Count,
+                Is.EqualTo( expected.UnknownProperties.Count ),
+                "Found unequal number of Tile UnknownProperties" );
+            for( int i = 0; i < expected.UnknownProperties.Count; i++ )
+            {
+                AssertEqual( 
+                    actual.UnknownProperties[i],
+                    expected.UnknownProperties[i] );
+            }
         }
         public static void AssertEqual( Sector actual, Sector expected )
         {
@@ -89,10 +95,16 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
                 actual.Comment,
                 Is.EqualTo( expected.Comment ),
                 "Found difference in Sector Comment" );
-            AssertEqual(
-                actual.UnknownProperties,
-                expected.UnknownProperties,
-                "Sector" );
+            Assert.That(
+                actual.UnknownProperties.Count,
+                Is.EqualTo( expected.UnknownProperties.Count ),
+                "Found unequal number of Sector UnknownProperties" );
+            for( int i = 0; i < expected.UnknownProperties.Count; i++ )
+            {
+                AssertEqual( 
+                    actual.UnknownProperties[i],
+                    expected.UnknownProperties[i] );
+            }
         }
         public static void AssertEqual( Zone actual, Zone expected )
         {
@@ -100,10 +112,16 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
                 actual.Comment,
                 Is.EqualTo( expected.Comment ),
                 "Found difference in Zone Comment" );
-            AssertEqual(
-                actual.UnknownProperties,
-                expected.UnknownProperties,
-                "Zone" );
+            Assert.That(
+                actual.UnknownProperties.Count,
+                Is.EqualTo( expected.UnknownProperties.Count ),
+                "Found unequal number of Zone UnknownProperties" );
+            for( int i = 0; i < expected.UnknownProperties.Count; i++ )
+            {
+                AssertEqual( 
+                    actual.UnknownProperties[i],
+                    expected.UnknownProperties[i] );
+            }
         }
         public static void AssertEqual( Plane actual, Plane expected )
         {
@@ -115,10 +133,16 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
                 actual.Comment,
                 Is.EqualTo( expected.Comment ),
                 "Found difference in Plane Comment" );
-            AssertEqual(
-                actual.UnknownProperties,
-                expected.UnknownProperties,
-                "Plane" );
+            Assert.That(
+                actual.UnknownProperties.Count,
+                Is.EqualTo( expected.UnknownProperties.Count ),
+                "Found unequal number of Plane UnknownProperties" );
+            for( int i = 0; i < expected.UnknownProperties.Count; i++ )
+            {
+                AssertEqual( 
+                    actual.UnknownProperties[i],
+                    expected.UnknownProperties[i] );
+            }
         }
         public static void AssertEqual( TileSpace actual, TileSpace expected )
         {
@@ -206,10 +230,16 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
                 actual.Comment,
                 Is.EqualTo( expected.Comment ),
                 "Found difference in Thing Comment" );
-            AssertEqual(
-                actual.UnknownProperties,
-                expected.UnknownProperties,
-                "Thing" );
+            Assert.That(
+                actual.UnknownProperties.Count,
+                Is.EqualTo( expected.UnknownProperties.Count ),
+                "Found unequal number of Thing UnknownProperties" );
+            for( int i = 0; i < expected.UnknownProperties.Count; i++ )
+            {
+                AssertEqual( 
+                    actual.UnknownProperties[i],
+                    expected.UnknownProperties[i] );
+            }
         }
         public static void AssertEqual( Trigger actual, Trigger expected )
         {
@@ -289,17 +319,23 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
                 actual.Comment,
                 Is.EqualTo( expected.Comment ),
                 "Found difference in Trigger Comment" );
-            AssertEqual(
-                actual.UnknownProperties,
-                expected.UnknownProperties,
-                "Trigger" );
+            Assert.That(
+                actual.UnknownProperties.Count,
+                Is.EqualTo( expected.UnknownProperties.Count ),
+                "Found unequal number of Trigger UnknownProperties" );
+            for( int i = 0; i < expected.UnknownProperties.Count; i++ )
+            {
+                AssertEqual( 
+                    actual.UnknownProperties[i],
+                    expected.UnknownProperties[i] );
+            }
         }
         public static void AssertEqual( Map actual, Map expected )
         {
             Assert.That(
-                actual.Namespace,
-                Is.EqualTo( expected.Namespace ),
-                "Found difference in Map Namespace" );
+                actual.NameSpace,
+                Is.EqualTo( expected.NameSpace ),
+                "Found difference in Map NameSpace" );
             Assert.That(
                 actual.TileSize,
                 Is.EqualTo( expected.TileSize ),
@@ -320,10 +356,6 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
                 actual.Comment,
                 Is.EqualTo( expected.Comment ),
                 "Found difference in Map Comment" );
-            AssertEqual(
-                actual.UnknownProperties,
-                expected.UnknownProperties,
-                "Map" );
             Assert.That(
                 actual.Tiles.Count,
                 Is.EqualTo( expected.Tiles.Count ),
@@ -393,6 +425,16 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
                 AssertEqual( 
                     actual.Triggers[i],
                     expected.Triggers[i] );
+            }
+            Assert.That(
+                actual.UnknownProperties.Count,
+                Is.EqualTo( expected.UnknownProperties.Count ),
+                "Found unequal number of Map UnknownProperties" );
+            for( int i = 0; i < expected.UnknownProperties.Count; i++ )
+            {
+                AssertEqual( 
+                    actual.UnknownProperties[i],
+                    expected.UnknownProperties[i] );
             }
             Assert.That(
                 actual.UnknownBlocks.Count,
