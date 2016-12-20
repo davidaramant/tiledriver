@@ -67,12 +67,14 @@
     <Compile Include="FormatModels\GameMaps\PlaneMetadata.cs" />
     <Compile Include="FormatModels\GameMaps\Expander.cs" />
     <Compile Include="FormatModels\Xlat\InvalidXlatException.cs" />
+    <Compile Include="FormatModels\Xlat\MapTranslator.cs" />
     <Compile Include="FormatModels\Xlat\Model.Generated.cs">
       <DependentUpon>Model.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="FormatModels\Xlat\Parsing\XlatLexer.cs" />
+    <Compile Include="FormatModels\Xlat\Parsing\XlatParser.cs" />
     <Compile Include="LevelGeometry\IRegion.cs" />
     <Compile Include="LevelGeometry\MapTile.cs" />
     <Compile Include="LevelGeometry\SparseMap.cs" />
@@ -90,7 +92,7 @@
     <Compile Include="FormatModels\Common\ILexer.cs" />
     <Compile Include="FormatModels\Uwmf\Parsing\Syntax\IHaveAssignments.cs" />
     <Compile Include="FormatModels\Uwmf\Parsing\Syntax\SyntaxAnalyzer.cs" />
-    <Compile Include="FormatModels\Uwmf\Parsing\Syntax\SyntaxExtensions.cs" />
+    <Compile Include="FormatModels\Common\SyntaxExtensions.cs" />
     <Compile Include="FormatModels\Uwmf\Parsing\UwmfLexer.cs" />
     <Compile Include="FormatModels\Uwmf\Parsing\Parser.cs" />
     <Compile Include="FormatModels\Uwmf\Parsing\Parser.Generated.cs">

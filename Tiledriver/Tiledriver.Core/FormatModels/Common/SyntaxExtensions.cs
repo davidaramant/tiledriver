@@ -2,9 +2,8 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using Functional.Maybe;
-using Tiledriver.Core.FormatModels.Common;
 
-namespace Tiledriver.Core.FormatModels.Uwmf.Parsing.Syntax
+namespace Tiledriver.Core.FormatModels.Common
 {
     public static class SyntaxExtensions
     {
@@ -16,6 +15,16 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing.Syntax
                 TokenType.Double,
                 TokenType.Integer,
                 TokenType.String);
+        }
+
+        public static Identifier MustReadIdentifier(this ILexer lexer)
+        {
+            return new Identifier((string)lexer.MustReadTokenOfTypes(TokenType.Identifier).Value);
+        }
+
+        public static ushort MustReadUshort(this ILexer lexer)
+        {
+            return (ushort)lexer.MustReadTokenOfTypes(TokenType.Integer).Value;
         }
 
         public static Maybe<Identifier> TryAsIdentifier(this Token token)

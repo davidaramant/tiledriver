@@ -16,13 +16,12 @@ namespace Tiledriver.Metadata
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System.Collections.Generic;
+using System.Linq;
 using Tiledriver.Core.Extensions;
 using Tiledriver.Core.FormatModels.Uwmf;
 
 namespace Tiledriver.Core.FormatModels.Xlat");
             output.OpenParen();
-
-            // TODO: There needs to be some better stuff in BlockData to more easily expose all the 8 billion properties here
 
             foreach (var block in XlatDefinitions.Blocks)
             {

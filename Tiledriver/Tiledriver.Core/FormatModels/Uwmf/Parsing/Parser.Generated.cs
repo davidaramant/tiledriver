@@ -35,7 +35,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
                 if (block.Name == triggerName) map.Triggers.Add(ParseTrigger(block));
             }
         }
-        private static Tile ParseTile(Block block)
+        public static Tile ParseTile(Block block)
         {
             var parsedBlock = new Tile();
             SetRequiredString(block.GetValueFor("TextureEast"), value => parsedBlock.TextureEast = value, "Tile", "TextureEast");
@@ -55,7 +55,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
             SetOptionalString(block.GetValueFor("Comment"), value => parsedBlock.Comment = value, "Tile", "Comment");
             return parsedBlock;
         }
-        private static Sector ParseSector(Block block)
+        public static Sector ParseSector(Block block)
         {
             var parsedBlock = new Sector();
             SetRequiredString(block.GetValueFor("TextureCeiling"), value => parsedBlock.TextureCeiling = value, "Sector", "TextureCeiling");
@@ -63,20 +63,20 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
             SetOptionalString(block.GetValueFor("Comment"), value => parsedBlock.Comment = value, "Sector", "Comment");
             return parsedBlock;
         }
-        private static Zone ParseZone(Block block)
+        public static Zone ParseZone(Block block)
         {
             var parsedBlock = new Zone();
             SetOptionalString(block.GetValueFor("Comment"), value => parsedBlock.Comment = value, "Zone", "Comment");
             return parsedBlock;
         }
-        private static Plane ParsePlane(Block block)
+        public static Plane ParsePlane(Block block)
         {
             var parsedBlock = new Plane();
             SetRequiredIntegerNumber(block.GetValueFor("Depth"), value => parsedBlock.Depth = value, "Plane", "Depth");
             SetOptionalString(block.GetValueFor("Comment"), value => parsedBlock.Comment = value, "Plane", "Comment");
             return parsedBlock;
         }
-        private static Thing ParseThing(Block block)
+        public static Thing ParseThing(Block block)
         {
             var parsedBlock = new Thing();
             SetRequiredString(block.GetValueFor("Type"), value => parsedBlock.Type = value, "Thing", "Type");
@@ -94,7 +94,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
             SetOptionalString(block.GetValueFor("Comment"), value => parsedBlock.Comment = value, "Thing", "Comment");
             return parsedBlock;
         }
-        private static Trigger ParseTrigger(Block block)
+        public static Trigger ParseTrigger(Block block)
         {
             var parsedBlock = new Trigger();
             SetRequiredIntegerNumber(block.GetValueFor("X"), value => parsedBlock.X = value, "Trigger", "X");

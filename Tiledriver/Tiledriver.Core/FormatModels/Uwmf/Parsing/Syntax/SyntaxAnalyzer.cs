@@ -92,7 +92,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing.Syntax
             }
         }
 
-        private static Block ParseBlock(Identifier blockName, Assignment firstAssigment, ILexer lexer)
+        public static Block ParseBlock(Identifier blockName, Assignment firstAssigment, ILexer lexer)
         {
             var assignments = new List<Assignment> { firstAssigment };
 
@@ -112,7 +112,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing.Syntax
             }
         }
 
-        private static Assignment ParseAssignment(Identifier name, ILexer lexer)
+        public static Assignment ParseAssignment(Identifier name, ILexer lexer)
         {
             lexer.MustReadTokenOfTypes(TokenType.Equal);
 
