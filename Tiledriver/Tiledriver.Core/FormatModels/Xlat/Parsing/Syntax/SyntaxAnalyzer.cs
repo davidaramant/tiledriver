@@ -22,6 +22,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
                 var name = idToken.TryAsIdentifier().Value;
 
                 // based on current "enable lightlevels" versus blocks
+                // TODO: include statements
                 var nextToken = lexer.MustReadTokenOfTypes(TokenType.Identifier, TokenType.OpenParen);
 
                 switch (nextToken.Type)

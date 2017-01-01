@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Functional.Maybe;
 using NUnit.Framework;
 using Tiledriver.Core.FormatModels.Common;
@@ -12,6 +13,8 @@ using Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax;
 
 namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
 {
+    // TODO: Include statements
+
     [TestFixture]
     public sealed class SyntaxAnalyzerTests
     {
@@ -222,6 +225,18 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                     new Assignment(new Identifier("cat"), Token.String("meow") ),
                     new Assignment(new Identifier("cow"), Token.BooleanFalse )
                 });
+        }
+
+        [Test]
+        public void ShouldAnalyzeRealXlat()
+        {
+            using (var stream = File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "Xlat", "Parsing", "wolf3d.txt")))
+            using (var textReader = new StreamReader(stream, Encoding.ASCII))
+            {
+                var lexer = new XlatLexer(textReader);
+                var syntaxAnalzer = new SyntaxAnalyzer();
+                var result = syntaxAnalzer.Analyze(lexer);
+            }
         }
 
         private static Expression[] Analyze(string input)
