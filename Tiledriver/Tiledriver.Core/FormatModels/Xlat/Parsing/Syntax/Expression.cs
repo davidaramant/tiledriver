@@ -87,9 +87,9 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
                 subExpressions: subExpressions);
         }
 
-        public IEnumerator<Assignment> GetAssignments()
+        public IEnumerable<Assignment> GetAssignments()
         {
-            return _properties.Select(pair => new Assignment(pair.Key, pair.Value)).GetEnumerator();
+            return _properties.Select(pair => new Assignment(pair.Key, pair.Value));
         }
 
         public bool HasAssignments => _properties.Any();
