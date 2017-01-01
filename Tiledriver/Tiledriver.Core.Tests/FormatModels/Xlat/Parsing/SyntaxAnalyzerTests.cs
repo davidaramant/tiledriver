@@ -41,6 +41,43 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 numberOfSubExpressions: 0);
         }
 
+        [Test]
+        public void ShouldBlockWithSimpleExpression()
+        {
+            var result = Analyze(@"block { thing with stuff; }");
+
+            Assert.That(result, Has.Length.EqualTo(1));
+            var expression = result.First();
+
+            AssertExpression(expression,
+                name: "block",
+                numberOfSubExpressions: 1);
+
+            var subExp = expression.SubExpressions.First();
+            AssertExpression(subExp,
+                name: "thing",
+                qualifiers: new[] { "with", "stuff" });
+        }
+
+        [Test]
+        public void ShouldBlockWithSimpleExpressionWithOldNum()
+        {
+            var result = Analyze(@"block { thing 44 with stuff; }");
+
+            Assert.That(result, Has.Length.EqualTo(1));
+            var expression = result.First();
+
+            AssertExpression(expression,
+                name: "block",
+                numberOfSubExpressions: 1);
+
+            var subExp = expression.SubExpressions.First();
+            AssertExpression(subExp,
+                name: "thing",
+                oldnum: 44,
+                qualifiers: new[] { "with", "stuff" });
+        }
+
         private static Expression[] Analyze(string input)
         {
             var syntaxAnalzer = new SyntaxAnalyzer();

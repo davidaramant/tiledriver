@@ -31,13 +31,13 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
         }
 
         public static Expression Simple(
-            Maybe<Identifier> name,
+            Identifier name,
             Maybe<ushort> oldnum,
             IEnumerable<Identifier> qualifiers)
         {
             return new Expression(
-                name: name,
-                oldnum: oldnum,
+                name: name.ToMaybe(),
+                oldnum: oldnum, 
                 qualifiers: qualifiers,
                 properties: Enumerable.Empty<KeyValuePair<Identifier, Token>>(),
                 values: Enumerable.Empty<Token>(),
@@ -75,11 +75,11 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
         }
 
         public static Expression Block(
-            Maybe<Identifier> name,
+            Identifier name,
             IEnumerable<Expression> subExpressions)
         {
             return new Expression(
-                name: name,
+                name: name.ToMaybe(),
                 oldnum: Maybe<ushort>.Nothing, 
                 qualifiers: Enumerable.Empty<Identifier>(),
                 properties: Enumerable.Empty<KeyValuePair<Identifier, Token>>(),

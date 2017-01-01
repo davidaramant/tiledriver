@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2016, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
+using System.CodeDom;
 using Functional.Maybe;
 
 namespace Tiledriver.Core.FormatModels.Common
@@ -52,6 +53,16 @@ namespace Tiledriver.Core.FormatModels.Common
                 return ((int)token.Value).ToMaybe();
             }
             return Maybe<int>.Nothing;
+        }
+
+        public static Maybe<ushort> AsUshort(this Token token)
+        {
+            var intToken = token.TryAsInt();
+            if (intToken.HasValue)
+            {
+                return token.TryAsInt().Select(num => (ushort)num);
+            }
+            throw new ParsingException("Expected ushort.");
         }
 
         public static Maybe<double> TryAsDouble(this Token token)
