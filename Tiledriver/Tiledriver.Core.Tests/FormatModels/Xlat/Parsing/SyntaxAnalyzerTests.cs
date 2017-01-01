@@ -132,6 +132,98 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 values: new[] { Token.String("string"), Token.String("string2") });
         }
 
+        [Test]
+        public void ShouldParseBlockWithValueLists()
+        {
+            var result = Analyze(
+                "block { " +
+                "	{19,  $Player1Start,     4, 0, 0}" +
+                "	{108, Guard,             4, HOLOWALL, 1}" +
+                "	{112, Guard,             4, PATHING|HOLOWALL, 1}" +
+                "}");
+
+            Assert.That(result, Has.Length.EqualTo(1));
+            var expression = result.First();
+
+            AssertExpression(expression,
+                name: "block",
+                numberOfSubExpressions: 3);
+
+            AssertExpression(expression.SubExpressions.ElementAt(0),
+                values: new[]
+                {
+                    Token.Integer(19), Token.Comma,
+                    Token.Meta, Token.Identifier("Player1Start"), Token.Comma,
+                    Token.Integer(4), Token.Comma,
+                    Token.Integer(0), Token.Comma,
+                    Token.Integer(0)
+                });
+
+            AssertExpression(expression.SubExpressions.ElementAt(1),
+                values: new[]
+                {
+                    Token.Integer(108), Token.Comma,
+                    Token.Identifier("Guard"), Token.Comma,
+                    Token.Integer(4), Token.Comma,
+                    Token.Identifier("HOLOWALL"), Token.Comma,
+                    Token.Integer(1)
+                });
+
+            AssertExpression(expression.SubExpressions.ElementAt(2),
+                values: new[]
+                {
+                    Token.Integer(112), Token.Comma,
+                    Token.Identifier("Guard"), Token.Comma,
+                    Token.Integer(4), Token.Comma,
+                    Token.Identifier("PATHING"), Token.Pipe, Token.Identifier("HOLOWALL"), Token.Comma,
+                    Token.Integer(1)
+                });
+        }
+        
+        [Test]
+        public void ShouldParseBlockWithAssignment()
+        {
+            var result = Analyze("block { thing { dog = 1; } }");
+
+            Assert.That(result, Has.Length.EqualTo(1));
+            var expression = result.First();
+
+            AssertExpression(expression,
+                name: "block",
+                numberOfSubExpressions: 1);
+
+            var subExp = expression.SubExpressions.First();
+            AssertExpression(subExp,
+                name: "thing",
+                properties: new []
+                {
+                    new Assignment(new Identifier("dog"), Token.Integer(1) )
+                });
+        }
+
+        [Test]
+        public void ShouldParseBlockWithAssignments()
+        {
+            var result = Analyze("block { thing { dog = 1; cat = \"meow\"; cow = false; } }");
+
+            Assert.That(result, Has.Length.EqualTo(1));
+            var expression = result.First();
+
+            AssertExpression(expression,
+                name: "block",
+                numberOfSubExpressions: 1);
+
+            var subExp = expression.SubExpressions.First();
+            AssertExpression(subExp,
+                name: "thing",
+                properties: new []
+                {
+                    new Assignment(new Identifier("dog"), Token.Integer(1) ),
+                    new Assignment(new Identifier("cat"), Token.String("meow") ),
+                    new Assignment(new Identifier("cow"), Token.BooleanFalse )
+                });
+        }
+
         private static Expression[] Analyze(string input)
         {
             var syntaxAnalzer = new SyntaxAnalyzer();
@@ -143,7 +235,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
             string name = null,
             short? oldnum = null,
             IEnumerable<string> qualifiers = null,
-            IEnumerable<KeyValuePair<Identifier, Token>> properties = null,
+            IEnumerable<Assignment> properties = null,
             IEnumerable<Token> values = null,
             int numberOfSubExpressions = 0)
         {
@@ -172,13 +264,13 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
             Assert.That(expression.Qualifiers.ToArray(), Is.EquivalentTo(expectedQualifiers), "Qualifers were not as expected.");
 
             var expectedProperties =
-                (properties ?? Enumerable.Empty<KeyValuePair<Identifier, Token>>()).ToArray();
+                (properties ?? Enumerable.Empty<Assignment>()).ToArray();
             Assert.That(expression.GetAssignments().Count(), Is.EqualTo(expectedProperties.Length), "Incorrect number of assignments.");
 
             foreach (var expectedProperty in expectedProperties)
             {
-                Assert.That(expression.GetValueFor(expectedProperty.Key), Is.EqualTo(expectedProperty.Value.ToMaybe()),
-                    $"Incorrect value for {expectedProperty.Key}");
+                Assert.That(expression.GetValueFor(expectedProperty.Name), Is.EqualTo(expectedProperty.Value.ToMaybe()),
+                    $"Incorrect value for {expectedProperty.Name}");
             }
 
             var expectedValues = (values ?? Enumerable.Empty<Token>()).ToArray();

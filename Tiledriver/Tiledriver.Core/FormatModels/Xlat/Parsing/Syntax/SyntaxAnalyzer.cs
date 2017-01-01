@@ -4,7 +4,6 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Net;
 using Functional.Maybe;
 using Tiledriver.Core.FormatModels.Common;
 
@@ -162,24 +161,33 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
             IEnumerable<Identifier> qualifiers,
             Identifier identifierOfFirstProperty)
         {
-            throw new NotImplementedException();
+            var assignments = new List<Assignment> { ParseAssignment(identifierOfFirstProperty, lexer) };
+
             while (true)
             {
-                var nextToken = lexer.MustReadTokenOfTypes(
-                    TokenType.CloseParen,
-                    TokenType.Identifier,
-                    TokenType.String);
+                var nextToken = lexer.MustReadTokenOfTypes(TokenType.Identifier, TokenType.CloseParen);
 
-                switch (nextToken.Type)
+                if (nextToken.Type == TokenType.CloseParen)
                 {
-                    case TokenType.CloseParen:
-                        return Expression.Simple(name, oldnum, qualifiers);
-                    case TokenType.Identifier:
-                    case TokenType.String:
-                    default:
-                        throw new ParsingException("Unknown state");
+                    return Expression.PropertyList(name: name.ToMaybe(), oldnum: oldnum, qualifiers: qualifiers, properties: assignments);
+                }
+                else
+                {
+                    var assignmentName = nextToken.TryAsIdentifier().Value;
+                    assignments.Add(ParseAssignment(assignmentName, lexer));
                 }
             }
+        }
+
+        public static Assignment ParseAssignment(Identifier name, ILexer lexer)
+        {
+            lexer.MustReadTokenOfTypes(TokenType.Equal);
+
+            var valueToken = lexer.MustReadValueToken();
+
+            lexer.MustReadTokenOfTypes(TokenType.Semicolon);
+
+            return new Assignment(name, valueToken);
         }
 
         private static Expression ParseExpressionWithStringValues(
@@ -208,7 +216,29 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
 
         private static Expression ParseValueList(ILexer lexer)
         {
-            throw new NotImplementedException();
+            // Leave it up to the next stage to make sense of this mess.  
+            // There's no easy way to transmit this info properly to the next stage.
+            var values = new List<Token>();
+
+            while (true)
+            {
+                var nextToken = lexer.MustReadTokenOfTypes(
+                    TokenType.CloseParen,
+                    TokenType.Comma,
+                    TokenType.Integer,
+                    TokenType.Meta,
+                    TokenType.Identifier,
+                    TokenType.Pipe);
+
+                if (nextToken.Type == TokenType.CloseParen)
+                    return Expression.ValueList(
+                        name: Maybe<Identifier>.Nothing,
+                        oldnum: Maybe<ushort>.Nothing,
+                        qualifiers: Enumerable.Empty<Identifier>(),
+                        values: values);
+
+                values.Add(nextToken);
+            }
         }
     }
 }

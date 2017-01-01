@@ -18,14 +18,14 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
             Maybe<Identifier> name,
             Maybe<ushort> oldnum,
             IEnumerable<Identifier> qualifiers,
-            IEnumerable<KeyValuePair<Identifier, Token>> properties,
+            IEnumerable<Assignment> properties,
             IEnumerable<Token> values,
             IEnumerable<Expression> subExpressions)
         {
             Name = name;
             Oldnum = oldnum;
             Qualifiers = qualifiers;
-            _properties = properties.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            _properties = properties.ToDictionary(kvp => kvp.Name, kvp => kvp.Value);
             Values = values;
             SubExpressions = subExpressions;
         }
@@ -39,7 +39,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
                 name: name.ToMaybe(),
                 oldnum: oldnum,
                 qualifiers: qualifiers,
-                properties: Enumerable.Empty<KeyValuePair<Identifier, Token>>(),
+                properties: Enumerable.Empty<Assignment>(),
                 values: Enumerable.Empty<Token>(),
                 subExpressions: Enumerable.Empty<Expression>());
         }
@@ -48,7 +48,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
             Maybe<Identifier> name,
             Maybe<ushort> oldnum,
             IEnumerable<Identifier> qualifiers,
-            IEnumerable<KeyValuePair<Identifier, Token>> properties)
+            IEnumerable<Assignment> properties)
         {
             return new Expression(
                 name: name,
@@ -69,7 +69,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
                 name: name,
                 oldnum: oldnum,
                 qualifiers: qualifiers,
-                properties: Enumerable.Empty<KeyValuePair<Identifier, Token>>(),
+                properties: Enumerable.Empty<Assignment>(),
                 values: values,
                 subExpressions: Enumerable.Empty<Expression>());
         }
@@ -82,7 +82,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
                 name: name.ToMaybe(),
                 oldnum: Maybe<ushort>.Nothing,
                 qualifiers: Enumerable.Empty<Identifier>(),
-                properties: Enumerable.Empty<KeyValuePair<Identifier, Token>>(),
+                properties: Enumerable.Empty<Assignment>(),
                 values: Enumerable.Empty<Token>(),
                 subExpressions: subExpressions);
         }
