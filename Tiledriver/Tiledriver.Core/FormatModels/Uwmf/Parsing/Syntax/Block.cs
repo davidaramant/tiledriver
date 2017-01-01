@@ -16,6 +16,8 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing.Syntax
         private readonly Dictionary<Identifier, Token> _properties;
         public Identifier Name { get; }
 
+        public bool HasAssignments => _properties.Any();
+
         public Maybe<Token> GetValueFor(string name)
         {
             return GetValueFor(new Identifier(name));
