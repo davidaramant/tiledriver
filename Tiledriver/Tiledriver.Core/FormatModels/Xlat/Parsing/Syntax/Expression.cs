@@ -13,14 +13,14 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
     public sealed class Expression
     {
         private readonly Dictionary<Identifier, Token> _properties;
-        
+
         public Expression(
             Maybe<Identifier> name,
             Maybe<ushort> oldnum,
             IEnumerable<Identifier> qualifiers,
             IEnumerable<KeyValuePair<Identifier, Token>> properties,
             IEnumerable<Token> values,
-            IEnumerable<Expression> subExpressions )
+            IEnumerable<Expression> subExpressions)
         {
             Name = name;
             Oldnum = oldnum;
@@ -37,7 +37,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
         {
             return new Expression(
                 name: name.ToMaybe(),
-                oldnum: oldnum, 
+                oldnum: oldnum,
                 qualifiers: qualifiers,
                 properties: Enumerable.Empty<KeyValuePair<Identifier, Token>>(),
                 values: Enumerable.Empty<Token>(),
@@ -56,7 +56,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
                 qualifiers: qualifiers,
                 properties: properties,
                 values: Enumerable.Empty<Token>(),
-                subExpressions:Enumerable.Empty<Expression>());
+                subExpressions: Enumerable.Empty<Expression>());
         }
 
         public static Expression ValueList(
@@ -70,7 +70,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
                 oldnum: oldnum,
                 qualifiers: qualifiers,
                 properties: Enumerable.Empty<KeyValuePair<Identifier, Token>>(),
-                values: Enumerable.Empty<Token>(),
+                values: values,
                 subExpressions: Enumerable.Empty<Expression>());
         }
 
@@ -80,7 +80,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
         {
             return new Expression(
                 name: name.ToMaybe(),
-                oldnum: Maybe<ushort>.Nothing, 
+                oldnum: Maybe<ushort>.Nothing,
                 qualifiers: Enumerable.Empty<Identifier>(),
                 properties: Enumerable.Empty<KeyValuePair<Identifier, Token>>(),
                 values: Enumerable.Empty<Token>(),

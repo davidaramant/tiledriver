@@ -42,7 +42,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
         }
 
         [Test]
-        public void ShouldBlockWithSimpleExpression()
+        public void ShouldParseBlockWithSimpleExpression()
         {
             var result = Analyze(@"block { thing with stuff; }");
 
@@ -60,7 +60,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
         }
 
         [Test]
-        public void ShouldBlockWithSimpleExpressionWithOldNum()
+        public void ShouldParseBlockWithSimpleExpressionWithOldNum()
         {
             var result = Analyze(@"block { thing 44 with stuff; }");
 
@@ -76,6 +76,60 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 name: "thing",
                 oldnum: 44,
                 qualifiers: new[] { "with", "stuff" });
+        }
+
+        [Test]
+        public void ShouldParseBlockWithExpressionWithEmptyList()
+        {
+            var result = Analyze(@"block { thing 44 {} }");
+
+            Assert.That(result, Has.Length.EqualTo(1));
+            var expression = result.First();
+
+            AssertExpression(expression,
+                name: "block",
+                numberOfSubExpressions: 1);
+
+            var subExp = expression.SubExpressions.First();
+            AssertExpression(subExp,
+                name: "thing",
+                oldnum: 44);
+        }
+
+        [Test]
+        public void ShouldParseBlockWithExpressionWithStringListOfSingleValue()
+        {
+            var result = Analyze("block { thing { \"string\" } }");
+
+            Assert.That(result, Has.Length.EqualTo(1));
+            var expression = result.First();
+
+            AssertExpression(expression,
+                name: "block",
+                numberOfSubExpressions: 1);
+
+            var subExp = expression.SubExpressions.First();
+            AssertExpression(subExp,
+                name: "thing",
+                values: new[] { Token.String("string") });
+        }
+
+        [Test]
+        public void ShouldParseBlockWithExpressionWithStringListOfMultipleValues()
+        {
+            var result = Analyze("block { thing { \"string\", \"string2\" } }");
+
+            Assert.That(result, Has.Length.EqualTo(1));
+            var expression = result.First();
+
+            AssertExpression(expression,
+                name: "block",
+                numberOfSubExpressions: 1);
+
+            var subExp = expression.SubExpressions.First();
+            AssertExpression(subExp,
+                name: "thing",
+                values: new[] { Token.String("string"), Token.String("string2") });
         }
 
         private static Expression[] Analyze(string input)

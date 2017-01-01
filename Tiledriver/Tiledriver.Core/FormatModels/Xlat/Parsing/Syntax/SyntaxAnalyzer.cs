@@ -93,8 +93,8 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
             while (true)
             {
                 var nextToken = lexer.MustReadTokenOfTypes(
-                    TokenType.Integer, 
-                    TokenType.Identifier, 
+                    TokenType.Integer,
+                    TokenType.Identifier,
                     TokenType.OpenParen,
                     TokenType.Semicolon);
 
@@ -119,9 +119,90 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
                         break;
 
                     case TokenType.OpenParen:
+                        return ParseExpressionWithList(lexer, name, oldNum, qualifiers);
+
                     default:
                         throw new ParsingException("Unknown state.");
                 }
+            }
+        }
+
+        private static Expression ParseExpressionWithList(
+            ILexer lexer,
+            Identifier name,
+            Maybe<ushort> oldnum,
+            IEnumerable<Identifier> qualifiers)
+        {
+            while (true)
+            {
+                var nextToken = lexer.MustReadTokenOfTypes(
+                    TokenType.CloseParen,
+                    TokenType.Identifier,
+                    TokenType.String);
+
+                switch (nextToken.Type)
+                {
+                    case TokenType.CloseParen:
+                        return Expression.Simple(name, oldnum, qualifiers);
+                    case TokenType.Identifier:
+                        return ParseExpressionWithProperties(lexer, name, oldnum, qualifiers,
+                            nextToken.TryAsIdentifier().Value);
+                    case TokenType.String:
+                        return ParseExpressionWithStringValues(lexer, name, oldnum, qualifiers, nextToken);
+                    default:
+                        throw new ParsingException("Unknown state");
+                }
+            }
+        }
+
+        private static Expression ParseExpressionWithProperties(
+            ILexer lexer,
+            Identifier name,
+            Maybe<ushort> oldnum,
+            IEnumerable<Identifier> qualifiers,
+            Identifier identifierOfFirstProperty)
+        {
+            throw new NotImplementedException();
+            while (true)
+            {
+                var nextToken = lexer.MustReadTokenOfTypes(
+                    TokenType.CloseParen,
+                    TokenType.Identifier,
+                    TokenType.String);
+
+                switch (nextToken.Type)
+                {
+                    case TokenType.CloseParen:
+                        return Expression.Simple(name, oldnum, qualifiers);
+                    case TokenType.Identifier:
+                    case TokenType.String:
+                    default:
+                        throw new ParsingException("Unknown state");
+                }
+            }
+        }
+
+        private static Expression ParseExpressionWithStringValues(
+            ILexer lexer,
+            Identifier name,
+            Maybe<ushort> oldnum,
+            IEnumerable<Identifier> qualifiers,
+            Token firstValue)
+        {
+            var values = new List<Token> { firstValue };
+
+            while (true)
+            {
+                var nextToken = lexer.MustReadTokenOfTypes(
+                    TokenType.Comma,
+                    TokenType.CloseParen);
+
+                if (nextToken.Type == TokenType.CloseParen)
+                    return Expression.ValueList(name.ToMaybe(), oldnum, qualifiers, values);
+
+                var stringToken = lexer.MustReadTokenOfTypes(TokenType.String);
+
+                values.Add(stringToken);
             }
         }
 
