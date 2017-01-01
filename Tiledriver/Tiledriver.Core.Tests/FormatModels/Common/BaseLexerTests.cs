@@ -6,7 +6,7 @@ using NUnit.Framework;
 using Piglet.Lexer;
 using Tiledriver.Core.FormatModels.Common;
 
-namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Common
+namespace Tiledriver.Core.Tests.FormatModels.Common
 {
     public abstract class BaseLexerTests
     {

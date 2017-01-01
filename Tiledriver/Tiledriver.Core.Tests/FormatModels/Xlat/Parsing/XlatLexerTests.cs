@@ -7,7 +7,7 @@ using NUnit.Framework;
 using Piglet.Lexer;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Xlat.Parsing;
-using Tiledriver.Core.Tests.FormatModels.Uwmf.Common;
+using Tiledriver.Core.Tests.FormatModels.Common;
 
 namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
 {

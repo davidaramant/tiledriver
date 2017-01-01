@@ -75,9 +75,7 @@
     </Compile>
     <Compile Include="FormatModels\Xlat\Parsing\Syntax\Block.cs" />
     <Compile Include="FormatModels\Xlat\Parsing\Syntax\Expression.cs" />
-    <Compile Include="FormatModels\Xlat\Parsing\Syntax\IExpression.cs" />
     <Compile Include="FormatModels\Xlat\Parsing\Syntax\SyntaxAnalyzer.cs" />
-    <Compile Include="FormatModels\Xlat\Parsing\Syntax\XlatSyntaxTree.cs" />
     <Compile Include="FormatModels\Xlat\Parsing\XlatLexer.cs" />
     <Compile Include="FormatModels\Xlat\Parsing\XlatParser.cs" />
     <Compile Include="LevelGeometry\IRegion.cs" />

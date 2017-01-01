@@ -5,7 +5,7 @@ using NUnit.Framework;
 using Piglet.Lexer;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Uwmf.Parsing;
-using Tiledriver.Core.Tests.FormatModels.Uwmf.Common;
+using Tiledriver.Core.Tests.FormatModels.Common;
 
 namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
 {
