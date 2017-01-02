@@ -10,7 +10,7 @@ using Tiledriver.Core.FormatModels.Common;
 namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
 {
     [DebuggerDisplay("{ToString()}")]
-    public sealed class Expression
+    public sealed class Expression : IHaveAssignments
     {
         private readonly Dictionary<Identifier, Token> _properties;
 

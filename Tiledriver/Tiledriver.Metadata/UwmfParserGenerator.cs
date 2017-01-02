@@ -28,7 +28,7 @@ OpenParen();
             foreach (var block in UwmfDefinitions.Blocks.Where(_ => _.NormalReading))
             {
                 output.
-                    Line($"public static {block.PascalCaseName} Parse{block.PascalCaseName}(Block block)").
+                    Line($"public static {block.PascalCaseName} Parse{block.PascalCaseName}(IHaveAssignments block)").
                     OpenParen().
                     Line($"var parsedBlock = new {block.PascalCaseName}();");
 

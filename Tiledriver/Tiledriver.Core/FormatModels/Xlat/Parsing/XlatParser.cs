@@ -75,14 +75,86 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
             }
         }
 
+        #region Tiles
+
         private static TileMappings ParseTiles(IEnumerable<Expression> expressions)
+        {
+            var tileMappings = new TileMappings();
+            foreach (var exp in expressions)
+            {
+                var name = exp.Name.OrElse(() => new ParsingException("Found expression without a name in 'tiles' section."));
+
+                switch (name.ToString())
+                {
+                    case "modzone":
+                        ParseModZone(exp, tileMappings);
+                        break;
+
+                    case "tile":
+                        ParseTile(exp, tileMappings);
+                        break;
+
+                    case "trigger":
+                        ParseTrigger(exp, tileMappings);
+                        break;
+
+                    case "zone":
+                        ParseSoundZone(exp, tileMappings);
+                        break;
+
+                    default:
+                        throw new ParsingException($"Unknown expression '{name}' in tiles section.");
+                }
+            }
+            return tileMappings;
+        }
+
+        private static void ParseModZone(Expression exp, TileMappings tileMappings)
         {
             throw new NotImplementedException();
         }
 
+        private static void ParseTile(Expression exp, TileMappings tileMappings)
+        {
+            var oldnum = exp.Oldnum.OrElse(() => new ParsingException("No oldnum found in tile definition."));
+            if (exp.Qualifiers.Any() || exp.SubExpressions.Any() || exp.Values.Any())
+            {
+                throw new ParsingException("Bad structure for tile.");
+            }
+            var zone = Uwmf.Parsing.Parser.ParseTile(exp);
+
+            tileMappings.Tiles.Add(oldnum, zone);
+        }
+
+        private static void ParseTrigger(Expression exp, TileMappings tileMappings)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void ParseSoundZone(Expression exp, TileMappings tileMappings)
+        {
+            var oldnum = exp.Oldnum.OrElse(() => new ParsingException("No oldnum found in sound zone definition."));
+            if (exp.Qualifiers.Any() || exp.SubExpressions.Any() || exp.Values.Any())
+            {
+                throw new ParsingException("Bad structure for sound zone.");
+            }
+            var zone = Uwmf.Parsing.Parser.ParseZone(exp);
+
+            tileMappings.Zones.Add(oldnum,zone);
+        }
+
+        #endregion Tiles
+
         private static ThingMappings ParseThings(IEnumerable<Expression> expressions)
         {
             throw new NotImplementedException();
+
+            var thingMappings = new ThingMappings();
+            foreach (var exp in expressions)
+            {
+
+            }
+            return thingMappings;
         }
 
         private static FlatMappings ParseFlats(IEnumerable<Expression> expressions)

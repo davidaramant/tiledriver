@@ -13,6 +13,11 @@ namespace Tiledriver.Core.FormatModels.Common
         public Identifier Name { get; }
         public Token Value { get; }
 
+        public Assignment([NotNull]string name, [NotNull]Token value) : 
+            this(new Identifier(name), value)
+        {
+        }
+
         public Assignment([NotNull]Identifier name, [NotNull]Token value)
         {
             Name = name;
