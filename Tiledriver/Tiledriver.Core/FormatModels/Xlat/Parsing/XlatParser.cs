@@ -7,6 +7,7 @@ using System.Linq;
 using Functional.Maybe;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax;
+using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.FormatModels.Xlat.Parsing
 {
@@ -122,22 +123,13 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
 
             bool fillzone = false;
 
-            var qualifier =
-                qualifierQueue.Dequeue()
-                    .TryAsIdentifier()
-                    .OrElse(() => new ParsingException("Unknown qualifier for modzone."));
+            var qualifier = qualifierQueue.DequeueOfType(TokenType.Identifier).AsIdentifier();
 
             if (qualifier.ToString() == "fillzone")
             {
                 fillzone = true;
-                if (!qualifierQueue.Any())
-                {
-                    throw new ParsingException("Invalid structure of modzone.");
-                }
-                qualifier =
-                    qualifierQueue.Dequeue()
-                        .TryAsIdentifier()
-                        .OrElse(() => new ParsingException("Unknown qualifier for modzone."));
+
+                qualifier = qualifierQueue.DequeueOfType(TokenType.Identifier).AsIdentifier(); ;
             }
 
             if (qualifier.ToString() == "ambush")
@@ -150,14 +142,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
             }
             else if (qualifier.ToString() == "changetrigger")
             {
-                if (!qualifierQueue.Any())
-                {
-                    throw new ParsingException("Invalid structure of modzone.");
-                }
-                var action =
-                    qualifierQueue.Dequeue()
-                        .TryAsString()
-                        .OrElse(() => new ParsingException("Invalid structure for modzone."));
+                var action = qualifierQueue.DequeueOfType(TokenType.String).TryAsString().Value;
                 if (exp.Values.Any() || exp.SubExpressions.Any() || qualifierQueue.Any())
                 {
                     throw new ParsingException("Invalid structure of changetrigger modzone.");
@@ -233,17 +218,147 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
 
         #endregion Tiles
 
+        #region Things
+
         private static ThingMappings ParseThings(IEnumerable<Expression> expressions)
         {
-            throw new NotImplementedException();
-
             var thingMappings = new ThingMappings();
             foreach (var exp in expressions)
             {
+                if (!exp.Name.HasValue)
+                {
+                    // Must be a thing definition
+                    ParseThingDefinition(exp, thingMappings);
+                }
+                else
+                {
+                    var name = exp.Name.Value;
+                    switch (name.ToString())
+                    {
+                        case "elevator":
+                            ParseElevator(exp, thingMappings);
+                            break;
 
+                        case "trigger":
+                            ParseTrigger(exp, thingMappings);
+                            break;
+
+                        default:
+                            throw new ParsingException($"Unknown expression '{name}' in 'things' section");
+                    }
+                }
             }
             return thingMappings;
         }
+
+        private static void ParseThingDefinition(Expression exp, ThingMappings thingMappings)
+        {
+            if (exp.Qualifiers.Any() || exp.SubExpressions.Any() || !exp.Values.Any() || exp.HasAssignments)
+            {
+                throw new ParsingException("Bad structure for thing definition.");
+            }
+
+            var valueQueue = new Queue<Token>(exp.Values);
+
+            var oldnum = valueQueue.Dequeue().AsUshort().Value;
+            valueQueue.DequeueOfType(TokenType.Comma);
+
+            var token = valueQueue.DequeueOfType(TokenType.Meta, TokenType.Identifier);
+            var hasMeta = false;
+            if (token.Type == TokenType.Meta)
+            {
+                hasMeta = true;
+                token = valueQueue.DequeueOfType(TokenType.Identifier);
+            }
+            var actor = (hasMeta ? "$" : string.Empty) + (string)token.AsIdentifier();
+            valueQueue.DequeueOfType(TokenType.Comma);
+
+            var angles = valueQueue.DequeueOfType(TokenType.Integer).AsInt();
+            valueQueue.DequeueOfType(TokenType.Comma);
+
+            token = valueQueue.DequeueOfType(TokenType.Identifier, TokenType.Integer);
+            var pathing = false;
+            var holowall = false;
+            if (token.Type == TokenType.Identifier)
+            {
+                var flag = token.AsIdentifier().ToString();
+                if (!(flag == "pathing" || flag == "holowall"))
+                {
+                    throw new ParsingException($"Unknown flag in thing definition: {flag}");
+                }
+
+                pathing = flag == "pathing";
+                holowall = flag == "holowall";
+
+                token = valueQueue.DequeueOfType(TokenType.Pipe, TokenType.Comma);
+                if (token.Type == TokenType.Pipe)
+                {
+                    flag = valueQueue.DequeueOfType(TokenType.Identifier).AsIdentifier().ToString();
+
+                    if (pathing)
+                    {
+                        if (flag != "holowall")
+                        {
+                            throw new ParsingException($"Unknown flag in thing definition: {flag}");
+                        }
+                        holowall = true;
+                    }
+                    else
+                    {
+                        if (flag != "pathing")
+                        {
+                            throw new ParsingException($"Unknown flag in thing definition: {flag}");
+                        }
+                        pathing = true;
+                    }
+                    valueQueue.DequeueOfType(TokenType.Comma);
+                }
+            }
+            else
+            {
+                valueQueue.DequeueOfType(TokenType.Comma);
+            }
+
+            var minskill = valueQueue.DequeueOfType(TokenType.Integer).AsInt();
+
+            if (valueQueue.Any())
+            {
+                throw new ParsingException("Unexpected additional values in thing definition.");
+            }
+
+            thingMappings.ThingDefinitions.Add(
+                new ThingDefinition(
+                    oldnum: oldnum,
+                    actor: actor,
+                    angles: angles,
+                    holowall: holowall,
+                    pathing: pathing,
+                    minskill: minskill));
+        }
+
+        private static void ParseElevator(Expression exp, ThingMappings thingMappings)
+        {
+            var oldnum = exp.Oldnum.OrElse(() => new ParsingException("No oldnum found in elevator definition."));
+            if (exp.Qualifiers.Any() || exp.SubExpressions.Any() || exp.Values.Any() || exp.HasAssignments)
+            {
+                throw new ParsingException("Bad structure for elevator.");
+            }
+            thingMappings.Elevator.Add(oldnum);
+        }
+
+        private static void ParseTrigger(Expression exp, ThingMappings thingMappings)
+        {
+            var oldnum = exp.Oldnum.OrElse(() => new ParsingException("No oldnum found in trigger definition."));
+            if (exp.Qualifiers.Any() || exp.SubExpressions.Any() || exp.Values.Any())
+            {
+                throw new ParsingException("Bad structure for trigger.");
+            }
+            var trigger = ParsePositionlessTrigger(exp);
+
+            thingMappings.PositionlessTriggers.Add(oldnum, trigger);
+        }
+
+        #endregion Things
 
         private static FlatMappings ParseFlats(IEnumerable<Expression> expressions)
         {

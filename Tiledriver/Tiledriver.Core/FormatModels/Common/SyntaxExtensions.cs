@@ -3,6 +3,9 @@
 
 using System;
 using System.CodeDom;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Functional.Maybe;
 
 namespace Tiledriver.Core.FormatModels.Common
@@ -38,6 +41,11 @@ namespace Tiledriver.Core.FormatModels.Common
             return Maybe<Identifier>.Nothing;
         }
 
+        public static Identifier AsIdentifier(this Token token)
+        {
+            return token.TryAsIdentifier().OrElse(()=> new ParsingException($"Expected '{TokenType.Identifier}' but got '{token.Type}"));
+        }
+
         public static Maybe<string> TryAsString(this Token token)
         {
             if (token.Type == TokenType.String)
@@ -47,6 +55,11 @@ namespace Tiledriver.Core.FormatModels.Common
             return Maybe<string>.Nothing;
         }
 
+        public static string AsString(this Token token)
+        {
+            return token.TryAsString().OrElse(() => new ParsingException($"Expected 'string' but got '{token.Type}'"));
+        }
+
         public static Maybe<int> TryAsInt(this Token token)
         {
             if (token.Type == TokenType.Integer)
@@ -54,6 +67,11 @@ namespace Tiledriver.Core.FormatModels.Common
                 return ((int)token.Value).ToMaybe();
             }
             return Maybe<int>.Nothing;
+        }
+
+        public static int AsInt(this Token token)
+        {
+            return token.TryAsInt().OrElse(() => new ParsingException($"Expected 'int' but got '{token.Type}'"));
         }
 
         public static Maybe<ushort> AsUshort(this Token token)
@@ -90,6 +108,20 @@ namespace Tiledriver.Core.FormatModels.Common
                 default:
                     return Maybe<bool>.Nothing;
             }
+        }
+
+        public static Token DequeueOfType(this Queue<Token> tokenQueue, params TokenType[] types)
+        {
+            if (!tokenQueue.Any())
+            {
+                throw new ParsingException($"Expected token type of {string.Join(", ", types)}");
+            }
+            var token = tokenQueue.Dequeue();
+            if (!types.Contains(token.Type))
+            {
+                throw new ParsingException($"Expected token type of {string.Join(", ", types)} but got '{token.Type}'");
+            }
+            return token;
         }
 
         public static void SetRequiredString(this Maybe<Token> maybeToken, Action<string> setter, string blockName, string parameterName)
