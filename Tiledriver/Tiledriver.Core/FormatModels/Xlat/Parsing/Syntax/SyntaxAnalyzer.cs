@@ -28,7 +28,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
                 switch (nextToken.Type)
                 {
                     case TokenType.Identifier:
-                        yield return ParseGlobalExpression(lexer, name, nextToken.TryAsIdentifier().Value);
+                        yield return ParseGlobalExpression(lexer, name, nextToken);
                         continue;
 
                     case TokenType.OpenParen:
@@ -41,15 +41,15 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
             }
         }
 
-        private static Expression ParseGlobalExpression(ILexer lexer, Identifier name, Identifier firstQualifier)
+        private static Expression ParseGlobalExpression(ILexer lexer, Identifier name, Token firstQualifier)
         {
-            var qualifiers = new List<Identifier> { firstQualifier };
+            var qualifiers = new List<Token> {  firstQualifier };
 
             var nextToken = lexer.MustReadTokenOfTypes(TokenType.Identifier, TokenType.Semicolon);
 
             while (nextToken.Type != TokenType.Semicolon)
             {
-                qualifiers.Add(nextToken.TryAsIdentifier().Value);
+                qualifiers.Add(nextToken);
                 nextToken = lexer.MustReadTokenOfTypes(TokenType.Identifier, TokenType.Semicolon);
             }
 
@@ -88,7 +88,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
         private static Expression ParseSubExpression(ILexer lexer, Identifier name)
         {
             var oldNum = Maybe<ushort>.Nothing;
-            var qualifiers = new List<Identifier>();
+            var qualifiers = new List<Token>();
 
             while (true)
             {
@@ -115,7 +115,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
                             qualifiers: qualifiers);
 
                     case TokenType.Identifier:
-                        qualifiers.Add(nextToken.TryAsIdentifier().Value);
+                        qualifiers.Add(nextToken);
                         break;
 
                     case TokenType.OpenParen:
@@ -131,7 +131,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
             ILexer lexer,
             Identifier name,
             Maybe<ushort> oldnum,
-            IEnumerable<Identifier> qualifiers)
+            IEnumerable<Token> qualifiers)
         {
             while (true)
             {
@@ -159,7 +159,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
             ILexer lexer,
             Identifier name,
             Maybe<ushort> oldnum,
-            IEnumerable<Identifier> qualifiers,
+            IEnumerable<Token> qualifiers,
             Identifier identifierOfFirstProperty)
         {
             var assignments = new List<Assignment> { ParseAssignment(identifierOfFirstProperty, lexer) };
@@ -195,7 +195,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
             ILexer lexer,
             Identifier name,
             Maybe<ushort> oldnum,
-            IEnumerable<Identifier> qualifiers,
+            IEnumerable<Token> qualifiers,
             Token firstValue)
         {
             var values = new List<Token> { firstValue };
@@ -235,7 +235,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
                     return Expression.ValueList(
                         name: Maybe<Identifier>.Nothing,
                         oldnum: Maybe<ushort>.Nothing,
-                        qualifiers: Enumerable.Empty<Identifier>(),
+                        qualifiers: Enumerable.Empty<Token>(),
                         values: values);
 
                 values.Add(nextToken);

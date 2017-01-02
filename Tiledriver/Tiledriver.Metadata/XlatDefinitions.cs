@@ -17,7 +17,7 @@ namespace Tiledriver.Metadata
                 DisableNormalReading().
                 HasOptionalBoolean("fillzone",false).
                 HasRequiredString("action").
-                HasSubBlock("trigger"),
+                HasSubBlock("positionlessTrigger"),
 
             new BlockData("thingDefinition").
                 DisableNormalReading().

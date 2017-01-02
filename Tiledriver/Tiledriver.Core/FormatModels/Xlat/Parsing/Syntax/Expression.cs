@@ -17,7 +17,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
         public Expression(
             Maybe<Identifier> name,
             Maybe<ushort> oldnum,
-            IEnumerable<Identifier> qualifiers,
+            IEnumerable<Token> qualifiers,
             IEnumerable<Assignment> properties,
             IEnumerable<Token> values,
             IEnumerable<Expression> subExpressions)
@@ -33,7 +33,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
         public static Expression Simple(
             Identifier name,
             Maybe<ushort> oldnum,
-            IEnumerable<Identifier> qualifiers)
+            IEnumerable<Token> qualifiers)
         {
             return new Expression(
                 name: name.ToMaybe(),
@@ -47,7 +47,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
         public static Expression PropertyList(
             Maybe<Identifier> name,
             Maybe<ushort> oldnum,
-            IEnumerable<Identifier> qualifiers,
+            IEnumerable<Token> qualifiers,
             IEnumerable<Assignment> properties)
         {
             return new Expression(
@@ -62,7 +62,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
         public static Expression ValueList(
             Maybe<Identifier> name,
             Maybe<ushort> oldnum,
-            IEnumerable<Identifier> qualifiers,
+            IEnumerable<Token> qualifiers,
             IEnumerable<Token> values)
         {
             return new Expression(
@@ -81,7 +81,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
             return new Expression(
                 name: name.ToMaybe(),
                 oldnum: Maybe<ushort>.Nothing,
-                qualifiers: Enumerable.Empty<Identifier>(),
+                qualifiers: Enumerable.Empty<Token>(),
                 properties: Enumerable.Empty<Assignment>(),
                 values: Enumerable.Empty<Token>(),
                 subExpressions: subExpressions);
@@ -106,7 +106,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
 
         public Maybe<Identifier> Name { get; }
         public Maybe<ushort> Oldnum { get; }
-        public IEnumerable<Identifier> Qualifiers { get; }
+        public IEnumerable<Token> Qualifiers { get; }
         public IEnumerable<Token> Values { get; }
         public IEnumerable<Expression> SubExpressions { get; }
     }

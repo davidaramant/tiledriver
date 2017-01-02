@@ -39,33 +39,33 @@ namespace Tiledriver.Core.FormatModels.Xlat
                 _action = value;
             }
         }
-        private bool _triggerHasBeenSet = false;
-        private Trigger _trigger;
-        public Trigger Trigger
+        private bool _positionlessTriggerHasBeenSet = false;
+        private PositionlessTrigger _positionlessTrigger;
+        public PositionlessTrigger PositionlessTrigger
         {
-            get { return _trigger; }
+            get { return _positionlessTrigger; }
             set
             {
-                _triggerHasBeenSet = true;
-                _trigger = value;
+                _positionlessTriggerHasBeenSet = true;
+                _positionlessTrigger = value;
             }
         }
         public bool Fillzone { get; set; } = false;
         public ChangeTriggerModzone() { }
         public ChangeTriggerModzone(
             string action,
-            Trigger trigger,
+            PositionlessTrigger positionlessTrigger,
             bool fillzone = false)
         {
             Action = action;
-            Trigger = trigger;
+            PositionlessTrigger = positionlessTrigger;
             Fillzone = fillzone;
             AdditionalSemanticChecks();
         }
         public void CheckSemanticValidity()
         {
             if (!_actionHasBeenSet) throw new InvalidUwmfException("Did not set Action on ChangeTriggerModzone");
-            if (!_triggerHasBeenSet) throw new InvalidUwmfException("Did not set Trigger on ChangeTriggerModzone");
+            if (!_positionlessTriggerHasBeenSet) throw new InvalidUwmfException("Did not set PositionlessTrigger on ChangeTriggerModzone");
             AdditionalSemanticChecks();
         }
 

@@ -30,7 +30,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
                         {
                             throw new ParsingException("Invalid structure of 'enable' command.");
                         }
-                        var flag = exp.Qualifiers.First();
+                        var flag = exp.Qualifiers.First().TryAsIdentifier().OrElse(() => new ParsingException("Invalid structure of 'enable' command"));
                         if (flag != new Identifier("lightlevels"))
                         {
                             throw new ParsingException($"Attempted to enable unknown flag '{flag}'");
@@ -111,7 +111,65 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
 
         private static void ParseModZone(Expression exp, TileMappings tileMappings)
         {
-            throw new NotImplementedException();
+            var oldnum = exp.Oldnum.OrElse(() => new ParsingException("No oldnum found in modzone definition."));
+
+            var qualifierQueue = new Queue<Token>(exp.Qualifiers);
+
+            if (!qualifierQueue.Any())
+            {
+                throw new ParsingException("Invalid structure of modzone.");
+            }
+
+            bool fillzone = false;
+
+            var qualifier =
+                qualifierQueue.Dequeue()
+                    .TryAsIdentifier()
+                    .OrElse(() => new ParsingException("Unknown qualifier for modzone."));
+
+            if (qualifier.ToString() == "fillzone")
+            {
+                fillzone = true;
+                if (!qualifierQueue.Any())
+                {
+                    throw new ParsingException("Invalid structure of modzone.");
+                }
+                qualifier =
+                    qualifierQueue.Dequeue()
+                        .TryAsIdentifier()
+                        .OrElse(() => new ParsingException("Unknown qualifier for modzone."));
+            }
+
+            if (qualifier.ToString() == "ambush")
+            {
+                if (exp.HasAssignments || exp.Values.Any() || exp.SubExpressions.Any() || qualifierQueue.Any())
+                {
+                    throw new ParsingException("Invalid structure of ambush modzone.");
+                }
+                tileMappings.AmbushModzones.Add(oldnum, new AmbushModzone(fillzone: fillzone));
+            }
+            else if (qualifier.ToString() == "changetrigger")
+            {
+                if (!qualifierQueue.Any())
+                {
+                    throw new ParsingException("Invalid structure of modzone.");
+                }
+                var action =
+                    qualifierQueue.Dequeue()
+                        .TryAsString()
+                        .OrElse(() => new ParsingException("Invalid structure for modzone."));
+                if (exp.Values.Any() || exp.SubExpressions.Any() || qualifierQueue.Any())
+                {
+                    throw new ParsingException("Invalid structure of changetrigger modzone.");
+                }
+
+                var trigger = ParsePositionlessTrigger(exp);
+                tileMappings.ChangeTriggerModzones.Add(oldnum, new ChangeTriggerModzone(action, trigger, fillzone));
+            }
+            else
+            {
+                throw new ParsingException($"Unknown qualifier '{qualifier}' in modzone.");
+            }
         }
 
         private static void ParseTile(Expression exp, TileMappings tileMappings)
@@ -170,7 +228,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
             }
             var zone = Uwmf.Parsing.Parser.ParseZone(exp);
 
-            tileMappings.Zones.Add(oldnum,zone);
+            tileMappings.Zones.Add(oldnum, zone);
         }
 
         #endregion Tiles
@@ -203,7 +261,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
                 {
                     throw new ParsingException($"Unknown expression '{name}' inside of flats.");
                 }
-                
+
                 if (exp.Oldnum.HasValue || exp.HasAssignments || exp.Qualifiers.Any() || exp.SubExpressions.Any())
                 {
                     throw new ParsingException($"Invalid structure of '{name}' expression in 'flats' command.");
@@ -215,7 +273,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
                     {
                         throw new ParsingException("Duplicate 'ceiling' expression in flats.");
                     }
-                    flatMappings.Ceiling.AddRange(exp.Values.Select(t=>t.TryAsString().Value));
+                    flatMappings.Ceiling.AddRange(exp.Values.Select(t => t.TryAsString().Value));
                 }
                 else
                 {

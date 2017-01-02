@@ -23,7 +23,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 Expression.Simple(
                     name: new Identifier( "enable"),
                     oldnum: Maybe<ushort>.Nothing,
-                    qualifiers:new [] { new Identifier("lightlevels"), })
+                    qualifiers:new [] { Token.Identifier("lightlevels"), })
             });
 
             Assert.That(translator.EnableLightLevels, Is.True, "Did not parse 'enable lightlevels'");
@@ -32,6 +32,58 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
         #endregion Global Expressions
 
         #region Tiles section
+
+        [Test]
+        public void ShouldParseAmbushModzoneInTiles()
+        {
+            var translator = XlatParser.Parse(new[]
+            {
+                Expression.Block(new Identifier("tiles"), new []
+                {
+                    Expression.Simple(
+                        name:new Identifier("modzone"),
+                        oldnum:((ushort)1).ToMaybe(),
+                        qualifiers:new [] {Token.Identifier("ambush"), }),
+                    Expression.Simple(
+                        name:new Identifier("modzone"),
+                        oldnum:((ushort)2).ToMaybe(),
+                        qualifiers:new [] { Token.Identifier("fillzone"), Token.Identifier("ambush"), }),
+                })
+            });
+
+            var mz1 = translator.TileMappings.AmbushModzones.Lookup((ushort)1).OrElse(() => new AssertionException("Did not include modzone."));
+            Assert.That(mz1.Fillzone, Is.False, "Did not parse modzone without ambush flag.");
+
+            var mz2 = translator.TileMappings.AmbushModzones.Lookup((ushort)2).OrElse(() => new AssertionException("Did not include modzone."));
+            Assert.That(mz2.Fillzone, Is.True, "Did not parse modzone with ambush flag.");
+        }
+
+        [Test]
+        public void ShouldParseChangeTriggerModzoneInTiles()
+        {
+            var translator = XlatParser.Parse(new[]
+            {
+                Expression.Block(new Identifier("tiles"), new []
+                {
+                    Expression.PropertyList(
+                        name:new Identifier("modzone").ToMaybe(),
+                        oldnum:((ushort)123).ToMaybe(),
+                        qualifiers:new [] { Token.Identifier("fillzone"), Token.Identifier("changetrigger"), Token.String("someoriginalaction") },
+                        properties:new[]
+                        {
+                            new Assignment("action", Token.String("someaction") ),
+                            new Assignment("activateEast", Token.BooleanFalse ),
+                        }),
+                })
+            });
+
+            var trigger = translator.TileMappings.ChangeTriggerModzones.Lookup((ushort)123).OrElse(() => new AssertionException("Did not include modzone."));
+
+            Assert.That(trigger.Fillzone, Is.True, "Did not parse Fillzone");
+            Assert.That(trigger.Action, Is.EqualTo("someoriginalaction"),"Did not parse action.");
+            Assert.That(trigger.PositionlessTrigger.Action, Is.EqualTo("someaction"), "Did not parse trigger action.");
+            Assert.That(trigger.PositionlessTrigger.ActivateEast, Is.False, "Did not parse trigger activateeast.");
+        }
 
         [Test]
         public void ShouldParseTileInTiles()
@@ -43,7 +95,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                     Expression.PropertyList(
                         name:new Identifier("tile").ToMaybe(),
                         oldnum:((ushort)123).ToMaybe(),
-                        qualifiers:Enumerable.Empty<Identifier>(),
+                        qualifiers:Enumerable.Empty<Token>(),
                         properties:new[]
                         {
                             new Assignment("textureEast", Token.String("tex1") ),
@@ -72,7 +124,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                     Expression.PropertyList(
                         name:new Identifier("trigger").ToMaybe(),
                         oldnum:((ushort)123).ToMaybe(),
-                        qualifiers:Enumerable.Empty<Identifier>(),
+                        qualifiers:Enumerable.Empty<Token>(),
                         properties:new[]
                         {
                             new Assignment("action", Token.String("someaction") ),
@@ -97,7 +149,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                     Expression.ValueList(
                         name:new Identifier("zone").ToMaybe(),
                         oldnum:((ushort)123).ToMaybe(),
-                        qualifiers:Enumerable.Empty<Identifier>(),
+                        qualifiers:Enumerable.Empty<Token>(),
                         values:Enumerable.Empty<Token>()),
                 })
             });
@@ -123,7 +175,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                     Expression.ValueList(
                         name:new Identifier("ceiling").ToMaybe(),
                         oldnum:Maybe<ushort>.Nothing,
-                        qualifiers:Enumerable.Empty<Identifier>(),
+                        qualifiers:Enumerable.Empty<Token>(),
                         values:new []
                         {
 
@@ -133,7 +185,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                     Expression.ValueList(
                         name:new Identifier("floor").ToMaybe(),
                         oldnum:Maybe<ushort>.Nothing,
-                        qualifiers:Enumerable.Empty<Identifier>(),
+                        qualifiers:Enumerable.Empty<Token>(),
                         values:new []
                         {
 
