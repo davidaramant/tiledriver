@@ -1,9 +1,7 @@
 ﻿// Copyright (c) 2016, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using System;
 using System.Linq;
-using Functional.Maybe;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Uwmf.Parsing.Syntax;
 
@@ -43,78 +41,6 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
                         zone: tuple[2],
                         tag: tuple.ElementAtOrDefault(3));
                 }));
-        }
-
-        private static void SetRequiredString(Maybe<Token> maybeToken, Action<string> setter, string blockName, string parameterName)
-        {
-            setter(
-                maybeToken.
-                OrElse(() => new ParsingException($"{parameterName} was not set on {blockName}")).
-                TryAsString().
-                OrElse(() => new ParsingException($"{parameterName} in {blockName} was not a string.")));
-        }
-
-        private static void SetRequiredFloatingPointNumber(Maybe<Token> maybeToken, Action<double> setter, string blockName, string parameterName)
-        {
-            setter(
-                maybeToken.
-                OrElse(() => new ParsingException($"{parameterName} was not set on {blockName}")).
-                TryAsDouble().
-                OrElse(() => new ParsingException($"{parameterName} in {blockName} was not a floating point value.")));
-        }
-
-        private static void SetRequiredIntegerNumber(Maybe<Token> maybeToken, Action<int> setter, string blockName, string parameterName)
-        {
-            setter(
-                maybeToken.
-                OrElse(() => new ParsingException($"{parameterName} was not set on {blockName}")).
-                TryAsInt().
-                OrElse(() => new ParsingException($"{parameterName} in {blockName} was not an integer.")));
-        }
-
-        private static void SetRequiredBoolean(Maybe<Token> maybeToken, Action<bool> setter, string blockName, string parameterName)
-        {
-            setter(
-                maybeToken.
-                OrElse(() => new ParsingException($"{parameterName} was not set on {blockName}")).
-                TryAsBool().
-                OrElse(() => new ParsingException($"{parameterName} in {blockName} was not a boolean.")));
-        }
-
-        private static void SetOptionalString(Maybe<Token> maybeToken, Action<string> setter, string blockName, string parameterName)
-        {
-            maybeToken.
-                Select(token =>
-                    token.TryAsString().
-                    OrElse(() => new ParsingException($"{parameterName} in {blockName} was not a string.")))
-                .Do(setter);
-        }
-
-        private static void SetOptionalFloatingPointNumber(Maybe<Token> maybeToken, Action<double> setter, string blockName, string parameterName)
-        {
-            maybeToken.
-                Select(token =>
-                    token.TryAsDouble().
-                    OrElse(() => new ParsingException($"{parameterName} in {blockName} was not a floating point value.")))
-                .Do(setter);
-        }
-
-        private static void SetOptionalIntegerNumber(Maybe<Token> maybeToken, Action<int> setter, string blockName, string parameterName)
-        {
-            maybeToken.
-                Select(token =>
-                    token.TryAsInt().
-                    OrElse(() => new ParsingException($"{parameterName} in {blockName} was not an integer.")))
-                .Do(setter);
-        }
-
-        private static void SetOptionalBoolean(Maybe<Token> maybeToken, Action<bool> setter, string blockName, string parameterName)
-        {
-            maybeToken.
-                Select(token =>
-                    token.TryAsBool().
-                    OrElse(() => new ParsingException($"{parameterName} in {blockName} was not a boolean.")))
-                .Do(setter);
         }
     }
 }

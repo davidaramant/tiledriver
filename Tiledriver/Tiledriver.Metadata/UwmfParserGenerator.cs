@@ -48,8 +48,8 @@ OpenParen();
                 var level = property.IsRequired ? "Required" : "Optional";
 
                 output.Line(
-                    $"Set{level}{property.UwmfTypeMethod}(" +
-                    $"{assignmentHolder}.GetValueFor(\"{property.PascalCaseName}\"), " +
+                    $"{assignmentHolder}.GetValueFor(\"{property.PascalCaseName}\")" +
+                    $".Set{level}{property.UwmfTypeMethod}(" +
                     $"value => {owner}.{property.PascalCaseName} = value, " +
                     $"\"{blockData.PascalCaseName}\", " +
                     $"\"{property.PascalCaseName}\");");

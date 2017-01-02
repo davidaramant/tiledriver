@@ -63,6 +63,31 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
         }
 
         [Test]
+        public void ShouldParseTriggerInTiles()
+        {
+            var translator = XlatParser.Parse(new[]
+            {
+                Expression.Block(new Identifier("tiles"), new []
+                {
+                    Expression.PropertyList(
+                        name:new Identifier("trigger").ToMaybe(),
+                        oldnum:((ushort)123).ToMaybe(),
+                        qualifiers:Enumerable.Empty<Identifier>(),
+                        properties:new[]
+                        {
+                            new Assignment("action", Token.String("someaction") ),
+                            new Assignment("activateEast", Token.BooleanFalse ),
+                        }),
+                })
+            });
+
+            var trigger = translator.TileMappings.PositionlessTriggers.Lookup((ushort)123).OrElse(() => new AssertionException("Did not include trigger."));
+
+            Assert.That(trigger.Action, Is.EqualTo("someaction"), "Did not set action");
+            Assert.That(trigger.ActivateEast, Is.False, "Did not set Activate East");
+        }
+
+        [Test]
         public void ShouldParseZoneInTiles()
         {
             var translator = XlatParser.Parse(new[]

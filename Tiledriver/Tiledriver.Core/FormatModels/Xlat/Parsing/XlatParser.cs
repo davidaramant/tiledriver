@@ -128,7 +128,37 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
 
         private static void ParseTrigger(Expression exp, TileMappings tileMappings)
         {
-            throw new NotImplementedException();
+            var oldnum = exp.Oldnum.OrElse(() => new ParsingException("No oldnum found in trigger definition."));
+            if (exp.Qualifiers.Any() || exp.SubExpressions.Any() || exp.Values.Any())
+            {
+                throw new ParsingException("Bad structure for trigger.");
+            }
+            var trigger = ParsePositionlessTrigger(exp);
+
+            tileMappings.PositionlessTriggers.Add(oldnum, trigger);
+        }
+
+        public static PositionlessTrigger ParsePositionlessTrigger(IHaveAssignments block)
+        {
+            // HACK: This is copy-pasted from the generated UWMF parser code with the x/y/z stuff removed
+            var parsedBlock = new PositionlessTrigger();
+            block.GetValueFor("Action").SetRequiredString(value => parsedBlock.Action = value, "Trigger", "Action");
+            block.GetValueFor("Arg0").SetOptionalIntegerNumber(value => parsedBlock.Arg0 = value, "Trigger", "Arg0");
+            block.GetValueFor("Arg1").SetOptionalIntegerNumber(value => parsedBlock.Arg1 = value, "Trigger", "Arg1");
+            block.GetValueFor("Arg2").SetOptionalIntegerNumber(value => parsedBlock.Arg2 = value, "Trigger", "Arg2");
+            block.GetValueFor("Arg3").SetOptionalIntegerNumber(value => parsedBlock.Arg3 = value, "Trigger", "Arg3");
+            block.GetValueFor("Arg4").SetOptionalIntegerNumber(value => parsedBlock.Arg4 = value, "Trigger", "Arg4");
+            block.GetValueFor("ActivateEast").SetOptionalBoolean(value => parsedBlock.ActivateEast = value, "Trigger", "ActivateEast");
+            block.GetValueFor("ActivateNorth").SetOptionalBoolean(value => parsedBlock.ActivateNorth = value, "Trigger", "ActivateNorth");
+            block.GetValueFor("ActivateWest").SetOptionalBoolean(value => parsedBlock.ActivateWest = value, "Trigger", "ActivateWest");
+            block.GetValueFor("ActivateSouth").SetOptionalBoolean(value => parsedBlock.ActivateSouth = value, "Trigger", "ActivateSouth");
+            block.GetValueFor("PlayerCross").SetOptionalBoolean(value => parsedBlock.PlayerCross = value, "Trigger", "PlayerCross");
+            block.GetValueFor("PlayerUse").SetOptionalBoolean(value => parsedBlock.PlayerUse = value, "Trigger", "PlayerUse");
+            block.GetValueFor("MonsterUse").SetOptionalBoolean(value => parsedBlock.MonsterUse = value, "Trigger", "MonsterUse");
+            block.GetValueFor("Repeatable").SetOptionalBoolean(value => parsedBlock.Repeatable = value, "Trigger", "Repeatable");
+            block.GetValueFor("Secret").SetOptionalBoolean(value => parsedBlock.Secret = value, "Trigger", "Secret");
+            block.GetValueFor("Comment").SetOptionalString(value => parsedBlock.Comment = value, "Trigger", "Comment");
+            return parsedBlock;
         }
 
         private static void ParseSoundZone(Expression exp, TileMappings tileMappings)

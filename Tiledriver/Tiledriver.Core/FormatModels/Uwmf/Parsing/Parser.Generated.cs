@@ -10,12 +10,12 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
     {
         static partial void SetGlobalAssignments(Map map, UwmfSyntaxTree tree)
         {
-            SetRequiredString(tree.GetValueFor("NameSpace"), value => map.NameSpace = value, "Map", "NameSpace");
-            SetRequiredIntegerNumber(tree.GetValueFor("TileSize"), value => map.TileSize = value, "Map", "TileSize");
-            SetRequiredString(tree.GetValueFor("Name"), value => map.Name = value, "Map", "Name");
-            SetRequiredIntegerNumber(tree.GetValueFor("Width"), value => map.Width = value, "Map", "Width");
-            SetRequiredIntegerNumber(tree.GetValueFor("Height"), value => map.Height = value, "Map", "Height");
-            SetOptionalString(tree.GetValueFor("Comment"), value => map.Comment = value, "Map", "Comment");
+            tree.GetValueFor("NameSpace").SetRequiredString(value => map.NameSpace = value, "Map", "NameSpace");
+            tree.GetValueFor("TileSize").SetRequiredIntegerNumber(value => map.TileSize = value, "Map", "TileSize");
+            tree.GetValueFor("Name").SetRequiredString(value => map.Name = value, "Map", "Name");
+            tree.GetValueFor("Width").SetRequiredIntegerNumber(value => map.Width = value, "Map", "Width");
+            tree.GetValueFor("Height").SetRequiredIntegerNumber(value => map.Height = value, "Map", "Height");
+            tree.GetValueFor("Comment").SetOptionalString(value => map.Comment = value, "Map", "Comment");
         }
         static partial void SetBlocks(Map map, UwmfSyntaxTree tree)
         {
@@ -38,84 +38,84 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
         public static Tile ParseTile(IHaveAssignments block)
         {
             var parsedBlock = new Tile();
-            SetRequiredString(block.GetValueFor("TextureEast"), value => parsedBlock.TextureEast = value, "Tile", "TextureEast");
-            SetRequiredString(block.GetValueFor("TextureNorth"), value => parsedBlock.TextureNorth = value, "Tile", "TextureNorth");
-            SetRequiredString(block.GetValueFor("TextureWest"), value => parsedBlock.TextureWest = value, "Tile", "TextureWest");
-            SetRequiredString(block.GetValueFor("TextureSouth"), value => parsedBlock.TextureSouth = value, "Tile", "TextureSouth");
-            SetOptionalBoolean(block.GetValueFor("BlockingEast"), value => parsedBlock.BlockingEast = value, "Tile", "BlockingEast");
-            SetOptionalBoolean(block.GetValueFor("BlockingNorth"), value => parsedBlock.BlockingNorth = value, "Tile", "BlockingNorth");
-            SetOptionalBoolean(block.GetValueFor("BlockingWest"), value => parsedBlock.BlockingWest = value, "Tile", "BlockingWest");
-            SetOptionalBoolean(block.GetValueFor("BlockingSouth"), value => parsedBlock.BlockingSouth = value, "Tile", "BlockingSouth");
-            SetOptionalBoolean(block.GetValueFor("OffsetVertical"), value => parsedBlock.OffsetVertical = value, "Tile", "OffsetVertical");
-            SetOptionalBoolean(block.GetValueFor("OffsetHorizontal"), value => parsedBlock.OffsetHorizontal = value, "Tile", "OffsetHorizontal");
-            SetOptionalBoolean(block.GetValueFor("DontOverlay"), value => parsedBlock.DontOverlay = value, "Tile", "DontOverlay");
-            SetOptionalIntegerNumber(block.GetValueFor("Mapped"), value => parsedBlock.Mapped = value, "Tile", "Mapped");
-            SetOptionalString(block.GetValueFor("SoundSequence"), value => parsedBlock.SoundSequence = value, "Tile", "SoundSequence");
-            SetOptionalString(block.GetValueFor("TextureOverhead"), value => parsedBlock.TextureOverhead = value, "Tile", "TextureOverhead");
-            SetOptionalString(block.GetValueFor("Comment"), value => parsedBlock.Comment = value, "Tile", "Comment");
+            block.GetValueFor("TextureEast").SetRequiredString(value => parsedBlock.TextureEast = value, "Tile", "TextureEast");
+            block.GetValueFor("TextureNorth").SetRequiredString(value => parsedBlock.TextureNorth = value, "Tile", "TextureNorth");
+            block.GetValueFor("TextureWest").SetRequiredString(value => parsedBlock.TextureWest = value, "Tile", "TextureWest");
+            block.GetValueFor("TextureSouth").SetRequiredString(value => parsedBlock.TextureSouth = value, "Tile", "TextureSouth");
+            block.GetValueFor("BlockingEast").SetOptionalBoolean(value => parsedBlock.BlockingEast = value, "Tile", "BlockingEast");
+            block.GetValueFor("BlockingNorth").SetOptionalBoolean(value => parsedBlock.BlockingNorth = value, "Tile", "BlockingNorth");
+            block.GetValueFor("BlockingWest").SetOptionalBoolean(value => parsedBlock.BlockingWest = value, "Tile", "BlockingWest");
+            block.GetValueFor("BlockingSouth").SetOptionalBoolean(value => parsedBlock.BlockingSouth = value, "Tile", "BlockingSouth");
+            block.GetValueFor("OffsetVertical").SetOptionalBoolean(value => parsedBlock.OffsetVertical = value, "Tile", "OffsetVertical");
+            block.GetValueFor("OffsetHorizontal").SetOptionalBoolean(value => parsedBlock.OffsetHorizontal = value, "Tile", "OffsetHorizontal");
+            block.GetValueFor("DontOverlay").SetOptionalBoolean(value => parsedBlock.DontOverlay = value, "Tile", "DontOverlay");
+            block.GetValueFor("Mapped").SetOptionalIntegerNumber(value => parsedBlock.Mapped = value, "Tile", "Mapped");
+            block.GetValueFor("SoundSequence").SetOptionalString(value => parsedBlock.SoundSequence = value, "Tile", "SoundSequence");
+            block.GetValueFor("TextureOverhead").SetOptionalString(value => parsedBlock.TextureOverhead = value, "Tile", "TextureOverhead");
+            block.GetValueFor("Comment").SetOptionalString(value => parsedBlock.Comment = value, "Tile", "Comment");
             return parsedBlock;
         }
         public static Sector ParseSector(IHaveAssignments block)
         {
             var parsedBlock = new Sector();
-            SetRequiredString(block.GetValueFor("TextureCeiling"), value => parsedBlock.TextureCeiling = value, "Sector", "TextureCeiling");
-            SetRequiredString(block.GetValueFor("TextureFloor"), value => parsedBlock.TextureFloor = value, "Sector", "TextureFloor");
-            SetOptionalString(block.GetValueFor("Comment"), value => parsedBlock.Comment = value, "Sector", "Comment");
+            block.GetValueFor("TextureCeiling").SetRequiredString(value => parsedBlock.TextureCeiling = value, "Sector", "TextureCeiling");
+            block.GetValueFor("TextureFloor").SetRequiredString(value => parsedBlock.TextureFloor = value, "Sector", "TextureFloor");
+            block.GetValueFor("Comment").SetOptionalString(value => parsedBlock.Comment = value, "Sector", "Comment");
             return parsedBlock;
         }
         public static Zone ParseZone(IHaveAssignments block)
         {
             var parsedBlock = new Zone();
-            SetOptionalString(block.GetValueFor("Comment"), value => parsedBlock.Comment = value, "Zone", "Comment");
+            block.GetValueFor("Comment").SetOptionalString(value => parsedBlock.Comment = value, "Zone", "Comment");
             return parsedBlock;
         }
         public static Plane ParsePlane(IHaveAssignments block)
         {
             var parsedBlock = new Plane();
-            SetRequiredIntegerNumber(block.GetValueFor("Depth"), value => parsedBlock.Depth = value, "Plane", "Depth");
-            SetOptionalString(block.GetValueFor("Comment"), value => parsedBlock.Comment = value, "Plane", "Comment");
+            block.GetValueFor("Depth").SetRequiredIntegerNumber(value => parsedBlock.Depth = value, "Plane", "Depth");
+            block.GetValueFor("Comment").SetOptionalString(value => parsedBlock.Comment = value, "Plane", "Comment");
             return parsedBlock;
         }
         public static Thing ParseThing(IHaveAssignments block)
         {
             var parsedBlock = new Thing();
-            SetRequiredString(block.GetValueFor("Type"), value => parsedBlock.Type = value, "Thing", "Type");
-            SetRequiredFloatingPointNumber(block.GetValueFor("X"), value => parsedBlock.X = value, "Thing", "X");
-            SetRequiredFloatingPointNumber(block.GetValueFor("Y"), value => parsedBlock.Y = value, "Thing", "Y");
-            SetRequiredFloatingPointNumber(block.GetValueFor("Z"), value => parsedBlock.Z = value, "Thing", "Z");
-            SetRequiredIntegerNumber(block.GetValueFor("Angle"), value => parsedBlock.Angle = value, "Thing", "Angle");
-            SetOptionalBoolean(block.GetValueFor("Ambush"), value => parsedBlock.Ambush = value, "Thing", "Ambush");
-            SetOptionalBoolean(block.GetValueFor("Patrol"), value => parsedBlock.Patrol = value, "Thing", "Patrol");
-            SetOptionalBoolean(block.GetValueFor("Skill1"), value => parsedBlock.Skill1 = value, "Thing", "Skill1");
-            SetOptionalBoolean(block.GetValueFor("Skill2"), value => parsedBlock.Skill2 = value, "Thing", "Skill2");
-            SetOptionalBoolean(block.GetValueFor("Skill3"), value => parsedBlock.Skill3 = value, "Thing", "Skill3");
-            SetOptionalBoolean(block.GetValueFor("Skill4"), value => parsedBlock.Skill4 = value, "Thing", "Skill4");
-            SetOptionalBoolean(block.GetValueFor("Skill5"), value => parsedBlock.Skill5 = value, "Thing", "Skill5");
-            SetOptionalString(block.GetValueFor("Comment"), value => parsedBlock.Comment = value, "Thing", "Comment");
+            block.GetValueFor("Type").SetRequiredString(value => parsedBlock.Type = value, "Thing", "Type");
+            block.GetValueFor("X").SetRequiredFloatingPointNumber(value => parsedBlock.X = value, "Thing", "X");
+            block.GetValueFor("Y").SetRequiredFloatingPointNumber(value => parsedBlock.Y = value, "Thing", "Y");
+            block.GetValueFor("Z").SetRequiredFloatingPointNumber(value => parsedBlock.Z = value, "Thing", "Z");
+            block.GetValueFor("Angle").SetRequiredIntegerNumber(value => parsedBlock.Angle = value, "Thing", "Angle");
+            block.GetValueFor("Ambush").SetOptionalBoolean(value => parsedBlock.Ambush = value, "Thing", "Ambush");
+            block.GetValueFor("Patrol").SetOptionalBoolean(value => parsedBlock.Patrol = value, "Thing", "Patrol");
+            block.GetValueFor("Skill1").SetOptionalBoolean(value => parsedBlock.Skill1 = value, "Thing", "Skill1");
+            block.GetValueFor("Skill2").SetOptionalBoolean(value => parsedBlock.Skill2 = value, "Thing", "Skill2");
+            block.GetValueFor("Skill3").SetOptionalBoolean(value => parsedBlock.Skill3 = value, "Thing", "Skill3");
+            block.GetValueFor("Skill4").SetOptionalBoolean(value => parsedBlock.Skill4 = value, "Thing", "Skill4");
+            block.GetValueFor("Skill5").SetOptionalBoolean(value => parsedBlock.Skill5 = value, "Thing", "Skill5");
+            block.GetValueFor("Comment").SetOptionalString(value => parsedBlock.Comment = value, "Thing", "Comment");
             return parsedBlock;
         }
         public static Trigger ParseTrigger(IHaveAssignments block)
         {
             var parsedBlock = new Trigger();
-            SetRequiredIntegerNumber(block.GetValueFor("X"), value => parsedBlock.X = value, "Trigger", "X");
-            SetRequiredIntegerNumber(block.GetValueFor("Y"), value => parsedBlock.Y = value, "Trigger", "Y");
-            SetRequiredIntegerNumber(block.GetValueFor("Z"), value => parsedBlock.Z = value, "Trigger", "Z");
-            SetRequiredString(block.GetValueFor("Action"), value => parsedBlock.Action = value, "Trigger", "Action");
-            SetOptionalIntegerNumber(block.GetValueFor("Arg0"), value => parsedBlock.Arg0 = value, "Trigger", "Arg0");
-            SetOptionalIntegerNumber(block.GetValueFor("Arg1"), value => parsedBlock.Arg1 = value, "Trigger", "Arg1");
-            SetOptionalIntegerNumber(block.GetValueFor("Arg2"), value => parsedBlock.Arg2 = value, "Trigger", "Arg2");
-            SetOptionalIntegerNumber(block.GetValueFor("Arg3"), value => parsedBlock.Arg3 = value, "Trigger", "Arg3");
-            SetOptionalIntegerNumber(block.GetValueFor("Arg4"), value => parsedBlock.Arg4 = value, "Trigger", "Arg4");
-            SetOptionalBoolean(block.GetValueFor("ActivateEast"), value => parsedBlock.ActivateEast = value, "Trigger", "ActivateEast");
-            SetOptionalBoolean(block.GetValueFor("ActivateNorth"), value => parsedBlock.ActivateNorth = value, "Trigger", "ActivateNorth");
-            SetOptionalBoolean(block.GetValueFor("ActivateWest"), value => parsedBlock.ActivateWest = value, "Trigger", "ActivateWest");
-            SetOptionalBoolean(block.GetValueFor("ActivateSouth"), value => parsedBlock.ActivateSouth = value, "Trigger", "ActivateSouth");
-            SetOptionalBoolean(block.GetValueFor("PlayerCross"), value => parsedBlock.PlayerCross = value, "Trigger", "PlayerCross");
-            SetOptionalBoolean(block.GetValueFor("PlayerUse"), value => parsedBlock.PlayerUse = value, "Trigger", "PlayerUse");
-            SetOptionalBoolean(block.GetValueFor("MonsterUse"), value => parsedBlock.MonsterUse = value, "Trigger", "MonsterUse");
-            SetOptionalBoolean(block.GetValueFor("Repeatable"), value => parsedBlock.Repeatable = value, "Trigger", "Repeatable");
-            SetOptionalBoolean(block.GetValueFor("Secret"), value => parsedBlock.Secret = value, "Trigger", "Secret");
-            SetOptionalString(block.GetValueFor("Comment"), value => parsedBlock.Comment = value, "Trigger", "Comment");
+            block.GetValueFor("X").SetRequiredIntegerNumber(value => parsedBlock.X = value, "Trigger", "X");
+            block.GetValueFor("Y").SetRequiredIntegerNumber(value => parsedBlock.Y = value, "Trigger", "Y");
+            block.GetValueFor("Z").SetRequiredIntegerNumber(value => parsedBlock.Z = value, "Trigger", "Z");
+            block.GetValueFor("Action").SetRequiredString(value => parsedBlock.Action = value, "Trigger", "Action");
+            block.GetValueFor("Arg0").SetOptionalIntegerNumber(value => parsedBlock.Arg0 = value, "Trigger", "Arg0");
+            block.GetValueFor("Arg1").SetOptionalIntegerNumber(value => parsedBlock.Arg1 = value, "Trigger", "Arg1");
+            block.GetValueFor("Arg2").SetOptionalIntegerNumber(value => parsedBlock.Arg2 = value, "Trigger", "Arg2");
+            block.GetValueFor("Arg3").SetOptionalIntegerNumber(value => parsedBlock.Arg3 = value, "Trigger", "Arg3");
+            block.GetValueFor("Arg4").SetOptionalIntegerNumber(value => parsedBlock.Arg4 = value, "Trigger", "Arg4");
+            block.GetValueFor("ActivateEast").SetOptionalBoolean(value => parsedBlock.ActivateEast = value, "Trigger", "ActivateEast");
+            block.GetValueFor("ActivateNorth").SetOptionalBoolean(value => parsedBlock.ActivateNorth = value, "Trigger", "ActivateNorth");
+            block.GetValueFor("ActivateWest").SetOptionalBoolean(value => parsedBlock.ActivateWest = value, "Trigger", "ActivateWest");
+            block.GetValueFor("ActivateSouth").SetOptionalBoolean(value => parsedBlock.ActivateSouth = value, "Trigger", "ActivateSouth");
+            block.GetValueFor("PlayerCross").SetOptionalBoolean(value => parsedBlock.PlayerCross = value, "Trigger", "PlayerCross");
+            block.GetValueFor("PlayerUse").SetOptionalBoolean(value => parsedBlock.PlayerUse = value, "Trigger", "PlayerUse");
+            block.GetValueFor("MonsterUse").SetOptionalBoolean(value => parsedBlock.MonsterUse = value, "Trigger", "MonsterUse");
+            block.GetValueFor("Repeatable").SetOptionalBoolean(value => parsedBlock.Repeatable = value, "Trigger", "Repeatable");
+            block.GetValueFor("Secret").SetOptionalBoolean(value => parsedBlock.Secret = value, "Trigger", "Secret");
+            block.GetValueFor("Comment").SetOptionalString(value => parsedBlock.Comment = value, "Trigger", "Comment");
             return parsedBlock;
         }
     }
