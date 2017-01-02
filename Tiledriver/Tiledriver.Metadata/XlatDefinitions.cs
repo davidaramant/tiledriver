@@ -26,6 +26,7 @@ namespace Tiledriver.Metadata
                 HasRequiredInteger("angles").
                 HasRequiredBoolean("holowall").
                 HasRequiredBoolean("pathing").
+                HasRequiredBoolean("ambush").
                 HasRequiredInteger("minskill"),
 
             new BlockData("positionlessTrigger").

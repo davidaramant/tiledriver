@@ -129,6 +129,17 @@ namespace Tiledriver.Core.FormatModels.Xlat
                 _pathing = value;
             }
         }
+        private bool _ambushHasBeenSet = false;
+        private bool _ambush;
+        public bool Ambush
+        {
+            get { return _ambush; }
+            set
+            {
+                _ambushHasBeenSet = true;
+                _ambush = value;
+            }
+        }
         private bool _minskillHasBeenSet = false;
         private int _minskill;
         public int Minskill
@@ -147,6 +158,7 @@ namespace Tiledriver.Core.FormatModels.Xlat
             int angles,
             bool holowall,
             bool pathing,
+            bool ambush,
             int minskill)
         {
             Oldnum = oldnum;
@@ -154,6 +166,7 @@ namespace Tiledriver.Core.FormatModels.Xlat
             Angles = angles;
             Holowall = holowall;
             Pathing = pathing;
+            Ambush = ambush;
             Minskill = minskill;
             AdditionalSemanticChecks();
         }
@@ -164,6 +177,7 @@ namespace Tiledriver.Core.FormatModels.Xlat
             if (!_anglesHasBeenSet) throw new InvalidUwmfException("Did not set Angles on ThingDefinition");
             if (!_holowallHasBeenSet) throw new InvalidUwmfException("Did not set Holowall on ThingDefinition");
             if (!_pathingHasBeenSet) throw new InvalidUwmfException("Did not set Pathing on ThingDefinition");
+            if (!_ambushHasBeenSet) throw new InvalidUwmfException("Did not set Ambush on ThingDefinition");
             if (!_minskillHasBeenSet) throw new InvalidUwmfException("Did not set Minskill on ThingDefinition");
             AdditionalSemanticChecks();
         }

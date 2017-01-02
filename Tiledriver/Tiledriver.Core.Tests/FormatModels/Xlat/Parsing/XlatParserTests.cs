@@ -291,6 +291,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
         {
             // 	{23,  Puddle,            4, HOLOWALL, 2}
             // 	{24,  Puddle,            5, PATHING|HOLOWALL, 3}
+            // 	{25,  Puddle,            6, AMBUSH|PATHING, 4}
             var translator = XlatParser.Parse(new[]
             {
                 Expression.Block(new Identifier("things"), new []
@@ -319,25 +320,48 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                             Token.Identifier("PATHING"),Token.Pipe,Token.Identifier("HOLOWALL"), Token.Comma,
                             Token.Integer(3),
                         }),
+                    Expression.ValueList(
+                        name:Maybe<Identifier>.Nothing,
+                        oldnum:Maybe<ushort>.Nothing,
+                        qualifiers:Enumerable.Empty<Token>(),
+                        values:new[]
+                        {
+                            Token.Integer(25), Token.Comma,
+                            Token.Identifier("Puddle"), Token.Comma,
+                            Token.Integer(6), Token.Comma,
+                            Token.Identifier("AMBUSH"),Token.Pipe,Token.Identifier("PATHING"), Token.Comma,
+                            Token.Integer(4),
+                        }),
                 })
             });
 
-            Assert.That(translator.ThingMappings.ThingDefinitions, Has.Count.EqualTo(2), "Did not parse thing definition.");
+            Assert.That(translator.ThingMappings.ThingDefinitions, Has.Count.EqualTo(3), "Did not parse thing definition.");
             var thingDef = translator.ThingMappings.ThingDefinitions.First();
             Assert.That(thingDef.Oldnum, Is.EqualTo(23), "Did not parse old num.");
             Assert.That(thingDef.Actor, Is.EqualTo("Puddle"), "Did not parse actor.");
             Assert.That(thingDef.Angles, Is.EqualTo(4), "Did not parse angles.");
             Assert.That(thingDef.Pathing, Is.False, "Did not parse pathing.");
             Assert.That(thingDef.Holowall, Is.True, "Did not parse holowall.");
+            Assert.That(thingDef.Ambush, Is.False, "Did not parse ambush.");
             Assert.That(thingDef.Minskill, Is.EqualTo(2), "Did not parse minskill.");
 
-            thingDef = translator.ThingMappings.ThingDefinitions.Last();
+            thingDef = translator.ThingMappings.ThingDefinitions.ElementAt(1);
             Assert.That(thingDef.Oldnum, Is.EqualTo(24), "Did not parse old num.");
             Assert.That(thingDef.Actor, Is.EqualTo("Puddle"), "Did not parse actor.");
             Assert.That(thingDef.Angles, Is.EqualTo(5), "Did not parse angles.");
             Assert.That(thingDef.Pathing, Is.True, "Did not parse pathing.");
             Assert.That(thingDef.Holowall, Is.True, "Did not parse holowall.");
+            Assert.That(thingDef.Ambush, Is.False, "Did not parse ambush.");
             Assert.That(thingDef.Minskill, Is.EqualTo(3), "Did not parse minskill.");
+
+            thingDef = translator.ThingMappings.ThingDefinitions.ElementAt(2);
+            Assert.That(thingDef.Oldnum, Is.EqualTo(25), "Did not parse old num.");
+            Assert.That(thingDef.Actor, Is.EqualTo("Puddle"), "Did not parse actor.");
+            Assert.That(thingDef.Angles, Is.EqualTo(6), "Did not parse angles.");
+            Assert.That(thingDef.Pathing, Is.True, "Did not parse pathing.");
+            Assert.That(thingDef.Holowall, Is.False, "Did not parse holowall.");
+            Assert.That(thingDef.Ambush, Is.True, "Did not parse ambush.");
+            Assert.That(thingDef.Minskill, Is.EqualTo(4), "Did not parse minskill.");
         }
 
         #endregion Things section

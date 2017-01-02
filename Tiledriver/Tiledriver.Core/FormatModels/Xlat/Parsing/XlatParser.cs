@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2016, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Functional.Maybe;
@@ -274,48 +275,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
             var angles = valueQueue.DequeueOfType(TokenType.Integer).AsInt();
             valueQueue.DequeueOfType(TokenType.Comma);
 
-            token = valueQueue.DequeueOfType(TokenType.Identifier, TokenType.Integer);
-            var pathing = false;
-            var holowall = false;
-            if (token.Type == TokenType.Identifier)
-            {
-                var flag = token.AsIdentifier().ToString();
-                if (!(flag == "pathing" || flag == "holowall"))
-                {
-                    throw new ParsingException($"Unknown flag in thing definition: {flag}");
-                }
-
-                pathing = flag == "pathing";
-                holowall = flag == "holowall";
-
-                token = valueQueue.DequeueOfType(TokenType.Pipe, TokenType.Comma);
-                if (token.Type == TokenType.Pipe)
-                {
-                    flag = valueQueue.DequeueOfType(TokenType.Identifier).AsIdentifier().ToString();
-
-                    if (pathing)
-                    {
-                        if (flag != "holowall")
-                        {
-                            throw new ParsingException($"Unknown flag in thing definition: {flag}");
-                        }
-                        holowall = true;
-                    }
-                    else
-                    {
-                        if (flag != "pathing")
-                        {
-                            throw new ParsingException($"Unknown flag in thing definition: {flag}");
-                        }
-                        pathing = true;
-                    }
-                    valueQueue.DequeueOfType(TokenType.Comma);
-                }
-            }
-            else
-            {
-                valueQueue.DequeueOfType(TokenType.Comma);
-            }
+            var flags = ParseThingFlags(valueQueue);
 
             var minskill = valueQueue.DequeueOfType(TokenType.Integer).AsInt();
 
@@ -329,9 +289,73 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
                     oldnum: oldnum,
                     actor: actor,
                     angles: angles,
-                    holowall: holowall,
-                    pathing: pathing,
+                    holowall: flags.HasFlag(ThingFlags.Holowall),
+                    pathing: flags.HasFlag(ThingFlags.Pathing),
+                    ambush: flags.HasFlag(ThingFlags.Ambush),
                     minskill: minskill));
+        }
+
+        private static ThingFlags ParseThingFlags(Queue<Token> valueQueue)
+        {
+            var token = valueQueue.DequeueOfType(TokenType.Identifier, TokenType.Integer);
+
+            if (token.Type == TokenType.Integer)
+            {
+                valueQueue.DequeueOfType(TokenType.Comma);
+                return ThingFlags.None;
+            }
+
+            var foundFlags = new List<string>();
+
+            do
+            {
+                foundFlags.Add(token.AsIdentifier().ToString());
+
+                token = valueQueue.DequeueOfType(TokenType.Pipe, TokenType.Comma);
+
+                if (token.Type == TokenType.Pipe)
+                {
+                    token = valueQueue.DequeueOfType(TokenType.Identifier);
+                }
+                else
+                {
+                    break;
+                }
+            } while (true);
+
+            var flags = ThingFlags.None;
+
+            foreach (var f in foundFlags)
+            {
+                switch (f)
+                {
+                    case "ambush":
+                        flags |= ThingFlags.Ambush;
+                        break;
+
+                    case "holowall":
+                        flags |= ThingFlags.Holowall;
+                        break;
+
+                    case "pathing":
+                        flags |= ThingFlags.Pathing;
+                        break;
+
+                    default:
+                        throw new ParsingException($"Unknown flag in thing definition: {f}");
+                }
+            }
+
+            return flags;
+        }
+
+        [Flags]
+        enum ThingFlags
+        {
+            None = 0,
+            Holowall = 1,
+            Pathing = 2,
+            Ambush = 4,
         }
 
         private static void ParseElevator(Expression exp, ThingMappings thingMappings)
