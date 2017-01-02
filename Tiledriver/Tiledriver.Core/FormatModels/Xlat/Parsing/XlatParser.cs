@@ -2,131 +2,129 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System;
-using Piglet.Parser;
+using System.Collections.Generic;
+using System.Linq;
+using Functional.Maybe;
 using Tiledriver.Core.FormatModels.Common;
-using Tiledriver.Core.FormatModels.Uwmf;
+using Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax;
 
 namespace Tiledriver.Core.FormatModels.Xlat.Parsing
 {
     public static class XlatParser
     {
-        public static MapTranslator Parse(ILexer lexer)
+        public static MapTranslator Parse(IEnumerable<Expression> xlatExpressions)
         {
             var tileMappings = new TileMappings();
             var thingMappings = new ThingMappings();
             var flatMappings = new FlatMappings();
             var enableLightLevels = false;
 
-            while (true)
+            foreach (var exp in xlatExpressions)
             {
-                var idToken = lexer.MustReadTokenOfTypes(TokenType.Identifier, TokenType.EndOfFile);
-
-                if (idToken.Type == TokenType.EndOfFile) break;
-
-                var name = idToken.TryAsIdentifier().Value;
+                var name = exp.Name.OrElse(() => new ParsingException("Found global expression without name."));
 
                 switch (name.ToString())
                 {
                     case "enable":
-                        var lightLevelsId = lexer.MustReadIdentifier();
-                        if (lightLevelsId.ToString() != "lightlevels")
+                        if (exp.Oldnum.HasValue || exp.HasAssignments || exp.Values.Any() || exp.Qualifiers.Count() != 1 || exp.SubExpressions.Any())
                         {
-                            throw new ParseException("Invalid syntax: Expected 'lightlevels'");
+                            throw new ParsingException("Invalid structure of 'enable' command.");
                         }
-                        lexer.MustReadTokenOfTypes(TokenType.Semicolon);
+                        var flag = exp.Qualifiers.First();
+                        if (flag != new Identifier("lightlevels"))
+                        {
+                            throw new ParsingException($"Attempted to enable unknown flag '{flag}'");
+                        }
                         enableLightLevels = true;
                         break;
 
-                    case "include":
-                        throw new NotImplementedException("inlude statement");
-                        
                     case "tiles":
-                        ParseTiles(tileMappings,lexer);
+                        ValidateSectionBlock(exp, "tiles");
+                        var parsedTiles = ParseTiles(exp.SubExpressions);
+                        tileMappings = parsedTiles;
+                        // TODO: merge with old
                         break;
+
                     case "things":
-                        ParseThings(thingMappings, lexer);
+                        ValidateSectionBlock(exp, "things");
+                        var parsedThings = ParseThings(exp.SubExpressions);
+                        thingMappings = parsedThings;
+                        // TODO: merge with old
                         break;
+
                     case "flats":
-                        ParseFlats(flatMappings, lexer);
+                        ValidateSectionBlock(exp, "flats");
+                        var parsedFlats = ParseFlats(exp.SubExpressions);
+                        flatMappings = parsedFlats;
+                        // TODO: merge with old
                         break;
 
                     default:
-                        throw new ParseException("Unknown identifier in XLAT global scope: " + name);
+                        throw new ParsingException("Unknown identifier in XLAT global scope: " + name);
                 }
             }
 
             return new MapTranslator(tileMappings, thingMappings, flatMappings, enableLightLevels);
         }
 
-        #region Tiles
-
-        private static void ParseTiles(TileMappings tileMappings, ILexer lexer)
+        private static void ValidateSectionBlock(Expression section, string name)
         {
-            lexer.MustReadTokenOfTypes(TokenType.OpenParen);
-
-            while (true)
+            if (section.Oldnum.HasValue || section.HasAssignments || section.Values.Any() || section.Qualifiers.Any())
             {
-                var idToken = lexer.MustReadTokenOfTypes(TokenType.Identifier, TokenType.CloseParen);
-
-                if (idToken.Type == TokenType.CloseParen) break;
-
-                var name = idToken.TryAsIdentifier().Value;
-
-                var oldNum = lexer.MustReadUshort();
-
-                switch (name.ToString())
-                {
-                    case "modzone":
-                    case "tile":
-                    case "trigger":
-                    case "zone":
-                    default:
-                        throw new ParseException("Unknown identifier in XLAT tiles: " + name);
-                }
+                throw new ParsingException($"Invalid structure of '{name}' section.");
             }
         }
 
-        #endregion
-
-        private static void ParseThings(ThingMappings thingMappings, ILexer lexer)
+        private static TileMappings ParseTiles(IEnumerable<Expression> expressions)
         {
-            lexer.MustReadTokenOfTypes(TokenType.OpenParen);
-
-            while (true)
-            {
-                // TODO: Handle OpenParen too - thing definitions!!
-                var idToken = lexer.MustReadTokenOfTypes(TokenType.Identifier, TokenType.CloseParen);
-
-                if (idToken.Type == TokenType.CloseParen) break;
-
-                var name = idToken.TryAsIdentifier().Value;
-
-                switch (name.ToString())
-                {
-                    default:
-                        throw new ParseException("Unknown identifier in XLAT things: " + name);
-                }
-            }
+            throw new NotImplementedException();
         }
 
-        private static void ParseFlats(FlatMappings flatMappings, ILexer lexer)
+        private static ThingMappings ParseThings(IEnumerable<Expression> expressions)
         {
-            lexer.MustReadTokenOfTypes(TokenType.OpenParen);
+            throw new NotImplementedException();
+        }
 
-            while (true)
+        private static FlatMappings ParseFlats(IEnumerable<Expression> expressions)
+        {
+            var exps = expressions.ToArray();
+            if (exps.Length > 2)
             {
-                var idToken = lexer.MustReadTokenOfTypes(TokenType.Identifier, TokenType.CloseParen);
+                throw new ParsingException("Too many definitions inside of 'flats'");
+            }
 
-                if (idToken.Type == TokenType.CloseParen) break;
-
-                var name = idToken.TryAsIdentifier().Value;
-
-                switch (name.ToString())
+            var flatMappings = new FlatMappings();
+            foreach (var exp in exps)
+            {
+                var name = exp.Name.Select(id => id.ToString()).OrElse(() => new ParsingException("Found 'flats' expression without name."));
+                if (name != "ceiling" && name != "floor")
                 {
-                    default:
-                        throw new ParseException("Unknown identifier in XLAT flats:" + name);
+                    throw new ParsingException($"Unknown expression '{name}' inside of flats.");
+                }
+                
+                if (exp.Oldnum.HasValue || exp.HasAssignments || exp.Qualifiers.Any() || exp.SubExpressions.Any())
+                {
+                    throw new ParsingException($"Invalid structure of '{name}' expression in 'flats' command.");
+                }
+
+                if (name == "ceiling")
+                {
+                    if (flatMappings.Ceiling.Any())
+                    {
+                        throw new ParsingException("Duplicate 'ceiling' expression in flats.");
+                    }
+                    flatMappings.Ceiling.AddRange(exp.Values.Select(t=>t.TryAsString().Value));
+                }
+                else
+                {
+                    if (flatMappings.Floor.Any())
+                    {
+                        throw new ParsingException("Duplicate 'floor' expression in flats.");
+                    }
+                    flatMappings.Floor.AddRange(exp.Values.Select(t => t.TryAsString().Value));
                 }
             }
+            return flatMappings;
         }
     }
 }
