@@ -28,7 +28,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
 
             AssertExpression(expression,
                 name: "enable",
-                qualifiers: new[] { "lightlevels" });
+                qualifiers: new[] { Token.Identifier("lightlevels") });
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
             var subExp = expression.SubExpressions.First();
             AssertExpression(subExp,
                 name: "thing",
-                qualifiers: new[] { "with", "stuff" });
+                qualifiers: new[] { Token.Identifier("with"), Token.Identifier("stuff") });
         }
 
         [Test]
@@ -78,7 +78,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
             AssertExpression(subExp,
                 name: "thing",
                 oldnum: 44,
-                qualifiers: new[] { "with", "stuff" });
+                qualifiers: new[] { Token.Identifier("with"), Token.Identifier("stuff") });
         }
 
         [Test]
@@ -136,6 +136,38 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
         }
 
         [Test]
+        public void ShouldParseBlockWithComplicatedExpression()
+        {
+            var result = Analyze("block { modzone 107 changetrigger \"Exit_Normal\"" +
+                                "	{" +
+                                "		action = \"Exit_Secret\";" +
+                                "		playeruse = true;" +
+                                "		activatenorth = false;" +
+                                "		activatesouth = false;" +
+                                "	} }");
+
+            Assert.That(result, Has.Length.EqualTo(1));
+            var expression = result.First();
+
+            AssertExpression(expression,
+                name: "block",
+                numberOfSubExpressions: 1);
+
+            var subExp = expression.SubExpressions.First();
+            AssertExpression(subExp,
+                name: "modzone",
+                oldnum: 107,
+                qualifiers: new[] { Token.Identifier("changetrigger"), Token.String("Exit_Normal") },
+                properties: new[]
+                {
+                    new Assignment("action",Token.String("Exit_Secret")),
+                    new Assignment("playeruse",Token.BooleanTrue),
+                    new Assignment("activatenorth",Token.BooleanFalse),
+                    new Assignment("activatesouth",Token.BooleanFalse),
+                });
+        }
+
+        [Test]
         public void ShouldParseBlockWithValueLists()
         {
             var result = Analyze(
@@ -182,7 +214,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                     Token.Integer(1)
                 });
         }
-        
+
         [Test]
         public void ShouldParseBlockWithAssignment()
         {
@@ -198,7 +230,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
             var subExp = expression.SubExpressions.First();
             AssertExpression(subExp,
                 name: "thing",
-                properties: new []
+                properties: new[]
                 {
                     new Assignment(new Identifier("dog"), Token.Integer(1) )
                 });
@@ -219,7 +251,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
             var subExp = expression.SubExpressions.First();
             AssertExpression(subExp,
                 name: "thing",
-                properties: new []
+                properties: new[]
                 {
                     new Assignment(new Identifier("dog"), Token.Integer(1) ),
                     new Assignment(new Identifier("cat"), Token.String("meow") ),
@@ -235,7 +267,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
             {
                 var lexer = new XlatLexer(textReader);
                 var syntaxAnalzer = new SyntaxAnalyzer();
-                var result = syntaxAnalzer.Analyze(lexer);
+                var result = syntaxAnalzer.Analyze(lexer).ToArray();
             }
         }
 
@@ -249,7 +281,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
             Expression expression,
             string name = null,
             short? oldnum = null,
-            IEnumerable<string> qualifiers = null,
+            IEnumerable<Token> qualifiers = null,
             IEnumerable<Assignment> properties = null,
             IEnumerable<Token> values = null,
             int numberOfSubExpressions = 0)
@@ -275,7 +307,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
             }
 
             var expectedQualifiers =
-                (qualifiers ?? Enumerable.Empty<string>()).Select(qName => new Identifier(qName)).ToArray();
+                (qualifiers ?? Enumerable.Empty<Token>()).ToArray();
             Assert.That(expression.Qualifiers.ToArray(), Is.EquivalentTo(expectedQualifiers), "Qualifers were not as expected.");
 
             var expectedProperties =

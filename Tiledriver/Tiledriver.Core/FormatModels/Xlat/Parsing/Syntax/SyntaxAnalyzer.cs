@@ -95,6 +95,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
                 var nextToken = lexer.MustReadTokenOfTypes(
                     TokenType.Integer,
                     TokenType.Identifier,
+                    TokenType.String,
                     TokenType.OpenParen,
                     TokenType.Semicolon);
 
@@ -114,6 +115,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
                             oldnum: oldNum,
                             qualifiers: qualifiers);
 
+                    case TokenType.String:
                     case TokenType.Identifier:
                         qualifiers.Add(nextToken);
                         break;

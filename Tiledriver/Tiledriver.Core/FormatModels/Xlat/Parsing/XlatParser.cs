@@ -1,13 +1,11 @@
 ﻿// Copyright (c) 2016, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Functional.Maybe;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax;
-using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.FormatModels.Xlat.Parsing
 {
@@ -181,7 +179,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
             tileMappings.PositionlessTriggers.Add(oldnum, trigger);
         }
 
-        public static PositionlessTrigger ParsePositionlessTrigger(IHaveAssignments block)
+        private static PositionlessTrigger ParsePositionlessTrigger(IHaveAssignments block)
         {
             // HACK: This is copy-pasted from the generated UWMF parser code with the x/y/z stuff removed
             var parsedBlock = new PositionlessTrigger();

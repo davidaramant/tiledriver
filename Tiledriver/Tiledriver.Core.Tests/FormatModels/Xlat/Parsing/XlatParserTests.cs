@@ -1,7 +1,9 @@
 ﻿// Copyright (c) 2017, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
+using System.IO;
 using System.Linq;
+using System.Text;
 using Functional.Maybe;
 using NUnit.Framework;
 using Tiledriver.Core.FormatModels.Common;
@@ -13,6 +15,19 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
     [TestFixture]
     public sealed class XlatParserTests
     {
+        [Test]
+        public void ShouldParseRealXlat()
+        {
+            using (var stream = File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "Xlat", "Parsing", "wolf3d.txt")))
+            using (var textReader = new StreamReader(stream, Encoding.ASCII))
+            {
+                var lexer = new XlatLexer(textReader);
+                var syntaxAnalzer = new SyntaxAnalyzer();
+                var result = syntaxAnalzer.Analyze(lexer);
+                var translator = XlatParser.Parse(result);
+            }
+        }
+
         #region Global Expressions
 
         [Test]
