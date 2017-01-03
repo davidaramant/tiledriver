@@ -1,7 +1,6 @@
 // Copyright (c) 2016, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -11,6 +10,7 @@ using Tiledriver.Core.FormatModels.Wad.StreamExtensions;
 
 namespace Tiledriver.Core.FormatModels.Wad
 {
+    // TODO: Should this be stateful to allow for lazy-loaded lumps?
     public sealed class WadFile : IEnumerable<ILump>
     {
         private struct LumpMetadata
@@ -110,32 +110,31 @@ namespace Tiledriver.Core.FormatModels.Wad
 
         public static WadFile Read(Stream stream)
         {
+            // TODO: More graceful handling of invalid files.
+
             var identification = stream.ReadText(4);
             var numLumps = stream.ReadInt();
             var directoryPosition = stream.ReadInt();
 
             stream.Position = directoryPosition;
 
-            var directory = new List<LumpMetadata>();
-            for (int i = 0; i < numLumps; i++)
+            var directory =
+                Enumerable.Range(1, numLumps).
+                Select(_ => LumpMetadata.ReadFrom(stream)).
+                ToArray();
+
+            return new WadFile(directory.Select<LumpMetadata, ILump>(info =>
             {
-                directory.Add(LumpMetadata.ReadFrom(stream));
-            }
-
-            var lumps = directory.Select<LumpMetadata, ILump>(info =>
-             {
-                 if (info.Size == 0)
-                 {
-                     return new Marker(info.Name);
-                 }
-                 else
-                 {
-                     stream.Position = info.Position;
-                     return new DataLump(info.Name, stream.ReadArray(info.Size));
-                 }
-             });
-
-            return new WadFile(lumps);
+                if (info.Size == 0)
+                {
+                    return new Marker(info.Name);
+                }
+                else
+                {
+                    stream.Position = info.Position;
+                    return new DataLump(info.Name, stream.ReadArray(info.Size));
+                }
+            }));
         }
 
         IEnumerator IEnumerable.GetEnumerator()

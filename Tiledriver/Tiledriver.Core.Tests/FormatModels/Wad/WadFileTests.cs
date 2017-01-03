@@ -1,12 +1,10 @@
 // Copyright (c) 2016, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using System;
 using System.IO;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Uwmf.Parsing;
 using Tiledriver.Core.FormatModels.Uwmf.Parsing.Syntax;
 using Tiledriver.Core.FormatModels.Wad;
