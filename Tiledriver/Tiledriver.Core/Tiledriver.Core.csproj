@@ -66,7 +66,13 @@
     <Compile Include="FormatModels\GameMaps\OffsetData.cs" />
     <Compile Include="FormatModels\GameMaps\PlaneMetadata.cs" />
     <Compile Include="FormatModels\GameMaps\Expander.cs" />
+    <Compile Include="FormatModels\Wad\DataLump.cs" />
+    <Compile Include="FormatModels\Wad\ILump.cs" />
+    <Compile Include="FormatModels\Wad\Marker.cs" />
     <Compile Include="FormatModels\Wad\LumpName.cs" />
+    <Compile Include="FormatModels\Wad\StreamExtensions\Extensions.cs" />
+    <Compile Include="FormatModels\Wad\UwmfLump.cs" />
+    <Compile Include="FormatModels\Wad\WadFile.cs" />
     <Compile Include="FormatModels\Xlat\InvalidXlatException.cs" />
     <Compile Include="FormatModels\Xlat\MapTranslator.cs" />
     <Compile Include="FormatModels\Xlat\Model.Generated.cs">
@@ -113,7 +119,6 @@
     <Compile Include="FormatModels\Uwmf\TileSpace.cs" />
     <Compile Include="FormatModels\Uwmf\UnknownBlock.cs" />
     <Compile Include="FormatModels\Uwmf\UnknownProperty.cs" />
-    <Compile Include="WadFile.cs" />
     <Compile Include="Wolf3D\Actor.cs" />
     <Compile Include="Wolf3D\AllWolfTextures.cs" />
     <Compile Include="Wolf3D\RegionTheme.cs" />

@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Tiledriver.Core;
+using Tiledriver.Core.FormatModels.Wad;
 
 namespace TestRunner
 {
@@ -35,9 +36,11 @@ namespace TestRunner
 
             var wadFileName = Path.GetFullPath("demo.wad");
 
-            WadFile.Save(
-                DemoMap.Create(),
-                wadFileName);
+            var wad = new WadFile();
+            wad.Append(new Marker("MAP01"));
+            wad.Append(new UwmfLump("TEXTMAP", DemoMap.Create()));
+            wad.Append(new Marker("ENDMAP"));
+            wad.SaveTo(wadFileName);
 
             Process.Start(
                 ecWolfPath,

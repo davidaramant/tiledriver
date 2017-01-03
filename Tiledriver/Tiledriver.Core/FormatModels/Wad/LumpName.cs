@@ -11,6 +11,7 @@ namespace Tiledriver.Core.FormatModels.Wad
     [DebuggerDisplay("{ToString()}")]
     public sealed class LumpName : IEquatable<LumpName>
     {
+        public const int MaxLength = 8;
         private readonly string _name;
 
         public LumpName([NotNull] string name)
@@ -23,7 +24,7 @@ namespace Tiledriver.Core.FormatModels.Wad
                 throw new ArgumentException("Name has invalid characters.",nameof(name));
             }
 
-            if (name.Length > 9)
+            if (name.Length > MaxLength)
             {
                 throw new ArgumentException("Name is too long.",nameof(name));
             }
@@ -33,6 +34,11 @@ namespace Tiledriver.Core.FormatModels.Wad
         public override string ToString()
         {
             return _name;
+        }
+
+        public static implicit operator LumpName(string name)
+        {
+            return new LumpName(name);
         }
 
         #region Equality stuff

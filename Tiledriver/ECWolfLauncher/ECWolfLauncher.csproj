@@ -55,6 +55,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Tiledriver.Core.Tests\Tiledriver.Core.Tests.csproj">
+      <Project>{7770ad96-ce49-4191-98b1-a983e4f59aba}</Project>
+      <Name>Tiledriver.Core.Tests</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Tiledriver.Core\Tiledriver.Core.csproj">
       <Project>{a32b1e60-62ee-4ef9-892b-1b8a3bb2396c}</Project>
       <Name>Tiledriver.Core</Name>
