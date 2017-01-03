@@ -1,0 +1,69 @@
+// Copyright (c) 2016, David Aramant
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+
+using System;
+using System.Diagnostics;
+using JetBrains.Annotations;
+using System.Text.RegularExpressions;
+
+namespace Tiledriver.Core.FormatModels.Wad
+{
+    [DebuggerDisplay("{ToString()}")]
+    public sealed class LumpName : IEquatable<LumpName>
+    {
+        private readonly string _name;
+
+        public LumpName([NotNull] string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Name cannot be null or whitespace.", nameof(name));
+
+            if (Regex.IsMatch(name, @"[^A-Z0-9\[\]\-_]", RegexOptions.Compiled))
+            {
+                throw new ArgumentException("Name has invalid characters.",nameof(name));
+            }
+
+            if (name.Length > 9)
+            {
+                throw new ArgumentException("Name is too long.",nameof(name));
+            }
+            _name = name;
+        }
+
+        public override string ToString()
+        {
+            return _name;
+        }
+
+        #region Equality stuff
+        public bool Equals(LumpName other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return string.Equals(_name, other._name);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj is LumpName && Equals((LumpName)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return _name.GetHashCode();
+        }
+
+        public static bool operator ==(LumpName left, LumpName right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(LumpName left, LumpName right)
+        {
+            return !Equals(left, right);
+        }
+        #endregion
+    }
+}

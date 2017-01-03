@@ -66,6 +66,7 @@
     <Compile Include="FormatModels\GameMaps\OffsetData.cs" />
     <Compile Include="FormatModels\GameMaps\PlaneMetadata.cs" />
     <Compile Include="FormatModels\GameMaps\Expander.cs" />
+    <Compile Include="FormatModels\Wad\LumpName.cs" />
     <Compile Include="FormatModels\Xlat\InvalidXlatException.cs" />
     <Compile Include="FormatModels\Xlat\MapTranslator.cs" />
     <Compile Include="FormatModels\Xlat\Model.Generated.cs">

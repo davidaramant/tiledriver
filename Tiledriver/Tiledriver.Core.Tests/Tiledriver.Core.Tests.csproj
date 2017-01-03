@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="FormatModels\GameMaps\ExpanderTests.cs" />
     <Compile Include="FormatModels\Common\BaseLexerTests.cs" />
+    <Compile Include="FormatModels\Wad\LumpNameTests.cs" />
     <Compile Include="FormatModels\Xlat\Parsing\SyntaxAnalyzerTests.cs" />
     <Compile Include="FormatModels\Xlat\Parsing\XlatLexerTests.cs" />
     <Compile Include="FormatModels\Xlat\Parsing\XlatParserTests.cs" />
