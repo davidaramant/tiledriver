@@ -38,5 +38,22 @@ namespace Tiledriver.Core.FormatModels.Wad.StreamExtensions
                 stream.Write(new byte[padding], 0, padding);
             }
         }
+
+        public static string ReadText(this Stream stream, int length)
+        {
+            return Encoding.ASCII.GetString(stream.ReadArray(length));
+        }
+
+        public static int ReadInt(this Stream stream)
+        {
+            return BitConverter.ToInt32(stream.ReadArray(4), 0);
+        }
+
+        public static byte[] ReadArray(this Stream stream, int length)
+        {
+            var data = new byte[length];
+            stream.Read(data, 0, length);
+            return data;
+        }
     }
 }

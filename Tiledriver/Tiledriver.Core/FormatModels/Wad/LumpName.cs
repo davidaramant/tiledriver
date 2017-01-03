@@ -21,12 +21,12 @@ namespace Tiledriver.Core.FormatModels.Wad
 
             if (Regex.IsMatch(name, @"[^A-Z0-9\[\]\-_]", RegexOptions.Compiled))
             {
-                throw new ArgumentException("Name has invalid characters.",nameof(name));
+                throw new ArgumentException($"'{name}' has invalid characters.",nameof(name));
             }
 
             if (name.Length > MaxLength)
             {
-                throw new ArgumentException("Name is too long.",nameof(name));
+                throw new ArgumentException($"'{name}' is too long.",nameof(name));
             }
             _name = name;
         }

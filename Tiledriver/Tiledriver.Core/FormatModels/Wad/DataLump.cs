@@ -10,6 +10,7 @@ namespace Tiledriver.Core.FormatModels.Wad
     {
         private readonly byte[] _data;
         public LumpName Name { get; }
+        public bool HasData => true;
 
         public DataLump([NotNull] LumpName name, [NotNull]byte[] data)
         {
@@ -20,6 +21,11 @@ namespace Tiledriver.Core.FormatModels.Wad
         public void WriteTo(Stream stream)
         {
             stream.Write(_data, 0, _data.Length);
+        }
+
+        public byte[] GetData()
+        {
+            return _data;
         }
     }
 }

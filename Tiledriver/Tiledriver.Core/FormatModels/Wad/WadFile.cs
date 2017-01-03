@@ -2,40 +2,59 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using JetBrains.Annotations;
 using Tiledriver.Core.FormatModels.Wad.StreamExtensions;
 
 namespace Tiledriver.Core.FormatModels.Wad
 {
-    public sealed class WadFile
+    public sealed class WadFile : IEnumerable<ILump>
     {
         private struct LumpMetadata
         {
-            private readonly int _position;
-            private readonly int _size;
-            private readonly LumpName _name;
+            public readonly int Position;
+            public readonly int Size;
+            public readonly LumpName Name;
 
             public LumpMetadata(int position, int size, LumpName name)
             {
-                _position = position;
-                _size = size;
-                _name = name;
+                Position = position;
+                Size = size;
+                Name = name;
             }
 
             public void WriteTo(Stream stream)
             {
-                stream.WriteInt(_position);
-                stream.WriteInt(_size);
-                stream.WriteText(_name.ToString(), totalLength: LumpName.MaxLength);
+                stream.WriteInt(Position);
+                stream.WriteInt(Size);
+                stream.WriteText(Name.ToString(), totalLength: LumpName.MaxLength);
+            }
+
+            public static LumpMetadata ReadFrom(Stream stream)
+            {
+                return new LumpMetadata(
+                    position: stream.ReadInt(),
+                    size: stream.ReadInt(),
+                    name: stream.ReadText(LumpName.MaxLength).TrimEnd((char)0));
             }
         }
 
         private readonly List<ILump> _lumps = new List<ILump>();
 
+        public int Count => _lumps.Count;
+
+        public ILump this[int index] => _lumps[index];
+
         public WadFile()
         {
+        }
+
+        private WadFile(IEnumerable<ILump> lumps)
+        {
+            _lumps.AddRange(lumps);
         }
 
         public void Append([NotNull]ILump lump)
@@ -57,7 +76,7 @@ namespace Tiledriver.Core.FormatModels.Wad
                 var metadata = new List<LumpMetadata>();
                 foreach (var lump in _lumps)
                 {
-                    int startOfLump = (int) fs.Position;
+                    int startOfLump = (int)fs.Position;
 
                     lump.WriteTo(fs);
 
@@ -91,9 +110,42 @@ namespace Tiledriver.Core.FormatModels.Wad
 
         public static WadFile Read(Stream stream)
         {
-            throw new NotImplementedException();
+            var identification = stream.ReadText(4);
+            var numLumps = stream.ReadInt();
+            var directoryPosition = stream.ReadInt();
+
+            stream.Position = directoryPosition;
+
+            var directory = new List<LumpMetadata>();
+            for (int i = 0; i < numLumps; i++)
+            {
+                directory.Add(LumpMetadata.ReadFrom(stream));
+            }
+
+            var lumps = directory.Select<LumpMetadata, ILump>(info =>
+             {
+                 if (info.Size == 0)
+                 {
+                     return new Marker(info.Name);
+                 }
+                 else
+                 {
+                     stream.Position = info.Position;
+                     return new DataLump(info.Name, stream.ReadArray(info.Size));
+                 }
+             });
+
+            return new WadFile(lumps);
         }
 
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
+        public IEnumerator<ILump> GetEnumerator()
+        {
+            return _lumps.GetEnumerator();
+        }
     }
 }
