@@ -5,8 +5,8 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Tiledriver.Core;
 using Tiledriver.Core.FormatModels.Wad;
+using Tiledriver.Core.Tests;
 
 namespace TestRunner
 {

@@ -59,7 +59,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DemoMap.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="FormatModels\Common\BaseLexer.cs" />
     <Compile Include="FormatModels\GameMaps\MapHeader.cs" />
