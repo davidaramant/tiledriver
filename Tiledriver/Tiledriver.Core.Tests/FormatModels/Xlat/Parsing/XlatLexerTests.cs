@@ -28,9 +28,9 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
             }
         }
 
-        protected override ILexer<Token> BuildLexer()
+        protected override ILexer<Token> GetDefinition()
         {
-            return XlatLexer.BuildLexer();
+            return XlatLexer.Definition;
         }
     }
 }

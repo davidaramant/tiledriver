@@ -12,9 +12,9 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
     [TestFixture]
     public sealed class UwmfLexerTests : BaseLexerTests
     {
-        protected override ILexer<Token> BuildLexer()
+        protected override ILexer<Token> GetDefinition()
         {
-            return UwmfLexer.BuildLexer();
+            return UwmfLexer.Definition;
         }
     }
 }

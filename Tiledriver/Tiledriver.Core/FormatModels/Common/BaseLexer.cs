@@ -1,7 +1,6 @@
 ﻿// Copyright (c) 2016, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using System.IO;
 using JetBrains.Annotations;
 using Piglet.Lexer;
 using System.Linq;
@@ -14,9 +13,9 @@ namespace Tiledriver.Core.FormatModels.Common
 
         private readonly ILexerInstance<Token> _lexer;
 
-        protected BaseLexer([NotNull]ILexer<Token> builder, [NotNull]TextReader reader)
+        protected BaseLexer([NotNull]ILexerInstance<Token> lexer)
         {
-            _lexer = builder.Begin(reader);
+            _lexer = lexer;
         }
 
         public Token ReadToken()

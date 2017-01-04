@@ -137,11 +137,11 @@ namespace Tiledriver.Core.Tests.FormatModels.Common
 
         protected void VerifyLexing(string input, params Token[] expectedTokens)
         {
-            var actualTokens = BuildLexer().Tokenize(input).Select(t => t.Item2).ToArray();
+            var actualTokens = GetDefinition().Tokenize(input).Select(t => t.Item2).ToArray();
 
             Assert.That(actualTokens, Is.EqualTo(expectedTokens), $"Did not correct tokenize {input}");
         }
 
-        protected abstract ILexer<Token> BuildLexer();
+        protected abstract ILexer<Token> GetDefinition();
     }
 }
