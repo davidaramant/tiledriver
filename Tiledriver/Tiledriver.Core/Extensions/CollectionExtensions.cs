@@ -22,5 +22,13 @@ namespace Tiledriver.Core.Extensions
                 dictionary.Add(item);
             }
         }
+
+        public static void Merge<T1, T2>(this Dictionary<T1, T2> dictionary, Dictionary<T1, T2> otherDictionary)
+        {
+            foreach (var kvp in otherDictionary)
+            {
+                dictionary[kvp.Key] = kvp.Value;
+            }
+        }
     }
 }

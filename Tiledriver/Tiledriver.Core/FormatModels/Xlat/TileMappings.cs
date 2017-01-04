@@ -1,7 +1,7 @@
 ﻿// Copyright (c) 2017, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using System;
+using Tiledriver.Core.Extensions;
 
 namespace Tiledriver.Core.FormatModels.Xlat
 {
@@ -9,7 +9,11 @@ namespace Tiledriver.Core.FormatModels.Xlat
     {
         public void Add(TileMappings newMappings)
         {
-            throw new NotImplementedException();
+            AmbushModzones.Merge(newMappings.AmbushModzones);
+            ChangeTriggerModzones.Merge(newMappings.ChangeTriggerModzones);
+            Tiles.Merge(newMappings.Tiles);
+            PositionlessTriggers.Merge(newMappings.PositionlessTriggers);
+            Zones.Merge(newMappings.Zones);
         }
     }
 }
