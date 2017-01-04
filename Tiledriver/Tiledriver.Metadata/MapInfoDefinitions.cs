@@ -5,10 +5,15 @@ using System.Collections.Generic;
 
 namespace Tiledriver.Metadata
 {
-    public sealed class MapInfoDefinitions
+    public static class MapInfoDefinitions
     {
         public static readonly IEnumerable<BlockData> Blocks = new[]
         {
+            // TODO: cluster
+            // TODO: episode
+            // TODO: gameinfo
+            // TODO: intermission
+
             new BlockData("map").
                 HasRequiredString("bordertexture").
                 HasRequiredInt("cluster").
@@ -31,7 +36,7 @@ namespace Tiledriver.Metadata
                 HasRequiredString("nextendsequence").
                 HasRequiredString("secretnextendsequence").
                 HasRequiredString("victorynextendsequence").
-                HasSubBlock("specialaction").
+                HasSubBlockLists("specialaction").
                 HasRequiredBool("nointermission").
                 HasRequiredInt("par").
                 HasRequiredString("translator"),

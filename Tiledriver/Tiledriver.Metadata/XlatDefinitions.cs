@@ -41,9 +41,9 @@ namespace Tiledriver.Metadata
                 HasOptionalBool("activateSouth", true).
                 HasOptionalBool("playerCross", false).
                 HasOptionalBool("playerUse", false).
-                HasOptionalBoolean("monsterUse", false).
-                HasOptionalBoolean("repeatable", false).
-                HasOptionalBoolean("secret", false).
+                HasOptionalBool("monsterUse", false).
+                HasOptionalBool("repeatable", false).
+                HasOptionalBool("secret", false).
                 HasOptionalString("comment", string.Empty).
                 CanHaveUnknownProperties(),
 
