@@ -48,6 +48,12 @@ namespace Tiledriver.Metadata
             return this;
         }
 
+        public BlockData HasOptionalStringList(string name)
+        {
+            _properties.Add(new PropertyData(name, name, PropertyType.StringList, defaultValue: new List<string>()));
+            return this;
+        }
+
         public BlockData HasMappedSubBlocks(params string[] names)
         {
             _properties.AddRange(names.Select(name => new PropertyData(name, name, PropertyType.MappedBlockList, defaultValue: null)));
@@ -92,7 +98,7 @@ namespace Tiledriver.Metadata
             return this;
         }
 
-        public BlockData HasRequiredInteger(string name)
+        public BlockData HasRequiredInt(string name)
         {
             _properties.Add(new PropertyData(name, name, PropertyType.Integer, defaultValue: null));
             return this;
@@ -117,13 +123,13 @@ namespace Tiledriver.Metadata
             return this;
         }
 
-        public BlockData HasRequiredBoolean(string name)
+        public BlockData HasRequiredBool(string name)
         {
             _properties.Add(new PropertyData(name, name, PropertyType.Boolean, defaultValue: null));
             return this;
         }
 
-        public BlockData HasOptionalInteger(string name, int defaultValue)
+        public BlockData HasOptionalInt(string name, int defaultValue)
         {
             _properties.Add(new PropertyData(name, name, PropertyType.Integer, defaultValue: defaultValue));
             return this;
@@ -141,7 +147,7 @@ namespace Tiledriver.Metadata
             return this;
         }
 
-        public BlockData HasOptionalBoolean(string name, bool defaultValue)
+        public BlockData HasOptionalBool(string name, bool defaultValue)
         {
             _properties.Add(new PropertyData(name, name, PropertyType.Boolean, defaultValue: defaultValue));
             return this;

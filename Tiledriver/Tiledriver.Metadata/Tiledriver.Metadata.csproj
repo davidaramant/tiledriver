@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IndentedWriter.cs" />
+    <Compile Include="MapInfoDefinitions.cs" />
     <Compile Include="UwmfModelGenerator.cs" />
     <Compile Include="NamedItem.cs" />
     <Compile Include="UwmfParserGenerator.cs" />
