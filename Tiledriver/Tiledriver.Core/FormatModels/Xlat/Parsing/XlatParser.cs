@@ -24,6 +24,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
 
                 switch (name.ToString())
                 {
+                    // TODO: Is there a 'disable' as well?
                     case "enable":
                         if (exp.Oldnum.HasValue || exp.HasAssignments || exp.Values.Any() || exp.Qualifiers.Count() != 1 || exp.SubExpressions.Any())
                         {
@@ -40,22 +41,19 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
                     case "tiles":
                         ValidateSectionBlock(exp, "tiles");
                         var parsedTiles = ParseTiles(exp.SubExpressions);
-                        tileMappings = parsedTiles;
-                        // TODO: merge with old
+                        tileMappings.Add(parsedTiles);
                         break;
 
                     case "things":
                         ValidateSectionBlock(exp, "things");
                         var parsedThings = ParseThings(exp.SubExpressions);
-                        thingMappings = parsedThings;
-                        // TODO: merge with old
+                        thingMappings.Add(parsedThings);
                         break;
 
                     case "flats":
                         ValidateSectionBlock(exp, "flats");
                         var parsedFlats = ParseFlats(exp.SubExpressions);
-                        flatMappings = parsedFlats;
-                        // TODO: merge with old
+                        flatMappings.Add(parsedFlats);
                         break;
 
                     default:

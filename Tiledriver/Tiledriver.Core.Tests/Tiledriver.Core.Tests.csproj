@@ -65,9 +65,12 @@
     <Compile Include="FormatModels\Common\BaseLexerTests.cs" />
     <Compile Include="FormatModels\Wad\LumpNameTests.cs" />
     <Compile Include="FormatModels\Wad\WadFileTests.cs" />
+    <Compile Include="FormatModels\Xlat\FlatMappingsTests.cs" />
     <Compile Include="FormatModels\Xlat\Parsing\SyntaxAnalyzerTests.cs" />
     <Compile Include="FormatModels\Xlat\Parsing\XlatLexerTests.cs" />
     <Compile Include="FormatModels\Xlat\Parsing\XlatParserTests.cs" />
+    <Compile Include="FormatModels\Xlat\ThingMappingsTests.cs" />
+    <Compile Include="FormatModels\Xlat\TileMappingsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FormatModels\Uwmf\Parsing\UwmfLexerTests.cs" />
     <Compile Include="FormatModels\Uwmf\Parsing\SyntaxAnalyzerTests.cs" />

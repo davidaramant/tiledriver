@@ -73,6 +73,7 @@
     <Compile Include="FormatModels\Wad\StreamExtensions\Extensions.cs" />
     <Compile Include="FormatModels\Wad\UwmfLump.cs" />
     <Compile Include="FormatModels\Wad\WadFile.cs" />
+    <Compile Include="FormatModels\Xlat\FlatMappings.cs" />
     <Compile Include="FormatModels\Xlat\InvalidXlatException.cs" />
     <Compile Include="FormatModels\Xlat\MapTranslator.cs" />
     <Compile Include="FormatModels\Xlat\Model.Generated.cs">
@@ -84,6 +85,8 @@
     <Compile Include="FormatModels\Xlat\Parsing\XlatSyntaxAnalyzer.cs" />
     <Compile Include="FormatModels\Xlat\Parsing\XlatLexer.cs" />
     <Compile Include="FormatModels\Xlat\Parsing\XlatParser.cs" />
+    <Compile Include="FormatModels\Xlat\ThingMappings.cs" />
+    <Compile Include="FormatModels\Xlat\TileMappings.cs" />
     <Compile Include="LevelGeometry\IRegion.cs" />
     <Compile Include="LevelGeometry\MapTile.cs" />
     <Compile Include="LevelGeometry\SparseMap.cs" />
