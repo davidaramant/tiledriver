@@ -74,17 +74,6 @@ namespace Tiledriver.Core.FormatModels.Xlat
 
     public sealed partial class ThingDefinition
     {
-        private bool _oldnumHasBeenSet = false;
-        private ushort _oldnum;
-        public ushort Oldnum
-        {
-            get { return _oldnum; }
-            set
-            {
-                _oldnumHasBeenSet = true;
-                _oldnum = value;
-            }
-        }
         private bool _actorHasBeenSet = false;
         private string _actor;
         public string Actor
@@ -153,7 +142,6 @@ namespace Tiledriver.Core.FormatModels.Xlat
         }
         public ThingDefinition() { }
         public ThingDefinition(
-            ushort oldnum,
             string actor,
             int angles,
             bool holowall,
@@ -161,7 +149,6 @@ namespace Tiledriver.Core.FormatModels.Xlat
             bool ambush,
             int minskill)
         {
-            Oldnum = oldnum;
             Actor = actor;
             Angles = angles;
             Holowall = holowall;
@@ -172,7 +159,6 @@ namespace Tiledriver.Core.FormatModels.Xlat
         }
         public void CheckSemanticValidity()
         {
-            if (!_oldnumHasBeenSet) throw new InvalidUwmfException("Did not set Oldnum on ThingDefinition");
             if (!_actorHasBeenSet) throw new InvalidUwmfException("Did not set Actor on ThingDefinition");
             if (!_anglesHasBeenSet) throw new InvalidUwmfException("Did not set Angles on ThingDefinition");
             if (!_holowallHasBeenSet) throw new InvalidUwmfException("Did not set Holowall on ThingDefinition");
@@ -296,12 +282,12 @@ namespace Tiledriver.Core.FormatModels.Xlat
     {
         public HashSet<ushort> Elevator { get; } = new HashSet<ushort>();
         public Dictionary<ushort,PositionlessTrigger> PositionlessTriggers { get; } = new Dictionary<ushort,PositionlessTrigger>();
-        public List<ThingDefinition> ThingDefinitions { get; } = new List<ThingDefinition>();
+        public Dictionary<ushort,ThingDefinition> ThingDefinitions { get; } = new Dictionary<ushort,ThingDefinition>();
         public ThingMappings() { }
         public ThingMappings(
             IEnumerable<ushort> elevator,
             Dictionary<ushort,PositionlessTrigger> positionlessTriggers,
-            IEnumerable<ThingDefinition> thingDefinitions)
+            Dictionary<ushort,ThingDefinition> thingDefinitions)
         {
             Elevator.AddRange(elevator);
             PositionlessTriggers.AddRange(positionlessTriggers);

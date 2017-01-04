@@ -282,8 +282,8 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
             }
 
             thingMappings.ThingDefinitions.Add(
+                oldnum,
                 new ThingDefinition(
-                    oldnum: oldnum,
                     actor: actor,
                     angles: angles,
                     holowall: flags.HasFlag(ThingFlags.Holowall),

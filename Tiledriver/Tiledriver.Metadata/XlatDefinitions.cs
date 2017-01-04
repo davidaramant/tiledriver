@@ -21,7 +21,6 @@ namespace Tiledriver.Metadata
 
             new BlockData("thingDefinition").
                 DisableNormalReading().
-                HasRequiredUshort("oldnum").
                 HasRequiredString("actor").
                 HasRequiredInteger("angles").
                 HasRequiredBoolean("holowall").
@@ -57,7 +56,7 @@ namespace Tiledriver.Metadata
                 DisableNormalReading().
                 HasRequiredUshortSet("elevator").
                 HasMappedSubBlocks("positionlessTrigger").
-                HasSubBlockLists("thingDefinition").
+                HasMappedSubBlocks("thingDefinition").
                 IsTopLevel(),
 
             new BlockData("flats",className:"FlatMappings").
