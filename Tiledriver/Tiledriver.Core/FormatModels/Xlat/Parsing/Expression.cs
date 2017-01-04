@@ -7,7 +7,7 @@ using System.Linq;
 using Functional.Maybe;
 using Tiledriver.Core.FormatModels.Common;
 
-namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
+namespace Tiledriver.Core.FormatModels.Xlat.Parsing
 {
     [DebuggerDisplay("{ToString()}")]
     public sealed class Expression : IHaveAssignments

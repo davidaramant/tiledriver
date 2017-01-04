@@ -93,6 +93,9 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>UwmfComparison.Generated.cs</LastGenOutput>
     </Content>
+    <Content Include="FormatModels\Xlat\Parsing\spear.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="FormatModels\Xlat\Parsing\wolf3d.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -6,15 +6,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Functional.Maybe;
+using Moq;
 using NUnit.Framework;
+using Tiledriver.Core.FormatModels;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Xlat.Parsing;
-using Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax;
 
 namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
 {
-    // TODO: Include statements
-
     [TestFixture]
     public sealed class SyntaxAnalyzerTests
     {
@@ -266,14 +265,31 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
             using (var textReader = new StreamReader(stream, Encoding.ASCII))
             {
                 var lexer = new XlatLexer(textReader);
-                var syntaxAnalzer = new SyntaxAnalyzer();
+                var syntaxAnalzer = new XlatSyntaxAnalyzer(Mock.Of<IResourceProvider>());
+                var result = syntaxAnalzer.Analyze(lexer).ToArray();
+            }
+        }
+
+        [Test]
+        public void ShouldAnalyzeRealXlatWithInclude()
+        {
+            var mockProvider = new Mock<IResourceProvider>();
+            mockProvider.
+                Setup(_ => _.Lookup(It.IsAny<string>()))
+                .Returns( File.ReadAllBytes(Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "Xlat", "Parsing", "wolf3d.txt")));
+
+            using (var stream = File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "Xlat", "Parsing", "spear.txt")))
+            using (var textReader = new StreamReader(stream, Encoding.ASCII))
+            {
+                var lexer = new XlatLexer(textReader);
+                var syntaxAnalzer = new XlatSyntaxAnalyzer(mockProvider.Object);
                 var result = syntaxAnalzer.Analyze(lexer).ToArray();
             }
         }
 
         private static Expression[] Analyze(string input)
         {
-            var syntaxAnalzer = new SyntaxAnalyzer();
+            var syntaxAnalzer = new XlatSyntaxAnalyzer(Mock.Of<IResourceProvider>());
             return syntaxAnalzer.Analyze(new XlatLexer(new StringReader(input))).ToArray();
         }
 

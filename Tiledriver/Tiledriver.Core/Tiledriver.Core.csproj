@@ -65,6 +65,7 @@
     <Compile Include="FormatModels\GameMaps\OffsetData.cs" />
     <Compile Include="FormatModels\GameMaps\PlaneMetadata.cs" />
     <Compile Include="FormatModels\GameMaps\Expander.cs" />
+    <Compile Include="FormatModels\IResourceProvider.cs" />
     <Compile Include="FormatModels\Wad\DataLump.cs" />
     <Compile Include="FormatModels\Wad\ILump.cs" />
     <Compile Include="FormatModels\Wad\Marker.cs" />
@@ -79,8 +80,8 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="FormatModels\Xlat\Parsing\Syntax\Expression.cs" />
-    <Compile Include="FormatModels\Xlat\Parsing\Syntax\SyntaxAnalyzer.cs" />
+    <Compile Include="FormatModels\Xlat\Parsing\Expression.cs" />
+    <Compile Include="FormatModels\Xlat\Parsing\XlatSyntaxAnalyzer.cs" />
     <Compile Include="FormatModels\Xlat\Parsing\XlatLexer.cs" />
     <Compile Include="FormatModels\Xlat\Parsing\XlatParser.cs" />
     <Compile Include="LevelGeometry\IRegion.cs" />

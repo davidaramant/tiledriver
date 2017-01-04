@@ -1,16 +1,24 @@
 ﻿// Copyright (c) 2017, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using Functional.Maybe;
 using Tiledriver.Core.FormatModels.Common;
 
-namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
+namespace Tiledriver.Core.FormatModels.Xlat.Parsing
 {
-    public sealed class SyntaxAnalyzer
+    public sealed class XlatSyntaxAnalyzer
     {
+        private readonly IResourceProvider _resourceProvider;
+
+        public XlatSyntaxAnalyzer(IResourceProvider resourceProvider)
+        {
+            _resourceProvider = resourceProvider;
+        }
+
         public IEnumerable<Expression> Analyze(ILexer lexer)
         {
             while (true)
@@ -21,8 +29,16 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
 
                 var name = idToken.TryAsIdentifier().Value;
 
+                if (name.ToString() == "include")
+                {
+                    foreach (var exp in ParseInclude(lexer))
+                    {
+                        yield return exp;
+                    }
+                    continue;
+                }
+
                 // based on current "enable lightlevels" versus blocks
-                // TODO: include statements
                 var nextToken = lexer.MustReadTokenOfTypes(TokenType.Identifier, TokenType.OpenParen);
 
                 switch (nextToken.Type)
@@ -41,9 +57,23 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax
             }
         }
 
+        private IEnumerable<Expression> ParseInclude(ILexer lexer)
+        {
+            var lumpName = lexer.MustReadTokenOfTypes(TokenType.String).AsString();
+
+            var data = _resourceProvider.Lookup(lumpName);
+
+            using (var ms = new MemoryStream(data))
+            using (var reader = new StreamReader(ms, Encoding.ASCII))
+            {
+                // The ToArray is needed because otherwise the stream is closed
+                return Analyze(new XlatLexer(reader)).ToArray();
+            }
+        }
+
         private static Expression ParseGlobalExpression(ILexer lexer, Identifier name, Token firstQualifier)
         {
-            var qualifiers = new List<Token> {  firstQualifier };
+            var qualifiers = new List<Token> { firstQualifier };
 
             var nextToken = lexer.MustReadTokenOfTypes(TokenType.Identifier, TokenType.Semicolon);
 

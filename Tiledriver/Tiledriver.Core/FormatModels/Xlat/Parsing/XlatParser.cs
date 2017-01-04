@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Functional.Maybe;
 using Tiledriver.Core.FormatModels.Common;
-using Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax;
 
 namespace Tiledriver.Core.FormatModels.Xlat.Parsing
 {

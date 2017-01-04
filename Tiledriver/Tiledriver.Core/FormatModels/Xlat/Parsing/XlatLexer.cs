@@ -15,6 +15,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
         {
         }
 
+        // TODO: This should be either Lazy or an instance
         public static ILexer<Token> BuildLexer()
         {
             return LexerFactory<Token>.Configure(configurator =>

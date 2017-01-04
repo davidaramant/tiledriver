@@ -5,10 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Functional.Maybe;
+using Moq;
 using NUnit.Framework;
+using Tiledriver.Core.FormatModels;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Xlat.Parsing;
-using Tiledriver.Core.FormatModels.Xlat.Parsing.Syntax;
 
 namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
 {
@@ -22,7 +23,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
             using (var textReader = new StreamReader(stream, Encoding.ASCII))
             {
                 var lexer = new XlatLexer(textReader);
-                var syntaxAnalzer = new SyntaxAnalyzer();
+                var syntaxAnalzer = new XlatSyntaxAnalyzer(Mock.Of<IResourceProvider>());
                 var result = syntaxAnalzer.Analyze(lexer);
                 var translator = XlatParser.Parse(result);
             }
