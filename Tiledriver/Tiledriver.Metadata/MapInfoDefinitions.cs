@@ -14,6 +14,9 @@ namespace Tiledriver.Metadata
             // TODO: gameinfo
             // TODO: intermission
 
+            // TODO: defaultmap
+            // TODO: adddefaultmap
+            // TODO: map names
             new BlockData("map").
                 HasRequiredString("bordertexture").
                 HasRequiredInt("cluster").
