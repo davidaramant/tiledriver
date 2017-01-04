@@ -15,11 +15,10 @@ namespace Tiledriver.Metadata
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using Tiledriver.Core.FormatModels.Common;
-using Tiledriver.Core.FormatModels.Uwmf.Parsing.Syntax;
 
 namespace Tiledriver.Core.FormatModels.Uwmf.Parsing").
 OpenParen().
-Line("public static partial class Parser").
+Line("public static partial class UwmfParser").
 OpenParen();
 
             WriteGlobalAssignmentParsing(output);

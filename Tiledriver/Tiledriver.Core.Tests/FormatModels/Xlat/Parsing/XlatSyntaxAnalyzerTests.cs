@@ -15,7 +15,7 @@ using Tiledriver.Core.FormatModels.Xlat.Parsing;
 namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
 {
     [TestFixture]
-    public sealed class SyntaxAnalyzerTests
+    public sealed class XlatSyntaxAnalyzerTests
     {
         [Test]
         public void ShouldParseGlobalExpression()

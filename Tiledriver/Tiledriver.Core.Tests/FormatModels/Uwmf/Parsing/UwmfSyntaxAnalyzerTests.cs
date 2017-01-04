@@ -6,19 +6,18 @@ using System.Linq;
 using NUnit.Framework;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Uwmf.Parsing;
-using Tiledriver.Core.FormatModels.Uwmf.Parsing.Syntax;
 
 namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
 {
     [TestFixture]
-    public sealed class SyntaxAnalyzerTests
+    public sealed class UwmfSyntaxAnalyzerTests
     {
         [Test]
         public void ShouldParseGlobalAssignment()
         {
             var input = @"prop = 1;";
 
-            var syntaxAnalzer = new SyntaxAnalyzer();
+            var syntaxAnalzer = new UwmfSyntaxAnalyzer();
             var result = syntaxAnalzer.Analyze(new UwmfLexer(new StringReader(input)));
 
             Assert.That(
@@ -32,7 +31,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
         {
             var input = @"prop = 1;prop2 = ""string"";";
 
-            var syntaxAnalzer = new SyntaxAnalyzer();
+            var syntaxAnalzer = new UwmfSyntaxAnalyzer();
             var result = syntaxAnalzer.Analyze(new UwmfLexer(new StringReader(input)));
 
             Assert.That(
@@ -50,7 +49,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
         {
             var input = @"block {}";
 
-            var syntaxAnalzer = new SyntaxAnalyzer();
+            var syntaxAnalzer = new UwmfSyntaxAnalyzer();
             var result = syntaxAnalzer.Analyze(new UwmfLexer(new StringReader(input)));
 
             Assert.That(result.Blocks, Has.Count.EqualTo(1), "Did not parse out a block");
@@ -65,7 +64,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
         {
             var input = @"block {prop = 1;prop2 = ""string"";}";
 
-            var syntaxAnalzer = new SyntaxAnalyzer();
+            var syntaxAnalzer = new UwmfSyntaxAnalyzer();
             var result = syntaxAnalzer.Analyze(new UwmfLexer(new StringReader(input)));
 
             Assert.That(result.Blocks, Has.Count.EqualTo(1), "Did not parse out a block");
@@ -85,7 +84,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
         {
             var input = @"gProp =1;block {prop = 1;prop2 = ""string"";}gProp2 = 5;";
 
-            var syntaxAnalzer = new SyntaxAnalyzer();
+            var syntaxAnalzer = new UwmfSyntaxAnalyzer();
             var result = syntaxAnalzer.Analyze(new UwmfLexer(new StringReader(input)));
 
             Assert.That(result.Blocks, Has.Count.EqualTo(1), "Did not parse out a block");
@@ -114,7 +113,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
         {
             var input = @"block {{1,2,3}}";
 
-            var syntaxAnalzer = new SyntaxAnalyzer();
+            var syntaxAnalzer = new UwmfSyntaxAnalyzer();
             var result = syntaxAnalzer.Analyze(new UwmfLexer(new StringReader(input)));
 
             Assert.That(result.ArrayBlocks, Has.Count.EqualTo(1), "Did not parse out a block");
@@ -131,7 +130,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
         {
             var input = @"block {{1,2,3},{4,5,6},{7,8,9,10}}";
 
-            var syntaxAnalzer = new SyntaxAnalyzer();
+            var syntaxAnalzer = new UwmfSyntaxAnalyzer();
             var result = syntaxAnalzer.Analyze(new UwmfLexer(new StringReader(input)));
 
             Assert.That(result.ArrayBlocks, Has.Count.EqualTo(1), "Did not parse out a block");

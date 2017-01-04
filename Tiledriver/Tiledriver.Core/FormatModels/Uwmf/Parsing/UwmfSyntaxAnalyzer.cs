@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Tiledriver.Core.FormatModels.Common;
 
-namespace Tiledriver.Core.FormatModels.Uwmf.Parsing.Syntax
+namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
 {
-    public sealed class SyntaxAnalyzer
+    public sealed class UwmfSyntaxAnalyzer
     {
         public UwmfSyntaxTree Analyze(ILexer lexer)
         {

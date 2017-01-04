@@ -3,11 +3,10 @@
 
 using System.Linq;
 using Tiledriver.Core.FormatModels.Common;
-using Tiledriver.Core.FormatModels.Uwmf.Parsing.Syntax;
 
 namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
 {
-    public static partial class Parser
+    public static partial class UwmfParser
     {
         public static Map Parse(UwmfSyntaxTree syntaxTree)
         {

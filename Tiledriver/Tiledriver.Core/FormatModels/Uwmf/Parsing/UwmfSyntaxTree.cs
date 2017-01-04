@@ -6,7 +6,7 @@ using System.Linq;
 using Functional.Maybe;
 using Tiledriver.Core.FormatModels.Common;
 
-namespace Tiledriver.Core.FormatModels.Uwmf.Parsing.Syntax
+namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
 {
     public sealed class UwmfSyntaxTree : IHaveAssignments
     {

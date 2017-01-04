@@ -160,7 +160,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
             {
                 throw new ParsingException("Bad structure for tile.");
             }
-            var zone = Uwmf.Parsing.Parser.ParseTile(exp);
+            var zone = Uwmf.Parsing.UwmfParser.ParseTile(exp);
 
             tileMappings.Tiles.Add(oldnum, zone);
         }
@@ -207,7 +207,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
             {
                 throw new ParsingException("Bad structure for sound zone.");
             }
-            var zone = Uwmf.Parsing.Parser.ParseZone(exp);
+            var zone = Uwmf.Parsing.UwmfParser.ParseZone(exp);
 
             tileMappings.Zones.Add(oldnum, zone);
         }

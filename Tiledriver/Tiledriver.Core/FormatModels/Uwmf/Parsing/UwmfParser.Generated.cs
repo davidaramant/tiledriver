@@ -2,11 +2,10 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using Tiledriver.Core.FormatModels.Common;
-using Tiledriver.Core.FormatModels.Uwmf.Parsing.Syntax;
 
 namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
 {
-    public static partial class Parser
+    public static partial class UwmfParser
     {
         static partial void SetGlobalAssignments(Map map, UwmfSyntaxTree tree)
         {

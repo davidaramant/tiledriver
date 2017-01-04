@@ -98,24 +98,24 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="FormatModels\Uwmf\Parsing\Syntax\ArrayBlock.cs" />
+    <Compile Include="FormatModels\Uwmf\Parsing\ArrayBlock.cs" />
     <Compile Include="FormatModels\Common\Assignment.cs" />
-    <Compile Include="FormatModels\Uwmf\Parsing\Syntax\Block.cs" />
+    <Compile Include="FormatModels\Uwmf\Parsing\Block.cs" />
     <Compile Include="FormatModels\Common\ILexer.cs" />
     <Compile Include="FormatModels\Common\IHaveAssignments.cs" />
-    <Compile Include="FormatModels\Uwmf\Parsing\Syntax\SyntaxAnalyzer.cs" />
+    <Compile Include="FormatModels\Uwmf\Parsing\UwmfSyntaxAnalyzer.cs" />
     <Compile Include="FormatModels\Common\SyntaxExtensions.cs" />
     <Compile Include="FormatModels\Uwmf\Parsing\UwmfLexer.cs" />
-    <Compile Include="FormatModels\Uwmf\Parsing\Parser.cs" />
-    <Compile Include="FormatModels\Uwmf\Parsing\Parser.Generated.cs">
+    <Compile Include="FormatModels\Uwmf\Parsing\UwmfParser.cs" />
+    <Compile Include="FormatModels\Uwmf\Parsing\UwmfParser.Generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Parser.tt</DependentUpon>
+      <DependentUpon>UwmfParser.tt</DependentUpon>
     </Compile>
     <Compile Include="FormatModels\Common\Token.cs" />
     <Compile Include="FormatModels\Common\Identifier.cs" />
     <Compile Include="FormatModels\Common\ParsingException.cs" />
-    <Compile Include="FormatModels\Uwmf\Parsing\Syntax\UwmfSyntaxTree.cs" />
+    <Compile Include="FormatModels\Uwmf\Parsing\UwmfSyntaxTree.cs" />
     <Compile Include="FormatModels\Uwmf\PlaneMap.cs" />
     <Compile Include="FormatModels\Uwmf\IWriteableUwmfBlock.cs" />
     <Compile Include="FormatModels\Uwmf\Map.cs" />
@@ -150,9 +150,9 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Model.Generated.cs</LastGenOutput>
     </Content>
-    <Content Include="FormatModels\Uwmf\Parsing\Parser.tt">
+    <Content Include="FormatModels\Uwmf\Parsing\UwmfParser.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Parser.Generated.cs</LastGenOutput>
+      <LastGenOutput>UwmfParser.Generated.cs</LastGenOutput>
     </Content>
     <Content Include="FormatModels\Xlat\Model.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

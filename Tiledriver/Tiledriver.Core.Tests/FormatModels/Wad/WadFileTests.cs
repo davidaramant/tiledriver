@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using Tiledriver.Core.FormatModels.Uwmf.Parsing;
-using Tiledriver.Core.FormatModels.Uwmf.Parsing.Syntax;
 using Tiledriver.Core.FormatModels.Wad;
 using Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing;
 
@@ -61,8 +60,8 @@ namespace Tiledriver.Core.Tests.FormatModels.Wad
                 using (var ms = new MemoryStream(mapBytes))
                 using (var textReader = new StreamReader(ms, Encoding.ASCII))
                 {
-                    var sa = new SyntaxAnalyzer();
-                    var roundTripped = Parser.Parse(sa.Analyze(new UwmfLexer(textReader)));
+                    var sa = new UwmfSyntaxAnalyzer();
+                    var roundTripped = UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader)));
 
                     UwmfComparison.AssertEqual(roundTripped, map);
                 }

@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Tiledriver.Core.FormatModels.Common;
 
-namespace Tiledriver.Core.FormatModels.Uwmf.Parsing.Syntax
+namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
 {
     public sealed class ArrayBlock : IEnumerable<IReadOnlyList<int>>
     {
