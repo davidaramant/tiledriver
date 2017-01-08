@@ -27,9 +27,9 @@ OpenParen();
             foreach (var block in UwmfDefinitions.Blocks.Where(_ => _.NormalReading))
             {
                 output.
-                    Line($"public static {block.PascalCaseName} Parse{block.PascalCaseName}(IHaveAssignments block)").
+                    Line($"public static {block.ClassName.ToPascalCase()} Parse{block.ClassName.ToPascalCase()}(IHaveAssignments block)").
                     OpenParen().
-                    Line($"var parsedBlock = new {block.PascalCaseName}();");
+                    Line($"var parsedBlock = new {block.ClassName.ToPascalCase()}();");
 
                 WritePropertyAssignments(block, output, assignmentHolder: "block", owner: "parsedBlock");
 
@@ -47,11 +47,11 @@ OpenParen();
                 var level = property.IsRequired ? "Required" : "Optional";
 
                 output.Line(
-                    $"{assignmentHolder}.GetValueFor(\"{property.PascalCaseName}\")" +
+                    $"{assignmentHolder}.GetValueFor(\"{property.ClassName.ToPascalCase()}\")" +
                     $".Set{level}{property.UwmfTypeMethod}(" +
-                    $"value => {owner}.{property.PascalCaseName} = value, " +
-                    $"\"{blockData.PascalCaseName}\", " +
-                    $"\"{property.PascalCaseName}\");");
+                    $"value => {owner}.{property.ClassName.ToPascalCase()} = value, " +
+                    $"\"{blockData.ClassName.ToPascalCase()}\", " +
+                    $"\"{property.ClassName.ToPascalCase()}\");");
             }
         }
 
@@ -62,7 +62,7 @@ OpenParen();
                 OpenParen();
 
             WritePropertyAssignments(
-                UwmfDefinitions.Blocks.Single(b => b.PascalCaseName == "Map"),
+                UwmfDefinitions.Blocks.Single(b => b.ClassName.ToPascalCase() == "Map"),
                 output, assignmentHolder: "tree", owner: "map");
 
             output.CloseParen();
@@ -76,7 +76,7 @@ OpenParen();
 
             foreach (var block in UwmfDefinitions.Blocks.Where(_ => _.NormalReading))
             {
-                output.Line($"var {block.CamelCaseName}Name = new Identifier(\"{block.CamelCaseName}\");");
+                output.Line($"var {block.ClassName.ToCamelCase()}Name = new Identifier(\"{block.ClassName.ToCamelCase()}\");");
             }
 
             output.
@@ -85,7 +85,7 @@ OpenParen();
 
             foreach (var block in UwmfDefinitions.Blocks.Where(_ => _.NormalReading))
             {
-                output.Line($"if (block.Name == {block.CamelCaseName}Name) map.{block.PluralPascalCaseName}.Add(Parse{block.PascalCaseName}(block));");
+                output.Line($"if (block.Name == {block.ClassName.ToCamelCase()}Name) map.{block.ClassName.ToPluralPascalCase()}.Add(Parse{block.ClassName.ToPascalCase()}(block));");
             }
 
             output.CloseParen().CloseParen();

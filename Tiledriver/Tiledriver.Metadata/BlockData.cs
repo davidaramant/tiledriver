@@ -26,7 +26,7 @@ namespace Tiledriver.Metadata
         {
         }
 
-        public BlockData(string xlatName, string className) : base(xlatName, className)
+        public BlockData(string formatName, string className) : base(formatName, className)
         {
         }
 

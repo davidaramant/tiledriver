@@ -46,11 +46,11 @@ namespace Tiledriver.Metadata
                     case PropertyType.StringList:
                         return "List<string>";
                     case PropertyType.Block:
-                        return PascalCaseName;
+                        return ClassName.ToPascalCase();
                     case PropertyType.BlockList:
-                        return $"List<{PascalCaseName}>";
+                        return $"List<{ClassName.ToPascalCase()}>";
                     case PropertyType.MappedBlockList:
-                        return $"Dictionary<ushort,{PascalCaseName}>";
+                        return $"Dictionary<ushort,{ClassName.ToPascalCase()}>";
                     case PropertyType.UnknownProperties:
                         return "List<UnknownProperty>";
                     case PropertyType.UnknownBlocks:
@@ -82,11 +82,11 @@ namespace Tiledriver.Metadata
                     case PropertyType.StringList:
                         return "IEnumerable<string>";
                     case PropertyType.Block:
-                        return PascalCaseName;
+                        return ClassName.ToPascalCase();
                     case PropertyType.BlockList:
-                        return $"IEnumerable<{PascalCaseName}>";
+                        return $"IEnumerable<{ClassName.ToPascalCase()}>";
                     case PropertyType.MappedBlockList:
-                        return $"Dictionary<ushort,{PascalCaseName}>";
+                        return $"Dictionary<ushort,{ClassName.ToPascalCase()}>";
                     case PropertyType.UnknownProperties:
                         return "IEnumerable<UnknownProperty>";
                     case PropertyType.UnknownBlocks:
@@ -111,10 +111,10 @@ namespace Tiledriver.Metadata
                     case PropertyType.UshortSet:
                     case PropertyType.StringList:
                     case PropertyType.Block:
-                        return CamelCaseName;
+                        return ClassName.ToCamelCase();
                     case PropertyType.BlockList:
                     case PropertyType.MappedBlockList:
-                        return PluralCamelCaseName;
+                        return ClassName.ToPluralCamelCase();
                     case PropertyType.UnknownProperties:
                         return "unknownProperties";
                     case PropertyType.UnknownBlocks:
@@ -139,10 +139,10 @@ namespace Tiledriver.Metadata
                     case PropertyType.UshortSet:
                     case PropertyType.StringList:
                     case PropertyType.Block:
-                        return PascalCaseName;
+                        return ClassName.ToPascalCase();
                     case PropertyType.BlockList:
                     case PropertyType.MappedBlockList:
-                        return PluralPascalCaseName;
+                        return ClassName.ToPluralPascalCase();
                     case PropertyType.UnknownProperties:
                         return "UnknownProperties";
                     case PropertyType.UnknownBlocks:
@@ -293,11 +293,11 @@ namespace Tiledriver.Metadata
 
         public PropertyData(
                 string name, 
-                string uwmfName, 
+                string formatName, 
                 PropertyType type, 
                 object defaultValue = null) : 
                     base(
-                        uwmfName:uwmfName, 
+                        formatName:formatName, 
                         className:name)
         {
             Type = type;

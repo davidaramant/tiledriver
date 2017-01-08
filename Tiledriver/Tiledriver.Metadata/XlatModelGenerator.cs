@@ -25,7 +25,7 @@ namespace Tiledriver.Core.FormatModels.Xlat");
 
             foreach (var block in XlatDefinitions.Blocks)
             {
-                output.Line($"public sealed partial class {block.PascalCaseName}");
+                output.Line($"public sealed partial class {block.ClassName.ToPascalCase()}");
                 output.OpenParen();
 
                 WriteProperties(block, output);
@@ -45,15 +45,15 @@ namespace Tiledriver.Core.FormatModels.Xlat");
         {
             foreach (var property in blockData.Properties.Where(_ => _.ScalarField && _.IsRequired))
             {
-                sb.Line($"private bool {property.FieldName}HasBeenSet = false;").
-                    Line($"private {property.PropertyTypeString} {property.FieldName};").
-                    Line($"public {property.PropertyTypeString} {property.PascalCaseName}").
+                sb.Line($"private bool {property.ClassName.ToFieldName()}HasBeenSet = false;").
+                    Line($"private {property.PropertyTypeString} {property.ClassName.ToFieldName()};").
+                    Line($"public {property.PropertyTypeString} {property.ClassName.ToPascalCase()}").
                     OpenParen().
-                    Line($"get {{ return {property.FieldName}; }}").
+                    Line($"get {{ return {property.ClassName.ToFieldName()}; }}").
                     Line($"set").
                     OpenParen().
-                    Line($"{property.FieldName}HasBeenSet = true;").
-                    Line($"{property.FieldName} = value;").
+                    Line($"{property.ClassName.ToFieldName()}HasBeenSet = true;").
+                    Line($"{property.ClassName.ToFieldName()} = value;").
                     CloseParen().
                     CloseParen();
             }
@@ -66,8 +66,8 @@ namespace Tiledriver.Core.FormatModels.Xlat");
 
         private static void WriteConstructors(IndentedWriter sb, BlockData blockData)
         {
-            sb.Line($"public {blockData.PascalCaseName}() {{ }}");
-            sb.Line($"public {blockData.PascalCaseName}(");
+            sb.Line($"public {blockData.ClassName.ToPascalCase()}() {{ }}");
+            sb.Line($"public {blockData.ClassName.ToPascalCase()}(");
             sb.IncreaseIndent();
 
             foreach (var indexed in blockData.OrderedProperties().Select((param, index) => new { param, index }))
@@ -96,7 +96,7 @@ namespace Tiledriver.Core.FormatModels.Xlat");
             foreach (var property in blockData.Properties.Where(_ => _.ScalarField && _.IsRequired))
             {
                 output.Line(
-                    $"if (!{property.FieldName}HasBeenSet) throw new InvalidUwmfException(\"Did not set {property.PascalCaseName} on {blockData.PascalCaseName}\");");
+                    $"if (!{property.ClassName.ToFieldName()}HasBeenSet) throw new InvalidUwmfException(\"Did not set {property.ClassName.ToPascalCase()} on {blockData.ClassName.ToPascalCase()}\");");
             }
 
             output.Line(@"AdditionalSemanticChecks();").

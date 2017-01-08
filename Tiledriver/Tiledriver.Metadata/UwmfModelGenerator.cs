@@ -26,7 +26,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf");
             foreach (var block in UwmfDefinitions.Blocks)
             {
                 var normalWriteInheritance = block.NormalWriting ? ", IWriteableUwmfBlock" : String.Empty;
-                output.Line($"public sealed partial class {block.PascalCaseName} : BaseUwmfBlock{normalWriteInheritance}");
+                output.Line($"public sealed partial class {block.ClassName.ToPascalCase()} : BaseUwmfBlock{normalWriteInheritance}");
                 output.OpenParen();
 
                 WriteProperties(block, output);
@@ -46,15 +46,15 @@ namespace Tiledriver.Core.FormatModels.Uwmf");
         {
             foreach (var property in blockData.Properties.Where(_ => _.ScalarField && _.IsRequired))
             {
-                sb.Line($"private bool {property.FieldName}HasBeenSet = false;").
-                    Line($"private {property.PropertyTypeString} {property.FieldName};").
-                    Line($"public {property.PropertyTypeString} {property.PascalCaseName}").
+                sb.Line($"private bool {property.ClassName.ToFieldName()}HasBeenSet = false;").
+                    Line($"private {property.PropertyTypeString} {property.ClassName.ToFieldName()};").
+                    Line($"public {property.PropertyTypeString} {property.ClassName.ToPascalCase()}").
                     OpenParen().
-                    Line($"get {{ return {property.FieldName}; }}").
+                    Line($"get {{ return {property.ClassName.ToFieldName()}; }}").
                     Line($"set").
                     OpenParen().
-                    Line($"{property.FieldName}HasBeenSet = true;").
-                    Line($"{property.FieldName} = value;").
+                    Line($"{property.ClassName.ToFieldName()}HasBeenSet = true;").
+                    Line($"{property.ClassName.ToFieldName()} = value;").
                     CloseParen().
                     CloseParen();
             }
@@ -67,8 +67,8 @@ namespace Tiledriver.Core.FormatModels.Uwmf");
 
         private static void WriteConstructors(IndentedWriter sb, BlockData blockData)
         {
-            sb.Line($"public {blockData.PascalCaseName}() {{ }}");
-            sb.Line($"public {blockData.PascalCaseName}(");
+            sb.Line($"public {blockData.ClassName.ToPascalCase()}() {{ }}");
+            sb.Line($"public {blockData.ClassName.ToPascalCase()}(");
             sb.IncreaseIndent();
 
             foreach (var indexed in blockData.OrderedProperties().Select((param, index) => new { param, index }))
@@ -100,7 +100,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf");
 
             if (blockData.IsSubBlock)
             {
-                sb.Line($"WriteLine(stream, \"{blockData.UwmfName}\");");
+                sb.Line($"WriteLine(stream, \"{blockData.FormatName}\");");
                 sb.Line("WriteLine(stream, \"{\");");
             }
 
@@ -108,13 +108,13 @@ namespace Tiledriver.Core.FormatModels.Uwmf");
             foreach (var property in blockData.Properties.Where(_ => _.ScalarField && _.IsRequired))
             {
                 sb.Line(
-                    $"WriteProperty(stream, \"{property.UwmfName}\", {property.FieldName}, indent: {indent});");
+                    $"WriteProperty(stream, \"{property.FormatName}\", {property.ClassName.ToFieldName()}, indent: {indent});");
             }
             // WRITE OPTIONAL PROPERTIES
             foreach (var property in blockData.Properties.Where(_ => _.ScalarField && !_.IsRequired))
             {
                 sb.Line(
-                    $"if ({property.PascalCaseName} != {property.DefaultAsString}) WriteProperty(stream, \"{property.UwmfName}\", {property.PascalCaseName}, indent: {indent});");
+                    $"if ({property.ClassName.ToPascalCase()} != {property.DefaultAsString}) WriteProperty(stream, \"{property.FormatName}\", {property.ClassName.ToPascalCase()}, indent: {indent});");
             }
 
             // WRITE UNKNOWN PROPERTES
@@ -149,7 +149,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf");
             foreach (var property in blockData.Properties.Where(_ => _.ScalarField && _.IsRequired))
             {
                 output.Line(
-                    $"if (!{property.FieldName}HasBeenSet) throw new InvalidUwmfException(\"Did not set {property.PascalCaseName} on {blockData.PascalCaseName}\");");
+                    $"if (!{property.ClassName.ToFieldName()}HasBeenSet) throw new InvalidUwmfException(\"Did not set {property.ClassName.ToPascalCase()} on {blockData.ClassName.ToPascalCase()}\");");
             }
 
             output.Line(@"AdditionalSemanticChecks();").
