@@ -24,7 +24,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
 foreach( var block in UwmfDefinitions.Blocks )
 {
 #>
-        public static void AssertEqual( <#= block.PascalCaseName #> actual, <#= block.PascalCaseName #> expected )
+        public static void AssertEqual( <#= block.ClassName.ToPascalCase() #> actual, <#= block.ClassName.ToPascalCase() #> expected )
         {
 <#
     foreach( var property in block.Properties.Where( p => p.ScalarField ) )
@@ -33,7 +33,7 @@ foreach( var block in UwmfDefinitions.Blocks )
             Assert.That(
                 actual.<#= property.PropertyName #>,
                 Is.EqualTo( expected.<#= property.PropertyName #> ),
-                "Found difference in <#= block.PascalCaseName #> <#= property.PropertyName #>" );
+                "Found difference in <#= block.ClassName.ToPascalCase() #> <#= property.PropertyName #>" );
 <#
     }
     foreach( var subBlock in block.Properties.Where( p => !p.ScalarField ) )
@@ -42,7 +42,7 @@ foreach( var block in UwmfDefinitions.Blocks )
             Assert.That(
                 actual.<#= subBlock.PropertyName #>.Count,
                 Is.EqualTo( expected.<#= subBlock.PropertyName #>.Count ),
-                "Found unequal number of <#= block.PascalCaseName #> <#= subBlock.PropertyName #>" );
+                "Found unequal number of <#= block.ClassName.ToPascalCase() #> <#= subBlock.PropertyName #>" );
             for( int i = 0; i < expected.<#= subBlock.PropertyName #>.Count; i++ )
             {
                 AssertEqual( 

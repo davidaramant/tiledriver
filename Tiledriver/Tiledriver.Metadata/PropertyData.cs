@@ -12,6 +12,7 @@ namespace Tiledriver.Metadata
         Double,
         Boolean,
         String,
+        Char,
         UshortSet,
         StringList,
         Block,
@@ -24,6 +25,7 @@ namespace Tiledriver.Metadata
     public sealed class PropertyData : NamedItem
     {
         public PropertyType Type { get; }
+        public bool IsMetaData { get; }
 
         public string PropertyTypeString
         {
@@ -179,7 +181,7 @@ namespace Tiledriver.Metadata
             }
         }
 
-        public string ArgumentDefinition => $"{ArgumentTypeString} {ArgumentName}" + (IsRequired?string.Empty:$" = {DefaultAsString}");
+        public string ArgumentDefinition => $"{ArgumentTypeString} {ArgumentName}" + (IsRequired ? string.Empty : $" = {DefaultAsString}");
 
         public string SetProperty
         {
@@ -230,8 +232,8 @@ namespace Tiledriver.Metadata
             }
         }
 
-        public bool IsUwmfSubBlockList => 
-            Type == PropertyType.BlockList || 
+        public bool IsUwmfSubBlockList =>
+            Type == PropertyType.BlockList ||
             Type == PropertyType.UnknownBlocks;
 
         private readonly object _defaultValue;
@@ -240,20 +242,23 @@ namespace Tiledriver.Metadata
         {
             get
             {
+                if (!ScalarField)
+                {
+                    return "null";
+                }
+
                 switch (Type)
                 {
                     case PropertyType.Ushort:
                     case PropertyType.Integer:
                     case PropertyType.Double:
-                    case PropertyType.UnknownProperties:
-                    case PropertyType.UnknownBlocks:
                         return _defaultValue.ToString();
 
                     case PropertyType.Boolean:
                         return _defaultValue.ToString().ToLowerInvariant();
 
                     case PropertyType.String:
-                        return "\"" + _defaultValue + "\"";                   
+                        return "\"" + _defaultValue + "\"";
 
                     default:
                         throw new NotImplementedException("Unknown property type.");
@@ -263,7 +268,33 @@ namespace Tiledriver.Metadata
 
         public string DefaultAssignment => IsRequired ? string.Empty : $" = {DefaultAsString}";
 
-        public bool IsRequired => _defaultValue == null;
+        public bool IsRequired
+        {
+            get
+            {
+                switch (Type)
+                {
+                    case PropertyType.Boolean:
+                    case PropertyType.Double:
+                    case PropertyType.Ushort:
+                    case PropertyType.Integer:
+                    case PropertyType.String:
+                    case PropertyType.Block:
+                    case PropertyType.Char:
+                        return _defaultValue == null;
+                    case PropertyType.UshortSet:
+                    case PropertyType.StringList:
+                    case PropertyType.BlockList:
+                    case PropertyType.MappedBlockList:
+                        return true;
+                    case PropertyType.UnknownProperties:
+                    case PropertyType.UnknownBlocks:
+                        return false;
+                    default:
+                        throw new NotImplementedException("Unknown property type.");
+                }
+            }
+        }
 
         public bool ScalarField
         {
@@ -277,6 +308,7 @@ namespace Tiledriver.Metadata
                     case PropertyType.Integer:
                     case PropertyType.String:
                     case PropertyType.Block:
+                    case PropertyType.Char:
                         return true;
                     case PropertyType.UshortSet:
                     case PropertyType.StringList:
@@ -292,16 +324,18 @@ namespace Tiledriver.Metadata
         }
 
         public PropertyData(
-                string name, 
-                string formatName, 
-                PropertyType type, 
-                object defaultValue = null) : 
+                string name,
+                PropertyType type,
+                bool isMetaData = false,
+                string formatName = null,
+                object defaultValue = null) :
                     base(
-                        formatName:formatName, 
-                        className:name)
+                        formatName: formatName ?? name,
+                        className: name)
         {
             Type = type;
+            IsMetaData = isMetaData;
             _defaultValue = defaultValue;
-        }        
+        }
     }
 }
