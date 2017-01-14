@@ -29,7 +29,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
             foreach (var block in MapInfoDefinitions.Blocks)
             {
                 var allInheritance =
-                    block.BaseClass.SelectOrElse(className => new[] {className}, () => new string[0])
+                    block.BaseClass.SelectOrElse(className => new[] { className }, () => new string[0])
                         .Concat(block.ImplementedInterfaces).ToArray();
 
                 var inheritance = allInheritance.Any()
@@ -54,12 +54,15 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
 
         private static void WriteProperties(BlockData blockData, IndentedWriter sb)
         {
-            // TODO: Values with defaults
             foreach (var property in blockData.Properties)
             {
                 if (property.ScalarField)
                 {
-                    sb.Line($"public Maybe<{property.PropertyTypeString}> {property.ClassName.ToPascalCase()} {{ get; }} = Maybe<{property.PropertyTypeString}>.Nothing;");
+                    var initialValue = property.HasDefault ?
+                        $"(({property.ArgumentTypeString}){property.DefaultAsString}).ToMaybe()" :
+                        $"Maybe<{property.PropertyTypeString}>.Nothing";
+
+                    sb.Line($"public Maybe<{property.PropertyTypeString}> {property.ClassName.ToPascalCase()} {{ get; }} = {initialValue};");
                 }
                 else
                 {
@@ -105,7 +108,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
                     argLine += $"{indexed.param.ArgumentTypeString} {indexed.param.ArgumentName}";
                 }
 
-                sb.Line(argLine + 
+                sb.Line(argLine +
                     (indexed.index == allProperties.Count - 1 ? ")" : ","));
             }
             if (baseClass.HasValue)

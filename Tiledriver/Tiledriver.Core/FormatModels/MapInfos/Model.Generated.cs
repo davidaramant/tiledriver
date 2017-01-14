@@ -14,8 +14,8 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public Maybe<int> Id { get; } = Maybe<int>.Nothing;
         public Maybe<string> ExitText { get; } = Maybe<string>.Nothing;
         public Maybe<string> ExitTextLookup { get; } = Maybe<string>.Nothing;
-        public Maybe<bool> ExitTextIsLump { get; } = Maybe<bool>.Nothing;
-        public Maybe<bool> ExitTextIsMessage { get; } = Maybe<bool>.Nothing;
+        public Maybe<bool> ExitTextIsLump { get; } = ((bool)false).ToMaybe();
+        public Maybe<bool> ExitTextIsMessage { get; } = ((bool)false).ToMaybe();
         public Cluster() { }
         public Cluster(
             Maybe<int> id,
@@ -38,10 +38,10 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public Maybe<char> Key { get; } = Maybe<char>.Nothing;
         public Maybe<string> Lookup { get; } = Maybe<string>.Nothing;
         public Maybe<string> Name { get; } = Maybe<string>.Nothing;
-        public Maybe<bool> NoSkillMenu { get; } = Maybe<bool>.Nothing;
-        public Maybe<bool> Optional { get; } = Maybe<bool>.Nothing;
+        public Maybe<bool> NoSkillMenu { get; } = ((bool)false).ToMaybe();
+        public Maybe<bool> Optional { get; } = ((bool)false).ToMaybe();
         public Maybe<string> PicName { get; } = Maybe<string>.Nothing;
-        public Maybe<bool> Remove { get; } = Maybe<bool>.Nothing;
+        public Maybe<bool> Remove { get; } = ((bool)false).ToMaybe();
         public Episode() { }
         public Episode(
             Maybe<string> map,
@@ -541,7 +541,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public Maybe<string> BorderTexture { get; } = Maybe<string>.Nothing;
         public Maybe<int> Cluster { get; } = Maybe<int>.Nothing;
         public Maybe<string> CompletionString { get; } = Maybe<string>.Nothing;
-        public Maybe<bool> DeathCam { get; } = Maybe<bool>.Nothing;
+        public Maybe<bool> DeathCam { get; } = ((bool)false).ToMaybe();
         public Maybe<string> DefaultCeiling { get; } = Maybe<string>.Nothing;
         public Maybe<string> DefaultFloor { get; } = Maybe<string>.Nothing;
         public IEnumerable<string> EnsureInventorys { get; } = Enumerable.Empty<string>();
@@ -551,8 +551,8 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public Maybe<int> LevelBonus { get; } = Maybe<int>.Nothing;
         public Maybe<int> LevelNum { get; } = Maybe<int>.Nothing;
         public Maybe<string> Music { get; } = Maybe<string>.Nothing;
-        public Maybe<bool> SpawnWithWeaponRaised { get; } = Maybe<bool>.Nothing;
-        public Maybe<bool> SecretDeathSounds { get; } = Maybe<bool>.Nothing;
+        public Maybe<bool> SpawnWithWeaponRaised { get; } = ((bool)false).ToMaybe();
+        public Maybe<bool> SecretDeathSounds { get; } = ((bool)false).ToMaybe();
         public Maybe<string> Next { get; } = Maybe<string>.Nothing;
         public Maybe<string> SecretNext { get; } = Maybe<string>.Nothing;
         public Maybe<string> VictoryNext { get; } = Maybe<string>.Nothing;
@@ -560,7 +560,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public Maybe<string> SecretNextEndSequence { get; } = Maybe<string>.Nothing;
         public Maybe<string> VictoryNextEndSequence { get; } = Maybe<string>.Nothing;
         public IEnumerable<SpecialAction> SpecialActions { get; } = Enumerable.Empty<SpecialAction>();
-        public Maybe<bool> Nointermission { get; } = Maybe<bool>.Nothing;
+        public Maybe<bool> Nointermission { get; } = ((bool)false).ToMaybe();
         public Maybe<int> Par { get; } = Maybe<int>.Nothing;
         public Maybe<string> Translator { get; } = Maybe<string>.Nothing;
         public BaseMap() { }

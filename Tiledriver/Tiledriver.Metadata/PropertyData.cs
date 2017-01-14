@@ -27,6 +27,7 @@ namespace Tiledriver.Metadata
 
         public PropertyType Type { get; }
         public bool IsMetaData { get; }
+        public bool HasDefault => _defaultValue != null;
 
         public string CollectionType
         {
