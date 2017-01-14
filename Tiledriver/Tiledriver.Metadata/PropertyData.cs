@@ -35,6 +35,8 @@ namespace Tiledriver.Metadata
                 {
                     case PropertyType.Boolean:
                         return "bool";
+                    case PropertyType.Char:
+                        return "char";
                     case PropertyType.Double:
                         return "double";
                     case PropertyType.Integer:
@@ -58,7 +60,7 @@ namespace Tiledriver.Metadata
                     case PropertyType.UnknownBlocks:
                         return "List<UnknownBlock>";
                     default:
-                        throw new NotImplementedException("Unknown property type.");
+                        throw new NotImplementedException("Unknown property type: " + Type);
                 }
             }
         }
@@ -71,6 +73,8 @@ namespace Tiledriver.Metadata
                 {
                     case PropertyType.Boolean:
                         return "bool";
+                    case PropertyType.Char:
+                        return "char";
                     case PropertyType.Double:
                         return "double";
                     case PropertyType.Integer:
@@ -106,6 +110,7 @@ namespace Tiledriver.Metadata
                 switch (Type)
                 {
                     case PropertyType.Boolean:
+                    case PropertyType.Char:
                     case PropertyType.Double:
                     case PropertyType.Integer:
                     case PropertyType.Ushort:
@@ -134,6 +139,7 @@ namespace Tiledriver.Metadata
                 switch (Type)
                 {
                     case PropertyType.Boolean:
+                    case PropertyType.Char:
                     case PropertyType.Double:
                     case PropertyType.Ushort:
                     case PropertyType.Integer:
@@ -162,6 +168,7 @@ namespace Tiledriver.Metadata
                 switch (Type)
                 {
                     case PropertyType.Boolean:
+                    case PropertyType.Char:
                     case PropertyType.Double:
                     case PropertyType.Ushort:
                     case PropertyType.Integer:
@@ -190,6 +197,7 @@ namespace Tiledriver.Metadata
                 switch (Type)
                 {
                     case PropertyType.Boolean:
+                    case PropertyType.Char:
                     case PropertyType.Double:
                     case PropertyType.Ushort:
                     case PropertyType.Integer:
@@ -260,6 +268,9 @@ namespace Tiledriver.Metadata
                     case PropertyType.String:
                         return "\"" + _defaultValue + "\"";
 
+                    case PropertyType.Char:
+                        return "'" + _defaultValue + "'";
+
                     default:
                         throw new NotImplementedException("Unknown property type.");
                 }
@@ -275,12 +286,12 @@ namespace Tiledriver.Metadata
                 switch (Type)
                 {
                     case PropertyType.Boolean:
+                    case PropertyType.Char:
                     case PropertyType.Double:
                     case PropertyType.Ushort:
                     case PropertyType.Integer:
                     case PropertyType.String:
                     case PropertyType.Block:
-                    case PropertyType.Char:
                         return _defaultValue == null;
                     case PropertyType.UshortSet:
                     case PropertyType.StringList:
@@ -303,12 +314,12 @@ namespace Tiledriver.Metadata
                 switch (Type)
                 {
                     case PropertyType.Boolean:
+                    case PropertyType.Char:
                     case PropertyType.Double:
                     case PropertyType.Ushort:
                     case PropertyType.Integer:
                     case PropertyType.String:
                     case PropertyType.Block:
-                    case PropertyType.Char:
                         return true;
                     case PropertyType.UshortSet:
                     case PropertyType.StringList:

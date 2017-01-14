@@ -15,7 +15,7 @@ namespace Tiledriver.Metadata
                 {
                     new PropertyData("id",type:PropertyType.Integer,isMetaData:true),
                     new PropertyData(formatName:"exittext",name:"exitText",type:PropertyType.String),
-                    new PropertyData(formatName:"exittextlookup",name:"exitText",type:PropertyType.String),
+                    new PropertyData(formatName:"exittextlookup",name:"exitTextLookup",type:PropertyType.String),
                     new PropertyData(formatName:"exittextislump",name:"exitTextIsLump",type:PropertyType.Boolean, defaultValue:false),
                     new PropertyData(formatName:"exittextismessage",name:"exitTextIsMessage",type:PropertyType.Boolean, defaultValue:false),
                 }),
@@ -39,8 +39,8 @@ namespace Tiledriver.Metadata
                 {
                     new PropertyData(formatName:"advisorycolor", name:"advisoryColor", type:PropertyType.String),
                     new PropertyData(formatName:"advisorypic", name:"advisoryPic", type:PropertyType.String),
-                    new PropertyData("border", type:PropertyType.String), // = inset, "<topcolor>", "<bottomcolor>", "<highlightcolor>"
-                    new PropertyData("border", type:PropertyType.String), // = <offset>, <unused>, "<tl>", "<t>", "<tr>", "<l>", "<r>", "<bl>", "<b>", "<br>"
+                    new PropertyData("playScreenBorderColors", type:PropertyType.Block),
+                    new PropertyData("playScreenBorderGraphics", type:PropertyType.Block), 
                     new PropertyData(formatName:"borderflat", name:"borderFlat", type:PropertyType.String),
                     new PropertyData(formatName:"doorsoundsequence", name:"doorSoundSequence", type:PropertyType.String),
                     new PropertyData(formatName:"drawreadthis", name:"drawReadThis", type:PropertyType.Boolean),
@@ -93,6 +93,17 @@ namespace Tiledriver.Metadata
                     new PropertyData("bottomRight",type:PropertyType.String),
                 }), 
 
+            new BlockData("menuColor",
+                properties:new[]
+                {
+                    new PropertyData("border1",type:PropertyType.String),
+                    new PropertyData("border2",type:PropertyType.String),
+                    new PropertyData("border3",type:PropertyType.String),
+                    new PropertyData("background",type:PropertyType.String),
+                    new PropertyData("stripe",type:PropertyType.String),
+                    new PropertyData("stripeBg",type:PropertyType.String),
+                }),
+
             // intermission
             new BlockData("intermission",
                 properties:new []
@@ -133,7 +144,6 @@ namespace Tiledriver.Metadata
                     new PropertyData(formatName:"textalignment",name:"textAlignment",type:PropertyType.String),
                     new PropertyData(formatName:"textcolor",name:"textColor",type:PropertyType.String),
                     new PropertyData(formatName:"textspeed",name:"textSpeed",type:PropertyType.Integer),
-                    new PropertyData(formatName:"textalignment",name:"textAlignment",type:PropertyType.String),
                     new PropertyData("positionX",type:PropertyType.Integer),
                     new PropertyData("positionY",type:PropertyType.Integer),
                 }),
