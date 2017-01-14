@@ -2,11 +2,13 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Functional.Maybe;
 
 namespace Tiledriver.Metadata
 {
+    [DebuggerDisplay("{" + nameof(ClassName) + "}")]
     public sealed class BlockData : NamedItem
     {
         private readonly List<PropertyData> _properties = new List<PropertyData>();

@@ -1981,7 +1981,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 time: time.ToMaybe(),
                 fadeType: FadeType);
         }
-        public Fader WithFadeType( string fadeType)
+        public Fader WithFadeType( string fadeType )
         {
             return new Fader(
                 background: Background,
@@ -3324,6 +3324,35 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 nointermission: Nointermission,
                 par: Par,
                 translator: translator.ToMaybe());
+        }
+        public DefaultMap WithAddDefaultMap( AddDefaultMap addDefaultMap )
+        {
+            return new DefaultMap(
+                borderTexture: addDefaultMap.BorderTexture.Or(BorderTexture),
+                cluster: addDefaultMap.Cluster.Or(Cluster),
+                completionString: addDefaultMap.CompletionString.Or(CompletionString),
+                deathCam: addDefaultMap.DeathCam.Or(DeathCam),
+                defaultCeiling: addDefaultMap.DefaultCeiling.Or(DefaultCeiling),
+                defaultFloor: addDefaultMap.DefaultFloor.Or(DefaultFloor),
+                ensureInventorys: EnsureInventorys.Concat(addDefaultMap.EnsureInventorys).ToArray(),
+                exitFade: addDefaultMap.ExitFade.Or(ExitFade),
+                floorNumber: addDefaultMap.FloorNumber.Or(FloorNumber),
+                highScoresGraphic: addDefaultMap.HighScoresGraphic.Or(HighScoresGraphic),
+                levelBonus: addDefaultMap.LevelBonus.Or(LevelBonus),
+                levelNum: addDefaultMap.LevelNum.Or(LevelNum),
+                music: addDefaultMap.Music.Or(Music),
+                spawnWithWeaponRaised: addDefaultMap.SpawnWithWeaponRaised.Or(SpawnWithWeaponRaised),
+                secretDeathSounds: addDefaultMap.SecretDeathSounds.Or(SecretDeathSounds),
+                next: addDefaultMap.Next.Or(Next),
+                secretNext: addDefaultMap.SecretNext.Or(SecretNext),
+                victoryNext: addDefaultMap.VictoryNext.Or(VictoryNext),
+                nextEndSequence: addDefaultMap.NextEndSequence.Or(NextEndSequence),
+                secretNextEndSequence: addDefaultMap.SecretNextEndSequence.Or(SecretNextEndSequence),
+                victoryNextEndSequence: addDefaultMap.VictoryNextEndSequence.Or(VictoryNextEndSequence),
+                specialActions: SpecialActions.Concat(addDefaultMap.SpecialActions).ToArray(),
+                nointermission: addDefaultMap.Nointermission.Or(Nointermission),
+                par: addDefaultMap.Par.Or(Par),
+                translator: addDefaultMap.Translator.Or(Translator));
         }
     }
 
@@ -5157,6 +5186,38 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 mapLump: MapLump,
                 mapName: MapName,
                 mapNameLookup: mapNameLookup.ToMaybe());
+        }
+        public Map WithDefaultMap( DefaultMap defaultMap )
+        {
+            return new Map(
+                borderTexture: defaultMap.BorderTexture.Or(BorderTexture),
+                cluster: defaultMap.Cluster.Or(Cluster),
+                completionString: defaultMap.CompletionString.Or(CompletionString),
+                deathCam: defaultMap.DeathCam.Or(DeathCam),
+                defaultCeiling: defaultMap.DefaultCeiling.Or(DefaultCeiling),
+                defaultFloor: defaultMap.DefaultFloor.Or(DefaultFloor),
+                ensureInventorys: EnsureInventorys.Concat(defaultMap.EnsureInventorys).ToArray(),
+                exitFade: defaultMap.ExitFade.Or(ExitFade),
+                floorNumber: defaultMap.FloorNumber.Or(FloorNumber),
+                highScoresGraphic: defaultMap.HighScoresGraphic.Or(HighScoresGraphic),
+                levelBonus: defaultMap.LevelBonus.Or(LevelBonus),
+                levelNum: defaultMap.LevelNum.Or(LevelNum),
+                music: defaultMap.Music.Or(Music),
+                spawnWithWeaponRaised: defaultMap.SpawnWithWeaponRaised.Or(SpawnWithWeaponRaised),
+                secretDeathSounds: defaultMap.SecretDeathSounds.Or(SecretDeathSounds),
+                next: defaultMap.Next.Or(Next),
+                secretNext: defaultMap.SecretNext.Or(SecretNext),
+                victoryNext: defaultMap.VictoryNext.Or(VictoryNext),
+                nextEndSequence: defaultMap.NextEndSequence.Or(NextEndSequence),
+                secretNextEndSequence: defaultMap.SecretNextEndSequence.Or(SecretNextEndSequence),
+                victoryNextEndSequence: defaultMap.VictoryNextEndSequence.Or(VictoryNextEndSequence),
+                specialActions: SpecialActions.Concat(defaultMap.SpecialActions).ToArray(),
+                nointermission: defaultMap.Nointermission.Or(Nointermission),
+                par: defaultMap.Par.Or(Par),
+                translator: defaultMap.Translator.Or(Translator),
+                mapLump: MapLump,
+                mapName: MapName,
+                mapNameLookup: MapNameLookup);
         }
     }
 

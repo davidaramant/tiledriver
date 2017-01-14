@@ -163,11 +163,11 @@ namespace Tiledriver.Metadata
 
 
             // map
-            new BlockData("defaultmap",className:"defaultMap",
+            new BlockData("defaultmap",className:"DefaultMap",
                 inheritsFrom:"BaseMap",
                 canSetPropertiesFrom:new [] {"AddDefaultMap"},
                 properties:Enumerable.Empty<PropertyData>()),
-            new BlockData("adddefaultmap",className:"addDefaultMap",
+            new BlockData("adddefaultmap",className:"AddDefaultMap",
                 inheritsFrom:"BaseMap",
                 properties:Enumerable.Empty<PropertyData>()),
             new BlockData("BaseMap",

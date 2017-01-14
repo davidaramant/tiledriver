@@ -44,6 +44,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
                 WriteProperties(block, output);
                 WriteConstructors(output, block);
                 WritePropertyMutators(block, output);
+                WriteWithMethods(block, output);
 
                 output.CloseParen();
                 output.Line();
@@ -151,17 +152,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
             if (blockData.IsAbstract)
                 return;
 
-            var baseClass =
-                blockData.BaseClass.Select(
-                    name => MapInfoDefinitions.Blocks.Single(b => b.ClassName == name));
-
-            var allProperties = new List<PropertyData>();
-
-            if (baseClass.HasValue)
-            {
-                allProperties.AddRange(baseClass.Value.Properties);
-            }
-            allProperties.AddRange(blockData.Properties);
+            var allProperties = GetAllPropertiesOf(blockData);
 
             if (!allProperties.Any())
                 return;
@@ -198,6 +189,73 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
                 sb.DecreaseIndent();
                 sb.CloseParen();
             }
+        }
+
+        private static void WriteWithMethods(BlockData blockData, IndentedWriter sb)
+        {
+            if (!blockData.SetsPropertiesFrom.Any())
+            {
+                return;
+            }
+
+            var allProperties = GetAllPropertiesOf(blockData);
+
+            foreach (var otherBlock in
+                blockData.SetsPropertiesFrom.Select(name => MapInfoDefinitions.Blocks.Single(b => b.ClassName == name)))
+            {
+                var otherType = otherBlock.ClassName.ToPascalCase();
+                var otherClassname = otherBlock.ClassName.ToCamelCase();
+                var allOtherProperties = new HashSet<string>(GetAllPropertiesOf(otherBlock).Select(p=>p.PropertyName));
+
+                sb.Line($"public {blockData.ClassName.ToPascalCase()} With{otherType}( {otherType} {otherClassname} )");
+                sb.OpenParen();
+                sb.Line($"return new {blockData.ClassName.ToPascalCase()}(");
+                sb.IncreaseIndent();
+                foreach (var indexed in allProperties.Select((param, index) => new { param, index }))
+                {
+                    var argLine = $"{indexed.param.ArgumentName}: ";
+                    var currentName = indexed.param.PropertyName;
+
+                    if (allOtherProperties.Contains(currentName))
+                    {
+                        if (indexed.param.ScalarField)
+                        {
+                            argLine += $"{otherClassname}.{currentName}.Or({currentName})";
+                        }
+                        else
+                        {
+                            argLine += $"{currentName}.Concat({otherClassname}.{currentName}).ToArray()";
+                        }
+                    }
+                    else
+                    {
+                        argLine += indexed.param.PropertyName;
+                    }
+
+                    sb.Line(argLine +
+                        (indexed.index == allProperties.Count - 1 ? ");" : ","));
+                }
+                sb.DecreaseIndent();
+                sb.CloseParen();
+            }
+        }
+
+        private static List<PropertyData> GetAllPropertiesOf(string className)
+        {
+            return GetAllPropertiesOf(MapInfoDefinitions.Blocks.Single(b => b.ClassName == className));
+        }
+
+        private static List<PropertyData> GetAllPropertiesOf(BlockData block)
+        {
+            var allProperties = new List<PropertyData>();
+
+            if (block.BaseClass.HasValue)
+            {
+                allProperties.AddRange(GetAllPropertiesOf(block.BaseClass.Value));
+            }
+            allProperties.AddRange(block.Properties);
+
+            return allProperties;
         }
     }
 }
