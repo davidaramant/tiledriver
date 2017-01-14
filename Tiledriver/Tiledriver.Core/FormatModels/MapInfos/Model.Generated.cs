@@ -1275,6 +1275,43 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 titleTime: TitleTime,
                 translator: Translator);
         }
+        public GameInfo WithPlayerClasses( string playerClasses )
+        {
+            return new GameInfo(
+                advisoryColor: AdvisoryColor,
+                advisoryPic: AdvisoryPic,
+                playScreenBorderColors: PlayScreenBorderColors,
+                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                borderFlat: BorderFlat,
+                doorSoundSequence: DoorSoundSequence,
+                drawReadThis: DrawReadThis,
+                finaleMusic: FinaleMusic,
+                gamePalette: GamePalette,
+                gibFactor: GibFactor,
+                highScoresFont: HighScoresFont,
+                highScoresFontColor: HighScoresFontColor,
+                intermissionMusic: IntermissionMusic,
+                menuColor: MenuColor,
+                menuFade: MenuFade,
+                menuFontColorDisabled: MenuFontColorDisabled,
+                menuFontColorHighlight: MenuFontColorHighlight,
+                menuFontColorHighlightSelection: MenuFontColorHighlightSelection,
+                menuFontColorInvalid: MenuFontColorInvalid,
+                menuFontColorInvalidSelection: MenuFontColorInvalidSelection,
+                menuFontColorLabel: MenuFontColorLabel,
+                menuFontColorSelection: MenuFontColorSelection,
+                menuFontColorTitle: MenuFontColorTitle,
+                menuMusic: MenuMusic,
+                pageIndexFontColor: PageIndexFontColor,
+                playerClassess: PlayerClassess.Concat( new[]{playerClasses} ),
+                pushwallSoundSequence: PushwallSoundSequence,
+                quitMessagess: QuitMessagess,
+                scoresMusic: ScoresMusic,
+                signOn: SignOn,
+                titleMusic: TitleMusic,
+                titleTime: TitleTime,
+                translator: Translator);
+        }
         public GameInfo WithPushwallSoundSequence( string pushwallSoundSequence )
         {
             return new GameInfo(
@@ -1343,6 +1380,43 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 playerClassess: PlayerClassess,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessagess: QuitMessagess.Concat( quitMessagess ),
+                scoresMusic: ScoresMusic,
+                signOn: SignOn,
+                titleMusic: TitleMusic,
+                titleTime: TitleTime,
+                translator: Translator);
+        }
+        public GameInfo WithQuitMessages( string quitMessages )
+        {
+            return new GameInfo(
+                advisoryColor: AdvisoryColor,
+                advisoryPic: AdvisoryPic,
+                playScreenBorderColors: PlayScreenBorderColors,
+                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                borderFlat: BorderFlat,
+                doorSoundSequence: DoorSoundSequence,
+                drawReadThis: DrawReadThis,
+                finaleMusic: FinaleMusic,
+                gamePalette: GamePalette,
+                gibFactor: GibFactor,
+                highScoresFont: HighScoresFont,
+                highScoresFontColor: HighScoresFontColor,
+                intermissionMusic: IntermissionMusic,
+                menuColor: MenuColor,
+                menuFade: MenuFade,
+                menuFontColorDisabled: MenuFontColorDisabled,
+                menuFontColorHighlight: MenuFontColorHighlight,
+                menuFontColorHighlightSelection: MenuFontColorHighlightSelection,
+                menuFontColorInvalid: MenuFontColorInvalid,
+                menuFontColorInvalidSelection: MenuFontColorInvalidSelection,
+                menuFontColorLabel: MenuFontColorLabel,
+                menuFontColorSelection: MenuFontColorSelection,
+                menuFontColorTitle: MenuFontColorTitle,
+                menuMusic: MenuMusic,
+                pageIndexFontColor: PageIndexFontColor,
+                playerClassess: PlayerClassess,
+                pushwallSoundSequence: PushwallSoundSequence,
+                quitMessagess: QuitMessagess.Concat( new[]{quitMessages} ),
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
@@ -1815,6 +1889,12 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new Intermission(
                 name: Name,
                 intermissionActions: IntermissionActions.Concat( intermissionActions ));
+        }
+        public Intermission WithIntermissionAction( IIntermissionAction intermissionAction )
+        {
+            return new Intermission(
+                name: Name,
+                intermissionActions: IntermissionActions.Concat( new[]{intermissionAction} ));
         }
     }
 
@@ -2328,6 +2408,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 positionX: PositionX,
                 positionY: PositionY);
         }
+        public TextScreen WithText( string text )
+        {
+            return new TextScreen(
+                background: Background,
+                backgroundTiled: BackgroundTiled,
+                backgroundPalette: BackgroundPalette,
+                draw: Draw,
+                drawX: DrawX,
+                drawY: DrawY,
+                music: Music,
+                time: Time,
+                texts: Texts.Concat( new[]{text} ),
+                textAlignment: TextAlignment,
+                textColor: TextColor,
+                textSpeed: TextSpeed,
+                positionX: PositionX,
+                positionY: PositionY);
+        }
         public TextScreen WithTextAlignment( string textAlignment )
         {
             return new TextScreen(
@@ -2803,6 +2901,35 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 par: Par,
                 translator: Translator);
         }
+        public DefaultMap WithEnsureInventory( string ensureInventory )
+        {
+            return new DefaultMap(
+                borderTexture: BorderTexture,
+                cluster: Cluster,
+                completionString: CompletionString,
+                deathCam: DeathCam,
+                defaultCeiling: DefaultCeiling,
+                defaultFloor: DefaultFloor,
+                ensureInventorys: EnsureInventorys.Concat( new[]{ensureInventory} ),
+                exitFade: ExitFade,
+                floorNumber: FloorNumber,
+                highScoresGraphic: HighScoresGraphic,
+                levelBonus: LevelBonus,
+                levelNum: LevelNum,
+                music: Music,
+                spawnWithWeaponRaised: SpawnWithWeaponRaised,
+                secretDeathSounds: SecretDeathSounds,
+                next: Next,
+                secretNext: SecretNext,
+                victoryNext: VictoryNext,
+                nextEndSequence: NextEndSequence,
+                secretNextEndSequence: SecretNextEndSequence,
+                victoryNextEndSequence: VictoryNextEndSequence,
+                specialActions: SpecialActions,
+                nointermission: Nointermission,
+                par: Par,
+                translator: Translator);
+        }
         public DefaultMap WithExitFade( int exitFade )
         {
             return new DefaultMap(
@@ -3238,6 +3365,35 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 par: Par,
                 translator: Translator);
         }
+        public DefaultMap WithSpecialAction( SpecialAction specialAction )
+        {
+            return new DefaultMap(
+                borderTexture: BorderTexture,
+                cluster: Cluster,
+                completionString: CompletionString,
+                deathCam: DeathCam,
+                defaultCeiling: DefaultCeiling,
+                defaultFloor: DefaultFloor,
+                ensureInventorys: EnsureInventorys,
+                exitFade: ExitFade,
+                floorNumber: FloorNumber,
+                highScoresGraphic: HighScoresGraphic,
+                levelBonus: LevelBonus,
+                levelNum: LevelNum,
+                music: Music,
+                spawnWithWeaponRaised: SpawnWithWeaponRaised,
+                secretDeathSounds: SecretDeathSounds,
+                next: Next,
+                secretNext: SecretNext,
+                victoryNext: VictoryNext,
+                nextEndSequence: NextEndSequence,
+                secretNextEndSequence: SecretNextEndSequence,
+                victoryNextEndSequence: VictoryNextEndSequence,
+                specialActions: SpecialActions.Concat( new[]{specialAction} ),
+                nointermission: Nointermission,
+                par: Par,
+                translator: Translator);
+        }
         public DefaultMap WithNointermission( bool nointermission )
         {
             return new DefaultMap(
@@ -3598,6 +3754,35 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 defaultCeiling: DefaultCeiling,
                 defaultFloor: DefaultFloor,
                 ensureInventorys: EnsureInventorys.Concat( ensureInventorys ),
+                exitFade: ExitFade,
+                floorNumber: FloorNumber,
+                highScoresGraphic: HighScoresGraphic,
+                levelBonus: LevelBonus,
+                levelNum: LevelNum,
+                music: Music,
+                spawnWithWeaponRaised: SpawnWithWeaponRaised,
+                secretDeathSounds: SecretDeathSounds,
+                next: Next,
+                secretNext: SecretNext,
+                victoryNext: VictoryNext,
+                nextEndSequence: NextEndSequence,
+                secretNextEndSequence: SecretNextEndSequence,
+                victoryNextEndSequence: VictoryNextEndSequence,
+                specialActions: SpecialActions,
+                nointermission: Nointermission,
+                par: Par,
+                translator: Translator);
+        }
+        public AddDefaultMap WithEnsureInventory( string ensureInventory )
+        {
+            return new AddDefaultMap(
+                borderTexture: BorderTexture,
+                cluster: Cluster,
+                completionString: CompletionString,
+                deathCam: DeathCam,
+                defaultCeiling: DefaultCeiling,
+                defaultFloor: DefaultFloor,
+                ensureInventorys: EnsureInventorys.Concat( new[]{ensureInventory} ),
                 exitFade: ExitFade,
                 floorNumber: FloorNumber,
                 highScoresGraphic: HighScoresGraphic,
@@ -4052,6 +4237,35 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 par: Par,
                 translator: Translator);
         }
+        public AddDefaultMap WithSpecialAction( SpecialAction specialAction )
+        {
+            return new AddDefaultMap(
+                borderTexture: BorderTexture,
+                cluster: Cluster,
+                completionString: CompletionString,
+                deathCam: DeathCam,
+                defaultCeiling: DefaultCeiling,
+                defaultFloor: DefaultFloor,
+                ensureInventorys: EnsureInventorys,
+                exitFade: ExitFade,
+                floorNumber: FloorNumber,
+                highScoresGraphic: HighScoresGraphic,
+                levelBonus: LevelBonus,
+                levelNum: LevelNum,
+                music: Music,
+                spawnWithWeaponRaised: SpawnWithWeaponRaised,
+                secretDeathSounds: SecretDeathSounds,
+                next: Next,
+                secretNext: SecretNext,
+                victoryNext: VictoryNext,
+                nextEndSequence: NextEndSequence,
+                secretNextEndSequence: SecretNextEndSequence,
+                victoryNextEndSequence: VictoryNextEndSequence,
+                specialActions: SpecialActions.Concat( new[]{specialAction} ),
+                nointermission: Nointermission,
+                par: Par,
+                translator: Translator);
+        }
         public AddDefaultMap WithNointermission( bool nointermission )
         {
             return new AddDefaultMap(
@@ -4493,6 +4707,38 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 defaultCeiling: DefaultCeiling,
                 defaultFloor: DefaultFloor,
                 ensureInventorys: EnsureInventorys.Concat( ensureInventorys ),
+                exitFade: ExitFade,
+                floorNumber: FloorNumber,
+                highScoresGraphic: HighScoresGraphic,
+                levelBonus: LevelBonus,
+                levelNum: LevelNum,
+                music: Music,
+                spawnWithWeaponRaised: SpawnWithWeaponRaised,
+                secretDeathSounds: SecretDeathSounds,
+                next: Next,
+                secretNext: SecretNext,
+                victoryNext: VictoryNext,
+                nextEndSequence: NextEndSequence,
+                secretNextEndSequence: SecretNextEndSequence,
+                victoryNextEndSequence: VictoryNextEndSequence,
+                specialActions: SpecialActions,
+                nointermission: Nointermission,
+                par: Par,
+                translator: Translator,
+                mapLump: MapLump,
+                mapName: MapName,
+                mapNameLookup: MapNameLookup);
+        }
+        public Map WithEnsureInventory( string ensureInventory )
+        {
+            return new Map(
+                borderTexture: BorderTexture,
+                cluster: Cluster,
+                completionString: CompletionString,
+                deathCam: DeathCam,
+                defaultCeiling: DefaultCeiling,
+                defaultFloor: DefaultFloor,
+                ensureInventorys: EnsureInventorys.Concat( new[]{ensureInventory} ),
                 exitFade: ExitFade,
                 floorNumber: FloorNumber,
                 highScoresGraphic: HighScoresGraphic,
@@ -4995,6 +5241,38 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 mapName: MapName,
                 mapNameLookup: MapNameLookup);
         }
+        public Map WithSpecialAction( SpecialAction specialAction )
+        {
+            return new Map(
+                borderTexture: BorderTexture,
+                cluster: Cluster,
+                completionString: CompletionString,
+                deathCam: DeathCam,
+                defaultCeiling: DefaultCeiling,
+                defaultFloor: DefaultFloor,
+                ensureInventorys: EnsureInventorys,
+                exitFade: ExitFade,
+                floorNumber: FloorNumber,
+                highScoresGraphic: HighScoresGraphic,
+                levelBonus: LevelBonus,
+                levelNum: LevelNum,
+                music: Music,
+                spawnWithWeaponRaised: SpawnWithWeaponRaised,
+                secretDeathSounds: SecretDeathSounds,
+                next: Next,
+                secretNext: SecretNext,
+                victoryNext: VictoryNext,
+                nextEndSequence: NextEndSequence,
+                secretNextEndSequence: SecretNextEndSequence,
+                victoryNextEndSequence: VictoryNextEndSequence,
+                specialActions: SpecialActions.Concat( new[]{specialAction} ),
+                nointermission: Nointermission,
+                par: Par,
+                translator: Translator,
+                mapLump: MapLump,
+                mapName: MapName,
+                mapNameLookup: MapNameLookup);
+        }
         public Map WithNointermission( bool nointermission )
         {
             return new Map(
@@ -5339,11 +5617,29 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 intermissions: Intermissions,
                 maps: Maps);
         }
+        public MapInfo WithCluster( Cluster cluster )
+        {
+            return new MapInfo(
+                clusters: Clusters.Concat( new[]{cluster} ),
+                episodes: Episodes,
+                gameInfo: GameInfo,
+                intermissions: Intermissions,
+                maps: Maps);
+        }
         public MapInfo WithEpisodes( IEnumerable<Episode> episodes )
         {
             return new MapInfo(
                 clusters: Clusters,
                 episodes: Episodes.Concat( episodes ),
+                gameInfo: GameInfo,
+                intermissions: Intermissions,
+                maps: Maps);
+        }
+        public MapInfo WithEpisode( Episode episode )
+        {
+            return new MapInfo(
+                clusters: Clusters,
+                episodes: Episodes.Concat( new[]{episode} ),
                 gameInfo: GameInfo,
                 intermissions: Intermissions,
                 maps: Maps);
@@ -5366,6 +5662,15 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 intermissions: Intermissions.Concat( intermissions ),
                 maps: Maps);
         }
+        public MapInfo WithIntermission( Intermission intermission )
+        {
+            return new MapInfo(
+                clusters: Clusters,
+                episodes: Episodes,
+                gameInfo: GameInfo,
+                intermissions: Intermissions.Concat( new[]{intermission} ),
+                maps: Maps);
+        }
         public MapInfo WithMaps( IEnumerable<Map> maps )
         {
             return new MapInfo(
@@ -5374,6 +5679,15 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 gameInfo: GameInfo,
                 intermissions: Intermissions,
                 maps: Maps.Concat( maps ));
+        }
+        public MapInfo WithMap( Map map )
+        {
+            return new MapInfo(
+                clusters: Clusters,
+                episodes: Episodes,
+                gameInfo: GameInfo,
+                intermissions: Intermissions,
+                maps: Maps.Concat( new[]{map} ));
         }
     }
 

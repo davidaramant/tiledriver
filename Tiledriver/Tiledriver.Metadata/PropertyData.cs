@@ -249,7 +249,7 @@ namespace Tiledriver.Metadata
         {
             get
             {
-                if (!ScalarField)
+                if (!IsScalarField)
                 {
                     return "null";
                 }
@@ -305,7 +305,7 @@ namespace Tiledriver.Metadata
             }
         }
 
-        public bool ScalarField
+        public bool IsScalarField
         {
             get
             {

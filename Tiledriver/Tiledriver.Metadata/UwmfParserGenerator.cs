@@ -42,7 +42,7 @@ OpenParen();
 
         private static void WritePropertyAssignments(BlockData blockData, IndentedWriter output, string assignmentHolder, string owner)
         {
-            foreach (var property in blockData.Properties.Where(p => p.ScalarField))
+            foreach (var property in blockData.Properties.Where(p => p.IsScalarField))
             {
                 var level = property.IsRequired ? "Required" : "Optional";
 

@@ -44,7 +44,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf");
 
         private static void WriteProperties(BlockData blockData, IndentedWriter sb)
         {
-            foreach (var property in blockData.Properties.Where(_ => _.ScalarField && _.IsRequired))
+            foreach (var property in blockData.Properties.Where(_ => _.IsScalarField && _.IsRequired))
             {
                 sb.Line($"private bool {property.ClassName.ToFieldName()}HasBeenSet = false;").
                     Line($"private {property.PropertyTypeString} {property.ClassName.ToFieldName()};").
@@ -59,7 +59,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf");
                     CloseParen();
             }
 
-            foreach (var property in blockData.Properties.Where(_ => !(_.ScalarField && _.IsRequired)))
+            foreach (var property in blockData.Properties.Where(_ => !(_.IsScalarField && _.IsRequired)))
             {
                 sb.Line(property.PropertyDefinition);
             }
@@ -105,13 +105,13 @@ namespace Tiledriver.Core.FormatModels.Uwmf");
             }
 
             // WRITE ALL REQUIRED PROPERTIES
-            foreach (var property in blockData.Properties.Where(_ => _.ScalarField && _.IsRequired))
+            foreach (var property in blockData.Properties.Where(_ => _.IsScalarField && _.IsRequired))
             {
                 sb.Line(
                     $"WriteProperty(stream, \"{property.FormatName}\", {property.ClassName.ToFieldName()}, indent: {indent});");
             }
             // WRITE OPTIONAL PROPERTIES
-            foreach (var property in blockData.Properties.Where(_ => _.ScalarField && !_.IsRequired))
+            foreach (var property in blockData.Properties.Where(_ => _.IsScalarField && !_.IsRequired))
             {
                 sb.Line(
                     $"if ({property.ClassName.ToPascalCase()} != {property.DefaultAsString}) WriteProperty(stream, \"{property.FormatName}\", {property.ClassName.ToPascalCase()}, indent: {indent});");
@@ -146,7 +146,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf");
                 OpenParen();
 
             // CHECK THAT ALL REQUIRED PROPERTIES HAVE BEEN SET
-            foreach (var property in blockData.Properties.Where(_ => _.ScalarField && _.IsRequired))
+            foreach (var property in blockData.Properties.Where(_ => _.IsScalarField && _.IsRequired))
             {
                 output.Line(
                     $"if (!{property.ClassName.ToFieldName()}HasBeenSet) throw new InvalidUwmfException(\"Did not set {property.ClassName.ToPascalCase()} on {blockData.ClassName.ToPascalCase()}\");");

@@ -8,6 +8,7 @@ namespace Tiledriver.Metadata
 {
     public static class MapInfoDefinitions
     {
+        // TODO: The plural/singular stuff is too simplistic
         public static readonly IEnumerable<BlockData> Blocks = new[]
         {
             new BlockData("cluster",

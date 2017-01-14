@@ -43,7 +43,7 @@ namespace Tiledriver.Core.FormatModels.Xlat");
 
         private static void WriteProperties(BlockData blockData, IndentedWriter sb)
         {
-            foreach (var property in blockData.Properties.Where(_ => _.ScalarField && _.IsRequired))
+            foreach (var property in blockData.Properties.Where(_ => _.IsScalarField && _.IsRequired))
             {
                 sb.Line($"private bool {property.ClassName.ToFieldName()}HasBeenSet = false;").
                     Line($"private {property.PropertyTypeString} {property.ClassName.ToFieldName()};").
@@ -58,7 +58,7 @@ namespace Tiledriver.Core.FormatModels.Xlat");
                     CloseParen();
             }
 
-            foreach (var property in blockData.Properties.Where(_ => !(_.ScalarField && _.IsRequired)))
+            foreach (var property in blockData.Properties.Where(_ => !(_.IsScalarField && _.IsRequired)))
             {
                 sb.Line(property.PropertyDefinition);
             }
@@ -93,7 +93,7 @@ namespace Tiledriver.Core.FormatModels.Xlat");
                 OpenParen();
 
             // CHECK THAT ALL REQUIRED PROPERTIES HAVE BEEN SET
-            foreach (var property in blockData.Properties.Where(_ => _.ScalarField && _.IsRequired))
+            foreach (var property in blockData.Properties.Where(_ => _.IsScalarField && _.IsRequired))
             {
                 output.Line(
                     $"if (!{property.ClassName.ToFieldName()}HasBeenSet) throw new InvalidUwmfException(\"Did not set {property.ClassName.ToPascalCase()} on {blockData.ClassName.ToPascalCase()}\");");

@@ -10,6 +10,7 @@ namespace Tiledriver.Metadata
 {
     public static class MapInfoModelGenerator
     {
+        // TODO: Should this use some kind of immutable collection instead of calling ToArray constantly?
         public static string GetText()
         {
             var output = new IndentedWriter();
@@ -59,7 +60,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
         {
             foreach (var property in blockData.Properties)
             {
-                if (property.ScalarField)
+                if (property.IsScalarField)
                 {
                     var initialValue = property.HasDefault ?
                         $"(({property.ArgumentTypeString}){property.DefaultAsString}).ToMaybe()" :
@@ -112,7 +113,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
             {
                 var argLine = string.Empty;
 
-                if (indexed.param.ScalarField)
+                if (indexed.param.IsScalarField)
                 {
                     argLine += $"Maybe<{indexed.param.ArgumentTypeString}> {indexed.param.ArgumentName}";
                 }
@@ -169,13 +170,13 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
 
                     if (indexed.param == property)
                     {
-                        if (indexed.param.ScalarField)
+                        if (indexed.param.IsScalarField)
                         {
                             argLine += $"{indexed.param.ArgumentName}.ToMaybe()";
                         }
                         else
                         {
-                            argLine += $"{property.PropertyName}.Concat( {indexed.param.ArgumentName} )";
+                            argLine += $"{property.PropertyName}.Concat( {indexed.param.ArgumentName} ).ToArray()";
                         }
                     }
                     else
@@ -188,6 +189,35 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
                 }
                 sb.DecreaseIndent();
                 sb.CloseParen();
+
+                // For collection types, also add a way to add a single item as a convenience
+                if (!property.IsScalarField)
+                {
+                    var singularPropName = property.ClassName.ToPascalCase();
+                    var singularArgName = property.ClassName.ToCamelCase();
+                    sb.Line($"public {blockData.ClassName.ToPascalCase()} With{singularPropName}( {property.CollectionType} {singularArgName} )");
+                    sb.OpenParen();
+                    sb.Line($"return new {blockData.ClassName.ToPascalCase()}(");
+                    sb.IncreaseIndent();
+                    foreach (var indexed in allProperties.Select((param, index) => new { param, index }))
+                    {
+                        var argLine = $"{indexed.param.ArgumentName}: ";
+
+                        if (indexed.param == property)
+                        {
+                            argLine += $"{property.PropertyName}.Concat( new[]{{{singularArgName}}} ).ToArray()";
+                        }
+                        else
+                        {
+                            argLine += indexed.param.PropertyName;
+                        }
+
+                        sb.Line(argLine +
+                            (indexed.index == allProperties.Count - 1 ? ");" : ","));
+                    }
+                    sb.DecreaseIndent();
+                    sb.CloseParen();
+                }
             }
         }
 
@@ -205,7 +235,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
             {
                 var otherType = otherBlock.ClassName.ToPascalCase();
                 var otherClassname = otherBlock.ClassName.ToCamelCase();
-                var allOtherProperties = new HashSet<string>(GetAllPropertiesOf(otherBlock).Select(p=>p.PropertyName));
+                var allOtherProperties = new HashSet<string>(GetAllPropertiesOf(otherBlock).Select(p => p.PropertyName));
 
                 sb.Line($"public {blockData.ClassName.ToPascalCase()} With{otherType}( {otherType} {otherClassname} )");
                 sb.OpenParen();
@@ -218,7 +248,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
 
                     if (allOtherProperties.Contains(currentName))
                     {
-                        if (indexed.param.ScalarField)
+                        if (indexed.param.IsScalarField)
                         {
                             argLine += $"{otherClassname}.{currentName}.Or({currentName})";
                         }
