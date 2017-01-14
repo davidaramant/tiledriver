@@ -403,19 +403,19 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
 
                 if (name == "ceiling")
                 {
-                    if (flatMappings.Ceiling.Any())
+                    if (flatMappings.Ceilings.Any())
                     {
                         throw new ParsingException("Duplicate 'ceiling' expression in flats.");
                     }
-                    flatMappings.Ceiling.AddRange(exp.Values.Select(t => t.TryAsString().Value));
+                    flatMappings.Ceilings.AddRange(exp.Values.Select(t => t.TryAsString().Value));
                 }
                 else
                 {
-                    if (flatMappings.Floor.Any())
+                    if (flatMappings.Floors.Any())
                     {
                         throw new ParsingException("Duplicate 'floor' expression in flats.");
                     }
-                    flatMappings.Floor.AddRange(exp.Values.Select(t => t.TryAsString().Value));
+                    flatMappings.Floors.AddRange(exp.Values.Select(t => t.TryAsString().Value));
                 }
             }
             return flatMappings;

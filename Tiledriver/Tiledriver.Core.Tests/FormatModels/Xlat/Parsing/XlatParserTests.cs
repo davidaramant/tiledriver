@@ -396,8 +396,8 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 })
             });
 
-            Assert.That(translator.FlatMappings.Ceiling, Is.EquivalentTo(new[] { "flat1", "flat2" }), "Did not parse ceiling.");
-            Assert.That(translator.FlatMappings.Floor, Is.EquivalentTo(new[] { "flat3", "flat4" }), "Did not parse floor.");
+            Assert.That(translator.FlatMappings.Ceilings, Is.EquivalentTo(new[] { "flat1", "flat2" }), "Did not parse ceiling.");
+            Assert.That(translator.FlatMappings.Floors, Is.EquivalentTo(new[] { "flat3", "flat4" }), "Did not parse floor.");
         }
 
         #endregion Flats section

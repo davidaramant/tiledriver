@@ -13,17 +13,17 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
         public void ShouldMergeMappings()
         {
             var fm1 = new FlatMappings(
-                ceiling: new[] { "c1", "c2", "c3" },
-                floor: new[] { "f1", "f2" });
+                ceilings: new[] { "c1", "c2", "c3" },
+                floors: new[] { "f1", "f2" });
 
             var fm2 = new FlatMappings(
-                ceiling: new[] { "c10", "c20" },
-                floor: new[] { "f10", "f20", "f30" });
+                ceilings: new[] { "c10", "c20" },
+                floors: new[] { "f10", "f20", "f30" });
 
             fm1.Add(fm2);
 
-            Assert.That(fm1.Ceiling, Is.EquivalentTo(new[] { "c10", "c20", "c3" }), "Did not merge ceilings.");
-            Assert.That(fm1.Floor, Is.EquivalentTo(new[] { "f10", "f20", "f30" }), "Did not merge floors.");
+            Assert.That(fm1.Ceilings, Is.EquivalentTo(new[] { "c10", "c20", "c3" }), "Did not merge ceilings.");
+            Assert.That(fm1.Floors, Is.EquivalentTo(new[] { "f10", "f20", "f30" }), "Did not merge floors.");
         }
     }
 }

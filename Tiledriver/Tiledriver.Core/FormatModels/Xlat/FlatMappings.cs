@@ -9,14 +9,14 @@ namespace Tiledriver.Core.FormatModels.Xlat
     {
         public void Add(FlatMappings newMappings)
         {
-            var newCeiling = newMappings.Ceiling.Concat(Ceiling.Skip(newMappings.Ceiling.Count)).ToArray();
-            var newFloor = newMappings.Floor.Concat(Floor.Skip(newMappings.Floor.Count)).ToArray();
+            var newCeiling = newMappings.Ceilings.Concat(Ceilings.Skip(newMappings.Ceilings.Count)).ToArray();
+            var newFloor = newMappings.Floors.Concat(Floors.Skip(newMappings.Floors.Count)).ToArray();
 
-            Ceiling.Clear();
-            Ceiling.AddRange(newCeiling);
+            Ceilings.Clear();
+            Ceilings.AddRange(newCeiling);
 
-            Floor.Clear();
-            Floor.AddRange(newFloor);
+            Floors.Clear();
+            Floors.AddRange(newFloor);
         }
     }
 }

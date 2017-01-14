@@ -2,6 +2,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Functional.Maybe;
 
@@ -39,6 +40,8 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
                 output.OpenParen();
 
                 WriteProperties(block, output);
+                WriteConstructors(output, block);
+                WriteWithMethods(block, output);
 
                 output.CloseParen();
                 output.Line();
@@ -51,6 +54,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
 
         private static void WriteProperties(BlockData blockData, IndentedWriter sb)
         {
+            // TODO: Values with defaults
             foreach (var property in blockData.Properties)
             {
                 if (property.ScalarField)
@@ -59,9 +63,84 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
                 }
                 else
                 {
-                    sb.Line($"public {property.ArgumentTypeString} {property.ClassName.ToPluralCamelCase()} {{ get; }} = Enumerable.Empty<{property.CollectionType}>();");
+                    sb.Line($"public {property.ArgumentTypeString} {property.ClassName.ToPluralPascalCase()} {{ get; }} = Enumerable.Empty<{property.CollectionType}>();");
                 }
             }
+        }
+
+        private static void WriteConstructors(IndentedWriter sb, BlockData blockData)
+        {
+            var baseClass =
+                blockData.BaseClass.Select(
+                    name => MapInfoDefinitions.Blocks.Single(b => b.ClassName == name));
+
+            var allProperties = new List<PropertyData>();
+
+            if (baseClass.HasValue)
+            {
+                allProperties.AddRange(baseClass.Value.Properties);
+            }
+            allProperties.AddRange(blockData.Properties);
+
+            sb.Line($"public {blockData.ClassName.ToPascalCase()}() {{ }}");
+
+            if (!allProperties.Any())
+            {
+                return;
+            }
+
+            sb.Line($"public {blockData.ClassName.ToPascalCase()}(");
+            sb.IncreaseIndent();
+
+            foreach (var indexed in allProperties.Select((param, index) => new { param, index }))
+            {
+                var argLine = string.Empty;
+
+                if (indexed.param.ScalarField)
+                {
+                    argLine += $"Maybe<{indexed.param.ArgumentTypeString}> {indexed.param.ArgumentName}";
+                }
+                else
+                {
+                    argLine += $"{indexed.param.ArgumentTypeString} {indexed.param.ArgumentName}";
+                }
+
+                sb.Line(argLine + 
+                    (indexed.index == allProperties.Count - 1 ? ")" : ","));
+            }
+            if (baseClass.HasValue)
+            {
+                sb.Line(": base(");
+                sb.IncreaseIndent();
+                foreach (var indexed in baseClass.Value.Properties.Select((param, index) => new { param, index }))
+                {
+                    sb.Line(indexed.param.ArgumentName +
+                        (indexed.index == baseClass.Value.Properties.Count() - 1 ? ")" : ","));
+                }
+                sb.DecreaseIndent();
+            }
+
+            sb.DecreaseIndent();
+            sb.OpenParen();
+
+            foreach (var property in blockData.Properties)
+            {
+                if (property.ScalarField)
+                {
+                    sb.Line($"{property.ClassName.ToPascalCase()} = {property.ArgumentName};");
+                }
+                else
+                {
+                    sb.Line($"{property.ClassName.ToPluralPascalCase()} = {property.ArgumentName};");
+                }
+            }
+
+            sb.CloseParen();
+        }
+
+        private static void WriteWithMethods(BlockData blockData, IndentedWriter sb)
+        {
+
         }
     }
 }
