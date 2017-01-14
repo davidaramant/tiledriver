@@ -66,6 +66,11 @@
     <Compile Include="FormatModels\GameMaps\PlaneMetadata.cs" />
     <Compile Include="FormatModels\GameMaps\Expander.cs" />
     <Compile Include="FormatModels\IResourceProvider.cs" />
+    <Compile Include="FormatModels\MapInfos\Model.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="FormatModels\Wad\DataLump.cs" />
     <Compile Include="FormatModels\Wad\ILump.cs" />
     <Compile Include="FormatModels\Wad\Marker.cs" />
@@ -146,6 +151,10 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="FormatModels\MapInfos\Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Model.Generated.cs</LastGenOutput>
+    </Content>
     <Content Include="FormatModels\Uwmf\Model.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Model.Generated.cs</LastGenOutput>
@@ -163,7 +172,9 @@
       <LastGenOutput>Actor.Generated.cs</LastGenOutput>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="FormatModels\MapInfos\Parsing\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
