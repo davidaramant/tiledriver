@@ -3,6 +3,7 @@
 
 using System;
 using System.Linq;
+using Functional.Maybe;
 
 namespace Tiledriver.Metadata
 {
@@ -26,7 +27,15 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
 
             foreach (var block in MapInfoDefinitions.Blocks)
             {
-                output.Line($"public partial class {block.ClassName.ToPascalCase()}");
+                var allInheritance =
+                    block.BaseClass.SelectOrElse(className => new[] {className}, () => new string[0])
+                        .Concat(block.ImplementedInterfaces).ToArray();
+
+                var inheritance = allInheritance.Any()
+                    ? " :" + string.Join(",", allInheritance.Select(s => " " + s))
+                    : string.Empty;
+
+                output.Line($"public partial class {block.ClassName.ToPascalCase()}{inheritance}");
                 output.OpenParen();
 
                 WriteProperties(block, output);

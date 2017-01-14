@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Functional.Maybe;
 
 namespace Tiledriver.Metadata
 {
@@ -11,9 +12,11 @@ namespace Tiledriver.Metadata
         private readonly List<PropertyData> _properties = new List<PropertyData>();
 
         public IEnumerable<PropertyData> Properties => _properties;
-        public bool IsSubBlock { get; private set; }
-        public bool NormalWriting { get; private set; }
-        public bool NormalReading { get; private set; }
+        public bool IsSubBlock { get; }
+        public bool NormalWriting { get; }
+        public bool NormalReading { get; }
+        public Maybe<string> BaseClass { get; }
+        public IEnumerable<string> ImplementedInterfaces { get; }
         public bool SupportsUnknownProperties => Properties.Any(p => p.Type == PropertyType.UnknownProperties);
         public bool SupportsUnknownBlocks => Properties.Any(p => p.Type == PropertyType.UnknownBlocks);
 
@@ -28,12 +31,16 @@ namespace Tiledriver.Metadata
             string className = null,
             bool isSubBlock = true,
             bool normalWriting = true,
-            bool normalReading = true) :
+            bool normalReading = true,
+            string inheritsFrom = null,
+            IEnumerable<string> implements = null) :
             base(formatName, className ?? formatName)
         {
             IsSubBlock = isSubBlock;
             NormalWriting = normalWriting;
             NormalReading = normalReading;
+            BaseClass = inheritsFrom.ToMaybe();
+            ImplementedInterfaces = implements ?? Enumerable.Empty<string>();
 
             _properties.AddRange(properties);
         }

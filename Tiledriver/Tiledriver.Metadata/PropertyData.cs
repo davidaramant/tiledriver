@@ -50,11 +50,11 @@ namespace Tiledriver.Metadata
                     case PropertyType.StringList:
                         return "List<string>";
                     case PropertyType.Block:
-                        return ClassName.ToPascalCase();
+                        return _blockType ?? ClassName.ToPascalCase();
                     case PropertyType.BlockList:
-                        return $"List<{ClassName.ToPascalCase()}>";
+                        return $"List<{_blockType ?? ClassName.ToPascalCase()}>";
                     case PropertyType.MappedBlockList:
-                        return $"Dictionary<ushort,{ClassName.ToPascalCase()}>";
+                        return $"Dictionary<ushort,{_blockType ?? ClassName.ToPascalCase()}>";
                     case PropertyType.UnknownProperties:
                         return "List<UnknownProperty>";
                     case PropertyType.UnknownBlocks:
@@ -88,11 +88,11 @@ namespace Tiledriver.Metadata
                     case PropertyType.StringList:
                         return "IEnumerable<string>";
                     case PropertyType.Block:
-                        return ClassName.ToPascalCase();
+                        return _blockType ?? ClassName.ToPascalCase();
                     case PropertyType.BlockList:
-                        return $"IEnumerable<{ClassName.ToPascalCase()}>";
+                        return $"IEnumerable<{_blockType ?? ClassName.ToPascalCase()}>";
                     case PropertyType.MappedBlockList:
-                        return $"Dictionary<ushort,{ClassName.ToPascalCase()}>";
+                        return $"Dictionary<ushort,{_blockType ?? ClassName.ToPascalCase()}>";
                     case PropertyType.UnknownProperties:
                         return "IEnumerable<UnknownProperty>";
                     case PropertyType.UnknownBlocks:
@@ -245,6 +245,7 @@ namespace Tiledriver.Metadata
             Type == PropertyType.UnknownBlocks;
 
         private readonly object _defaultValue;
+        private readonly string _blockType;
 
         public string DefaultAsString
         {
@@ -339,7 +340,8 @@ namespace Tiledriver.Metadata
                 PropertyType type,
                 bool isMetaData = false,
                 string formatName = null,
-                object defaultValue = null) :
+                object defaultValue = null,
+                string blockType = null) :
                     base(
                         formatName: formatName ?? name,
                         className: name)
@@ -347,6 +349,7 @@ namespace Tiledriver.Metadata
             Type = type;
             IsMetaData = isMetaData;
             _defaultValue = defaultValue;
+            _blockType = blockType;
         }
     }
 }

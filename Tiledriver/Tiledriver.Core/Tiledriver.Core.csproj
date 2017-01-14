@@ -66,6 +66,7 @@
     <Compile Include="FormatModels\GameMaps\PlaneMetadata.cs" />
     <Compile Include="FormatModels\GameMaps\Expander.cs" />
     <Compile Include="FormatModels\IResourceProvider.cs" />
+    <Compile Include="FormatModels\MapInfos\IIntermissionAction.cs" />
     <Compile Include="FormatModels\MapInfos\Model.Generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

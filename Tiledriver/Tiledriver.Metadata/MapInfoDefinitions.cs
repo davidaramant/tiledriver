@@ -40,7 +40,7 @@ namespace Tiledriver.Metadata
                     new PropertyData(formatName:"advisorycolor", name:"advisoryColor", type:PropertyType.String),
                     new PropertyData(formatName:"advisorypic", name:"advisoryPic", type:PropertyType.String),
                     new PropertyData("playScreenBorderColors", type:PropertyType.Block),
-                    new PropertyData("playScreenBorderGraphics", type:PropertyType.Block), 
+                    new PropertyData("playScreenBorderGraphics", type:PropertyType.Block),
                     new PropertyData(formatName:"borderflat", name:"borderFlat", type:PropertyType.String),
                     new PropertyData(formatName:"doorsoundsequence", name:"doorSoundSequence", type:PropertyType.String),
                     new PropertyData(formatName:"drawreadthis", name:"drawReadThis", type:PropertyType.Boolean),
@@ -91,7 +91,7 @@ namespace Tiledriver.Metadata
                     new PropertyData("bottomLeft",type:PropertyType.String),
                     new PropertyData("bottom",type:PropertyType.String),
                     new PropertyData("bottomRight",type:PropertyType.String),
-                }), 
+                }),
 
             new BlockData("menuColor",
                 properties:new[]
@@ -109,7 +109,7 @@ namespace Tiledriver.Metadata
                 properties:new []
                 {
                     new PropertyData("name",type:PropertyType.String,isMetaData:true),
-                    new PropertyData("intermissionAction",type:PropertyType.BlockList), 
+                    new PropertyData("intermissionAction",type:PropertyType.BlockList,blockType:"IIntermissionAction"),
                 }),
 
             new BlockData("IntermissionAction",
@@ -123,21 +123,28 @@ namespace Tiledriver.Metadata
                     new PropertyData("drawY",type:PropertyType.Integer),
                     new PropertyData("music",type:PropertyType.String),
                     new PropertyData("time",type:PropertyType.Integer),
-                }), 
-
-            new BlockData("Fader",
-                properties:new[]
-                {
-                    new PropertyData(formatName:"fadetype",name:"fadeType",type:PropertyType.String), 
                 }),
 
-            new BlockData("GotoTitle",
+            new BlockData("Fader",
+                inheritsFrom:"IntermissionAction",
+                implements:new [] {"IIntermissionAction"},
+                properties:new[]
+                {
+                    new PropertyData(formatName:"fadetype",name:"fadeType",type:PropertyType.String),
+                }),
+
+            new BlockData(formatName:"GotoTitle",className:"GoToTitle",
+                implements:new [] {"IIntermissionAction"},
                 properties:Enumerable.Empty<PropertyData>()),
 
             new BlockData("Image",
+                inheritsFrom:"IntermissionAction",
+                implements:new [] {"IIntermissionAction"},
                 properties:Enumerable.Empty<PropertyData>()),
 
             new BlockData("TextScreen",
+                inheritsFrom:"IntermissionAction",
+                implements:new [] {"IIntermissionAction"},
                 properties:new[]
                 {
                     new PropertyData("text",type:PropertyType.StringList),
@@ -149,6 +156,8 @@ namespace Tiledriver.Metadata
                 }),
 
             new BlockData("VictoryStats",
+                inheritsFrom:"IntermissionAction",
+                implements:new [] {"IIntermissionAction"},
                 properties:Enumerable.Empty<PropertyData>()), 
 
 

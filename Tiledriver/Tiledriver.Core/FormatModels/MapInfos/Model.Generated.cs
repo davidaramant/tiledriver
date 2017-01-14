@@ -99,7 +99,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
     public partial class Intermission
     {
         public Maybe<string> Name { get; private set; }
-        public List<IntermissionAction> IntermissionActions { get; } = new List<IntermissionAction>();
+        public List<IIntermissionAction> IntermissionActions { get; } = new List<IIntermissionAction>();
     }
 
     public partial class IntermissionAction
@@ -114,20 +114,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public Maybe<int> Time { get; private set; }
     }
 
-    public partial class Fader
+    public partial class Fader : IntermissionAction, IIntermissionAction
     {
         public Maybe<string> FadeType { get; private set; }
     }
 
-    public partial class GotoTitle
+    public partial class GoToTitle : IIntermissionAction
     {
     }
 
-    public partial class Image
+    public partial class Image : IntermissionAction, IIntermissionAction
     {
     }
 
-    public partial class TextScreen
+    public partial class TextScreen : IntermissionAction, IIntermissionAction
     {
         public List<string> Text { get; } = new List<string>();
         public Maybe<string> TextAlignment { get; private set; }
@@ -137,7 +137,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public Maybe<int> PositionY { get; private set; }
     }
 
-    public partial class VictoryStats
+    public partial class VictoryStats : IntermissionAction, IIntermissionAction
     {
     }
 
