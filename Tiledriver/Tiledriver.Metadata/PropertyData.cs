@@ -13,10 +13,9 @@ namespace Tiledriver.Metadata
         Boolean,
         String,
         Char,
-        UshortSet,
-        StringList,
+        Set,
         Block,
-        BlockList,
+        List,
         MappedBlockList,
         UnknownProperties,
         UnknownBlocks,
@@ -24,8 +23,16 @@ namespace Tiledriver.Metadata
 
     public sealed class PropertyData : NamedItem
     {
+        private string _collectionType;
+
         public PropertyType Type { get; }
         public bool IsMetaData { get; }
+
+        public string CollectionType
+        {
+            get {  return _collectionType ?? ClassName.ToPascalCase(); }
+            private set { _collectionType = value; }
+        }
 
         public string PropertyTypeString
         {
@@ -45,16 +52,14 @@ namespace Tiledriver.Metadata
                         return "ushort";
                     case PropertyType.String:
                         return "string";
-                    case PropertyType.UshortSet:
-                        return "HashSet<ushort>";
-                    case PropertyType.StringList:
-                        return "List<string>";
+                    case PropertyType.Set:
+                        return $"HashSet<{CollectionType}>";
                     case PropertyType.Block:
-                        return _blockType ?? ClassName.ToPascalCase();
-                    case PropertyType.BlockList:
-                        return $"List<{_blockType ?? ClassName.ToPascalCase()}>";
+                        return CollectionType ?? ClassName.ToPascalCase();
+                    case PropertyType.List:
+                        return $"List<{CollectionType}>";
                     case PropertyType.MappedBlockList:
-                        return $"Dictionary<ushort,{_blockType ?? ClassName.ToPascalCase()}>";
+                        return $"Dictionary<ushort,{CollectionType}>";
                     case PropertyType.UnknownProperties:
                         return "List<UnknownProperty>";
                     case PropertyType.UnknownBlocks:
@@ -83,16 +88,13 @@ namespace Tiledriver.Metadata
                         return "ushort";
                     case PropertyType.String:
                         return "string";
-                    case PropertyType.UshortSet:
-                        return "IEnumerable<ushort>";
-                    case PropertyType.StringList:
-                        return "IEnumerable<string>";
                     case PropertyType.Block:
-                        return _blockType ?? ClassName.ToPascalCase();
-                    case PropertyType.BlockList:
-                        return $"IEnumerable<{_blockType ?? ClassName.ToPascalCase()}>";
+                        return CollectionType;
+                    case PropertyType.Set:
+                    case PropertyType.List:
+                        return $"IEnumerable<{CollectionType}>";
                     case PropertyType.MappedBlockList:
-                        return $"Dictionary<ushort,{_blockType ?? ClassName.ToPascalCase()}>";
+                        return $"Dictionary<ushort,{CollectionType}>";
                     case PropertyType.UnknownProperties:
                         return "IEnumerable<UnknownProperty>";
                     case PropertyType.UnknownBlocks:
@@ -115,11 +117,10 @@ namespace Tiledriver.Metadata
                     case PropertyType.Integer:
                     case PropertyType.Ushort:
                     case PropertyType.String:
-                    case PropertyType.UshortSet:
-                    case PropertyType.StringList:
+                    case PropertyType.Set:
                     case PropertyType.Block:
                         return ClassName.ToCamelCase();
-                    case PropertyType.BlockList:
+                    case PropertyType.List:
                     case PropertyType.MappedBlockList:
                         return ClassName.ToPluralCamelCase();
                     case PropertyType.UnknownProperties:
@@ -144,11 +145,10 @@ namespace Tiledriver.Metadata
                     case PropertyType.Ushort:
                     case PropertyType.Integer:
                     case PropertyType.String:
-                    case PropertyType.UshortSet:
-                    case PropertyType.StringList:
+                    case PropertyType.Set:
                     case PropertyType.Block:
                         return ClassName.ToPascalCase();
-                    case PropertyType.BlockList:
+                    case PropertyType.List:
                     case PropertyType.MappedBlockList:
                         return ClassName.ToPluralPascalCase();
                     case PropertyType.UnknownProperties:
@@ -174,10 +174,9 @@ namespace Tiledriver.Metadata
                     case PropertyType.Integer:
                     case PropertyType.String:
                         return $"public {PropertyTypeString} {PropertyName} {{ get; set; }} = {DefaultAsString};";
-                    case PropertyType.UshortSet:
-                    case PropertyType.StringList:
+                    case PropertyType.Set:
                     case PropertyType.Block:
-                    case PropertyType.BlockList:
+                    case PropertyType.List:
                     case PropertyType.MappedBlockList:
                     case PropertyType.UnknownProperties:
                     case PropertyType.UnknownBlocks:
@@ -204,9 +203,8 @@ namespace Tiledriver.Metadata
                     case PropertyType.String:
                     case PropertyType.Block:
                         return $"{PropertyName} = {ArgumentName};";
-                    case PropertyType.UshortSet:
-                    case PropertyType.StringList:
-                    case PropertyType.BlockList:
+                    case PropertyType.Set:
+                    case PropertyType.List:
                     case PropertyType.MappedBlockList:
                         return $"{PropertyName}.AddRange({ArgumentName});";
                     case PropertyType.UnknownProperties:
@@ -241,11 +239,10 @@ namespace Tiledriver.Metadata
         }
 
         public bool IsUwmfSubBlockList =>
-            Type == PropertyType.BlockList ||
+            Type == PropertyType.List ||
             Type == PropertyType.UnknownBlocks;
 
         private readonly object _defaultValue;
-        private readonly string _blockType;
 
         public string DefaultAsString
         {
@@ -294,9 +291,8 @@ namespace Tiledriver.Metadata
                     case PropertyType.String:
                     case PropertyType.Block:
                         return _defaultValue == null;
-                    case PropertyType.UshortSet:
-                    case PropertyType.StringList:
-                    case PropertyType.BlockList:
+                    case PropertyType.Set:
+                    case PropertyType.List:
                     case PropertyType.MappedBlockList:
                         return true;
                     case PropertyType.UnknownProperties:
@@ -322,9 +318,8 @@ namespace Tiledriver.Metadata
                     case PropertyType.String:
                     case PropertyType.Block:
                         return true;
-                    case PropertyType.UshortSet:
-                    case PropertyType.StringList:
-                    case PropertyType.BlockList:
+                    case PropertyType.Set:
+                    case PropertyType.List:
                     case PropertyType.MappedBlockList:
                     case PropertyType.UnknownProperties:
                     case PropertyType.UnknownBlocks:
@@ -341,7 +336,7 @@ namespace Tiledriver.Metadata
                 bool isMetaData = false,
                 string formatName = null,
                 object defaultValue = null,
-                string blockType = null) :
+                string collectionType = null) :
                     base(
                         formatName: formatName ?? name,
                         className: name)
@@ -349,7 +344,7 @@ namespace Tiledriver.Metadata
             Type = type;
             IsMetaData = isMetaData;
             _defaultValue = defaultValue;
-            _blockType = blockType;
+            CollectionType = collectionType;
         }
     }
 }

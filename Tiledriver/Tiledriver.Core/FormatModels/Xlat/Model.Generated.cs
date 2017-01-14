@@ -304,15 +304,15 @@ namespace Tiledriver.Core.FormatModels.Xlat
 
     public sealed partial class FlatMappings
     {
-        public List<string> Ceiling { get; } = new List<string>();
-        public List<string> Floor { get; } = new List<string>();
+        public List<string> Ceilings { get; } = new List<string>();
+        public List<string> Floors { get; } = new List<string>();
         public FlatMappings() { }
         public FlatMappings(
-            IEnumerable<string> ceiling,
-            IEnumerable<string> floor)
+            IEnumerable<string> ceilings,
+            IEnumerable<string> floors)
         {
-            Ceiling.AddRange(ceiling);
-            Floor.AddRange(floor);
+            Ceilings.AddRange(ceilings);
+            Floors.AddRange(floors);
             AdditionalSemanticChecks();
         }
         public void CheckSemanticValidity()

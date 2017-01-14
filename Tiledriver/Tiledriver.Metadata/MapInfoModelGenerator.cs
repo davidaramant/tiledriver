@@ -39,9 +39,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
                 output.OpenParen();
 
                 WriteProperties(block, output);
-                //WriteConstructors(output, block);
-                //WriteWriteToMethod(block, output);
-                //WriteSemanticValidityMethods(output, block);
 
                 output.CloseParen();
                 output.Line();
@@ -58,11 +55,11 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
             {
                 if (property.ScalarField)
                 {
-                    sb.Line($"public Maybe<{property.PropertyTypeString}> {property.ClassName.ToPascalCase()} {{ get; private set; }}");
+                    sb.Line($"public Maybe<{property.PropertyTypeString}> {property.ClassName.ToPascalCase()} {{ get; }} = Maybe<{property.PropertyTypeString}>.Nothing;");
                 }
                 else
                 {
-                    sb.Line(property.PropertyDefinition);
+                    sb.Line($"public {property.ArgumentTypeString} {property.ClassName.ToPluralCamelCase()} {{ get; }} = Enumerable.Empty<{property.CollectionType}>();");
                 }
             }
         }
