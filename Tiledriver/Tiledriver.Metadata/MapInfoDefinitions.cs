@@ -113,6 +113,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new BlockData("IntermissionAction",
+                isAbstract: true,
                 properties:new[]
                 {
                     new PropertyData("background",type:PropertyType.String),
@@ -164,11 +165,13 @@ namespace Tiledriver.Metadata
             // map
             new BlockData("defaultmap",className:"defaultMap",
                 inheritsFrom:"BaseMap",
+                canSetPropertiesFrom:new [] {"AddDefaultMap"},
                 properties:Enumerable.Empty<PropertyData>()),
             new BlockData("adddefaultmap",className:"addDefaultMap",
                 inheritsFrom:"BaseMap",
                 properties:Enumerable.Empty<PropertyData>()),
             new BlockData("BaseMap",
+                isAbstract: true,
                 properties:new []
                 {
                     new PropertyData(formatName:"bordertexture",name:"borderTexture",type:PropertyType.String),
@@ -199,6 +202,7 @@ namespace Tiledriver.Metadata
                 }),
             new BlockData("map",
                 inheritsFrom:"BaseMap",
+                canSetPropertiesFrom:new [] {"DefaultMap"},
                 properties:new []
                 {
                     new PropertyData("mapLump",type:PropertyType.String,isMetaData:true),

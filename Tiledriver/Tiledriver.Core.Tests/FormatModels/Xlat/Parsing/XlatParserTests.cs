@@ -192,7 +192,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 })
             });
 
-            Assert.That(translator.ThingMappings.Elevator.Contains(123), Is.True, "Did not parse elevator.");
+            Assert.That(translator.ThingMappings.Elevators.Contains(123), Is.True, "Did not parse elevator.");
         }
 
         [Test]

@@ -15,19 +15,19 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
         public void ShouldMergeElevatorMappings()
         {
             var tm1 = new ThingMappings(
-                elevator: new ushort[] { 1, 2, 3 },
+                elevators: new ushort[] { 1, 2, 3 },
                 positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>(),
                 thingDefinitions: new Dictionary<ushort, ThingDefinition>());
 
             var tm2 = new ThingMappings(
-                elevator: new ushort[] { 3, 4, 5 },
+                elevators: new ushort[] { 3, 4, 5 },
                 positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>(),
                 thingDefinitions: new Dictionary<ushort, ThingDefinition>());
 
             tm1.Add(tm2);
 
             Assert.That(
-                tm1.Elevator,
+                tm1.Elevators,
                 Is.EquivalentTo(new ushort[] { 1, 2, 3, 4, 5 }),
                 "Did not merge elevators.");
         }
@@ -36,7 +36,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
         public void ShouldMergeTriggerMappings()
         {
             var tm1 = new ThingMappings(
-                elevator: Enumerable.Empty<ushort>(),
+                elevators: Enumerable.Empty<ushort>(),
                 positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>
                 {
                     { 1, new PositionlessTrigger(action:"Action1") },
@@ -45,7 +45,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
                 thingDefinitions: new Dictionary<ushort, ThingDefinition>());
 
             var tm2 = new ThingMappings(
-                elevator: Enumerable.Empty<ushort>(),
+                elevators: Enumerable.Empty<ushort>(),
                 positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>
                 {
                     { 2, new PositionlessTrigger(action:"ActionNew2") },
@@ -75,7 +75,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
         public void ShouldMergeThingMappings()
         {
             var tm1 = new ThingMappings(
-                elevator: Enumerable.Empty<ushort>(),
+                elevators: Enumerable.Empty<ushort>(),
                 positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>(),
                 thingDefinitions: new Dictionary<ushort, ThingDefinition>
                 {
@@ -84,7 +84,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
                 });
 
             var tm2 = new ThingMappings(
-                elevator: Enumerable.Empty<ushort>(),
+                elevators: Enumerable.Empty<ushort>(),
                 positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>(),
                 thingDefinitions: new Dictionary<ushort, ThingDefinition>
                 {

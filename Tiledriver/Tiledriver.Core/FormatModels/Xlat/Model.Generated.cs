@@ -280,16 +280,16 @@ namespace Tiledriver.Core.FormatModels.Xlat
 
     public sealed partial class ThingMappings
     {
-        public HashSet<ushort> Elevator { get; } = new HashSet<ushort>();
+        public HashSet<ushort> Elevators { get; } = new HashSet<ushort>();
         public Dictionary<ushort,PositionlessTrigger> PositionlessTriggers { get; } = new Dictionary<ushort,PositionlessTrigger>();
         public Dictionary<ushort,ThingDefinition> ThingDefinitions { get; } = new Dictionary<ushort,ThingDefinition>();
         public ThingMappings() { }
         public ThingMappings(
-            IEnumerable<ushort> elevator,
+            IEnumerable<ushort> elevators,
             Dictionary<ushort,PositionlessTrigger> positionlessTriggers,
             Dictionary<ushort,ThingDefinition> thingDefinitions)
         {
-            Elevator.AddRange(elevator);
+            Elevators.AddRange(elevators);
             PositionlessTriggers.AddRange(positionlessTriggers);
             ThingDefinitions.AddRange(thingDefinitions);
             AdditionalSemanticChecks();

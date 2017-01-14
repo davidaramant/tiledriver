@@ -36,12 +36,14 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
                     ? " :" + string.Join(",", allInheritance.Select(s => " " + s))
                     : string.Empty;
 
-                output.Line($"public partial class {block.ClassName.ToPascalCase()}{inheritance}");
+                var type = block.IsAbstract ? "abstract" : "sealed";
+
+                output.Line($"public {type} partial class {block.ClassName.ToPascalCase()}{inheritance}");
                 output.OpenParen();
 
                 WriteProperties(block, output);
                 WriteConstructors(output, block);
-                WriteWithMethods(block, output);
+                WritePropertyMutators(block, output);
 
                 output.CloseParen();
                 output.Line();
@@ -62,17 +64,28 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
                         $"(({property.ArgumentTypeString}){property.DefaultAsString}).ToMaybe()" :
                         $"Maybe<{property.PropertyTypeString}>.Nothing";
 
-                    sb.Line($"public Maybe<{property.PropertyTypeString}> {property.ClassName.ToPascalCase()} {{ get; }} = {initialValue};");
+                    sb.Line($"public Maybe<{property.PropertyTypeString}> {property.PropertyName} {{ get; }} = {initialValue};");
                 }
                 else
                 {
-                    sb.Line($"public {property.ArgumentTypeString} {property.ClassName.ToPluralPascalCase()} {{ get; }} = Enumerable.Empty<{property.CollectionType}>();");
+                    sb.Line($"public {property.ArgumentTypeString} {property.PropertyName} {{ get; }} = Enumerable.Empty<{property.CollectionType}>();");
                 }
             }
         }
 
         private static void WriteConstructors(IndentedWriter sb, BlockData blockData)
         {
+            if (!blockData.IsAbstract)
+            {
+                sb.Line(
+                    $"public static {blockData.ClassName.ToPascalCase()} Default = new {blockData.ClassName.ToPascalCase()}();");
+                sb.Line($"private {blockData.ClassName.ToPascalCase()}() {{ }}");
+            }
+            else
+            {
+                sb.Line($"protected {blockData.ClassName.ToPascalCase()}() {{ }}");
+            }
+
             var baseClass =
                 blockData.BaseClass.Select(
                     name => MapInfoDefinitions.Blocks.Single(b => b.ClassName == name));
@@ -85,14 +98,13 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
             }
             allProperties.AddRange(blockData.Properties);
 
-            sb.Line($"public {blockData.ClassName.ToPascalCase()}() {{ }}");
-
             if (!allProperties.Any())
             {
                 return;
             }
 
-            sb.Line($"public {blockData.ClassName.ToPascalCase()}(");
+            var visibility = blockData.IsAbstract ? "protected" : "public";
+            sb.Line($"{visibility} {blockData.ClassName.ToPascalCase()}(");
             sb.IncreaseIndent();
 
             foreach (var indexed in allProperties.Select((param, index) => new { param, index }))
@@ -128,22 +140,64 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
 
             foreach (var property in blockData.Properties)
             {
-                if (property.ScalarField)
-                {
-                    sb.Line($"{property.ClassName.ToPascalCase()} = {property.ArgumentName};");
-                }
-                else
-                {
-                    sb.Line($"{property.ClassName.ToPluralPascalCase()} = {property.ArgumentName};");
-                }
+                sb.Line($"{property.PropertyName} = {property.ArgumentName};");
             }
 
             sb.CloseParen();
         }
 
-        private static void WriteWithMethods(BlockData blockData, IndentedWriter sb)
+        private static void WritePropertyMutators(BlockData blockData, IndentedWriter sb)
         {
+            if (blockData.IsAbstract)
+                return;
 
+            var baseClass =
+                blockData.BaseClass.Select(
+                    name => MapInfoDefinitions.Blocks.Single(b => b.ClassName == name));
+
+            var allProperties = new List<PropertyData>();
+
+            if (baseClass.HasValue)
+            {
+                allProperties.AddRange(baseClass.Value.Properties);
+            }
+            allProperties.AddRange(blockData.Properties);
+
+            if (!allProperties.Any())
+                return;
+
+            foreach (var property in allProperties)
+            {
+                sb.Line($"public {blockData.ClassName.ToPascalCase()} With{property.PropertyName}( {property.ArgumentTypeString} {property.ArgumentName} )");
+                sb.OpenParen();
+                sb.Line($"return new {blockData.ClassName.ToPascalCase()}(");
+                sb.IncreaseIndent();
+                foreach (var indexed in allProperties.Select((param, index) => new { param, index }))
+                {
+                    var argLine = $"{indexed.param.ArgumentName}: ";
+
+                    if (indexed.param == property)
+                    {
+                        if (indexed.param.ScalarField)
+                        {
+                            argLine += $"{indexed.param.ArgumentName}.ToMaybe()";
+                        }
+                        else
+                        {
+                            argLine += $"{property.PropertyName}.Concat( {indexed.param.ArgumentName} )";
+                        }
+                    }
+                    else
+                    {
+                        argLine += indexed.param.PropertyName;
+                    }
+
+                    sb.Line(argLine +
+                        (indexed.index == allProperties.Count - 1 ? ");" : ","));
+                }
+                sb.DecreaseIndent();
+                sb.CloseParen();
+            }
         }
     }
 }

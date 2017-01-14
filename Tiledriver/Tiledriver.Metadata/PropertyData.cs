@@ -118,10 +118,10 @@ namespace Tiledriver.Metadata
                     case PropertyType.Integer:
                     case PropertyType.Ushort:
                     case PropertyType.String:
-                    case PropertyType.Set:
                     case PropertyType.Block:
                         return ClassName.ToCamelCase();
                     case PropertyType.List:
+                    case PropertyType.Set:
                     case PropertyType.MappedBlockList:
                         return ClassName.ToPluralCamelCase();
                     case PropertyType.UnknownProperties:
@@ -146,9 +146,9 @@ namespace Tiledriver.Metadata
                     case PropertyType.Ushort:
                     case PropertyType.Integer:
                     case PropertyType.String:
-                    case PropertyType.Set:
                     case PropertyType.Block:
                         return ClassName.ToPascalCase();
+                    case PropertyType.Set:
                     case PropertyType.List:
                     case PropertyType.MappedBlockList:
                         return ClassName.ToPluralPascalCase();

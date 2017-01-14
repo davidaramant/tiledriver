@@ -362,7 +362,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
             {
                 throw new ParsingException("Bad structure for elevator.");
             }
-            thingMappings.Elevator.Add(oldnum);
+            thingMappings.Elevators.Add(oldnum);
         }
 
         private static void ParseTrigger(Expression exp, ThingMappings thingMappings)
