@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\CollectionExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="FormatModels\Common\BaseLexer.cs" />
     <Compile Include="FormatModels\GameMaps\MapHeader.cs" />
     <Compile Include="FormatModels\GameMaps\OffsetData.cs" />
@@ -76,6 +77,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="FormatModels\MapInfos\Parsing\IMapInfoElement.cs" />
+    <Compile Include="FormatModels\MapInfos\Parsing\MapInfoProperty.cs" />
+    <Compile Include="FormatModels\MapInfos\Parsing\MapInfoBlock.cs" />
+    <Compile Include="FormatModels\MapInfos\Parsing\MapInfoLexer.cs" />
+    <Compile Include="FormatModels\MapInfos\Parsing\MapInfoTextReader.cs" />
     <Compile Include="FormatModels\Wad\DataLump.cs" />
     <Compile Include="FormatModels\Wad\ILump.cs" />
     <Compile Include="FormatModels\Wad\Marker.cs" />
@@ -177,9 +183,7 @@
       <LastGenOutput>Actor.Generated.cs</LastGenOutput>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="FormatModels\MapInfos\Parsing\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
