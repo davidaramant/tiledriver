@@ -10,7 +10,6 @@ namespace Tiledriver.Metadata
 {
     public static class MapInfoModelGenerator
     {
-        // TODO: Should this use some kind of immutable collection instead of calling ToArray constantly?
         public static string GetText()
         {
             var output = new IndentedWriter();
@@ -19,6 +18,7 @@ namespace Tiledriver.Metadata
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using Tiledriver.Core.Extensions;
@@ -70,7 +70,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
                 }
                 else
                 {
-                    sb.Line($"public {property.ArgumentTypeString} {property.PropertyName} {{ get; }} = Enumerable.Empty<{property.CollectionType}>();");
+                    sb.Line(property.PropertyDefinition);
                 }
             }
         }
@@ -142,7 +142,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
 
             foreach (var property in blockData.Properties)
             {
-                sb.Line($"{property.PropertyName} = {property.ArgumentName};");
+                sb.Line(property.SetProperty);
             }
 
             sb.CloseParen();
@@ -176,7 +176,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
                         }
                         else
                         {
-                            argLine += $"{property.PropertyName}.Concat( {indexed.param.ArgumentName} ).ToArray()";
+                            argLine += $"{property.PropertyName}.AddRange( {indexed.param.ArgumentName} )";
                         }
                     }
                     else
@@ -205,7 +205,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
 
                         if (indexed.param == property)
                         {
-                            argLine += $"{property.PropertyName}.Concat( new[]{{{singularArgName}}} ).ToArray()";
+                            argLine += $"{property.PropertyName}.Add({singularArgName})";
                         }
                         else
                         {
@@ -254,7 +254,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
                         }
                         else
                         {
-                            argLine += $"{currentName}.Concat({otherClassname}.{currentName}).ToArray()";
+                            argLine += $"{currentName}.AddRange({otherClassname}.{currentName})";
                         }
                     }
                     else

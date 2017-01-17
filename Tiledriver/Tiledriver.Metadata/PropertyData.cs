@@ -16,6 +16,7 @@ namespace Tiledriver.Metadata
         Set,
         Block,
         List,
+        ImmutableList,
         MappedBlockList,
         UnknownProperties,
         UnknownBlocks,
@@ -59,6 +60,8 @@ namespace Tiledriver.Metadata
                         return CollectionType ?? ClassName.ToPascalCase();
                     case PropertyType.List:
                         return $"List<{CollectionType}>";
+                    case PropertyType.ImmutableList:
+                        return $"ImmutableList<{CollectionType}>";
                     case PropertyType.MappedBlockList:
                         return $"Dictionary<ushort,{CollectionType}>";
                     case PropertyType.UnknownProperties:
@@ -93,6 +96,7 @@ namespace Tiledriver.Metadata
                         return CollectionType;
                     case PropertyType.Set:
                     case PropertyType.List:
+                    case PropertyType.ImmutableList:
                         return $"IEnumerable<{CollectionType}>";
                     case PropertyType.MappedBlockList:
                         return $"Dictionary<ushort,{CollectionType}>";
@@ -122,6 +126,7 @@ namespace Tiledriver.Metadata
                         return ClassName.ToCamelCase();
                     case PropertyType.List:
                     case PropertyType.Set:
+                    case PropertyType.ImmutableList:
                     case PropertyType.MappedBlockList:
                         return ClassName.ToPluralCamelCase();
                     case PropertyType.UnknownProperties:
@@ -150,6 +155,7 @@ namespace Tiledriver.Metadata
                         return ClassName.ToPascalCase();
                     case PropertyType.Set:
                     case PropertyType.List:
+                    case PropertyType.ImmutableList:
                     case PropertyType.MappedBlockList:
                         return ClassName.ToPluralPascalCase();
                     case PropertyType.UnknownProperties:
@@ -182,6 +188,9 @@ namespace Tiledriver.Metadata
                     case PropertyType.UnknownProperties:
                     case PropertyType.UnknownBlocks:
                         return $"public {PropertyTypeString} {PropertyName} {{ get; }} = new {PropertyTypeString}();";
+                    case PropertyType.ImmutableList:
+                        return $"public {PropertyTypeString} {PropertyName} {{ get; }} = {PropertyTypeString}.Empty;";
+
                     default:
                         throw new NotImplementedException("Unknown property type.");
                 }
@@ -204,6 +213,8 @@ namespace Tiledriver.Metadata
                     case PropertyType.String:
                     case PropertyType.Block:
                         return $"{PropertyName} = {ArgumentName};";
+                    case PropertyType.ImmutableList:
+                        return $"{PropertyName} = {ArgumentName}.ToImmutableList();";
                     case PropertyType.Set:
                     case PropertyType.List:
                     case PropertyType.MappedBlockList:
@@ -294,6 +305,7 @@ namespace Tiledriver.Metadata
                         return _defaultValue == null;
                     case PropertyType.Set:
                     case PropertyType.List:
+                    case PropertyType.ImmutableList:
                     case PropertyType.MappedBlockList:
                         return true;
                     case PropertyType.UnknownProperties:
@@ -321,6 +333,7 @@ namespace Tiledriver.Metadata
                         return true;
                     case PropertyType.Set:
                     case PropertyType.List:
+                    case PropertyType.ImmutableList:
                     case PropertyType.MappedBlockList:
                     case PropertyType.UnknownProperties:
                     case PropertyType.UnknownBlocks:

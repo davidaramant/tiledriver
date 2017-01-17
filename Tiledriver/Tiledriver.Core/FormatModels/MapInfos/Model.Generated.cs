@@ -2,6 +2,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using Tiledriver.Core.Extensions;
@@ -234,9 +235,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public Maybe<string> MenuFontColorTitle { get; } = Maybe<string>.Nothing;
         public Maybe<string> MenuMusic { get; } = Maybe<string>.Nothing;
         public Maybe<string> PageIndexFontColor { get; } = Maybe<string>.Nothing;
-        public IEnumerable<string> PlayerClassess { get; } = Enumerable.Empty<string>();
+        public ImmutableList<string> PlayerClassess { get; } = ImmutableList<string>.Empty;
         public Maybe<string> PushwallSoundSequence { get; } = Maybe<string>.Nothing;
-        public IEnumerable<string> QuitMessagess { get; } = Enumerable.Empty<string>();
+        public ImmutableList<string> QuitMessagess { get; } = ImmutableList<string>.Empty;
         public Maybe<string> ScoresMusic { get; } = Maybe<string>.Nothing;
         public Maybe<string> SignOn { get; } = Maybe<string>.Nothing;
         public Maybe<string> TitleMusic { get; } = Maybe<string>.Nothing;
@@ -304,9 +305,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             MenuFontColorTitle = menuFontColorTitle;
             MenuMusic = menuMusic;
             PageIndexFontColor = pageIndexFontColor;
-            PlayerClassess = playerClassess;
+            PlayerClassess = playerClassess.ToImmutableList();
             PushwallSoundSequence = pushwallSoundSequence;
-            QuitMessagess = quitMessagess;
+            QuitMessagess = quitMessagess.ToImmutableList();
             ScoresMusic = scoresMusic;
             SignOn = signOn;
             TitleMusic = titleMusic;
@@ -1266,7 +1267,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
                 pageIndexFontColor: PageIndexFontColor,
-                playerClassess: PlayerClassess.Concat( playerClassess ),
+                playerClassess: PlayerClassess.AddRange( playerClassess ),
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessagess: QuitMessagess,
                 scoresMusic: ScoresMusic,
@@ -1303,7 +1304,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
                 pageIndexFontColor: PageIndexFontColor,
-                playerClassess: PlayerClassess.Concat( new[]{playerClasses} ),
+                playerClassess: PlayerClassess.Add(playerClasses),
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessagess: QuitMessagess,
                 scoresMusic: ScoresMusic,
@@ -1379,7 +1380,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 pageIndexFontColor: PageIndexFontColor,
                 playerClassess: PlayerClassess,
                 pushwallSoundSequence: PushwallSoundSequence,
-                quitMessagess: QuitMessagess.Concat( quitMessagess ),
+                quitMessagess: QuitMessagess.AddRange( quitMessagess ),
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
@@ -1416,7 +1417,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 pageIndexFontColor: PageIndexFontColor,
                 playerClassess: PlayerClassess,
                 pushwallSoundSequence: PushwallSoundSequence,
-                quitMessagess: QuitMessagess.Concat( new[]{quitMessages} ),
+                quitMessagess: QuitMessagess.Add(quitMessages),
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
@@ -1868,7 +1869,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
     public sealed partial class Intermission
     {
         public Maybe<string> Name { get; } = Maybe<string>.Nothing;
-        public IEnumerable<IIntermissionAction> IntermissionActions { get; } = Enumerable.Empty<IIntermissionAction>();
+        public ImmutableList<IIntermissionAction> IntermissionActions { get; } = ImmutableList<IIntermissionAction>.Empty;
         public static Intermission Default = new Intermission();
         private Intermission() { }
         public Intermission(
@@ -1876,7 +1877,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             IEnumerable<IIntermissionAction> intermissionActions)
         {
             Name = name;
-            IntermissionActions = intermissionActions;
+            IntermissionActions = intermissionActions.ToImmutableList();
         }
         public Intermission WithName( string name )
         {
@@ -1888,13 +1889,13 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         {
             return new Intermission(
                 name: Name,
-                intermissionActions: IntermissionActions.Concat( intermissionActions ));
+                intermissionActions: IntermissionActions.AddRange( intermissionActions ));
         }
         public Intermission WithIntermissionAction( IIntermissionAction intermissionAction )
         {
             return new Intermission(
                 name: Name,
-                intermissionActions: IntermissionActions.Concat( new[]{intermissionAction} ));
+                intermissionActions: IntermissionActions.Add(intermissionAction));
         }
     }
 
@@ -2206,7 +2207,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
 
     public sealed partial class TextScreen : IntermissionAction, IIntermissionAction
     {
-        public IEnumerable<string> Texts { get; } = Enumerable.Empty<string>();
+        public ImmutableList<string> Texts { get; } = ImmutableList<string>.Empty;
         public Maybe<string> TextAlignment { get; } = Maybe<string>.Nothing;
         public Maybe<string> TextColor { get; } = Maybe<string>.Nothing;
         public Maybe<int> TextSpeed { get; } = Maybe<int>.Nothing;
@@ -2239,7 +2240,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 music,
                 time)
         {
-            Texts = texts;
+            Texts = texts.ToImmutableList();
             TextAlignment = textAlignment;
             TextColor = textColor;
             TextSpeed = textSpeed;
@@ -2401,7 +2402,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 drawY: DrawY,
                 music: Music,
                 time: Time,
-                texts: Texts.Concat( texts ),
+                texts: Texts.AddRange( texts ),
                 textAlignment: TextAlignment,
                 textColor: TextColor,
                 textSpeed: TextSpeed,
@@ -2419,7 +2420,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 drawY: DrawY,
                 music: Music,
                 time: Time,
-                texts: Texts.Concat( new[]{text} ),
+                texts: Texts.Add(text),
                 textAlignment: TextAlignment,
                 textColor: TextColor,
                 textSpeed: TextSpeed,
@@ -2881,7 +2882,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 deathCam: DeathCam,
                 defaultCeiling: DefaultCeiling,
                 defaultFloor: DefaultFloor,
-                ensureInventorys: EnsureInventorys.Concat( ensureInventorys ),
+                ensureInventorys: EnsureInventorys.AddRange( ensureInventorys ),
                 exitFade: ExitFade,
                 floorNumber: FloorNumber,
                 highScoresGraphic: HighScoresGraphic,
@@ -2910,7 +2911,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 deathCam: DeathCam,
                 defaultCeiling: DefaultCeiling,
                 defaultFloor: DefaultFloor,
-                ensureInventorys: EnsureInventorys.Concat( new[]{ensureInventory} ),
+                ensureInventorys: EnsureInventorys.Add(ensureInventory),
                 exitFade: ExitFade,
                 floorNumber: FloorNumber,
                 highScoresGraphic: HighScoresGraphic,
@@ -3360,7 +3361,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 nextEndSequence: NextEndSequence,
                 secretNextEndSequence: SecretNextEndSequence,
                 victoryNextEndSequence: VictoryNextEndSequence,
-                specialActions: SpecialActions.Concat( specialActions ),
+                specialActions: SpecialActions.AddRange( specialActions ),
                 nointermission: Nointermission,
                 par: Par,
                 translator: Translator);
@@ -3389,7 +3390,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 nextEndSequence: NextEndSequence,
                 secretNextEndSequence: SecretNextEndSequence,
                 victoryNextEndSequence: VictoryNextEndSequence,
-                specialActions: SpecialActions.Concat( new[]{specialAction} ),
+                specialActions: SpecialActions.Add(specialAction),
                 nointermission: Nointermission,
                 par: Par,
                 translator: Translator);
@@ -3490,7 +3491,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 deathCam: addDefaultMap.DeathCam.Or(DeathCam),
                 defaultCeiling: addDefaultMap.DefaultCeiling.Or(DefaultCeiling),
                 defaultFloor: addDefaultMap.DefaultFloor.Or(DefaultFloor),
-                ensureInventorys: EnsureInventorys.Concat(addDefaultMap.EnsureInventorys).ToArray(),
+                ensureInventorys: EnsureInventorys.AddRange(addDefaultMap.EnsureInventorys),
                 exitFade: addDefaultMap.ExitFade.Or(ExitFade),
                 floorNumber: addDefaultMap.FloorNumber.Or(FloorNumber),
                 highScoresGraphic: addDefaultMap.HighScoresGraphic.Or(HighScoresGraphic),
@@ -3505,7 +3506,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 nextEndSequence: addDefaultMap.NextEndSequence.Or(NextEndSequence),
                 secretNextEndSequence: addDefaultMap.SecretNextEndSequence.Or(SecretNextEndSequence),
                 victoryNextEndSequence: addDefaultMap.VictoryNextEndSequence.Or(VictoryNextEndSequence),
-                specialActions: SpecialActions.Concat(addDefaultMap.SpecialActions).ToArray(),
+                specialActions: SpecialActions.AddRange(addDefaultMap.SpecialActions),
                 nointermission: addDefaultMap.Nointermission.Or(Nointermission),
                 par: addDefaultMap.Par.Or(Par),
                 translator: addDefaultMap.Translator.Or(Translator));
@@ -3753,7 +3754,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 deathCam: DeathCam,
                 defaultCeiling: DefaultCeiling,
                 defaultFloor: DefaultFloor,
-                ensureInventorys: EnsureInventorys.Concat( ensureInventorys ),
+                ensureInventorys: EnsureInventorys.AddRange( ensureInventorys ),
                 exitFade: ExitFade,
                 floorNumber: FloorNumber,
                 highScoresGraphic: HighScoresGraphic,
@@ -3782,7 +3783,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 deathCam: DeathCam,
                 defaultCeiling: DefaultCeiling,
                 defaultFloor: DefaultFloor,
-                ensureInventorys: EnsureInventorys.Concat( new[]{ensureInventory} ),
+                ensureInventorys: EnsureInventorys.Add(ensureInventory),
                 exitFade: ExitFade,
                 floorNumber: FloorNumber,
                 highScoresGraphic: HighScoresGraphic,
@@ -4232,7 +4233,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 nextEndSequence: NextEndSequence,
                 secretNextEndSequence: SecretNextEndSequence,
                 victoryNextEndSequence: VictoryNextEndSequence,
-                specialActions: SpecialActions.Concat( specialActions ),
+                specialActions: SpecialActions.AddRange( specialActions ),
                 nointermission: Nointermission,
                 par: Par,
                 translator: Translator);
@@ -4261,7 +4262,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 nextEndSequence: NextEndSequence,
                 secretNextEndSequence: SecretNextEndSequence,
                 victoryNextEndSequence: VictoryNextEndSequence,
-                specialActions: SpecialActions.Concat( new[]{specialAction} ),
+                specialActions: SpecialActions.Add(specialAction),
                 nointermission: Nointermission,
                 par: Par,
                 translator: Translator);
@@ -4363,7 +4364,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public Maybe<bool> DeathCam { get; } = ((bool)false).ToMaybe();
         public Maybe<string> DefaultCeiling { get; } = Maybe<string>.Nothing;
         public Maybe<string> DefaultFloor { get; } = Maybe<string>.Nothing;
-        public IEnumerable<string> EnsureInventorys { get; } = Enumerable.Empty<string>();
+        public ImmutableList<string> EnsureInventorys { get; } = ImmutableList<string>.Empty;
         public Maybe<int> ExitFade { get; } = Maybe<int>.Nothing;
         public Maybe<int> FloorNumber { get; } = Maybe<int>.Nothing;
         public Maybe<string> HighScoresGraphic { get; } = Maybe<string>.Nothing;
@@ -4378,7 +4379,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public Maybe<string> NextEndSequence { get; } = Maybe<string>.Nothing;
         public Maybe<string> SecretNextEndSequence { get; } = Maybe<string>.Nothing;
         public Maybe<string> VictoryNextEndSequence { get; } = Maybe<string>.Nothing;
-        public IEnumerable<SpecialAction> SpecialActions { get; } = Enumerable.Empty<SpecialAction>();
+        public ImmutableList<SpecialAction> SpecialActions { get; } = ImmutableList<SpecialAction>.Empty;
         public Maybe<bool> Nointermission { get; } = ((bool)false).ToMaybe();
         public Maybe<int> Par { get; } = Maybe<int>.Nothing;
         public Maybe<string> Translator { get; } = Maybe<string>.Nothing;
@@ -4416,7 +4417,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             DeathCam = deathCam;
             DefaultCeiling = defaultCeiling;
             DefaultFloor = defaultFloor;
-            EnsureInventorys = ensureInventorys;
+            EnsureInventorys = ensureInventorys.ToImmutableList();
             ExitFade = exitFade;
             FloorNumber = floorNumber;
             HighScoresGraphic = highScoresGraphic;
@@ -4431,7 +4432,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             NextEndSequence = nextEndSequence;
             SecretNextEndSequence = secretNextEndSequence;
             VictoryNextEndSequence = victoryNextEndSequence;
-            SpecialActions = specialActions;
+            SpecialActions = specialActions.ToImmutableList();
             Nointermission = nointermission;
             Par = par;
             Translator = translator;
@@ -4706,7 +4707,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 deathCam: DeathCam,
                 defaultCeiling: DefaultCeiling,
                 defaultFloor: DefaultFloor,
-                ensureInventorys: EnsureInventorys.Concat( ensureInventorys ),
+                ensureInventorys: EnsureInventorys.AddRange( ensureInventorys ),
                 exitFade: ExitFade,
                 floorNumber: FloorNumber,
                 highScoresGraphic: HighScoresGraphic,
@@ -4738,7 +4739,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 deathCam: DeathCam,
                 defaultCeiling: DefaultCeiling,
                 defaultFloor: DefaultFloor,
-                ensureInventorys: EnsureInventorys.Concat( new[]{ensureInventory} ),
+                ensureInventorys: EnsureInventorys.Add(ensureInventory),
                 exitFade: ExitFade,
                 floorNumber: FloorNumber,
                 highScoresGraphic: HighScoresGraphic,
@@ -5233,7 +5234,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 nextEndSequence: NextEndSequence,
                 secretNextEndSequence: SecretNextEndSequence,
                 victoryNextEndSequence: VictoryNextEndSequence,
-                specialActions: SpecialActions.Concat( specialActions ),
+                specialActions: SpecialActions.AddRange( specialActions ),
                 nointermission: Nointermission,
                 par: Par,
                 translator: Translator,
@@ -5265,7 +5266,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 nextEndSequence: NextEndSequence,
                 secretNextEndSequence: SecretNextEndSequence,
                 victoryNextEndSequence: VictoryNextEndSequence,
-                specialActions: SpecialActions.Concat( new[]{specialAction} ),
+                specialActions: SpecialActions.Add(specialAction),
                 nointermission: Nointermission,
                 par: Par,
                 translator: Translator,
@@ -5474,7 +5475,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 deathCam: defaultMap.DeathCam.Or(DeathCam),
                 defaultCeiling: defaultMap.DefaultCeiling.Or(DefaultCeiling),
                 defaultFloor: defaultMap.DefaultFloor.Or(DefaultFloor),
-                ensureInventorys: EnsureInventorys.Concat(defaultMap.EnsureInventorys).ToArray(),
+                ensureInventorys: EnsureInventorys.AddRange(defaultMap.EnsureInventorys),
                 exitFade: defaultMap.ExitFade.Or(ExitFade),
                 floorNumber: defaultMap.FloorNumber.Or(FloorNumber),
                 highScoresGraphic: defaultMap.HighScoresGraphic.Or(HighScoresGraphic),
@@ -5489,7 +5490,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 nextEndSequence: defaultMap.NextEndSequence.Or(NextEndSequence),
                 secretNextEndSequence: defaultMap.SecretNextEndSequence.Or(SecretNextEndSequence),
                 victoryNextEndSequence: defaultMap.VictoryNextEndSequence.Or(VictoryNextEndSequence),
-                specialActions: SpecialActions.Concat(defaultMap.SpecialActions).ToArray(),
+                specialActions: SpecialActions.AddRange(defaultMap.SpecialActions),
                 nointermission: defaultMap.Nointermission.Or(Nointermission),
                 par: defaultMap.Par.Or(Par),
                 translator: defaultMap.Translator.Or(Translator),
@@ -5588,11 +5589,11 @@ namespace Tiledriver.Core.FormatModels.MapInfos
 
     public sealed partial class MapInfo
     {
-        public IEnumerable<Cluster> Clusters { get; } = Enumerable.Empty<Cluster>();
-        public IEnumerable<Episode> Episodes { get; } = Enumerable.Empty<Episode>();
+        public ImmutableList<Cluster> Clusters { get; } = ImmutableList<Cluster>.Empty;
+        public ImmutableList<Episode> Episodes { get; } = ImmutableList<Episode>.Empty;
         public Maybe<GameInfo> GameInfo { get; } = Maybe<GameInfo>.Nothing;
-        public IEnumerable<Intermission> Intermissions { get; } = Enumerable.Empty<Intermission>();
-        public IEnumerable<Map> Maps { get; } = Enumerable.Empty<Map>();
+        public ImmutableList<Intermission> Intermissions { get; } = ImmutableList<Intermission>.Empty;
+        public ImmutableList<Map> Maps { get; } = ImmutableList<Map>.Empty;
         public static MapInfo Default = new MapInfo();
         private MapInfo() { }
         public MapInfo(
@@ -5602,16 +5603,16 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             IEnumerable<Intermission> intermissions,
             IEnumerable<Map> maps)
         {
-            Clusters = clusters;
-            Episodes = episodes;
+            Clusters = clusters.ToImmutableList();
+            Episodes = episodes.ToImmutableList();
             GameInfo = gameInfo;
-            Intermissions = intermissions;
-            Maps = maps;
+            Intermissions = intermissions.ToImmutableList();
+            Maps = maps.ToImmutableList();
         }
         public MapInfo WithClusters( IEnumerable<Cluster> clusters )
         {
             return new MapInfo(
-                clusters: Clusters.Concat( clusters ),
+                clusters: Clusters.AddRange( clusters ),
                 episodes: Episodes,
                 gameInfo: GameInfo,
                 intermissions: Intermissions,
@@ -5620,7 +5621,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public MapInfo WithCluster( Cluster cluster )
         {
             return new MapInfo(
-                clusters: Clusters.Concat( new[]{cluster} ),
+                clusters: Clusters.Add(cluster),
                 episodes: Episodes,
                 gameInfo: GameInfo,
                 intermissions: Intermissions,
@@ -5630,7 +5631,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         {
             return new MapInfo(
                 clusters: Clusters,
-                episodes: Episodes.Concat( episodes ),
+                episodes: Episodes.AddRange( episodes ),
                 gameInfo: GameInfo,
                 intermissions: Intermissions,
                 maps: Maps);
@@ -5639,7 +5640,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         {
             return new MapInfo(
                 clusters: Clusters,
-                episodes: Episodes.Concat( new[]{episode} ),
+                episodes: Episodes.Add(episode),
                 gameInfo: GameInfo,
                 intermissions: Intermissions,
                 maps: Maps);
@@ -5659,7 +5660,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 clusters: Clusters,
                 episodes: Episodes,
                 gameInfo: GameInfo,
-                intermissions: Intermissions.Concat( intermissions ),
+                intermissions: Intermissions.AddRange( intermissions ),
                 maps: Maps);
         }
         public MapInfo WithIntermission( Intermission intermission )
@@ -5668,7 +5669,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 clusters: Clusters,
                 episodes: Episodes,
                 gameInfo: GameInfo,
-                intermissions: Intermissions.Concat( new[]{intermission} ),
+                intermissions: Intermissions.Add(intermission),
                 maps: Maps);
         }
         public MapInfo WithMaps( IEnumerable<Map> maps )
@@ -5678,7 +5679,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 episodes: Episodes,
                 gameInfo: GameInfo,
                 intermissions: Intermissions,
-                maps: Maps.Concat( maps ));
+                maps: Maps.AddRange( maps ));
         }
         public MapInfo WithMap( Map map )
         {
@@ -5687,7 +5688,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 episodes: Episodes,
                 gameInfo: GameInfo,
                 intermissions: Intermissions,
-                maps: Maps.Concat( new[]{map} ));
+                maps: Maps.Add(map));
         }
     }
 
