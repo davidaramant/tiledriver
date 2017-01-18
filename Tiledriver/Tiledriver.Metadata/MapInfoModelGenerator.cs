@@ -193,8 +193,8 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
                 // For collection types, also add a way to add a single item as a convenience
                 if (!property.IsScalarField)
                 {
-                    var singularPropName = property.ClassName.ToPascalCase();
-                    var singularArgName = property.ClassName.ToCamelCase();
+                    var singularPropName = property.SingularName.ToPascalCase();
+                    var singularArgName = property.SingularName.ToCamelCase();
                     sb.Line($"public {blockData.ClassName.ToPascalCase()} WithAdditional{singularPropName}( {property.CollectionType} {singularArgName} )");
                     sb.OpenParen();
                     sb.Line($"return new {blockData.ClassName.ToPascalCase()}(");

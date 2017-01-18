@@ -8,7 +8,6 @@ namespace Tiledriver.Metadata
 {
     public static class MapInfoDefinitions
     {
-        // TODO: The plural/singular stuff is too simplistic
         public static readonly IEnumerable<BlockData> Blocks = new[]
         {
             new BlockData("cluster",
@@ -64,9 +63,9 @@ namespace Tiledriver.Metadata
                     new PropertyData(formatName:"menufontcolor_title", name:"menuFontColorTitle", type:PropertyType.String),
                     new PropertyData(formatName:"menumusic", name:"menuMusic", type:PropertyType.String),
                     new PropertyData(formatName:"pageindexfontcolor", name:"pageIndexFontColor", type:PropertyType.String),
-                    new PropertyData(formatName:"playerclasses", name:"playerClasses", type:PropertyType.ImmutableList, collectionType:"string"),
+                    new PropertyData(formatName:"playerclasses", name:"PlayerClasses",singularName:"PlayerClass", type:PropertyType.ImmutableList, collectionType:"string"),
                     new PropertyData(formatName:"pushwallsoundsequence", name:"pushwallSoundSequence", type:PropertyType.String),
-                    new PropertyData(formatName:"quitmessages", name:"quitMessages", type:PropertyType.ImmutableList, collectionType:"string"),
+                    new PropertyData(formatName:"quitmessages", name:"QuitMessages",singularName:"QuitMessage", type:PropertyType.ImmutableList, collectionType:"string"),
                     new PropertyData(formatName:"scoresmusic", name:"scoresMusic", type:PropertyType.String),
                     new PropertyData(formatName:"signon", name:"signOn", type:PropertyType.String),
                     new PropertyData(formatName:"titlemusic", name:"titleMusic", type:PropertyType.String),
@@ -111,7 +110,7 @@ namespace Tiledriver.Metadata
                 properties:new []
                 {
                     new PropertyData("name",type:PropertyType.String,isMetaData:true),
-                    new PropertyData("intermissionAction",type:PropertyType.ImmutableList,collectionType:"IIntermissionAction"),
+                    new PropertyData(formatName:"intermissionaction",name:"IntermissionActions",singularName:"IntermissionAction",type:PropertyType.ImmutableList,collectionType:"IIntermissionAction"),
                 }),
 
             new BlockData("IntermissionAction",
@@ -150,7 +149,7 @@ namespace Tiledriver.Metadata
                 implements:new [] {"IIntermissionAction"},
                 properties:new[]
                 {
-                    new PropertyData("text",type:PropertyType.ImmutableList, collectionType:"string"),
+                    new PropertyData(formatName:"text",name:"Texts",singularName:"Text",type:PropertyType.ImmutableList, collectionType:"string"),
                     new PropertyData(formatName:"textalignment",name:"textAlignment",type:PropertyType.String),
                     new PropertyData(formatName:"textcolor",name:"textColor",type:PropertyType.String),
                     new PropertyData(formatName:"textspeed",name:"textSpeed",type:PropertyType.Integer),
@@ -182,7 +181,7 @@ namespace Tiledriver.Metadata
                     new PropertyData(formatName:"deathcam",name:"deathCam",type:PropertyType.Boolean, defaultValue:false),
                     new PropertyData(formatName:"defaultceiling",name:"defaultCeiling",type:PropertyType.String),
                     new PropertyData(formatName:"defaultfloor",name:"defaultFloor",type:PropertyType.String),
-                    new PropertyData(formatName:"ensureinventory",name:"ensureInventory",type:PropertyType.ImmutableList, collectionType:"string"),
+                    new PropertyData(formatName:"ensureinventory",name:"EnsureInventories",singularName:"EnsureInventory",type:PropertyType.ImmutableList, collectionType:"string"),
                     new PropertyData(formatName:"exitfade",name:"exitFade",type:PropertyType.Integer),
                     new PropertyData(formatName:"floornumber",name:"floorNumber",type:PropertyType.Integer),
                     new PropertyData(formatName:"highscoresgraphic",name:"highScoresGraphic",type:PropertyType.String),
@@ -197,7 +196,7 @@ namespace Tiledriver.Metadata
                     new PropertyData(formatName:"nextendsequence",name:"nextEndSequence",type:PropertyType.String),
                     new PropertyData(formatName:"secretnextendsequence",name:"secretNextEndSequence",type:PropertyType.String),
                     new PropertyData(formatName:"victorynextendsequence",name:"victoryNextEndSequence",type:PropertyType.String),
-                    new PropertyData(formatName:"specialaction",name:"specialAction",type:PropertyType.ImmutableList),
+                    new PropertyData(formatName:"specialaction",name:"SpecialActions",singularName:"SpecialAction",type:PropertyType.ImmutableList),
                     new PropertyData(formatName:"nointermission",name:"nointermission",type:PropertyType.Boolean, defaultValue:false),
                     new PropertyData("par",type:PropertyType.Integer),
                     new PropertyData("translator",type:PropertyType.String),
@@ -228,11 +227,11 @@ namespace Tiledriver.Metadata
                 normalReading:false,
                 properties:new []
                 {
-                    new PropertyData("cluster",type:PropertyType.ImmutableList),
-                    new PropertyData("episode",type:PropertyType.ImmutableList),
+                    new PropertyData(formatName:"cluster",name:"Clusters",singularName:"Cluster",type:PropertyType.ImmutableList),
+                    new PropertyData(formatName:"episode",name:"Episodes",singularName:"Episode",type:PropertyType.ImmutableList),
                     new PropertyData("gameInfo",formatName:"gameinfo",type:PropertyType.Block),
-                    new PropertyData("intermission",type:PropertyType.ImmutableList),
-                    new PropertyData("map",type:PropertyType.ImmutableList),
+                    new PropertyData(formatName:"intermission",name:"Intermissions",singularName:"Intermission",type:PropertyType.ImmutableList),
+                    new PropertyData(formatName:"map",name:"Maps",singularName:"Map",type:PropertyType.ImmutableList),
                 }),
         };
     }

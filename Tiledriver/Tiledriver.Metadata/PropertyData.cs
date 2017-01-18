@@ -2,6 +2,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System;
+using Functional.Maybe;
 
 namespace Tiledriver.Metadata
 {
@@ -25,6 +26,7 @@ namespace Tiledriver.Metadata
     public sealed class PropertyData : NamedItem
     {
         private string _collectionType;
+        private readonly Maybe<string> _singularName;
 
         public PropertyType Type { get; }
         public bool IsMetaData { get; }
@@ -32,9 +34,11 @@ namespace Tiledriver.Metadata
 
         public string CollectionType
         {
-            get {  return _collectionType ?? ClassName.ToPascalCase(); }
+            get { return _collectionType ?? SingularName.ToPascalCase(); }
             private set { _collectionType = value; }
         }
+
+        public string SingularName => _singularName.OrElse(ClassName);
 
         public string PropertyTypeString
         {
@@ -128,7 +132,7 @@ namespace Tiledriver.Metadata
                     case PropertyType.Set:
                     case PropertyType.ImmutableList:
                     case PropertyType.MappedBlockList:
-                        return ClassName.ToPluralCamelCase();
+                        return _singularName.HasValue ? ClassName.ToCamelCase() : ClassName.ToPluralCamelCase();
                     case PropertyType.UnknownProperties:
                         return "unknownProperties";
                     case PropertyType.UnknownBlocks:
@@ -157,7 +161,7 @@ namespace Tiledriver.Metadata
                     case PropertyType.List:
                     case PropertyType.ImmutableList:
                     case PropertyType.MappedBlockList:
-                        return ClassName.ToPluralPascalCase();
+                        return _singularName.HasValue ? ClassName.ToPascalCase() : ClassName.ToPluralPascalCase();
                     case PropertyType.UnknownProperties:
                         return "UnknownProperties";
                     case PropertyType.UnknownBlocks:
@@ -349,6 +353,7 @@ namespace Tiledriver.Metadata
                 PropertyType type,
                 bool isMetaData = false,
                 string formatName = null,
+                string singularName = null,
                 object defaultValue = null,
                 string collectionType = null) :
                     base(
@@ -357,6 +362,7 @@ namespace Tiledriver.Metadata
         {
             Type = type;
             IsMetaData = isMetaData;
+            _singularName = singularName.ToMaybe();
             _defaultValue = defaultValue;
             CollectionType = collectionType;
         }
