@@ -1267,7 +1267,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
                 pageIndexFontColor: PageIndexFontColor,
-                playerClassess: PlayerClassess.AddRange( playerClassess ),
+                playerClassess: playerClassess,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessagess: QuitMessagess,
                 scoresMusic: ScoresMusic,
@@ -1276,7 +1276,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 titleTime: TitleTime,
                 translator: Translator);
         }
-        public GameInfo WithPlayerClasses( string playerClasses )
+        public GameInfo WithAdditionalPlayerClasses( string playerClasses )
         {
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
@@ -1380,14 +1380,14 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 pageIndexFontColor: PageIndexFontColor,
                 playerClassess: PlayerClassess,
                 pushwallSoundSequence: PushwallSoundSequence,
-                quitMessagess: QuitMessagess.AddRange( quitMessagess ),
+                quitMessagess: quitMessagess,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
                 titleTime: TitleTime,
                 translator: Translator);
         }
-        public GameInfo WithQuitMessages( string quitMessages )
+        public GameInfo WithAdditionalQuitMessages( string quitMessages )
         {
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
@@ -1608,6 +1608,43 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 titleMusic: TitleMusic,
                 titleTime: TitleTime,
                 translator: translator.ToMaybe());
+        }
+        public GameInfo WithGameInfo( GameInfo gameInfo )
+        {
+            return new GameInfo(
+                advisoryColor: gameInfo.AdvisoryColor.Or(AdvisoryColor),
+                advisoryPic: gameInfo.AdvisoryPic.Or(AdvisoryPic),
+                playScreenBorderColors: gameInfo.PlayScreenBorderColors.Or(PlayScreenBorderColors),
+                playScreenBorderGraphics: gameInfo.PlayScreenBorderGraphics.Or(PlayScreenBorderGraphics),
+                borderFlat: gameInfo.BorderFlat.Or(BorderFlat),
+                doorSoundSequence: gameInfo.DoorSoundSequence.Or(DoorSoundSequence),
+                drawReadThis: gameInfo.DrawReadThis.Or(DrawReadThis),
+                finaleMusic: gameInfo.FinaleMusic.Or(FinaleMusic),
+                gamePalette: gameInfo.GamePalette.Or(GamePalette),
+                gibFactor: gameInfo.GibFactor.Or(GibFactor),
+                highScoresFont: gameInfo.HighScoresFont.Or(HighScoresFont),
+                highScoresFontColor: gameInfo.HighScoresFontColor.Or(HighScoresFontColor),
+                intermissionMusic: gameInfo.IntermissionMusic.Or(IntermissionMusic),
+                menuColor: gameInfo.MenuColor.Or(MenuColor),
+                menuFade: gameInfo.MenuFade.Or(MenuFade),
+                menuFontColorDisabled: gameInfo.MenuFontColorDisabled.Or(MenuFontColorDisabled),
+                menuFontColorHighlight: gameInfo.MenuFontColorHighlight.Or(MenuFontColorHighlight),
+                menuFontColorHighlightSelection: gameInfo.MenuFontColorHighlightSelection.Or(MenuFontColorHighlightSelection),
+                menuFontColorInvalid: gameInfo.MenuFontColorInvalid.Or(MenuFontColorInvalid),
+                menuFontColorInvalidSelection: gameInfo.MenuFontColorInvalidSelection.Or(MenuFontColorInvalidSelection),
+                menuFontColorLabel: gameInfo.MenuFontColorLabel.Or(MenuFontColorLabel),
+                menuFontColorSelection: gameInfo.MenuFontColorSelection.Or(MenuFontColorSelection),
+                menuFontColorTitle: gameInfo.MenuFontColorTitle.Or(MenuFontColorTitle),
+                menuMusic: gameInfo.MenuMusic.Or(MenuMusic),
+                pageIndexFontColor: gameInfo.PageIndexFontColor.Or(PageIndexFontColor),
+                playerClassess: PlayerClassess.AddRange(gameInfo.PlayerClassess),
+                pushwallSoundSequence: gameInfo.PushwallSoundSequence.Or(PushwallSoundSequence),
+                quitMessagess: QuitMessagess.AddRange(gameInfo.QuitMessagess),
+                scoresMusic: gameInfo.ScoresMusic.Or(ScoresMusic),
+                signOn: gameInfo.SignOn.Or(SignOn),
+                titleMusic: gameInfo.TitleMusic.Or(TitleMusic),
+                titleTime: gameInfo.TitleTime.Or(TitleTime),
+                translator: gameInfo.Translator.Or(Translator));
         }
     }
 
@@ -1889,9 +1926,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         {
             return new Intermission(
                 name: Name,
-                intermissionActions: IntermissionActions.AddRange( intermissionActions ));
+                intermissionActions: intermissionActions);
         }
-        public Intermission WithIntermissionAction( IIntermissionAction intermissionAction )
+        public Intermission WithAdditionalIntermissionAction( IIntermissionAction intermissionAction )
         {
             return new Intermission(
                 name: Name,
@@ -2402,14 +2439,14 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 drawY: DrawY,
                 music: Music,
                 time: Time,
-                texts: Texts.AddRange( texts ),
+                texts: texts,
                 textAlignment: TextAlignment,
                 textColor: TextColor,
                 textSpeed: TextSpeed,
                 positionX: PositionX,
                 positionY: PositionY);
         }
-        public TextScreen WithText( string text )
+        public TextScreen WithAdditionalText( string text )
         {
             return new TextScreen(
                 background: Background,
@@ -2882,7 +2919,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 deathCam: DeathCam,
                 defaultCeiling: DefaultCeiling,
                 defaultFloor: DefaultFloor,
-                ensureInventorys: EnsureInventorys.AddRange( ensureInventorys ),
+                ensureInventorys: ensureInventorys,
                 exitFade: ExitFade,
                 floorNumber: FloorNumber,
                 highScoresGraphic: HighScoresGraphic,
@@ -2902,7 +2939,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 par: Par,
                 translator: Translator);
         }
-        public DefaultMap WithEnsureInventory( string ensureInventory )
+        public DefaultMap WithAdditionalEnsureInventory( string ensureInventory )
         {
             return new DefaultMap(
                 borderTexture: BorderTexture,
@@ -3361,12 +3398,12 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 nextEndSequence: NextEndSequence,
                 secretNextEndSequence: SecretNextEndSequence,
                 victoryNextEndSequence: VictoryNextEndSequence,
-                specialActions: SpecialActions.AddRange( specialActions ),
+                specialActions: specialActions,
                 nointermission: Nointermission,
                 par: Par,
                 translator: Translator);
         }
-        public DefaultMap WithSpecialAction( SpecialAction specialAction )
+        public DefaultMap WithAdditionalSpecialAction( SpecialAction specialAction )
         {
             return new DefaultMap(
                 borderTexture: BorderTexture,
@@ -3754,7 +3791,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 deathCam: DeathCam,
                 defaultCeiling: DefaultCeiling,
                 defaultFloor: DefaultFloor,
-                ensureInventorys: EnsureInventorys.AddRange( ensureInventorys ),
+                ensureInventorys: ensureInventorys,
                 exitFade: ExitFade,
                 floorNumber: FloorNumber,
                 highScoresGraphic: HighScoresGraphic,
@@ -3774,7 +3811,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 par: Par,
                 translator: Translator);
         }
-        public AddDefaultMap WithEnsureInventory( string ensureInventory )
+        public AddDefaultMap WithAdditionalEnsureInventory( string ensureInventory )
         {
             return new AddDefaultMap(
                 borderTexture: BorderTexture,
@@ -4233,12 +4270,12 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 nextEndSequence: NextEndSequence,
                 secretNextEndSequence: SecretNextEndSequence,
                 victoryNextEndSequence: VictoryNextEndSequence,
-                specialActions: SpecialActions.AddRange( specialActions ),
+                specialActions: specialActions,
                 nointermission: Nointermission,
                 par: Par,
                 translator: Translator);
         }
-        public AddDefaultMap WithSpecialAction( SpecialAction specialAction )
+        public AddDefaultMap WithAdditionalSpecialAction( SpecialAction specialAction )
         {
             return new AddDefaultMap(
                 borderTexture: BorderTexture,
@@ -4707,7 +4744,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 deathCam: DeathCam,
                 defaultCeiling: DefaultCeiling,
                 defaultFloor: DefaultFloor,
-                ensureInventorys: EnsureInventorys.AddRange( ensureInventorys ),
+                ensureInventorys: ensureInventorys,
                 exitFade: ExitFade,
                 floorNumber: FloorNumber,
                 highScoresGraphic: HighScoresGraphic,
@@ -4730,7 +4767,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 mapName: MapName,
                 mapNameLookup: MapNameLookup);
         }
-        public Map WithEnsureInventory( string ensureInventory )
+        public Map WithAdditionalEnsureInventory( string ensureInventory )
         {
             return new Map(
                 borderTexture: BorderTexture,
@@ -5234,7 +5271,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 nextEndSequence: NextEndSequence,
                 secretNextEndSequence: SecretNextEndSequence,
                 victoryNextEndSequence: VictoryNextEndSequence,
-                specialActions: SpecialActions.AddRange( specialActions ),
+                specialActions: specialActions,
                 nointermission: Nointermission,
                 par: Par,
                 translator: Translator,
@@ -5242,7 +5279,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 mapName: MapName,
                 mapNameLookup: MapNameLookup);
         }
-        public Map WithSpecialAction( SpecialAction specialAction )
+        public Map WithAdditionalSpecialAction( SpecialAction specialAction )
         {
             return new Map(
                 borderTexture: BorderTexture,
@@ -5612,13 +5649,13 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public MapInfo WithClusters( IEnumerable<Cluster> clusters )
         {
             return new MapInfo(
-                clusters: Clusters.AddRange( clusters ),
+                clusters: clusters,
                 episodes: Episodes,
                 gameInfo: GameInfo,
                 intermissions: Intermissions,
                 maps: Maps);
         }
-        public MapInfo WithCluster( Cluster cluster )
+        public MapInfo WithAdditionalCluster( Cluster cluster )
         {
             return new MapInfo(
                 clusters: Clusters.Add(cluster),
@@ -5631,12 +5668,12 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         {
             return new MapInfo(
                 clusters: Clusters,
-                episodes: Episodes.AddRange( episodes ),
+                episodes: episodes,
                 gameInfo: GameInfo,
                 intermissions: Intermissions,
                 maps: Maps);
         }
-        public MapInfo WithEpisode( Episode episode )
+        public MapInfo WithAdditionalEpisode( Episode episode )
         {
             return new MapInfo(
                 clusters: Clusters,
@@ -5660,10 +5697,10 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 clusters: Clusters,
                 episodes: Episodes,
                 gameInfo: GameInfo,
-                intermissions: Intermissions.AddRange( intermissions ),
+                intermissions: intermissions,
                 maps: Maps);
         }
-        public MapInfo WithIntermission( Intermission intermission )
+        public MapInfo WithAdditionalIntermission( Intermission intermission )
         {
             return new MapInfo(
                 clusters: Clusters,
@@ -5679,9 +5716,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 episodes: Episodes,
                 gameInfo: GameInfo,
                 intermissions: Intermissions,
-                maps: Maps.AddRange( maps ));
+                maps: maps);
         }
-        public MapInfo WithMap( Map map )
+        public MapInfo WithAdditionalMap( Map map )
         {
             return new MapInfo(
                 clusters: Clusters,

@@ -35,7 +35,8 @@ namespace Tiledriver.Metadata
                 }),
 
             // gameinfo
-            new BlockData("gameinfo",className:"gameInfo",
+            new BlockData("gameinfo",className:"GameInfo",
+                canSetPropertiesFrom:new []{"GameInfo"},
                 properties:new[]
                 {
                     new PropertyData(formatName:"advisorycolor", name:"advisoryColor", type:PropertyType.String),

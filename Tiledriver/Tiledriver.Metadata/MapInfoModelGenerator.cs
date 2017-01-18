@@ -176,7 +176,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
                         }
                         else
                         {
-                            argLine += $"{property.PropertyName}.AddRange( {indexed.param.ArgumentName} )";
+                            argLine += $"{indexed.param.ArgumentName}";
                         }
                     }
                     else
@@ -195,7 +195,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
                 {
                     var singularPropName = property.ClassName.ToPascalCase();
                     var singularArgName = property.ClassName.ToCamelCase();
-                    sb.Line($"public {blockData.ClassName.ToPascalCase()} With{singularPropName}( {property.CollectionType} {singularArgName} )");
+                    sb.Line($"public {blockData.ClassName.ToPascalCase()} WithAdditional{singularPropName}( {property.CollectionType} {singularArgName} )");
                     sb.OpenParen();
                     sb.Line($"return new {blockData.ClassName.ToPascalCase()}(");
                     sb.IncreaseIndent();
