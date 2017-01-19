@@ -23,7 +23,7 @@ namespace Tiledriver.Metadata
         UnknownBlocks,
     }
 
-    public sealed class PropertyData : NamedItem
+    public sealed class Property : NamedItem
     {
         private string _collectionType;
         private readonly Maybe<string> _singularName;
@@ -348,7 +348,7 @@ namespace Tiledriver.Metadata
             }
         }
 
-        public PropertyData(
+        public Property(
                 string name,
                 PropertyType type,
                 bool isMetaData = false,

@@ -56,9 +56,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
             return output.GetString();
         }
 
-        private static void WriteProperties(BlockData blockData, IndentedWriter sb)
+        private static void WriteProperties(Block block, IndentedWriter sb)
         {
-            foreach (var property in blockData.Properties)
+            foreach (var property in block.Properties)
             {
                 if (property.IsScalarField)
                 {
@@ -75,38 +75,38 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
             }
         }
 
-        private static void WriteConstructors(IndentedWriter sb, BlockData blockData)
+        private static void WriteConstructors(IndentedWriter sb, Block block)
         {
-            if (!blockData.IsAbstract)
+            if (!block.IsAbstract)
             {
                 sb.Line(
-                    $"public static {blockData.ClassName.ToPascalCase()} Default = new {blockData.ClassName.ToPascalCase()}();");
-                sb.Line($"private {blockData.ClassName.ToPascalCase()}() {{ }}");
+                    $"public static {block.ClassName.ToPascalCase()} Default = new {block.ClassName.ToPascalCase()}();");
+                sb.Line($"private {block.ClassName.ToPascalCase()}() {{ }}");
             }
             else
             {
-                sb.Line($"protected {blockData.ClassName.ToPascalCase()}() {{ }}");
+                sb.Line($"protected {block.ClassName.ToPascalCase()}() {{ }}");
             }
 
             var baseClass =
-                blockData.BaseClass.Select(
+                block.BaseClass.Select(
                     name => MapInfoDefinitions.Blocks.Single(b => b.ClassName == name));
 
-            var allProperties = new List<PropertyData>();
+            var allProperties = new List<Property>();
 
             if (baseClass.HasValue)
             {
                 allProperties.AddRange(baseClass.Value.Properties);
             }
-            allProperties.AddRange(blockData.Properties);
+            allProperties.AddRange(block.Properties);
 
             if (!allProperties.Any())
             {
                 return;
             }
 
-            var visibility = blockData.IsAbstract ? "protected" : "public";
-            sb.Line($"{visibility} {blockData.ClassName.ToPascalCase()}(");
+            var visibility = block.IsAbstract ? "protected" : "public";
+            sb.Line($"{visibility} {block.ClassName.ToPascalCase()}(");
             sb.IncreaseIndent();
 
             foreach (var indexed in allProperties.Select((param, index) => new { param, index }))
@@ -140,7 +140,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
             sb.DecreaseIndent();
             sb.OpenParen();
 
-            foreach (var property in blockData.Properties)
+            foreach (var property in block.Properties)
             {
                 sb.Line(property.SetProperty);
             }
@@ -148,21 +148,21 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
             sb.CloseParen();
         }
 
-        private static void WritePropertyMutators(BlockData blockData, IndentedWriter sb)
+        private static void WritePropertyMutators(Block block, IndentedWriter sb)
         {
-            if (blockData.IsAbstract)
+            if (block.IsAbstract)
                 return;
 
-            var allProperties = GetAllPropertiesOf(blockData);
+            var allProperties = GetAllPropertiesOf(block);
 
             if (!allProperties.Any())
                 return;
 
             foreach (var property in allProperties)
             {
-                sb.Line($"public {blockData.ClassName.ToPascalCase()} With{property.PropertyName}( {property.ArgumentTypeString} {property.ArgumentName} )");
+                sb.Line($"public {block.ClassName.ToPascalCase()} With{property.PropertyName}( {property.ArgumentTypeString} {property.ArgumentName} )");
                 sb.OpenParen();
-                sb.Line($"return new {blockData.ClassName.ToPascalCase()}(");
+                sb.Line($"return new {block.ClassName.ToPascalCase()}(");
                 sb.IncreaseIndent();
                 foreach (var indexed in allProperties.Select((param, index) => new { param, index }))
                 {
@@ -195,9 +195,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
                 {
                     var singularPropName = property.SingularName.ToPascalCase();
                     var singularArgName = property.SingularName.ToCamelCase();
-                    sb.Line($"public {blockData.ClassName.ToPascalCase()} WithAdditional{singularPropName}( {property.CollectionType} {singularArgName} )");
+                    sb.Line($"public {block.ClassName.ToPascalCase()} WithAdditional{singularPropName}( {property.CollectionType} {singularArgName} )");
                     sb.OpenParen();
-                    sb.Line($"return new {blockData.ClassName.ToPascalCase()}(");
+                    sb.Line($"return new {block.ClassName.ToPascalCase()}(");
                     sb.IncreaseIndent();
                     foreach (var indexed in allProperties.Select((param, index) => new { param, index }))
                     {
@@ -221,25 +221,25 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
             }
         }
 
-        private static void WriteWithMethods(BlockData blockData, IndentedWriter sb)
+        private static void WriteWithMethods(Block block, IndentedWriter sb)
         {
-            if (!blockData.SetsPropertiesFrom.Any())
+            if (!block.SetsPropertiesFrom.Any())
             {
                 return;
             }
 
-            var allProperties = GetAllPropertiesOf(blockData);
+            var allProperties = GetAllPropertiesOf(block);
 
             foreach (var otherBlock in
-                blockData.SetsPropertiesFrom.Select(name => MapInfoDefinitions.Blocks.Single(b => b.ClassName == name)))
+                block.SetsPropertiesFrom.Select(name => MapInfoDefinitions.Blocks.Single(b => b.ClassName == name)))
             {
                 var otherType = otherBlock.ClassName.ToPascalCase();
                 var otherClassname = otherBlock.ClassName.ToCamelCase();
                 var allOtherProperties = new HashSet<string>(GetAllPropertiesOf(otherBlock).Select(p => p.PropertyName));
 
-                sb.Line($"public {blockData.ClassName.ToPascalCase()} With{otherType}( {otherType} {otherClassname} )");
+                sb.Line($"public {block.ClassName.ToPascalCase()} With{otherType}( {otherType} {otherClassname} )");
                 sb.OpenParen();
-                sb.Line($"return new {blockData.ClassName.ToPascalCase()}(");
+                sb.Line($"return new {block.ClassName.ToPascalCase()}(");
                 sb.IncreaseIndent();
                 foreach (var indexed in allProperties.Select((param, index) => new { param, index }))
                 {
@@ -270,14 +270,14 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
             }
         }
 
-        private static List<PropertyData> GetAllPropertiesOf(string className)
+        private static List<Property> GetAllPropertiesOf(string className)
         {
             return GetAllPropertiesOf(MapInfoDefinitions.Blocks.Single(b => b.ClassName == className));
         }
 
-        private static List<PropertyData> GetAllPropertiesOf(BlockData block)
+        private static List<Property> GetAllPropertiesOf(Block block)
         {
-            var allProperties = new List<PropertyData>();
+            var allProperties = new List<Property>();
 
             if (block.BaseClass.HasValue)
             {

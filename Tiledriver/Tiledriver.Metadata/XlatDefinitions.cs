@@ -7,87 +7,87 @@ namespace Tiledriver.Metadata
 {
     public static class XlatDefinitions
     {
-        public static readonly IEnumerable<BlockData> Blocks = new[]
+        public static readonly IEnumerable<Block> Blocks = new[]
         {
-            new BlockData("ambushModzone",
+            new Block("ambushModzone",
                 normalReading:false,
                 properties:new []
                 {
-                    new PropertyData("fillzone", type:PropertyType.Boolean, defaultValue:false),
+                    new Property("fillzone", type:PropertyType.Boolean, defaultValue:false),
                 }),
 
-            new BlockData("changeTriggerModzone",
+            new Block("changeTriggerModzone",
                 normalReading:false,
                 properties:new []
                 {
-                    new PropertyData("fillzone", type:PropertyType.Boolean, defaultValue:false),
-                    new PropertyData("action", type:PropertyType.String),
-                    new PropertyData("positionlessTrigger", type:PropertyType.Block),
+                    new Property("fillzone", type:PropertyType.Boolean, defaultValue:false),
+                    new Property("action", type:PropertyType.String),
+                    new Property("positionlessTrigger", type:PropertyType.Block),
                 }),
 
-            new BlockData("thingDefinition",
+            new Block("thingDefinition",
                 normalReading:false,
                 properties:new []
                 {
-                    new PropertyData("actor",type:PropertyType.String),
-                    new PropertyData("angles",type:PropertyType.Integer),
-                    new PropertyData("holowall",type:PropertyType.Boolean),
-                    new PropertyData("pathing",type:PropertyType.Boolean),
-                    new PropertyData("ambush",type:PropertyType.Boolean),
-                    new PropertyData("minskill",type:PropertyType.Integer),
+                    new Property("actor",type:PropertyType.String),
+                    new Property("angles",type:PropertyType.Integer),
+                    new Property("holowall",type:PropertyType.Boolean),
+                    new Property("pathing",type:PropertyType.Boolean),
+                    new Property("ambush",type:PropertyType.Boolean),
+                    new Property("minskill",type:PropertyType.Integer),
                 }),
 
-            new BlockData("positionlessTrigger",
+            new Block("positionlessTrigger",
                 properties:new []
                 {
-                    new PropertyData("action",PropertyType.String),
-                    new PropertyData("arg0",PropertyType.Integer, defaultValue:0),
-                    new PropertyData("arg1",PropertyType.Integer, defaultValue:0),
-                    new PropertyData("arg2",PropertyType.Integer, defaultValue:0),
-                    new PropertyData("arg3",PropertyType.Integer, defaultValue:0),
-                    new PropertyData("arg4",PropertyType.Integer, defaultValue:0),
-                    new PropertyData("activateEast", type:PropertyType.Boolean ,defaultValue:true),
-                    new PropertyData("activateNorth", type:PropertyType.Boolean ,defaultValue:true),
-                    new PropertyData("activateWest", type:PropertyType.Boolean ,defaultValue:true),
-                    new PropertyData("activateSouth", type:PropertyType.Boolean ,defaultValue:true),
-                    new PropertyData("playerCross", type:PropertyType.Boolean ,defaultValue:false),
-                    new PropertyData("playerUse", type:PropertyType.Boolean ,defaultValue:false),
-                    new PropertyData("monsterUse", type:PropertyType.Boolean ,defaultValue:false),
-                    new PropertyData("repeatable", type:PropertyType.Boolean ,defaultValue:false),
-                    new PropertyData("secret", type:PropertyType.Boolean ,defaultValue:false),
-                    new PropertyData("comment",type:PropertyType.String,defaultValue:string.Empty), 
-                    new PropertyData("unknownProperties", PropertyType.UnknownProperties),
+                    new Property("action",PropertyType.String),
+                    new Property("arg0",PropertyType.Integer, defaultValue:0),
+                    new Property("arg1",PropertyType.Integer, defaultValue:0),
+                    new Property("arg2",PropertyType.Integer, defaultValue:0),
+                    new Property("arg3",PropertyType.Integer, defaultValue:0),
+                    new Property("arg4",PropertyType.Integer, defaultValue:0),
+                    new Property("activateEast", type:PropertyType.Boolean ,defaultValue:true),
+                    new Property("activateNorth", type:PropertyType.Boolean ,defaultValue:true),
+                    new Property("activateWest", type:PropertyType.Boolean ,defaultValue:true),
+                    new Property("activateSouth", type:PropertyType.Boolean ,defaultValue:true),
+                    new Property("playerCross", type:PropertyType.Boolean ,defaultValue:false),
+                    new Property("playerUse", type:PropertyType.Boolean ,defaultValue:false),
+                    new Property("monsterUse", type:PropertyType.Boolean ,defaultValue:false),
+                    new Property("repeatable", type:PropertyType.Boolean ,defaultValue:false),
+                    new Property("secret", type:PropertyType.Boolean ,defaultValue:false),
+                    new Property("comment",type:PropertyType.String,defaultValue:string.Empty), 
+                    new Property("unknownProperties", PropertyType.UnknownProperties),
                 }),
 
-            new BlockData("tiles",className:"TileMappings",
+            new Block("tiles",className:"TileMappings",
                 normalReading:false,
                 isSubBlock:false,
                 properties:new[]
                 {
-                    new PropertyData("ambushModzone",type:PropertyType.MappedBlockList),
-                    new PropertyData("changeTriggerModzone",type:PropertyType.MappedBlockList),
-                    new PropertyData("tile",type:PropertyType.MappedBlockList),
-                    new PropertyData("positionlessTrigger",type:PropertyType.MappedBlockList),
-                    new PropertyData("zone",type:PropertyType.MappedBlockList),
+                    new Property("ambushModzone",type:PropertyType.MappedBlockList),
+                    new Property("changeTriggerModzone",type:PropertyType.MappedBlockList),
+                    new Property("tile",type:PropertyType.MappedBlockList),
+                    new Property("positionlessTrigger",type:PropertyType.MappedBlockList),
+                    new Property("zone",type:PropertyType.MappedBlockList),
                 }),
 
-            new BlockData("things",className:"ThingMappings",
+            new Block("things",className:"ThingMappings",
                 normalReading:false,
                 isSubBlock:false,
                 properties:new []
                 {
-                    new PropertyData("elevator",type:PropertyType.Set, collectionType:"ushort"),
-                    new PropertyData("positionlessTrigger",type:PropertyType.MappedBlockList),
-                    new PropertyData("thingDefinition",type:PropertyType.MappedBlockList),
+                    new Property("elevator",type:PropertyType.Set, collectionType:"ushort"),
+                    new Property("positionlessTrigger",type:PropertyType.MappedBlockList),
+                    new Property("thingDefinition",type:PropertyType.MappedBlockList),
                 }),
 
-            new BlockData("flats",className:"FlatMappings",
+            new Block("flats",className:"FlatMappings",
                 normalReading:false,
                 isSubBlock:false,
                 properties:new[]
                 {
-                    new PropertyData("ceiling",type:PropertyType.List, collectionType:"string"),
-                    new PropertyData("floor",type:PropertyType.List, collectionType:"string"),
+                    new Property("ceiling",type:PropertyType.List, collectionType:"string"),
+                    new Property("floor",type:PropertyType.List, collectionType:"string"),
                 }),
         };
     }

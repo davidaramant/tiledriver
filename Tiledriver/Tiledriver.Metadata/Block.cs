@@ -9,11 +9,11 @@ using Functional.Maybe;
 namespace Tiledriver.Metadata
 {
     [DebuggerDisplay("{" + nameof(ClassName) + "}")]
-    public sealed class BlockData : NamedItem
+    public sealed class Block : NamedItem
     {
-        private readonly List<PropertyData> _properties = new List<PropertyData>();
+        private readonly List<Property> _properties = new List<Property>();
 
-        public IEnumerable<PropertyData> Properties => _properties;
+        public IEnumerable<Property> Properties => _properties;
         public bool IsSubBlock { get; }
         public bool NormalWriting { get; }
         public bool NormalReading { get; }
@@ -24,14 +24,14 @@ namespace Tiledriver.Metadata
         public bool SupportsUnknownProperties => Properties.Any(p => p.Type == PropertyType.UnknownProperties);
         public bool SupportsUnknownBlocks => Properties.Any(p => p.Type == PropertyType.UnknownBlocks);
 
-        public IEnumerable<PropertyData> OrderedProperties()
+        public IEnumerable<Property> OrderedProperties()
         {
             return Properties.Where(p => p.IsRequired).Concat(Properties.Where(p => !p.IsRequired));
         }
 
-        public BlockData(
+        public Block(
             string formatName,
-            IEnumerable<PropertyData> properties,
+            IEnumerable<Property> properties,
             string className = null,
             bool isSubBlock = true,
             bool normalWriting = true,
