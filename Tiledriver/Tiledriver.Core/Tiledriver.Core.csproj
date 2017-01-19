@@ -78,6 +78,7 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="FormatModels\MapInfos\Parsing\IMapInfoElement.cs" />
+    <Compile Include="FormatModels\MapInfos\Parsing\MapInfoParser.cs" />
     <Compile Include="FormatModels\MapInfos\Parsing\MapInfoProperty.cs" />
     <Compile Include="FormatModels\MapInfos\Parsing\MapInfoBlock.cs" />
     <Compile Include="FormatModels\MapInfos\Parsing\MapInfoLexer.cs" />
