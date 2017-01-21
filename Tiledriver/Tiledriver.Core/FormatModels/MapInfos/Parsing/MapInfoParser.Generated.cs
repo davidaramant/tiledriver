@@ -20,8 +20,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                 {
                     case "exittext":
                         break;
-                    case "exittextlookup":
-                        break;
                     case "exittextislump":
                         break;
                     case "exittextismessage":
@@ -74,9 +72,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                         break;
                     case "advisorypic":
                         break;
-                    case "playScreenBorderColors":
-                        break;
-                    case "playScreenBorderGraphics":
+                    case "border":
                         break;
                     case "borderflat":
                         break;
@@ -168,6 +164,14 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             {
                 switch (property.Name.ToString())
                 {
+                    case "background":
+                        break;
+                    case "draw":
+                        break;
+                    case "music":
+                        break;
+                    case "time":
+                        break;
                     case "fadetype":
                         break;
                     default:
@@ -200,6 +204,14 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             {
                 switch (property.Name.ToString())
                 {
+                    case "background":
+                        break;
+                    case "draw":
+                        break;
+                    case "music":
+                        break;
+                    case "time":
+                        break;
                     default:
                         throw new ParsingException($"Unknown property {property.Name} found in Image.");
                 }
@@ -215,6 +227,14 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             {
                 switch (property.Name.ToString())
                 {
+                    case "background":
+                        break;
+                    case "draw":
+                        break;
+                    case "music":
+                        break;
+                    case "time":
+                        break;
                     case "text":
                         break;
                     case "textalignment":
@@ -223,9 +243,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                         break;
                     case "textspeed":
                         break;
-                    case "positionX":
-                        break;
-                    case "positionY":
+                    case "position":
                         break;
                     default:
                         throw new ParsingException($"Unknown property {property.Name} found in TextScreen.");
@@ -242,6 +260,14 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             {
                 switch (property.Name.ToString())
                 {
+                    case "background":
+                        break;
+                    case "draw":
+                        break;
+                    case "music":
+                        break;
+                    case "time":
+                        break;
                     default:
                         throw new ParsingException($"Unknown property {property.Name} found in VictoryStats.");
                 }
@@ -257,6 +283,50 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             {
                 switch (property.Name.ToString())
                 {
+                    case "bordertexture":
+                        break;
+                    case "cluster":
+                        break;
+                    case "completionstring":
+                        break;
+                    case "deathcam":
+                        break;
+                    case "defaultceiling":
+                        break;
+                    case "defaultfloor":
+                        break;
+                    case "ensureinventory":
+                        break;
+                    case "exitfade":
+                        break;
+                    case "floornumber":
+                        break;
+                    case "highscoresgraphic":
+                        break;
+                    case "levelbonus":
+                        break;
+                    case "levelnum":
+                        break;
+                    case "music":
+                        break;
+                    case "spawnwithweaponraised":
+                        break;
+                    case "secretdeathsounds":
+                        break;
+                    case "next":
+                        break;
+                    case "secretnext":
+                        break;
+                    case "victorynext":
+                        break;
+                    case "specialaction":
+                        break;
+                    case "nointermission":
+                        break;
+                    case "par":
+                        break;
+                    case "translator":
+                        break;
                     default:
                         throw new ParsingException($"Unknown property {property.Name} found in DefaultMap.");
                 }
@@ -272,6 +342,50 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             {
                 switch (property.Name.ToString())
                 {
+                    case "bordertexture":
+                        break;
+                    case "cluster":
+                        break;
+                    case "completionstring":
+                        break;
+                    case "deathcam":
+                        break;
+                    case "defaultceiling":
+                        break;
+                    case "defaultfloor":
+                        break;
+                    case "ensureinventory":
+                        break;
+                    case "exitfade":
+                        break;
+                    case "floornumber":
+                        break;
+                    case "highscoresgraphic":
+                        break;
+                    case "levelbonus":
+                        break;
+                    case "levelnum":
+                        break;
+                    case "music":
+                        break;
+                    case "spawnwithweaponraised":
+                        break;
+                    case "secretdeathsounds":
+                        break;
+                    case "next":
+                        break;
+                    case "secretnext":
+                        break;
+                    case "victorynext":
+                        break;
+                    case "specialaction":
+                        break;
+                    case "nointermission":
+                        break;
+                    case "par":
+                        break;
+                    case "translator":
+                        break;
                     default:
                         throw new ParsingException($"Unknown property {property.Name} found in AddDefaultMap.");
                 }
@@ -287,6 +401,50 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             {
                 switch (property.Name.ToString())
                 {
+                    case "bordertexture":
+                        break;
+                    case "cluster":
+                        break;
+                    case "completionstring":
+                        break;
+                    case "deathcam":
+                        break;
+                    case "defaultceiling":
+                        break;
+                    case "defaultfloor":
+                        break;
+                    case "ensureinventory":
+                        break;
+                    case "exitfade":
+                        break;
+                    case "floornumber":
+                        break;
+                    case "highscoresgraphic":
+                        break;
+                    case "levelbonus":
+                        break;
+                    case "levelnum":
+                        break;
+                    case "music":
+                        break;
+                    case "spawnwithweaponraised":
+                        break;
+                    case "secretdeathsounds":
+                        break;
+                    case "next":
+                        break;
+                    case "secretnext":
+                        break;
+                    case "victorynext":
+                        break;
+                    case "specialaction":
+                        break;
+                    case "nointermission":
+                        break;
+                    case "par":
+                        break;
+                    case "translator":
+                        break;
                     default:
                         throw new ParsingException($"Unknown property {property.Name} found in Map.");
                 }

@@ -3,9 +3,6 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.IO;
-using System.Linq;
-using Tiledriver.Core.Extensions;
 using Functional.Maybe;
 
 namespace Tiledriver.Core.FormatModels.MapInfos
@@ -13,22 +10,19 @@ namespace Tiledriver.Core.FormatModels.MapInfos
     public sealed partial class Cluster
     {
         public Maybe<int> Id { get; } = Maybe<int>.Nothing;
-        public Maybe<string> ExitText { get; } = Maybe<string>.Nothing;
-        public Maybe<string> ExitTextLookup { get; } = Maybe<string>.Nothing;
+        public Maybe<ClusterExitText> ExitText { get; } = Maybe<ClusterExitText>.Nothing;
         public Maybe<bool> ExitTextIsLump { get; } = ((bool)false).ToMaybe();
         public Maybe<bool> ExitTextIsMessage { get; } = ((bool)false).ToMaybe();
         public static Cluster Default = new Cluster();
         private Cluster() { }
         public Cluster(
             Maybe<int> id,
-            Maybe<string> exitText,
-            Maybe<string> exitTextLookup,
+            Maybe<ClusterExitText> exitText,
             Maybe<bool> exitTextIsLump,
             Maybe<bool> exitTextIsMessage)
         {
             Id = id;
             ExitText = exitText;
-            ExitTextLookup = exitTextLookup;
             ExitTextIsLump = exitTextIsLump;
             ExitTextIsMessage = exitTextIsMessage;
         }
@@ -37,25 +31,14 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new Cluster(
                 id: id.ToMaybe(),
                 exitText: ExitText,
-                exitTextLookup: ExitTextLookup,
                 exitTextIsLump: ExitTextIsLump,
                 exitTextIsMessage: ExitTextIsMessage);
         }
-        public Cluster WithExitText( string exitText )
+        public Cluster WithExitText( ClusterExitText exitText )
         {
             return new Cluster(
                 id: Id,
                 exitText: exitText.ToMaybe(),
-                exitTextLookup: ExitTextLookup,
-                exitTextIsLump: ExitTextIsLump,
-                exitTextIsMessage: ExitTextIsMessage);
-        }
-        public Cluster WithExitTextLookup( string exitTextLookup )
-        {
-            return new Cluster(
-                id: Id,
-                exitText: ExitText,
-                exitTextLookup: exitTextLookup.ToMaybe(),
                 exitTextIsLump: ExitTextIsLump,
                 exitTextIsMessage: ExitTextIsMessage);
         }
@@ -64,7 +47,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new Cluster(
                 id: Id,
                 exitText: ExitText,
-                exitTextLookup: ExitTextLookup,
                 exitTextIsLump: exitTextIsLump.ToMaybe(),
                 exitTextIsMessage: ExitTextIsMessage);
         }
@@ -73,9 +55,35 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new Cluster(
                 id: Id,
                 exitText: ExitText,
-                exitTextLookup: ExitTextLookup,
                 exitTextIsLump: ExitTextIsLump,
                 exitTextIsMessage: exitTextIsMessage.ToMaybe());
+        }
+    }
+
+    public sealed partial class ClusterExitText
+    {
+        public Maybe<string> Text { get; } = Maybe<string>.Nothing;
+        public Maybe<bool> Lookup { get; } = Maybe<bool>.Nothing;
+        public static ClusterExitText Default = new ClusterExitText();
+        private ClusterExitText() { }
+        public ClusterExitText(
+            Maybe<string> text,
+            Maybe<bool> lookup)
+        {
+            Text = text;
+            Lookup = lookup;
+        }
+        public ClusterExitText WithText( string text )
+        {
+            return new ClusterExitText(
+                text: text.ToMaybe(),
+                lookup: Lookup);
+        }
+        public ClusterExitText WithLookup( bool lookup )
+        {
+            return new ClusterExitText(
+                text: Text,
+                lookup: lookup.ToMaybe());
         }
     }
 
@@ -212,8 +220,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
     {
         public Maybe<string> AdvisoryColor { get; } = Maybe<string>.Nothing;
         public Maybe<string> AdvisoryPic { get; } = Maybe<string>.Nothing;
-        public Maybe<PlayScreenBorderColors> PlayScreenBorderColors { get; } = Maybe<PlayScreenBorderColors>.Nothing;
-        public Maybe<PlayScreenBorderGraphics> PlayScreenBorderGraphics { get; } = Maybe<PlayScreenBorderGraphics>.Nothing;
+        public Maybe<GameBorder> Border { get; } = Maybe<GameBorder>.Nothing;
         public Maybe<string> BorderFlat { get; } = Maybe<string>.Nothing;
         public Maybe<string> DoorSoundSequence { get; } = Maybe<string>.Nothing;
         public Maybe<bool> DrawReadThis { get; } = Maybe<bool>.Nothing;
@@ -248,8 +255,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public GameInfo(
             Maybe<string> advisoryColor,
             Maybe<string> advisoryPic,
-            Maybe<PlayScreenBorderColors> playScreenBorderColors,
-            Maybe<PlayScreenBorderGraphics> playScreenBorderGraphics,
+            Maybe<GameBorder> border,
             Maybe<string> borderFlat,
             Maybe<string> doorSoundSequence,
             Maybe<bool> drawReadThis,
@@ -282,8 +288,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         {
             AdvisoryColor = advisoryColor;
             AdvisoryPic = advisoryPic;
-            PlayScreenBorderColors = playScreenBorderColors;
-            PlayScreenBorderGraphics = playScreenBorderGraphics;
+            Border = border;
             BorderFlat = borderFlat;
             DoorSoundSequence = doorSoundSequence;
             DrawReadThis = drawReadThis;
@@ -319,8 +324,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: advisoryColor.ToMaybe(),
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -356,8 +360,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: advisoryPic.ToMaybe(),
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -388,50 +391,12 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 titleTime: TitleTime,
                 translator: Translator);
         }
-        public GameInfo WithPlayScreenBorderColors( PlayScreenBorderColors playScreenBorderColors )
+        public GameInfo WithBorder( GameBorder border )
         {
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: playScreenBorderColors.ToMaybe(),
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
-                borderFlat: BorderFlat,
-                doorSoundSequence: DoorSoundSequence,
-                drawReadThis: DrawReadThis,
-                finaleMusic: FinaleMusic,
-                gamePalette: GamePalette,
-                gibFactor: GibFactor,
-                highScoresFont: HighScoresFont,
-                highScoresFontColor: HighScoresFontColor,
-                intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
-                menuFade: MenuFade,
-                menuFontColorDisabled: MenuFontColorDisabled,
-                menuFontColorHighlight: MenuFontColorHighlight,
-                menuFontColorHighlightSelection: MenuFontColorHighlightSelection,
-                menuFontColorInvalid: MenuFontColorInvalid,
-                menuFontColorInvalidSelection: MenuFontColorInvalidSelection,
-                menuFontColorLabel: MenuFontColorLabel,
-                menuFontColorSelection: MenuFontColorSelection,
-                menuFontColorTitle: MenuFontColorTitle,
-                menuMusic: MenuMusic,
-                pageIndexFontColor: PageIndexFontColor,
-                playerClasses: PlayerClasses,
-                pushwallSoundSequence: PushwallSoundSequence,
-                quitMessages: QuitMessages,
-                scoresMusic: ScoresMusic,
-                signOn: SignOn,
-                titleMusic: TitleMusic,
-                titleTime: TitleTime,
-                translator: Translator);
-        }
-        public GameInfo WithPlayScreenBorderGraphics( PlayScreenBorderGraphics playScreenBorderGraphics )
-        {
-            return new GameInfo(
-                advisoryColor: AdvisoryColor,
-                advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: playScreenBorderGraphics.ToMaybe(),
+                border: border.ToMaybe(),
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -467,8 +432,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: borderFlat.ToMaybe(),
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -504,8 +468,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: doorSoundSequence.ToMaybe(),
                 drawReadThis: DrawReadThis,
@@ -541,8 +504,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: drawReadThis.ToMaybe(),
@@ -578,8 +540,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -615,8 +576,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -652,8 +612,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -689,8 +648,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -726,8 +684,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -763,8 +720,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -800,8 +756,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -837,8 +792,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -874,8 +828,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -911,8 +864,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -948,8 +900,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -985,8 +936,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -1022,8 +972,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -1059,8 +1008,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -1096,8 +1044,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -1133,8 +1080,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -1170,8 +1116,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -1207,8 +1152,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -1244,8 +1188,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -1281,8 +1224,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -1318,8 +1260,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -1355,8 +1296,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -1392,8 +1332,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -1429,8 +1368,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -1466,8 +1404,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -1503,8 +1440,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -1540,8 +1476,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -1577,8 +1512,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
-                playScreenBorderColors: PlayScreenBorderColors,
-                playScreenBorderGraphics: PlayScreenBorderGraphics,
+                border: Border,
                 borderFlat: BorderFlat,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
@@ -1614,8 +1548,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new GameInfo(
                 advisoryColor: gameInfo.AdvisoryColor.Or(AdvisoryColor),
                 advisoryPic: gameInfo.AdvisoryPic.Or(AdvisoryPic),
-                playScreenBorderColors: gameInfo.PlayScreenBorderColors.Or(PlayScreenBorderColors),
-                playScreenBorderGraphics: gameInfo.PlayScreenBorderGraphics.Or(PlayScreenBorderGraphics),
+                border: gameInfo.Border.Or(Border),
                 borderFlat: gameInfo.BorderFlat.Or(BorderFlat),
                 doorSoundSequence: gameInfo.DoorSoundSequence.Or(DoorSoundSequence),
                 drawReadThis: gameInfo.DrawReadThis.Or(DrawReadThis),
@@ -1648,14 +1581,41 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         }
     }
 
-    public sealed partial class PlayScreenBorderColors
+    public sealed partial class GameBorder
+    {
+        public Maybe<GameBorderColors> Colors { get; } = Maybe<GameBorderColors>.Nothing;
+        public Maybe<GameBorderGraphics> Graphics { get; } = Maybe<GameBorderGraphics>.Nothing;
+        public static GameBorder Default = new GameBorder();
+        private GameBorder() { }
+        public GameBorder(
+            Maybe<GameBorderColors> colors,
+            Maybe<GameBorderGraphics> graphics)
+        {
+            Colors = colors;
+            Graphics = graphics;
+        }
+        public GameBorder WithColors( GameBorderColors colors )
+        {
+            return new GameBorder(
+                colors: colors.ToMaybe(),
+                graphics: Graphics);
+        }
+        public GameBorder WithGraphics( GameBorderGraphics graphics )
+        {
+            return new GameBorder(
+                colors: Colors,
+                graphics: graphics.ToMaybe());
+        }
+    }
+
+    public sealed partial class GameBorderColors
     {
         public Maybe<string> TopColor { get; } = Maybe<string>.Nothing;
         public Maybe<string> BottomColor { get; } = Maybe<string>.Nothing;
         public Maybe<string> HighlightColor { get; } = Maybe<string>.Nothing;
-        public static PlayScreenBorderColors Default = new PlayScreenBorderColors();
-        private PlayScreenBorderColors() { }
-        public PlayScreenBorderColors(
+        public static GameBorderColors Default = new GameBorderColors();
+        private GameBorderColors() { }
+        public GameBorderColors(
             Maybe<string> topColor,
             Maybe<string> bottomColor,
             Maybe<string> highlightColor)
@@ -1664,30 +1624,30 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             BottomColor = bottomColor;
             HighlightColor = highlightColor;
         }
-        public PlayScreenBorderColors WithTopColor( string topColor )
+        public GameBorderColors WithTopColor( string topColor )
         {
-            return new PlayScreenBorderColors(
+            return new GameBorderColors(
                 topColor: topColor.ToMaybe(),
                 bottomColor: BottomColor,
                 highlightColor: HighlightColor);
         }
-        public PlayScreenBorderColors WithBottomColor( string bottomColor )
+        public GameBorderColors WithBottomColor( string bottomColor )
         {
-            return new PlayScreenBorderColors(
+            return new GameBorderColors(
                 topColor: TopColor,
                 bottomColor: bottomColor.ToMaybe(),
                 highlightColor: HighlightColor);
         }
-        public PlayScreenBorderColors WithHighlightColor( string highlightColor )
+        public GameBorderColors WithHighlightColor( string highlightColor )
         {
-            return new PlayScreenBorderColors(
+            return new GameBorderColors(
                 topColor: TopColor,
                 bottomColor: BottomColor,
                 highlightColor: highlightColor.ToMaybe());
         }
     }
 
-    public sealed partial class PlayScreenBorderGraphics
+    public sealed partial class GameBorderGraphics
     {
         public Maybe<string> TopLeft { get; } = Maybe<string>.Nothing;
         public Maybe<string> Top { get; } = Maybe<string>.Nothing;
@@ -1697,9 +1657,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public Maybe<string> BottomLeft { get; } = Maybe<string>.Nothing;
         public Maybe<string> Bottom { get; } = Maybe<string>.Nothing;
         public Maybe<string> BottomRight { get; } = Maybe<string>.Nothing;
-        public static PlayScreenBorderGraphics Default = new PlayScreenBorderGraphics();
-        private PlayScreenBorderGraphics() { }
-        public PlayScreenBorderGraphics(
+        public static GameBorderGraphics Default = new GameBorderGraphics();
+        private GameBorderGraphics() { }
+        public GameBorderGraphics(
             Maybe<string> topLeft,
             Maybe<string> top,
             Maybe<string> topRight,
@@ -1718,9 +1678,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             Bottom = bottom;
             BottomRight = bottomRight;
         }
-        public PlayScreenBorderGraphics WithTopLeft( string topLeft )
+        public GameBorderGraphics WithTopLeft( string topLeft )
         {
-            return new PlayScreenBorderGraphics(
+            return new GameBorderGraphics(
                 topLeft: topLeft.ToMaybe(),
                 top: Top,
                 topRight: TopRight,
@@ -1730,9 +1690,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 bottom: Bottom,
                 bottomRight: BottomRight);
         }
-        public PlayScreenBorderGraphics WithTop( string top )
+        public GameBorderGraphics WithTop( string top )
         {
-            return new PlayScreenBorderGraphics(
+            return new GameBorderGraphics(
                 topLeft: TopLeft,
                 top: top.ToMaybe(),
                 topRight: TopRight,
@@ -1742,9 +1702,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 bottom: Bottom,
                 bottomRight: BottomRight);
         }
-        public PlayScreenBorderGraphics WithTopRight( string topRight )
+        public GameBorderGraphics WithTopRight( string topRight )
         {
-            return new PlayScreenBorderGraphics(
+            return new GameBorderGraphics(
                 topLeft: TopLeft,
                 top: Top,
                 topRight: topRight.ToMaybe(),
@@ -1754,9 +1714,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 bottom: Bottom,
                 bottomRight: BottomRight);
         }
-        public PlayScreenBorderGraphics WithLeft( string left )
+        public GameBorderGraphics WithLeft( string left )
         {
-            return new PlayScreenBorderGraphics(
+            return new GameBorderGraphics(
                 topLeft: TopLeft,
                 top: Top,
                 topRight: TopRight,
@@ -1766,9 +1726,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 bottom: Bottom,
                 bottomRight: BottomRight);
         }
-        public PlayScreenBorderGraphics WithRight( string right )
+        public GameBorderGraphics WithRight( string right )
         {
-            return new PlayScreenBorderGraphics(
+            return new GameBorderGraphics(
                 topLeft: TopLeft,
                 top: Top,
                 topRight: TopRight,
@@ -1778,9 +1738,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 bottom: Bottom,
                 bottomRight: BottomRight);
         }
-        public PlayScreenBorderGraphics WithBottomLeft( string bottomLeft )
+        public GameBorderGraphics WithBottomLeft( string bottomLeft )
         {
-            return new PlayScreenBorderGraphics(
+            return new GameBorderGraphics(
                 topLeft: TopLeft,
                 top: Top,
                 topRight: TopRight,
@@ -1790,9 +1750,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 bottom: Bottom,
                 bottomRight: BottomRight);
         }
-        public PlayScreenBorderGraphics WithBottom( string bottom )
+        public GameBorderGraphics WithBottom( string bottom )
         {
-            return new PlayScreenBorderGraphics(
+            return new GameBorderGraphics(
                 topLeft: TopLeft,
                 top: Top,
                 topRight: TopRight,
@@ -1802,9 +1762,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 bottom: bottom.ToMaybe(),
                 bottomRight: BottomRight);
         }
-        public PlayScreenBorderGraphics WithBottomRight( string bottomRight )
+        public GameBorderGraphics WithBottomRight( string bottomRight )
         {
-            return new PlayScreenBorderGraphics(
+            return new GameBorderGraphics(
                 topLeft: TopLeft,
                 top: Top,
                 topRight: TopRight,
@@ -1938,33 +1898,99 @@ namespace Tiledriver.Core.FormatModels.MapInfos
 
     public abstract partial class IntermissionAction
     {
-        public Maybe<string> Background { get; } = Maybe<string>.Nothing;
-        public Maybe<bool> BackgroundTiled { get; } = Maybe<bool>.Nothing;
-        public Maybe<string> BackgroundPalette { get; } = Maybe<string>.Nothing;
-        public Maybe<string> Draw { get; } = Maybe<string>.Nothing;
-        public Maybe<int> DrawX { get; } = Maybe<int>.Nothing;
-        public Maybe<int> DrawY { get; } = Maybe<int>.Nothing;
+        public Maybe<IntermissionBackground> Background { get; } = Maybe<IntermissionBackground>.Nothing;
+        public Maybe<IntermissionDraw> Draw { get; } = Maybe<IntermissionDraw>.Nothing;
         public Maybe<string> Music { get; } = Maybe<string>.Nothing;
         public Maybe<int> Time { get; } = Maybe<int>.Nothing;
         protected IntermissionAction() { }
         protected IntermissionAction(
-            Maybe<string> background,
-            Maybe<bool> backgroundTiled,
-            Maybe<string> backgroundPalette,
-            Maybe<string> draw,
-            Maybe<int> drawX,
-            Maybe<int> drawY,
+            Maybe<IntermissionBackground> background,
+            Maybe<IntermissionDraw> draw,
             Maybe<string> music,
             Maybe<int> time)
         {
             Background = background;
-            BackgroundTiled = backgroundTiled;
-            BackgroundPalette = backgroundPalette;
             Draw = draw;
-            DrawX = drawX;
-            DrawY = drawY;
             Music = music;
             Time = time;
+        }
+    }
+
+    public sealed partial class IntermissionBackground
+    {
+        public Maybe<string> Texture { get; } = Maybe<string>.Nothing;
+        public Maybe<bool> Tiled { get; } = Maybe<bool>.Nothing;
+        public Maybe<string> Palette { get; } = Maybe<string>.Nothing;
+        public static IntermissionBackground Default = new IntermissionBackground();
+        private IntermissionBackground() { }
+        public IntermissionBackground(
+            Maybe<string> texture,
+            Maybe<bool> tiled,
+            Maybe<string> palette)
+        {
+            Texture = texture;
+            Tiled = tiled;
+            Palette = palette;
+        }
+        public IntermissionBackground WithTexture( string texture )
+        {
+            return new IntermissionBackground(
+                texture: texture.ToMaybe(),
+                tiled: Tiled,
+                palette: Palette);
+        }
+        public IntermissionBackground WithTiled( bool tiled )
+        {
+            return new IntermissionBackground(
+                texture: Texture,
+                tiled: tiled.ToMaybe(),
+                palette: Palette);
+        }
+        public IntermissionBackground WithPalette( string palette )
+        {
+            return new IntermissionBackground(
+                texture: Texture,
+                tiled: Tiled,
+                palette: palette.ToMaybe());
+        }
+    }
+
+    public sealed partial class IntermissionDraw
+    {
+        public Maybe<string> Texture { get; } = Maybe<string>.Nothing;
+        public Maybe<int> X { get; } = Maybe<int>.Nothing;
+        public Maybe<int> Y { get; } = Maybe<int>.Nothing;
+        public static IntermissionDraw Default = new IntermissionDraw();
+        private IntermissionDraw() { }
+        public IntermissionDraw(
+            Maybe<string> texture,
+            Maybe<int> x,
+            Maybe<int> y)
+        {
+            Texture = texture;
+            X = x;
+            Y = y;
+        }
+        public IntermissionDraw WithTexture( string texture )
+        {
+            return new IntermissionDraw(
+                texture: texture.ToMaybe(),
+                x: X,
+                y: Y);
+        }
+        public IntermissionDraw WithX( int x )
+        {
+            return new IntermissionDraw(
+                texture: Texture,
+                x: x.ToMaybe(),
+                y: Y);
+        }
+        public IntermissionDraw WithY( int y )
+        {
+            return new IntermissionDraw(
+                texture: Texture,
+                x: X,
+                y: y.ToMaybe());
         }
     }
 
@@ -1974,101 +2000,33 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public static Fader Default = new Fader();
         private Fader() { }
         public Fader(
-            Maybe<string> background,
-            Maybe<bool> backgroundTiled,
-            Maybe<string> backgroundPalette,
-            Maybe<string> draw,
-            Maybe<int> drawX,
-            Maybe<int> drawY,
+            Maybe<IntermissionBackground> background,
+            Maybe<IntermissionDraw> draw,
             Maybe<string> music,
             Maybe<int> time,
             Maybe<string> fadeType)
             : base(
                 background,
-                backgroundTiled,
-                backgroundPalette,
                 draw,
-                drawX,
-                drawY,
                 music,
                 time)
         {
             FadeType = fadeType;
         }
-        public Fader WithBackground( string background )
+        public Fader WithBackground( IntermissionBackground background )
         {
             return new Fader(
                 background: background.ToMaybe(),
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
                 draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
                 music: Music,
                 time: Time,
                 fadeType: FadeType);
         }
-        public Fader WithBackgroundTiled( bool backgroundTiled )
+        public Fader WithDraw( IntermissionDraw draw )
         {
             return new Fader(
                 background: Background,
-                backgroundTiled: backgroundTiled.ToMaybe(),
-                backgroundPalette: BackgroundPalette,
-                draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
-                music: Music,
-                time: Time,
-                fadeType: FadeType);
-        }
-        public Fader WithBackgroundPalette( string backgroundPalette )
-        {
-            return new Fader(
-                background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: backgroundPalette.ToMaybe(),
-                draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
-                music: Music,
-                time: Time,
-                fadeType: FadeType);
-        }
-        public Fader WithDraw( string draw )
-        {
-            return new Fader(
-                background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
                 draw: draw.ToMaybe(),
-                drawX: DrawX,
-                drawY: DrawY,
-                music: Music,
-                time: Time,
-                fadeType: FadeType);
-        }
-        public Fader WithDrawX( int drawX )
-        {
-            return new Fader(
-                background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
-                draw: Draw,
-                drawX: drawX.ToMaybe(),
-                drawY: DrawY,
-                music: Music,
-                time: Time,
-                fadeType: FadeType);
-        }
-        public Fader WithDrawY( int drawY )
-        {
-            return new Fader(
-                background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
-                draw: Draw,
-                drawX: DrawX,
-                drawY: drawY.ToMaybe(),
                 music: Music,
                 time: Time,
                 fadeType: FadeType);
@@ -2077,11 +2035,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         {
             return new Fader(
                 background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
                 draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
                 music: music.ToMaybe(),
                 time: Time,
                 fadeType: FadeType);
@@ -2090,11 +2044,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         {
             return new Fader(
                 background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
                 draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
                 music: Music,
                 time: time.ToMaybe(),
                 fadeType: FadeType);
@@ -2103,11 +2053,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         {
             return new Fader(
                 background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
                 draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
                 music: Music,
                 time: Time,
                 fadeType: fadeType.ToMaybe());
@@ -2125,94 +2071,30 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public static Image Default = new Image();
         private Image() { }
         public Image(
-            Maybe<string> background,
-            Maybe<bool> backgroundTiled,
-            Maybe<string> backgroundPalette,
-            Maybe<string> draw,
-            Maybe<int> drawX,
-            Maybe<int> drawY,
+            Maybe<IntermissionBackground> background,
+            Maybe<IntermissionDraw> draw,
             Maybe<string> music,
             Maybe<int> time)
             : base(
                 background,
-                backgroundTiled,
-                backgroundPalette,
                 draw,
-                drawX,
-                drawY,
                 music,
                 time)
         {
         }
-        public Image WithBackground( string background )
+        public Image WithBackground( IntermissionBackground background )
         {
             return new Image(
                 background: background.ToMaybe(),
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
                 draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
                 music: Music,
                 time: Time);
         }
-        public Image WithBackgroundTiled( bool backgroundTiled )
+        public Image WithDraw( IntermissionDraw draw )
         {
             return new Image(
                 background: Background,
-                backgroundTiled: backgroundTiled.ToMaybe(),
-                backgroundPalette: BackgroundPalette,
-                draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
-                music: Music,
-                time: Time);
-        }
-        public Image WithBackgroundPalette( string backgroundPalette )
-        {
-            return new Image(
-                background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: backgroundPalette.ToMaybe(),
-                draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
-                music: Music,
-                time: Time);
-        }
-        public Image WithDraw( string draw )
-        {
-            return new Image(
-                background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
                 draw: draw.ToMaybe(),
-                drawX: DrawX,
-                drawY: DrawY,
-                music: Music,
-                time: Time);
-        }
-        public Image WithDrawX( int drawX )
-        {
-            return new Image(
-                background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
-                draw: Draw,
-                drawX: drawX.ToMaybe(),
-                drawY: DrawY,
-                music: Music,
-                time: Time);
-        }
-        public Image WithDrawY( int drawY )
-        {
-            return new Image(
-                background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
-                draw: Draw,
-                drawX: DrawX,
-                drawY: drawY.ToMaybe(),
                 music: Music,
                 time: Time);
         }
@@ -2220,11 +2102,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         {
             return new Image(
                 background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
                 draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
                 music: music.ToMaybe(),
                 time: Time);
         }
@@ -2232,11 +2110,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         {
             return new Image(
                 background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
                 draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
                 music: Music,
                 time: time.ToMaybe());
         }
@@ -2248,32 +2122,22 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public Maybe<string> TextAlignment { get; } = Maybe<string>.Nothing;
         public Maybe<string> TextColor { get; } = Maybe<string>.Nothing;
         public Maybe<int> TextSpeed { get; } = Maybe<int>.Nothing;
-        public Maybe<int> PositionX { get; } = Maybe<int>.Nothing;
-        public Maybe<int> PositionY { get; } = Maybe<int>.Nothing;
+        public Maybe<TextScreenPosition> Position { get; } = Maybe<TextScreenPosition>.Nothing;
         public static TextScreen Default = new TextScreen();
         private TextScreen() { }
         public TextScreen(
-            Maybe<string> background,
-            Maybe<bool> backgroundTiled,
-            Maybe<string> backgroundPalette,
-            Maybe<string> draw,
-            Maybe<int> drawX,
-            Maybe<int> drawY,
+            Maybe<IntermissionBackground> background,
+            Maybe<IntermissionDraw> draw,
             Maybe<string> music,
             Maybe<int> time,
             IEnumerable<string> texts,
             Maybe<string> textAlignment,
             Maybe<string> textColor,
             Maybe<int> textSpeed,
-            Maybe<int> positionX,
-            Maybe<int> positionY)
+            Maybe<TextScreenPosition> position)
             : base(
                 background,
-                backgroundTiled,
-                backgroundPalette,
                 draw,
-                drawX,
-                drawY,
                 music,
                 time)
         {
@@ -2281,278 +2145,164 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             TextAlignment = textAlignment;
             TextColor = textColor;
             TextSpeed = textSpeed;
-            PositionX = positionX;
-            PositionY = positionY;
+            Position = position;
         }
-        public TextScreen WithBackground( string background )
+        public TextScreen WithBackground( IntermissionBackground background )
         {
             return new TextScreen(
                 background: background.ToMaybe(),
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
                 draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
                 music: Music,
                 time: Time,
                 texts: Texts,
                 textAlignment: TextAlignment,
                 textColor: TextColor,
                 textSpeed: TextSpeed,
-                positionX: PositionX,
-                positionY: PositionY);
+                position: Position);
         }
-        public TextScreen WithBackgroundTiled( bool backgroundTiled )
+        public TextScreen WithDraw( IntermissionDraw draw )
         {
             return new TextScreen(
                 background: Background,
-                backgroundTiled: backgroundTiled.ToMaybe(),
-                backgroundPalette: BackgroundPalette,
-                draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
-                music: Music,
-                time: Time,
-                texts: Texts,
-                textAlignment: TextAlignment,
-                textColor: TextColor,
-                textSpeed: TextSpeed,
-                positionX: PositionX,
-                positionY: PositionY);
-        }
-        public TextScreen WithBackgroundPalette( string backgroundPalette )
-        {
-            return new TextScreen(
-                background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: backgroundPalette.ToMaybe(),
-                draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
-                music: Music,
-                time: Time,
-                texts: Texts,
-                textAlignment: TextAlignment,
-                textColor: TextColor,
-                textSpeed: TextSpeed,
-                positionX: PositionX,
-                positionY: PositionY);
-        }
-        public TextScreen WithDraw( string draw )
-        {
-            return new TextScreen(
-                background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
                 draw: draw.ToMaybe(),
-                drawX: DrawX,
-                drawY: DrawY,
                 music: Music,
                 time: Time,
                 texts: Texts,
                 textAlignment: TextAlignment,
                 textColor: TextColor,
                 textSpeed: TextSpeed,
-                positionX: PositionX,
-                positionY: PositionY);
-        }
-        public TextScreen WithDrawX( int drawX )
-        {
-            return new TextScreen(
-                background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
-                draw: Draw,
-                drawX: drawX.ToMaybe(),
-                drawY: DrawY,
-                music: Music,
-                time: Time,
-                texts: Texts,
-                textAlignment: TextAlignment,
-                textColor: TextColor,
-                textSpeed: TextSpeed,
-                positionX: PositionX,
-                positionY: PositionY);
-        }
-        public TextScreen WithDrawY( int drawY )
-        {
-            return new TextScreen(
-                background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
-                draw: Draw,
-                drawX: DrawX,
-                drawY: drawY.ToMaybe(),
-                music: Music,
-                time: Time,
-                texts: Texts,
-                textAlignment: TextAlignment,
-                textColor: TextColor,
-                textSpeed: TextSpeed,
-                positionX: PositionX,
-                positionY: PositionY);
+                position: Position);
         }
         public TextScreen WithMusic( string music )
         {
             return new TextScreen(
                 background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
                 draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
                 music: music.ToMaybe(),
                 time: Time,
                 texts: Texts,
                 textAlignment: TextAlignment,
                 textColor: TextColor,
                 textSpeed: TextSpeed,
-                positionX: PositionX,
-                positionY: PositionY);
+                position: Position);
         }
         public TextScreen WithTime( int time )
         {
             return new TextScreen(
                 background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
                 draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
                 music: Music,
                 time: time.ToMaybe(),
                 texts: Texts,
                 textAlignment: TextAlignment,
                 textColor: TextColor,
                 textSpeed: TextSpeed,
-                positionX: PositionX,
-                positionY: PositionY);
+                position: Position);
         }
         public TextScreen WithTexts( IEnumerable<string> texts )
         {
             return new TextScreen(
                 background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
                 draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
                 music: Music,
                 time: Time,
                 texts: texts,
                 textAlignment: TextAlignment,
                 textColor: TextColor,
                 textSpeed: TextSpeed,
-                positionX: PositionX,
-                positionY: PositionY);
+                position: Position);
         }
         public TextScreen WithAdditionalText( string text )
         {
             return new TextScreen(
                 background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
                 draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
                 music: Music,
                 time: Time,
                 texts: Texts.Add(text),
                 textAlignment: TextAlignment,
                 textColor: TextColor,
                 textSpeed: TextSpeed,
-                positionX: PositionX,
-                positionY: PositionY);
+                position: Position);
         }
         public TextScreen WithTextAlignment( string textAlignment )
         {
             return new TextScreen(
                 background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
                 draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
                 music: Music,
                 time: Time,
                 texts: Texts,
                 textAlignment: textAlignment.ToMaybe(),
                 textColor: TextColor,
                 textSpeed: TextSpeed,
-                positionX: PositionX,
-                positionY: PositionY);
+                position: Position);
         }
         public TextScreen WithTextColor( string textColor )
         {
             return new TextScreen(
                 background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
                 draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
                 music: Music,
                 time: Time,
                 texts: Texts,
                 textAlignment: TextAlignment,
                 textColor: textColor.ToMaybe(),
                 textSpeed: TextSpeed,
-                positionX: PositionX,
-                positionY: PositionY);
+                position: Position);
         }
         public TextScreen WithTextSpeed( int textSpeed )
         {
             return new TextScreen(
                 background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
                 draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
                 music: Music,
                 time: Time,
                 texts: Texts,
                 textAlignment: TextAlignment,
                 textColor: TextColor,
                 textSpeed: textSpeed.ToMaybe(),
-                positionX: PositionX,
-                positionY: PositionY);
+                position: Position);
         }
-        public TextScreen WithPositionX( int positionX )
+        public TextScreen WithPosition( TextScreenPosition position )
         {
             return new TextScreen(
                 background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
                 draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
                 music: Music,
                 time: Time,
                 texts: Texts,
                 textAlignment: TextAlignment,
                 textColor: TextColor,
                 textSpeed: TextSpeed,
-                positionX: positionX.ToMaybe(),
-                positionY: PositionY);
+                position: position.ToMaybe());
         }
-        public TextScreen WithPositionY( int positionY )
+    }
+
+    public sealed partial class TextScreenPosition
+    {
+        public Maybe<int> X { get; } = Maybe<int>.Nothing;
+        public Maybe<int> Y { get; } = Maybe<int>.Nothing;
+        public static TextScreenPosition Default = new TextScreenPosition();
+        private TextScreenPosition() { }
+        public TextScreenPosition(
+            Maybe<int> x,
+            Maybe<int> y)
         {
-            return new TextScreen(
-                background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
-                draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
-                music: Music,
-                time: Time,
-                texts: Texts,
-                textAlignment: TextAlignment,
-                textColor: TextColor,
-                textSpeed: TextSpeed,
-                positionX: PositionX,
-                positionY: positionY.ToMaybe());
+            X = x;
+            Y = y;
+        }
+        public TextScreenPosition WithX( int x )
+        {
+            return new TextScreenPosition(
+                x: x.ToMaybe(),
+                y: Y);
+        }
+        public TextScreenPosition WithY( int y )
+        {
+            return new TextScreenPosition(
+                x: X,
+                y: y.ToMaybe());
         }
     }
 
@@ -2561,94 +2311,30 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public static VictoryStats Default = new VictoryStats();
         private VictoryStats() { }
         public VictoryStats(
-            Maybe<string> background,
-            Maybe<bool> backgroundTiled,
-            Maybe<string> backgroundPalette,
-            Maybe<string> draw,
-            Maybe<int> drawX,
-            Maybe<int> drawY,
+            Maybe<IntermissionBackground> background,
+            Maybe<IntermissionDraw> draw,
             Maybe<string> music,
             Maybe<int> time)
             : base(
                 background,
-                backgroundTiled,
-                backgroundPalette,
                 draw,
-                drawX,
-                drawY,
                 music,
                 time)
         {
         }
-        public VictoryStats WithBackground( string background )
+        public VictoryStats WithBackground( IntermissionBackground background )
         {
             return new VictoryStats(
                 background: background.ToMaybe(),
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
                 draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
                 music: Music,
                 time: Time);
         }
-        public VictoryStats WithBackgroundTiled( bool backgroundTiled )
+        public VictoryStats WithDraw( IntermissionDraw draw )
         {
             return new VictoryStats(
                 background: Background,
-                backgroundTiled: backgroundTiled.ToMaybe(),
-                backgroundPalette: BackgroundPalette,
-                draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
-                music: Music,
-                time: Time);
-        }
-        public VictoryStats WithBackgroundPalette( string backgroundPalette )
-        {
-            return new VictoryStats(
-                background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: backgroundPalette.ToMaybe(),
-                draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
-                music: Music,
-                time: Time);
-        }
-        public VictoryStats WithDraw( string draw )
-        {
-            return new VictoryStats(
-                background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
                 draw: draw.ToMaybe(),
-                drawX: DrawX,
-                drawY: DrawY,
-                music: Music,
-                time: Time);
-        }
-        public VictoryStats WithDrawX( int drawX )
-        {
-            return new VictoryStats(
-                background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
-                draw: Draw,
-                drawX: drawX.ToMaybe(),
-                drawY: DrawY,
-                music: Music,
-                time: Time);
-        }
-        public VictoryStats WithDrawY( int drawY )
-        {
-            return new VictoryStats(
-                background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
-                draw: Draw,
-                drawX: DrawX,
-                drawY: drawY.ToMaybe(),
                 music: Music,
                 time: Time);
         }
@@ -2656,11 +2342,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         {
             return new VictoryStats(
                 background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
                 draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
                 music: music.ToMaybe(),
                 time: Time);
         }
@@ -2668,11 +2350,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         {
             return new VictoryStats(
                 background: Background,
-                backgroundTiled: BackgroundTiled,
-                backgroundPalette: BackgroundPalette,
                 draw: Draw,
-                drawX: DrawX,
-                drawY: DrawY,
                 music: Music,
                 time: time.ToMaybe());
         }
@@ -2698,12 +2376,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             Maybe<string> music,
             Maybe<bool> spawnWithWeaponRaised,
             Maybe<bool> secretDeathSounds,
-            Maybe<string> next,
-            Maybe<string> secretNext,
-            Maybe<string> victoryNext,
-            Maybe<string> nextEndSequence,
-            Maybe<string> secretNextEndSequence,
-            Maybe<string> victoryNextEndSequence,
+            Maybe<NextMapInfo> next,
+            Maybe<NextMapInfo> secretNext,
+            Maybe<NextMapInfo> victoryNext,
             IEnumerable<SpecialAction> specialActions,
             Maybe<bool> nointermission,
             Maybe<int> par,
@@ -2727,9 +2402,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next,
                 secretNext,
                 victoryNext,
-                nextEndSequence,
-                secretNextEndSequence,
-                victoryNextEndSequence,
                 specialActions,
                 nointermission,
                 par,
@@ -2757,9 +2429,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -2786,9 +2455,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -2815,9 +2481,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -2844,9 +2507,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -2873,9 +2533,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -2902,9 +2559,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -2931,9 +2585,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -2960,9 +2611,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -2989,9 +2637,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -3018,9 +2663,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -3047,9 +2689,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -3076,9 +2715,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -3105,9 +2741,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -3134,9 +2767,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -3163,9 +2793,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -3192,15 +2819,12 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
                 translator: Translator);
         }
-        public DefaultMap WithNext( string next )
+        public DefaultMap WithNext( NextMapInfo next )
         {
             return new DefaultMap(
                 borderTexture: BorderTexture,
@@ -3221,15 +2845,12 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: next.ToMaybe(),
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
                 translator: Translator);
         }
-        public DefaultMap WithSecretNext( string secretNext )
+        public DefaultMap WithSecretNext( NextMapInfo secretNext )
         {
             return new DefaultMap(
                 borderTexture: BorderTexture,
@@ -3250,15 +2871,12 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: secretNext.ToMaybe(),
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
                 translator: Translator);
         }
-        public DefaultMap WithVictoryNext( string victoryNext )
+        public DefaultMap WithVictoryNext( NextMapInfo victoryNext )
         {
             return new DefaultMap(
                 borderTexture: BorderTexture,
@@ -3279,96 +2897,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: victoryNext.ToMaybe(),
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
-                specialActions: SpecialActions,
-                nointermission: Nointermission,
-                par: Par,
-                translator: Translator);
-        }
-        public DefaultMap WithNextEndSequence( string nextEndSequence )
-        {
-            return new DefaultMap(
-                borderTexture: BorderTexture,
-                cluster: Cluster,
-                completionString: CompletionString,
-                deathCam: DeathCam,
-                defaultCeiling: DefaultCeiling,
-                defaultFloor: DefaultFloor,
-                ensureInventories: EnsureInventories,
-                exitFade: ExitFade,
-                floorNumber: FloorNumber,
-                highScoresGraphic: HighScoresGraphic,
-                levelBonus: LevelBonus,
-                levelNum: LevelNum,
-                music: Music,
-                spawnWithWeaponRaised: SpawnWithWeaponRaised,
-                secretDeathSounds: SecretDeathSounds,
-                next: Next,
-                secretNext: SecretNext,
-                victoryNext: VictoryNext,
-                nextEndSequence: nextEndSequence.ToMaybe(),
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
-                specialActions: SpecialActions,
-                nointermission: Nointermission,
-                par: Par,
-                translator: Translator);
-        }
-        public DefaultMap WithSecretNextEndSequence( string secretNextEndSequence )
-        {
-            return new DefaultMap(
-                borderTexture: BorderTexture,
-                cluster: Cluster,
-                completionString: CompletionString,
-                deathCam: DeathCam,
-                defaultCeiling: DefaultCeiling,
-                defaultFloor: DefaultFloor,
-                ensureInventories: EnsureInventories,
-                exitFade: ExitFade,
-                floorNumber: FloorNumber,
-                highScoresGraphic: HighScoresGraphic,
-                levelBonus: LevelBonus,
-                levelNum: LevelNum,
-                music: Music,
-                spawnWithWeaponRaised: SpawnWithWeaponRaised,
-                secretDeathSounds: SecretDeathSounds,
-                next: Next,
-                secretNext: SecretNext,
-                victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: secretNextEndSequence.ToMaybe(),
-                victoryNextEndSequence: VictoryNextEndSequence,
-                specialActions: SpecialActions,
-                nointermission: Nointermission,
-                par: Par,
-                translator: Translator);
-        }
-        public DefaultMap WithVictoryNextEndSequence( string victoryNextEndSequence )
-        {
-            return new DefaultMap(
-                borderTexture: BorderTexture,
-                cluster: Cluster,
-                completionString: CompletionString,
-                deathCam: DeathCam,
-                defaultCeiling: DefaultCeiling,
-                defaultFloor: DefaultFloor,
-                ensureInventories: EnsureInventories,
-                exitFade: ExitFade,
-                floorNumber: FloorNumber,
-                highScoresGraphic: HighScoresGraphic,
-                levelBonus: LevelBonus,
-                levelNum: LevelNum,
-                music: Music,
-                spawnWithWeaponRaised: SpawnWithWeaponRaised,
-                secretDeathSounds: SecretDeathSounds,
-                next: Next,
-                secretNext: SecretNext,
-                victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: victoryNextEndSequence.ToMaybe(),
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -3395,9 +2923,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: specialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -3424,9 +2949,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions.Add(specialAction),
                 nointermission: Nointermission,
                 par: Par,
@@ -3453,9 +2975,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: nointermission.ToMaybe(),
                 par: Par,
@@ -3482,9 +3001,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: par.ToMaybe(),
@@ -3511,9 +3027,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -3540,9 +3053,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: addDefaultMap.Next.Or(Next),
                 secretNext: addDefaultMap.SecretNext.Or(SecretNext),
                 victoryNext: addDefaultMap.VictoryNext.Or(VictoryNext),
-                nextEndSequence: addDefaultMap.NextEndSequence.Or(NextEndSequence),
-                secretNextEndSequence: addDefaultMap.SecretNextEndSequence.Or(SecretNextEndSequence),
-                victoryNextEndSequence: addDefaultMap.VictoryNextEndSequence.Or(VictoryNextEndSequence),
                 specialActions: SpecialActions.AddRange(addDefaultMap.SpecialActions),
                 nointermission: addDefaultMap.Nointermission.Or(Nointermission),
                 par: addDefaultMap.Par.Or(Par),
@@ -3570,12 +3080,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             Maybe<string> music,
             Maybe<bool> spawnWithWeaponRaised,
             Maybe<bool> secretDeathSounds,
-            Maybe<string> next,
-            Maybe<string> secretNext,
-            Maybe<string> victoryNext,
-            Maybe<string> nextEndSequence,
-            Maybe<string> secretNextEndSequence,
-            Maybe<string> victoryNextEndSequence,
+            Maybe<NextMapInfo> next,
+            Maybe<NextMapInfo> secretNext,
+            Maybe<NextMapInfo> victoryNext,
             IEnumerable<SpecialAction> specialActions,
             Maybe<bool> nointermission,
             Maybe<int> par,
@@ -3599,9 +3106,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next,
                 secretNext,
                 victoryNext,
-                nextEndSequence,
-                secretNextEndSequence,
-                victoryNextEndSequence,
                 specialActions,
                 nointermission,
                 par,
@@ -3629,9 +3133,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -3658,9 +3159,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -3687,9 +3185,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -3716,9 +3211,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -3745,9 +3237,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -3774,9 +3263,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -3803,9 +3289,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -3832,9 +3315,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -3861,9 +3341,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -3890,9 +3367,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -3919,9 +3393,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -3948,9 +3419,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -3977,9 +3445,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -4006,9 +3471,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -4035,9 +3497,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -4064,15 +3523,12 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
                 translator: Translator);
         }
-        public AddDefaultMap WithNext( string next )
+        public AddDefaultMap WithNext( NextMapInfo next )
         {
             return new AddDefaultMap(
                 borderTexture: BorderTexture,
@@ -4093,15 +3549,12 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: next.ToMaybe(),
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
                 translator: Translator);
         }
-        public AddDefaultMap WithSecretNext( string secretNext )
+        public AddDefaultMap WithSecretNext( NextMapInfo secretNext )
         {
             return new AddDefaultMap(
                 borderTexture: BorderTexture,
@@ -4122,15 +3575,12 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: secretNext.ToMaybe(),
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
                 translator: Translator);
         }
-        public AddDefaultMap WithVictoryNext( string victoryNext )
+        public AddDefaultMap WithVictoryNext( NextMapInfo victoryNext )
         {
             return new AddDefaultMap(
                 borderTexture: BorderTexture,
@@ -4151,96 +3601,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: victoryNext.ToMaybe(),
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
-                specialActions: SpecialActions,
-                nointermission: Nointermission,
-                par: Par,
-                translator: Translator);
-        }
-        public AddDefaultMap WithNextEndSequence( string nextEndSequence )
-        {
-            return new AddDefaultMap(
-                borderTexture: BorderTexture,
-                cluster: Cluster,
-                completionString: CompletionString,
-                deathCam: DeathCam,
-                defaultCeiling: DefaultCeiling,
-                defaultFloor: DefaultFloor,
-                ensureInventories: EnsureInventories,
-                exitFade: ExitFade,
-                floorNumber: FloorNumber,
-                highScoresGraphic: HighScoresGraphic,
-                levelBonus: LevelBonus,
-                levelNum: LevelNum,
-                music: Music,
-                spawnWithWeaponRaised: SpawnWithWeaponRaised,
-                secretDeathSounds: SecretDeathSounds,
-                next: Next,
-                secretNext: SecretNext,
-                victoryNext: VictoryNext,
-                nextEndSequence: nextEndSequence.ToMaybe(),
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
-                specialActions: SpecialActions,
-                nointermission: Nointermission,
-                par: Par,
-                translator: Translator);
-        }
-        public AddDefaultMap WithSecretNextEndSequence( string secretNextEndSequence )
-        {
-            return new AddDefaultMap(
-                borderTexture: BorderTexture,
-                cluster: Cluster,
-                completionString: CompletionString,
-                deathCam: DeathCam,
-                defaultCeiling: DefaultCeiling,
-                defaultFloor: DefaultFloor,
-                ensureInventories: EnsureInventories,
-                exitFade: ExitFade,
-                floorNumber: FloorNumber,
-                highScoresGraphic: HighScoresGraphic,
-                levelBonus: LevelBonus,
-                levelNum: LevelNum,
-                music: Music,
-                spawnWithWeaponRaised: SpawnWithWeaponRaised,
-                secretDeathSounds: SecretDeathSounds,
-                next: Next,
-                secretNext: SecretNext,
-                victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: secretNextEndSequence.ToMaybe(),
-                victoryNextEndSequence: VictoryNextEndSequence,
-                specialActions: SpecialActions,
-                nointermission: Nointermission,
-                par: Par,
-                translator: Translator);
-        }
-        public AddDefaultMap WithVictoryNextEndSequence( string victoryNextEndSequence )
-        {
-            return new AddDefaultMap(
-                borderTexture: BorderTexture,
-                cluster: Cluster,
-                completionString: CompletionString,
-                deathCam: DeathCam,
-                defaultCeiling: DefaultCeiling,
-                defaultFloor: DefaultFloor,
-                ensureInventories: EnsureInventories,
-                exitFade: ExitFade,
-                floorNumber: FloorNumber,
-                highScoresGraphic: HighScoresGraphic,
-                levelBonus: LevelBonus,
-                levelNum: LevelNum,
-                music: Music,
-                spawnWithWeaponRaised: SpawnWithWeaponRaised,
-                secretDeathSounds: SecretDeathSounds,
-                next: Next,
-                secretNext: SecretNext,
-                victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: victoryNextEndSequence.ToMaybe(),
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -4267,9 +3627,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: specialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -4296,9 +3653,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions.Add(specialAction),
                 nointermission: Nointermission,
                 par: Par,
@@ -4325,9 +3679,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: nointermission.ToMaybe(),
                 par: Par,
@@ -4354,9 +3705,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: par.ToMaybe(),
@@ -4383,9 +3731,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -4410,12 +3755,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public Maybe<string> Music { get; } = Maybe<string>.Nothing;
         public Maybe<bool> SpawnWithWeaponRaised { get; } = ((bool)false).ToMaybe();
         public Maybe<bool> SecretDeathSounds { get; } = ((bool)false).ToMaybe();
-        public Maybe<string> Next { get; } = Maybe<string>.Nothing;
-        public Maybe<string> SecretNext { get; } = Maybe<string>.Nothing;
-        public Maybe<string> VictoryNext { get; } = Maybe<string>.Nothing;
-        public Maybe<string> NextEndSequence { get; } = Maybe<string>.Nothing;
-        public Maybe<string> SecretNextEndSequence { get; } = Maybe<string>.Nothing;
-        public Maybe<string> VictoryNextEndSequence { get; } = Maybe<string>.Nothing;
+        public Maybe<NextMapInfo> Next { get; } = Maybe<NextMapInfo>.Nothing;
+        public Maybe<NextMapInfo> SecretNext { get; } = Maybe<NextMapInfo>.Nothing;
+        public Maybe<NextMapInfo> VictoryNext { get; } = Maybe<NextMapInfo>.Nothing;
         public ImmutableList<SpecialAction> SpecialActions { get; } = ImmutableList<SpecialAction>.Empty;
         public Maybe<bool> Nointermission { get; } = ((bool)false).ToMaybe();
         public Maybe<int> Par { get; } = Maybe<int>.Nothing;
@@ -4437,12 +3779,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             Maybe<string> music,
             Maybe<bool> spawnWithWeaponRaised,
             Maybe<bool> secretDeathSounds,
-            Maybe<string> next,
-            Maybe<string> secretNext,
-            Maybe<string> victoryNext,
-            Maybe<string> nextEndSequence,
-            Maybe<string> secretNextEndSequence,
-            Maybe<string> victoryNextEndSequence,
+            Maybe<NextMapInfo> next,
+            Maybe<NextMapInfo> secretNext,
+            Maybe<NextMapInfo> victoryNext,
             IEnumerable<SpecialAction> specialActions,
             Maybe<bool> nointermission,
             Maybe<int> par,
@@ -4466,9 +3805,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             Next = next;
             SecretNext = secretNext;
             VictoryNext = victoryNext;
-            NextEndSequence = nextEndSequence;
-            SecretNextEndSequence = secretNextEndSequence;
-            VictoryNextEndSequence = victoryNextEndSequence;
             SpecialActions = specialActions.ToImmutableList();
             Nointermission = nointermission;
             Par = par;
@@ -4499,12 +3835,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             Maybe<string> music,
             Maybe<bool> spawnWithWeaponRaised,
             Maybe<bool> secretDeathSounds,
-            Maybe<string> next,
-            Maybe<string> secretNext,
-            Maybe<string> victoryNext,
-            Maybe<string> nextEndSequence,
-            Maybe<string> secretNextEndSequence,
-            Maybe<string> victoryNextEndSequence,
+            Maybe<NextMapInfo> next,
+            Maybe<NextMapInfo> secretNext,
+            Maybe<NextMapInfo> victoryNext,
             IEnumerable<SpecialAction> specialActions,
             Maybe<bool> nointermission,
             Maybe<int> par,
@@ -4531,9 +3864,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next,
                 secretNext,
                 victoryNext,
-                nextEndSequence,
-                secretNextEndSequence,
-                victoryNextEndSequence,
                 specialActions,
                 nointermission,
                 par,
@@ -4564,9 +3894,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -4596,9 +3923,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -4628,9 +3952,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -4660,9 +3981,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -4692,9 +4010,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -4724,9 +4039,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -4756,9 +4068,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -4788,9 +4097,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -4820,9 +4126,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -4852,9 +4155,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -4884,9 +4184,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -4916,9 +4213,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -4948,9 +4242,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -4980,9 +4271,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -5012,9 +4300,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -5044,9 +4329,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -5055,7 +4337,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 mapName: MapName,
                 mapNameLookup: MapNameLookup);
         }
-        public Map WithNext( string next )
+        public Map WithNext( NextMapInfo next )
         {
             return new Map(
                 borderTexture: BorderTexture,
@@ -5076,9 +4358,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: next.ToMaybe(),
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -5087,7 +4366,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 mapName: MapName,
                 mapNameLookup: MapNameLookup);
         }
-        public Map WithSecretNext( string secretNext )
+        public Map WithSecretNext( NextMapInfo secretNext )
         {
             return new Map(
                 borderTexture: BorderTexture,
@@ -5108,9 +4387,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: secretNext.ToMaybe(),
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -5119,7 +4395,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 mapName: MapName,
                 mapNameLookup: MapNameLookup);
         }
-        public Map WithVictoryNext( string victoryNext )
+        public Map WithVictoryNext( NextMapInfo victoryNext )
         {
             return new Map(
                 borderTexture: BorderTexture,
@@ -5140,105 +4416,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: victoryNext.ToMaybe(),
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
-                specialActions: SpecialActions,
-                nointermission: Nointermission,
-                par: Par,
-                translator: Translator,
-                mapLump: MapLump,
-                mapName: MapName,
-                mapNameLookup: MapNameLookup);
-        }
-        public Map WithNextEndSequence( string nextEndSequence )
-        {
-            return new Map(
-                borderTexture: BorderTexture,
-                cluster: Cluster,
-                completionString: CompletionString,
-                deathCam: DeathCam,
-                defaultCeiling: DefaultCeiling,
-                defaultFloor: DefaultFloor,
-                ensureInventories: EnsureInventories,
-                exitFade: ExitFade,
-                floorNumber: FloorNumber,
-                highScoresGraphic: HighScoresGraphic,
-                levelBonus: LevelBonus,
-                levelNum: LevelNum,
-                music: Music,
-                spawnWithWeaponRaised: SpawnWithWeaponRaised,
-                secretDeathSounds: SecretDeathSounds,
-                next: Next,
-                secretNext: SecretNext,
-                victoryNext: VictoryNext,
-                nextEndSequence: nextEndSequence.ToMaybe(),
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
-                specialActions: SpecialActions,
-                nointermission: Nointermission,
-                par: Par,
-                translator: Translator,
-                mapLump: MapLump,
-                mapName: MapName,
-                mapNameLookup: MapNameLookup);
-        }
-        public Map WithSecretNextEndSequence( string secretNextEndSequence )
-        {
-            return new Map(
-                borderTexture: BorderTexture,
-                cluster: Cluster,
-                completionString: CompletionString,
-                deathCam: DeathCam,
-                defaultCeiling: DefaultCeiling,
-                defaultFloor: DefaultFloor,
-                ensureInventories: EnsureInventories,
-                exitFade: ExitFade,
-                floorNumber: FloorNumber,
-                highScoresGraphic: HighScoresGraphic,
-                levelBonus: LevelBonus,
-                levelNum: LevelNum,
-                music: Music,
-                spawnWithWeaponRaised: SpawnWithWeaponRaised,
-                secretDeathSounds: SecretDeathSounds,
-                next: Next,
-                secretNext: SecretNext,
-                victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: secretNextEndSequence.ToMaybe(),
-                victoryNextEndSequence: VictoryNextEndSequence,
-                specialActions: SpecialActions,
-                nointermission: Nointermission,
-                par: Par,
-                translator: Translator,
-                mapLump: MapLump,
-                mapName: MapName,
-                mapNameLookup: MapNameLookup);
-        }
-        public Map WithVictoryNextEndSequence( string victoryNextEndSequence )
-        {
-            return new Map(
-                borderTexture: BorderTexture,
-                cluster: Cluster,
-                completionString: CompletionString,
-                deathCam: DeathCam,
-                defaultCeiling: DefaultCeiling,
-                defaultFloor: DefaultFloor,
-                ensureInventories: EnsureInventories,
-                exitFade: ExitFade,
-                floorNumber: FloorNumber,
-                highScoresGraphic: HighScoresGraphic,
-                levelBonus: LevelBonus,
-                levelNum: LevelNum,
-                music: Music,
-                spawnWithWeaponRaised: SpawnWithWeaponRaised,
-                secretDeathSounds: SecretDeathSounds,
-                next: Next,
-                secretNext: SecretNext,
-                victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: victoryNextEndSequence.ToMaybe(),
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -5268,9 +4445,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: specialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -5300,9 +4474,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions.Add(specialAction),
                 nointermission: Nointermission,
                 par: Par,
@@ -5332,9 +4503,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: nointermission.ToMaybe(),
                 par: Par,
@@ -5364,9 +4532,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: par.ToMaybe(),
@@ -5396,9 +4561,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -5428,9 +4590,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -5460,9 +4619,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -5492,9 +4648,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: Next,
                 secretNext: SecretNext,
                 victoryNext: VictoryNext,
-                nextEndSequence: NextEndSequence,
-                secretNextEndSequence: SecretNextEndSequence,
-                victoryNextEndSequence: VictoryNextEndSequence,
                 specialActions: SpecialActions,
                 nointermission: Nointermission,
                 par: Par,
@@ -5524,9 +4677,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 next: defaultMap.Next.Or(Next),
                 secretNext: defaultMap.SecretNext.Or(SecretNext),
                 victoryNext: defaultMap.VictoryNext.Or(VictoryNext),
-                nextEndSequence: defaultMap.NextEndSequence.Or(NextEndSequence),
-                secretNextEndSequence: defaultMap.SecretNextEndSequence.Or(SecretNextEndSequence),
-                victoryNextEndSequence: defaultMap.VictoryNextEndSequence.Or(VictoryNextEndSequence),
                 specialActions: SpecialActions.AddRange(defaultMap.SpecialActions),
                 nointermission: defaultMap.Nointermission.Or(Nointermission),
                 par: defaultMap.Par.Or(Par),
@@ -5534,6 +4684,33 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 mapLump: MapLump,
                 mapName: MapName,
                 mapNameLookup: MapNameLookup);
+        }
+    }
+
+    public sealed partial class NextMapInfo
+    {
+        public Maybe<string> Name { get; } = Maybe<string>.Nothing;
+        public Maybe<bool> EndSequence { get; } = ((bool)false).ToMaybe();
+        public static NextMapInfo Default = new NextMapInfo();
+        private NextMapInfo() { }
+        public NextMapInfo(
+            Maybe<string> name,
+            Maybe<bool> endSequence)
+        {
+            Name = name;
+            EndSequence = endSequence;
+        }
+        public NextMapInfo WithName( string name )
+        {
+            return new NextMapInfo(
+                name: name.ToMaybe(),
+                endSequence: EndSequence);
+        }
+        public NextMapInfo WithEndSequence( bool endSequence )
+        {
+            return new NextMapInfo(
+                name: Name,
+                endSequence: endSequence.ToMaybe());
         }
     }
 

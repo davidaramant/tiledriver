@@ -8,6 +8,7 @@ namespace Tiledriver.Metadata
 {
     public enum PropertyType
     {
+        Flag,
         Integer,
         Ushort,
         Double,
@@ -46,6 +47,7 @@ namespace Tiledriver.Metadata
             {
                 switch (Type)
                 {
+                    case PropertyType.Flag:
                     case PropertyType.Boolean:
                         return "bool";
                     case PropertyType.Char:
@@ -84,6 +86,7 @@ namespace Tiledriver.Metadata
             {
                 switch (Type)
                 {
+                    case PropertyType.Flag:
                     case PropertyType.Boolean:
                         return "bool";
                     case PropertyType.Char:
@@ -120,6 +123,7 @@ namespace Tiledriver.Metadata
             {
                 switch (Type)
                 {
+                    case PropertyType.Flag:
                     case PropertyType.Boolean:
                     case PropertyType.Char:
                     case PropertyType.Double:
@@ -149,6 +153,7 @@ namespace Tiledriver.Metadata
             {
                 switch (Type)
                 {
+                    case PropertyType.Flag:
                     case PropertyType.Boolean:
                     case PropertyType.Char:
                     case PropertyType.Double:
@@ -178,6 +183,7 @@ namespace Tiledriver.Metadata
             {
                 switch (Type)
                 {
+                    case PropertyType.Flag:
                     case PropertyType.Boolean:
                     case PropertyType.Char:
                     case PropertyType.Double:
@@ -209,6 +215,7 @@ namespace Tiledriver.Metadata
             {
                 switch (Type)
                 {
+                    case PropertyType.Flag:
                     case PropertyType.Boolean:
                     case PropertyType.Char:
                     case PropertyType.Double:
@@ -255,6 +262,7 @@ namespace Tiledriver.Metadata
                     case PropertyType.Double:
                         return _defaultValue.ToString();
 
+                    case PropertyType.Flag:
                     case PropertyType.Boolean:
                         return _defaultValue.ToString().ToLowerInvariant();
 
@@ -278,6 +286,7 @@ namespace Tiledriver.Metadata
             {
                 switch (Type)
                 {
+                    case PropertyType.Flag:
                     case PropertyType.Boolean:
                     case PropertyType.Char:
                     case PropertyType.Double:
@@ -306,6 +315,7 @@ namespace Tiledriver.Metadata
             {
                 switch (Type)
                 {
+                    case PropertyType.Flag:
                     case PropertyType.Boolean:
                     case PropertyType.Char:
                     case PropertyType.Double:

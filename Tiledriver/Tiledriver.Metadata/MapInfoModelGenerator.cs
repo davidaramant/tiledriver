@@ -150,7 +150,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
             if (block.IsAbstract)
                 return;
 
-            var allProperties = GetAllPropertiesOf(block);
+            var allProperties = MapInfoDefinitions.GetAllPropertiesOf(block);
 
             if (!allProperties.Any())
                 return;
@@ -225,14 +225,14 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
                 return;
             }
 
-            var allProperties = GetAllPropertiesOf(block);
+            var allProperties = MapInfoDefinitions.GetAllPropertiesOf(block);
 
             foreach (var otherBlock in
                 block.SetsPropertiesFrom.Select(name => MapInfoDefinitions.Blocks.Single(b => b.ClassName == name)))
             {
                 var otherType = otherBlock.ClassName.ToPascalCase();
                 var otherClassname = otherBlock.ClassName.ToCamelCase();
-                var allOtherProperties = new HashSet<string>(GetAllPropertiesOf(otherBlock).Select(p => p.PropertyName));
+                var allOtherProperties = new HashSet<string>(MapInfoDefinitions.GetAllPropertiesOf(otherBlock).Select(p => p.PropertyName));
 
                 sb.Line($"public {block.ClassName.ToPascalCase()} With{otherType}( {otherType} {otherClassname} )");
                 sb.OpenParen();
@@ -265,24 +265,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
                 sb.DecreaseIndent();
                 sb.CloseParen();
             }
-        }
-
-        private static List<Property> GetAllPropertiesOf(string className)
-        {
-            return GetAllPropertiesOf(MapInfoDefinitions.Blocks.Single(b => b.ClassName == className));
-        }
-
-        private static List<Property> GetAllPropertiesOf(Block block)
-        {
-            var allProperties = new List<Property>();
-
-            if (block.BaseClass.HasValue)
-            {
-                allProperties.AddRange(GetAllPropertiesOf(block.BaseClass.Value));
-            }
-            allProperties.AddRange(block.Properties);
-
-            return allProperties;
         }
     }
 }

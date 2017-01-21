@@ -8,6 +8,24 @@ namespace Tiledriver.Metadata
 {
     public static class MapInfoDefinitions
     {
+        public static List<Property> GetAllPropertiesOf(string className)
+        {
+            return GetAllPropertiesOf(Blocks.Single(b => b.ClassName == className));
+        }
+
+        public static List<Property> GetAllPropertiesOf(Block block)
+        {
+            var allProperties = new List<Property>();
+
+            if (block.BaseClass.HasValue)
+            {
+                allProperties.AddRange(GetAllPropertiesOf(block.BaseClass.Value));
+            }
+            allProperties.AddRange(block.Properties);
+
+            return allProperties;
+        }
+
         public static readonly IEnumerable<Block> Blocks = new[]
         {
             new Block("cluster",
@@ -15,12 +33,20 @@ namespace Tiledriver.Metadata
                 properties:new []
                 {
                     new Property("id",type:PropertyType.Integer,isMetaData:true),
-                    new Property(formatName:"exittext",name:"exitText",type:PropertyType.String),
-                    new Property(formatName:"exittextlookup",name:"exitTextLookup",type:PropertyType.String),
-                    new Property(formatName:"exittextislump",name:"exitTextIsLump",type:PropertyType.Boolean, defaultValue:false),
-                    new Property(formatName:"exittextismessage",name:"exitTextIsMessage",type:PropertyType.Boolean, defaultValue:false),
+                    new Property(formatName:"exittext",name:"exitText",type:PropertyType.Block, collectionType:"ClusterExitText"),
+                    new Property(formatName:"exittextislump",name:"exitTextIsLump",type:PropertyType.Flag, defaultValue:false),
+                    new Property(formatName:"exittextismessage",name:"exitTextIsMessage",type:PropertyType.Flag, defaultValue:false),
                 }),
 
+            new Block("ClusterExitText",
+                normalReading:false,
+                properties:new[]
+                {
+                    new Property("text",type:PropertyType.String),
+                    new Property("lookup",type:PropertyType.Boolean),
+                }),
+
+            // There is also 'clearepisodes'
             new Block("episode",
                 isSubBlock:false,
                 properties:new []
@@ -29,10 +55,10 @@ namespace Tiledriver.Metadata
                     new Property("key",type:PropertyType.Char),
                     new Property("lookup",type:PropertyType.String),
                     new Property("name",type:PropertyType.String),
-                    new Property(formatName:"noskillmenu",name:"noSkillMenu",type:PropertyType.Boolean,defaultValue:false),
-                    new Property("optional",type:PropertyType.Boolean,defaultValue:false),
+                    new Property(formatName:"noskillmenu",name:"noSkillMenu",type:PropertyType.Flag,defaultValue:false),
+                    new Property("optional",type:PropertyType.Flag,defaultValue:false),
                     new Property(formatName:"picname",name:"picName",type:PropertyType.String),
-                    new Property("remove",type:PropertyType.Boolean,defaultValue:false),
+                    new Property("remove",type:PropertyType.Flag,defaultValue:false),
                 }),
 
             // gameinfo
@@ -43,8 +69,7 @@ namespace Tiledriver.Metadata
                 {
                     new Property(formatName:"advisorycolor", name:"advisoryColor", type:PropertyType.String),
                     new Property(formatName:"advisorypic", name:"advisoryPic", type:PropertyType.String),
-                    new Property("playScreenBorderColors", type:PropertyType.Block),
-                    new Property("playScreenBorderGraphics", type:PropertyType.Block),
+                    new Property("border", type:PropertyType.Block, collectionType:"GameBorder"),
                     new Property(formatName:"borderflat", name:"borderFlat", type:PropertyType.String),
                     new Property(formatName:"doorsoundsequence", name:"doorSoundSequence", type:PropertyType.String),
                     new Property(formatName:"drawreadthis", name:"drawReadThis", type:PropertyType.Boolean),
@@ -76,7 +101,16 @@ namespace Tiledriver.Metadata
                     new Property("translator", type:PropertyType.String),
                 }),
 
-            new Block("playScreenBorderColors",
+            new Block("GameBorder",
+                normalReading:false,
+                properties:new[]
+                {
+                    new Property("Colors",type:PropertyType.Block,collectionType:"GameBorderColors"),
+                    new Property("Graphics",type:PropertyType.Block,collectionType:"GameBorderGraphics"),
+                }),
+
+
+            new Block("GameBorderColors",
                 normalReading:false,
                 properties:new[]
                 {
@@ -85,7 +119,7 @@ namespace Tiledriver.Metadata
                     new Property("highlightColor",type:PropertyType.String),
                 }),
 
-            new Block("playScreenBorderGraphics",
+            new Block("GameBorderGraphics",
                 normalReading:false,
                 properties:new[]
                 {
@@ -125,14 +159,28 @@ namespace Tiledriver.Metadata
                 normalReading:false,
                 properties:new[]
                 {
-                    new Property("background",type:PropertyType.String),
-                    new Property("backgroundTiled",type:PropertyType.Boolean),
-                    new Property("backgroundPalette",type:PropertyType.String),
-                    new Property("draw",type:PropertyType.String),
-                    new Property("drawX",type:PropertyType.Integer),
-                    new Property("drawY",type:PropertyType.Integer),
+                    new Property("background",type:PropertyType.Block, collectionType:"IntermissionBackground"),
+                    new Property("draw",type:PropertyType.Block, collectionType:"IntermissionDraw"),
                     new Property("music",type:PropertyType.String),
                     new Property("time",type:PropertyType.Integer),
+                }),
+            
+            new Block("IntermissionBackground",
+                normalReading:false,
+                properties:new []
+                {
+                    new Property("texture",type:PropertyType.String),
+                    new Property("tiled",type:PropertyType.Boolean),
+                    new Property("palette",type:PropertyType.String),
+                }),
+
+            new Block("IntermissionDraw",
+                normalReading:false,
+                properties:new []
+                {
+                    new Property("texture",type:PropertyType.String),
+                    new Property("x",type:PropertyType.Integer),
+                    new Property("y",type:PropertyType.Integer),
                 }),
 
             new Block("Fader",
@@ -161,8 +209,15 @@ namespace Tiledriver.Metadata
                     new Property(formatName:"textalignment",name:"textAlignment",type:PropertyType.String),
                     new Property(formatName:"textcolor",name:"textColor",type:PropertyType.String),
                     new Property(formatName:"textspeed",name:"textSpeed",type:PropertyType.Integer),
-                    new Property("positionX",type:PropertyType.Integer),
-                    new Property("positionY",type:PropertyType.Integer),
+                    new Property("position",type:PropertyType.Block, collectionType:"TextScreenPosition"),
+                }),
+
+            new Block("TextScreenPosition",
+                normalReading:false,
+                properties:new []
+                {
+                    new Property("x",type:PropertyType.Integer),
+                    new Property("y",type:PropertyType.Integer),
                 }),
 
             new Block("VictoryStats",
@@ -199,16 +254,13 @@ namespace Tiledriver.Metadata
                     new Property(formatName:"levelbonus",name:"levelBonus",type:PropertyType.Integer),
                     new Property(formatName:"levelnum",name:"levelNum",type:PropertyType.Integer),
                     new Property("music",type:PropertyType.String),
-                    new Property(formatName:"spawnwithweaponraised",name:"spawnWithWeaponRaised",type:PropertyType.Boolean, defaultValue:false),
+                    new Property(formatName:"spawnwithweaponraised",name:"spawnWithWeaponRaised",type:PropertyType.Flag, defaultValue:false),
                     new Property(formatName:"secretdeathsounds",name:"secretDeathSounds",type:PropertyType.Boolean, defaultValue:false),
-                    new Property("next",type:PropertyType.String),
-                    new Property(formatName:"secretnext",name:"secretNext",type:PropertyType.String),
-                    new Property(formatName:"victorynext",name:"victoryNext",type:PropertyType.String),
-                    new Property(formatName:"nextendsequence",name:"nextEndSequence",type:PropertyType.String),
-                    new Property(formatName:"secretnextendsequence",name:"secretNextEndSequence",type:PropertyType.String),
-                    new Property(formatName:"victorynextendsequence",name:"victoryNextEndSequence",type:PropertyType.String),
+                    new Property("next",type:PropertyType.Block,collectionType:"NextMapInfo"),
+                    new Property(formatName:"secretnext",name:"secretNext",type:PropertyType.Block,collectionType:"NextMapInfo"),
+                    new Property(formatName:"victorynext",name:"victoryNext",type:PropertyType.Block,collectionType:"NextMapInfo"),
                     new Property(formatName:"specialaction",name:"SpecialActions",singularName:"SpecialAction",type:PropertyType.ImmutableList),
-                    new Property(formatName:"nointermission",name:"nointermission",type:PropertyType.Boolean, defaultValue:false),
+                    new Property(formatName:"nointermission",name:"nointermission",type:PropertyType.Flag, defaultValue:false),
                     new Property("par",type:PropertyType.Integer),
                     new Property("translator",type:PropertyType.String),
                 }),
@@ -221,6 +273,14 @@ namespace Tiledriver.Metadata
                     new Property("mapLump",type:PropertyType.String,isMetaData:true),
                     new Property("mapName",type:PropertyType.String,isMetaData:true),
                     new Property("mapNameLookup",type:PropertyType.String,isMetaData:true),
+                }),
+
+            new Block("NextMapInfo",
+                normalReading:false,
+                properties:new []
+                {
+                    new Property("Name",PropertyType.String),
+                    new Property("EndSequence",PropertyType.Boolean,defaultValue:false),
                 }),
 
             new Block("specialaction",className: "SpecialAction",

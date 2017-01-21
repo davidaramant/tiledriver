@@ -48,7 +48,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing");
 
                 output.Line($"var {instance} =  {className}.Default;");
 
-                if (block.Properties.Any(p => p.IsMetaData))
+                var properties = MapInfoDefinitions.GetAllPropertiesOf(block).ToArray();
+
+                if (properties.Any(p => p.IsMetaData))
                 {
                     output.Line($"{instance} = Parse{className}Metadata({instance}, block.Metadata);");
                 }
@@ -63,7 +65,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing");
                 output.Line("switch (property.Name.ToString())");
                 output.OpenParen();
 
-                foreach (var property in block.Properties.Where(p=>!p.IsMetaData))
+                foreach (var property in properties.Where(p=>!p.IsMetaData))
                 {
                     output.Line($"case \"{property.FormatName}\":");
                     output.IncreaseIndent();
