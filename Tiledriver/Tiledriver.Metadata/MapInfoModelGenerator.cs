@@ -19,9 +19,6 @@ namespace Tiledriver.Metadata
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.IO;
-using System.Linq;
-using Tiledriver.Core.Extensions;
 using Functional.Maybe;
 
 namespace Tiledriver.Core.FormatModels.MapInfos");

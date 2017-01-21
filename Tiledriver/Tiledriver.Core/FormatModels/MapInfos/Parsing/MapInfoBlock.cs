@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using Tiledriver.Core.FormatModels.Common;
 
@@ -19,13 +20,13 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
         }
 
         public Identifier Name { get; }
-        public IEnumerable<string> Metadata { get; }
+        public ImmutableArray<string> Metadata { get; }
         public IEnumerable<IMapInfoElement> Children { get; }
 
         public MapInfoBlock(Identifier name, IEnumerable<string> metadata, IEnumerable<IMapInfoElement> children)
         {
             Name = name;
-            Metadata = metadata;
+            Metadata = metadata.ToImmutableArray();
             Children = children;
         }
     }

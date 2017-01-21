@@ -11,6 +11,7 @@ namespace Tiledriver.Metadata
         public static readonly IEnumerable<Block> Blocks = new[]
         {
             new Block("cluster",
+                isSubBlock:false,
                 properties:new []
                 {
                     new Property("id",type:PropertyType.Integer,isMetaData:true),
@@ -21,6 +22,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("episode",
+                isSubBlock:false,
                 properties:new []
                 {
                     new Property("map",type:PropertyType.String,isMetaData:true),
@@ -35,6 +37,7 @@ namespace Tiledriver.Metadata
 
             // gameinfo
             new Block("gameinfo",className:"GameInfo",
+                isSubBlock:false,
                 canSetPropertiesFrom:new []{"GameInfo"},
                 properties:new[]
                 {
@@ -74,6 +77,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("playScreenBorderColors",
+                normalReading:false,
                 properties:new[]
                 {
                     new Property("topColor",type:PropertyType.String),
@@ -82,6 +86,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("playScreenBorderGraphics",
+                normalReading:false,
                 properties:new[]
                 {
                     new Property("topLeft",type:PropertyType.String),
@@ -95,6 +100,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("menuColor",
+                normalReading:false,
                 properties:new[]
                 {
                     new Property("border1",type:PropertyType.String),
@@ -107,6 +113,7 @@ namespace Tiledriver.Metadata
 
             // intermission
             new Block("intermission",
+                isSubBlock:false,
                 properties:new []
                 {
                     new Property("name",type:PropertyType.String,isMetaData:true),
@@ -115,6 +122,7 @@ namespace Tiledriver.Metadata
 
             new Block("IntermissionAction",
                 isAbstract: true,
+                normalReading:false,
                 properties:new[]
                 {
                     new Property("background",type:PropertyType.String),
@@ -165,14 +173,17 @@ namespace Tiledriver.Metadata
 
             // map
             new Block("defaultmap",className:"DefaultMap",
+                isSubBlock:false,
                 inheritsFrom:"BaseMap",
                 canSetPropertiesFrom:new [] {"AddDefaultMap"},
                 properties:Enumerable.Empty<Property>()),
             new Block("adddefaultmap",className:"AddDefaultMap",
+                isSubBlock:false,
                 inheritsFrom:"BaseMap",
                 properties:Enumerable.Empty<Property>()),
             new Block("BaseMap",
                 isAbstract: true,
+                normalReading:false,
                 properties:new []
                 {
                     new Property(formatName:"bordertexture",name:"borderTexture",type:PropertyType.String),
@@ -202,6 +213,7 @@ namespace Tiledriver.Metadata
                     new Property("translator",type:PropertyType.String),
                 }),
             new Block("map",
+                isSubBlock:false,
                 inheritsFrom:"BaseMap",
                 canSetPropertiesFrom:new [] {"DefaultMap"},
                 properties:new []
@@ -212,6 +224,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("specialaction",className: "SpecialAction",
+                normalReading:false,
                 properties:new []
                 {
                     new Property(formatName:"actorclass",name:"actorClass",type:PropertyType.String),
@@ -223,7 +236,6 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("mapInfo",
-                isSubBlock:false,
                 normalReading:false,
                 properties:new []
                 {
