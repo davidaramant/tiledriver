@@ -10,10 +10,10 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
         static partial void SetGlobalAssignments(Map map, UwmfSyntaxTree tree)
         {
             tree.GetValueFor("NameSpace").SetRequiredString(value => map.NameSpace = value, "Map", "NameSpace");
-            tree.GetValueFor("TileSize").SetRequiredIntegerNumber(value => map.TileSize = value, "Map", "TileSize");
+            tree.GetValueFor("TileSize").SetRequiredInteger(value => map.TileSize = value, "Map", "TileSize");
             tree.GetValueFor("Name").SetRequiredString(value => map.Name = value, "Map", "Name");
-            tree.GetValueFor("Width").SetRequiredIntegerNumber(value => map.Width = value, "Map", "Width");
-            tree.GetValueFor("Height").SetRequiredIntegerNumber(value => map.Height = value, "Map", "Height");
+            tree.GetValueFor("Width").SetRequiredInteger(value => map.Width = value, "Map", "Width");
+            tree.GetValueFor("Height").SetRequiredInteger(value => map.Height = value, "Map", "Height");
             tree.GetValueFor("Comment").SetOptionalString(value => map.Comment = value, "Map", "Comment");
         }
         static partial void SetBlocks(Map map, UwmfSyntaxTree tree)
@@ -48,7 +48,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
             block.GetValueFor("OffsetVertical").SetOptionalBoolean(value => parsedBlock.OffsetVertical = value, "Tile", "OffsetVertical");
             block.GetValueFor("OffsetHorizontal").SetOptionalBoolean(value => parsedBlock.OffsetHorizontal = value, "Tile", "OffsetHorizontal");
             block.GetValueFor("DontOverlay").SetOptionalBoolean(value => parsedBlock.DontOverlay = value, "Tile", "DontOverlay");
-            block.GetValueFor("Mapped").SetOptionalIntegerNumber(value => parsedBlock.Mapped = value, "Tile", "Mapped");
+            block.GetValueFor("Mapped").SetOptionalInteger(value => parsedBlock.Mapped = value, "Tile", "Mapped");
             block.GetValueFor("SoundSequence").SetOptionalString(value => parsedBlock.SoundSequence = value, "Tile", "SoundSequence");
             block.GetValueFor("TextureOverhead").SetOptionalString(value => parsedBlock.TextureOverhead = value, "Tile", "TextureOverhead");
             block.GetValueFor("Comment").SetOptionalString(value => parsedBlock.Comment = value, "Tile", "Comment");
@@ -71,7 +71,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
         public static Plane ParsePlane(IHaveAssignments block)
         {
             var parsedBlock = new Plane();
-            block.GetValueFor("Depth").SetRequiredIntegerNumber(value => parsedBlock.Depth = value, "Plane", "Depth");
+            block.GetValueFor("Depth").SetRequiredInteger(value => parsedBlock.Depth = value, "Plane", "Depth");
             block.GetValueFor("Comment").SetOptionalString(value => parsedBlock.Comment = value, "Plane", "Comment");
             return parsedBlock;
         }
@@ -79,10 +79,10 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
         {
             var parsedBlock = new Thing();
             block.GetValueFor("Type").SetRequiredString(value => parsedBlock.Type = value, "Thing", "Type");
-            block.GetValueFor("X").SetRequiredFloatingPointNumber(value => parsedBlock.X = value, "Thing", "X");
-            block.GetValueFor("Y").SetRequiredFloatingPointNumber(value => parsedBlock.Y = value, "Thing", "Y");
-            block.GetValueFor("Z").SetRequiredFloatingPointNumber(value => parsedBlock.Z = value, "Thing", "Z");
-            block.GetValueFor("Angle").SetRequiredIntegerNumber(value => parsedBlock.Angle = value, "Thing", "Angle");
+            block.GetValueFor("X").SetRequiredDouble(value => parsedBlock.X = value, "Thing", "X");
+            block.GetValueFor("Y").SetRequiredDouble(value => parsedBlock.Y = value, "Thing", "Y");
+            block.GetValueFor("Z").SetRequiredDouble(value => parsedBlock.Z = value, "Thing", "Z");
+            block.GetValueFor("Angle").SetRequiredInteger(value => parsedBlock.Angle = value, "Thing", "Angle");
             block.GetValueFor("Ambush").SetOptionalBoolean(value => parsedBlock.Ambush = value, "Thing", "Ambush");
             block.GetValueFor("Patrol").SetOptionalBoolean(value => parsedBlock.Patrol = value, "Thing", "Patrol");
             block.GetValueFor("Skill1").SetOptionalBoolean(value => parsedBlock.Skill1 = value, "Thing", "Skill1");
@@ -96,15 +96,15 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
         public static Trigger ParseTrigger(IHaveAssignments block)
         {
             var parsedBlock = new Trigger();
-            block.GetValueFor("X").SetRequiredIntegerNumber(value => parsedBlock.X = value, "Trigger", "X");
-            block.GetValueFor("Y").SetRequiredIntegerNumber(value => parsedBlock.Y = value, "Trigger", "Y");
-            block.GetValueFor("Z").SetRequiredIntegerNumber(value => parsedBlock.Z = value, "Trigger", "Z");
+            block.GetValueFor("X").SetRequiredInteger(value => parsedBlock.X = value, "Trigger", "X");
+            block.GetValueFor("Y").SetRequiredInteger(value => parsedBlock.Y = value, "Trigger", "Y");
+            block.GetValueFor("Z").SetRequiredInteger(value => parsedBlock.Z = value, "Trigger", "Z");
             block.GetValueFor("Action").SetRequiredString(value => parsedBlock.Action = value, "Trigger", "Action");
-            block.GetValueFor("Arg0").SetOptionalIntegerNumber(value => parsedBlock.Arg0 = value, "Trigger", "Arg0");
-            block.GetValueFor("Arg1").SetOptionalIntegerNumber(value => parsedBlock.Arg1 = value, "Trigger", "Arg1");
-            block.GetValueFor("Arg2").SetOptionalIntegerNumber(value => parsedBlock.Arg2 = value, "Trigger", "Arg2");
-            block.GetValueFor("Arg3").SetOptionalIntegerNumber(value => parsedBlock.Arg3 = value, "Trigger", "Arg3");
-            block.GetValueFor("Arg4").SetOptionalIntegerNumber(value => parsedBlock.Arg4 = value, "Trigger", "Arg4");
+            block.GetValueFor("Arg0").SetOptionalInteger(value => parsedBlock.Arg0 = value, "Trigger", "Arg0");
+            block.GetValueFor("Arg1").SetOptionalInteger(value => parsedBlock.Arg1 = value, "Trigger", "Arg1");
+            block.GetValueFor("Arg2").SetOptionalInteger(value => parsedBlock.Arg2 = value, "Trigger", "Arg2");
+            block.GetValueFor("Arg3").SetOptionalInteger(value => parsedBlock.Arg3 = value, "Trigger", "Arg3");
+            block.GetValueFor("Arg4").SetOptionalInteger(value => parsedBlock.Arg4 = value, "Trigger", "Arg4");
             block.GetValueFor("ActivateEast").SetOptionalBoolean(value => parsedBlock.ActivateEast = value, "Trigger", "ActivateEast");
             block.GetValueFor("ActivateNorth").SetOptionalBoolean(value => parsedBlock.ActivateNorth = value, "Trigger", "ActivateNorth");
             block.GetValueFor("ActivateWest").SetOptionalBoolean(value => parsedBlock.ActivateWest = value, "Trigger", "ActivateWest");

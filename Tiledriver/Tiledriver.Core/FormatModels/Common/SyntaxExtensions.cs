@@ -133,7 +133,7 @@ namespace Tiledriver.Core.FormatModels.Common
                 OrElse(() => new ParsingException($"{parameterName} in {blockName} was not a string.")));
         }
 
-        public static void SetRequiredFloatingPointNumber(this Maybe<Token> maybeToken, Action<double> setter, string blockName, string parameterName)
+        public static void SetRequiredDouble(this Maybe<Token> maybeToken, Action<double> setter, string blockName, string parameterName)
         {
             setter(
                 maybeToken.
@@ -142,7 +142,7 @@ namespace Tiledriver.Core.FormatModels.Common
                 OrElse(() => new ParsingException($"{parameterName} in {blockName} was not a floating point value.")));
         }
 
-        public static void SetRequiredIntegerNumber(this Maybe<Token> maybeToken, Action<int> setter, string blockName, string parameterName)
+        public static void SetRequiredInteger(this Maybe<Token> maybeToken, Action<int> setter, string blockName, string parameterName)
         {
             setter(
                 maybeToken.
@@ -169,7 +169,7 @@ namespace Tiledriver.Core.FormatModels.Common
                 .Do(setter);
         }
 
-        public static void SetOptionalFloatingPointNumber(this Maybe<Token> maybeToken, Action<double> setter, string blockName, string parameterName)
+        public static void SetOptionalDouble(this Maybe<Token> maybeToken, Action<double> setter, string blockName, string parameterName)
         {
             maybeToken.
                 Select(token =>
@@ -178,7 +178,7 @@ namespace Tiledriver.Core.FormatModels.Common
                 .Do(setter);
         }
 
-        public static void SetOptionalIntegerNumber(this Maybe<Token> maybeToken, Action<int> setter, string blockName, string parameterName)
+        public static void SetOptionalInteger(this Maybe<Token> maybeToken, Action<int> setter, string blockName, string parameterName)
         {
             maybeToken.
                 Select(token =>

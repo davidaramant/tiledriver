@@ -232,28 +232,7 @@ namespace Tiledriver.Metadata
                 }
             }
         }
-
-
-        public string UwmfTypeMethod
-        {
-            get
-            {
-                switch (Type)
-                {
-                    case PropertyType.Boolean:
-                        return "Boolean";
-                    case PropertyType.Double:
-                        return "FloatingPointNumber";
-                    case PropertyType.Integer:
-                        return "IntegerNumber";
-                    case PropertyType.String:
-                        return "String";
-                    default:
-                        throw new NotImplementedException("Unknown property type.");
-                }
-            }
-        }
-
+        
         public bool IsUwmfSubBlockList =>
             Type == PropertyType.List ||
             Type == PropertyType.UnknownBlocks;

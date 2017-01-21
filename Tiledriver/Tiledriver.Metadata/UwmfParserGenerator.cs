@@ -48,7 +48,7 @@ OpenParen();
 
                 output.Line(
                     $"{assignmentHolder}.GetValueFor(\"{property.ClassName.ToPascalCase()}\")" +
-                    $".Set{level}{property.UwmfTypeMethod}(" +
+                    $".Set{level}{property.Type}(" +
                     $"value => {owner}.{property.ClassName.ToPascalCase()} = value, " +
                     $"\"{block.ClassName.ToPascalCase()}\", " +
                     $"\"{property.ClassName.ToPascalCase()}\");");

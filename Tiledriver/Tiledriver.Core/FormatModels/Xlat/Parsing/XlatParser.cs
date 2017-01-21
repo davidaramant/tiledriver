@@ -182,11 +182,11 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
             // HACK: This is copy-pasted from the generated UWMF parser code with the x/y/z stuff removed
             var parsedBlock = new PositionlessTrigger();
             block.GetValueFor("Action").SetRequiredString(value => parsedBlock.Action = value, "Trigger", "Action");
-            block.GetValueFor("Arg0").SetOptionalIntegerNumber(value => parsedBlock.Arg0 = value, "Trigger", "Arg0");
-            block.GetValueFor("Arg1").SetOptionalIntegerNumber(value => parsedBlock.Arg1 = value, "Trigger", "Arg1");
-            block.GetValueFor("Arg2").SetOptionalIntegerNumber(value => parsedBlock.Arg2 = value, "Trigger", "Arg2");
-            block.GetValueFor("Arg3").SetOptionalIntegerNumber(value => parsedBlock.Arg3 = value, "Trigger", "Arg3");
-            block.GetValueFor("Arg4").SetOptionalIntegerNumber(value => parsedBlock.Arg4 = value, "Trigger", "Arg4");
+            block.GetValueFor("Arg0").SetOptionalInteger(value => parsedBlock.Arg0 = value, "Trigger", "Arg0");
+            block.GetValueFor("Arg1").SetOptionalInteger(value => parsedBlock.Arg1 = value, "Trigger", "Arg1");
+            block.GetValueFor("Arg2").SetOptionalInteger(value => parsedBlock.Arg2 = value, "Trigger", "Arg2");
+            block.GetValueFor("Arg3").SetOptionalInteger(value => parsedBlock.Arg3 = value, "Trigger", "Arg3");
+            block.GetValueFor("Arg4").SetOptionalInteger(value => parsedBlock.Arg4 = value, "Trigger", "Arg4");
             block.GetValueFor("ActivateEast").SetOptionalBoolean(value => parsedBlock.ActivateEast = value, "Trigger", "ActivateEast");
             block.GetValueFor("ActivateNorth").SetOptionalBoolean(value => parsedBlock.ActivateNorth = value, "Trigger", "ActivateNorth");
             block.GetValueFor("ActivateWest").SetOptionalBoolean(value => parsedBlock.ActivateWest = value, "Trigger", "ActivateWest");

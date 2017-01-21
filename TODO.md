@@ -1,7 +1,6 @@
 # TODOs
 
 - Parsing of MapInfo
-    - The MapInfo definitions are still not quite right
     - More metadata in each property for how to parse?
 - WAD file resource provider
 - File system resource provider
