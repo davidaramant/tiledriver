@@ -223,7 +223,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public Maybe<string> HighScoresFont { get; } = Maybe<string>.Nothing;
         public Maybe<string> HighScoresFontColor { get; } = Maybe<string>.Nothing;
         public Maybe<string> IntermissionMusic { get; } = Maybe<string>.Nothing;
-        public Maybe<string> MenuColor { get; } = Maybe<string>.Nothing;
+        public Maybe<MenuColor> MenuColor { get; } = Maybe<MenuColor>.Nothing;
         public Maybe<string> MenuFade { get; } = Maybe<string>.Nothing;
         public Maybe<string> MenuFontColorDisabled { get; } = Maybe<string>.Nothing;
         public Maybe<string> MenuFontColorHighlight { get; } = Maybe<string>.Nothing;
@@ -259,7 +259,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             Maybe<string> highScoresFont,
             Maybe<string> highScoresFontColor,
             Maybe<string> intermissionMusic,
-            Maybe<string> menuColor,
+            Maybe<MenuColor> menuColor,
             Maybe<string> menuFade,
             Maybe<string> menuFontColorDisabled,
             Maybe<string> menuFontColorHighlight,
@@ -795,7 +795,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 titleTime: TitleTime,
                 translator: Translator);
         }
-        public GameInfo WithMenuColor( string menuColor )
+        public GameInfo WithMenuColor( MenuColor menuColor )
         {
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
