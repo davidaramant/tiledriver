@@ -2,12 +2,14 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using Tiledriver.Core.FormatModels.Common;
 
 namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
 {
-    [DebuggerDisplay("{Name} = {Value}")]
+    [DebuggerDisplay("{ToString()}")]
     public sealed class MapInfoProperty : IMapInfoElement
     {
         bool IMapInfoElement.IsBlock => false;
@@ -19,16 +21,21 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
 
 
         public Identifier Name { get; }
-        public string Value { get; }
+        public ImmutableArray<string> Values { get; }
 
-        public MapInfoProperty(Identifier name, string value)
+        public MapInfoProperty(Identifier name, IEnumerable<string> values)
         {
             Name = name;
-            Value = value;
+            Values = values.ToImmutableArray();
         }
 
-        public MapInfoProperty(Identifier name) : this(name, String.Empty)
+        public MapInfoProperty(Identifier name) : this(name, ImmutableArray<string>.Empty)
         {
+        }
+
+        public override string ToString()
+        {
+            return $"{Name} = {string.Join(", ", Values)}";
         }
     }
 }

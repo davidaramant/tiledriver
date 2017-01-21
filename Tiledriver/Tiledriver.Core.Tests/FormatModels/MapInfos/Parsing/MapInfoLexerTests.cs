@@ -20,7 +20,7 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
         public void ShouldHandlePropertyWithValue()
         {
             VerifyLexing("a = 3",
-                new MapInfoProperty(new Identifier("a"), "3"));
+                new MapInfoProperty(new Identifier("a"), new[] { "3" }));
         }
 
         [Test]
@@ -28,6 +28,13 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
         {
             VerifyLexing("a",
                 new MapInfoProperty(new Identifier("a")));
+        }
+
+        [Test]
+        public void ShouldHandlePropertyWithValues()
+        {
+            VerifyLexing("a = 1, 2, 3",
+                new MapInfoProperty(new Identifier("a"), new[] { "1", "2", "3" }));
         }
 
         [Test]
@@ -44,8 +51,8 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
                     new[] { "1", "2", "\"3\"" },
                     new[]
                     {
-                        new MapInfoProperty(new Identifier("a"), "\"dog\""),
-                        new MapInfoProperty(new Identifier("b"), "4"),
+                        new MapInfoProperty(new Identifier("a"), new [] { "\"dog\""}),
+                        new MapInfoProperty(new Identifier("b"), new [] {"4"}),
                     }));
         }
 
@@ -67,7 +74,7 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
                     {
                         new MapInfoBlock(new Identifier("nested"),Enumerable.Empty<string>(),new[]
                         {
-                            new MapInfoProperty(new Identifier("a"), "\"dog\""),
+                            new MapInfoProperty(new Identifier("a"), new [] {"\"dog\""}),
                         }),
 
                     }));
@@ -106,7 +113,7 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
         {
             var mockProvider = new Mock<IResourceProvider>();
             mockProvider.Setup(_ => _.Lookup("mapinfo/wolfcommon.txt"))
-                .Returns( File.ReadAllBytes(
+                .Returns(File.ReadAllBytes(
                         Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "MapInfos",
                         "Parsing", "wolf3d.txt")));
 
@@ -158,13 +165,13 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
         private static void VerifyPropertiesAreIdentical(MapInfoProperty actual, MapInfoProperty expected)
         {
             Assert.That(actual.Name, Is.EqualTo(expected.Name), "Property name did not match.");
-            Assert.That(actual.Value, Is.EqualTo(expected.Value), "Property value did not match.");
+            Assert.That(actual.Values, Is.EquivalentTo(expected.Values), "Property values did not match.");
         }
 
         private static void VerifyBlocksAreIdentical(MapInfoBlock actual, MapInfoBlock expected)
         {
             Assert.That(actual.Name, Is.EqualTo(expected.Name), "Block name did not match.");
-            Assert.That(actual.Metadata, Is.EqualTo(expected.Metadata), "Block metadata did not match.");
+            Assert.That(actual.Metadata, Is.EquivalentTo(expected.Metadata), "Block metadata did not match.");
 
 
         }

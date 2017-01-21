@@ -84,7 +84,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
 
             return new MapInfoProperty(
                 new Identifier(line.Substring(0, firstEqualsIndex).Trim()),
-                line.Substring(firstEqualsIndex + 1).Trim());
+                line.Substring(firstEqualsIndex + 1).Split(',').Select(v => v.Trim()));
         }
 
         private MapInfoBlock ParseBlock(string startLine, MapInfoTextReader reader)
