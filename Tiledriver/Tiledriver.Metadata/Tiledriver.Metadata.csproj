@@ -51,6 +51,7 @@
     <Compile Include="IndentedWriter.cs" />
     <Compile Include="MapInfoDefinitions.cs" />
     <Compile Include="MapInfoModelGenerator.cs" />
+    <Compile Include="MapInfoParserGenerator.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="UwmfModelGenerator.cs" />
     <Compile Include="NamedItem.cs" />

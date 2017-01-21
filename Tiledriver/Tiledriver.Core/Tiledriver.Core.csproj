@@ -79,6 +79,11 @@
     </Compile>
     <Compile Include="FormatModels\MapInfos\Parsing\IMapInfoElement.cs" />
     <Compile Include="FormatModels\MapInfos\Parsing\MapInfoParser.cs" />
+    <Compile Include="FormatModels\MapInfos\Parsing\MapInfoParser.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MapInfoParser.tt</DependentUpon>
+    </Compile>
     <Compile Include="FormatModels\MapInfos\Parsing\MapInfoProperty.cs" />
     <Compile Include="FormatModels\MapInfos\Parsing\MapInfoBlock.cs" />
     <Compile Include="FormatModels\MapInfos\Parsing\MapInfoLexer.cs" />
@@ -166,6 +171,10 @@
     <Content Include="FormatModels\MapInfos\Model.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Model.Generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="FormatModels\MapInfos\Parsing\MapInfoParser.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>MapInfoParser.Generated.cs</LastGenOutput>
     </Content>
     <Content Include="FormatModels\Uwmf\Model.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
