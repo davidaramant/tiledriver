@@ -52,11 +52,11 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing");
 
                 if (properties.Any(p => p.IsMetaData))
                 {
-                    output.Line($"{instance} = Parse{className}Metadata({instance}, block.Metadata);");
+                    output.Line($"{instance} = Parse{className}Metadata({instance}, block );");
                 }
                 else
                 {
-                    output.Line($"AssertMetadataLength(\"{className}\",block.Metadata,0);");
+                    output.Line($"block.AssertMetadataLength(0, \"{className}\");");
                 }
                 
                 output.Line("foreach(var property in block.Children)");
@@ -70,6 +70,8 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing");
                     output.Line($"case \"{property.FormatName}\":");
                     output.IncreaseIndent();
 
+                    output.Line($"{instance} = {instance}.With{property.PropertyName}( " +
+                                $"Parse{property.ParsingTypeName}(property, \"{className} {property.FormatName}\") );");
 
                     output.Line("break;");
                     output.DecreaseIndent();

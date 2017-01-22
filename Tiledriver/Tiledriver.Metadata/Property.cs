@@ -337,6 +337,34 @@ namespace Tiledriver.Metadata
             }
         }
 
+        public string ParsingTypeName
+        {
+            get
+            {
+                switch (Type)
+                {
+                    case PropertyType.Flag:
+                    case PropertyType.Boolean:
+                    case PropertyType.Char:
+                    case PropertyType.Double:
+                    case PropertyType.Ushort:
+                    case PropertyType.Integer:
+                    case PropertyType.String:
+                        return Type.ToString();
+                    case PropertyType.Block:
+                        return CollectionType;
+                    case PropertyType.Set:
+                        return CollectionType.ToPascalCase() + "Set";
+                    case PropertyType.List:
+                        return CollectionType.ToPascalCase() + "List";
+                    case PropertyType.ImmutableList:
+                        return CollectionType.ToPascalCase() + "ImmutableList";
+                    default:
+                        throw new NotImplementedException("Unknown property type.");
+                }
+            }
+        }
+
         public Property(
                 string name,
                 PropertyType type,

@@ -148,6 +148,7 @@ namespace Tiledriver.Metadata
             // intermission
             new Block("intermission",
                 isSubBlock:false,
+                normalReading:false,
                 properties:new []
                 {
                     new Property("name",type:PropertyType.String,isMetaData:true),

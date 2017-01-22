@@ -17,7 +17,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
         {
             throw new NotSupportedException();
         }
-        MapInfoProperty IMapInfoElement.AsAssignment() => this;
+        MapInfoProperty IMapInfoElement.AsProperty() => this;
 
 
         public Identifier Name { get; }

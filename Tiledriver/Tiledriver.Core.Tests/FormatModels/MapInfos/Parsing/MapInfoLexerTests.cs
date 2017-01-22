@@ -156,8 +156,8 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
                 else
                 {
                     VerifyPropertiesAreIdentical(
-                        actual: pair.Actual.AsAssignment(),
-                        expected: pair.Expected.AsAssignment());
+                        actual: pair.Actual.AsProperty(),
+                        expected: pair.Expected.AsProperty());
                 }
             }
         }

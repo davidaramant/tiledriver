@@ -10,6 +10,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
         Identifier Name { get; }
         bool IsBlock { get; }
         MapInfoBlock AsBlock();
-        MapInfoProperty AsAssignment();
+        MapInfoProperty AsProperty();
     }
 }

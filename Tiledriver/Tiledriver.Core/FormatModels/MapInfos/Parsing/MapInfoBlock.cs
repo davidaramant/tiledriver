@@ -14,7 +14,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
     {
         bool IMapInfoElement.IsBlock => true;
         MapInfoBlock IMapInfoElement.AsBlock() => this;
-        MapInfoProperty IMapInfoElement.AsAssignment()
+        MapInfoProperty IMapInfoElement.AsProperty()
         {
             throw new NotSupportedException();
         }
