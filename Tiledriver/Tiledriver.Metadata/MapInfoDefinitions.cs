@@ -123,6 +123,7 @@ namespace Tiledriver.Metadata
                 normalReading:false,
                 properties:new[]
                 {
+                    new Property("offset",type:PropertyType.Integer),
                     new Property("topLeft",type:PropertyType.String),
                     new Property("top",type:PropertyType.String),
                     new Property("topRight",type:PropertyType.String),
@@ -165,7 +166,7 @@ namespace Tiledriver.Metadata
                     new Property("music",type:PropertyType.String),
                     new Property("time",type:PropertyType.Integer),
                 }),
-            
+
             new Block("IntermissionBackground",
                 normalReading:false,
                 properties:new []

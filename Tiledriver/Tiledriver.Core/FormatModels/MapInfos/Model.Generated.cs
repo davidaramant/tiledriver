@@ -1649,6 +1649,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
 
     public sealed partial class GameBorderGraphics
     {
+        public Maybe<int> Offset { get; } = Maybe<int>.Nothing;
         public Maybe<string> TopLeft { get; } = Maybe<string>.Nothing;
         public Maybe<string> Top { get; } = Maybe<string>.Nothing;
         public Maybe<string> TopRight { get; } = Maybe<string>.Nothing;
@@ -1660,6 +1661,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public static GameBorderGraphics Default = new GameBorderGraphics();
         private GameBorderGraphics() { }
         public GameBorderGraphics(
+            Maybe<int> offset,
             Maybe<string> topLeft,
             Maybe<string> top,
             Maybe<string> topRight,
@@ -1669,6 +1671,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             Maybe<string> bottom,
             Maybe<string> bottomRight)
         {
+            Offset = offset;
             TopLeft = topLeft;
             Top = top;
             TopRight = topRight;
@@ -1678,9 +1681,23 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             Bottom = bottom;
             BottomRight = bottomRight;
         }
+        public GameBorderGraphics WithOffset( int offset )
+        {
+            return new GameBorderGraphics(
+                offset: offset.ToMaybe(),
+                topLeft: TopLeft,
+                top: Top,
+                topRight: TopRight,
+                left: Left,
+                right: Right,
+                bottomLeft: BottomLeft,
+                bottom: Bottom,
+                bottomRight: BottomRight);
+        }
         public GameBorderGraphics WithTopLeft( string topLeft )
         {
             return new GameBorderGraphics(
+                offset: Offset,
                 topLeft: topLeft.ToMaybe(),
                 top: Top,
                 topRight: TopRight,
@@ -1693,6 +1710,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public GameBorderGraphics WithTop( string top )
         {
             return new GameBorderGraphics(
+                offset: Offset,
                 topLeft: TopLeft,
                 top: top.ToMaybe(),
                 topRight: TopRight,
@@ -1705,6 +1723,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public GameBorderGraphics WithTopRight( string topRight )
         {
             return new GameBorderGraphics(
+                offset: Offset,
                 topLeft: TopLeft,
                 top: Top,
                 topRight: topRight.ToMaybe(),
@@ -1717,6 +1736,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public GameBorderGraphics WithLeft( string left )
         {
             return new GameBorderGraphics(
+                offset: Offset,
                 topLeft: TopLeft,
                 top: Top,
                 topRight: TopRight,
@@ -1729,6 +1749,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public GameBorderGraphics WithRight( string right )
         {
             return new GameBorderGraphics(
+                offset: Offset,
                 topLeft: TopLeft,
                 top: Top,
                 topRight: TopRight,
@@ -1741,6 +1762,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public GameBorderGraphics WithBottomLeft( string bottomLeft )
         {
             return new GameBorderGraphics(
+                offset: Offset,
                 topLeft: TopLeft,
                 top: Top,
                 topRight: TopRight,
@@ -1753,6 +1775,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public GameBorderGraphics WithBottom( string bottom )
         {
             return new GameBorderGraphics(
+                offset: Offset,
                 topLeft: TopLeft,
                 top: Top,
                 topRight: TopRight,
@@ -1765,6 +1788,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public GameBorderGraphics WithBottomRight( string bottomRight )
         {
             return new GameBorderGraphics(
+                offset: Offset,
                 topLeft: TopLeft,
                 top: Top,
                 topRight: TopRight,

@@ -16,7 +16,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
     {
         public static MapInfo Parse(IEnumerable<IMapInfoElement> elements)
         {
-            return null;
+            throw new NotImplementedException();
         }
 
         private static Cluster ParseClusterMetadata(Cluster cluster, MapInfoBlock block)
@@ -179,62 +179,166 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
 
         public static ImmutableList<string> ParseStringImmutableList(IMapInfoElement element, string context)
         {
-            throw new NotImplementedException();
-            return ImmutableList<string>.Empty;
+            var property = element.AssertAsProperty(context);
+
+            return property.Values.Select(v => ParseQuotedStringWithMinLength(v, 1, context)).ToImmutableList();
         }
 
         public static ClusterExitText ParseClusterExitText(IMapInfoElement element, string context)
         {
-            throw new NotImplementedException();
-            return ClusterExitText.Default;
+            var property = element.AssertAsProperty(context);
+
+            switch (property.Values.Length)
+            {
+                case 1:
+                    return ClusterExitText.Default.WithText(ParseQuotedStringWithMinLength(property.Values[0], 0, context));
+
+                case 2:
+                    if (property.Values[0] != "lookup")
+                    {
+                        throw new ParsingException($"Expected 'lookup' in {context}.");
+                    }
+                    return new ClusterExitText(
+                        text: ParseQuotedStringWithMinLength(property.Values[1], 0, context).ToMaybe(),
+                        lookup: true.ToMaybe());
+
+                default:
+                    throw new ParsingException($"Unexpected number of values for {context}: {property.Values.Length}");
+            }
         }
 
         public static GameBorder ParseGameBorder(IMapInfoElement element, string context)
         {
-            throw new NotImplementedException();
-            return GameBorder.Default;
+            var property = element.AssertAsProperty(context);
+
+            var v = property.Values;
+
+            switch (v.Length)
+            {
+                case 4:
+                    if (v[0] != "inset")
+                    {
+                        throw new ParsingException($"Expected 'inset' in {context}.");
+                    }
+
+                    return GameBorder.Default.WithColors(new GameBorderColors(
+                        topColor: ParseQuotedStringWithMinLength(v[1], 1, context).ToMaybe(),
+                        bottomColor: ParseQuotedStringWithMinLength(v[2], 1, context).ToMaybe(),
+                        highlightColor: ParseQuotedStringWithMinLength(v[3], 1, context).ToMaybe()));
+
+                case 10:
+                    // v[1] is intentionally skipped
+                    return GameBorder.Default.WithGraphics(new GameBorderGraphics(
+                        offset: ParseInt(v[0], context).ToMaybe(),
+                        topLeft: ParseQuotedStringWithMinLength(v[2], 1, context).ToMaybe(),
+                        top: ParseQuotedStringWithMinLength(v[3], 1, context).ToMaybe(),
+                        topRight: ParseQuotedStringWithMinLength(v[4], 1, context).ToMaybe(),
+                        left: ParseQuotedStringWithMinLength(v[5], 1, context).ToMaybe(),
+                        right: ParseQuotedStringWithMinLength(v[6], 1, context).ToMaybe(),
+                        bottomLeft: ParseQuotedStringWithMinLength(v[7], 1, context).ToMaybe(),
+                        bottom: ParseQuotedStringWithMinLength(v[8], 1, context).ToMaybe(),
+                        bottomRight: ParseQuotedStringWithMinLength(v[9], 1, context).ToMaybe()));
+
+                default:
+                    throw new ParsingException($"Unexpected number of values for {context}: {property.Values.Length}");
+            }
         }
 
         public static MenuColor ParseMenuColor(IMapInfoElement element, string context)
         {
-            throw new NotImplementedException();
-            return MenuColor.Default;
-        }
+            var property = element.AssertAsProperty(context);
+            property.AssertValuesLength(6, context);
 
-        public static ImmutableList<IntermissionAction> ParseIntermissionActionImmutableList(IMapInfoElement element, string context)
-        {
-            throw new NotImplementedException();
-            return ImmutableList<IntermissionAction>.Empty;
+            Func<int, Maybe<string>> getColor =
+                index => ParseQuotedStringWithMinLength(property.Values[index], 0, context).ToMaybe();
+
+            return new MenuColor(
+                border1: getColor(0),
+                border2: getColor(1),
+                border3: getColor(2),
+                background: getColor(3),
+                stripe: getColor(4),
+                stripeBg: getColor(5));
         }
 
         public static IntermissionBackground ParseIntermissionBackground(IMapInfoElement element, string context)
         {
-            throw new NotImplementedException();
-            return IntermissionBackground.Default;
+            var property = element.AssertAsProperty(context);
+
+            switch (property.Values.Length)
+            {
+                case 1:
+                    return IntermissionBackground.Default.WithTexture(ParseQuotedStringWithMinLength(property.Values[0], 1, context));
+
+                case 2:
+                    return IntermissionBackground.Default.
+                        WithTexture(ParseQuotedStringWithMinLength(property.Values[0], 1, context)).
+                        WithTiled(ParseInt(property.Values[1], context) != 0);
+
+                case 3:
+                    return new IntermissionBackground(
+                        texture: ParseQuotedStringWithMinLength(property.Values[0], 1, context).ToMaybe(),
+                        tiled: (ParseInt(property.Values[1], context) != 0).ToMaybe(),
+                        palette: ParseQuotedStringWithMinLength(property.Values[2], 1, context).ToMaybe());
+
+                default:
+                    throw new ParsingException($"Unexpected number of values for {context}: {property.Values.Length}");
+            }
         }
 
         public static IntermissionDraw ParseIntermissionDraw(IMapInfoElement element, string context)
         {
-            throw new NotImplementedException();
-            return IntermissionDraw.Default;
+            var property = element.AssertAsProperty(context);
+            property.AssertValuesLength(3, context);
+
+            var v = property.Values;
+
+            return new IntermissionDraw(
+                texture: ParseQuotedStringWithMinLength(v[0], 1, context).ToMaybe(),
+                x: ParseInt(v[1], context).ToMaybe(),
+                y: ParseInt(v[2], context).ToMaybe());
         }
 
         public static TextScreenPosition ParseTextScreenPosition(IMapInfoElement element, string context)
         {
-            throw new NotImplementedException();
-            return TextScreenPosition.Default;
+            var property = element.AssertAsProperty(context);
+
+            property.AssertValuesLength(2, context);
+
+            return new TextScreenPosition(
+                x: ParseInt(property.Values[0], context).ToMaybe(),
+                y: ParseInt(property.Values[1], context).ToMaybe());
         }
 
         public static NextMapInfo ParseNextMapInfo(IMapInfoElement element, string context)
         {
-            throw new NotImplementedException();
-            return NextMapInfo.Default;
+            var property = element.AssertAsProperty(context);
+
+            var v = property.Values;
+
+            switch (v.Length)
+            {
+                case 1:
+                    return NextMapInfo.Default.WithName(ParseQuotedStringWithMinLength(v[0], 1, context));
+
+                case 2:
+                    if (v[0] != "EndSequence")
+                    {
+                        throw new ParsingException($"Expected 'EndSequence' in {context}");
+                    }
+
+                    return new NextMapInfo(
+                        name: ParseQuotedStringWithMinLength(v[1], 1, context).ToMaybe(),
+                        endSequence: true.ToMaybe());
+
+                default:
+                    throw new ParsingException($"Unexpected number of values for {context}: {v.Length}");
+            }
         }
 
         public static ImmutableList<SpecialAction> ParseSpecialActionImmutableList(IMapInfoElement element, string context)
         {
             throw new NotImplementedException();
-            return ImmutableList<SpecialAction>.Empty;
         }
 
         private static Intermission ParseIntermission(MapInfoBlock block)
