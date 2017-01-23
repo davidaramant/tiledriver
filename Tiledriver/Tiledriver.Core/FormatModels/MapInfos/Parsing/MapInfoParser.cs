@@ -336,9 +336,57 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             }
         }
 
-        public static ImmutableList<SpecialAction> ParseSpecialActionImmutableList(IMapInfoElement element, string context)
+        public static SpecialAction ParseSpecialAction(IMapInfoElement element, string context)
         {
-            throw new NotImplementedException();
+            var property = element.AssertAsProperty(context);
+
+            var v = property.Values;
+
+            switch (v.Length)
+            {
+                case 2:
+                    return SpecialAction.Default.
+                        WithActorClass(ParseQuotedStringWithMinLength(v[0],1,context)).
+                        WithSpecial(ParseQuotedStringWithMinLength(v[1],1,context));
+                case 3:
+                    return SpecialAction.Default.
+                        WithActorClass(ParseQuotedStringWithMinLength(v[0], 1, context)).
+                        WithSpecial(ParseQuotedStringWithMinLength(v[1], 1, context)).
+                        WithArg0(ParseInt(v[2],context));
+                case 4:
+                    return SpecialAction.Default.
+                        WithActorClass(ParseQuotedStringWithMinLength(v[0], 1, context)).
+                        WithSpecial(ParseQuotedStringWithMinLength(v[1], 1, context)).
+                        WithArg0(ParseInt(v[2], context)).
+                        WithArg1(ParseInt(v[3], context));
+                case 5:
+                    return SpecialAction.Default.
+                        WithActorClass(ParseQuotedStringWithMinLength(v[0], 1, context)).
+                        WithSpecial(ParseQuotedStringWithMinLength(v[1], 1, context)).
+                        WithArg0(ParseInt(v[2], context)).
+                        WithArg1(ParseInt(v[3], context)).
+                        WithArg2(ParseInt(v[4], context));
+                case 6:
+                    return SpecialAction.Default.
+                        WithActorClass(ParseQuotedStringWithMinLength(v[0], 1, context)).
+                        WithSpecial(ParseQuotedStringWithMinLength(v[1], 1, context)).
+                        WithArg0(ParseInt(v[2], context)).
+                        WithArg1(ParseInt(v[3], context)).
+                        WithArg2(ParseInt(v[4], context)).
+                        WithArg3(ParseInt(v[5], context));
+                case 7:
+                    return SpecialAction.Default.
+                        WithActorClass(ParseQuotedStringWithMinLength(v[0], 1, context)).
+                        WithSpecial(ParseQuotedStringWithMinLength(v[1], 1, context)).
+                        WithArg0(ParseInt(v[2], context)).
+                        WithArg1(ParseInt(v[3], context)).
+                        WithArg2(ParseInt(v[4], context)).
+                        WithArg3(ParseInt(v[5], context)).
+                        WithArg4(ParseInt(v[6], context));
+
+                default:
+                    throw new ParsingException($"Unexpected number of values for {context}: {v.Length}");
+            }
         }
 
         private static Intermission ParseIntermission(MapInfoBlock block)

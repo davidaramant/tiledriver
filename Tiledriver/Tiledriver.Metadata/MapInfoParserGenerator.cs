@@ -70,8 +70,11 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing");
                     output.Line($"case \"{property.FormatName}\":");
                     output.IncreaseIndent();
 
-                    output.Line($"{instance} = {instance}.With{property.PropertyName}( " +
-                                $"Parse{property.ParsingTypeName}(property, \"{className} {property.FormatName}\") );");
+                    var withMethodName = property.AllowMultiple ? "Additional" + property.SingularName : property.PropertyName;
+                    var parsingName = property.AllowMultiple ? property.SingularName : property.ParsingTypeName;
+
+                    output.Line($"{instance} = {instance}.With{withMethodName}( " +
+                                $"Parse{parsingName}(property, \"{className} {property.FormatName}\") );");
 
                     output.Line("break;");
                     output.DecreaseIndent();

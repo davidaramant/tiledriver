@@ -4742,19 +4742,21 @@ namespace Tiledriver.Core.FormatModels.MapInfos
     {
         public Maybe<string> ActorClass { get; } = Maybe<string>.Nothing;
         public Maybe<string> Special { get; } = Maybe<string>.Nothing;
-        public Maybe<string> Arg0 { get; } = Maybe<string>.Nothing;
-        public Maybe<string> Arg1 { get; } = Maybe<string>.Nothing;
-        public Maybe<string> Arg2 { get; } = Maybe<string>.Nothing;
-        public Maybe<string> Arg3 { get; } = Maybe<string>.Nothing;
+        public Maybe<int> Arg0 { get; } = Maybe<int>.Nothing;
+        public Maybe<int> Arg1 { get; } = Maybe<int>.Nothing;
+        public Maybe<int> Arg2 { get; } = Maybe<int>.Nothing;
+        public Maybe<int> Arg3 { get; } = Maybe<int>.Nothing;
+        public Maybe<int> Arg4 { get; } = Maybe<int>.Nothing;
         public static SpecialAction Default = new SpecialAction();
         private SpecialAction() { }
         public SpecialAction(
             Maybe<string> actorClass,
             Maybe<string> special,
-            Maybe<string> arg0,
-            Maybe<string> arg1,
-            Maybe<string> arg2,
-            Maybe<string> arg3)
+            Maybe<int> arg0,
+            Maybe<int> arg1,
+            Maybe<int> arg2,
+            Maybe<int> arg3,
+            Maybe<int> arg4)
         {
             ActorClass = actorClass;
             Special = special;
@@ -4762,6 +4764,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             Arg1 = arg1;
             Arg2 = arg2;
             Arg3 = arg3;
+            Arg4 = arg4;
         }
         public SpecialAction WithActorClass( string actorClass )
         {
@@ -4771,7 +4774,8 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 arg0: Arg0,
                 arg1: Arg1,
                 arg2: Arg2,
-                arg3: Arg3);
+                arg3: Arg3,
+                arg4: Arg4);
         }
         public SpecialAction WithSpecial( string special )
         {
@@ -4781,9 +4785,10 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 arg0: Arg0,
                 arg1: Arg1,
                 arg2: Arg2,
-                arg3: Arg3);
+                arg3: Arg3,
+                arg4: Arg4);
         }
-        public SpecialAction WithArg0( string arg0 )
+        public SpecialAction WithArg0( int arg0 )
         {
             return new SpecialAction(
                 actorClass: ActorClass,
@@ -4791,9 +4796,10 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 arg0: arg0.ToMaybe(),
                 arg1: Arg1,
                 arg2: Arg2,
-                arg3: Arg3);
+                arg3: Arg3,
+                arg4: Arg4);
         }
-        public SpecialAction WithArg1( string arg1 )
+        public SpecialAction WithArg1( int arg1 )
         {
             return new SpecialAction(
                 actorClass: ActorClass,
@@ -4801,9 +4807,10 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 arg0: Arg0,
                 arg1: arg1.ToMaybe(),
                 arg2: Arg2,
-                arg3: Arg3);
+                arg3: Arg3,
+                arg4: Arg4);
         }
-        public SpecialAction WithArg2( string arg2 )
+        public SpecialAction WithArg2( int arg2 )
         {
             return new SpecialAction(
                 actorClass: ActorClass,
@@ -4811,9 +4818,10 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 arg0: Arg0,
                 arg1: Arg1,
                 arg2: arg2.ToMaybe(),
-                arg3: Arg3);
+                arg3: Arg3,
+                arg4: Arg4);
         }
-        public SpecialAction WithArg3( string arg3 )
+        public SpecialAction WithArg3( int arg3 )
         {
             return new SpecialAction(
                 actorClass: ActorClass,
@@ -4821,7 +4829,19 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 arg0: Arg0,
                 arg1: Arg1,
                 arg2: Arg2,
-                arg3: arg3.ToMaybe());
+                arg3: arg3.ToMaybe(),
+                arg4: Arg4);
+        }
+        public SpecialAction WithArg4( int arg4 )
+        {
+            return new SpecialAction(
+                actorClass: ActorClass,
+                special: Special,
+                arg0: Arg0,
+                arg1: Arg1,
+                arg2: Arg2,
+                arg3: Arg3,
+                arg4: arg4.ToMaybe());
         }
     }
 

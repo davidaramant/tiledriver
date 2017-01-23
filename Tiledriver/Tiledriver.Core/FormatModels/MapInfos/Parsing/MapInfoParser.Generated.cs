@@ -385,7 +385,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                         defaultMap = defaultMap.WithVictoryNext( ParseNextMapInfo(property, "DefaultMap victorynext") );
                         break;
                     case "specialaction":
-                        defaultMap = defaultMap.WithSpecialActions( ParseSpecialActionImmutableList(property, "DefaultMap specialaction") );
+                        defaultMap = defaultMap.WithAdditionalSpecialAction( ParseSpecialAction(property, "DefaultMap specialaction") );
                         break;
                     case "nointermission":
                         defaultMap = defaultMap.WithNointermission( ParseFlag(property, "DefaultMap nointermission") );
@@ -466,7 +466,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                         addDefaultMap = addDefaultMap.WithVictoryNext( ParseNextMapInfo(property, "AddDefaultMap victorynext") );
                         break;
                     case "specialaction":
-                        addDefaultMap = addDefaultMap.WithSpecialActions( ParseSpecialActionImmutableList(property, "AddDefaultMap specialaction") );
+                        addDefaultMap = addDefaultMap.WithAdditionalSpecialAction( ParseSpecialAction(property, "AddDefaultMap specialaction") );
                         break;
                     case "nointermission":
                         addDefaultMap = addDefaultMap.WithNointermission( ParseFlag(property, "AddDefaultMap nointermission") );
@@ -547,7 +547,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                         map = map.WithVictoryNext( ParseNextMapInfo(property, "Map victorynext") );
                         break;
                     case "specialaction":
-                        map = map.WithSpecialActions( ParseSpecialActionImmutableList(property, "Map specialaction") );
+                        map = map.WithAdditionalSpecialAction( ParseSpecialAction(property, "Map specialaction") );
                         break;
                     case "nointermission":
                         map = map.WithNointermission( ParseFlag(property, "Map nointermission") );

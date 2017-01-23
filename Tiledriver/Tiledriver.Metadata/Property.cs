@@ -39,6 +39,8 @@ namespace Tiledriver.Metadata
             private set { _collectionType = value; }
         }
 
+        public bool AllowMultiple { get; }
+
         public string SingularName => _singularName.OrElse(ClassName);
 
         public string PropertyTypeString
@@ -372,7 +374,8 @@ namespace Tiledriver.Metadata
                 string formatName = null,
                 string singularName = null,
                 object defaultValue = null,
-                string collectionType = null) :
+                string collectionType = null,
+                bool allowMultiple = false) :
                     base(
                         formatName: formatName ?? name,
                         className: name)
@@ -382,6 +385,7 @@ namespace Tiledriver.Metadata
             _singularName = singularName.ToMaybe();
             _defaultValue = defaultValue;
             CollectionType = collectionType;
+            AllowMultiple = allowMultiple;
         }
     }
 }
