@@ -37,13 +37,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             return episode.WithMap(map);
         }
 
-        private static Intermission ParseIntermissionMetadata(Intermission intermission, MapInfoBlock block)
-        {
-            block.AssertMetadataLength(1, "Intermission");
-
-            return intermission.WithName(block.Metadata[0]);
-        }
-
         private static Map ParseMapMetadata(Map map, MapInfoBlock block)
         {
             var metadata = block.Metadata;
@@ -346,13 +339,13 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             {
                 case 2:
                     return SpecialAction.Default.
-                        WithActorClass(ParseQuotedStringWithMinLength(v[0],1,context)).
-                        WithSpecial(ParseQuotedStringWithMinLength(v[1],1,context));
+                        WithActorClass(ParseQuotedStringWithMinLength(v[0], 1, context)).
+                        WithSpecial(ParseQuotedStringWithMinLength(v[1], 1, context));
                 case 3:
                     return SpecialAction.Default.
                         WithActorClass(ParseQuotedStringWithMinLength(v[0], 1, context)).
                         WithSpecial(ParseQuotedStringWithMinLength(v[1], 1, context)).
-                        WithArg0(ParseInt(v[2],context));
+                        WithArg0(ParseInt(v[2], context));
                 case 4:
                     return SpecialAction.Default.
                         WithActorClass(ParseQuotedStringWithMinLength(v[0], 1, context)).
@@ -391,18 +384,42 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
 
         private static Intermission ParseIntermission(MapInfoBlock block)
         {
-            throw new NotImplementedException();
-            var intermission = Intermission.Default;
-            intermission = ParseIntermissionMetadata(intermission, block);
+            block.AssertMetadataLength(1, "Intermission");
+
+            var name = block.Metadata[0];
+            var children = new List<IIntermissionAction>();
+
             foreach (var property in block.Children)
             {
+                var subBlock = property.AssertAsBlock($"Intermission {property.Name}");
+
                 switch (property.Name.ToString())
                 {
+                    case "Fader":
+                        children.Add(ParseFader(subBlock));
+                        break;
+
+                    case "GotoTitle":
+                        children.Add(ParseGoToTitle(subBlock));
+                        break;
+
+                    case "Image":
+                        children.Add(ParseImage(subBlock));
+                        break;
+
+                    case "TextScreen":
+                        children.Add(ParseTextScreen(subBlock));
+                        break;
+
+                    case "VictoryStats":
+                        children.Add(ParseVictoryStats(subBlock));
+                        break;
+
                     default:
                         throw new ParsingException($"Unknown property {property.Name} found in Intermission.");
                 }
             }
-            return intermission;
+            return new Intermission(name.ToMaybe(), children);
         }
 
     }
