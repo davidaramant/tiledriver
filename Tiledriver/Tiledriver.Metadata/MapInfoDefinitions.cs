@@ -269,7 +269,7 @@ namespace Tiledriver.Metadata
             new Block("map",
                 isSubBlock:false,
                 inheritsFrom:"BaseMap",
-                canSetPropertiesFrom:new [] {"DefaultMap"},
+                propertyFallbacksFrom:new [] {"DefaultMap", "GameInfo"},
                 properties:new []
                 {
                     new Property("mapLump",type:PropertyType.String,isMetaData:true),

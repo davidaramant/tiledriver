@@ -19,6 +19,7 @@ namespace Tiledriver.Metadata
         public bool NormalReading { get; }
         public bool IsAbstract { get; }
         public IEnumerable<string> SetsPropertiesFrom { get; }
+        public IEnumerable<string> PropertyFallbacksFrom { get; }
         public Maybe<string> BaseClass { get; }
         public IEnumerable<string> ImplementedInterfaces { get; }
         public bool SupportsUnknownProperties => Properties.Any(p => p.Type == PropertyType.UnknownProperties);
@@ -39,7 +40,8 @@ namespace Tiledriver.Metadata
             string inheritsFrom = null,
             bool isAbstract = false,
             IEnumerable<string> implements = null,
-            IEnumerable<string> canSetPropertiesFrom = null ) :
+            IEnumerable<string> canSetPropertiesFrom = null,
+            IEnumerable<string> propertyFallbacksFrom = null ) :
             base(formatName, className ?? formatName)
         {
             IsSubBlock = isSubBlock;
@@ -47,6 +49,7 @@ namespace Tiledriver.Metadata
             NormalReading = normalReading;
             IsAbstract = isAbstract;
             SetsPropertiesFrom = canSetPropertiesFrom ?? Enumerable.Empty<string>();
+            PropertyFallbacksFrom = propertyFallbacksFrom ?? Enumerable.Empty<string>();
             BaseClass = inheritsFrom.ToMaybe();
             ImplementedInterfaces = implements ?? Enumerable.Empty<string>();
 

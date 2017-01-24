@@ -16,7 +16,60 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
     {
         public static MapInfo Parse(IEnumerable<IMapInfoElement> elements)
         {
-            throw new NotImplementedException();
+            var clusters = new List<Cluster>();
+            var episodes = new List<Episode>();
+            var gameInfo = GameInfo.Default;
+            var intermissions = new List<Intermission>();
+            var defaultMap = DefaultMap.Default;
+            var maps = new List<Map>();
+
+            foreach (var element in elements)
+            {
+                switch (element.Name.ToLower())
+                {
+                    case "cluster":
+                        clusters.Add(ParseCluster(element.AssertAsBlock("Cluster")));
+                        break;
+
+                    case "clearepisodes":
+                        var flag = element.AssertAsProperty("Clear Episodes");
+                        flag.AssertValuesLength(0, "Clear Episodes");
+                        episodes.Clear();
+                        break;
+
+                    case "episode":
+                        episodes.Add(ParseEpisode(element.AssertAsBlock("Episode")));
+                        break;
+
+                    case "gameinfo":
+                        var newGameInfo = ParseGameInfo(element.AssertAsBlock("GameInfo"));
+                        gameInfo = gameInfo.WithGameInfo(newGameInfo);
+                        break;
+
+                    case "intermission":
+                        intermissions.Add(ParseIntermission(element.AssertAsBlock("Intermission")));
+                        break;
+
+                    case "defaultmap":
+                        defaultMap = ParseDefaultMap(element.AssertAsBlock("DefaultMap"));
+                        break;
+
+                    case "adddefaultmap":
+                        var addDefaultMap = ParseAddDefaultMap(element.AssertAsBlock("AddDefaultMap"));
+                        defaultMap = defaultMap.WithAddDefaultMap(addDefaultMap);
+                        break;
+
+                    case "map":
+                        var map = ParseMap(element.AssertAsBlock("Map"));
+                        maps.Add(map.WithFallbackDefaultMap(defaultMap).WithFallbackGameInfo(gameInfo));
+                        break;
+
+                    default:
+                        throw new ParsingException($"Unknown element '{element.Name}' in global MapInfo scope.");
+                }
+            }
+
+            return new MapInfo(clusters, episodes, gameInfo.ToMaybe(), intermissions, maps);
         }
 
         private static Cluster ParseClusterMetadata(Cluster cluster, MapInfoBlock block)
