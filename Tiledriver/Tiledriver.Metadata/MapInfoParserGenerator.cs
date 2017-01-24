@@ -62,7 +62,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing");
                 output.Line("foreach(var property in block.Children)");
                 output.OpenParen();
 
-                output.Line("switch (property.Name.ToString())");
+                output.Line("switch (property.Name.ToLower())");
                 output.OpenParen();
 
                 foreach (var property in properties.Where(p=>!p.IsMetaData))

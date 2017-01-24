@@ -393,7 +393,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             {
                 var subBlock = property.AssertAsBlock($"Intermission {property.Name}");
 
-                switch (property.Name.ToString())
+                switch (property.Name.ToLower())
                 {
                     case "Fader":
                         children.Add(ParseFader(subBlock));

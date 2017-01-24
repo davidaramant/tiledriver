@@ -17,9 +17,14 @@ namespace Tiledriver.Core.FormatModels.Common
             _name = name;
         }
 
-        public override string ToString()
+        public string ToLower()
         {
             return _name.ToLowerInvariant();
+        }
+
+        public override string ToString()
+        {
+            return _name;
         }
 
         public static explicit operator string(Identifier id)

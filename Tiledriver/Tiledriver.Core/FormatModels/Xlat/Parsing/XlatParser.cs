@@ -22,7 +22,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
             {
                 var name = exp.Name.OrElse(() => new ParsingException("Found global expression without name."));
 
-                switch (name.ToString())
+                switch (name.ToLower())
                 {
                     // TODO: Is there a 'disable' as well?
                     case "enable":
@@ -81,7 +81,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
             {
                 var name = exp.Name.OrElse(() => new ParsingException("Found expression without a name in 'tiles' section."));
 
-                switch (name.ToString())
+                switch (name.ToLower())
                 {
                     case "modzone":
                         ParseModZone(exp, tileMappings);
@@ -121,14 +121,14 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
 
             var qualifier = qualifierQueue.DequeueOfType(TokenType.Identifier).AsIdentifier();
 
-            if (qualifier.ToString() == "fillzone")
+            if (qualifier.ToLower() == "fillzone")
             {
                 fillzone = true;
 
                 qualifier = qualifierQueue.DequeueOfType(TokenType.Identifier).AsIdentifier(); ;
             }
 
-            if (qualifier.ToString() == "ambush")
+            if (qualifier.ToLower() == "ambush")
             {
                 if (exp.HasAssignments || exp.Values.Any() || exp.SubExpressions.Any() || qualifierQueue.Any())
                 {
@@ -136,7 +136,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
                 }
                 tileMappings.AmbushModzones.Add(oldnum, new AmbushModzone(fillzone: fillzone));
             }
-            else if (qualifier.ToString() == "changetrigger")
+            else if (qualifier.ToLower() == "changetrigger")
             {
                 var action = qualifierQueue.DequeueOfType(TokenType.String).TryAsString().Value;
                 if (exp.Values.Any() || exp.SubExpressions.Any() || qualifierQueue.Any())
@@ -229,7 +229,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
                 else
                 {
                     var name = exp.Name.Value;
-                    switch (name.ToString())
+                    switch (name.ToLower())
                     {
                         case "elevator":
                             ParseElevator(exp, thingMappings);
@@ -306,7 +306,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
 
             do
             {
-                foundFlags.Add(token.AsIdentifier().ToString());
+                foundFlags.Add(token.AsIdentifier().ToLower());
 
                 token = valueQueue.DequeueOfType(TokenType.Pipe, TokenType.Comma);
 
@@ -390,7 +390,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
             var flatMappings = new FlatMappings();
             foreach (var exp in exps)
             {
-                var name = exp.Name.Select(id => id.ToString()).OrElse(() => new ParsingException("Found 'flats' expression without name."));
+                var name = exp.Name.Select(id => id.ToLower()).OrElse(() => new ParsingException("Found 'flats' expression without name."));
                 if (name != "ceiling" && name != "floor")
                 {
                     throw new ParsingException($"Unknown expression '{name}' inside of flats.");

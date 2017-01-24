@@ -16,7 +16,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             cluster = ParseClusterMetadata(cluster, block );
             foreach(var property in block.Children)
             {
-                switch (property.Name.ToString())
+                switch (property.Name.ToLower())
                 {
                     case "exittext":
                         cluster = cluster.WithExitText( ParseClusterExitText(property, "Cluster exittext") );
@@ -40,7 +40,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             episode = ParseEpisodeMetadata(episode, block );
             foreach(var property in block.Children)
             {
-                switch (property.Name.ToString())
+                switch (property.Name.ToLower())
                 {
                     case "key":
                         episode = episode.WithKey( ParseChar(property, "Episode key") );
@@ -76,7 +76,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             block.AssertMetadataLength(0, "GameInfo");
             foreach(var property in block.Children)
             {
-                switch (property.Name.ToString())
+                switch (property.Name.ToLower())
                 {
                     case "advisorycolor":
                         gameInfo = gameInfo.WithAdvisoryColor( ParseString(property, "GameInfo advisorycolor") );
@@ -187,7 +187,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             block.AssertMetadataLength(0, "Fader");
             foreach(var property in block.Children)
             {
-                switch (property.Name.ToString())
+                switch (property.Name.ToLower())
                 {
                     case "background":
                         fader = fader.WithBackground( ParseIntermissionBackground(property, "Fader background") );
@@ -217,7 +217,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             block.AssertMetadataLength(0, "GoToTitle");
             foreach(var property in block.Children)
             {
-                switch (property.Name.ToString())
+                switch (property.Name.ToLower())
                 {
                     default:
                         throw new ParsingException($"Unknown property {property.Name} found in GoToTitle.");
@@ -232,7 +232,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             block.AssertMetadataLength(0, "Image");
             foreach(var property in block.Children)
             {
-                switch (property.Name.ToString())
+                switch (property.Name.ToLower())
                 {
                     case "background":
                         image = image.WithBackground( ParseIntermissionBackground(property, "Image background") );
@@ -259,7 +259,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             block.AssertMetadataLength(0, "TextScreen");
             foreach(var property in block.Children)
             {
-                switch (property.Name.ToString())
+                switch (property.Name.ToLower())
                 {
                     case "background":
                         textScreen = textScreen.WithBackground( ParseIntermissionBackground(property, "TextScreen background") );
@@ -301,7 +301,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             block.AssertMetadataLength(0, "VictoryStats");
             foreach(var property in block.Children)
             {
-                switch (property.Name.ToString())
+                switch (property.Name.ToLower())
                 {
                     case "background":
                         victoryStats = victoryStats.WithBackground( ParseIntermissionBackground(property, "VictoryStats background") );
@@ -328,7 +328,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             block.AssertMetadataLength(0, "DefaultMap");
             foreach(var property in block.Children)
             {
-                switch (property.Name.ToString())
+                switch (property.Name.ToLower())
                 {
                     case "bordertexture":
                         defaultMap = defaultMap.WithBorderTexture( ParseString(property, "DefaultMap bordertexture") );
@@ -409,7 +409,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             block.AssertMetadataLength(0, "AddDefaultMap");
             foreach(var property in block.Children)
             {
-                switch (property.Name.ToString())
+                switch (property.Name.ToLower())
                 {
                     case "bordertexture":
                         addDefaultMap = addDefaultMap.WithBorderTexture( ParseString(property, "AddDefaultMap bordertexture") );
@@ -490,7 +490,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             map = ParseMapMetadata(map, block );
             foreach(var property in block.Children)
             {
-                switch (property.Name.ToString())
+                switch (property.Name.ToLower())
                 {
                     case "bordertexture":
                         map = map.WithBorderTexture( ParseString(property, "Map bordertexture") );
