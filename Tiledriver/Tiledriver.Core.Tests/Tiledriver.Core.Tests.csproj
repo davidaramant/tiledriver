@@ -68,6 +68,7 @@
     <Compile Include="FormatModels\GameMaps\ExpanderTests.cs" />
     <Compile Include="FormatModels\Common\BaseLexerTests.cs" />
     <Compile Include="FormatModels\MapInfos\Parsing\MapInfoLexerTests.cs" />
+    <Compile Include="FormatModels\MapInfos\Parsing\MapInfoParserTests.cs" />
     <Compile Include="FormatModels\MapInfos\Parsing\MapInfoTextReaderTests.cs" />
     <Compile Include="FormatModels\Wad\LumpNameTests.cs" />
     <Compile Include="FormatModels\Wad\WadFileTests.cs" />

@@ -469,7 +469,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                         break;
 
                     default:
-                        throw new ParsingException($"Unknown property {property.Name} found in Intermission.");
+                        throw new ParsingException($"Unknown property '{property.Name}' found in Intermission.");
                 }
             }
             return new Intermission(name.ToMaybe(), children);

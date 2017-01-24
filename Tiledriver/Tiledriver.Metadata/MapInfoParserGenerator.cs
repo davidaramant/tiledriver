@@ -82,7 +82,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing");
 
                 output.Line("default:");
                 output.IncreaseIndent();
-                output.Line($"throw new ParsingException($\"Unknown property {{property.Name}} found in {className}.\");");
+                output.Line($"throw new ParsingException($\"Unknown element '{{property.Name}}' found in {className}.\");");
                 output.DecreaseIndent();
 
                 output.CloseParen(); // end switch

@@ -28,7 +28,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                         cluster = cluster.WithExitTextIsMessage( ParseFlag(property, "Cluster exittextismessage") );
                         break;
                     default:
-                        throw new ParsingException($"Unknown property {property.Name} found in Cluster.");
+                        throw new ParsingException($"Unknown element '{property.Name}' found in Cluster.");
                 }
             }
             return cluster;
@@ -64,7 +64,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                         episode = episode.WithRemove( ParseFlag(property, "Episode remove") );
                         break;
                     default:
-                        throw new ParsingException($"Unknown property {property.Name} found in Episode.");
+                        throw new ParsingException($"Unknown element '{property.Name}' found in Episode.");
                 }
             }
             return episode;
@@ -114,8 +114,8 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                     case "intermissionmusic":
                         gameInfo = gameInfo.WithIntermissionMusic( ParseString(property, "GameInfo intermissionmusic") );
                         break;
-                    case "menucolor":
-                        gameInfo = gameInfo.WithMenuColor( ParseMenuColor(property, "GameInfo menucolor") );
+                    case "menucolors":
+                        gameInfo = gameInfo.WithMenuColor( ParseMenuColor(property, "GameInfo menucolors") );
                         break;
                     case "menufade":
                         gameInfo = gameInfo.WithMenuFade( ParseString(property, "GameInfo menufade") );
@@ -175,7 +175,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                         gameInfo = gameInfo.WithTranslator( ParseString(property, "GameInfo translator") );
                         break;
                     default:
-                        throw new ParsingException($"Unknown property {property.Name} found in GameInfo.");
+                        throw new ParsingException($"Unknown element '{property.Name}' found in GameInfo.");
                 }
             }
             return gameInfo;
@@ -205,7 +205,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                         fader = fader.WithFadeType( ParseString(property, "Fader fadetype") );
                         break;
                     default:
-                        throw new ParsingException($"Unknown property {property.Name} found in Fader.");
+                        throw new ParsingException($"Unknown element '{property.Name}' found in Fader.");
                 }
             }
             return fader;
@@ -220,7 +220,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                 switch (property.Name.ToLower())
                 {
                     default:
-                        throw new ParsingException($"Unknown property {property.Name} found in GoToTitle.");
+                        throw new ParsingException($"Unknown element '{property.Name}' found in GoToTitle.");
                 }
             }
             return goToTitle;
@@ -247,7 +247,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                         image = image.WithTime( ParseInteger(property, "Image time") );
                         break;
                     default:
-                        throw new ParsingException($"Unknown property {property.Name} found in Image.");
+                        throw new ParsingException($"Unknown element '{property.Name}' found in Image.");
                 }
             }
             return image;
@@ -289,7 +289,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                         textScreen = textScreen.WithPosition( ParseTextScreenPosition(property, "TextScreen position") );
                         break;
                     default:
-                        throw new ParsingException($"Unknown property {property.Name} found in TextScreen.");
+                        throw new ParsingException($"Unknown element '{property.Name}' found in TextScreen.");
                 }
             }
             return textScreen;
@@ -316,7 +316,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                         victoryStats = victoryStats.WithTime( ParseInteger(property, "VictoryStats time") );
                         break;
                     default:
-                        throw new ParsingException($"Unknown property {property.Name} found in VictoryStats.");
+                        throw new ParsingException($"Unknown element '{property.Name}' found in VictoryStats.");
                 }
             }
             return victoryStats;
@@ -397,7 +397,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                         defaultMap = defaultMap.WithTranslator( ParseString(property, "DefaultMap translator") );
                         break;
                     default:
-                        throw new ParsingException($"Unknown property {property.Name} found in DefaultMap.");
+                        throw new ParsingException($"Unknown element '{property.Name}' found in DefaultMap.");
                 }
             }
             return defaultMap;
@@ -478,7 +478,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                         addDefaultMap = addDefaultMap.WithTranslator( ParseString(property, "AddDefaultMap translator") );
                         break;
                     default:
-                        throw new ParsingException($"Unknown property {property.Name} found in AddDefaultMap.");
+                        throw new ParsingException($"Unknown element '{property.Name}' found in AddDefaultMap.");
                 }
             }
             return addDefaultMap;
@@ -559,7 +559,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                         map = map.WithTranslator( ParseString(property, "Map translator") );
                         break;
                     default:
-                        throw new ParsingException($"Unknown property {property.Name} found in Map.");
+                        throw new ParsingException($"Unknown element '{property.Name}' found in Map.");
                 }
             }
             return map;

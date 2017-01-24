@@ -79,7 +79,7 @@ namespace Tiledriver.Metadata
                     new Property(formatName:"highscoresfont", name:"highScoresFont", type:PropertyType.String),
                     new Property(formatName:"highscoresfontcolor", name:"highScoresFontColor", type:PropertyType.String),
                     new Property(formatName:"intermissionmusic", name:"intermissionMusic", type:PropertyType.String),
-                    new Property(formatName:"menucolor", name:"MenuColor", type:PropertyType.Block),
+                    new Property(formatName:"menucolors", name:"MenuColor", type:PropertyType.Block),
                     new Property(formatName:"menufade", name:"menuFade", type:PropertyType.String),
                     new Property(formatName:"menufontcolor_disabled", name:"menuFontColorDisabled", type:PropertyType.String),
                     new Property(formatName:"menufontcolor_highlight", name:"menuFontColorHighlight", type:PropertyType.String),
