@@ -222,15 +222,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public Maybe<string> AdvisoryPic { get; } = Maybe<string>.Nothing;
         public Maybe<GameBorder> Border { get; } = Maybe<GameBorder>.Nothing;
         public Maybe<string> BorderFlat { get; } = Maybe<string>.Nothing;
+        public Maybe<string> DeathTransition { get; } = Maybe<string>.Nothing;
+        public Maybe<string> DialogColor { get; } = Maybe<string>.Nothing;
         public Maybe<string> DoorSoundSequence { get; } = Maybe<string>.Nothing;
         public Maybe<bool> DrawReadThis { get; } = Maybe<bool>.Nothing;
+        public Maybe<string> FinaleFlat { get; } = Maybe<string>.Nothing;
         public Maybe<string> FinaleMusic { get; } = Maybe<string>.Nothing;
+        public Maybe<string> GameColorMap { get; } = Maybe<string>.Nothing;
+        public Maybe<string> GameOverPic { get; } = Maybe<string>.Nothing;
         public Maybe<string> GamePalette { get; } = Maybe<string>.Nothing;
         public Maybe<double> GibFactor { get; } = Maybe<double>.Nothing;
         public Maybe<string> HighScoresFont { get; } = Maybe<string>.Nothing;
         public Maybe<string> HighScoresFontColor { get; } = Maybe<string>.Nothing;
         public Maybe<string> IntermissionMusic { get; } = Maybe<string>.Nothing;
-        public Maybe<MenuColor> MenuColor { get; } = Maybe<MenuColor>.Nothing;
+        public Maybe<MenuColors> MenuColors { get; } = Maybe<MenuColors>.Nothing;
         public Maybe<string> MenuFade { get; } = Maybe<string>.Nothing;
         public Maybe<string> MenuFontColorDisabled { get; } = Maybe<string>.Nothing;
         public Maybe<string> MenuFontColorHighlight { get; } = Maybe<string>.Nothing;
@@ -241,15 +246,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public Maybe<string> MenuFontColorSelection { get; } = Maybe<string>.Nothing;
         public Maybe<string> MenuFontColorTitle { get; } = Maybe<string>.Nothing;
         public Maybe<string> MenuMusic { get; } = Maybe<string>.Nothing;
+        public Maybe<MenuWindowColors> MenuWindowColors { get; } = Maybe<MenuWindowColors>.Nothing;
+        public Maybe<MessageColors> MessageColors { get; } = Maybe<MessageColors>.Nothing;
+        public Maybe<string> MessageFontColor { get; } = Maybe<string>.Nothing;
         public Maybe<string> PageIndexFontColor { get; } = Maybe<string>.Nothing;
         public ImmutableList<string> PlayerClasses { get; } = ImmutableList<string>.Empty;
+        public Maybe<Psyched> Psyched { get; } = Maybe<Psyched>.Nothing;
         public Maybe<string> PushwallSoundSequence { get; } = Maybe<string>.Nothing;
         public ImmutableList<string> QuitMessages { get; } = ImmutableList<string>.Empty;
         public Maybe<string> ScoresMusic { get; } = Maybe<string>.Nothing;
         public Maybe<string> SignOn { get; } = Maybe<string>.Nothing;
         public Maybe<string> TitleMusic { get; } = Maybe<string>.Nothing;
+        public Maybe<string> TitlePage { get; } = Maybe<string>.Nothing;
+        public Maybe<string> TitlePalette { get; } = Maybe<string>.Nothing;
         public Maybe<int> TitleTime { get; } = Maybe<int>.Nothing;
+        public Maybe<bool> TrackHighScores { get; } = Maybe<bool>.Nothing;
         public Maybe<string> Translator { get; } = Maybe<string>.Nothing;
+        public Maybe<string> VictoryMusic { get; } = Maybe<string>.Nothing;
+        public Maybe<string> VictoryPic { get; } = Maybe<string>.Nothing;
         public static GameInfo Default = new GameInfo();
         private GameInfo() { }
         public GameInfo(
@@ -257,15 +271,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             Maybe<string> advisoryPic,
             Maybe<GameBorder> border,
             Maybe<string> borderFlat,
+            Maybe<string> deathTransition,
+            Maybe<string> dialogColor,
             Maybe<string> doorSoundSequence,
             Maybe<bool> drawReadThis,
+            Maybe<string> finaleFlat,
             Maybe<string> finaleMusic,
+            Maybe<string> gameColorMap,
+            Maybe<string> gameOverPic,
             Maybe<string> gamePalette,
             Maybe<double> gibFactor,
             Maybe<string> highScoresFont,
             Maybe<string> highScoresFontColor,
             Maybe<string> intermissionMusic,
-            Maybe<MenuColor> menuColor,
+            Maybe<MenuColors> menuColors,
             Maybe<string> menuFade,
             Maybe<string> menuFontColorDisabled,
             Maybe<string> menuFontColorHighlight,
@@ -276,29 +295,43 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             Maybe<string> menuFontColorSelection,
             Maybe<string> menuFontColorTitle,
             Maybe<string> menuMusic,
+            Maybe<MenuWindowColors> menuWindowColors,
+            Maybe<MessageColors> messageColors,
+            Maybe<string> messageFontColor,
             Maybe<string> pageIndexFontColor,
             IEnumerable<string> playerClasses,
+            Maybe<Psyched> psyched,
             Maybe<string> pushwallSoundSequence,
             IEnumerable<string> quitMessages,
             Maybe<string> scoresMusic,
             Maybe<string> signOn,
             Maybe<string> titleMusic,
+            Maybe<string> titlePage,
+            Maybe<string> titlePalette,
             Maybe<int> titleTime,
-            Maybe<string> translator)
+            Maybe<bool> trackHighScores,
+            Maybe<string> translator,
+            Maybe<string> victoryMusic,
+            Maybe<string> victoryPic)
         {
             AdvisoryColor = advisoryColor;
             AdvisoryPic = advisoryPic;
             Border = border;
             BorderFlat = borderFlat;
+            DeathTransition = deathTransition;
+            DialogColor = dialogColor;
             DoorSoundSequence = doorSoundSequence;
             DrawReadThis = drawReadThis;
+            FinaleFlat = finaleFlat;
             FinaleMusic = finaleMusic;
+            GameColorMap = gameColorMap;
+            GameOverPic = gameOverPic;
             GamePalette = gamePalette;
             GibFactor = gibFactor;
             HighScoresFont = highScoresFont;
             HighScoresFontColor = highScoresFontColor;
             IntermissionMusic = intermissionMusic;
-            MenuColor = menuColor;
+            MenuColors = menuColors;
             MenuFade = menuFade;
             MenuFontColorDisabled = menuFontColorDisabled;
             MenuFontColorHighlight = menuFontColorHighlight;
@@ -309,15 +342,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             MenuFontColorSelection = menuFontColorSelection;
             MenuFontColorTitle = menuFontColorTitle;
             MenuMusic = menuMusic;
+            MenuWindowColors = menuWindowColors;
+            MessageColors = messageColors;
+            MessageFontColor = messageFontColor;
             PageIndexFontColor = pageIndexFontColor;
             PlayerClasses = playerClasses.ToImmutableList();
+            Psyched = psyched;
             PushwallSoundSequence = pushwallSoundSequence;
             QuitMessages = quitMessages.ToImmutableList();
             ScoresMusic = scoresMusic;
             SignOn = signOn;
             TitleMusic = titleMusic;
+            TitlePage = titlePage;
+            TitlePalette = titlePalette;
             TitleTime = titleTime;
+            TrackHighScores = trackHighScores;
             Translator = translator;
+            VictoryMusic = victoryMusic;
+            VictoryPic = victoryPic;
         }
         public GameInfo WithAdvisoryColor( string advisoryColor )
         {
@@ -326,15 +368,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -345,15 +392,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithAdvisoryPic( string advisoryPic )
         {
@@ -362,15 +418,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: advisoryPic.ToMaybe(),
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -381,15 +442,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithBorder( GameBorder border )
         {
@@ -398,15 +468,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: border.ToMaybe(),
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -417,15 +492,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithBorderFlat( string borderFlat )
         {
@@ -434,15 +518,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: borderFlat.ToMaybe(),
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -453,15 +542,124 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
+        }
+        public GameInfo WithDeathTransition( string deathTransition )
+        {
+            return new GameInfo(
+                advisoryColor: AdvisoryColor,
+                advisoryPic: AdvisoryPic,
+                border: Border,
+                borderFlat: BorderFlat,
+                deathTransition: deathTransition.ToMaybe(),
+                dialogColor: DialogColor,
+                doorSoundSequence: DoorSoundSequence,
+                drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
+                finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
+                gamePalette: GamePalette,
+                gibFactor: GibFactor,
+                highScoresFont: HighScoresFont,
+                highScoresFontColor: HighScoresFontColor,
+                intermissionMusic: IntermissionMusic,
+                menuColors: MenuColors,
+                menuFade: MenuFade,
+                menuFontColorDisabled: MenuFontColorDisabled,
+                menuFontColorHighlight: MenuFontColorHighlight,
+                menuFontColorHighlightSelection: MenuFontColorHighlightSelection,
+                menuFontColorInvalid: MenuFontColorInvalid,
+                menuFontColorInvalidSelection: MenuFontColorInvalidSelection,
+                menuFontColorLabel: MenuFontColorLabel,
+                menuFontColorSelection: MenuFontColorSelection,
+                menuFontColorTitle: MenuFontColorTitle,
+                menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
+                pageIndexFontColor: PageIndexFontColor,
+                playerClasses: PlayerClasses,
+                psyched: Psyched,
+                pushwallSoundSequence: PushwallSoundSequence,
+                quitMessages: QuitMessages,
+                scoresMusic: ScoresMusic,
+                signOn: SignOn,
+                titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
+                titleTime: TitleTime,
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
+        }
+        public GameInfo WithDialogColor( string dialogColor )
+        {
+            return new GameInfo(
+                advisoryColor: AdvisoryColor,
+                advisoryPic: AdvisoryPic,
+                border: Border,
+                borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: dialogColor.ToMaybe(),
+                doorSoundSequence: DoorSoundSequence,
+                drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
+                finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
+                gamePalette: GamePalette,
+                gibFactor: GibFactor,
+                highScoresFont: HighScoresFont,
+                highScoresFontColor: HighScoresFontColor,
+                intermissionMusic: IntermissionMusic,
+                menuColors: MenuColors,
+                menuFade: MenuFade,
+                menuFontColorDisabled: MenuFontColorDisabled,
+                menuFontColorHighlight: MenuFontColorHighlight,
+                menuFontColorHighlightSelection: MenuFontColorHighlightSelection,
+                menuFontColorInvalid: MenuFontColorInvalid,
+                menuFontColorInvalidSelection: MenuFontColorInvalidSelection,
+                menuFontColorLabel: MenuFontColorLabel,
+                menuFontColorSelection: MenuFontColorSelection,
+                menuFontColorTitle: MenuFontColorTitle,
+                menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
+                pageIndexFontColor: PageIndexFontColor,
+                playerClasses: PlayerClasses,
+                psyched: Psyched,
+                pushwallSoundSequence: PushwallSoundSequence,
+                quitMessages: QuitMessages,
+                scoresMusic: ScoresMusic,
+                signOn: SignOn,
+                titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
+                titleTime: TitleTime,
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithDoorSoundSequence( string doorSoundSequence )
         {
@@ -470,15 +668,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: doorSoundSequence.ToMaybe(),
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -489,15 +692,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithDrawReadThis( bool drawReadThis )
         {
@@ -506,15 +718,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: drawReadThis.ToMaybe(),
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -525,15 +742,74 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
+        }
+        public GameInfo WithFinaleFlat( string finaleFlat )
+        {
+            return new GameInfo(
+                advisoryColor: AdvisoryColor,
+                advisoryPic: AdvisoryPic,
+                border: Border,
+                borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
+                doorSoundSequence: DoorSoundSequence,
+                drawReadThis: DrawReadThis,
+                finaleFlat: finaleFlat.ToMaybe(),
+                finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
+                gamePalette: GamePalette,
+                gibFactor: GibFactor,
+                highScoresFont: HighScoresFont,
+                highScoresFontColor: HighScoresFontColor,
+                intermissionMusic: IntermissionMusic,
+                menuColors: MenuColors,
+                menuFade: MenuFade,
+                menuFontColorDisabled: MenuFontColorDisabled,
+                menuFontColorHighlight: MenuFontColorHighlight,
+                menuFontColorHighlightSelection: MenuFontColorHighlightSelection,
+                menuFontColorInvalid: MenuFontColorInvalid,
+                menuFontColorInvalidSelection: MenuFontColorInvalidSelection,
+                menuFontColorLabel: MenuFontColorLabel,
+                menuFontColorSelection: MenuFontColorSelection,
+                menuFontColorTitle: MenuFontColorTitle,
+                menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
+                pageIndexFontColor: PageIndexFontColor,
+                playerClasses: PlayerClasses,
+                psyched: Psyched,
+                pushwallSoundSequence: PushwallSoundSequence,
+                quitMessages: QuitMessages,
+                scoresMusic: ScoresMusic,
+                signOn: SignOn,
+                titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
+                titleTime: TitleTime,
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithFinaleMusic( string finaleMusic )
         {
@@ -542,15 +818,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: finaleMusic.ToMaybe(),
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -561,15 +842,124 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
+        }
+        public GameInfo WithGameColorMap( string gameColorMap )
+        {
+            return new GameInfo(
+                advisoryColor: AdvisoryColor,
+                advisoryPic: AdvisoryPic,
+                border: Border,
+                borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
+                doorSoundSequence: DoorSoundSequence,
+                drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
+                finaleMusic: FinaleMusic,
+                gameColorMap: gameColorMap.ToMaybe(),
+                gameOverPic: GameOverPic,
+                gamePalette: GamePalette,
+                gibFactor: GibFactor,
+                highScoresFont: HighScoresFont,
+                highScoresFontColor: HighScoresFontColor,
+                intermissionMusic: IntermissionMusic,
+                menuColors: MenuColors,
+                menuFade: MenuFade,
+                menuFontColorDisabled: MenuFontColorDisabled,
+                menuFontColorHighlight: MenuFontColorHighlight,
+                menuFontColorHighlightSelection: MenuFontColorHighlightSelection,
+                menuFontColorInvalid: MenuFontColorInvalid,
+                menuFontColorInvalidSelection: MenuFontColorInvalidSelection,
+                menuFontColorLabel: MenuFontColorLabel,
+                menuFontColorSelection: MenuFontColorSelection,
+                menuFontColorTitle: MenuFontColorTitle,
+                menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
+                pageIndexFontColor: PageIndexFontColor,
+                playerClasses: PlayerClasses,
+                psyched: Psyched,
+                pushwallSoundSequence: PushwallSoundSequence,
+                quitMessages: QuitMessages,
+                scoresMusic: ScoresMusic,
+                signOn: SignOn,
+                titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
+                titleTime: TitleTime,
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
+        }
+        public GameInfo WithGameOverPic( string gameOverPic )
+        {
+            return new GameInfo(
+                advisoryColor: AdvisoryColor,
+                advisoryPic: AdvisoryPic,
+                border: Border,
+                borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
+                doorSoundSequence: DoorSoundSequence,
+                drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
+                finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: gameOverPic.ToMaybe(),
+                gamePalette: GamePalette,
+                gibFactor: GibFactor,
+                highScoresFont: HighScoresFont,
+                highScoresFontColor: HighScoresFontColor,
+                intermissionMusic: IntermissionMusic,
+                menuColors: MenuColors,
+                menuFade: MenuFade,
+                menuFontColorDisabled: MenuFontColorDisabled,
+                menuFontColorHighlight: MenuFontColorHighlight,
+                menuFontColorHighlightSelection: MenuFontColorHighlightSelection,
+                menuFontColorInvalid: MenuFontColorInvalid,
+                menuFontColorInvalidSelection: MenuFontColorInvalidSelection,
+                menuFontColorLabel: MenuFontColorLabel,
+                menuFontColorSelection: MenuFontColorSelection,
+                menuFontColorTitle: MenuFontColorTitle,
+                menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
+                pageIndexFontColor: PageIndexFontColor,
+                playerClasses: PlayerClasses,
+                psyched: Psyched,
+                pushwallSoundSequence: PushwallSoundSequence,
+                quitMessages: QuitMessages,
+                scoresMusic: ScoresMusic,
+                signOn: SignOn,
+                titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
+                titleTime: TitleTime,
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithGamePalette( string gamePalette )
         {
@@ -578,15 +968,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: gamePalette.ToMaybe(),
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -597,15 +992,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithGibFactor( double gibFactor )
         {
@@ -614,15 +1018,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: gibFactor.ToMaybe(),
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -633,15 +1042,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithHighScoresFont( string highScoresFont )
         {
@@ -650,15 +1068,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: highScoresFont.ToMaybe(),
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -669,15 +1092,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithHighScoresFontColor( string highScoresFontColor )
         {
@@ -686,15 +1118,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: highScoresFontColor.ToMaybe(),
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -705,15 +1142,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithIntermissionMusic( string intermissionMusic )
         {
@@ -722,15 +1168,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: intermissionMusic.ToMaybe(),
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -741,32 +1192,46 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
-        public GameInfo WithMenuColor( MenuColor menuColor )
+        public GameInfo WithMenuColors( MenuColors menuColors )
         {
             return new GameInfo(
                 advisoryColor: AdvisoryColor,
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: menuColor.ToMaybe(),
+                menuColors: menuColors.ToMaybe(),
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -777,15 +1242,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithMenuFade( string menuFade )
         {
@@ -794,15 +1268,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: menuFade.ToMaybe(),
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -813,15 +1292,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithMenuFontColorDisabled( string menuFontColorDisabled )
         {
@@ -830,15 +1318,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: menuFontColorDisabled.ToMaybe(),
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -849,15 +1342,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithMenuFontColorHighlight( string menuFontColorHighlight )
         {
@@ -866,15 +1368,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: menuFontColorHighlight.ToMaybe(),
@@ -885,15 +1392,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithMenuFontColorHighlightSelection( string menuFontColorHighlightSelection )
         {
@@ -902,15 +1418,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -921,15 +1442,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithMenuFontColorInvalid( string menuFontColorInvalid )
         {
@@ -938,15 +1468,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -957,15 +1492,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithMenuFontColorInvalidSelection( string menuFontColorInvalidSelection )
         {
@@ -974,15 +1518,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -993,15 +1542,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithMenuFontColorLabel( string menuFontColorLabel )
         {
@@ -1010,15 +1568,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -1029,15 +1592,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithMenuFontColorSelection( string menuFontColorSelection )
         {
@@ -1046,15 +1618,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -1065,15 +1642,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: menuFontColorSelection.ToMaybe(),
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithMenuFontColorTitle( string menuFontColorTitle )
         {
@@ -1082,15 +1668,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -1101,15 +1692,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: menuFontColorTitle.ToMaybe(),
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithMenuMusic( string menuMusic )
         {
@@ -1118,15 +1718,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -1137,15 +1742,174 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: menuMusic.ToMaybe(),
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
+        }
+        public GameInfo WithMenuWindowColors( MenuWindowColors menuWindowColors )
+        {
+            return new GameInfo(
+                advisoryColor: AdvisoryColor,
+                advisoryPic: AdvisoryPic,
+                border: Border,
+                borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
+                doorSoundSequence: DoorSoundSequence,
+                drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
+                finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
+                gamePalette: GamePalette,
+                gibFactor: GibFactor,
+                highScoresFont: HighScoresFont,
+                highScoresFontColor: HighScoresFontColor,
+                intermissionMusic: IntermissionMusic,
+                menuColors: MenuColors,
+                menuFade: MenuFade,
+                menuFontColorDisabled: MenuFontColorDisabled,
+                menuFontColorHighlight: MenuFontColorHighlight,
+                menuFontColorHighlightSelection: MenuFontColorHighlightSelection,
+                menuFontColorInvalid: MenuFontColorInvalid,
+                menuFontColorInvalidSelection: MenuFontColorInvalidSelection,
+                menuFontColorLabel: MenuFontColorLabel,
+                menuFontColorSelection: MenuFontColorSelection,
+                menuFontColorTitle: MenuFontColorTitle,
+                menuMusic: MenuMusic,
+                menuWindowColors: menuWindowColors.ToMaybe(),
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
+                pageIndexFontColor: PageIndexFontColor,
+                playerClasses: PlayerClasses,
+                psyched: Psyched,
+                pushwallSoundSequence: PushwallSoundSequence,
+                quitMessages: QuitMessages,
+                scoresMusic: ScoresMusic,
+                signOn: SignOn,
+                titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
+                titleTime: TitleTime,
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
+        }
+        public GameInfo WithMessageColors( MessageColors messageColors )
+        {
+            return new GameInfo(
+                advisoryColor: AdvisoryColor,
+                advisoryPic: AdvisoryPic,
+                border: Border,
+                borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
+                doorSoundSequence: DoorSoundSequence,
+                drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
+                finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
+                gamePalette: GamePalette,
+                gibFactor: GibFactor,
+                highScoresFont: HighScoresFont,
+                highScoresFontColor: HighScoresFontColor,
+                intermissionMusic: IntermissionMusic,
+                menuColors: MenuColors,
+                menuFade: MenuFade,
+                menuFontColorDisabled: MenuFontColorDisabled,
+                menuFontColorHighlight: MenuFontColorHighlight,
+                menuFontColorHighlightSelection: MenuFontColorHighlightSelection,
+                menuFontColorInvalid: MenuFontColorInvalid,
+                menuFontColorInvalidSelection: MenuFontColorInvalidSelection,
+                menuFontColorLabel: MenuFontColorLabel,
+                menuFontColorSelection: MenuFontColorSelection,
+                menuFontColorTitle: MenuFontColorTitle,
+                menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: messageColors.ToMaybe(),
+                messageFontColor: MessageFontColor,
+                pageIndexFontColor: PageIndexFontColor,
+                playerClasses: PlayerClasses,
+                psyched: Psyched,
+                pushwallSoundSequence: PushwallSoundSequence,
+                quitMessages: QuitMessages,
+                scoresMusic: ScoresMusic,
+                signOn: SignOn,
+                titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
+                titleTime: TitleTime,
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
+        }
+        public GameInfo WithMessageFontColor( string messageFontColor )
+        {
+            return new GameInfo(
+                advisoryColor: AdvisoryColor,
+                advisoryPic: AdvisoryPic,
+                border: Border,
+                borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
+                doorSoundSequence: DoorSoundSequence,
+                drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
+                finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
+                gamePalette: GamePalette,
+                gibFactor: GibFactor,
+                highScoresFont: HighScoresFont,
+                highScoresFontColor: HighScoresFontColor,
+                intermissionMusic: IntermissionMusic,
+                menuColors: MenuColors,
+                menuFade: MenuFade,
+                menuFontColorDisabled: MenuFontColorDisabled,
+                menuFontColorHighlight: MenuFontColorHighlight,
+                menuFontColorHighlightSelection: MenuFontColorHighlightSelection,
+                menuFontColorInvalid: MenuFontColorInvalid,
+                menuFontColorInvalidSelection: MenuFontColorInvalidSelection,
+                menuFontColorLabel: MenuFontColorLabel,
+                menuFontColorSelection: MenuFontColorSelection,
+                menuFontColorTitle: MenuFontColorTitle,
+                menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: messageFontColor.ToMaybe(),
+                pageIndexFontColor: PageIndexFontColor,
+                playerClasses: PlayerClasses,
+                psyched: Psyched,
+                pushwallSoundSequence: PushwallSoundSequence,
+                quitMessages: QuitMessages,
+                scoresMusic: ScoresMusic,
+                signOn: SignOn,
+                titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
+                titleTime: TitleTime,
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithPageIndexFontColor( string pageIndexFontColor )
         {
@@ -1154,15 +1918,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -1173,15 +1942,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: pageIndexFontColor.ToMaybe(),
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithPlayerClasses( IEnumerable<string> playerClasses )
         {
@@ -1190,15 +1968,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -1209,15 +1992,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: playerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithAdditionalPlayerClass( string playerClass )
         {
@@ -1226,15 +2018,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -1245,15 +2042,74 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses.Add(playerClass),
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
+        }
+        public GameInfo WithPsyched( Psyched psyched )
+        {
+            return new GameInfo(
+                advisoryColor: AdvisoryColor,
+                advisoryPic: AdvisoryPic,
+                border: Border,
+                borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
+                doorSoundSequence: DoorSoundSequence,
+                drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
+                finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
+                gamePalette: GamePalette,
+                gibFactor: GibFactor,
+                highScoresFont: HighScoresFont,
+                highScoresFontColor: HighScoresFontColor,
+                intermissionMusic: IntermissionMusic,
+                menuColors: MenuColors,
+                menuFade: MenuFade,
+                menuFontColorDisabled: MenuFontColorDisabled,
+                menuFontColorHighlight: MenuFontColorHighlight,
+                menuFontColorHighlightSelection: MenuFontColorHighlightSelection,
+                menuFontColorInvalid: MenuFontColorInvalid,
+                menuFontColorInvalidSelection: MenuFontColorInvalidSelection,
+                menuFontColorLabel: MenuFontColorLabel,
+                menuFontColorSelection: MenuFontColorSelection,
+                menuFontColorTitle: MenuFontColorTitle,
+                menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
+                pageIndexFontColor: PageIndexFontColor,
+                playerClasses: PlayerClasses,
+                psyched: psyched.ToMaybe(),
+                pushwallSoundSequence: PushwallSoundSequence,
+                quitMessages: QuitMessages,
+                scoresMusic: ScoresMusic,
+                signOn: SignOn,
+                titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
+                titleTime: TitleTime,
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithPushwallSoundSequence( string pushwallSoundSequence )
         {
@@ -1262,15 +2118,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -1281,15 +2142,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: pushwallSoundSequence.ToMaybe(),
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithQuitMessages( IEnumerable<string> quitMessages )
         {
@@ -1298,15 +2168,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -1317,15 +2192,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: quitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithAdditionalQuitMessage( string quitMessage )
         {
@@ -1334,15 +2218,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -1353,15 +2242,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages.Add(quitMessage),
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithScoresMusic( string scoresMusic )
         {
@@ -1370,15 +2268,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -1389,15 +2292,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: scoresMusic.ToMaybe(),
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithSignOn( string signOn )
         {
@@ -1406,15 +2318,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -1425,15 +2342,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: signOn.ToMaybe(),
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithTitleMusic( string titleMusic )
         {
@@ -1442,15 +2368,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -1461,15 +2392,124 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: titleMusic.ToMaybe(),
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
+        }
+        public GameInfo WithTitlePage( string titlePage )
+        {
+            return new GameInfo(
+                advisoryColor: AdvisoryColor,
+                advisoryPic: AdvisoryPic,
+                border: Border,
+                borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
+                doorSoundSequence: DoorSoundSequence,
+                drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
+                finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
+                gamePalette: GamePalette,
+                gibFactor: GibFactor,
+                highScoresFont: HighScoresFont,
+                highScoresFontColor: HighScoresFontColor,
+                intermissionMusic: IntermissionMusic,
+                menuColors: MenuColors,
+                menuFade: MenuFade,
+                menuFontColorDisabled: MenuFontColorDisabled,
+                menuFontColorHighlight: MenuFontColorHighlight,
+                menuFontColorHighlightSelection: MenuFontColorHighlightSelection,
+                menuFontColorInvalid: MenuFontColorInvalid,
+                menuFontColorInvalidSelection: MenuFontColorInvalidSelection,
+                menuFontColorLabel: MenuFontColorLabel,
+                menuFontColorSelection: MenuFontColorSelection,
+                menuFontColorTitle: MenuFontColorTitle,
+                menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
+                pageIndexFontColor: PageIndexFontColor,
+                playerClasses: PlayerClasses,
+                psyched: Psyched,
+                pushwallSoundSequence: PushwallSoundSequence,
+                quitMessages: QuitMessages,
+                scoresMusic: ScoresMusic,
+                signOn: SignOn,
+                titleMusic: TitleMusic,
+                titlePage: titlePage.ToMaybe(),
+                titlePalette: TitlePalette,
+                titleTime: TitleTime,
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
+        }
+        public GameInfo WithTitlePalette( string titlePalette )
+        {
+            return new GameInfo(
+                advisoryColor: AdvisoryColor,
+                advisoryPic: AdvisoryPic,
+                border: Border,
+                borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
+                doorSoundSequence: DoorSoundSequence,
+                drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
+                finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
+                gamePalette: GamePalette,
+                gibFactor: GibFactor,
+                highScoresFont: HighScoresFont,
+                highScoresFontColor: HighScoresFontColor,
+                intermissionMusic: IntermissionMusic,
+                menuColors: MenuColors,
+                menuFade: MenuFade,
+                menuFontColorDisabled: MenuFontColorDisabled,
+                menuFontColorHighlight: MenuFontColorHighlight,
+                menuFontColorHighlightSelection: MenuFontColorHighlightSelection,
+                menuFontColorInvalid: MenuFontColorInvalid,
+                menuFontColorInvalidSelection: MenuFontColorInvalidSelection,
+                menuFontColorLabel: MenuFontColorLabel,
+                menuFontColorSelection: MenuFontColorSelection,
+                menuFontColorTitle: MenuFontColorTitle,
+                menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
+                pageIndexFontColor: PageIndexFontColor,
+                playerClasses: PlayerClasses,
+                psyched: Psyched,
+                pushwallSoundSequence: PushwallSoundSequence,
+                quitMessages: QuitMessages,
+                scoresMusic: ScoresMusic,
+                signOn: SignOn,
+                titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: titlePalette.ToMaybe(),
+                titleTime: TitleTime,
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithTitleTime( int titleTime )
         {
@@ -1478,15 +2518,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -1497,15 +2542,74 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: titleTime.ToMaybe(),
-                translator: Translator);
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
+        }
+        public GameInfo WithTrackHighScores( bool trackHighScores )
+        {
+            return new GameInfo(
+                advisoryColor: AdvisoryColor,
+                advisoryPic: AdvisoryPic,
+                border: Border,
+                borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
+                doorSoundSequence: DoorSoundSequence,
+                drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
+                finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
+                gamePalette: GamePalette,
+                gibFactor: GibFactor,
+                highScoresFont: HighScoresFont,
+                highScoresFontColor: HighScoresFontColor,
+                intermissionMusic: IntermissionMusic,
+                menuColors: MenuColors,
+                menuFade: MenuFade,
+                menuFontColorDisabled: MenuFontColorDisabled,
+                menuFontColorHighlight: MenuFontColorHighlight,
+                menuFontColorHighlightSelection: MenuFontColorHighlightSelection,
+                menuFontColorInvalid: MenuFontColorInvalid,
+                menuFontColorInvalidSelection: MenuFontColorInvalidSelection,
+                menuFontColorLabel: MenuFontColorLabel,
+                menuFontColorSelection: MenuFontColorSelection,
+                menuFontColorTitle: MenuFontColorTitle,
+                menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
+                pageIndexFontColor: PageIndexFontColor,
+                playerClasses: PlayerClasses,
+                psyched: Psyched,
+                pushwallSoundSequence: PushwallSoundSequence,
+                quitMessages: QuitMessages,
+                scoresMusic: ScoresMusic,
+                signOn: SignOn,
+                titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
+                titleTime: TitleTime,
+                trackHighScores: trackHighScores.ToMaybe(),
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
         }
         public GameInfo WithTranslator( string translator )
         {
@@ -1514,15 +2618,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: AdvisoryPic,
                 border: Border,
                 borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
                 doorSoundSequence: DoorSoundSequence,
                 drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
                 finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
                 gamePalette: GamePalette,
                 gibFactor: GibFactor,
                 highScoresFont: HighScoresFont,
                 highScoresFontColor: HighScoresFontColor,
                 intermissionMusic: IntermissionMusic,
-                menuColor: MenuColor,
+                menuColors: MenuColors,
                 menuFade: MenuFade,
                 menuFontColorDisabled: MenuFontColorDisabled,
                 menuFontColorHighlight: MenuFontColorHighlight,
@@ -1533,15 +2642,124 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: MenuFontColorSelection,
                 menuFontColorTitle: MenuFontColorTitle,
                 menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
                 pageIndexFontColor: PageIndexFontColor,
                 playerClasses: PlayerClasses,
+                psyched: Psyched,
                 pushwallSoundSequence: PushwallSoundSequence,
                 quitMessages: QuitMessages,
                 scoresMusic: ScoresMusic,
                 signOn: SignOn,
                 titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
                 titleTime: TitleTime,
-                translator: translator.ToMaybe());
+                trackHighScores: TrackHighScores,
+                translator: translator.ToMaybe(),
+                victoryMusic: VictoryMusic,
+                victoryPic: VictoryPic);
+        }
+        public GameInfo WithVictoryMusic( string victoryMusic )
+        {
+            return new GameInfo(
+                advisoryColor: AdvisoryColor,
+                advisoryPic: AdvisoryPic,
+                border: Border,
+                borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
+                doorSoundSequence: DoorSoundSequence,
+                drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
+                finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
+                gamePalette: GamePalette,
+                gibFactor: GibFactor,
+                highScoresFont: HighScoresFont,
+                highScoresFontColor: HighScoresFontColor,
+                intermissionMusic: IntermissionMusic,
+                menuColors: MenuColors,
+                menuFade: MenuFade,
+                menuFontColorDisabled: MenuFontColorDisabled,
+                menuFontColorHighlight: MenuFontColorHighlight,
+                menuFontColorHighlightSelection: MenuFontColorHighlightSelection,
+                menuFontColorInvalid: MenuFontColorInvalid,
+                menuFontColorInvalidSelection: MenuFontColorInvalidSelection,
+                menuFontColorLabel: MenuFontColorLabel,
+                menuFontColorSelection: MenuFontColorSelection,
+                menuFontColorTitle: MenuFontColorTitle,
+                menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
+                pageIndexFontColor: PageIndexFontColor,
+                playerClasses: PlayerClasses,
+                psyched: Psyched,
+                pushwallSoundSequence: PushwallSoundSequence,
+                quitMessages: QuitMessages,
+                scoresMusic: ScoresMusic,
+                signOn: SignOn,
+                titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
+                titleTime: TitleTime,
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: victoryMusic.ToMaybe(),
+                victoryPic: VictoryPic);
+        }
+        public GameInfo WithVictoryPic( string victoryPic )
+        {
+            return new GameInfo(
+                advisoryColor: AdvisoryColor,
+                advisoryPic: AdvisoryPic,
+                border: Border,
+                borderFlat: BorderFlat,
+                deathTransition: DeathTransition,
+                dialogColor: DialogColor,
+                doorSoundSequence: DoorSoundSequence,
+                drawReadThis: DrawReadThis,
+                finaleFlat: FinaleFlat,
+                finaleMusic: FinaleMusic,
+                gameColorMap: GameColorMap,
+                gameOverPic: GameOverPic,
+                gamePalette: GamePalette,
+                gibFactor: GibFactor,
+                highScoresFont: HighScoresFont,
+                highScoresFontColor: HighScoresFontColor,
+                intermissionMusic: IntermissionMusic,
+                menuColors: MenuColors,
+                menuFade: MenuFade,
+                menuFontColorDisabled: MenuFontColorDisabled,
+                menuFontColorHighlight: MenuFontColorHighlight,
+                menuFontColorHighlightSelection: MenuFontColorHighlightSelection,
+                menuFontColorInvalid: MenuFontColorInvalid,
+                menuFontColorInvalidSelection: MenuFontColorInvalidSelection,
+                menuFontColorLabel: MenuFontColorLabel,
+                menuFontColorSelection: MenuFontColorSelection,
+                menuFontColorTitle: MenuFontColorTitle,
+                menuMusic: MenuMusic,
+                menuWindowColors: MenuWindowColors,
+                messageColors: MessageColors,
+                messageFontColor: MessageFontColor,
+                pageIndexFontColor: PageIndexFontColor,
+                playerClasses: PlayerClasses,
+                psyched: Psyched,
+                pushwallSoundSequence: PushwallSoundSequence,
+                quitMessages: QuitMessages,
+                scoresMusic: ScoresMusic,
+                signOn: SignOn,
+                titleMusic: TitleMusic,
+                titlePage: TitlePage,
+                titlePalette: TitlePalette,
+                titleTime: TitleTime,
+                trackHighScores: TrackHighScores,
+                translator: Translator,
+                victoryMusic: VictoryMusic,
+                victoryPic: victoryPic.ToMaybe());
         }
         public GameInfo WithGameInfo( GameInfo gameInfo )
         {
@@ -1550,15 +2768,20 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 advisoryPic: gameInfo.AdvisoryPic.Or(AdvisoryPic),
                 border: gameInfo.Border.Or(Border),
                 borderFlat: gameInfo.BorderFlat.Or(BorderFlat),
+                deathTransition: gameInfo.DeathTransition.Or(DeathTransition),
+                dialogColor: gameInfo.DialogColor.Or(DialogColor),
                 doorSoundSequence: gameInfo.DoorSoundSequence.Or(DoorSoundSequence),
                 drawReadThis: gameInfo.DrawReadThis.Or(DrawReadThis),
+                finaleFlat: gameInfo.FinaleFlat.Or(FinaleFlat),
                 finaleMusic: gameInfo.FinaleMusic.Or(FinaleMusic),
+                gameColorMap: gameInfo.GameColorMap.Or(GameColorMap),
+                gameOverPic: gameInfo.GameOverPic.Or(GameOverPic),
                 gamePalette: gameInfo.GamePalette.Or(GamePalette),
                 gibFactor: gameInfo.GibFactor.Or(GibFactor),
                 highScoresFont: gameInfo.HighScoresFont.Or(HighScoresFont),
                 highScoresFontColor: gameInfo.HighScoresFontColor.Or(HighScoresFontColor),
                 intermissionMusic: gameInfo.IntermissionMusic.Or(IntermissionMusic),
-                menuColor: gameInfo.MenuColor.Or(MenuColor),
+                menuColors: gameInfo.MenuColors.Or(MenuColors),
                 menuFade: gameInfo.MenuFade.Or(MenuFade),
                 menuFontColorDisabled: gameInfo.MenuFontColorDisabled.Or(MenuFontColorDisabled),
                 menuFontColorHighlight: gameInfo.MenuFontColorHighlight.Or(MenuFontColorHighlight),
@@ -1569,15 +2792,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 menuFontColorSelection: gameInfo.MenuFontColorSelection.Or(MenuFontColorSelection),
                 menuFontColorTitle: gameInfo.MenuFontColorTitle.Or(MenuFontColorTitle),
                 menuMusic: gameInfo.MenuMusic.Or(MenuMusic),
+                menuWindowColors: gameInfo.MenuWindowColors.Or(MenuWindowColors),
+                messageColors: gameInfo.MessageColors.Or(MessageColors),
+                messageFontColor: gameInfo.MessageFontColor.Or(MessageFontColor),
                 pageIndexFontColor: gameInfo.PageIndexFontColor.Or(PageIndexFontColor),
                 playerClasses: PlayerClasses.AddRange(gameInfo.PlayerClasses),
+                psyched: gameInfo.Psyched.Or(Psyched),
                 pushwallSoundSequence: gameInfo.PushwallSoundSequence.Or(PushwallSoundSequence),
                 quitMessages: QuitMessages.AddRange(gameInfo.QuitMessages),
                 scoresMusic: gameInfo.ScoresMusic.Or(ScoresMusic),
                 signOn: gameInfo.SignOn.Or(SignOn),
                 titleMusic: gameInfo.TitleMusic.Or(TitleMusic),
+                titlePage: gameInfo.TitlePage.Or(TitlePage),
+                titlePalette: gameInfo.TitlePalette.Or(TitlePalette),
                 titleTime: gameInfo.TitleTime.Or(TitleTime),
-                translator: gameInfo.Translator.Or(Translator));
+                trackHighScores: gameInfo.TrackHighScores.Or(TrackHighScores),
+                translator: gameInfo.Translator.Or(Translator),
+                victoryMusic: gameInfo.VictoryMusic.Or(VictoryMusic),
+                victoryPic: gameInfo.VictoryPic.Or(VictoryPic));
         }
     }
 
@@ -1800,7 +3032,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         }
     }
 
-    public sealed partial class MenuColor
+    public sealed partial class MenuColors
     {
         public Maybe<string> Border1 { get; } = Maybe<string>.Nothing;
         public Maybe<string> Border2 { get; } = Maybe<string>.Nothing;
@@ -1808,9 +3040,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public Maybe<string> Background { get; } = Maybe<string>.Nothing;
         public Maybe<string> Stripe { get; } = Maybe<string>.Nothing;
         public Maybe<string> StripeBg { get; } = Maybe<string>.Nothing;
-        public static MenuColor Default = new MenuColor();
-        private MenuColor() { }
-        public MenuColor(
+        public static MenuColors Default = new MenuColors();
+        private MenuColors() { }
+        public MenuColors(
             Maybe<string> border1,
             Maybe<string> border2,
             Maybe<string> border3,
@@ -1825,9 +3057,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             Stripe = stripe;
             StripeBg = stripeBg;
         }
-        public MenuColor WithBorder1( string border1 )
+        public MenuColors WithBorder1( string border1 )
         {
-            return new MenuColor(
+            return new MenuColors(
                 border1: border1.ToMaybe(),
                 border2: Border2,
                 border3: Border3,
@@ -1835,9 +3067,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 stripe: Stripe,
                 stripeBg: StripeBg);
         }
-        public MenuColor WithBorder2( string border2 )
+        public MenuColors WithBorder2( string border2 )
         {
-            return new MenuColor(
+            return new MenuColors(
                 border1: Border1,
                 border2: border2.ToMaybe(),
                 border3: Border3,
@@ -1845,9 +3077,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 stripe: Stripe,
                 stripeBg: StripeBg);
         }
-        public MenuColor WithBorder3( string border3 )
+        public MenuColors WithBorder3( string border3 )
         {
-            return new MenuColor(
+            return new MenuColors(
                 border1: Border1,
                 border2: Border2,
                 border3: border3.ToMaybe(),
@@ -1855,9 +3087,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 stripe: Stripe,
                 stripeBg: StripeBg);
         }
-        public MenuColor WithBackground( string background )
+        public MenuColors WithBackground( string background )
         {
-            return new MenuColor(
+            return new MenuColors(
                 border1: Border1,
                 border2: Border2,
                 border3: Border3,
@@ -1865,9 +3097,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 stripe: Stripe,
                 stripeBg: StripeBg);
         }
-        public MenuColor WithStripe( string stripe )
+        public MenuColors WithStripe( string stripe )
         {
-            return new MenuColor(
+            return new MenuColors(
                 border1: Border1,
                 border2: Border2,
                 border3: Border3,
@@ -1875,15 +3107,180 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 stripe: stripe.ToMaybe(),
                 stripeBg: StripeBg);
         }
-        public MenuColor WithStripeBg( string stripeBg )
+        public MenuColors WithStripeBg( string stripeBg )
         {
-            return new MenuColor(
+            return new MenuColors(
                 border1: Border1,
                 border2: Border2,
                 border3: Border3,
                 background: Background,
                 stripe: Stripe,
                 stripeBg: stripeBg.ToMaybe());
+        }
+    }
+
+    public sealed partial class MenuWindowColors
+    {
+        public Maybe<string> Background { get; } = Maybe<string>.Nothing;
+        public Maybe<string> Top { get; } = Maybe<string>.Nothing;
+        public Maybe<string> Bottom { get; } = Maybe<string>.Nothing;
+        public Maybe<string> IndexBackground { get; } = Maybe<string>.Nothing;
+        public Maybe<string> IndexTop { get; } = Maybe<string>.Nothing;
+        public Maybe<string> IndexBottom { get; } = Maybe<string>.Nothing;
+        public static MenuWindowColors Default = new MenuWindowColors();
+        private MenuWindowColors() { }
+        public MenuWindowColors(
+            Maybe<string> background,
+            Maybe<string> top,
+            Maybe<string> bottom,
+            Maybe<string> indexBackground,
+            Maybe<string> indexTop,
+            Maybe<string> indexBottom)
+        {
+            Background = background;
+            Top = top;
+            Bottom = bottom;
+            IndexBackground = indexBackground;
+            IndexTop = indexTop;
+            IndexBottom = indexBottom;
+        }
+        public MenuWindowColors WithBackground( string background )
+        {
+            return new MenuWindowColors(
+                background: background.ToMaybe(),
+                top: Top,
+                bottom: Bottom,
+                indexBackground: IndexBackground,
+                indexTop: IndexTop,
+                indexBottom: IndexBottom);
+        }
+        public MenuWindowColors WithTop( string top )
+        {
+            return new MenuWindowColors(
+                background: Background,
+                top: top.ToMaybe(),
+                bottom: Bottom,
+                indexBackground: IndexBackground,
+                indexTop: IndexTop,
+                indexBottom: IndexBottom);
+        }
+        public MenuWindowColors WithBottom( string bottom )
+        {
+            return new MenuWindowColors(
+                background: Background,
+                top: Top,
+                bottom: bottom.ToMaybe(),
+                indexBackground: IndexBackground,
+                indexTop: IndexTop,
+                indexBottom: IndexBottom);
+        }
+        public MenuWindowColors WithIndexBackground( string indexBackground )
+        {
+            return new MenuWindowColors(
+                background: Background,
+                top: Top,
+                bottom: Bottom,
+                indexBackground: indexBackground.ToMaybe(),
+                indexTop: IndexTop,
+                indexBottom: IndexBottom);
+        }
+        public MenuWindowColors WithIndexTop( string indexTop )
+        {
+            return new MenuWindowColors(
+                background: Background,
+                top: Top,
+                bottom: Bottom,
+                indexBackground: IndexBackground,
+                indexTop: indexTop.ToMaybe(),
+                indexBottom: IndexBottom);
+        }
+        public MenuWindowColors WithIndexBottom( string indexBottom )
+        {
+            return new MenuWindowColors(
+                background: Background,
+                top: Top,
+                bottom: Bottom,
+                indexBackground: IndexBackground,
+                indexTop: IndexTop,
+                indexBottom: indexBottom.ToMaybe());
+        }
+    }
+
+    public sealed partial class MessageColors
+    {
+        public Maybe<string> Background { get; } = Maybe<string>.Nothing;
+        public Maybe<string> Top { get; } = Maybe<string>.Nothing;
+        public Maybe<string> Bottom { get; } = Maybe<string>.Nothing;
+        public static MessageColors Default = new MessageColors();
+        private MessageColors() { }
+        public MessageColors(
+            Maybe<string> background,
+            Maybe<string> top,
+            Maybe<string> bottom)
+        {
+            Background = background;
+            Top = top;
+            Bottom = bottom;
+        }
+        public MessageColors WithBackground( string background )
+        {
+            return new MessageColors(
+                background: background.ToMaybe(),
+                top: Top,
+                bottom: Bottom);
+        }
+        public MessageColors WithTop( string top )
+        {
+            return new MessageColors(
+                background: Background,
+                top: top.ToMaybe(),
+                bottom: Bottom);
+        }
+        public MessageColors WithBottom( string bottom )
+        {
+            return new MessageColors(
+                background: Background,
+                top: Top,
+                bottom: bottom.ToMaybe());
+        }
+    }
+
+    public sealed partial class Psyched
+    {
+        public Maybe<string> Color1 { get; } = Maybe<string>.Nothing;
+        public Maybe<string> Color2 { get; } = Maybe<string>.Nothing;
+        public Maybe<int> Offset { get; } = ((int)0).ToMaybe();
+        public static Psyched Default = new Psyched();
+        private Psyched() { }
+        public Psyched(
+            Maybe<string> color1,
+            Maybe<string> color2,
+            Maybe<int> offset)
+        {
+            Color1 = color1;
+            Color2 = color2;
+            Offset = offset;
+        }
+        public Psyched WithColor1( string color1 )
+        {
+            return new Psyched(
+                color1: color1.ToMaybe(),
+                color2: Color2,
+                offset: Offset);
+        }
+        public Psyched WithColor2( string color2 )
+        {
+            return new Psyched(
+                color1: Color1,
+                color2: color2.ToMaybe(),
+                offset: Offset);
+        }
+        public Psyched WithOffset( int offset )
+        {
+            return new Psyched(
+                color1: Color1,
+                color2: Color2,
+                offset: offset.ToMaybe());
         }
     }
 

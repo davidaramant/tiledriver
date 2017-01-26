@@ -69,17 +69,22 @@ namespace Tiledriver.Metadata
                 {
                     new Property(formatName:"advisorycolor", name:"advisoryColor", type:PropertyType.String),
                     new Property(formatName:"advisorypic", name:"advisoryPic", type:PropertyType.String),
-                    new Property("border", type:PropertyType.Block, collectionType:"GameBorder"),
+                    new Property(formatName:"border", name:"border", type:PropertyType.Block, collectionType:"GameBorder"),
                     new Property(formatName:"borderflat", name:"borderFlat", type:PropertyType.String),
+                    new Property(formatName:"deathtransition", name:"deathTransition", type:PropertyType.String),
+                    new Property(formatName:"dialogcolor", name:"dialogColor", type:PropertyType.String),
                     new Property(formatName:"doorsoundsequence", name:"doorSoundSequence", type:PropertyType.String),
                     new Property(formatName:"drawreadthis", name:"drawReadThis", type:PropertyType.Boolean),
+                    new Property(formatName:"finaleflat", name:"finaleFlat", type:PropertyType.String),
                     new Property(formatName:"finalemusic", name:"finaleMusic", type:PropertyType.String),
+                    new Property(formatName:"gamecolormap", name:"gameColorMap", type:PropertyType.String),
+                    new Property(formatName:"gameoverpic", name:"gameOverPic", type:PropertyType.String),
                     new Property(formatName:"gamepalette", name:"gamePalette", type:PropertyType.String),
                     new Property(formatName:"gibfactor", name:"gibFactor", type:PropertyType.Double),
                     new Property(formatName:"highscoresfont", name:"highScoresFont", type:PropertyType.String),
                     new Property(formatName:"highscoresfontcolor", name:"highScoresFontColor", type:PropertyType.String),
                     new Property(formatName:"intermissionmusic", name:"intermissionMusic", type:PropertyType.String),
-                    new Property(formatName:"menucolors", name:"MenuColor", type:PropertyType.Block),
+                    new Property(formatName:"menucolors", name:"MenuColors", type:PropertyType.Block),
                     new Property(formatName:"menufade", name:"menuFade", type:PropertyType.String),
                     new Property(formatName:"menufontcolor_disabled", name:"menuFontColorDisabled", type:PropertyType.String),
                     new Property(formatName:"menufontcolor_highlight", name:"menuFontColorHighlight", type:PropertyType.String),
@@ -90,15 +95,24 @@ namespace Tiledriver.Metadata
                     new Property(formatName:"menufontcolor_selection", name:"menuFontColorSelection", type:PropertyType.String),
                     new Property(formatName:"menufontcolor_title", name:"menuFontColorTitle", type:PropertyType.String),
                     new Property(formatName:"menumusic", name:"menuMusic", type:PropertyType.String),
+                    new Property(formatName:"menuwindowcolors", name:"menuWindowColors", type:PropertyType.Block),
+                    new Property(formatName:"messagecolors", name:"messageColors", type:PropertyType.Block),
+                    new Property(formatName:"messagefontcolor", name:"messageFontColor", type:PropertyType.String),
                     new Property(formatName:"pageindexfontcolor", name:"pageIndexFontColor", type:PropertyType.String),
                     new Property(formatName:"playerclasses", name:"PlayerClasses",singularName:"PlayerClass", type:PropertyType.ImmutableList, collectionType:"string"),
+                    new Property(formatName:"psyched", name:"psyched", type:PropertyType.Block),
                     new Property(formatName:"pushwallsoundsequence", name:"pushwallSoundSequence", type:PropertyType.String),
                     new Property(formatName:"quitmessages", name:"QuitMessages",singularName:"QuitMessage", type:PropertyType.ImmutableList, collectionType:"string"),
                     new Property(formatName:"scoresmusic", name:"scoresMusic", type:PropertyType.String),
                     new Property(formatName:"signon", name:"signOn", type:PropertyType.String),
                     new Property(formatName:"titlemusic", name:"titleMusic", type:PropertyType.String),
+                    new Property(formatName:"titlepage", name:"titlePage", type:PropertyType.String),
+                    new Property(formatName:"titlepalette", name:"titlePalette", type:PropertyType.String),
                     new Property(formatName:"titletime", name:"titleTime", type:PropertyType.Integer),
-                    new Property("translator", type:PropertyType.String),
+                    new Property(formatName:"trackhighscores", name:"trackHighScores", type:PropertyType.Boolean),
+                    new Property(formatName:"translator", name:"translator", type:PropertyType.String),
+                    new Property(formatName:"victorymusic", name:"victoryMusic", type:PropertyType.String),
+                    new Property(formatName:"victorypic", name:"victoryPic", type:PropertyType.String),
                 }),
 
             new Block("GameBorder",
@@ -134,7 +148,7 @@ namespace Tiledriver.Metadata
                     new Property("bottomRight",type:PropertyType.String),
                 }),
 
-            new Block("menuColor",
+            new Block("MenuColors",
                 normalReading:false,
                 properties:new[]
                 {
@@ -144,6 +158,36 @@ namespace Tiledriver.Metadata
                     new Property("background",type:PropertyType.String),
                     new Property("stripe",type:PropertyType.String),
                     new Property("stripeBg",type:PropertyType.String),
+                }),
+
+            new Block("MenuWindowColors",
+                normalReading:false,
+                properties:new[]
+                {
+                    new Property("background",type:PropertyType.String),
+                    new Property("top",type:PropertyType.String),
+                    new Property("bottom",type:PropertyType.String),
+                    new Property("indexBackground",type:PropertyType.String),
+                    new Property("indexTop",type:PropertyType.String),
+                    new Property("indexBottom",type:PropertyType.String),
+                }),
+
+            new Block("MessageColors",
+                normalReading:false,
+                properties:new[]
+                {
+                    new Property("background",type:PropertyType.String),
+                    new Property("top",type:PropertyType.String),
+                    new Property("bottom",type:PropertyType.String),
+                }),
+
+            new Block("Psyched",
+                normalReading:false,
+                properties:new[]
+                {
+                    new Property("color1",type:PropertyType.String),
+                    new Property("color2",type:PropertyType.String),
+                    new Property("offset",type:PropertyType.Integer, defaultValue:0),
                 }),
 
             // intermission

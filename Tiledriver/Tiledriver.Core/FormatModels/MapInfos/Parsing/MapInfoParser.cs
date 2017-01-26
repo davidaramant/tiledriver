@@ -290,7 +290,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             }
         }
 
-        public static MenuColor ParseMenuColor(IMapInfoElement element, string context)
+        public static MenuColors ParseMenuColors(IMapInfoElement element, string context)
         {
             var property = element.AssertAsProperty(context);
             property.AssertValuesLength(6, context);
@@ -298,13 +298,67 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             Func<int, Maybe<string>> getColor =
                 index => ParseQuotedStringWithMinLength(property.Values[index], 0, context).ToMaybe();
 
-            return new MenuColor(
+            return new MenuColors(
                 border1: getColor(0),
                 border2: getColor(1),
                 border3: getColor(2),
                 background: getColor(3),
                 stripe: getColor(4),
                 stripeBg: getColor(5));
+        }
+
+        public static MenuWindowColors ParseMenuWindowColors(IMapInfoElement element, string context)
+        {
+            var property = element.AssertAsProperty(context);
+            property.AssertValuesLength(6, context);
+
+            Func<int, Maybe<string>> getColor =
+                index => ParseQuotedStringWithMinLength(property.Values[index], 0, context).ToMaybe();
+
+            return new MenuWindowColors(
+                background: getColor(0),
+                top: getColor(1),
+                bottom: getColor(2),
+                indexBackground: getColor(3),
+                indexTop: getColor(4),
+                indexBottom: getColor(5));
+        }
+
+        public static MessageColors ParseMessageColors(IMapInfoElement element, string context)
+        {
+            var property = element.AssertAsProperty(context);
+            property.AssertValuesLength(3, context);
+
+            Func<int, Maybe<string>> getColor =
+                index => ParseQuotedStringWithMinLength(property.Values[index], 0, context).ToMaybe();
+
+            return new MessageColors(
+                background: getColor(0),
+                top: getColor(1),
+                bottom: getColor(2));
+        }
+
+        public static Psyched ParsePsyched(IMapInfoElement element, string context)
+        {
+            var property = element.AssertAsProperty(context);
+            var v = property.Values;
+
+            switch (v.Length)
+            {
+                case 2:
+                    return Psyched.Default.
+                        WithColor1(ParseQuotedStringWithMinLength(v[0], 1, context)).
+                        WithColor2(ParseQuotedStringWithMinLength(v[1], 1, context));
+
+                case 3:
+                    return new Psyched(
+                        color1: ParseQuotedStringWithMinLength(v[0], 1, context).ToMaybe(),
+                        color2: ParseQuotedStringWithMinLength(v[1], 1, context).ToMaybe(),
+                        offset: ParseInt(v[2], context).ToMaybe());
+
+                default:
+                    throw new ParsingException($"Unexpected number of values for {context}: {property.Values.Length}");
+            }
         }
 
         public static IntermissionBackground ParseIntermissionBackground(IMapInfoElement element, string context)

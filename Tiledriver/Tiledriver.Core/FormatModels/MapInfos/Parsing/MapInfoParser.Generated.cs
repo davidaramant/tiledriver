@@ -90,14 +90,29 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                     case "borderflat":
                         gameInfo = gameInfo.WithBorderFlat( ParseString(property, "GameInfo borderflat") );
                         break;
+                    case "deathtransition":
+                        gameInfo = gameInfo.WithDeathTransition( ParseString(property, "GameInfo deathtransition") );
+                        break;
+                    case "dialogcolor":
+                        gameInfo = gameInfo.WithDialogColor( ParseString(property, "GameInfo dialogcolor") );
+                        break;
                     case "doorsoundsequence":
                         gameInfo = gameInfo.WithDoorSoundSequence( ParseString(property, "GameInfo doorsoundsequence") );
                         break;
                     case "drawreadthis":
                         gameInfo = gameInfo.WithDrawReadThis( ParseBoolean(property, "GameInfo drawreadthis") );
                         break;
+                    case "finaleflat":
+                        gameInfo = gameInfo.WithFinaleFlat( ParseString(property, "GameInfo finaleflat") );
+                        break;
                     case "finalemusic":
                         gameInfo = gameInfo.WithFinaleMusic( ParseString(property, "GameInfo finalemusic") );
+                        break;
+                    case "gamecolormap":
+                        gameInfo = gameInfo.WithGameColorMap( ParseString(property, "GameInfo gamecolormap") );
+                        break;
+                    case "gameoverpic":
+                        gameInfo = gameInfo.WithGameOverPic( ParseString(property, "GameInfo gameoverpic") );
                         break;
                     case "gamepalette":
                         gameInfo = gameInfo.WithGamePalette( ParseString(property, "GameInfo gamepalette") );
@@ -115,7 +130,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                         gameInfo = gameInfo.WithIntermissionMusic( ParseString(property, "GameInfo intermissionmusic") );
                         break;
                     case "menucolors":
-                        gameInfo = gameInfo.WithMenuColor( ParseMenuColor(property, "GameInfo menucolors") );
+                        gameInfo = gameInfo.WithMenuColors( ParseMenuColors(property, "GameInfo menucolors") );
                         break;
                     case "menufade":
                         gameInfo = gameInfo.WithMenuFade( ParseString(property, "GameInfo menufade") );
@@ -147,11 +162,23 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                     case "menumusic":
                         gameInfo = gameInfo.WithMenuMusic( ParseString(property, "GameInfo menumusic") );
                         break;
+                    case "menuwindowcolors":
+                        gameInfo = gameInfo.WithMenuWindowColors( ParseMenuWindowColors(property, "GameInfo menuwindowcolors") );
+                        break;
+                    case "messagecolors":
+                        gameInfo = gameInfo.WithMessageColors( ParseMessageColors(property, "GameInfo messagecolors") );
+                        break;
+                    case "messagefontcolor":
+                        gameInfo = gameInfo.WithMessageFontColor( ParseString(property, "GameInfo messagefontcolor") );
+                        break;
                     case "pageindexfontcolor":
                         gameInfo = gameInfo.WithPageIndexFontColor( ParseString(property, "GameInfo pageindexfontcolor") );
                         break;
                     case "playerclasses":
                         gameInfo = gameInfo.WithPlayerClasses( ParseStringImmutableList(property, "GameInfo playerclasses") );
+                        break;
+                    case "psyched":
+                        gameInfo = gameInfo.WithPsyched( ParsePsyched(property, "GameInfo psyched") );
                         break;
                     case "pushwallsoundsequence":
                         gameInfo = gameInfo.WithPushwallSoundSequence( ParseString(property, "GameInfo pushwallsoundsequence") );
@@ -168,11 +195,26 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                     case "titlemusic":
                         gameInfo = gameInfo.WithTitleMusic( ParseString(property, "GameInfo titlemusic") );
                         break;
+                    case "titlepage":
+                        gameInfo = gameInfo.WithTitlePage( ParseString(property, "GameInfo titlepage") );
+                        break;
+                    case "titlepalette":
+                        gameInfo = gameInfo.WithTitlePalette( ParseString(property, "GameInfo titlepalette") );
+                        break;
                     case "titletime":
                         gameInfo = gameInfo.WithTitleTime( ParseInteger(property, "GameInfo titletime") );
                         break;
+                    case "trackhighscores":
+                        gameInfo = gameInfo.WithTrackHighScores( ParseBoolean(property, "GameInfo trackhighscores") );
+                        break;
                     case "translator":
                         gameInfo = gameInfo.WithTranslator( ParseString(property, "GameInfo translator") );
+                        break;
+                    case "victorymusic":
+                        gameInfo = gameInfo.WithVictoryMusic( ParseString(property, "GameInfo victorymusic") );
+                        break;
+                    case "victorypic":
+                        gameInfo = gameInfo.WithVictoryPic( ParseString(property, "GameInfo victorypic") );
                         break;
                     default:
                         throw new ParsingException($"Unknown element '{property.Name}' found in GameInfo.");
