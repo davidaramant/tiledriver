@@ -74,19 +74,24 @@ OpenParen();
                 Line("static partial void SetBlocks(Map map, UwmfSyntaxTree tree)").
                 OpenParen();
 
-            foreach (var block in UwmfDefinitions.Blocks.Where(_ => _.NormalReading))
-            {
-                output.Line($"var {block.ClassName.ToCamelCase()}Name = new Identifier(\"{block.ClassName.ToCamelCase()}\");");
-            }
-
             output.
                 Line("foreach (var block in tree.Blocks)").
                 OpenParen();
 
+            output.Line("switch(block.Name.ToLower())");
+            output.OpenParen();
+
             foreach (var block in UwmfDefinitions.Blocks.Where(_ => _.NormalReading))
             {
-                output.Line($"if (block.Name == {block.ClassName.ToCamelCase()}Name) map.{block.ClassName.ToPluralPascalCase()}.Add(Parse{block.ClassName.ToPascalCase()}(block));");
+                output.
+                    Line($"case \"{block.ClassName.ToCamelCase()}\":").
+                    IncreaseIndent().
+                    Line($"map.{block.ClassName.ToPluralPascalCase()}.Add(Parse{block.ClassName.ToPascalCase()}(block));").
+                    Line("break;").
+                    DecreaseIndent();
             }
+
+            output.CloseParen();
 
             output.CloseParen().CloseParen();
         }

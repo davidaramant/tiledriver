@@ -18,20 +18,29 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
         }
         static partial void SetBlocks(Map map, UwmfSyntaxTree tree)
         {
-            var tileName = new Identifier("tile");
-            var sectorName = new Identifier("sector");
-            var zoneName = new Identifier("zone");
-            var planeName = new Identifier("plane");
-            var thingName = new Identifier("thing");
-            var triggerName = new Identifier("trigger");
             foreach (var block in tree.Blocks)
             {
-                if (block.Name == tileName) map.Tiles.Add(ParseTile(block));
-                if (block.Name == sectorName) map.Sectors.Add(ParseSector(block));
-                if (block.Name == zoneName) map.Zones.Add(ParseZone(block));
-                if (block.Name == planeName) map.Planes.Add(ParsePlane(block));
-                if (block.Name == thingName) map.Things.Add(ParseThing(block));
-                if (block.Name == triggerName) map.Triggers.Add(ParseTrigger(block));
+                switch(block.Name.ToLower())
+                {
+                    case "tile":
+                        map.Tiles.Add(ParseTile(block));
+                        break;
+                    case "sector":
+                        map.Sectors.Add(ParseSector(block));
+                        break;
+                    case "zone":
+                        map.Zones.Add(ParseZone(block));
+                        break;
+                    case "plane":
+                        map.Planes.Add(ParsePlane(block));
+                        break;
+                    case "thing":
+                        map.Things.Add(ParseThing(block));
+                        break;
+                    case "trigger":
+                        map.Triggers.Add(ParseTrigger(block));
+                        break;
+                }
             }
         }
         public static Tile ParseTile(IHaveAssignments block)

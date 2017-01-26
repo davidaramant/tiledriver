@@ -1,7 +1,7 @@
 # TODOs
 
 - Parsing of MapInfo
-    - More metadata in each property for how to parse?
+    - Add Automap and Skill blocks to documentation and metadata
 - WAD file resource provider
 - File system resource provider
 - Convert GameMaps to UWMF
@@ -15,6 +15,7 @@
 
 - Convert the WDC 3.1 format levels to UWMF
 - Support Spear of Destiny
+- UWMF unknown block / property parsing
 
 ### GUI Application
 
