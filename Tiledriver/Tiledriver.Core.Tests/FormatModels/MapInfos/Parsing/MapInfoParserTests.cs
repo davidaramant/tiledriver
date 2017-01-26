@@ -33,12 +33,12 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
             mockProvider.Setup(_ => _.Lookup("mapinfo/wolfcommon.txt"))
                 .Returns(File.ReadAllBytes(
                         Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "MapInfos",
-                        "Parsing", "wolf3d.txt")));
+                        "Parsing", "wolfcommon.txt")));
 
             using (var stream = File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "MapInfos", "Parsing", "wolf3d.txt")))
             using (var textReader = new StreamReader(stream, Encoding.ASCII))
             {
-                var lexer = new MapInfoLexer(Mock.Of<IResourceProvider>());
+                var lexer = new MapInfoLexer(mockProvider.Object);
                 var elements = lexer.Analyze(textReader).ToArray();
                 var results = MapInfoParser.Parse(elements);
             }
