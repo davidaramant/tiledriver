@@ -655,6 +655,39 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             return skill;
         }
 
+        private static AutoMap ParseAutoMap(MapInfoBlock block)
+        {
+            var autoMap =  AutoMap.Default;
+            block.AssertMetadataLength(0, "AutoMap");
+            foreach(var property in block.Children)
+            {
+                switch (property.Name.ToLower())
+                {
+                    case "background":
+                        autoMap = autoMap.WithBackground( ParseString(property, "AutoMap background") );
+                        break;
+                    case "doorcolor":
+                        autoMap = autoMap.WithDoorColor( ParseString(property, "AutoMap doorcolor") );
+                        break;
+                    case "floorcolor":
+                        autoMap = autoMap.WithFloorColor( ParseString(property, "AutoMap floorcolor") );
+                        break;
+                    case "fontcolor":
+                        autoMap = autoMap.WithFontColor( ParseString(property, "AutoMap fontcolor") );
+                        break;
+                    case "wallcolor":
+                        autoMap = autoMap.WithWallColor( ParseString(property, "AutoMap wallcolor") );
+                        break;
+                    case "yourcolor":
+                        autoMap = autoMap.WithYourColor( ParseString(property, "AutoMap yourcolor") );
+                        break;
+                    default:
+                        throw new ParsingException($"Unknown element '{property.Name}' found in AutoMap.");
+                }
+            }
+            return autoMap;
+        }
+
         private static MenuColors ParseMenuColors(IMapInfoElement element, string context)
         {
             var property = element.AssertAsProperty(context);

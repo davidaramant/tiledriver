@@ -371,21 +371,6 @@ namespace Tiledriver.Metadata
                         new Property("arg4", PropertyType.Integer),
                     });
 
-            yield return new Block("mapInfo",
-                    parsing: Parsing.Manual,
-                    properties: new[]
-                    {
-                        new Property(formatName: "cluster", name: "Clusters", singularName: "Cluster",
-                            type: PropertyType.ImmutableList),
-                        new Property(formatName: "episode", name: "Episodes", singularName: "Episode",
-                            type: PropertyType.ImmutableList),
-                        new Property("gameInfo", formatName: "gameinfo", type: PropertyType.Block),
-                        new Property(formatName: "intermission", name: "Intermissions", singularName: "Intermission",
-                            type: PropertyType.ImmutableList),
-                        new Property(formatName: "map", name: "Maps", singularName: "Map",
-                            type: PropertyType.ImmutableList),
-                    });
-
             yield return new Block("skill",
                 properties: new[]
                 {
@@ -402,6 +387,31 @@ namespace Tiledriver.Metadata
                     new Property(formatName:"scoremultiplier",name:"ScoreMultiplier", type:PropertyType.Double),
                     new Property(formatName:"spawnfilter",name:"SpawnFilter", type:PropertyType.Integer),
                 });
+
+            yield return new Block("AutoMap",
+                canSetPropertiesFrom: new[] { "AutoMap" },
+                properties: new[]
+                {
+                    new Property(formatName:"background",name:"Background", type:PropertyType.String),
+                    new Property(formatName:"doorcolor",name:"DoorColor", type:PropertyType.String),
+                    new Property(formatName:"floorcolor",name:"FloorColor", type:PropertyType.String),
+                    new Property(formatName:"fontcolor",name:"FontColor", type:PropertyType.String),
+                    new Property(formatName:"wallcolor",name:"WallColor", type:PropertyType.String),
+                    new Property(formatName:"yourcolor",name:"YourColor", type:PropertyType.String),
+                });
+
+            yield return new Block("mapInfo",
+                    parsing: Parsing.Manual,
+                    properties: new[]
+                    {
+                        new Property("autoMap", formatName: "automap", type: PropertyType.Block),
+                        new Property(formatName: "cluster", name: "Clusters", singularName: "Cluster",type: PropertyType.ImmutableList),
+                        new Property(formatName: "episode", name: "Episodes", singularName: "Episode",type: PropertyType.ImmutableList),
+                        new Property("gameInfo", formatName: "gameinfo", type: PropertyType.Block),
+                        new Property(formatName: "intermission", name: "Intermissions", singularName: "Intermission",type: PropertyType.ImmutableList),
+                        new Property(formatName: "map", name: "Maps", singularName: "Map",type: PropertyType.ImmutableList),
+                        new Property(formatName: "skill", name: "Skills", singularName: "Skill",type: PropertyType.ImmutableList),
+                    });
         }
     }
 }

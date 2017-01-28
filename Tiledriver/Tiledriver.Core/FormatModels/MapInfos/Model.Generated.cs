@@ -6271,111 +6271,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         }
     }
 
-    public sealed partial class MapInfo
-    {
-        public ImmutableList<Cluster> Clusters { get; } = ImmutableList<Cluster>.Empty;
-        public ImmutableList<Episode> Episodes { get; } = ImmutableList<Episode>.Empty;
-        public Maybe<GameInfo> GameInfo { get; } = Maybe<GameInfo>.Nothing;
-        public ImmutableList<Intermission> Intermissions { get; } = ImmutableList<Intermission>.Empty;
-        public ImmutableList<Map> Maps { get; } = ImmutableList<Map>.Empty;
-        public static MapInfo Default = new MapInfo();
-        private MapInfo() { }
-        public MapInfo(
-            IEnumerable<Cluster> clusters,
-            IEnumerable<Episode> episodes,
-            Maybe<GameInfo> gameInfo,
-            IEnumerable<Intermission> intermissions,
-            IEnumerable<Map> maps)
-        {
-            Clusters = clusters.ToImmutableList();
-            Episodes = episodes.ToImmutableList();
-            GameInfo = gameInfo;
-            Intermissions = intermissions.ToImmutableList();
-            Maps = maps.ToImmutableList();
-        }
-        public MapInfo WithClusters( IEnumerable<Cluster> clusters )
-        {
-            return new MapInfo(
-                clusters: clusters,
-                episodes: Episodes,
-                gameInfo: GameInfo,
-                intermissions: Intermissions,
-                maps: Maps);
-        }
-        public MapInfo WithAdditionalCluster( Cluster cluster )
-        {
-            return new MapInfo(
-                clusters: Clusters.Add(cluster),
-                episodes: Episodes,
-                gameInfo: GameInfo,
-                intermissions: Intermissions,
-                maps: Maps);
-        }
-        public MapInfo WithEpisodes( IEnumerable<Episode> episodes )
-        {
-            return new MapInfo(
-                clusters: Clusters,
-                episodes: episodes,
-                gameInfo: GameInfo,
-                intermissions: Intermissions,
-                maps: Maps);
-        }
-        public MapInfo WithAdditionalEpisode( Episode episode )
-        {
-            return new MapInfo(
-                clusters: Clusters,
-                episodes: Episodes.Add(episode),
-                gameInfo: GameInfo,
-                intermissions: Intermissions,
-                maps: Maps);
-        }
-        public MapInfo WithGameInfo( GameInfo gameInfo )
-        {
-            return new MapInfo(
-                clusters: Clusters,
-                episodes: Episodes,
-                gameInfo: gameInfo.ToMaybe(),
-                intermissions: Intermissions,
-                maps: Maps);
-        }
-        public MapInfo WithIntermissions( IEnumerable<Intermission> intermissions )
-        {
-            return new MapInfo(
-                clusters: Clusters,
-                episodes: Episodes,
-                gameInfo: GameInfo,
-                intermissions: intermissions,
-                maps: Maps);
-        }
-        public MapInfo WithAdditionalIntermission( Intermission intermission )
-        {
-            return new MapInfo(
-                clusters: Clusters,
-                episodes: Episodes,
-                gameInfo: GameInfo,
-                intermissions: Intermissions.Add(intermission),
-                maps: Maps);
-        }
-        public MapInfo WithMaps( IEnumerable<Map> maps )
-        {
-            return new MapInfo(
-                clusters: Clusters,
-                episodes: Episodes,
-                gameInfo: GameInfo,
-                intermissions: Intermissions,
-                maps: maps);
-        }
-        public MapInfo WithAdditionalMap( Map map )
-        {
-            return new MapInfo(
-                clusters: Clusters,
-                episodes: Episodes,
-                gameInfo: GameInfo,
-                intermissions: Intermissions,
-                maps: Maps.Add(map));
-        }
-    }
-
     public sealed partial class Skill
     {
         public Maybe<string> Id { get; } = Maybe<string>.Nothing;
@@ -6610,6 +6505,265 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 quizHints: QuizHints,
                 scoreMultiplier: ScoreMultiplier,
                 spawnFilter: spawnFilter.ToMaybe());
+        }
+    }
+
+    public sealed partial class AutoMap
+    {
+        public Maybe<string> Background { get; } = Maybe<string>.Nothing;
+        public Maybe<string> DoorColor { get; } = Maybe<string>.Nothing;
+        public Maybe<string> FloorColor { get; } = Maybe<string>.Nothing;
+        public Maybe<string> FontColor { get; } = Maybe<string>.Nothing;
+        public Maybe<string> WallColor { get; } = Maybe<string>.Nothing;
+        public Maybe<string> YourColor { get; } = Maybe<string>.Nothing;
+        public static AutoMap Default = new AutoMap();
+        private AutoMap() { }
+        public AutoMap(
+            Maybe<string> background,
+            Maybe<string> doorColor,
+            Maybe<string> floorColor,
+            Maybe<string> fontColor,
+            Maybe<string> wallColor,
+            Maybe<string> yourColor)
+        {
+            Background = background;
+            DoorColor = doorColor;
+            FloorColor = floorColor;
+            FontColor = fontColor;
+            WallColor = wallColor;
+            YourColor = yourColor;
+        }
+        public AutoMap WithBackground( string background )
+        {
+            return new AutoMap(
+                background: background.ToMaybe(),
+                doorColor: DoorColor,
+                floorColor: FloorColor,
+                fontColor: FontColor,
+                wallColor: WallColor,
+                yourColor: YourColor);
+        }
+        public AutoMap WithDoorColor( string doorColor )
+        {
+            return new AutoMap(
+                background: Background,
+                doorColor: doorColor.ToMaybe(),
+                floorColor: FloorColor,
+                fontColor: FontColor,
+                wallColor: WallColor,
+                yourColor: YourColor);
+        }
+        public AutoMap WithFloorColor( string floorColor )
+        {
+            return new AutoMap(
+                background: Background,
+                doorColor: DoorColor,
+                floorColor: floorColor.ToMaybe(),
+                fontColor: FontColor,
+                wallColor: WallColor,
+                yourColor: YourColor);
+        }
+        public AutoMap WithFontColor( string fontColor )
+        {
+            return new AutoMap(
+                background: Background,
+                doorColor: DoorColor,
+                floorColor: FloorColor,
+                fontColor: fontColor.ToMaybe(),
+                wallColor: WallColor,
+                yourColor: YourColor);
+        }
+        public AutoMap WithWallColor( string wallColor )
+        {
+            return new AutoMap(
+                background: Background,
+                doorColor: DoorColor,
+                floorColor: FloorColor,
+                fontColor: FontColor,
+                wallColor: wallColor.ToMaybe(),
+                yourColor: YourColor);
+        }
+        public AutoMap WithYourColor( string yourColor )
+        {
+            return new AutoMap(
+                background: Background,
+                doorColor: DoorColor,
+                floorColor: FloorColor,
+                fontColor: FontColor,
+                wallColor: WallColor,
+                yourColor: yourColor.ToMaybe());
+        }
+        public AutoMap WithAutoMap( AutoMap autoMap )
+        {
+            return new AutoMap(
+                background: autoMap.Background.Or(Background),
+                doorColor: autoMap.DoorColor.Or(DoorColor),
+                floorColor: autoMap.FloorColor.Or(FloorColor),
+                fontColor: autoMap.FontColor.Or(FontColor),
+                wallColor: autoMap.WallColor.Or(WallColor),
+                yourColor: autoMap.YourColor.Or(YourColor));
+        }
+    }
+
+    public sealed partial class MapInfo
+    {
+        public Maybe<AutoMap> AutoMap { get; } = Maybe<AutoMap>.Nothing;
+        public ImmutableList<Cluster> Clusters { get; } = ImmutableList<Cluster>.Empty;
+        public ImmutableList<Episode> Episodes { get; } = ImmutableList<Episode>.Empty;
+        public Maybe<GameInfo> GameInfo { get; } = Maybe<GameInfo>.Nothing;
+        public ImmutableList<Intermission> Intermissions { get; } = ImmutableList<Intermission>.Empty;
+        public ImmutableList<Map> Maps { get; } = ImmutableList<Map>.Empty;
+        public ImmutableList<Skill> Skills { get; } = ImmutableList<Skill>.Empty;
+        public static MapInfo Default = new MapInfo();
+        private MapInfo() { }
+        public MapInfo(
+            Maybe<AutoMap> autoMap,
+            IEnumerable<Cluster> clusters,
+            IEnumerable<Episode> episodes,
+            Maybe<GameInfo> gameInfo,
+            IEnumerable<Intermission> intermissions,
+            IEnumerable<Map> maps,
+            IEnumerable<Skill> skills)
+        {
+            AutoMap = autoMap;
+            Clusters = clusters.ToImmutableList();
+            Episodes = episodes.ToImmutableList();
+            GameInfo = gameInfo;
+            Intermissions = intermissions.ToImmutableList();
+            Maps = maps.ToImmutableList();
+            Skills = skills.ToImmutableList();
+        }
+        public MapInfo WithAutoMap( AutoMap autoMap )
+        {
+            return new MapInfo(
+                autoMap: autoMap.ToMaybe(),
+                clusters: Clusters,
+                episodes: Episodes,
+                gameInfo: GameInfo,
+                intermissions: Intermissions,
+                maps: Maps,
+                skills: Skills);
+        }
+        public MapInfo WithClusters( IEnumerable<Cluster> clusters )
+        {
+            return new MapInfo(
+                autoMap: AutoMap,
+                clusters: clusters,
+                episodes: Episodes,
+                gameInfo: GameInfo,
+                intermissions: Intermissions,
+                maps: Maps,
+                skills: Skills);
+        }
+        public MapInfo WithAdditionalCluster( Cluster cluster )
+        {
+            return new MapInfo(
+                autoMap: AutoMap,
+                clusters: Clusters.Add(cluster),
+                episodes: Episodes,
+                gameInfo: GameInfo,
+                intermissions: Intermissions,
+                maps: Maps,
+                skills: Skills);
+        }
+        public MapInfo WithEpisodes( IEnumerable<Episode> episodes )
+        {
+            return new MapInfo(
+                autoMap: AutoMap,
+                clusters: Clusters,
+                episodes: episodes,
+                gameInfo: GameInfo,
+                intermissions: Intermissions,
+                maps: Maps,
+                skills: Skills);
+        }
+        public MapInfo WithAdditionalEpisode( Episode episode )
+        {
+            return new MapInfo(
+                autoMap: AutoMap,
+                clusters: Clusters,
+                episodes: Episodes.Add(episode),
+                gameInfo: GameInfo,
+                intermissions: Intermissions,
+                maps: Maps,
+                skills: Skills);
+        }
+        public MapInfo WithGameInfo( GameInfo gameInfo )
+        {
+            return new MapInfo(
+                autoMap: AutoMap,
+                clusters: Clusters,
+                episodes: Episodes,
+                gameInfo: gameInfo.ToMaybe(),
+                intermissions: Intermissions,
+                maps: Maps,
+                skills: Skills);
+        }
+        public MapInfo WithIntermissions( IEnumerable<Intermission> intermissions )
+        {
+            return new MapInfo(
+                autoMap: AutoMap,
+                clusters: Clusters,
+                episodes: Episodes,
+                gameInfo: GameInfo,
+                intermissions: intermissions,
+                maps: Maps,
+                skills: Skills);
+        }
+        public MapInfo WithAdditionalIntermission( Intermission intermission )
+        {
+            return new MapInfo(
+                autoMap: AutoMap,
+                clusters: Clusters,
+                episodes: Episodes,
+                gameInfo: GameInfo,
+                intermissions: Intermissions.Add(intermission),
+                maps: Maps,
+                skills: Skills);
+        }
+        public MapInfo WithMaps( IEnumerable<Map> maps )
+        {
+            return new MapInfo(
+                autoMap: AutoMap,
+                clusters: Clusters,
+                episodes: Episodes,
+                gameInfo: GameInfo,
+                intermissions: Intermissions,
+                maps: maps,
+                skills: Skills);
+        }
+        public MapInfo WithAdditionalMap( Map map )
+        {
+            return new MapInfo(
+                autoMap: AutoMap,
+                clusters: Clusters,
+                episodes: Episodes,
+                gameInfo: GameInfo,
+                intermissions: Intermissions,
+                maps: Maps.Add(map),
+                skills: Skills);
+        }
+        public MapInfo WithSkills( IEnumerable<Skill> skills )
+        {
+            return new MapInfo(
+                autoMap: AutoMap,
+                clusters: Clusters,
+                episodes: Episodes,
+                gameInfo: GameInfo,
+                intermissions: Intermissions,
+                maps: Maps,
+                skills: skills);
+        }
+        public MapInfo WithAdditionalSkill( Skill skill )
+        {
+            return new MapInfo(
+                autoMap: AutoMap,
+                clusters: Clusters,
+                episodes: Episodes,
+                gameInfo: GameInfo,
+                intermissions: Intermissions,
+                maps: Maps,
+                skills: Skills.Add(skill));
         }
     }
 

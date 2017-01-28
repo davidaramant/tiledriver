@@ -16,17 +16,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
     {
         public static MapInfo Parse(IEnumerable<IMapInfoElement> elements)
         {
+            var autoMap = AutoMap.Default;
             var clusters = new List<Cluster>();
             var episodes = new List<Episode>();
             var gameInfo = GameInfo.Default;
             var intermissions = new List<Intermission>();
             var defaultMap = DefaultMap.Default;
             var maps = new List<Map>();
+            var skills = new List<Skill>();
 
             foreach (var element in elements)
             {
                 switch (element.Name.ToLower())
                 {
+                    case "automap":
+                        var newAutoMap = ParseAutoMap(element.AssertAsBlock("AutoMap"));
+                        autoMap = autoMap.WithAutoMap(newAutoMap);
+                        break;
+
                     case "cluster":
                         clusters.Add(ParseCluster(element.AssertAsBlock("Cluster")));
                         break;
@@ -64,12 +71,16 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                         maps.Add(map.WithFallbackDefaultMap(defaultMap).WithFallbackGameInfo(gameInfo));
                         break;
 
+                    case "skill":
+                        skills.Add(ParseSkill(element.AssertAsBlock("Skill")));
+                        break;
+
                     default:
                         throw new ParsingException($"Unknown element '{element.Name}' in global MapInfo scope.");
                 }
             }
 
-            return new MapInfo(clusters, episodes, gameInfo.ToMaybe(), intermissions, maps);
+            return new MapInfo(autoMap.ToMaybe(), clusters, episodes, gameInfo.ToMaybe(), intermissions, maps, skills);
         }
 
         private static Cluster ParseClusterMetadata(Cluster cluster, MapInfoBlock block)
