@@ -24,7 +24,7 @@ using Functional.Maybe;
 namespace Tiledriver.Core.FormatModels.MapInfos");
             output.OpenParen();
 
-            foreach (var block in MapInfoDefinitions.Blocks)
+            foreach (var block in MapInfoDefinitions.Blocks())
             {
                 var allInheritance =
                     block.BaseClass.SelectOrElse(className => new[] { className }, () => new string[0])
@@ -88,7 +88,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
 
             var baseClass =
                 block.BaseClass.Select(
-                    name => MapInfoDefinitions.Blocks.Single(b => b.ClassName == name));
+                    name => MapInfoDefinitions.Blocks().Single(b => b.ClassName == name));
 
             var allProperties = new List<Property>();
 
@@ -229,7 +229,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
             var allProperties = MapInfoDefinitions.GetAllPropertiesOf(block);
 
             foreach (var otherBlock in
-                block.SetsPropertiesFrom.Select(name => MapInfoDefinitions.Blocks.Single(b => b.ClassName == name)))
+                block.SetsPropertiesFrom.Select(name => MapInfoDefinitions.Blocks().Single(b => b.ClassName == name)))
             {
                 var otherType = otherBlock.ClassName.ToPascalCase();
                 var otherClassname = otherBlock.ClassName.ToCamelCase();
@@ -278,7 +278,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos");
             var allProperties = MapInfoDefinitions.GetAllPropertiesOf(block);
 
             foreach (var otherBlock in
-                block.PropertyFallbacksFrom.Select(name => MapInfoDefinitions.Blocks.Single(b => b.ClassName == name)))
+                block.PropertyFallbacksFrom.Select(name => MapInfoDefinitions.Blocks().Single(b => b.ClassName == name)))
             {
                 var otherType = otherBlock.ClassName.ToPascalCase();
                 var otherClassname = otherBlock.ClassName.ToCamelCase();

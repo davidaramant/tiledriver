@@ -37,7 +37,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing");
 
         private static void WriteBlockParsers(IndentedWriter output)
         {
-            foreach (var block in MapInfoDefinitions.Blocks.Where(b => b.NormalParsing))
+            foreach (var block in MapInfoDefinitions.Blocks().Where(b => b.NormalParsing))
             {
                 var className = block.ClassName.ToPascalCase();
                 var instance = block.ClassName.ToCamelCase();
@@ -97,7 +97,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing");
 
         private static void WriteParameterParsers(IndentedWriter output)
         {
-            foreach (var block in MapInfoDefinitions.Blocks.Where(b => b.ParsingMode == Parsing.OrderedProperties))
+            foreach (var block in MapInfoDefinitions.Blocks().Where(b => b.ParsingMode == Parsing.OrderedProperties))
             {
                 var className = block.ClassName.ToPascalCase();
                 var instance = block.ClassName.ToCamelCase();
