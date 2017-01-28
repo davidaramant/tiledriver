@@ -61,9 +61,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
         {
             var lumpName = lexer.MustReadTokenOfTypes(TokenType.String).AsString();
 
-            var data = _resourceProvider.Lookup(lumpName);
-
-            using (var ms = new MemoryStream(data))
+            using (var ms = _resourceProvider.Lookup(lumpName))
             using (var reader = new StreamReader(ms, Encoding.ASCII))
             {
                 // The ToArray is needed because otherwise the stream is closed

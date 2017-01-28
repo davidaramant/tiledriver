@@ -276,7 +276,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
             var mockProvider = new Mock<IResourceProvider>();
             mockProvider.
                 Setup(_ => _.Lookup(It.IsAny<string>()))
-                .Returns( File.ReadAllBytes(Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "Xlat", "Parsing", "wolf3d.txt")));
+                .Returns( File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "Xlat", "Parsing", "wolf3d.txt")));
 
             using (var stream = File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "Xlat", "Parsing", "spear.txt")))
             using (var textReader = new StreamReader(stream, Encoding.ASCII))

@@ -31,7 +31,7 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
         {
             var mockProvider = new Mock<IResourceProvider>();
             mockProvider.Setup(_ => _.Lookup("mapinfo/wolfcommon.txt"))
-                .Returns(File.ReadAllBytes(
+                .Returns(File.OpenRead(
                         Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "MapInfos",
                         "Parsing", "wolfcommon.txt")));
 

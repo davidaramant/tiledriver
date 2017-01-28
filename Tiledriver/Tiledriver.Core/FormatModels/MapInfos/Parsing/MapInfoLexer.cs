@@ -46,9 +46,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
         {
             var lumpPath = line.Remove(0, "include".Length).Trim().Substring(1).RemoveLast(1);
 
-            var data = _resourceProvider.Lookup(lumpPath);
-
-            using (var ms = new MemoryStream(data))
+            using (var ms = _resourceProvider.Lookup(lumpPath))
             using (var reader = new StreamReader(ms, Encoding.ASCII))
             {
                 // The ToArray is needed because otherwise the stream is closed
