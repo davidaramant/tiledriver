@@ -12,7 +12,7 @@ namespace Tiledriver.Metadata
     {
         Normal,
         Manual,
-        InOrder
+        OrderedProperties
     }
 
     [DebuggerDisplay("{" + nameof(ClassName) + "}")]

@@ -607,5 +607,60 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             return map;
         }
 
+        private static MenuColors ParseMenuColors(IMapInfoElement element, string context)
+        {
+            var property = element.AssertAsProperty(context);
+            property.AssertValuesLength(6, context);
+            return new MenuColors(
+                border1: ParseString(property.Values[0], context).ToMaybe(),
+                border2: ParseString(property.Values[1], context).ToMaybe(),
+                border3: ParseString(property.Values[2], context).ToMaybe(),
+                background: ParseString(property.Values[3], context).ToMaybe(),
+                stripe: ParseString(property.Values[4], context).ToMaybe(),
+                stripeBg: ParseString(property.Values[5], context).ToMaybe());
+        }
+
+        private static MenuWindowColors ParseMenuWindowColors(IMapInfoElement element, string context)
+        {
+            var property = element.AssertAsProperty(context);
+            property.AssertValuesLength(6, context);
+            return new MenuWindowColors(
+                background: ParseString(property.Values[0], context).ToMaybe(),
+                top: ParseString(property.Values[1], context).ToMaybe(),
+                bottom: ParseString(property.Values[2], context).ToMaybe(),
+                indexBackground: ParseString(property.Values[3], context).ToMaybe(),
+                indexTop: ParseString(property.Values[4], context).ToMaybe(),
+                indexBottom: ParseString(property.Values[5], context).ToMaybe());
+        }
+
+        private static MessageColors ParseMessageColors(IMapInfoElement element, string context)
+        {
+            var property = element.AssertAsProperty(context);
+            property.AssertValuesLength(3, context);
+            return new MessageColors(
+                background: ParseString(property.Values[0], context).ToMaybe(),
+                top: ParseString(property.Values[1], context).ToMaybe(),
+                bottom: ParseString(property.Values[2], context).ToMaybe());
+        }
+
+        private static IntermissionDraw ParseIntermissionDraw(IMapInfoElement element, string context)
+        {
+            var property = element.AssertAsProperty(context);
+            property.AssertValuesLength(3, context);
+            return new IntermissionDraw(
+                texture: ParseString(property.Values[0], context).ToMaybe(),
+                x: ParseInteger(property.Values[1], context).ToMaybe(),
+                y: ParseInteger(property.Values[2], context).ToMaybe());
+        }
+
+        private static TextScreenPosition ParseTextScreenPosition(IMapInfoElement element, string context)
+        {
+            var property = element.AssertAsProperty(context);
+            property.AssertValuesLength(2, context);
+            return new TextScreenPosition(
+                x: ParseInteger(property.Values[0], context).ToMaybe(),
+                y: ParseInteger(property.Values[1], context).ToMaybe());
+        }
+
     }
 }

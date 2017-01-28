@@ -149,7 +149,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("MenuColors",
-                parsing:Parsing.Manual,
+                parsing:Parsing.OrderedProperties,
                 properties:new[]
                 {
                     new Property("border1",type:PropertyType.String),
@@ -161,7 +161,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("MenuWindowColors",
-                parsing:Parsing.Manual,
+                parsing:Parsing.OrderedProperties,
                 properties:new[]
                 {
                     new Property("background",type:PropertyType.String),
@@ -173,7 +173,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("MessageColors",
-                parsing:Parsing.Manual,
+                parsing:Parsing.OrderedProperties,
                 properties:new[]
                 {
                     new Property("background",type:PropertyType.String),
@@ -221,7 +221,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("IntermissionDraw",
-                parsing:Parsing.Manual,
+                parsing:Parsing.OrderedProperties,
                 properties:new []
                 {
                     new Property("texture",type:PropertyType.String),
@@ -259,7 +259,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("TextScreenPosition",
-                parsing:Parsing.Manual,
+                parsing:Parsing.OrderedProperties,
                 properties:new []
                 {
                     new Property("x",type:PropertyType.Integer),

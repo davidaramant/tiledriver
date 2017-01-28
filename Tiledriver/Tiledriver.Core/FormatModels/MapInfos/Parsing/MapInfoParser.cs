@@ -76,7 +76,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
         {
             block.AssertMetadataLength(1, "Cluster");
 
-            var id = ParseInt(block.Metadata[0], "Cluster id");
+            var id = ParseInteger(block.Metadata[0], "Cluster id");
 
             return cluster.WithId(id);
         }
@@ -126,14 +126,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             return map.WithMapLump(mapLump);
         }
 
-        private static int ParseInt(string s, string context)
+        private static string ParseString(string s, string context)
         {
-            int result;
-            if (!int.TryParse(s, NumberStyles.None, CultureInfo.InvariantCulture, out result))
-            {
-                throw new ParsingException($"{context} was not an integer.");
-            }
-            return result;
+            return ParseQuotedStringWithMinLength(s,0,context);
         }
 
         private static string ParseQuotedStringWithMinLength(string s, int minLength, string context)
@@ -149,13 +144,23 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             throw new ParsingException($"{context} was not a properly formatted string.");
         }
 
+        private static int ParseInteger(string s, string context)
+        {
+            int result;
+            if (!int.TryParse(s, NumberStyles.None, CultureInfo.InvariantCulture, out result))
+            {
+                throw new ParsingException($"{context} was not an integer.");
+            }
+            return result;
+        }
+
         private static int ParseInteger(IMapInfoElement element, string context)
         {
             var property = element.AssertAsProperty(context);
 
             property.AssertValuesLength(1, context);
 
-            return ParseInt(property.Values[0], context);
+            return ParseInteger(property.Values[0], context);
         }
 
         private static double ParseDouble(IMapInfoElement element, string context)
@@ -275,7 +280,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                 case 10:
                     // v[1] is intentionally skipped
                     return GameBorder.Default.WithGraphics(new GameBorderGraphics(
-                        offset: ParseInt(v[0], context).ToMaybe(),
+                        offset: ParseInteger(v[0], context).ToMaybe(),
                         topLeft: ParseQuotedStringWithMinLength(v[2], 1, context).ToMaybe(),
                         top: ParseQuotedStringWithMinLength(v[3], 1, context).ToMaybe(),
                         topRight: ParseQuotedStringWithMinLength(v[4], 1, context).ToMaybe(),
@@ -288,54 +293,6 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                 default:
                     throw new ParsingException($"Unexpected number of values for {context}: {property.Values.Length}");
             }
-        }
-
-        public static MenuColors ParseMenuColors(IMapInfoElement element, string context)
-        {
-            var property = element.AssertAsProperty(context);
-            property.AssertValuesLength(6, context);
-
-            Func<int, Maybe<string>> getColor =
-                index => ParseQuotedStringWithMinLength(property.Values[index], 0, context).ToMaybe();
-
-            return new MenuColors(
-                border1: getColor(0),
-                border2: getColor(1),
-                border3: getColor(2),
-                background: getColor(3),
-                stripe: getColor(4),
-                stripeBg: getColor(5));
-        }
-
-        public static MenuWindowColors ParseMenuWindowColors(IMapInfoElement element, string context)
-        {
-            var property = element.AssertAsProperty(context);
-            property.AssertValuesLength(6, context);
-
-            Func<int, Maybe<string>> getColor =
-                index => ParseQuotedStringWithMinLength(property.Values[index], 0, context).ToMaybe();
-
-            return new MenuWindowColors(
-                background: getColor(0),
-                top: getColor(1),
-                bottom: getColor(2),
-                indexBackground: getColor(3),
-                indexTop: getColor(4),
-                indexBottom: getColor(5));
-        }
-
-        public static MessageColors ParseMessageColors(IMapInfoElement element, string context)
-        {
-            var property = element.AssertAsProperty(context);
-            property.AssertValuesLength(3, context);
-
-            Func<int, Maybe<string>> getColor =
-                index => ParseQuotedStringWithMinLength(property.Values[index], 0, context).ToMaybe();
-
-            return new MessageColors(
-                background: getColor(0),
-                top: getColor(1),
-                bottom: getColor(2));
         }
 
         public static Psyched ParsePsyched(IMapInfoElement element, string context)
@@ -354,7 +311,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                     return new Psyched(
                         color1: ParseQuotedStringWithMinLength(v[0], 1, context).ToMaybe(),
                         color2: ParseQuotedStringWithMinLength(v[1], 1, context).ToMaybe(),
-                        offset: ParseInt(v[2], context).ToMaybe());
+                        offset: ParseInteger(v[2], context).ToMaybe());
 
                 default:
                     throw new ParsingException($"Unexpected number of values for {context}: {property.Values.Length}");
@@ -373,41 +330,17 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                 case 2:
                     return IntermissionBackground.Default.
                         WithTexture(ParseQuotedStringWithMinLength(property.Values[0], 1, context)).
-                        WithTiled(ParseInt(property.Values[1], context) != 0);
+                        WithTiled(ParseInteger(property.Values[1], context) != 0);
 
                 case 3:
                     return new IntermissionBackground(
                         texture: ParseQuotedStringWithMinLength(property.Values[0], 1, context).ToMaybe(),
-                        tiled: (ParseInt(property.Values[1], context) != 0).ToMaybe(),
+                        tiled: (ParseInteger(property.Values[1], context) != 0).ToMaybe(),
                         palette: ParseQuotedStringWithMinLength(property.Values[2], 1, context).ToMaybe());
 
                 default:
                     throw new ParsingException($"Unexpected number of values for {context}: {property.Values.Length}");
             }
-        }
-
-        public static IntermissionDraw ParseIntermissionDraw(IMapInfoElement element, string context)
-        {
-            var property = element.AssertAsProperty(context);
-            property.AssertValuesLength(3, context);
-
-            var v = property.Values;
-
-            return new IntermissionDraw(
-                texture: ParseQuotedStringWithMinLength(v[0], 1, context).ToMaybe(),
-                x: ParseInt(v[1], context).ToMaybe(),
-                y: ParseInt(v[2], context).ToMaybe());
-        }
-
-        public static TextScreenPosition ParseTextScreenPosition(IMapInfoElement element, string context)
-        {
-            var property = element.AssertAsProperty(context);
-
-            property.AssertValuesLength(2, context);
-
-            return new TextScreenPosition(
-                x: ParseInt(property.Values[0], context).ToMaybe(),
-                y: ParseInt(property.Values[1], context).ToMaybe());
         }
 
         public static NextMapInfo ParseNextMapInfo(IMapInfoElement element, string context)
@@ -452,37 +385,37 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                     return SpecialAction.Default.
                         WithActorClass(ParseQuotedStringWithMinLength(v[0], 1, context)).
                         WithSpecial(ParseQuotedStringWithMinLength(v[1], 1, context)).
-                        WithArg0(ParseInt(v[2], context));
+                        WithArg0(ParseInteger(v[2], context));
                 case 4:
                     return SpecialAction.Default.
                         WithActorClass(ParseQuotedStringWithMinLength(v[0], 1, context)).
                         WithSpecial(ParseQuotedStringWithMinLength(v[1], 1, context)).
-                        WithArg0(ParseInt(v[2], context)).
-                        WithArg1(ParseInt(v[3], context));
+                        WithArg0(ParseInteger(v[2], context)).
+                        WithArg1(ParseInteger(v[3], context));
                 case 5:
                     return SpecialAction.Default.
                         WithActorClass(ParseQuotedStringWithMinLength(v[0], 1, context)).
                         WithSpecial(ParseQuotedStringWithMinLength(v[1], 1, context)).
-                        WithArg0(ParseInt(v[2], context)).
-                        WithArg1(ParseInt(v[3], context)).
-                        WithArg2(ParseInt(v[4], context));
+                        WithArg0(ParseInteger(v[2], context)).
+                        WithArg1(ParseInteger(v[3], context)).
+                        WithArg2(ParseInteger(v[4], context));
                 case 6:
                     return SpecialAction.Default.
                         WithActorClass(ParseQuotedStringWithMinLength(v[0], 1, context)).
                         WithSpecial(ParseQuotedStringWithMinLength(v[1], 1, context)).
-                        WithArg0(ParseInt(v[2], context)).
-                        WithArg1(ParseInt(v[3], context)).
-                        WithArg2(ParseInt(v[4], context)).
-                        WithArg3(ParseInt(v[5], context));
+                        WithArg0(ParseInteger(v[2], context)).
+                        WithArg1(ParseInteger(v[3], context)).
+                        WithArg2(ParseInteger(v[4], context)).
+                        WithArg3(ParseInteger(v[5], context));
                 case 7:
                     return SpecialAction.Default.
                         WithActorClass(ParseQuotedStringWithMinLength(v[0], 1, context)).
                         WithSpecial(ParseQuotedStringWithMinLength(v[1], 1, context)).
-                        WithArg0(ParseInt(v[2], context)).
-                        WithArg1(ParseInt(v[3], context)).
-                        WithArg2(ParseInt(v[4], context)).
-                        WithArg3(ParseInt(v[5], context)).
-                        WithArg4(ParseInt(v[6], context));
+                        WithArg0(ParseInteger(v[2], context)).
+                        WithArg1(ParseInteger(v[3], context)).
+                        WithArg2(ParseInteger(v[4], context)).
+                        WithArg3(ParseInteger(v[5], context)).
+                        WithArg4(ParseInteger(v[6], context));
 
                 default:
                     throw new ParsingException($"Unexpected number of values for {context}: {v.Length}");
