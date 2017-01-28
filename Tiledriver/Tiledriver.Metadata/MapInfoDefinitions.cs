@@ -385,6 +385,23 @@ namespace Tiledriver.Metadata
                         new Property(formatName: "map", name: "Maps", singularName: "Map",
                             type: PropertyType.ImmutableList),
                     });
+
+            yield return new Block("skill",
+                properties: new[]
+                {
+                    new Property("id", type:PropertyType.Identifier, isMetaData:true),
+                    new Property(formatName:"damagefactor",name:"DamageFactor", type:PropertyType.Double),
+                    new Property(formatName:"fastmonsters",name:"FastMontsters", type:PropertyType.Flag),
+                    new Property(formatName:"lives",name:"Lives", type:PropertyType.Integer),
+                    new Property(formatName:"mapfilter",name:"MapFilter", type:PropertyType.Integer),
+                    new Property(formatName:"mustconfirm",name:"MustConfirm", type:PropertyType.String),
+                    new Property(formatName:"name",name:"Name", type:PropertyType.String),
+                    new Property(formatName:"picname",name:"PicName", type:PropertyType.String),
+                    new Property(formatName:"playerdamagefactor",name:"PlayerDamageFactor", type:PropertyType.Double),
+                    new Property(formatName:"quizhints",name:"QuizHints", type:PropertyType.Boolean),
+                    new Property(formatName:"scoremultiplier",name:"ScoreMultiplier", type:PropertyType.Double),
+                    new Property(formatName:"spawnfilter",name:"SpawnFilter", type:PropertyType.Integer),
+                });
         }
     }
 }

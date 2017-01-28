@@ -6376,4 +6376,241 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         }
     }
 
+    public sealed partial class Skill
+    {
+        public Maybe<string> Id { get; } = Maybe<string>.Nothing;
+        public Maybe<double> DamageFactor { get; } = Maybe<double>.Nothing;
+        public Maybe<bool> FastMontsters { get; } = Maybe<bool>.Nothing;
+        public Maybe<int> Lives { get; } = Maybe<int>.Nothing;
+        public Maybe<int> MapFilter { get; } = Maybe<int>.Nothing;
+        public Maybe<string> MustConfirm { get; } = Maybe<string>.Nothing;
+        public Maybe<string> Name { get; } = Maybe<string>.Nothing;
+        public Maybe<string> PicName { get; } = Maybe<string>.Nothing;
+        public Maybe<double> PlayerDamageFactor { get; } = Maybe<double>.Nothing;
+        public Maybe<bool> QuizHints { get; } = Maybe<bool>.Nothing;
+        public Maybe<double> ScoreMultiplier { get; } = Maybe<double>.Nothing;
+        public Maybe<int> SpawnFilter { get; } = Maybe<int>.Nothing;
+        public static Skill Default = new Skill();
+        private Skill() { }
+        public Skill(
+            Maybe<string> id,
+            Maybe<double> damageFactor,
+            Maybe<bool> fastMontsters,
+            Maybe<int> lives,
+            Maybe<int> mapFilter,
+            Maybe<string> mustConfirm,
+            Maybe<string> name,
+            Maybe<string> picName,
+            Maybe<double> playerDamageFactor,
+            Maybe<bool> quizHints,
+            Maybe<double> scoreMultiplier,
+            Maybe<int> spawnFilter)
+        {
+            Id = id;
+            DamageFactor = damageFactor;
+            FastMontsters = fastMontsters;
+            Lives = lives;
+            MapFilter = mapFilter;
+            MustConfirm = mustConfirm;
+            Name = name;
+            PicName = picName;
+            PlayerDamageFactor = playerDamageFactor;
+            QuizHints = quizHints;
+            ScoreMultiplier = scoreMultiplier;
+            SpawnFilter = spawnFilter;
+        }
+        public Skill WithId( string id )
+        {
+            return new Skill(
+                id: id.ToMaybe(),
+                damageFactor: DamageFactor,
+                fastMontsters: FastMontsters,
+                lives: Lives,
+                mapFilter: MapFilter,
+                mustConfirm: MustConfirm,
+                name: Name,
+                picName: PicName,
+                playerDamageFactor: PlayerDamageFactor,
+                quizHints: QuizHints,
+                scoreMultiplier: ScoreMultiplier,
+                spawnFilter: SpawnFilter);
+        }
+        public Skill WithDamageFactor( double damageFactor )
+        {
+            return new Skill(
+                id: Id,
+                damageFactor: damageFactor.ToMaybe(),
+                fastMontsters: FastMontsters,
+                lives: Lives,
+                mapFilter: MapFilter,
+                mustConfirm: MustConfirm,
+                name: Name,
+                picName: PicName,
+                playerDamageFactor: PlayerDamageFactor,
+                quizHints: QuizHints,
+                scoreMultiplier: ScoreMultiplier,
+                spawnFilter: SpawnFilter);
+        }
+        public Skill WithFastMontsters( bool fastMontsters )
+        {
+            return new Skill(
+                id: Id,
+                damageFactor: DamageFactor,
+                fastMontsters: fastMontsters.ToMaybe(),
+                lives: Lives,
+                mapFilter: MapFilter,
+                mustConfirm: MustConfirm,
+                name: Name,
+                picName: PicName,
+                playerDamageFactor: PlayerDamageFactor,
+                quizHints: QuizHints,
+                scoreMultiplier: ScoreMultiplier,
+                spawnFilter: SpawnFilter);
+        }
+        public Skill WithLives( int lives )
+        {
+            return new Skill(
+                id: Id,
+                damageFactor: DamageFactor,
+                fastMontsters: FastMontsters,
+                lives: lives.ToMaybe(),
+                mapFilter: MapFilter,
+                mustConfirm: MustConfirm,
+                name: Name,
+                picName: PicName,
+                playerDamageFactor: PlayerDamageFactor,
+                quizHints: QuizHints,
+                scoreMultiplier: ScoreMultiplier,
+                spawnFilter: SpawnFilter);
+        }
+        public Skill WithMapFilter( int mapFilter )
+        {
+            return new Skill(
+                id: Id,
+                damageFactor: DamageFactor,
+                fastMontsters: FastMontsters,
+                lives: Lives,
+                mapFilter: mapFilter.ToMaybe(),
+                mustConfirm: MustConfirm,
+                name: Name,
+                picName: PicName,
+                playerDamageFactor: PlayerDamageFactor,
+                quizHints: QuizHints,
+                scoreMultiplier: ScoreMultiplier,
+                spawnFilter: SpawnFilter);
+        }
+        public Skill WithMustConfirm( string mustConfirm )
+        {
+            return new Skill(
+                id: Id,
+                damageFactor: DamageFactor,
+                fastMontsters: FastMontsters,
+                lives: Lives,
+                mapFilter: MapFilter,
+                mustConfirm: mustConfirm.ToMaybe(),
+                name: Name,
+                picName: PicName,
+                playerDamageFactor: PlayerDamageFactor,
+                quizHints: QuizHints,
+                scoreMultiplier: ScoreMultiplier,
+                spawnFilter: SpawnFilter);
+        }
+        public Skill WithName( string name )
+        {
+            return new Skill(
+                id: Id,
+                damageFactor: DamageFactor,
+                fastMontsters: FastMontsters,
+                lives: Lives,
+                mapFilter: MapFilter,
+                mustConfirm: MustConfirm,
+                name: name.ToMaybe(),
+                picName: PicName,
+                playerDamageFactor: PlayerDamageFactor,
+                quizHints: QuizHints,
+                scoreMultiplier: ScoreMultiplier,
+                spawnFilter: SpawnFilter);
+        }
+        public Skill WithPicName( string picName )
+        {
+            return new Skill(
+                id: Id,
+                damageFactor: DamageFactor,
+                fastMontsters: FastMontsters,
+                lives: Lives,
+                mapFilter: MapFilter,
+                mustConfirm: MustConfirm,
+                name: Name,
+                picName: picName.ToMaybe(),
+                playerDamageFactor: PlayerDamageFactor,
+                quizHints: QuizHints,
+                scoreMultiplier: ScoreMultiplier,
+                spawnFilter: SpawnFilter);
+        }
+        public Skill WithPlayerDamageFactor( double playerDamageFactor )
+        {
+            return new Skill(
+                id: Id,
+                damageFactor: DamageFactor,
+                fastMontsters: FastMontsters,
+                lives: Lives,
+                mapFilter: MapFilter,
+                mustConfirm: MustConfirm,
+                name: Name,
+                picName: PicName,
+                playerDamageFactor: playerDamageFactor.ToMaybe(),
+                quizHints: QuizHints,
+                scoreMultiplier: ScoreMultiplier,
+                spawnFilter: SpawnFilter);
+        }
+        public Skill WithQuizHints( bool quizHints )
+        {
+            return new Skill(
+                id: Id,
+                damageFactor: DamageFactor,
+                fastMontsters: FastMontsters,
+                lives: Lives,
+                mapFilter: MapFilter,
+                mustConfirm: MustConfirm,
+                name: Name,
+                picName: PicName,
+                playerDamageFactor: PlayerDamageFactor,
+                quizHints: quizHints.ToMaybe(),
+                scoreMultiplier: ScoreMultiplier,
+                spawnFilter: SpawnFilter);
+        }
+        public Skill WithScoreMultiplier( double scoreMultiplier )
+        {
+            return new Skill(
+                id: Id,
+                damageFactor: DamageFactor,
+                fastMontsters: FastMontsters,
+                lives: Lives,
+                mapFilter: MapFilter,
+                mustConfirm: MustConfirm,
+                name: Name,
+                picName: PicName,
+                playerDamageFactor: PlayerDamageFactor,
+                quizHints: QuizHints,
+                scoreMultiplier: scoreMultiplier.ToMaybe(),
+                spawnFilter: SpawnFilter);
+        }
+        public Skill WithSpawnFilter( int spawnFilter )
+        {
+            return new Skill(
+                id: Id,
+                damageFactor: DamageFactor,
+                fastMontsters: FastMontsters,
+                lives: Lives,
+                mapFilter: MapFilter,
+                mustConfirm: MustConfirm,
+                name: Name,
+                picName: PicName,
+                playerDamageFactor: PlayerDamageFactor,
+                quizHints: QuizHints,
+                scoreMultiplier: ScoreMultiplier,
+                spawnFilter: spawnFilter.ToMaybe());
+        }
+    }
+
 }

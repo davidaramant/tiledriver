@@ -120,6 +120,13 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             }
         }
 
+        private static Skill ParseSkillMetadata(Skill skill, MapInfoBlock block)
+        {
+            block.AssertMetadataLength(1, "Skill");
+
+            return skill.WithId(block.Metadata[0]);
+        }
+
         private static Map ParseMapLumpMetadata(Map map, string metadata)
         {
             var mapLump = ParseQuotedStringWithMinLength(metadata, 1, "Map lump name");
@@ -128,7 +135,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
 
         private static string ParseString(string s, string context)
         {
-            return ParseQuotedStringWithMinLength(s,0,context);
+            return ParseQuotedStringWithMinLength(s, 0, context);
         }
 
         private static string ParseQuotedStringWithMinLength(string s, int minLength, string context)

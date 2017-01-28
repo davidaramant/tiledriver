@@ -9,6 +9,7 @@ namespace Tiledriver.Metadata
     public enum PropertyType
     {
         Flag,
+        Identifier,
         Integer,
         Ushort,
         Double,
@@ -60,6 +61,7 @@ namespace Tiledriver.Metadata
                         return "int";
                     case PropertyType.Ushort:
                         return "ushort";
+                    case PropertyType.Identifier:
                     case PropertyType.String:
                         return "string";
                     case PropertyType.Set:
@@ -99,6 +101,7 @@ namespace Tiledriver.Metadata
                         return "int";
                     case PropertyType.Ushort:
                         return "ushort";
+                    case PropertyType.Identifier:
                     case PropertyType.String:
                         return "string";
                     case PropertyType.Block:
@@ -133,6 +136,7 @@ namespace Tiledriver.Metadata
                     case PropertyType.Ushort:
                     case PropertyType.String:
                     case PropertyType.Block:
+                    case PropertyType.Identifier:
                         return ClassName.ToCamelCase();
                     case PropertyType.List:
                     case PropertyType.Set:
@@ -163,6 +167,7 @@ namespace Tiledriver.Metadata
                     case PropertyType.Integer:
                     case PropertyType.String:
                     case PropertyType.Block:
+                    case PropertyType.Identifier:
                         return ClassName.ToPascalCase();
                     case PropertyType.Set:
                     case PropertyType.List:
@@ -192,6 +197,7 @@ namespace Tiledriver.Metadata
                     case PropertyType.Ushort:
                     case PropertyType.Integer:
                     case PropertyType.String:
+                    case PropertyType.Identifier:
                         return $"public {PropertyTypeString} {PropertyName} {{ get; set; }} = {DefaultAsString};";
                     case PropertyType.Set:
                     case PropertyType.Block:
@@ -225,6 +231,7 @@ namespace Tiledriver.Metadata
                     case PropertyType.Integer:
                     case PropertyType.String:
                     case PropertyType.Block:
+                    case PropertyType.Identifier:
                         return $"{PropertyName} = {ArgumentName};";
                     case PropertyType.ImmutableList:
                         return $"{PropertyName} = {ArgumentName}.ToImmutableList();";
@@ -269,6 +276,7 @@ namespace Tiledriver.Metadata
                         return _defaultValue.ToString().ToLowerInvariant();
 
                     case PropertyType.String:
+                    case PropertyType.Identifier:
                         return "\"" + _defaultValue + "\"";
 
                     case PropertyType.Char:
@@ -296,6 +304,7 @@ namespace Tiledriver.Metadata
                     case PropertyType.Integer:
                     case PropertyType.String:
                     case PropertyType.Block:
+                    case PropertyType.Identifier:
                         return _defaultValue == null;
                     case PropertyType.Set:
                     case PropertyType.List:
@@ -325,6 +334,7 @@ namespace Tiledriver.Metadata
                     case PropertyType.Integer:
                     case PropertyType.String:
                     case PropertyType.Block:
+                    case PropertyType.Identifier:
                         return true;
                     case PropertyType.Set:
                     case PropertyType.List:
@@ -352,6 +362,7 @@ namespace Tiledriver.Metadata
                     case PropertyType.Ushort:
                     case PropertyType.Integer:
                     case PropertyType.String:
+                    case PropertyType.Identifier:
                         return Type.ToString();
                     case PropertyType.Block:
                         return CollectionType;

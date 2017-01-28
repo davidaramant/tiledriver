@@ -607,6 +607,54 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             return map;
         }
 
+        private static Skill ParseSkill(MapInfoBlock block)
+        {
+            var skill =  Skill.Default;
+            skill = ParseSkillMetadata(skill, block );
+            foreach(var property in block.Children)
+            {
+                switch (property.Name.ToLower())
+                {
+                    case "damagefactor":
+                        skill = skill.WithDamageFactor( ParseDouble(property, "Skill damagefactor") );
+                        break;
+                    case "fastmonsters":
+                        skill = skill.WithFastMontsters( ParseFlag(property, "Skill fastmonsters") );
+                        break;
+                    case "lives":
+                        skill = skill.WithLives( ParseInteger(property, "Skill lives") );
+                        break;
+                    case "mapfilter":
+                        skill = skill.WithMapFilter( ParseInteger(property, "Skill mapfilter") );
+                        break;
+                    case "mustconfirm":
+                        skill = skill.WithMustConfirm( ParseString(property, "Skill mustconfirm") );
+                        break;
+                    case "name":
+                        skill = skill.WithName( ParseString(property, "Skill name") );
+                        break;
+                    case "picname":
+                        skill = skill.WithPicName( ParseString(property, "Skill picname") );
+                        break;
+                    case "playerdamagefactor":
+                        skill = skill.WithPlayerDamageFactor( ParseDouble(property, "Skill playerdamagefactor") );
+                        break;
+                    case "quizhints":
+                        skill = skill.WithQuizHints( ParseBoolean(property, "Skill quizhints") );
+                        break;
+                    case "scoremultiplier":
+                        skill = skill.WithScoreMultiplier( ParseDouble(property, "Skill scoremultiplier") );
+                        break;
+                    case "spawnfilter":
+                        skill = skill.WithSpawnFilter( ParseInteger(property, "Skill spawnfilter") );
+                        break;
+                    default:
+                        throw new ParsingException($"Unknown element '{property.Name}' found in Skill.");
+                }
+            }
+            return skill;
+        }
+
         private static MenuColors ParseMenuColors(IMapInfoElement element, string context)
         {
             var property = element.AssertAsProperty(context);
