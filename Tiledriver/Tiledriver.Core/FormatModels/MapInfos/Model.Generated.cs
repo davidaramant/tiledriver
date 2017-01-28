@@ -3322,18 +3322,45 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public Maybe<IntermissionBackground> Background { get; } = Maybe<IntermissionBackground>.Nothing;
         public Maybe<IntermissionDraw> Draw { get; } = Maybe<IntermissionDraw>.Nothing;
         public Maybe<string> Music { get; } = Maybe<string>.Nothing;
-        public Maybe<int> Time { get; } = Maybe<int>.Nothing;
+        public Maybe<IntermissionTime> Time { get; } = Maybe<IntermissionTime>.Nothing;
         protected IntermissionAction() { }
         protected IntermissionAction(
             Maybe<IntermissionBackground> background,
             Maybe<IntermissionDraw> draw,
             Maybe<string> music,
-            Maybe<int> time)
+            Maybe<IntermissionTime> time)
         {
             Background = background;
             Draw = draw;
             Music = music;
             Time = time;
+        }
+    }
+
+    public sealed partial class IntermissionTime
+    {
+        public Maybe<int> Time { get; } = Maybe<int>.Nothing;
+        public Maybe<bool> TitleTime { get; } = Maybe<bool>.Nothing;
+        public static IntermissionTime Default = new IntermissionTime();
+        private IntermissionTime() { }
+        public IntermissionTime(
+            Maybe<int> time,
+            Maybe<bool> titleTime)
+        {
+            Time = time;
+            TitleTime = titleTime;
+        }
+        public IntermissionTime WithTime( int time )
+        {
+            return new IntermissionTime(
+                time: time.ToMaybe(),
+                titleTime: TitleTime);
+        }
+        public IntermissionTime WithTitleTime( bool titleTime )
+        {
+            return new IntermissionTime(
+                time: Time,
+                titleTime: titleTime.ToMaybe());
         }
     }
 
@@ -3424,7 +3451,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             Maybe<IntermissionBackground> background,
             Maybe<IntermissionDraw> draw,
             Maybe<string> music,
-            Maybe<int> time,
+            Maybe<IntermissionTime> time,
             Maybe<string> fadeType)
             : base(
                 background,
@@ -3461,7 +3488,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 time: Time,
                 fadeType: FadeType);
         }
-        public Fader WithTime( int time )
+        public Fader WithTime( IntermissionTime time )
         {
             return new Fader(
                 background: Background,
@@ -3495,7 +3522,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             Maybe<IntermissionBackground> background,
             Maybe<IntermissionDraw> draw,
             Maybe<string> music,
-            Maybe<int> time)
+            Maybe<IntermissionTime> time)
             : base(
                 background,
                 draw,
@@ -3527,7 +3554,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 music: music.ToMaybe(),
                 time: Time);
         }
-        public Image WithTime( int time )
+        public Image WithTime( IntermissionTime time )
         {
             return new Image(
                 background: Background,
@@ -3550,7 +3577,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             Maybe<IntermissionBackground> background,
             Maybe<IntermissionDraw> draw,
             Maybe<string> music,
-            Maybe<int> time,
+            Maybe<IntermissionTime> time,
             IEnumerable<string> texts,
             Maybe<string> textAlignment,
             Maybe<string> textColor,
@@ -3607,7 +3634,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 textSpeed: TextSpeed,
                 position: Position);
         }
-        public TextScreen WithTime( int time )
+        public TextScreen WithTime( IntermissionTime time )
         {
             return new TextScreen(
                 background: Background,
@@ -3735,7 +3762,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             Maybe<IntermissionBackground> background,
             Maybe<IntermissionDraw> draw,
             Maybe<string> music,
-            Maybe<int> time)
+            Maybe<IntermissionTime> time)
             : base(
                 background,
                 draw,
@@ -3767,7 +3794,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 music: music.ToMaybe(),
                 time: Time);
         }
-        public VictoryStats WithTime( int time )
+        public VictoryStats WithTime( IntermissionTime time )
         {
             return new VictoryStats(
                 background: Background,

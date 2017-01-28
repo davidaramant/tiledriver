@@ -241,10 +241,10 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                         fader = fader.WithMusic( ParseString(property, "Fader music") );
                         break;
                     case "time":
-                        fader = fader.WithTime( ParseInteger(property, "Fader time") );
+                        fader = fader.WithTime( ParseIntermissionTime(property, "Fader time") );
                         break;
                     case "fadetype":
-                        fader = fader.WithFadeType( ParseString(property, "Fader fadetype") );
+                        fader = fader.WithFadeType( ParseIdentifier(property, "Fader fadetype") );
                         break;
                     default:
                         throw new ParsingException($"Unknown element '{property.Name}' found in Fader.");
@@ -286,7 +286,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                         image = image.WithMusic( ParseString(property, "Image music") );
                         break;
                     case "time":
-                        image = image.WithTime( ParseInteger(property, "Image time") );
+                        image = image.WithTime( ParseIntermissionTime(property, "Image time") );
                         break;
                     default:
                         throw new ParsingException($"Unknown element '{property.Name}' found in Image.");
@@ -313,7 +313,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                         textScreen = textScreen.WithMusic( ParseString(property, "TextScreen music") );
                         break;
                     case "time":
-                        textScreen = textScreen.WithTime( ParseInteger(property, "TextScreen time") );
+                        textScreen = textScreen.WithTime( ParseIntermissionTime(property, "TextScreen time") );
                         break;
                     case "text":
                         textScreen = textScreen.WithTexts( ParseStringImmutableList(property, "TextScreen text") );
@@ -355,7 +355,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                         victoryStats = victoryStats.WithMusic( ParseString(property, "VictoryStats music") );
                         break;
                     case "time":
-                        victoryStats = victoryStats.WithTime( ParseInteger(property, "VictoryStats time") );
+                        victoryStats = victoryStats.WithTime( ParseIntermissionTime(property, "VictoryStats time") );
                         break;
                     default:
                         throw new ParsingException($"Unknown element '{property.Name}' found in VictoryStats.");

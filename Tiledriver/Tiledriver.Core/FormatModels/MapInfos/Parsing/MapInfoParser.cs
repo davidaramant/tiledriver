@@ -159,7 +159,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                     return str;
                 }
             }
-            throw new ParsingException($"{context} was not a properly formatted string.");
+            throw new ParsingException($"{context} was not a properly formatted string: " + s);
         }
 
         private static int ParseInteger(string s, string context)
@@ -167,7 +167,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             int result;
             if (!int.TryParse(s, NumberStyles.None, CultureInfo.InvariantCulture, out result))
             {
-                throw new ParsingException($"{context} was not an integer.");
+                throw new ParsingException($"{context} was not an integer: " + s);
             }
             return result;
         }
@@ -190,9 +190,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             double result;
             if (!double.TryParse(property.Values[0], NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out result))
             {
-                throw new ParsingException($"{context} was not a floating point number.");
+                throw new ParsingException($"{context} was not a floating point number: " + property.Values[0]);
             }
             return result;
+        }
+
+        private static string ParseIdentifier(string s, string context)
+        {
+            // TODO: Should this be a real Identifier type?
+            return s;
+        }
+
+        private static string ParseIdentifier(IMapInfoElement element, string context)
+        {
+            var property = element.AssertAsProperty(context);
+
+            property.AssertValuesLength(1, context);
+
+            return property.Values[0];
         }
 
         private static string ParseString(IMapInfoElement element, string context)
@@ -207,7 +222,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             {
                 return s.Substring(1).RemoveLast(1);
             }
-            throw new ParsingException($"{context} was not a properly formatted string.");
+            throw new ParsingException($"{context} was not a properly formatted string: " + s);
         }
 
         private static char ParseChar(IMapInfoElement element, string context)
@@ -215,7 +230,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             var s = ParseString(element, context);
 
             if (s.Length != 1)
-                throw new ParsingException($"{context} was not a properly formatted char.");
+                throw new ParsingException($"{context} was not a properly formatted char: " + s);
 
             return s[0];
         }
@@ -233,7 +248,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                 case "false":
                     return false;
                 default:
-                    throw new ParsingException($"{context} was not a properly formatted boolean.");
+                    throw new ParsingException($"{context} was not a properly formatted boolean: " + property.Values[0]);
             }
         }
 
@@ -287,7 +302,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                 case 4:
                     if (v[0] != "inset")
                     {
-                        throw new ParsingException($"Expected 'inset' in {context}.");
+                        throw new ParsingException($"Expected 'inset' in {context}: " + v[0]);
                     }
 
                     return GameBorder.Default.WithColors(new GameBorderColors(
@@ -340,24 +355,48 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
         {
             var property = element.AssertAsProperty(context);
 
+            // TODO: The 'Identifier' thing is a bit of a hack.  ECWolf has some special cases for the texture.
+
             switch (property.Values.Length)
             {
                 case 1:
-                    return IntermissionBackground.Default.WithTexture(ParseQuotedStringWithMinLength(property.Values[0], 1, context));
+                    return IntermissionBackground.Default.WithTexture(ParseIdentifier(property.Values[0], context));
 
                 case 2:
                     return IntermissionBackground.Default.
-                        WithTexture(ParseQuotedStringWithMinLength(property.Values[0], 1, context)).
+                        WithTexture(ParseIdentifier(property.Values[0], context)).
                         WithTiled(ParseInteger(property.Values[1], context) != 0);
 
                 case 3:
                     return new IntermissionBackground(
-                        texture: ParseQuotedStringWithMinLength(property.Values[0], 1, context).ToMaybe(),
+                        texture: ParseIdentifier(property.Values[0], context).ToMaybe(),
                         tiled: (ParseInteger(property.Values[1], context) != 0).ToMaybe(),
                         palette: ParseQuotedStringWithMinLength(property.Values[2], 1, context).ToMaybe());
 
                 default:
                     throw new ParsingException($"Unexpected number of values for {context}: {property.Values.Length}");
+            }
+        }
+
+        public static IntermissionTime ParseIntermissionTime(IMapInfoElement element, string context)
+        {
+            var property = element.AssertAsProperty(context);
+            property.AssertValuesLength(1, context);
+
+            var v = property.Values[0];
+
+            int time = 0;
+            if (int.TryParse(v, out time))
+            {
+                return IntermissionTime.Default.WithTime(time);
+            }
+            else if (v.ToLowerInvariant() == "titletime")
+            {
+                return IntermissionTime.Default.WithTitleTime(true);
+            }
+            else
+            {
+                throw new ParsingException($"Unknown value in {context}: " + v);
             }
         }
 
@@ -375,7 +414,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                 case 2:
                     if (v[0] != "EndSequence")
                     {
-                        throw new ParsingException($"Expected 'EndSequence' in {context}");
+                        throw new ParsingException($"Expected 'EndSequence' in {context}: " + v[0]);
                     }
 
                     return new NextMapInfo(
@@ -453,23 +492,23 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
 
                 switch (property.Name.ToLower())
                 {
-                    case "Fader":
+                    case "fader":
                         children.Add(ParseFader(subBlock));
                         break;
 
-                    case "GotoTitle":
+                    case "gototitle":
                         children.Add(ParseGoToTitle(subBlock));
                         break;
 
-                    case "Image":
+                    case "image":
                         children.Add(ParseImage(subBlock));
                         break;
 
-                    case "TextScreen":
+                    case "textscreen":
                         children.Add(ParseTextScreen(subBlock));
                         break;
 
-                    case "VictoryStats":
+                    case "victorystats":
                         children.Add(ParseVictoryStats(subBlock));
                         break;
 

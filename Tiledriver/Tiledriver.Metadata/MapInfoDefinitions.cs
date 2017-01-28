@@ -226,7 +226,15 @@ namespace Tiledriver.Metadata
                         new Property("background", type: PropertyType.Block, collectionType: "IntermissionBackground"),
                         new Property("draw", type: PropertyType.Block, collectionType: "IntermissionDraw"),
                         new Property("music", type: PropertyType.String),
+                        new Property("time", type: PropertyType.Block, collectionType:"IntermissionTime"),
+                    });
+
+            yield return new Block("IntermissionTime",
+                    parsing: Parsing.Manual,
+                    properties: new[]
+                    {
                         new Property("time", type: PropertyType.Integer),
+                        new Property("TitleTime",type:PropertyType.Boolean),
                     });
 
             yield return new Block("IntermissionBackground",
@@ -252,7 +260,7 @@ namespace Tiledriver.Metadata
                     implements: new[] { "IIntermissionAction" },
                     properties: new[]
                     {
-                        new Property(formatName: "fadetype", name: "fadeType", type: PropertyType.String),
+                        new Property(formatName: "fadetype", name: "fadeType", type: PropertyType.Identifier),
                     });
 
             yield return new Block(formatName: "GotoTitle", className: "GoToTitle",
