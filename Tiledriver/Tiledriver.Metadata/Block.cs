@@ -8,6 +8,13 @@ using Functional.Maybe;
 
 namespace Tiledriver.Metadata
 {
+    public enum Parsing
+    {
+        Normal,
+        Manual,
+        InOrder
+    }
+
     [DebuggerDisplay("{" + nameof(ClassName) + "}")]
     public sealed class Block : NamedItem
     {
@@ -15,8 +22,9 @@ namespace Tiledriver.Metadata
 
         public IEnumerable<Property> Properties => _properties;
         public bool IsSubBlock { get; }
+        public Parsing ParsingMode { get; }
         public bool NormalWriting { get; }
-        public bool NormalReading { get; }
+        public bool NormalParsing => ParsingMode == Parsing.Normal;
         public bool IsAbstract { get; }
         public IEnumerable<string> SetsPropertiesFrom { get; }
         public IEnumerable<string> PropertyFallbacksFrom { get; }
@@ -36,7 +44,7 @@ namespace Tiledriver.Metadata
             string className = null,
             bool isSubBlock = true,
             bool normalWriting = true,
-            bool normalReading = true,
+            Parsing parsing = Parsing.Normal,
             string inheritsFrom = null,
             bool isAbstract = false,
             IEnumerable<string> implements = null,
@@ -46,7 +54,7 @@ namespace Tiledriver.Metadata
         {
             IsSubBlock = isSubBlock;
             NormalWriting = normalWriting;
-            NormalReading = normalReading;
+            ParsingMode = parsing;
             IsAbstract = isAbstract;
             SetsPropertiesFrom = canSetPropertiesFrom ?? Enumerable.Empty<string>();
             PropertyFallbacksFrom = propertyFallbacksFrom ?? Enumerable.Empty<string>();

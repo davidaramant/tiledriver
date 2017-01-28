@@ -24,7 +24,7 @@ OpenParen();
             WriteGlobalAssignmentParsing(output);
             WriteBlockParsing(output);
 
-            foreach (var block in UwmfDefinitions.Blocks.Where(_ => _.NormalReading))
+            foreach (var block in UwmfDefinitions.Blocks.Where(_ => _.NormalParsing))
             {
                 output.
                     Line($"public static {block.ClassName.ToPascalCase()} Parse{block.ClassName.ToPascalCase()}(IHaveAssignments block)").
@@ -81,7 +81,7 @@ OpenParen();
             output.Line("switch(block.Name.ToLower())");
             output.OpenParen();
 
-            foreach (var block in UwmfDefinitions.Blocks.Where(_ => _.NormalReading))
+            foreach (var block in UwmfDefinitions.Blocks.Where(_ => _.NormalParsing))
             {
                 output.
                     Line($"case \"{block.ClassName.ToCamelCase()}\":").

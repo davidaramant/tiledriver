@@ -10,14 +10,14 @@ namespace Tiledriver.Metadata
         public static readonly IEnumerable<Block> Blocks = new[]
         {
             new Block("ambushModzone",
-                normalReading:false,
+                parsing:Parsing.Manual,
                 properties:new []
                 {
                     new Property("fillzone", type:PropertyType.Boolean, defaultValue:false),
                 }),
 
             new Block("changeTriggerModzone",
-                normalReading:false,
+                parsing:Parsing.Manual,
                 properties:new []
                 {
                     new Property("fillzone", type:PropertyType.Boolean, defaultValue:false),
@@ -26,7 +26,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("thingDefinition",
-                normalReading:false,
+                parsing:Parsing.Manual,
                 properties:new []
                 {
                     new Property("actor",type:PropertyType.String),
@@ -60,7 +60,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("tiles",className:"TileMappings",
-                normalReading:false,
+                parsing:Parsing.Manual,
                 isSubBlock:false,
                 properties:new[]
                 {
@@ -72,7 +72,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("things",className:"ThingMappings",
-                normalReading:false,
+                parsing:Parsing.Manual,
                 isSubBlock:false,
                 properties:new []
                 {
@@ -82,7 +82,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("flats",className:"FlatMappings",
-                normalReading:false,
+                parsing:Parsing.Manual,
                 isSubBlock:false,
                 properties:new[]
                 {

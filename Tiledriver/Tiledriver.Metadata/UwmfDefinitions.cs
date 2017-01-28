@@ -55,7 +55,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("tileSpace",
-                normalReading:false,
+                parsing:Parsing.Manual,
                 normalWriting:false,
                 properties:new []
                 {
@@ -66,7 +66,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("planeMap",
-                normalReading:false,
+                parsing:Parsing.Manual,
                 properties:new []
                 {
                     new Property("tileSpace",PropertyType.List),
@@ -117,7 +117,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("map",
-                normalReading:false,
+                parsing:Parsing.Manual,
                 isSubBlock:false,
                 properties:new []
                 {

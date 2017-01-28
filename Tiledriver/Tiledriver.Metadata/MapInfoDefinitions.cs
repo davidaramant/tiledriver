@@ -39,7 +39,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("ClusterExitText",
-                normalReading:false,
+                parsing:Parsing.Manual,
                 properties:new[]
                 {
                     new Property("text",type:PropertyType.String),
@@ -116,7 +116,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("GameBorder",
-                normalReading:false,
+                parsing:Parsing.Manual,
                 properties:new[]
                 {
                     new Property("Colors",type:PropertyType.Block,collectionType:"GameBorderColors"),
@@ -125,7 +125,7 @@ namespace Tiledriver.Metadata
 
 
             new Block("GameBorderColors",
-                normalReading:false,
+                parsing:Parsing.Manual,
                 properties:new[]
                 {
                     new Property("topColor",type:PropertyType.String),
@@ -134,7 +134,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("GameBorderGraphics",
-                normalReading:false,
+                parsing:Parsing.Manual,
                 properties:new[]
                 {
                     new Property("offset",type:PropertyType.Integer),
@@ -149,7 +149,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("MenuColors",
-                normalReading:false,
+                parsing:Parsing.Manual,
                 properties:new[]
                 {
                     new Property("border1",type:PropertyType.String),
@@ -161,7 +161,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("MenuWindowColors",
-                normalReading:false,
+                parsing:Parsing.Manual,
                 properties:new[]
                 {
                     new Property("background",type:PropertyType.String),
@@ -173,7 +173,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("MessageColors",
-                normalReading:false,
+                parsing:Parsing.Manual,
                 properties:new[]
                 {
                     new Property("background",type:PropertyType.String),
@@ -182,7 +182,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("Psyched",
-                normalReading:false,
+                parsing:Parsing.Manual,
                 properties:new[]
                 {
                     new Property("color1",type:PropertyType.String),
@@ -193,7 +193,7 @@ namespace Tiledriver.Metadata
             // intermission
             new Block("intermission",
                 isSubBlock:false,
-                normalReading:false,
+                parsing:Parsing.Manual,
                 properties:new []
                 {
                     new Property("name",type:PropertyType.String,isMetaData:true),
@@ -202,7 +202,7 @@ namespace Tiledriver.Metadata
 
             new Block("IntermissionAction",
                 isAbstract: true,
-                normalReading:false,
+                parsing:Parsing.Manual,
                 properties:new[]
                 {
                     new Property("background",type:PropertyType.Block, collectionType:"IntermissionBackground"),
@@ -212,7 +212,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("IntermissionBackground",
-                normalReading:false,
+                parsing:Parsing.Manual,
                 properties:new []
                 {
                     new Property("texture",type:PropertyType.String),
@@ -221,7 +221,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("IntermissionDraw",
-                normalReading:false,
+                parsing:Parsing.Manual,
                 properties:new []
                 {
                     new Property("texture",type:PropertyType.String),
@@ -259,7 +259,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("TextScreenPosition",
-                normalReading:false,
+                parsing:Parsing.Manual,
                 properties:new []
                 {
                     new Property("x",type:PropertyType.Integer),
@@ -284,7 +284,7 @@ namespace Tiledriver.Metadata
                 properties:Enumerable.Empty<Property>()),
             new Block("BaseMap",
                 isAbstract: true,
-                normalReading:false,
+                parsing:Parsing.Manual,
                 properties:new []
                 {
                     new Property(formatName:"bordertexture",name:"borderTexture",type:PropertyType.String),
@@ -322,7 +322,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("NextMapInfo",
-                normalReading:false,
+                parsing:Parsing.Manual,
                 properties:new []
                 {
                     new Property("Name",PropertyType.String),
@@ -330,7 +330,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("specialaction",className: "SpecialAction",
-                normalReading:false,
+                parsing:Parsing.Manual,
                 properties:new []
                 {
                     new Property(formatName:"actorclass",name:"actorClass",type:PropertyType.String),
@@ -343,7 +343,7 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("mapInfo",
-                normalReading:false,
+                parsing:Parsing.Manual,
                 properties:new []
                 {
                     new Property(formatName:"cluster",name:"Clusters",singularName:"Cluster",type:PropertyType.ImmutableList),
