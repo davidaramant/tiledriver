@@ -6,18 +6,17 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using Tiledriver.Core.Uwmf;
 using Tiledriver.UwmfViewer.Views;
-using static Tiledriver.UwmfViewer.Views.Palette;
+using static System.Windows.Media.Colors;
 
 namespace Tiledriver.UwmfViewer.ViewModels
 {
     public class ThingVm : MapItemVm
     {
         private readonly Thing thing;
+        public bool isPlayer => thing.Type == "$Player1Start";
         private readonly string category;
-        private readonly Geometry geometry;
-        private readonly SolidColorBrush fill;
-        private readonly SolidColorBrush stroke;
         private readonly bool shouldRotate;
+        public override double Angle() => shouldRotate ? (450 - thing.Angle) % 360 : 0;
 
         public ThingVm(Thing thing, string category)
         {
@@ -26,9 +25,9 @@ namespace Tiledriver.UwmfViewer.ViewModels
 
             var template = templates.ContainsKey(thing.Type) ? templates[thing.Type] : templates.ContainsKey(category ?? "") ? templates[category] : Default;
 
-            geometry = template.Geometry;
-            fill = template.Fill;
-            stroke = template.Stroke;
+            shape = template.Geometry;
+            Fill = template.Fill;
+            Stroke = template.Stroke;
             shouldRotate = template.ShouldRotate;
 
             Coordinates = new Point(Math.Floor(thing.X), Math.Floor(thing.Y));
@@ -37,13 +36,16 @@ namespace Tiledriver.UwmfViewer.ViewModels
 
         public override Path CreatePath(int size)
         {
+            var points = Utilities.PointManipulator.CreatePath(shape, Width(64), Height(64), 0, 0, 0);
+            var pathMarkup = $"M {String.Join(" ", points)} Z";
+
             element = new Path()
             {
                 Height = Height(size),
                 Width = Width(size),
-                Data = geometry,
-                Fill = fill,
-                Stroke = stroke,
+                Data = Geometry.Parse(pathMarkup),
+                Fill = Fill.ToBrush(),
+                Stroke = Stroke.ToBrush(),
                 StrokeThickness = 2,
                 Stretch = Stretch.Uniform
             };
@@ -92,7 +94,7 @@ namespace Tiledriver.UwmfViewer.ViewModels
             { "$Player1Start", Player() },
             { "PatrolPoint", PatrolPoint() },
             // GUARDS
-            { "DeadGuard", Circle(Brown, SaddleBrown) },
+            { "DeadGuard", Diamond(Brown, SaddleBrown) },
             { "Dog", Dog() },
             { "Guard", EnemyMan(SaddleBrown) },
             { "Officer", EnemyMan(White) },
@@ -102,41 +104,41 @@ namespace Tiledriver.UwmfViewer.ViewModels
             { "GoldKey", Key(Gold) },
             { "SilverKey", Key(Silver) },
             // DECORATIONS
-            { "WhitePillar", Circle(White, LightGray) },
-            { "CeilingLight", Circle(LightYellow, LightGoldenrodYellow) },
+            { "WhitePillar", Diamond(White, LightGray) },
+            { "CeilingLight", Diamond(LightYellow, LightGoldenrodYellow) },
             
             // CATEGORIES
             { "Bosses", Boss() },
             { "Ghosts", PacmanGhost() },
-            { "Decorations", Circle(Green, LightGreen) },
+            { "Decorations", Diamond(Green, LightGreen) },
             { "Treasure", Treasure() },
             { "Health", Health() },
             { "Weapons", Weapons() },
             { "Ammo", Ammo() },
         };
 
-        private static ThingVmTemplate Default => new ThingVmTemplate(CIRCLE, Violet, White);
-        private static ThingVmTemplate Player() => new ThingVmTemplate(MAN, Transparent, Yellow, true);
-        private static ThingVmTemplate PatrolPoint() => new ThingVmTemplate(ARROW, Black, White, true);
-        private static ThingVmTemplate EnemyMan(SolidColorBrush fill) => new ThingVmTemplate(MAN, fill, White, true);
-        private static ThingVmTemplate Boss() => new ThingVmTemplate(BOSS, Red, White, true);
-        private static ThingVmTemplate Key(SolidColorBrush fill) => new ThingVmTemplate(KEY, fill, fill);
-        private static ThingVmTemplate PacmanGhost() => new ThingVmTemplate(PACMAN_GHOST, GhostWhite, LightBlue);
-        private static ThingVmTemplate Circle(SolidColorBrush fill, SolidColorBrush stroke) => new ThingVmTemplate(CIRCLE, fill, stroke);
-        private static ThingVmTemplate Dog() => new ThingVmTemplate(DOG, Brown, SaddleBrown, shouldRotate:true);
-        private static ThingVmTemplate Treasure() => new ThingVmTemplate(CROWN, Gold, Gold);
-        private static ThingVmTemplate Health() => new ThingVmTemplate(CROSS, Blue, White);
-        private static ThingVmTemplate Weapons() => new ThingVmTemplate(GUN, Gray, LightGray);
-        private static ThingVmTemplate Ammo() => new ThingVmTemplate(AMMO, Gray, LightGray);
+        private static ThingVmTemplate Default => new ThingVmTemplate(iDIAMOND, Violet, White);
+        private static ThingVmTemplate Player() => new ThingVmTemplate(iMAN, Yellow, Yellow, true);
+        private static ThingVmTemplate PatrolPoint() => new ThingVmTemplate(iARROW, Black, White, true);
+        private static ThingVmTemplate EnemyMan(Color fill) => new ThingVmTemplate(iMAN, fill, White, true);
+        private static ThingVmTemplate Boss() => new ThingVmTemplate(iBOSS, Red, White, true);
+        private static ThingVmTemplate Key(Color fill) => new ThingVmTemplate(iKEY, fill, fill);
+        private static ThingVmTemplate PacmanGhost() => new ThingVmTemplate(iPACMAN_GHOST, GhostWhite, LightBlue);
+        private static ThingVmTemplate Diamond(Color fill, Color stroke) => new ThingVmTemplate(iDIAMOND, fill, stroke);
+        private static ThingVmTemplate Dog() => new ThingVmTemplate(iDOG, Brown, SaddleBrown, shouldRotate:true);
+        private static ThingVmTemplate Treasure() => new ThingVmTemplate(iCROWN, Gold, Gold);
+        private static ThingVmTemplate Health() => new ThingVmTemplate(iCROSS, Blue, White);
+        private static ThingVmTemplate Weapons() => new ThingVmTemplate(iGUN, Gray, LightGray);
+        private static ThingVmTemplate Ammo() => new ThingVmTemplate(iAMMO, Gray, LightGray);
 
         private class ThingVmTemplate
         {
-            public Geometry Geometry { get; }
-            public SolidColorBrush Fill { get; }
-            public SolidColorBrush Stroke { get; }
+            public int[] Geometry { get; }
+            public Color Fill { get; }
+            public Color Stroke { get; }
             public bool ShouldRotate { get; }
 
-            public ThingVmTemplate(Geometry geometry, SolidColorBrush fill, SolidColorBrush stroke, bool shouldRotate = false)
+            public ThingVmTemplate(int[] geometry, Color fill, Color stroke, bool shouldRotate = false)
             {
                 Geometry = geometry;
                 Fill = fill;
