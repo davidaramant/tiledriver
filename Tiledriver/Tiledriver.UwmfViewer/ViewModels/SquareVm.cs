@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Tiledriver.Core.Uwmf;
-using static Tiledriver.UwmfViewer.Views.Palette;
+using static System.Windows.Media.Colors;
 
 namespace Tiledriver.UwmfViewer.ViewModels
 {
@@ -15,6 +16,7 @@ namespace Tiledriver.UwmfViewer.ViewModels
         private readonly Tile tile;
         private readonly Sector sector;
         private readonly int zone;
+        public override double Angle() => 0;
 
         public SquareVm(int x, int y, Tile tile, Sector sector, int zone)
         {
@@ -25,6 +27,27 @@ namespace Tiledriver.UwmfViewer.ViewModels
             this.zone = zone;
             Coordinates = new Point(x, y);
             LayerType = LayerType.Tile;
+
+            if (tile == null)
+            {
+                Fill = Stroke = Black;
+                shape = MapItemVm.iSQUARE;
+            }
+            else if (tile.TextureNorth.StartsWith("DOOR"))
+            {
+                Fill = Stroke = Gray;
+                shape = MapItemVm.iNSDOOR;
+            }
+            else if (tile.TextureNorth.StartsWith("SLOT"))
+            {
+                Fill = Stroke = Gray;
+                shape = MapItemVm.iEWDOOR;
+            }
+            else
+            {
+                Fill = Stroke = DarkGray;
+                shape = MapItemVm.iSQUARE;
+            }
         }
 
         public override Path CreatePath(int size)
@@ -90,26 +113,7 @@ namespace Tiledriver.UwmfViewer.ViewModels
 
         private void SetProperties(Path element)
         {
-            if (tile == null)
-            {
-                element.Fill = element.Stroke = Black;
-                element.Data = MapItemVm.SQUARE;
-            }
-            else if (tile.TextureNorth.StartsWith("DOOR"))
-            {
-                element.Fill = element.Stroke = Gray;
-                element.Data = MapItemVm.NSDOOR;
-            }
-            else if (tile.TextureNorth.StartsWith("SLOT"))
-            {
-                element.Fill = element.Stroke = Gray;
-                element.Data = MapItemVm.EWDOOR;
-            }
-            else
-            {
-                element.Fill = element.Stroke = DarkGray;
-                element.Data = MapItemVm.SQUARE;
-            }
+           
         }
     }
 }

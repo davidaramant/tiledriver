@@ -10,9 +10,10 @@
     <ScrollViewer HorizontalScrollBarVisibility="Visible"
                   VerticalScrollBarVisibility="Visible"
                   PanningMode="Both">
-        <Canvas x:Name="FullArea"
-                SnapsToDevicePixels="True"
-                Margin="32">
+        <Canvas x:Name="Canvas">
+            <Image x:Name="MapImage"
+                   SnapsToDevicePixels="True"
+                   Margin="32" />
         </Canvas>
     </ScrollViewer>
 </UserControl>

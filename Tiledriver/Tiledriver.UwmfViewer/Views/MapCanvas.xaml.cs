@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Tiledriver.Core.Uwmf;
 using Tiledriver.UwmfViewer.ViewModels;
@@ -12,9 +13,13 @@ namespace Tiledriver.UwmfViewer.Views
 {
     public partial class MapCanvas
     {
-        private int squareSize = 24;
+        private int squareSize = 48;
+        private int viewSquareSize = 24;
         private ObservableCollection<MapItemVm> mapItems = new ObservableCollection<MapItemVm>();
         private Path selectionMarker;
+        private Point? selectionCoordinates;
+        private WriteableBitmap wb;
+        private Map map;
 
         public event EventHandler<MapItemEventArgs> NotifyNewMapItems;
 
@@ -22,25 +27,45 @@ namespace Tiledriver.UwmfViewer.Views
         {
             InitializeComponent();
 
-            FullArea.MouseUp += (sender, args) =>
+            Canvas.MouseUp += (sender, args) =>
             {
-                var pos = args.GetPosition(FullArea);
-                HandleEventAt(new Point((int)pos.X / squareSize, (int)pos.Y / squareSize));
+                var pos = args.GetPosition(MapImage);
+                selectionCoordinates = new Point((int)pos.X / viewSquareSize, (int)pos.Y / viewSquareSize);
+                HandleEventAt(selectionCoordinates.Value);
             };
+        }
+
+        public void Resize(int size)
+        {
+            viewSquareSize = size;
+
+            Canvas.Height = map.Height * size;
+            Canvas.Width = map.Width * size;
+            MapImage.Height = map.Height * size;
+            MapImage.Width = map.Width * size;
+
+            Canvas.Children.Remove(selectionMarker);
+            selectionMarker = CreateSelectionMarker(size);
+            if (selectionCoordinates.HasValue)
+            {
+                HandleEventAt(selectionCoordinates.Value);
+            }
         }
 
         public void Update(Map map, int size)
         {
-            squareSize = size;
+            this.map = map;
+            selectionCoordinates = null;
+            Resize(size);
 
             ClearDetailsPane();
-            FullArea.Children.Clear();
+            MapImage.Source = null;
             mapItems = new ObservableCollection<MapItemVm>();
-            selectionMarker = CreateSelectionMarker(squareSize);
 
-            FullArea.Height = map.Height * squareSize;
-            FullArea.Width = map.Width * squareSize;
-            FullArea.Background = Colors.Black.ToBrush();
+            MapImage.StretchDirection = StretchDirection.Both;
+            MapImage.Source = null;
+            wb = BitmapFactory.New(map.Height * squareSize, map.Width * squareSize);
+            MapImage.Source = wb;
 
             var factory = new MapItemVmFactory(map);
 
@@ -58,23 +83,29 @@ namespace Tiledriver.UwmfViewer.Views
             {
                 AddMapItem(factory.BuildThing(thing));
             }
+
+            using (wb.GetBitmapContext())
+            {
+                wb.Clear(Colors.Black);
+
+                foreach (var mapItem in mapItems)
+                {
+                    wb.FillPolygon(mapItem.Points(squareSize), mapItem.Fill);
+                }
+            }
         }
 
         private void AddMapItem(MapItemVm mapItem)
         {
             mapItems.Add(mapItem);
-            //if (mapItem.ShouldAddToCanvas)
-            {
-                FullArea.Children.Add(mapItem.CreatePath(squareSize));
-            }
         }
 
         private void HandleEventAt(Point coordinate)
         {
-            FullArea.Children.Remove(selectionMarker);
-            Canvas.SetLeft(selectionMarker, coordinate.X * squareSize);
-            Canvas.SetTop(selectionMarker, coordinate.Y * squareSize);
-            FullArea.Children.Add(selectionMarker);
+            Canvas.Children.Remove(selectionMarker);
+            Canvas.SetLeft(selectionMarker, coordinate.X * viewSquareSize + 32);
+            Canvas.SetTop(selectionMarker, coordinate.Y * viewSquareSize + 32);
+            Canvas.Children.Add(selectionMarker);
 
             var filteredMapItems = new ObservableCollection<MapItemVm>(mapItems
                 .Where(i => i.Coordinates.Equals(coordinate)));

@@ -52,7 +52,7 @@ namespace Tiledriver.UwmfViewer
             ZoomOutButton.IsEnabled = true;
             tileSize = Math.Min(tileSize + 8, 32);
             if (tileSize == 32) ZoomInButton.IsEnabled = false;
-            MapCanvas.Update(vm.Map, tileSize);
+            MapCanvas.Resize(tileSize);
         }
 
         private void ZoomOut(object sender, RoutedEventArgs e)
@@ -60,7 +60,7 @@ namespace Tiledriver.UwmfViewer
             ZoomInButton.IsEnabled = true;
             tileSize = Math.Max(tileSize - 8, 8);
             if (tileSize == 8) ZoomOutButton.IsEnabled = false;
-            MapCanvas.Update(vm.Map, tileSize);
+            MapCanvas.Resize(tileSize);
         }
 
         private void SelectMapFile(object sender, RoutedEventArgs e)
@@ -90,6 +90,7 @@ namespace Tiledriver.UwmfViewer
         {
             if (!File.Exists(fileName)) return;
 
+            tileSize = 24;
             using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
             {
                 vm.Map = Parser.Parse(new Lexer(new UwmfCharReader(stream)));
