@@ -61,6 +61,10 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WriteableBitmapEx.Wpf, Version=1.5.0.0, Culture=neutral, PublicKeyToken=50375ca6144f1c69, processorArchitecture=MSIL">
+      <HintPath>..\packages\WriteableBitmapEx.1.5.0.0\lib\net40\WriteableBitmapEx.Wpf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -70,6 +74,7 @@
     <Compile Include="Converters\HexToBrushConverter.cs" />
     <Compile Include="Converters\EmptyStringVisibilityConverter.cs" />
     <Compile Include="Utilities\FunctionalExtensions.cs" />
+    <Compile Include="Utilities\PointManipulator.cs" />
     <Compile Include="ViewModels\BaseNotifyingVm.cs" />
     <Compile Include="ViewModels\DetailProperties.cs" />
     <Compile Include="ViewModels\DetailViewVm.cs" />
