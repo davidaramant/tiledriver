@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Tiledriver.Core.Uwmf;
+using Tiledriver.Core.FormatModels.Uwmf;
 
 namespace Tiledriver.Gui.Utilities
 {

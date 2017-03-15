@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using Tiledriver.Core.Uwmf;
+using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Gui.ViewModels;
 
 namespace Tiledriver.Gui.Views

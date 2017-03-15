@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Input;
-using Tiledriver.Core.Uwmf.Parsing;
+using Tiledriver.Core.FormatModels.Uwmf.Parsing;
 using Tiledriver.Gui.ViewModels;
 
 namespace Tiledriver.Gui
@@ -86,13 +87,16 @@ namespace Tiledriver.Gui
             OpenMapFile(packagedMapFilesDir + "thingdemo.txt");
         }
 
-        private void OpenMapFile(string fileName)
+        private void OpenMapFile(string filePath)
         {
-            if (!File.Exists(fileName)) return;
+            if (!File.Exists(filePath)) return;
 
-            using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+            // TODO: Use some kind of dependency injection system
+            using (var stream = File.OpenRead(filePath))
+            using (var textReader = new StreamReader(stream, Encoding.ASCII))
             {
-                vm.Map = Parser.Parse(new Lexer(new UwmfCharReader(stream)));
+                var sa = new UwmfSyntaxAnalyzer();
+                vm.Map = UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader)));
                 Application.Current.MainWindow.Title = $"Tiledriver UWMF Viewer - {vm.Map.Name}";
             }
         }

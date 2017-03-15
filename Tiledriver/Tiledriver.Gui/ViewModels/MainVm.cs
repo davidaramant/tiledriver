@@ -1,4 +1,4 @@
-﻿using Tiledriver.Core.Uwmf;
+﻿using Tiledriver.Core.FormatModels.Uwmf;
 
 namespace Tiledriver.Gui.ViewModels
 {

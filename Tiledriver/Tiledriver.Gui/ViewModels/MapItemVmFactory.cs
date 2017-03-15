@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using Tiledriver.Core.Uwmf;
+using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.Wolf3D;
 using Tiledriver.Gui.Utilities;
 using Tiledriver.Gui.ViewModels;
