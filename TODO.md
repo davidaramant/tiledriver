@@ -1,9 +1,11 @@
 # TODOs
 
 - Parsing of MapInfo
-    - Add Automap and Skill blocks to documentation and metadata
+    - Add Automap and Skill blocks to documentation
 - WAD file resource provider
 - File system resource provider
+- PK3 resource provider
+- Parse 
 - Convert GameMaps to UWMF
     - Hook together existing framework pieces
     - Convert

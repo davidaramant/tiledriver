@@ -7,7 +7,7 @@ using JetBrains.Annotations;
 
 namespace Tiledriver.Core.FormatModels.Common
 {
-    [DebuggerDisplay("{_name}")]
+    [DebuggerDisplay("{" + nameof(_name) + "}")]
     public sealed class Identifier
     {
         private readonly string _name;
