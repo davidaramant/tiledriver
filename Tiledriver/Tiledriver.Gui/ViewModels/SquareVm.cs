@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) 2016, Ryan Clarke and Jason Giles
+// Copyright (c) 2017, David Aramant
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,80 +14,80 @@ namespace Tiledriver.Gui.ViewModels
 {
     public class SquareVm : MapItemVm
     {
-        private readonly int x;
-        private readonly int y;
-        private readonly Tile tile;
-        private readonly Sector sector;
-        private readonly int zone;
+        private readonly int _x;
+        private readonly int _y;
+        private readonly Tile _tile;
+        private readonly Sector _sector;
+        private readonly int _zone;
 
         public SquareVm(int x, int y, Tile tile, Sector sector, int zone)
         {
-            this.x = x;
-            this.y = y;
-            this.tile = tile;
-            this.sector = sector;
-            this.zone = zone;
+            this._x = x;
+            this._y = y;
+            this._tile = tile;
+            this._sector = sector;
+            this._zone = zone;
             Coordinates = new Point(x, y);
             LayerType = LayerType.Tile;
         }
 
         public override Path CreatePath(int size)
         {
-            element = new Path()
+            Element = new Path()
             {
                 Width = Width(size),
                 Height = Width(size),
                 Stretch = Stretch.Uniform
             };
-            SetProperties(element);
+            SetProperties(Element);
 
-            Canvas.SetLeft(element, Left(size));
-            Canvas.SetTop(element, Top(size));
+            Canvas.SetLeft(Element, Left(size));
+            Canvas.SetTop(Element, Top(size));
 
-            return element;
+            return Element;
         }
 
-        public override double Left(double size) => x * size;
-        public override double Top(double size) => y * size;
+        public override double Left(double size) => _x * size;
+        public override double Top(double size) => _y * size;
         public override double Height(double size) => size;
         public override double Width(double size) => size;
 
-        public override bool ShouldAddToCanvas => tile != null;
+        public override bool ShouldAddToCanvas => _tile != null;
 
-        public override string DetailType => tile == null ? "Space" : (tile.TextureNorth.StartsWith("DOOR") || tile.TextureNorth.StartsWith("SLOT")) ? "Door" : "Wall";
+        public override string DetailType => _tile == null ? "Space" : (_tile.TextureNorth.StartsWith("DOOR") || _tile.TextureNorth.StartsWith("SLOT")) ? "Door" : "Wall";
 
         public override IEnumerable<DetailProperties> Details
         {
             get
             {
-                yield return new DetailProperties("Position", "X", x.ToString());
-                yield return new DetailProperties("Position", "Y", y.ToString());
+                yield return new DetailProperties("Position", "X", _x.ToString());
+                yield return new DetailProperties("Position", "Y", _y.ToString());
 
-                if (sector != null)
+                if (_sector != null)
                 {
-                    yield return new DetailProperties("Sector", "CeilingTexture", sector.TextureCeiling);
-                    yield return new DetailProperties("Sector", "FloorTexture", sector.TextureFloor);
+                    yield return new DetailProperties("Sector", "CeilingTexture", _sector.TextureCeiling);
+                    yield return new DetailProperties("Sector", "FloorTexture", _sector.TextureFloor);
                 }
 
-                if (zone >= 0)
+                if (_zone >= 0)
                 {
-                    yield return new DetailProperties("Miscellaneous", "Zone", zone.ToString());
+                    yield return new DetailProperties("Miscellaneous", "Zone", _zone.ToString());
                 }
                 
-                if (tile != null)
+                if (_tile != null)
                 {
-                    yield return new DetailProperties("Texture", "Texture North", tile.TextureNorth);
-                    yield return new DetailProperties("Texture", "Texture East", tile.TextureEast);
-                    yield return new DetailProperties("Texture", "Texture South", tile.TextureSouth);
-                    yield return new DetailProperties("Texture", "Texture West", tile.TextureWest);
+                    yield return new DetailProperties("Texture", "Texture North", _tile.TextureNorth);
+                    yield return new DetailProperties("Texture", "Texture East", _tile.TextureEast);
+                    yield return new DetailProperties("Texture", "Texture South", _tile.TextureSouth);
+                    yield return new DetailProperties("Texture", "Texture West", _tile.TextureWest);
 
-                    yield return new DetailProperties("Texture Offset", "Offset Vertical", tile.OffsetVertical ? "Yes" : "No");
-                    yield return new DetailProperties("Texture Offset", "Offset Horizontal", tile.OffsetHorizontal ? "Yes" : "No");
+                    yield return new DetailProperties("Texture Offset", "Offset Vertical", _tile.OffsetVertical ? "Yes" : "No");
+                    yield return new DetailProperties("Texture Offset", "Offset Horizontal", _tile.OffsetHorizontal ? "Yes" : "No");
 
-                    yield return new DetailProperties("Texture Blocking", "Blocking North", tile.BlockingNorth ? "Yes" : "No");
-                    yield return new DetailProperties("Texture Blocking", "Blocking East", tile.BlockingEast ? "Yes" : "No");
-                    yield return new DetailProperties("Texture Blocking", "Blocking South", tile.BlockingSouth ? "Yes" : "No");
-                    yield return new DetailProperties("Texture Blocking", "Blocking West", tile.BlockingWest ? "Yes" : "No");
+                    yield return new DetailProperties("Texture Blocking", "Blocking North", _tile.BlockingNorth ? "Yes" : "No");
+                    yield return new DetailProperties("Texture Blocking", "Blocking East", _tile.BlockingEast ? "Yes" : "No");
+                    yield return new DetailProperties("Texture Blocking", "Blocking South", _tile.BlockingSouth ? "Yes" : "No");
+                    yield return new DetailProperties("Texture Blocking", "Blocking West", _tile.BlockingWest ? "Yes" : "No");
                 }
             }
         }
@@ -93,25 +96,25 @@ namespace Tiledriver.Gui.ViewModels
         {
             SolidColorBrush color;
             string path;
-            if (tile == null)
+            if (_tile == null)
             {
                 color = Colors.Black.ToBrush();
-                path = MapItemVm.SQUARE;
+                path = MapItemVm.SquarePath;
             }
-            else if (tile.TextureNorth.StartsWith("DOOR"))
+            else if (_tile.TextureNorth.StartsWith("DOOR"))
             {
                 color = Colors.Gray.ToBrush();
-                path = MapItemVm.NSDOOR;
+                path = MapItemVm.NorthSouthDoorPath;
             }
-            else if (tile.TextureNorth.StartsWith("SLOT"))
+            else if (_tile.TextureNorth.StartsWith("SLOT"))
             {
                 color = Colors.Gray.ToBrush();
-                path = MapItemVm.EWDOOR;
+                path = MapItemVm.EastWestDoorPath;
             }
             else
             {
                 color = Colors.DarkGray.ToBrush();
-                path = MapItemVm.SQUARE;
+                path = MapItemVm.SquarePath;
             }
 
             element.Fill = color;

@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// Copyright (c) 2016, Ryan Clarke and Jason Giles
+// Copyright (c) 2017, David Aramant
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tiledriver.Gui.ViewModels
 {
     public class MapCanvasVm : BaseNotifyingVm
     {
-        private ObservableCollection<MapItemVm> mapItems;
+        private ObservableCollection<MapItemVm> _mapItems;
         public ObservableCollection<MapItemVm> MapItems { get; set; }
     }
 }

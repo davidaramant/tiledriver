@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Copyright (c) 2016, Ryan Clarke and Jason Giles
+// Copyright (c) 2017, David Aramant
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+
+using System;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -10,18 +14,18 @@ namespace Tiledriver.Gui
 {
     public partial class MainWindow
     {
-        private MainVm vm = new MainVm();
+        private readonly MainVm _vm = new MainVm();
 
-        private int tileSize = 24;
+        private int _tileSize = 24;
 
-        private string packagedMapFilesDir = System.AppDomain.CurrentDomain.BaseDirectory + "..\\..\\MapFiles\\";
+        private readonly string _packagedMapFilesDir = System.AppDomain.CurrentDomain.BaseDirectory + "..\\..\\MapFiles\\";
 
         public MainWindow()
         {
             InitializeComponent();
 
-            DataContext = vm;
-            vm.PropertyChanged += SubscribeMapCanvasToMapChanges;
+            DataContext = _vm;
+            _vm.PropertyChanged += SubscribeMapCanvasToMapChanges;
             MapCanvas.NotifyNewMapItems += DetailPane.Update;
             KeyDown += MainWindow_KeyDown;
         }
@@ -40,9 +44,9 @@ namespace Tiledriver.Gui
 
         private void SubscribeMapCanvasToMapChanges(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName.Equals(nameof(vm.Map)))
+            if (e.PropertyName.Equals(nameof(_vm.Map)))
             {
-                MapCanvas.Update(vm.Map, tileSize);
+                MapCanvas.Update(_vm.Map, _tileSize);
                 ZoomInButton.IsEnabled = true;
                 ZoomOutButton.IsEnabled = true;
             }
@@ -51,17 +55,17 @@ namespace Tiledriver.Gui
         private void ZoomIn(object sender, RoutedEventArgs e)
         {
             ZoomOutButton.IsEnabled = true;
-            tileSize = Math.Min(tileSize + 8, 32);
-            if (tileSize == 32) ZoomInButton.IsEnabled = false;
-            MapCanvas.Update(vm.Map, tileSize);
+            _tileSize = Math.Min(_tileSize + 8, 32);
+            if (_tileSize == 32) ZoomInButton.IsEnabled = false;
+            MapCanvas.Update(_vm.Map, _tileSize);
         }
 
         private void ZoomOut(object sender, RoutedEventArgs e)
         {
             ZoomInButton.IsEnabled = true;
-            tileSize = Math.Max(tileSize - 8, 8);
-            if (tileSize == 8) ZoomOutButton.IsEnabled = false;
-            MapCanvas.Update(vm.Map, tileSize);
+            _tileSize = Math.Max(_tileSize - 8, 8);
+            if (_tileSize == 8) ZoomOutButton.IsEnabled = false;
+            MapCanvas.Update(_vm.Map, _tileSize);
         }
 
         private void SelectMapFile(object sender, RoutedEventArgs e)
@@ -79,12 +83,12 @@ namespace Tiledriver.Gui
 
         private void SelectDefaultMapFile(object sender, RoutedEventArgs e)
         {
-            OpenMapFile(packagedMapFilesDir + "FIXEDTEXTMAP.txt");
+            OpenMapFile(_packagedMapFilesDir + "FIXEDTEXTMAP.txt");
         }
 
         private void SelectDemoMapFile(object sender, RoutedEventArgs e)
         {
-            OpenMapFile(packagedMapFilesDir + "thingdemo.txt");
+            OpenMapFile(_packagedMapFilesDir + "thingdemo.txt");
         }
 
         private void OpenMapFile(string filePath)
@@ -96,8 +100,8 @@ namespace Tiledriver.Gui
             using (var textReader = new StreamReader(stream, Encoding.ASCII))
             {
                 var sa = new UwmfSyntaxAnalyzer();
-                vm.Map = UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader)));
-                Application.Current.MainWindow.Title = $"Tiledriver UWMF Viewer - {vm.Map.Name}";
+                _vm.Map = UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader)));
+                Application.Current.MainWindow.Title = $"Tiledriver UWMF Viewer - {_vm.Map.Name}";
             }
         }
 

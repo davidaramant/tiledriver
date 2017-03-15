@@ -1,5 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// Copyright (c) 2016, Ryan Clarke and Jason Giles
+// Copyright (c) 2017, David Aramant
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -13,9 +16,9 @@ namespace Tiledriver.Gui.Views
 {
     public partial class MapCanvas
     {
-        private int squareSize = 24;
-        private ObservableCollection<MapItemVm> mapItems = new ObservableCollection<MapItemVm>();
-        private Path selectionMarker;
+        private int _squareSize = 24;
+        private ObservableCollection<MapItemVm> _mapItems = new ObservableCollection<MapItemVm>();
+        private Path _selectionMarker;
 
         public event EventHandler<MapItemEventArgs> NotifyNewMapItems;
 
@@ -26,21 +29,21 @@ namespace Tiledriver.Gui.Views
             FullArea.MouseUp += (sender, args) =>
             {
                 var pos = args.GetPosition(FullArea);
-                HandleEventAt(new Point((int)pos.X / squareSize, (int)pos.Y / squareSize));
+                HandleEventAt(new Point((int)pos.X / _squareSize, (int)pos.Y / _squareSize));
             };
         }
 
         public void Update(Map map, int size)
         {
-            squareSize = size;
+            _squareSize = size;
 
             ClearDetailsPane();
             FullArea.Children.Clear();
-            mapItems = new ObservableCollection<MapItemVm>();
-            selectionMarker = CreateSelectionMarker(squareSize);
+            _mapItems = new ObservableCollection<MapItemVm>();
+            _selectionMarker = CreateSelectionMarker(_squareSize);
 
-            FullArea.Height = map.Height * squareSize;
-            FullArea.Width = map.Width * squareSize;
+            FullArea.Height = map.Height * _squareSize;
+            FullArea.Width = map.Width * _squareSize;
             FullArea.Background = Colors.Black.ToBrush();
 
             var factory = new MapItemVmFactory(map);
@@ -63,21 +66,21 @@ namespace Tiledriver.Gui.Views
 
         private void AddMapItem(MapItemVm mapItem)
         {
-            mapItems.Add(mapItem);
+            _mapItems.Add(mapItem);
             if (mapItem.ShouldAddToCanvas)
             {
-                FullArea.Children.Add(mapItem.CreatePath(squareSize));
+                FullArea.Children.Add(mapItem.CreatePath(_squareSize));
             }
         }
 
         private void HandleEventAt(Point coordinate)
         {
-            FullArea.Children.Remove(selectionMarker);
-            Canvas.SetLeft(selectionMarker, coordinate.X * squareSize);
-            Canvas.SetTop(selectionMarker, coordinate.Y * squareSize);
-            FullArea.Children.Add(selectionMarker);
+            FullArea.Children.Remove(_selectionMarker);
+            Canvas.SetLeft(_selectionMarker, coordinate.X * _squareSize);
+            Canvas.SetTop(_selectionMarker, coordinate.Y * _squareSize);
+            FullArea.Children.Add(_selectionMarker);
 
-            var filteredMapItems = new ObservableCollection<MapItemVm>(mapItems
+            var filteredMapItems = new ObservableCollection<MapItemVm>(_mapItems
                 .Where(i => i.Coordinates.Equals(coordinate)));
 
             ShowDetails(filteredMapItems);
@@ -89,7 +92,7 @@ namespace Tiledriver.Gui.Views
             {
                 Height = size,
                 Width = size,
-                Data = Geometry.Parse(MapItemVm.SQUARE),
+                Data = Geometry.Parse(MapItemVm.SquarePath),
                 Fill = Colors.Transparent.ToBrush(),
                 Stroke = Colors.Red.ToBrush(),
                 StrokeThickness = 1,

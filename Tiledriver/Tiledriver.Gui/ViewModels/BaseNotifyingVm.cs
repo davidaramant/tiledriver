@@ -1,4 +1,8 @@
-﻿using System.ComponentModel;
+﻿// Copyright (c) 2016, Ryan Clarke and Jason Giles
+// Copyright (c) 2017, David Aramant
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace Tiledriver.Gui.ViewModels

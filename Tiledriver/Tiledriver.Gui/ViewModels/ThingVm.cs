@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Copyright (c) 2016, Ryan Clarke and Jason Giles
+// Copyright (c) 2017, David Aramant
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,24 +16,24 @@ namespace Tiledriver.Gui.ViewModels
 {
     public class ThingVm : MapItemVm
     {
-        private readonly Thing thing;
-        private readonly string category;
-        private readonly Geometry geometry;
-        private readonly SolidColorBrush fill;
-        private readonly SolidColorBrush stroke;
-        private readonly bool shouldRotate;
+        private readonly Thing _thing;
+        private readonly string _category;
+        private readonly Geometry _geometry;
+        private readonly SolidColorBrush _fill;
+        private readonly SolidColorBrush _stroke;
+        private readonly bool _shouldRotate;
 
         public ThingVm(Thing thing, string category)
         {
-            this.thing = thing;
-            this.category = category;
+            this._thing = thing;
+            this._category = category;
 
-            var template = templates.ContainsKey(thing.Type) ? templates[thing.Type] : templates.ContainsKey(category ?? "") ? templates[category] : Default;
+            var template = _templates.ContainsKey(thing.Type) ? _templates[thing.Type] : _templates.ContainsKey(category ?? "") ? _templates[category] : Default;
 
-            geometry = template.Geometry;
-            fill = template.Fill;
-            stroke = template.Stroke;
-            shouldRotate = template.ShouldRotate;
+            _geometry = template.Geometry;
+            _fill = template.Fill;
+            _stroke = template.Stroke;
+            _shouldRotate = template.ShouldRotate;
 
             Coordinates = new Point(Math.Floor(thing.X), Math.Floor(thing.Y));
             LayerType = LayerType.Thing;
@@ -37,56 +41,56 @@ namespace Tiledriver.Gui.ViewModels
 
         public override Path CreatePath(int size)
         {
-            element = new Path()
+            Element = new Path()
             {
                 Height = Height(size),
                 Width = Width(size),
-                Data = geometry,
-                Fill = fill,
-                Stroke = stroke,
+                Data = _geometry,
+                Fill = _fill,
+                Stroke = _stroke,
                 StrokeThickness = 2,
                 Stretch = Stretch.Uniform
             };
 
-            if (shouldRotate)
+            if (_shouldRotate)
             {
-                element.RenderTransform = new RotateTransform((450 - thing.Angle) % 360, Width(size) / 2, Height(size) / 2);
+                Element.RenderTransform = new RotateTransform((450 - _thing.Angle) % 360, Width(size) / 2, Height(size) / 2);
             }
 
-            Canvas.SetLeft(element, Left(size));
-            Canvas.SetTop(element, Top(size));
+            Canvas.SetLeft(Element, Left(size));
+            Canvas.SetTop(Element, Top(size));
 
-            return element;
+            return Element;
         }
 
-        public override double Left(double size) => thing.X * size - Width(size) / 2;
-        public override double Top(double size) => thing.Y * size - Height(size) / 2;
+        public override double Left(double size) => _thing.X * size - Width(size) / 2;
+        public override double Top(double size) => _thing.Y * size - Height(size) / 2;
         public override double Height(double size) => size / 1.6;
         public override double Width(double size) => size / 1.6;
 
-        public override string DetailType => thing?.Type ?? "Thing";
+        public override string DetailType => _thing?.Type ?? "Thing";
 
         public override IEnumerable<DetailProperties> Details
         {
             get
             {
-                yield return new DetailProperties(null, "Category", category);
+                yield return new DetailProperties(null, "Category", _category);
 
-                yield return new DetailProperties("Position", "X", thing.X.ToString());
-                yield return new DetailProperties("Position", "Y", thing.Y.ToString());
-                yield return new DetailProperties("Position", "Angle", thing.Angle.ToString());
+                yield return new DetailProperties("Position", "X", _thing.X.ToString());
+                yield return new DetailProperties("Position", "Y", _thing.Y.ToString());
+                yield return new DetailProperties("Position", "Angle", _thing.Angle.ToString());
 
-                yield return new DetailProperties("Skill Level", "Level 1", thing.Skill1 ? "Yes" : "No");
-                yield return new DetailProperties("Skill Level", "Level 2", thing.Skill2 ? "Yes" : "No");
-                yield return new DetailProperties("Skill Level", "Level 3", thing.Skill3 ? "Yes" : "No");
-                yield return new DetailProperties("Skill Level", "Level 4", thing.Skill4 ? "Yes" : "No");
+                yield return new DetailProperties("Skill Level", "Level 1", _thing.Skill1 ? "Yes" : "No");
+                yield return new DetailProperties("Skill Level", "Level 2", _thing.Skill2 ? "Yes" : "No");
+                yield return new DetailProperties("Skill Level", "Level 3", _thing.Skill3 ? "Yes" : "No");
+                yield return new DetailProperties("Skill Level", "Level 4", _thing.Skill4 ? "Yes" : "No");
 
-                yield return new DetailProperties("Special", "Ambush", thing.Ambush ? "Yes" : "No");
-                yield return new DetailProperties("Special", "Patrol", thing.Patrol ? "Yes" : "No");
+                yield return new DetailProperties("Special", "Ambush", _thing.Ambush ? "Yes" : "No");
+                yield return new DetailProperties("Special", "Patrol", _thing.Patrol ? "Yes" : "No");
             }
         }
 
-        private static Dictionary<string, ThingVmTemplate> templates = new Dictionary<string, ThingVmTemplate>
+        private static Dictionary<string, ThingVmTemplate> _templates = new Dictionary<string, ThingVmTemplate>
         {
             // SPECIAL
             { "$Player1Start", Player() },
@@ -115,20 +119,20 @@ namespace Tiledriver.Gui.ViewModels
             { "Ammo", Ammo() },
         };
 
-        private static ThingVmTemplate Default => new ThingVmTemplate(CIRCLE, Violet, White);
+        private static ThingVmTemplate Default => new ThingVmTemplate(CirclePath, Violet, White);
 
-        private static ThingVmTemplate Player() => new ThingVmTemplate(MAN, Black, Yellow, true);
-        private static ThingVmTemplate PatrolPoint() => new ThingVmTemplate(ARROW, Black, White, true);
-        private static ThingVmTemplate EnemyMan(Color fill) => new ThingVmTemplate(MAN, fill, White, true);
-        private static ThingVmTemplate Boss() => new ThingVmTemplate(BOSS, Red, White, true);
-        private static ThingVmTemplate Key(Color fill) => new ThingVmTemplate(KEY, fill, fill);
-        private static ThingVmTemplate PacmanGhost() => new ThingVmTemplate(PACMAN_GHOST, GhostWhite, LightBlue);
-        private static ThingVmTemplate Circle(Color fill, Color stroke) => new ThingVmTemplate(CIRCLE, fill, stroke);
-        private static ThingVmTemplate Dog() => new ThingVmTemplate(DOG, Brown, SaddleBrown, shouldRotate:true);
-        private static ThingVmTemplate Treasure() => new ThingVmTemplate(CROWN, Gold, Gold);
-        private static ThingVmTemplate Health() => new ThingVmTemplate(CROSS, Blue, White);
-        private static ThingVmTemplate Weapons() => new ThingVmTemplate(GUN, Gray, LightGray);
-        private static ThingVmTemplate Ammo() => new ThingVmTemplate(AMMO, Gray, LightGray);
+        private static ThingVmTemplate Player() => new ThingVmTemplate(ManPath, Black, Yellow, true);
+        private static ThingVmTemplate PatrolPoint() => new ThingVmTemplate(ArrowPath, Black, White, true);
+        private static ThingVmTemplate EnemyMan(Color fill) => new ThingVmTemplate(ManPath, fill, White, true);
+        private static ThingVmTemplate Boss() => new ThingVmTemplate(BossPath, Red, White, true);
+        private static ThingVmTemplate Key(Color fill) => new ThingVmTemplate(KeyPath, fill, fill);
+        private static ThingVmTemplate PacmanGhost() => new ThingVmTemplate(PacmanGhostPath, GhostWhite, LightBlue);
+        private static ThingVmTemplate Circle(Color fill, Color stroke) => new ThingVmTemplate(CirclePath, fill, stroke);
+        private static ThingVmTemplate Dog() => new ThingVmTemplate(DogPath, Brown, SaddleBrown, shouldRotate:true);
+        private static ThingVmTemplate Treasure() => new ThingVmTemplate(CrownPath, Gold, Gold);
+        private static ThingVmTemplate Health() => new ThingVmTemplate(CrossPath, Blue, White);
+        private static ThingVmTemplate Weapons() => new ThingVmTemplate(GunPath, Gray, LightGray);
+        private static ThingVmTemplate Ammo() => new ThingVmTemplate(AmmoPath, Gray, LightGray);
 
         private class ThingVmTemplate
         {

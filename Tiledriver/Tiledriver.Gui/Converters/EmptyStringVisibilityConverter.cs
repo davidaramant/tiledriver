@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Copyright (c) 2016, Ryan Clarke and Jason Giles
+// Copyright (c) 2017, David Aramant
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+
+using System;
 using System.Globalization;
 using System.Windows.Data;
 using static System.String;

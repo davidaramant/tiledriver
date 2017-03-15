@@ -27,7 +27,7 @@ foreach( var block in UwmfDefinitions.Blocks )
         public static void AssertEqual( <#= block.ClassName.ToPascalCase() #> actual, <#= block.ClassName.ToPascalCase() #> expected )
         {
 <#
-    foreach( var property in block.Properties.Where( p => p.ScalarField ) )
+    foreach( var property in block.Properties.Where( p => p.IsScalarField ) )
     {
 #>
             Assert.That(
@@ -36,7 +36,7 @@ foreach( var block in UwmfDefinitions.Blocks )
                 "Found difference in <#= block.ClassName.ToPascalCase() #> <#= property.PropertyName #>" );
 <#
     }
-    foreach( var subBlock in block.Properties.Where( p => !p.ScalarField ) )
+    foreach( var subBlock in block.Properties.Where( p => !p.IsScalarField ) )
     {
 #>
             Assert.That(
