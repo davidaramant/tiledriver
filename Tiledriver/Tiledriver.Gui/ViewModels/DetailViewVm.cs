@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace Tiledriver.UwmfViewer.ViewModels
+namespace Tiledriver.Gui.ViewModels
 {
     public class DetailViewVm : BaseNotifyingVm
     {

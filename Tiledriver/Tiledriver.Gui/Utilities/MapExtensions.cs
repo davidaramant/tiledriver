@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Tiledriver.Core.Uwmf;
 
-namespace Tiledriver.UwmfViewer.Utilities
+namespace Tiledriver.Gui.Utilities
 {
     public static class MapExtensions
     {

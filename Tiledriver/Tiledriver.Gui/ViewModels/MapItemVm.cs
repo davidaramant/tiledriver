@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
 
-namespace Tiledriver.UwmfViewer.ViewModels
+namespace Tiledriver.Gui.ViewModels
 {
     public abstract class MapItemVm
     {

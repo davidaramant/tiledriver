@@ -5,10 +5,10 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Tiledriver.Core.Uwmf;
-using Tiledriver.UwmfViewer.Views;
+using Tiledriver.Gui.Views;
 using static System.Windows.Media.Colors;
 
-namespace Tiledriver.UwmfViewer.ViewModels
+namespace Tiledriver.Gui.ViewModels
 {
     public class ThingVm : MapItemVm
     {

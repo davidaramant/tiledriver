@@ -7,9 +7,9 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Tiledriver.Core.Uwmf;
-using Tiledriver.UwmfViewer.ViewModels;
+using Tiledriver.Gui.ViewModels;
 
-namespace Tiledriver.UwmfViewer.Views
+namespace Tiledriver.Gui.Views
 {
     public partial class MapCanvas
     {

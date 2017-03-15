@@ -1,4 +1,4 @@
-﻿namespace Tiledriver.UwmfViewer.ViewModels
+﻿namespace Tiledriver.Gui.ViewModels
 {
     public enum LayerType
     {

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Tiledriver.UwmfViewer.ViewModels
+namespace Tiledriver.Gui.ViewModels
 {
     public class BaseNotifyingVm : INotifyPropertyChanged
     {

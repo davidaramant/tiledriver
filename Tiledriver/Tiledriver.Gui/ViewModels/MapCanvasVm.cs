@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tiledriver.UwmfViewer.ViewModels
+namespace Tiledriver.Gui.ViewModels
 {
     public class MapCanvasVm : BaseNotifyingVm
     {

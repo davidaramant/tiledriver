@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
 
-namespace Tiledriver.UwmfViewer.Views
+namespace Tiledriver.Gui.Views
 {
     static class ViewExtensions
     {

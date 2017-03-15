@@ -4,10 +4,10 @@ using System.Linq;
 using System.Windows;
 using Tiledriver.Core.Uwmf;
 using Tiledriver.Core.Wolf3D;
-using Tiledriver.UwmfViewer.Utilities;
-using Tiledriver.UwmfViewer.ViewModels;
+using Tiledriver.Gui.Utilities;
+using Tiledriver.Gui.ViewModels;
 
-namespace Tiledriver.UwmfViewer.ViewModels
+namespace Tiledriver.Gui.ViewModels
 {
     public class MapItemVmFactory
     {

@@ -4,7 +4,7 @@ using System.Windows.Data;
 using static System.String;
 using static System.Windows.Visibility;
 
-namespace Tiledriver.UwmfViewer.Converters
+namespace Tiledriver.Gui.Converters
 {
     public class EmptyStringVisibilityConverter : IValueConverter
     {

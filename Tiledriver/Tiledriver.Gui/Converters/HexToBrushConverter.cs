@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace Tiledriver.UwmfViewer.Converters
+namespace Tiledriver.Gui.Converters
 {
     public class HexToBrushConverter : IValueConverter
     {

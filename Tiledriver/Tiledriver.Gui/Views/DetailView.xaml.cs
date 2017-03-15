@@ -1,6 +1,6 @@
-﻿using Tiledriver.UwmfViewer.ViewModels;
+﻿using Tiledriver.Gui.ViewModels;
 
-namespace Tiledriver.UwmfViewer.Views
+namespace Tiledriver.Gui.Views
 {
     public partial class DetailView
     {

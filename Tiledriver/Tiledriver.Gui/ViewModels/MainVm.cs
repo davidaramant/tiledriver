@@ -1,6 +1,6 @@
 ﻿using Tiledriver.Core.Uwmf;
 
-namespace Tiledriver.UwmfViewer.ViewModels
+namespace Tiledriver.Gui.ViewModels
 {
     public class MainVm : BaseNotifyingVm
     {

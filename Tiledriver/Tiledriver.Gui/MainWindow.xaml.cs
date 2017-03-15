@@ -3,9 +3,9 @@ using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using Tiledriver.Core.Uwmf.Parsing;
-using Tiledriver.UwmfViewer.ViewModels;
+using Tiledriver.Gui.ViewModels;
 
-namespace Tiledriver.UwmfViewer
+namespace Tiledriver.Gui
 {
     public partial class MainWindow
     {
