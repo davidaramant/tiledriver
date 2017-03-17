@@ -11,7 +11,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
 {
     public static class XlatParser
     {
-        public static MapTranslator Parse(IEnumerable<Expression> xlatExpressions)
+        public static MapTranslatorInfo Parse(IEnumerable<Expression> xlatExpressions)
         {
             var tileMappings = new TileMappings();
             var thingMappings = new ThingMappings();
@@ -61,7 +61,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
                 }
             }
 
-            return new MapTranslator(tileMappings, thingMappings, flatMappings, enableLightLevels);
+            return new MapTranslatorInfo(tileMappings, thingMappings, flatMappings, enableLightLevels);
         }
 
         private static void ValidateSectionBlock(Expression section, string name)
