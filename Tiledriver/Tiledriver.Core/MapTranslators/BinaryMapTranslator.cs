@@ -43,25 +43,16 @@ namespace Tiledriver.Core.MapTranslators
                 width: binaryMap.Size.Width,
                 height: binaryMap.Size.Height,
                 name: mapInfo.MapName.OrElse(binaryMap.Name),
-                tiles: new List<Tile> // TODO
-                {
-                    new Tile
-                    (
-                        textureNorth: "GSTONEA1",
-                        textureSouth: "GSTONEA1",
-                        textureEast: "GSTONEA2",
-                        textureWest: "GSTONEA2"
-                    ),
-                },
+                tiles: _translatorInfo.TileMappings.Tiles.Values,
                 sectors: hasSectorInfo ? TranslateSectors(binaryMap) : CreateDefaultSector(mapInfo),
                 zones: new List<Zone> // TODO
                 {
                     new Zone(),
                 },
                 planes: new List<Plane> { new Plane(depth: 64) },
-                planeMaps: new[] { new PlaneMap(tileSpaces: CreateGeometry(64, 64)), },
+                planeMaps: new[] { new PlaneMap(tileSpaces: TranslateTileSpaces(binaryMap, mapInfo)), },
                 things: TranslateThings(binaryMap),
-                triggers: new List<Trigger>()
+                triggers: new List<Trigger>() // TODO
             );
         }
 
@@ -128,19 +119,6 @@ namespace Tiledriver.Core.MapTranslators
                         throw new InvalidOperationException("Unknown mapping type");
                 }
             }
-
-            //yield return new Thing
-            //(
-            //    type: Actor.Player1Start.ClassName,
-            //    x: 1.5,
-            //    y: 1.5,
-            //    z: 0,
-            //    angle: 0,
-            //    skill1: true,
-            //    skill2: true,
-            //    skill3: true,
-            //    skill4: true
-            //);
         }
 
         private static IEnumerable<Sector> TranslateSectors(BinaryMap binaryMap)
@@ -159,45 +137,28 @@ namespace Tiledriver.Core.MapTranslators
             };
         }
 
-        public static IEnumerable<TileSpace> CreateGeometry(int width, int height)
+        private IEnumerable<TileSpace> TranslateTileSpaces(BinaryMap binaryMap, Map mapInfo)
         {
-            var entries = new TileSpace[height, width];
+            var length = binaryMap.Size.Width * binaryMap.Size.Height;
+            var spaces = 
+                Enumerable.Range(1, binaryMap.Size.Height * binaryMap.Size.Width).
+                Select(_ => new TileSpace(tile: -1, sector: 0, zone: 0)).
+                ToArray();
 
-            Func<TileSpace> solidTile = () => new TileSpace(0, 0, -1);
-            Func<TileSpace> emptyTile = () => new TileSpace(-1, 0, 0);
-
-            // ### Build a big empty square
-
-            // Top wall
-            for (var col = 0; col < width; col++)
+            for (int i = 0; i < length; i++)
             {
-                entries[0, col] = solidTile();
-            }
+                var oldNum = binaryMap.Plane0[i];
 
-            for (var row = 1; row < height - 1; row++)
-            {
-                entries[row, 0] = solidTile();
-                for (var col = 1; col < width - 1; col++)
+                if (_translatorInfo.TileMappings.Tiles.TryGetValue(oldNum, out var tile))
                 {
-                    entries[row, col] = emptyTile();
-                }
-                entries[row, width - 1] = solidTile();
-            }
-
-            // bottom wall
-            for (var col = 0; col < width; col++)
-            {
-                entries[height - 1, col] = solidTile();
-            }
-
-
-            for (int row = 0; row < height; row++)
-            {
-                for (int col = 0; col < width; col++)
-                {
-                    yield return entries[row, col];
+                    // TODO: This is godawful
+                    var l = _translatorInfo.TileMappings.Tiles.Values.ToList();
+                    var index = l.IndexOf(tile);
+                    spaces[i].Tile = index;
                 }
             }
+
+            return spaces;
         }
     }
 }
