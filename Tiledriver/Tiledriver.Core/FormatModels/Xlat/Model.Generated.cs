@@ -8,70 +8,6 @@ using Tiledriver.Core.FormatModels.Uwmf;
 
 namespace Tiledriver.Core.FormatModels.Xlat
 {
-    public sealed partial class AmbushModzone
-    {
-        public bool Fillzone { get; set; } = false;
-        public AmbushModzone() { }
-        public AmbushModzone(
-            bool fillzone = false)
-        {
-            Fillzone = fillzone;
-            AdditionalSemanticChecks();
-        }
-        public void CheckSemanticValidity()
-        {
-            AdditionalSemanticChecks();
-        }
-
-        partial void AdditionalSemanticChecks();
-    }
-
-    public sealed partial class ChangeTriggerModzone
-    {
-        private bool _actionHasBeenSet = false;
-        private string _action;
-        public string Action
-        {
-            get { return _action; }
-            set
-            {
-                _actionHasBeenSet = true;
-                _action = value;
-            }
-        }
-        private bool _triggerTemplateHasBeenSet = false;
-        private TriggerTemplate _triggerTemplate;
-        public TriggerTemplate TriggerTemplate
-        {
-            get { return _triggerTemplate; }
-            set
-            {
-                _triggerTemplateHasBeenSet = true;
-                _triggerTemplate = value;
-            }
-        }
-        public bool Fillzone { get; set; } = false;
-        public ChangeTriggerModzone() { }
-        public ChangeTriggerModzone(
-            string action,
-            TriggerTemplate triggerTemplate,
-            bool fillzone = false)
-        {
-            Action = action;
-            TriggerTemplate = triggerTemplate;
-            Fillzone = fillzone;
-            AdditionalSemanticChecks();
-        }
-        public void CheckSemanticValidity()
-        {
-            if (!_actionHasBeenSet) throw new InvalidUwmfException("Did not set Action on ChangeTriggerModzone");
-            if (!_triggerTemplateHasBeenSet) throw new InvalidUwmfException("Did not set TriggerTemplate on ChangeTriggerModzone");
-            AdditionalSemanticChecks();
-        }
-
-        partial void AdditionalSemanticChecks();
-    }
-
     public sealed partial class Elevator : IThingMapping
     {
         private bool _oldNumHasBeenSet = false;
@@ -299,6 +235,70 @@ namespace Tiledriver.Core.FormatModels.Xlat
         {
             if (!_oldNumHasBeenSet) throw new InvalidUwmfException("Did not set OldNum on TriggerTemplate");
             if (!_actionHasBeenSet) throw new InvalidUwmfException("Did not set Action on TriggerTemplate");
+            AdditionalSemanticChecks();
+        }
+
+        partial void AdditionalSemanticChecks();
+    }
+
+    public sealed partial class AmbushModzone
+    {
+        public bool Fillzone { get; set; } = false;
+        public AmbushModzone() { }
+        public AmbushModzone(
+            bool fillzone = false)
+        {
+            Fillzone = fillzone;
+            AdditionalSemanticChecks();
+        }
+        public void CheckSemanticValidity()
+        {
+            AdditionalSemanticChecks();
+        }
+
+        partial void AdditionalSemanticChecks();
+    }
+
+    public sealed partial class ChangeTriggerModzone
+    {
+        private bool _actionHasBeenSet = false;
+        private string _action;
+        public string Action
+        {
+            get { return _action; }
+            set
+            {
+                _actionHasBeenSet = true;
+                _action = value;
+            }
+        }
+        private bool _triggerTemplateHasBeenSet = false;
+        private TriggerTemplate _triggerTemplate;
+        public TriggerTemplate TriggerTemplate
+        {
+            get { return _triggerTemplate; }
+            set
+            {
+                _triggerTemplateHasBeenSet = true;
+                _triggerTemplate = value;
+            }
+        }
+        public bool Fillzone { get; set; } = false;
+        public ChangeTriggerModzone() { }
+        public ChangeTriggerModzone(
+            string action,
+            TriggerTemplate triggerTemplate,
+            bool fillzone = false)
+        {
+            Action = action;
+            TriggerTemplate = triggerTemplate;
+            Fillzone = fillzone;
+            AdditionalSemanticChecks();
+        }
+        public void CheckSemanticValidity()
+        {
+            if (!_actionHasBeenSet) throw new InvalidUwmfException("Did not set Action on ChangeTriggerModzone");
+            if (!_triggerTemplateHasBeenSet) throw new InvalidUwmfException("Did not set TriggerTemplate on ChangeTriggerModzone");
             AdditionalSemanticChecks();
         }
 

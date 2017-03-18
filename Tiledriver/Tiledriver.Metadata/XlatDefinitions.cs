@@ -9,22 +9,6 @@ namespace Tiledriver.Metadata
     {
         public static readonly IEnumerable<Block> Blocks = new[]
         {
-            new Block("ambushModzone",
-                parsing:Parsing.Manual,
-                properties:new []
-                {
-                    new Property("fillzone", type:PropertyType.Boolean, defaultValue:false),
-                }),
-
-            new Block("changeTriggerModzone",
-                parsing:Parsing.Manual,
-                properties:new []
-                {
-                    new Property("fillzone", type:PropertyType.Boolean, defaultValue:false),
-                    new Property("action", type:PropertyType.String),
-                    new Property("triggerTemplate", type:PropertyType.Block),
-                }),
-
             new Block("elevator",
                 implements:new []{"IThingMapping"},
                 properties:new []
@@ -68,6 +52,22 @@ namespace Tiledriver.Metadata
                     new Property("secret", type:PropertyType.Boolean ,defaultValue:false),
                     new Property("comment",type:PropertyType.String,defaultValue:string.Empty),
                     new Property("unknownProperties", PropertyType.UnknownProperties),
+                }),
+
+            new Block("ambushModzone",
+                parsing:Parsing.Manual,
+                properties:new []
+                {
+                    new Property("fillzone", type:PropertyType.Boolean, defaultValue:false),
+                }),
+
+            new Block("changeTriggerModzone",
+                parsing:Parsing.Manual,
+                properties:new []
+                {
+                    new Property("fillzone", type:PropertyType.Boolean, defaultValue:false),
+                    new Property("action", type:PropertyType.String),
+                    new Property("triggerTemplate", type:PropertyType.Block),
                 }),
 
             new Block("tiles",className:"TileMappings",
