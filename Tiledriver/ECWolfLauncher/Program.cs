@@ -5,8 +5,16 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
+using Moq;
+using Tiledriver.Core.FormatModels;
+using Tiledriver.Core.FormatModels.Common;
+using Tiledriver.Core.FormatModels.GameMaps;
+using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Wad;
-using Tiledriver.Core.Tests;
+using Tiledriver.Core.FormatModels.Xlat;
+using Tiledriver.Core.FormatModels.Xlat.Parsing;
+using Tiledriver.Core.MapTranslators;
 
 namespace TestRunner
 {
@@ -16,6 +24,51 @@ namespace TestRunner
     class Program
     {
         static void Main(string[] args)
+        {
+            //LoadMapInEcWolf(DemoMap.Create(), Path.GetFullPath("demo.wad"));
+            TranslatorTest();
+        }
+
+        private static void TranslatorTest()
+        {
+            var bMap = LoadBinaryMap();
+
+            var xlat = LoadXlat();
+
+            var translator = new BinaryMapTranslator(translatorInfo: xlat);
+            var uwmfMap = translator.Translate(bMap);
+
+            LoadMapInEcWolf(uwmfMap, Path.GetFullPath("translated.wad"));
+        }
+
+        private static BinaryMap LoadBinaryMap()
+        {
+            var basePath = @"C:\Program Files (x86)\Steam\steamapps\common\Wolfenstein 3D\base";
+            var mapHeadPath = Path.Combine(basePath, "MAPHEAD.WL6");
+            var gameMapsPath = Path.Combine(basePath, "GAMEMAPS.WL6");
+
+            using (var headerStream = File.OpenRead(mapHeadPath))
+            using (var mapsStream = File.OpenRead(gameMapsPath))
+            {
+                var gameMaps = GameMapsBundle.Load(headerStream, mapsStream);
+
+                return gameMaps.LoadMap(0, mapsStream);
+            }
+        }
+
+        private static MapTranslatorInfo LoadXlat()
+        {
+            using (var stream = File.OpenRead(Path.Combine("..", "..", "..", "Tiledriver.Core.Tests", "FormatModels", "Xlat", "Parsing", "wolf3d.txt")))
+            using (var textReader = new StreamReader(stream, Encoding.ASCII))
+            {
+                var lexer = new XlatLexer(textReader);
+                var syntaxAnalzer = new XlatSyntaxAnalyzer(Mock.Of<IResourceProvider>());
+                var result = syntaxAnalzer.Analyze(lexer);
+                return XlatParser.Parse(result);
+            }
+        }
+
+        private static void LoadMapInEcWolf(Map uwmfMap, string wadPath)
         {
             const string inputFile = "ECWolfPath.txt";
 
@@ -34,17 +87,15 @@ namespace TestRunner
                 ecWolfPath = Path.Combine(ecWolfPath, "ecwolf.exe");
             }
 
-            var wadFileName = Path.GetFullPath("demo.wad");
-
             var wad = new WadFile();
             wad.Append(new Marker("MAP01"));
-            wad.Append(new UwmfLump("TEXTMAP", DemoMap.Create()));
+            wad.Append(new UwmfLump("TEXTMAP", uwmfMap));
             wad.Append(new Marker("ENDMAP"));
-            wad.SaveTo(wadFileName);
+            wad.SaveTo(wadPath);
 
             Process.Start(
                 ecWolfPath,
-                $"--file \"{wadFileName}\" --normal --nowait --tedlevel map01");
+                $"--file \"{wadPath}\" --normal --nowait --tedlevel map01");
         }
     }
 }
