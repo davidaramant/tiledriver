@@ -68,6 +68,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="FormatModels\Common\BaseLexer.cs" />
     <Compile Include="FormatModels\Common\BinaryMap.cs" />
+    <Compile Include="FormatModels\GameMaps\GameMapsBundle.cs" />
     <Compile Include="FormatModels\GameMaps\MapHeader.cs" />
     <Compile Include="FormatModels\GameMaps\OffsetData.cs" />
     <Compile Include="FormatModels\GameMaps\PlaneMetadata.cs" />
@@ -115,7 +116,7 @@
     <Compile Include="LevelGeometry\IRegion.cs" />
     <Compile Include="LevelGeometry\MapTile.cs" />
     <Compile Include="LevelGeometry\SparseMap.cs" />
-    <Compile Include="MapTranslators\GameInfoTranslator.cs" />
+    <Compile Include="MapTranslators\BinaryMapTranslator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FormatModels\Uwmf\BaseUwmfBlock.cs" />
     <Compile Include="FormatModels\Uwmf\InvalidUwmfException.cs" />

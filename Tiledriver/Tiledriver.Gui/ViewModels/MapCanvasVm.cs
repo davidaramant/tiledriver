@@ -8,7 +8,6 @@ namespace Tiledriver.Gui.ViewModels
 {
     public class MapCanvasVm : BaseNotifyingVm
     {
-        private ObservableCollection<MapItemVm> _mapItems;
         public ObservableCollection<MapItemVm> MapItems { get; set; }
     }
 }

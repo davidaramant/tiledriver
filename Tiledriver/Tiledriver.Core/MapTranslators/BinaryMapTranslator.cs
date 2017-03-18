@@ -7,11 +7,11 @@ using Tiledriver.Core.FormatModels.Xlat;
 
 namespace Tiledriver.Core.MapTranslators
 {
-    public sealed class GameInfoTranslator
+    public sealed class BinaryMapTranslator
     {
         private readonly MapTranslatorInfo _translatorInfo;
 
-        public GameInfoTranslator(MapTranslatorInfo translatorInfo)
+        public BinaryMapTranslator(MapTranslatorInfo translatorInfo)
         {
             _translatorInfo = translatorInfo;
         }
