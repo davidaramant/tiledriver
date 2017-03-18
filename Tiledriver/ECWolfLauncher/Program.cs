@@ -10,6 +10,8 @@ using Moq;
 using Tiledriver.Core.FormatModels;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.GameMaps;
+using Tiledriver.Core.FormatModels.MapInfos;
+using Tiledriver.Core.FormatModels.MapInfos.Parsing;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Wad;
 using Tiledriver.Core.FormatModels.Xlat;
@@ -35,8 +37,10 @@ namespace TestRunner
 
             var xlat = LoadXlat();
 
+            var mapInfos = LoadMapInfo();
+
             var translator = new BinaryMapTranslator(translatorInfo: xlat);
-            var uwmfMap = translator.Translate(bMap);
+            var uwmfMap = translator.Translate(bMap,mapInfos.Maps[0]);
 
             LoadMapInEcWolf(uwmfMap, Path.GetFullPath("translated.wad"));
         }
@@ -65,6 +69,23 @@ namespace TestRunner
                 var syntaxAnalzer = new XlatSyntaxAnalyzer(Mock.Of<IResourceProvider>());
                 var result = syntaxAnalzer.Analyze(lexer);
                 return XlatParser.Parse(result);
+            }
+        }
+
+        private static MapInfo LoadMapInfo()
+        {
+            var mockProvider = new Mock<IResourceProvider>();
+            mockProvider.Setup(_ => _.Lookup("mapinfo/wolfcommon.txt"))
+                .Returns(File.OpenRead(
+                        Path.Combine("..", "..", "..", "Tiledriver.Core.Tests", "FormatModels", "MapInfos",
+                        "Parsing", "wolfcommon.txt")));
+
+            using (var stream = File.OpenRead(Path.Combine("..", "..", "..", "Tiledriver.Core.Tests", "FormatModels", "MapInfos", "Parsing", "wolf3d.txt")))
+            using (var textReader = new StreamReader(stream, Encoding.ASCII))
+            {
+                var lexer = new MapInfoLexer(mockProvider.Object);
+                var elements = lexer.Analyze(textReader).ToArray();
+                return MapInfoParser.Parse(elements);
             }
         }
 
