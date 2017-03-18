@@ -17,9 +17,29 @@ namespace Tiledriver.Core.MapTranslators
             _translatorInfo = translatorInfo;
         }
 
-        public Map Translate(BinaryMap binaryMap)
+        public MapData Translate(BinaryMap binaryMap)
         {
-            throw new NotImplementedException();
+
+
+            var map = new MapData
+            {
+                NameSpace = "Wolf3D",
+                TileSize = 64,
+                Width = binaryMap.Size.Width,
+                Height = binaryMap.Size.Height,
+                Name = binaryMap.Name,
+
+                Planes = { new Plane(depth: 64) },
+
+                // Tiles
+                // Sectors
+                // Zones
+                // PlaneMaps
+                // Things
+                // Triggers
+            };
+
+            return map;
         }
     }
 }

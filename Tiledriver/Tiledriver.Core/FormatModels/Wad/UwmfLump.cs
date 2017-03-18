@@ -10,20 +10,20 @@ namespace Tiledriver.Core.FormatModels.Wad
 {
     public sealed class UwmfLump : ILump
     {
-        private readonly Map _map;
+        private readonly MapData _mapData;
         public LumpName Name { get; }
         public bool HasData => true;
 
 
-        public UwmfLump([NotNull]LumpName name, [NotNull]Map map)
+        public UwmfLump([NotNull]LumpName name, [NotNull]MapData mapData)
         {
             Name = name;
-            _map = map;
+            _mapData = mapData;
         }
 
         public void WriteTo(Stream stream)
         {
-            _map.WriteTo(stream);
+            _mapData.WriteTo(stream);
         }
 
         public byte[] GetData()

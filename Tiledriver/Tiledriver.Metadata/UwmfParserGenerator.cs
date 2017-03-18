@@ -58,11 +58,11 @@ OpenParen();
         private static void WriteGlobalAssignmentParsing(IndentedWriter output)
         {
             output.
-                Line("static partial void SetGlobalAssignments(Map map, UwmfSyntaxTree tree)").
+                Line("static partial void SetGlobalAssignments(MapData map, UwmfSyntaxTree tree)").
                 OpenParen();
 
             WritePropertyAssignments(
-                UwmfDefinitions.Blocks.Single(b => b.ClassName.ToPascalCase() == "Map"),
+                UwmfDefinitions.Blocks.Single(b => b.ClassName.ToPascalCase() == "MapData"),
                 output, assignmentHolder: "tree", owner: "map");
 
             output.CloseParen();
@@ -71,7 +71,7 @@ OpenParen();
         private static void WriteBlockParsing(IndentedWriter output)
         {
             output.
-                Line("static partial void SetBlocks(Map map, UwmfSyntaxTree tree)").
+                Line("static partial void SetBlocks(MapData map, UwmfSyntaxTree tree)").
                 OpenParen();
 
             output.

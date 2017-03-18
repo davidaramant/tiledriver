@@ -10,7 +10,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf
     /// <summary>
     /// A UWMF map.
     /// </summary>
-    public partial class Map
+    public partial class MapData
     {
         partial void AdditionalSemanticChecks()
         {

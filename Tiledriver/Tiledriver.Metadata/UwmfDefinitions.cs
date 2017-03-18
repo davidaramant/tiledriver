@@ -116,7 +116,7 @@ namespace Tiledriver.Metadata
                     new Property("unknownProperties", PropertyType.UnknownProperties),
                 }),
 
-            new Block("map",
+            new Block("mapData",
                 parsing:Parsing.Manual,
                 isSubBlock:false,
                 properties:new []

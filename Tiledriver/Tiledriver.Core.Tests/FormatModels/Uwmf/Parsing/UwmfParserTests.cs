@@ -15,7 +15,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
         [Test]
         public void ShouldRoundTripMinimalMap()
         {
-            var map = new Map
+            var map = new MapData
             {
                 NameSpace = "1",
                 Width = 2,

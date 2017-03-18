@@ -68,7 +68,7 @@ namespace TestRunner
             }
         }
 
-        private static void LoadMapInEcWolf(Map uwmfMap, string wadPath)
+        private static void LoadMapInEcWolf(MapData uwmfMap, string wadPath)
         {
             const string inputFile = "ECWolfPath.txt";
 

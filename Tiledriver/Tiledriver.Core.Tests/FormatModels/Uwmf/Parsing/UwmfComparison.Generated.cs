@@ -330,36 +330,36 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
                     expected.UnknownProperties[i] );
             }
         }
-        public static void AssertEqual( Map actual, Map expected )
+        public static void AssertEqual( MapData actual, MapData expected )
         {
             Assert.That(
                 actual.NameSpace,
                 Is.EqualTo( expected.NameSpace ),
-                "Found difference in Map NameSpace" );
+                "Found difference in MapData NameSpace" );
             Assert.That(
                 actual.TileSize,
                 Is.EqualTo( expected.TileSize ),
-                "Found difference in Map TileSize" );
+                "Found difference in MapData TileSize" );
             Assert.That(
                 actual.Name,
                 Is.EqualTo( expected.Name ),
-                "Found difference in Map Name" );
+                "Found difference in MapData Name" );
             Assert.That(
                 actual.Width,
                 Is.EqualTo( expected.Width ),
-                "Found difference in Map Width" );
+                "Found difference in MapData Width" );
             Assert.That(
                 actual.Height,
                 Is.EqualTo( expected.Height ),
-                "Found difference in Map Height" );
+                "Found difference in MapData Height" );
             Assert.That(
                 actual.Comment,
                 Is.EqualTo( expected.Comment ),
-                "Found difference in Map Comment" );
+                "Found difference in MapData Comment" );
             Assert.That(
                 actual.Tiles.Count,
                 Is.EqualTo( expected.Tiles.Count ),
-                "Found unequal number of Map Tiles" );
+                "Found unequal number of MapData Tiles" );
             for( int i = 0; i < expected.Tiles.Count; i++ )
             {
                 AssertEqual( 
@@ -369,7 +369,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
             Assert.That(
                 actual.Sectors.Count,
                 Is.EqualTo( expected.Sectors.Count ),
-                "Found unequal number of Map Sectors" );
+                "Found unequal number of MapData Sectors" );
             for( int i = 0; i < expected.Sectors.Count; i++ )
             {
                 AssertEqual( 
@@ -379,7 +379,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
             Assert.That(
                 actual.Zones.Count,
                 Is.EqualTo( expected.Zones.Count ),
-                "Found unequal number of Map Zones" );
+                "Found unequal number of MapData Zones" );
             for( int i = 0; i < expected.Zones.Count; i++ )
             {
                 AssertEqual( 
@@ -389,7 +389,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
             Assert.That(
                 actual.Planes.Count,
                 Is.EqualTo( expected.Planes.Count ),
-                "Found unequal number of Map Planes" );
+                "Found unequal number of MapData Planes" );
             for( int i = 0; i < expected.Planes.Count; i++ )
             {
                 AssertEqual( 
@@ -399,7 +399,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
             Assert.That(
                 actual.PlaneMaps.Count,
                 Is.EqualTo( expected.PlaneMaps.Count ),
-                "Found unequal number of Map PlaneMaps" );
+                "Found unequal number of MapData PlaneMaps" );
             for( int i = 0; i < expected.PlaneMaps.Count; i++ )
             {
                 AssertEqual( 
@@ -409,7 +409,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
             Assert.That(
                 actual.Things.Count,
                 Is.EqualTo( expected.Things.Count ),
-                "Found unequal number of Map Things" );
+                "Found unequal number of MapData Things" );
             for( int i = 0; i < expected.Things.Count; i++ )
             {
                 AssertEqual( 
@@ -419,7 +419,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
             Assert.That(
                 actual.Triggers.Count,
                 Is.EqualTo( expected.Triggers.Count ),
-                "Found unequal number of Map Triggers" );
+                "Found unequal number of MapData Triggers" );
             for( int i = 0; i < expected.Triggers.Count; i++ )
             {
                 AssertEqual( 
@@ -429,7 +429,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
             Assert.That(
                 actual.UnknownProperties.Count,
                 Is.EqualTo( expected.UnknownProperties.Count ),
-                "Found unequal number of Map UnknownProperties" );
+                "Found unequal number of MapData UnknownProperties" );
             for( int i = 0; i < expected.UnknownProperties.Count; i++ )
             {
                 AssertEqual( 
@@ -439,7 +439,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
             Assert.That(
                 actual.UnknownBlocks.Count,
                 Is.EqualTo( expected.UnknownBlocks.Count ),
-                "Found unequal number of Map UnknownBlocks" );
+                "Found unequal number of MapData UnknownBlocks" );
             for( int i = 0; i < expected.UnknownBlocks.Count; i++ )
             {
                 AssertEqual( 

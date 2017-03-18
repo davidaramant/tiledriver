@@ -12,12 +12,12 @@ namespace Tiledriver.Gui.ViewModels
 {
     public class MapItemVmFactory
     {
-        private Map _map;
+        private MapData _mapData;
         private IEnumerable<Actor> _actors = Actor.GetAll().Where(a => a.Wolf3D);
 
-        public MapItemVmFactory(Map map)
+        public MapItemVmFactory(MapData mapData)
         {
-            this._map = map;
+            this._mapData = mapData;
         }
 
         public ThingVm BuildThing(Thing thing)
@@ -28,9 +28,9 @@ namespace Tiledriver.Gui.ViewModels
 
         public SquareVm BuildSquare(int x, int y)
         {
-            var tileSpace = _map.TileSpaceAt(x, y);
-            var tile = _map.TileAt(tileSpace.Tile);
-            var sector = _map.SectorAt(tileSpace.Sector);
+            var tileSpace = _mapData.TileSpaceAt(x, y);
+            var tile = _mapData.TileAt(tileSpace.Tile);
+            var sector = _mapData.SectorAt(tileSpace.Sector);
             return new SquareVm(x, y, tile, sector, tileSpace.Zone);
         }
     }

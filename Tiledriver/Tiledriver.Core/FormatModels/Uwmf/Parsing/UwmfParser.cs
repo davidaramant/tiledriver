@@ -8,9 +8,9 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
 {
     public static partial class UwmfParser
     {
-        public static Map Parse(UwmfSyntaxTree syntaxTree)
+        public static MapData Parse(UwmfSyntaxTree syntaxTree)
         {
-            var map = new Map();
+            var map = new MapData();
 
             SetGlobalAssignments(map, syntaxTree);
             SetBlocks(map, syntaxTree);
@@ -21,8 +21,8 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
             return map;
         }
 
-        static partial void SetGlobalAssignments(Map map, UwmfSyntaxTree tree);
-        static partial void SetBlocks(Map map, UwmfSyntaxTree tree);
+        static partial void SetGlobalAssignments(MapData mapData, UwmfSyntaxTree tree);
+        static partial void SetBlocks(MapData mapData, UwmfSyntaxTree tree);
 
         private static PlaneMap ParsePlaneMap(ArrayBlock arrayBlock)
         {

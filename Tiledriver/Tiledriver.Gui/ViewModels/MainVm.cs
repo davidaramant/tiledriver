@@ -8,11 +8,11 @@ namespace Tiledriver.Gui.ViewModels
 {
     public class MainVm : BaseNotifyingVm
     {
-        private Map _map;
-        public Map Map
+        private MapData _mapData;
+        public MapData MapData
         {
-            get { return _map; }
-            set { NotifySet(ref _map, value); }
+            get { return _mapData; }
+            set { NotifySet(ref _mapData, value); }
         }
     }
 }

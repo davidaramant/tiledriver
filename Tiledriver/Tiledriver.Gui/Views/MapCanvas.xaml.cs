@@ -33,7 +33,7 @@ namespace Tiledriver.Gui.Views
             };
         }
 
-        public void Update(Map map, int size)
+        public void Update(MapData mapData, int size)
         {
             _squareSize = size;
 
@@ -42,23 +42,23 @@ namespace Tiledriver.Gui.Views
             _mapItems = new ObservableCollection<MapItemVm>();
             _selectionMarker = CreateSelectionMarker(_squareSize);
 
-            FullArea.Height = map.Height * _squareSize;
-            FullArea.Width = map.Width * _squareSize;
+            FullArea.Height = mapData.Height * _squareSize;
+            FullArea.Width = mapData.Width * _squareSize;
             FullArea.Background = Colors.Black.ToBrush();
 
-            var factory = new MapItemVmFactory(map);
+            var factory = new MapItemVmFactory(mapData);
 
             // Squares
-            for (var x = 0; x < map.Width; x++)
+            for (var x = 0; x < mapData.Width; x++)
             {
-                for (var y = 0; y < map.Height; y++)
+                for (var y = 0; y < mapData.Height; y++)
                 {
                     AddMapItem(factory.BuildSquare(x, y));
                 }
             }
 
             // Things
-            foreach (var thing in map.Things)
+            foreach (var thing in mapData.Things)
             {
                 AddMapItem(factory.BuildThing(thing));
             }

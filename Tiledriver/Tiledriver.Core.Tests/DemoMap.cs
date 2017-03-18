@@ -11,12 +11,12 @@ namespace Tiledriver.Core.Tests
 {
     public static class DemoMap
     {
-        public static Map Create()
+        public static MapData Create()
         {
             const int width = 128;
             const int height = 128;
 
-            var map = new Map
+            var map = new MapData
             (
                 nameSpace: "Wolf3D",
                 tileSize: 64,
@@ -127,24 +127,24 @@ namespace Tiledriver.Core.Tests
             return map;
         }
 
-        private static void GenerateThings(Map map)
+        private static void GenerateThings(MapData mapData)
         {
             // Decorations
             foreach (var indexedActorGroup in Actor.GetAll().Where(a => a.Category != "Special").GroupBy(a => a.Category).Select((group, index) => new { group, index }))
             {
-                DrawActors(map, indexedActorGroup.group, indexedActorGroup.index * 8);
+                DrawActors(mapData, indexedActorGroup.group, indexedActorGroup.index * 8);
             }
             //DrawActors(map, Actor.GetAll().Where(a => a.Category == "Decorations"), 0);
         }
 
-        private static void DrawActors(Map map, IEnumerable<Actor> actors, int offset)
+        private static void DrawActors(MapData mapData, IEnumerable<Actor> actors, int offset)
         {
-            map.Things.AddRange(actors.Select((actor, actorIndex) =>
+            mapData.Things.AddRange(actors.Select((actor, actorIndex) =>
             {
                 var x = 4 + offset;
                 var y = 2 + actorIndex;
 
-                map.PlaneMaps[0].TileSpaces[y * map.Width + x].Sector = actor.Wolf3D ? 1 : 2;
+                mapData.PlaneMaps[0].TileSpaces[y * mapData.Width + x].Sector = actor.Wolf3D ? 1 : 2;
 
                 return new Thing(
                     type: actor.ClassName,

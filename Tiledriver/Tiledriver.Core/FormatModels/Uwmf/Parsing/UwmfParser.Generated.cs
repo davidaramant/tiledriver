@@ -7,16 +7,16 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
 {
     public static partial class UwmfParser
     {
-        static partial void SetGlobalAssignments(Map map, UwmfSyntaxTree tree)
+        static partial void SetGlobalAssignments(MapData map, UwmfSyntaxTree tree)
         {
-            tree.GetValueFor("NameSpace").SetRequiredString(value => map.NameSpace = value, "Map", "NameSpace");
-            tree.GetValueFor("TileSize").SetRequiredInteger(value => map.TileSize = value, "Map", "TileSize");
-            tree.GetValueFor("Name").SetRequiredString(value => map.Name = value, "Map", "Name");
-            tree.GetValueFor("Width").SetRequiredInteger(value => map.Width = value, "Map", "Width");
-            tree.GetValueFor("Height").SetRequiredInteger(value => map.Height = value, "Map", "Height");
-            tree.GetValueFor("Comment").SetOptionalString(value => map.Comment = value, "Map", "Comment");
+            tree.GetValueFor("NameSpace").SetRequiredString(value => map.NameSpace = value, "MapData", "NameSpace");
+            tree.GetValueFor("TileSize").SetRequiredInteger(value => map.TileSize = value, "MapData", "TileSize");
+            tree.GetValueFor("Name").SetRequiredString(value => map.Name = value, "MapData", "Name");
+            tree.GetValueFor("Width").SetRequiredInteger(value => map.Width = value, "MapData", "Width");
+            tree.GetValueFor("Height").SetRequiredInteger(value => map.Height = value, "MapData", "Height");
+            tree.GetValueFor("Comment").SetOptionalString(value => map.Comment = value, "MapData", "Comment");
         }
-        static partial void SetBlocks(Map map, UwmfSyntaxTree tree)
+        static partial void SetBlocks(MapData map, UwmfSyntaxTree tree)
         {
             foreach (var block in tree.Blocks)
             {

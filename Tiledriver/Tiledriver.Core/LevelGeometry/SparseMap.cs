@@ -95,10 +95,10 @@ namespace Tiledriver.Core.LevelGeometry
             _regions.RemoveAt(_regions.Count - 1);
         }
 
-        public Map Compile()
+        public MapData Compile()
         {
             // TODO: Move sector definition into TileTheme
-            return new Map
+            return new MapData
             (
                 nameSpace: "Wolf3D",
                 tileSize: 64,

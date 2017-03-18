@@ -663,7 +663,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf
         partial void AdditionalSemanticChecks();
     }
 
-    public sealed partial class Map : BaseUwmfBlock, IWriteableUwmfBlock
+    public sealed partial class MapData : BaseUwmfBlock, IWriteableUwmfBlock
     {
         private bool _nameSpaceHasBeenSet = false;
         private string _nameSpace;
@@ -730,8 +730,8 @@ namespace Tiledriver.Core.FormatModels.Uwmf
         public List<Trigger> Triggers { get; } = new List<Trigger>();
         public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
         public List<UnknownBlock> UnknownBlocks { get; } = new List<UnknownBlock>();
-        public Map() { }
-        public Map(
+        public MapData() { }
+        public MapData(
             string nameSpace,
             int tileSize,
             string name,
@@ -790,11 +790,11 @@ namespace Tiledriver.Core.FormatModels.Uwmf
         }
         public void CheckSemanticValidity()
         {
-            if (!_nameSpaceHasBeenSet) throw new InvalidUwmfException("Did not set NameSpace on Map");
-            if (!_tileSizeHasBeenSet) throw new InvalidUwmfException("Did not set TileSize on Map");
-            if (!_nameHasBeenSet) throw new InvalidUwmfException("Did not set Name on Map");
-            if (!_widthHasBeenSet) throw new InvalidUwmfException("Did not set Width on Map");
-            if (!_heightHasBeenSet) throw new InvalidUwmfException("Did not set Height on Map");
+            if (!_nameSpaceHasBeenSet) throw new InvalidUwmfException("Did not set NameSpace on MapData");
+            if (!_tileSizeHasBeenSet) throw new InvalidUwmfException("Did not set TileSize on MapData");
+            if (!_nameHasBeenSet) throw new InvalidUwmfException("Did not set Name on MapData");
+            if (!_widthHasBeenSet) throw new InvalidUwmfException("Did not set Width on MapData");
+            if (!_heightHasBeenSet) throw new InvalidUwmfException("Did not set Height on MapData");
             AdditionalSemanticChecks();
         }
 
