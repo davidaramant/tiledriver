@@ -35,7 +35,14 @@ namespace Tiledriver.Core.MapTranslators
             // Plane 1 - things
             // Plane 2 - floor/ceiling
 
+            var zones = new List<Zone> { new Zone() };
+
             var hasSectorInfo = binaryMap.Plane2.Any(num => num != 0);
+            var sectors = hasSectorInfo ? TranslateSectors(binaryMap) : CreateDefaultSector(mapInfo);
+
+            var triggers = new List<Trigger>();
+            var things = TranslateThings(binaryMap, triggers);
+            var tileSpaces = TranslateTileSpaces(binaryMap, mapInfo);
 
             return new MapData(
                 nameSpace: "Wolf3D",
@@ -44,30 +51,17 @@ namespace Tiledriver.Core.MapTranslators
                 height: binaryMap.Size.Height,
                 name: mapInfo.MapName.OrElse(binaryMap.Name),
                 tiles: _translatorInfo.TileMappings.Tiles.Values,
-                sectors: hasSectorInfo ? TranslateSectors(binaryMap) : CreateDefaultSector(mapInfo),
-                zones: new List<Zone> // TODO
-                {
-                    new Zone(),
-                },
+                sectors: sectors,
+                zones: zones,
                 planes: new List<Plane> { new Plane(depth: 64) },
-                planeMaps: new[] { new PlaneMap(tileSpaces: TranslateTileSpaces(binaryMap, mapInfo)), },
-                things: TranslateThings(binaryMap),
-                triggers: new List<Trigger>() // TODO
+                planeMaps: new[] { new PlaneMap(tileSpaces: tileSpaces), },
+                things: things,
+                triggers: triggers
             );
         }
 
-        private IEnumerable<Thing> TranslateThings(BinaryMap binaryMap)
+        private IEnumerable<Thing> TranslateThings(BinaryMap binaryMap, List<Trigger> triggers)
         {
-            var oldThings =
-                binaryMap.Plane1.
-                    Select((oldNum, index) => new
-                    {
-                        OldNum = oldNum,
-                        X = index % binaryMap.Size.Width,
-                        Y = index / binaryMap.Size.Width,
-                    }).
-                    Where(p => p.OldNum != 0);
-
             int TranslateAngle(ThingTemplate template, ushort oldNum)
             {
                 if (template.Angles == 0)
@@ -82,6 +76,16 @@ namespace Tiledriver.Core.MapTranslators
 
                 return angle;
             }
+
+            var oldThings =
+                binaryMap.Plane1.
+                    Select((oldNum, index) => new
+                    {
+                        OldNum = oldNum,
+                        X = index % binaryMap.Size.Width,
+                        Y = index / binaryMap.Size.Width,
+                    }).
+                    Where(p => p.OldNum != 0);
 
             foreach (var oldThing in oldThings)
             {
@@ -112,7 +116,11 @@ namespace Tiledriver.Core.MapTranslators
                         break;
 
                     case TriggerTemplate triggerTemplate:
-                        // TODO: thing triggers
+                        var trigger = _autoMapper.Map<Trigger>(triggerTemplate);
+                        trigger.X = oldThing.X;
+                        trigger.Y = oldThing.Y;
+                        trigger.Z = 0;
+                        triggers.Add(trigger);
                         break;
 
                     default:
@@ -140,7 +148,7 @@ namespace Tiledriver.Core.MapTranslators
         private IEnumerable<TileSpace> TranslateTileSpaces(BinaryMap binaryMap, Map mapInfo)
         {
             var length = binaryMap.Size.Width * binaryMap.Size.Height;
-            var spaces = 
+            var spaces =
                 Enumerable.Range(1, binaryMap.Size.Height * binaryMap.Size.Width).
                 Select(_ => new TileSpace(tile: -1, sector: 0, zone: 0)).
                 ToArray();

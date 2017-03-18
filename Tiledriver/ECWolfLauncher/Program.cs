@@ -41,7 +41,7 @@ namespace TestRunner
             var mapInfos = LoadMapInfo();
 
 
-            var autoMapperConfig = new MapperConfiguration(cfg => cfg.CreateMap<ThingTemplate, Thing>());
+            var autoMapperConfig = new MapperConfiguration(cfg => cfg.CreateMap<TriggerTemplate, Trigger>());
             var autoMapper = autoMapperConfig.CreateMapper();
 
 
@@ -122,7 +122,7 @@ namespace TestRunner
 
             Process.Start(
                 ecWolfPath,
-                $"--file \"{wadPath}\" --normal --nowait --tedlevel map01");
+                $"--file \"{wadPath}\" --hard --nowait --tedlevel map01");
         }
     }
 }
