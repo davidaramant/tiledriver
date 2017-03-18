@@ -39,33 +39,33 @@ namespace Tiledriver.Core.FormatModels.Xlat
                 _action = value;
             }
         }
-        private bool _positionlessTriggerHasBeenSet = false;
-        private PositionlessTrigger _positionlessTrigger;
-        public PositionlessTrigger PositionlessTrigger
+        private bool _triggerTemplateHasBeenSet = false;
+        private TriggerTemplate _triggerTemplate;
+        public TriggerTemplate TriggerTemplate
         {
-            get { return _positionlessTrigger; }
+            get { return _triggerTemplate; }
             set
             {
-                _positionlessTriggerHasBeenSet = true;
-                _positionlessTrigger = value;
+                _triggerTemplateHasBeenSet = true;
+                _triggerTemplate = value;
             }
         }
         public bool Fillzone { get; set; } = false;
         public ChangeTriggerModzone() { }
         public ChangeTriggerModzone(
             string action,
-            PositionlessTrigger positionlessTrigger,
+            TriggerTemplate triggerTemplate,
             bool fillzone = false)
         {
             Action = action;
-            PositionlessTrigger = positionlessTrigger;
+            TriggerTemplate = triggerTemplate;
             Fillzone = fillzone;
             AdditionalSemanticChecks();
         }
         public void CheckSemanticValidity()
         {
             if (!_actionHasBeenSet) throw new InvalidUwmfException("Did not set Action on ChangeTriggerModzone");
-            if (!_positionlessTriggerHasBeenSet) throw new InvalidUwmfException("Did not set PositionlessTrigger on ChangeTriggerModzone");
+            if (!_triggerTemplateHasBeenSet) throw new InvalidUwmfException("Did not set TriggerTemplate on ChangeTriggerModzone");
             AdditionalSemanticChecks();
         }
 
@@ -101,7 +101,7 @@ namespace Tiledriver.Core.FormatModels.Xlat
         partial void AdditionalSemanticChecks();
     }
 
-    public sealed partial class ThingDefinition : IThingMapping
+    public sealed partial class ThingTemplate : IThingMapping
     {
         private bool _oldNumHasBeenSet = false;
         private ushort _oldNum;
@@ -180,8 +180,8 @@ namespace Tiledriver.Core.FormatModels.Xlat
                 _minskill = value;
             }
         }
-        public ThingDefinition() { }
-        public ThingDefinition(
+        public ThingTemplate() { }
+        public ThingTemplate(
             ushort oldNum,
             string actor,
             int angles,
@@ -201,20 +201,20 @@ namespace Tiledriver.Core.FormatModels.Xlat
         }
         public void CheckSemanticValidity()
         {
-            if (!_oldNumHasBeenSet) throw new InvalidUwmfException("Did not set OldNum on ThingDefinition");
-            if (!_actorHasBeenSet) throw new InvalidUwmfException("Did not set Actor on ThingDefinition");
-            if (!_anglesHasBeenSet) throw new InvalidUwmfException("Did not set Angles on ThingDefinition");
-            if (!_holowallHasBeenSet) throw new InvalidUwmfException("Did not set Holowall on ThingDefinition");
-            if (!_pathingHasBeenSet) throw new InvalidUwmfException("Did not set Pathing on ThingDefinition");
-            if (!_ambushHasBeenSet) throw new InvalidUwmfException("Did not set Ambush on ThingDefinition");
-            if (!_minskillHasBeenSet) throw new InvalidUwmfException("Did not set Minskill on ThingDefinition");
+            if (!_oldNumHasBeenSet) throw new InvalidUwmfException("Did not set OldNum on ThingTemplate");
+            if (!_actorHasBeenSet) throw new InvalidUwmfException("Did not set Actor on ThingTemplate");
+            if (!_anglesHasBeenSet) throw new InvalidUwmfException("Did not set Angles on ThingTemplate");
+            if (!_holowallHasBeenSet) throw new InvalidUwmfException("Did not set Holowall on ThingTemplate");
+            if (!_pathingHasBeenSet) throw new InvalidUwmfException("Did not set Pathing on ThingTemplate");
+            if (!_ambushHasBeenSet) throw new InvalidUwmfException("Did not set Ambush on ThingTemplate");
+            if (!_minskillHasBeenSet) throw new InvalidUwmfException("Did not set Minskill on ThingTemplate");
             AdditionalSemanticChecks();
         }
 
         partial void AdditionalSemanticChecks();
     }
 
-    public sealed partial class PositionlessTrigger : IThingMapping
+    public sealed partial class TriggerTemplate : IThingMapping
     {
         private bool _oldNumHasBeenSet = false;
         private ushort _oldNum;
@@ -254,8 +254,8 @@ namespace Tiledriver.Core.FormatModels.Xlat
         public bool Secret { get; set; } = false;
         public string Comment { get; set; } = "";
         public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
-        public PositionlessTrigger() { }
-        public PositionlessTrigger(
+        public TriggerTemplate() { }
+        public TriggerTemplate(
             ushort oldNum,
             string action,
             int arg0 = 0,
@@ -297,8 +297,8 @@ namespace Tiledriver.Core.FormatModels.Xlat
         }
         public void CheckSemanticValidity()
         {
-            if (!_oldNumHasBeenSet) throw new InvalidUwmfException("Did not set OldNum on PositionlessTrigger");
-            if (!_actionHasBeenSet) throw new InvalidUwmfException("Did not set Action on PositionlessTrigger");
+            if (!_oldNumHasBeenSet) throw new InvalidUwmfException("Did not set OldNum on TriggerTemplate");
+            if (!_actionHasBeenSet) throw new InvalidUwmfException("Did not set Action on TriggerTemplate");
             AdditionalSemanticChecks();
         }
 
@@ -310,20 +310,20 @@ namespace Tiledriver.Core.FormatModels.Xlat
         public Dictionary<ushort,AmbushModzone> AmbushModzones { get; } = new Dictionary<ushort,AmbushModzone>();
         public Dictionary<ushort,ChangeTriggerModzone> ChangeTriggerModzones { get; } = new Dictionary<ushort,ChangeTriggerModzone>();
         public Dictionary<ushort,Tile> Tiles { get; } = new Dictionary<ushort,Tile>();
-        public Dictionary<ushort,PositionlessTrigger> PositionlessTriggers { get; } = new Dictionary<ushort,PositionlessTrigger>();
+        public Dictionary<ushort,TriggerTemplate> TriggerTemplates { get; } = new Dictionary<ushort,TriggerTemplate>();
         public Dictionary<ushort,Zone> Zones { get; } = new Dictionary<ushort,Zone>();
         public TileMappings() { }
         public TileMappings(
             Dictionary<ushort,AmbushModzone> ambushModzones,
             Dictionary<ushort,ChangeTriggerModzone> changeTriggerModzones,
             Dictionary<ushort,Tile> tiles,
-            Dictionary<ushort,PositionlessTrigger> positionlessTriggers,
+            Dictionary<ushort,TriggerTemplate> triggerTemplates,
             Dictionary<ushort,Zone> zones)
         {
             AmbushModzones.AddRange(ambushModzones);
             ChangeTriggerModzones.AddRange(changeTriggerModzones);
             Tiles.AddRange(tiles);
-            PositionlessTriggers.AddRange(positionlessTriggers);
+            TriggerTemplates.AddRange(triggerTemplates);
             Zones.AddRange(zones);
             AdditionalSemanticChecks();
         }
@@ -338,17 +338,17 @@ namespace Tiledriver.Core.FormatModels.Xlat
     public sealed partial class ThingMappings
     {
         public List<ushort> Elevators { get; } = new List<ushort>();
-        public Dictionary<ushort,PositionlessTrigger> PositionlessTriggers { get; } = new Dictionary<ushort,PositionlessTrigger>();
-        public Dictionary<ushort,ThingDefinition> ThingDefinitions { get; } = new Dictionary<ushort,ThingDefinition>();
+        public Dictionary<ushort,TriggerTemplate> TriggerTemplates { get; } = new Dictionary<ushort,TriggerTemplate>();
+        public Dictionary<ushort,ThingTemplate> ThingTemplates { get; } = new Dictionary<ushort,ThingTemplate>();
         public ThingMappings() { }
         public ThingMappings(
             IEnumerable<ushort> elevators,
-            Dictionary<ushort,PositionlessTrigger> positionlessTriggers,
-            Dictionary<ushort,ThingDefinition> thingDefinitions)
+            Dictionary<ushort,TriggerTemplate> triggerTemplates,
+            Dictionary<ushort,ThingTemplate> thingTemplates)
         {
             Elevators.AddRange(elevators);
-            PositionlessTriggers.AddRange(positionlessTriggers);
-            ThingDefinitions.AddRange(thingDefinitions);
+            TriggerTemplates.AddRange(triggerTemplates);
+            ThingTemplates.AddRange(thingTemplates);
             AdditionalSemanticChecks();
         }
         public void CheckSemanticValidity()

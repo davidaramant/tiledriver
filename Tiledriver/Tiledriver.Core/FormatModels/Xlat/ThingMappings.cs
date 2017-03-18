@@ -10,8 +10,8 @@ namespace Tiledriver.Core.FormatModels.Xlat
         public void Add(ThingMappings newMappings)
         {
             Elevators.AddRange(newMappings.Elevators);
-            PositionlessTriggers.Merge(newMappings.PositionlessTriggers);
-            ThingDefinitions.Merge(newMappings.ThingDefinitions);
+            TriggerTemplates.Merge(newMappings.TriggerTemplates);
+            ThingTemplates.Merge(newMappings.ThingTemplates);
         }
     }
 }

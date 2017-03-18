@@ -97,8 +97,8 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
 
             Assert.That(trigger.Fillzone, Is.True, "Did not parse Fillzone");
             Assert.That(trigger.Action, Is.EqualTo("someoriginalaction"), "Did not parse action.");
-            Assert.That(trigger.PositionlessTrigger.Action, Is.EqualTo("someaction"), "Did not parse trigger action.");
-            Assert.That(trigger.PositionlessTrigger.ActivateEast, Is.False, "Did not parse trigger activateeast.");
+            Assert.That(trigger.TriggerTemplate.Action, Is.EqualTo("someaction"), "Did not parse trigger action.");
+            Assert.That(trigger.TriggerTemplate.ActivateEast, Is.False, "Did not parse trigger activateeast.");
         }
 
         [Test]
@@ -149,7 +149,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 })
             });
 
-            var trigger = translator.TileMappings.PositionlessTriggers.Lookup((ushort)123).OrElse(() => new AssertionException("Did not include trigger."));
+            var trigger = translator.TileMappings.TriggerTemplates.Lookup((ushort)123).OrElse(() => new AssertionException("Did not include trigger."));
 
             Assert.That(trigger.Action, Is.EqualTo("someaction"), "Did not set action");
             Assert.That(trigger.ActivateEast, Is.False, "Did not set Activate East");
@@ -214,7 +214,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 })
             });
 
-            var trigger = translator.ThingMappings.PositionlessTriggers.Lookup((ushort)123).OrElse(() => new AssertionException("Did not include trigger."));
+            var trigger = translator.ThingMappings.TriggerTemplates.Lookup((ushort)123).OrElse(() => new AssertionException("Did not include trigger."));
 
             Assert.That(trigger.OldNum, Is.EqualTo(123), "Did not set oldNum");
             Assert.That(trigger.Action, Is.EqualTo("someaction"), "Did not set action");
@@ -244,8 +244,8 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 })
             });
 
-            Assert.That(translator.ThingMappings.ThingDefinitions, Has.Count.EqualTo(1), "Did not parse thing definition.");
-            var thingDef = translator.ThingMappings.ThingDefinitions.First();
+            Assert.That(translator.ThingMappings.ThingTemplates, Has.Count.EqualTo(1), "Did not parse thing definition.");
+            var thingDef = translator.ThingMappings.ThingTemplates.First();
             Assert.That(thingDef.Key, Is.EqualTo(23), "Did not parse old num.");
             Assert.That(thingDef.Value.OldNum, Is.EqualTo(23), "Did not part OldNum");
             Assert.That(thingDef.Value.Actor, Is.EqualTo("Puddle"), "Did not parse actor.");
@@ -278,8 +278,8 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 })
             });
 
-            Assert.That(translator.ThingMappings.ThingDefinitions, Has.Count.EqualTo(1), "Did not parse thing definition.");
-            var thingDef = translator.ThingMappings.ThingDefinitions.First();
+            Assert.That(translator.ThingMappings.ThingTemplates, Has.Count.EqualTo(1), "Did not parse thing definition.");
+            var thingDef = translator.ThingMappings.ThingTemplates.First();
             Assert.That(thingDef.Key, Is.EqualTo(23), "Did not parse old num.");
             Assert.That(thingDef.Value.Actor, Is.EqualTo("$Puddle"), "Did not parse actor.");
             Assert.That(thingDef.Value.Angles, Is.EqualTo(4), "Did not parse angles.");
@@ -338,8 +338,8 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 })
             });
 
-            Assert.That(translator.ThingMappings.ThingDefinitions, Has.Count.EqualTo(3), "Did not parse thing definition.");
-            var thingDef = translator.ThingMappings.ThingDefinitions[23];
+            Assert.That(translator.ThingMappings.ThingTemplates, Has.Count.EqualTo(3), "Did not parse thing definition.");
+            var thingDef = translator.ThingMappings.ThingTemplates[23];
             Assert.That(thingDef.Actor, Is.EqualTo("Puddle"), "Did not parse actor.");
             Assert.That(thingDef.Angles, Is.EqualTo(4), "Did not parse angles.");
             Assert.That(thingDef.Pathing, Is.False, "Did not parse pathing.");
@@ -347,7 +347,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
             Assert.That(thingDef.Ambush, Is.False, "Did not parse ambush.");
             Assert.That(thingDef.Minskill, Is.EqualTo(2), "Did not parse minskill.");
 
-            thingDef = translator.ThingMappings.ThingDefinitions[24];
+            thingDef = translator.ThingMappings.ThingTemplates[24];
             Assert.That(thingDef.Actor, Is.EqualTo("Puddle"), "Did not parse actor.");
             Assert.That(thingDef.Angles, Is.EqualTo(5), "Did not parse angles.");
             Assert.That(thingDef.Pathing, Is.True, "Did not parse pathing.");
@@ -355,7 +355,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
             Assert.That(thingDef.Ambush, Is.False, "Did not parse ambush.");
             Assert.That(thingDef.Minskill, Is.EqualTo(3), "Did not parse minskill.");
 
-            thingDef = translator.ThingMappings.ThingDefinitions[25];
+            thingDef = translator.ThingMappings.ThingTemplates[25];
             Assert.That(thingDef.Actor, Is.EqualTo("Puddle"), "Did not parse actor.");
             Assert.That(thingDef.Angles, Is.EqualTo(6), "Did not parse angles.");
             Assert.That(thingDef.Pathing, Is.True, "Did not parse pathing.");

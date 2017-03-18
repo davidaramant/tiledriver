@@ -24,7 +24,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
                 },
                 changeTriggerModzones: new Dictionary<ushort, ChangeTriggerModzone>(),
                 tiles: new Dictionary<ushort, Tile>(),
-                positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>(),
+                triggerTemplates: new Dictionary<ushort, TriggerTemplate>(),
                 zones: new Dictionary<ushort, Zone>());
 
             var tm2 = new TileMappings(
@@ -35,7 +35,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
                 },
                 changeTriggerModzones: new Dictionary<ushort, ChangeTriggerModzone>(),
                 tiles: new Dictionary<ushort, Tile>(),
-                positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>(),
+                triggerTemplates: new Dictionary<ushort, TriggerTemplate>(),
                 zones: new Dictionary<ushort, Zone>());
 
             tm1.Add(tm2);
@@ -53,22 +53,22 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
                 ambushModzones: new Dictionary<ushort, AmbushModzone>(),
                 changeTriggerModzones: new Dictionary<ushort, ChangeTriggerModzone>
                 {
-                    {1,new ChangeTriggerModzone("A1",new PositionlessTrigger()) },
-                    {2,new ChangeTriggerModzone("A2",new PositionlessTrigger()) },
+                    {1,new ChangeTriggerModzone("A1",new TriggerTemplate()) },
+                    {2,new ChangeTriggerModzone("A2",new TriggerTemplate()) },
                 },
                 tiles: new Dictionary<ushort, Tile>(),
-                positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>(),
+                triggerTemplates: new Dictionary<ushort, TriggerTemplate>(),
                 zones: new Dictionary<ushort, Zone>());
 
             var tm2 = new TileMappings(
                 ambushModzones: new Dictionary<ushort, AmbushModzone>(),
                 changeTriggerModzones: new Dictionary<ushort, ChangeTriggerModzone>
                 {
-                    {2,new ChangeTriggerModzone("A2new",new PositionlessTrigger()) },
-                    {3,new ChangeTriggerModzone("A3",new PositionlessTrigger()) },
+                    {2,new ChangeTriggerModzone("A2new",new TriggerTemplate()) },
+                    {3,new ChangeTriggerModzone("A3",new TriggerTemplate()) },
                 },
                 tiles: new Dictionary<ushort, Tile>(),
-                positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>(),
+                triggerTemplates: new Dictionary<ushort, TriggerTemplate>(),
                 zones: new Dictionary<ushort, Zone>());
 
             tm1.Add(tm2);
@@ -90,7 +90,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
                     {1,new Tile(textureEast:"T1",textureNorth:"whatever",textureSouth:"whatever",textureWest:"whatever") },
                     {2,new Tile(textureEast:"T2",textureNorth:"whatever",textureSouth:"whatever",textureWest:"whatever") },
                 },
-                positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>(),
+                triggerTemplates: new Dictionary<ushort, TriggerTemplate>(),
                 zones: new Dictionary<ushort, Zone>());
 
             var tm2 = new TileMappings(
@@ -101,7 +101,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
                     {2,new Tile(textureEast:"T2new",textureNorth:"whatever",textureSouth:"whatever",textureWest:"whatever") },
                     {3,new Tile(textureEast:"T3",textureNorth:"whatever",textureSouth:"whatever",textureWest:"whatever") },
                 },
-                positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>(),
+                triggerTemplates: new Dictionary<ushort, TriggerTemplate>(),
                 zones: new Dictionary<ushort, Zone>());
 
             tm1.Add(tm2);
@@ -119,10 +119,10 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
                 ambushModzones: new Dictionary<ushort, AmbushModzone>(),
                 changeTriggerModzones: new Dictionary<ushort, ChangeTriggerModzone>(),
                 tiles: new Dictionary<ushort, Tile>(),
-                positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>
+                triggerTemplates: new Dictionary<ushort, TriggerTemplate>
                 {
-                    { 1, new PositionlessTrigger(oldNum:1,action:"Action1") },
-                    { 2, new PositionlessTrigger(oldNum:2,action:"Action2") }
+                    { 1, new TriggerTemplate(oldNum:1,action:"Action1") },
+                    { 2, new TriggerTemplate(oldNum:2,action:"Action2") }
                 },
                 zones: new Dictionary<ushort, Zone>());
 
@@ -130,17 +130,17 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
                 ambushModzones: new Dictionary<ushort, AmbushModzone>(),
                 changeTriggerModzones: new Dictionary<ushort, ChangeTriggerModzone>(),
                 tiles: new Dictionary<ushort, Tile>(),
-                positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>
+                triggerTemplates: new Dictionary<ushort, TriggerTemplate>
                 {
-                    { 2, new PositionlessTrigger(oldNum:2,action:"ActionNew2") },
-                    { 3, new PositionlessTrigger(oldNum:3,action:"Action3") }
+                    { 2, new TriggerTemplate(oldNum:2,action:"ActionNew2") },
+                    { 3, new TriggerTemplate(oldNum:3,action:"Action3") }
                 },
                 zones: new Dictionary<ushort, Zone>());
 
             tm1.Add(tm2);
 
             CheckMerge(
-                tm1.PositionlessTriggers,
+                tm1.TriggerTemplates,
                 trigger => trigger.Action,
                 new[] { "Action1", "ActionNew2", "Action3" });
         }
@@ -152,7 +152,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
                 ambushModzones: new Dictionary<ushort, AmbushModzone>(),
                 changeTriggerModzones: new Dictionary<ushort, ChangeTriggerModzone>(),
                 tiles: new Dictionary<ushort, Tile>(),
-                positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>(),
+                triggerTemplates: new Dictionary<ushort, TriggerTemplate>(),
                 zones: new Dictionary<ushort, Zone>
                 {
                     {1,new Zone(comment:"C1") },
@@ -163,7 +163,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
                 ambushModzones: new Dictionary<ushort, AmbushModzone>(),
                 changeTriggerModzones: new Dictionary<ushort, ChangeTriggerModzone>(),
                 tiles: new Dictionary<ushort, Tile>(),
-                positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>(),
+                triggerTemplates: new Dictionary<ushort, TriggerTemplate>(),
                 zones: new Dictionary<ushort, Zone>
                 {
                     {2,new Zone(comment:"C2new") },

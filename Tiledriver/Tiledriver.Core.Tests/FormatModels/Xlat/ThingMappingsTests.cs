@@ -16,13 +16,13 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
         {
             var tm1 = new ThingMappings(
                 elevators: new ushort[] { 1, 2, 3 },
-                positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>(),
-                thingDefinitions: new Dictionary<ushort, ThingDefinition>());
+                triggerTemplates: new Dictionary<ushort, TriggerTemplate>(),
+                thingTemplates: new Dictionary<ushort, ThingTemplate>());
 
             var tm2 = new ThingMappings(
                 elevators: new ushort[] { 3, 4, 5 },
-                positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>(),
-                thingDefinitions: new Dictionary<ushort, ThingDefinition>());
+                triggerTemplates: new Dictionary<ushort, TriggerTemplate>(),
+                thingTemplates: new Dictionary<ushort, ThingTemplate>());
 
             tm1.Add(tm2);
 
@@ -37,36 +37,36 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
         {
             var tm1 = new ThingMappings(
                 elevators: Enumerable.Empty<ushort>(),
-                positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>
+                triggerTemplates: new Dictionary<ushort, TriggerTemplate>
                 {
-                    { 1, new PositionlessTrigger(oldNum:1,action:"Action1") },
-                    { 2, new PositionlessTrigger(oldNum:2,action:"Action2") }
+                    { 1, new TriggerTemplate(oldNum:1,action:"Action1") },
+                    { 2, new TriggerTemplate(oldNum:2,action:"Action2") }
                 },
-                thingDefinitions: new Dictionary<ushort, ThingDefinition>());
+                thingTemplates: new Dictionary<ushort, ThingTemplate>());
 
             var tm2 = new ThingMappings(
                 elevators: Enumerable.Empty<ushort>(),
-                positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>
+                triggerTemplates: new Dictionary<ushort, TriggerTemplate>
                 {
-                    { 2, new PositionlessTrigger(oldNum:2,action:"ActionNew2") },
-                    { 3, new PositionlessTrigger(oldNum:3,action:"Action3") }
+                    { 2, new TriggerTemplate(oldNum:2,action:"ActionNew2") },
+                    { 3, new TriggerTemplate(oldNum:3,action:"Action3") }
                 },
-                thingDefinitions: new Dictionary<ushort, ThingDefinition>());
+                thingTemplates: new Dictionary<ushort, ThingTemplate>());
 
             tm1.Add(tm2);
 
             Assert.That(
-                tm1.PositionlessTriggers,
+                tm1.TriggerTemplates,
                 Has.Count.EqualTo(3),
                 "Unexpected number of triggers.");
 
             Assert.That(
-                tm1.PositionlessTriggers.Keys,
+                tm1.TriggerTemplates.Keys,
                 Is.EquivalentTo(new ushort[] { 1, 2, 3 }),
                 "Unexpected trigger keys.");
 
             Assert.That(
-                tm1.PositionlessTriggers.Values.Select(t => t.Action),
+                tm1.TriggerTemplates.Values.Select(t => t.Action),
                 Is.EquivalentTo(new[] { "Action1", "ActionNew2", "Action3" }),
                 "Unexpected trigger values.");
         }
@@ -76,36 +76,36 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
         {
             var tm1 = new ThingMappings(
                 elevators: Enumerable.Empty<ushort>(),
-                positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>(),
-                thingDefinitions: new Dictionary<ushort, ThingDefinition>
+                triggerTemplates: new Dictionary<ushort, TriggerTemplate>(),
+                thingTemplates: new Dictionary<ushort, ThingTemplate>
                 {
-                    {1,new ThingDefinition(oldNum:1,actor:"A1",angles:0,holowall:false,pathing:false,ambush:false,minskill:0) },
-                    {2,new ThingDefinition(oldNum:2,actor:"A2",angles:0,holowall:false,pathing:false,ambush:false,minskill:0) },
+                    {1,new ThingTemplate(oldNum:1,actor:"A1",angles:0,holowall:false,pathing:false,ambush:false,minskill:0) },
+                    {2,new ThingTemplate(oldNum:2,actor:"A2",angles:0,holowall:false,pathing:false,ambush:false,minskill:0) },
                 });
 
             var tm2 = new ThingMappings(
                 elevators: Enumerable.Empty<ushort>(),
-                positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>(),
-                thingDefinitions: new Dictionary<ushort, ThingDefinition>
+                triggerTemplates: new Dictionary<ushort, TriggerTemplate>(),
+                thingTemplates: new Dictionary<ushort, ThingTemplate>
                 {
-                    {2,new ThingDefinition(oldNum:2,actor:"A2new",angles:0,holowall:false,pathing:false,ambush:false,minskill:0) },
-                    {3,new ThingDefinition(oldNum:3,actor:"A3",angles:0,holowall:false,pathing:false,ambush:false,minskill:0) },
+                    {2,new ThingTemplate(oldNum:2,actor:"A2new",angles:0,holowall:false,pathing:false,ambush:false,minskill:0) },
+                    {3,new ThingTemplate(oldNum:3,actor:"A3",angles:0,holowall:false,pathing:false,ambush:false,minskill:0) },
                 });
 
             tm1.Add(tm2);
 
             Assert.That(
-                tm1.ThingDefinitions,
+                tm1.ThingTemplates,
                 Has.Count.EqualTo(3),
                 "Unexpected number of thing definitions.");
 
             Assert.That(
-                tm1.ThingDefinitions.Keys,
+                tm1.ThingTemplates.Keys,
                 Is.EquivalentTo(new ushort[] { 1, 2, 3 }),
                 "Unexpected thing definition keys.");
 
             Assert.That(
-                tm1.ThingDefinitions.Values.Select(t => t.Actor),
+                tm1.ThingTemplates.Values.Select(t => t.Actor),
                 Is.EquivalentTo(new[] { "A1", "A2new", "A3" }),
                 "Unexpected thing definition values.");
         }

@@ -79,7 +79,7 @@ namespace Tiledriver.Core.MapTranslators
             {
                 // TODO: Can an elevator, thing, and trigger have the same mapping id?
 
-                var definition = _translatorInfo.ThingMappings.ThingDefinitions[idWithPosition.Id];
+                var definition = _translatorInfo.ThingMappings.ThingTemplates[idWithPosition.Id];
             }
             yield break;
         }

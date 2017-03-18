@@ -175,13 +175,13 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
             var trigger = ParsePositionlessTrigger(exp);
             trigger.OldNum = oldnum;
 
-            tileMappings.PositionlessTriggers.Add(oldnum, trigger);
+            tileMappings.TriggerTemplates.Add(oldnum, trigger);
         }
 
-        private static PositionlessTrigger ParsePositionlessTrigger(IHaveAssignments block)
+        private static TriggerTemplate ParsePositionlessTrigger(IHaveAssignments block)
         {
             // HACK: This is copy-pasted from the generated UWMF parser code with the x/y/z stuff removed
-            var parsedBlock = new PositionlessTrigger();
+            var parsedBlock = new TriggerTemplate();
             block.GetValueFor("Action").SetRequiredString(value => parsedBlock.Action = value, "Trigger", "Action");
             block.GetValueFor("Arg0").SetOptionalInteger(value => parsedBlock.Arg0 = value, "Trigger", "Arg0");
             block.GetValueFor("Arg1").SetOptionalInteger(value => parsedBlock.Arg1 = value, "Trigger", "Arg1");
@@ -282,9 +282,9 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
                 throw new ParsingException("Unexpected additional values in thing definition.");
             }
 
-            thingMappings.ThingDefinitions.Add(
+            thingMappings.ThingTemplates.Add(
                 oldnum,
-                new ThingDefinition(
+                new ThingTemplate(
                     oldNum: oldnum,
                     actor: actor,
                     angles: angles,
@@ -377,7 +377,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
             var trigger = ParsePositionlessTrigger(exp);
             trigger.OldNum = oldnum;
 
-            thingMappings.PositionlessTriggers.Add(oldnum, trigger);
+            thingMappings.TriggerTemplates.Add(oldnum, trigger);
         }
 
         #endregion Things

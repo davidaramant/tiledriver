@@ -12,7 +12,7 @@ namespace Tiledriver.Core.FormatModels.Xlat
             AmbushModzones.Merge(newMappings.AmbushModzones);
             ChangeTriggerModzones.Merge(newMappings.ChangeTriggerModzones);
             Tiles.Merge(newMappings.Tiles);
-            PositionlessTriggers.Merge(newMappings.PositionlessTriggers);
+            TriggerTemplates.Merge(newMappings.TriggerTemplates);
             Zones.Merge(newMappings.Zones);
         }
     }

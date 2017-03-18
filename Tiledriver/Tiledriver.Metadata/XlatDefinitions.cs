@@ -22,7 +22,7 @@ namespace Tiledriver.Metadata
                 {
                     new Property("fillzone", type:PropertyType.Boolean, defaultValue:false),
                     new Property("action", type:PropertyType.String),
-                    new Property("positionlessTrigger", type:PropertyType.Block),
+                    new Property("triggerTemplate", type:PropertyType.Block),
                 }),
 
             new Block("elevator",
@@ -32,7 +32,7 @@ namespace Tiledriver.Metadata
                     new Property("oldNum",PropertyType.Ushort,isMetaData:true),
                 }),
 
-            new Block("thingDefinition",
+            new Block("thingTemplate",
                 parsing:Parsing.Manual,
                 implements:new []{"IThingMapping"},
                 properties:new []
@@ -46,7 +46,7 @@ namespace Tiledriver.Metadata
                     new Property("minskill",type:PropertyType.Integer),
                 }),
 
-            new Block("positionlessTrigger",
+            new Block("triggerTemplate",
                 implements:new []{"IThingMapping"},
                 properties:new []
                 {
@@ -78,7 +78,7 @@ namespace Tiledriver.Metadata
                     new Property("ambushModzone",type:PropertyType.MappedBlockList),
                     new Property("changeTriggerModzone",type:PropertyType.MappedBlockList),
                     new Property("tile",type:PropertyType.MappedBlockList),
-                    new Property("positionlessTrigger",type:PropertyType.MappedBlockList),
+                    new Property("triggerTemplate",type:PropertyType.MappedBlockList),
                     new Property("zone",type:PropertyType.MappedBlockList),
                 }),
 
@@ -88,8 +88,8 @@ namespace Tiledriver.Metadata
                 properties:new []
                 {
                     new Property("elevator",type:PropertyType.List, collectionType:"ushort"),
-                    new Property("positionlessTrigger",type:PropertyType.MappedBlockList),
-                    new Property("thingDefinition",type:PropertyType.MappedBlockList),
+                    new Property("triggerTemplate",type:PropertyType.MappedBlockList),
+                    new Property("thingTemplate",type:PropertyType.MappedBlockList),
                 }),
 
             new Block("flats",className:"FlatMappings",
