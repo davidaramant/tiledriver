@@ -38,7 +38,7 @@ namespace Tiledriver.Metadata
                 properties:new []
                 {
                     new Property("oldNum",PropertyType.Ushort,isMetaData:true),
-                    new Property("actor",type:PropertyType.String),
+                    new Property("type",type:PropertyType.String),
                     new Property("angles",type:PropertyType.Integer),
                     new Property("holowall",type:PropertyType.Boolean),
                     new Property("pathing",type:PropertyType.Boolean),

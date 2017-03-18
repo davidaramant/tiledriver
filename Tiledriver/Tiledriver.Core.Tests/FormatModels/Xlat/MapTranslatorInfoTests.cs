@@ -72,7 +72,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
         {
             return new ThingTemplate(
                 oldNum: oldNum,
-                actor: "Actor",
+                type: "Actor",
                 angles: angles,
                 holowall: false,
                 pathing: false,

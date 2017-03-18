@@ -223,10 +223,6 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
                 Is.EqualTo( expected.Skill4 ),
                 "Found difference in Thing Skill4" );
             Assert.That(
-                actual.Skill5,
-                Is.EqualTo( expected.Skill5 ),
-                "Found difference in Thing Skill5" );
-            Assert.That(
                 actual.Comment,
                 Is.EqualTo( expected.Comment ),
                 "Found difference in Thing Comment" );

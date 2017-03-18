@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using AutoMapper;
 using Moq;
 using Tiledriver.Core.FormatModels;
 using Tiledriver.Core.FormatModels.Common;
@@ -39,8 +40,13 @@ namespace TestRunner
 
             var mapInfos = LoadMapInfo();
 
-            var translator = new BinaryMapTranslator(translatorInfo: xlat);
-            var uwmfMap = translator.Translate(bMap,mapInfos.Maps[0]);
+
+            var autoMapperConfig = new MapperConfiguration(cfg => cfg.CreateMap<ThingTemplate, Thing>());
+            var autoMapper = autoMapperConfig.CreateMapper();
+
+
+            var translator = new BinaryMapTranslator(translatorInfo: xlat, autoMapper:autoMapper);
+            var uwmfMap = translator.Translate(bMap, mapInfos.Maps[0]);
 
             LoadMapInEcWolf(uwmfMap, Path.GetFullPath("translated.wad"));
         }

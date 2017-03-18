@@ -256,7 +256,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
             var thingTemplate = (ThingTemplate)mapping;
 
             Assert.That(thingTemplate.OldNum, Is.EqualTo(23), "Did not part OldNum");
-            Assert.That(thingTemplate.Actor, Is.EqualTo("Puddle"), "Did not parse actor.");
+            Assert.That(thingTemplate.Type, Is.EqualTo("Puddle"), "Did not parse actor.");
             Assert.That(thingTemplate.Angles, Is.EqualTo(4), "Did not parse angles.");
             Assert.That(thingTemplate.Pathing, Is.False, "Did not parse pathing.");
             Assert.That(thingTemplate.Holowall, Is.False, "Did not parse holowall.");
@@ -293,7 +293,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
             var thingTemplate = (ThingTemplate)mapping;
 
             Assert.That(thingTemplate.OldNum, Is.EqualTo(23), "Did not part OldNum");
-            Assert.That(thingTemplate.Actor, Is.EqualTo("$Puddle"), "Did not parse actor.");
+            Assert.That(thingTemplate.Type, Is.EqualTo("$Puddle"), "Did not parse actor.");
             Assert.That(thingTemplate.Angles, Is.EqualTo(4), "Did not parse angles.");
             Assert.That(thingTemplate.Pathing, Is.False, "Did not parse pathing.");
             Assert.That(thingTemplate.Holowall, Is.False, "Did not parse holowall.");
@@ -356,7 +356,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
 
             var thingTemplate = (ThingTemplate)mapping;
 
-            Assert.That(thingTemplate.Actor, Is.EqualTo("Puddle"), "Did not parse actor.");
+            Assert.That(thingTemplate.Type, Is.EqualTo("Puddle"), "Did not parse actor.");
             Assert.That(thingTemplate.Angles, Is.EqualTo(4), "Did not parse angles.");
             Assert.That(thingTemplate.Pathing, Is.False, "Did not parse pathing.");
             Assert.That(thingTemplate.Holowall, Is.True, "Did not parse holowall.");
@@ -368,7 +368,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
 
             thingTemplate = (ThingTemplate)mapping;
 
-            Assert.That(thingTemplate.Actor, Is.EqualTo("Puddle"), "Did not parse actor.");
+            Assert.That(thingTemplate.Type, Is.EqualTo("Puddle"), "Did not parse actor.");
             Assert.That(thingTemplate.Angles, Is.EqualTo(5), "Did not parse angles.");
             Assert.That(thingTemplate.Pathing, Is.True, "Did not parse pathing.");
             Assert.That(thingTemplate.Holowall, Is.True, "Did not parse holowall.");
@@ -380,7 +380,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
 
             thingTemplate = (ThingTemplate)mapping;
 
-            Assert.That(thingTemplate.Actor, Is.EqualTo("Puddle"), "Did not parse actor.");
+            Assert.That(thingTemplate.Type, Is.EqualTo("Puddle"), "Did not parse actor.");
             Assert.That(thingTemplate.Angles, Is.EqualTo(6), "Did not parse angles.");
             Assert.That(thingTemplate.Pathing, Is.True, "Did not parse pathing.");
             Assert.That(thingTemplate.Holowall, Is.False, "Did not parse holowall.");

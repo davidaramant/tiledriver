@@ -439,7 +439,6 @@ namespace Tiledriver.Core.FormatModels.Uwmf
         public bool Skill2 { get; set; } = false;
         public bool Skill3 { get; set; } = false;
         public bool Skill4 { get; set; } = false;
-        public bool Skill5 { get; set; } = false;
         public string Comment { get; set; } = "";
         public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
         public Thing() { }
@@ -455,7 +454,6 @@ namespace Tiledriver.Core.FormatModels.Uwmf
             bool skill2 = false,
             bool skill3 = false,
             bool skill4 = false,
-            bool skill5 = false,
             string comment = "",
             IEnumerable<UnknownProperty> unknownProperties = null)
         {
@@ -470,7 +468,6 @@ namespace Tiledriver.Core.FormatModels.Uwmf
             Skill2 = skill2;
             Skill3 = skill3;
             Skill4 = skill4;
-            Skill5 = skill5;
             Comment = comment;
             UnknownProperties.AddRange(unknownProperties ?? Enumerable.Empty<UnknownProperty>());
             AdditionalSemanticChecks();
@@ -491,7 +488,6 @@ namespace Tiledriver.Core.FormatModels.Uwmf
             if (Skill2 != false) WriteProperty(stream, "skill2", Skill2, indent: true);
             if (Skill3 != false) WriteProperty(stream, "skill3", Skill3, indent: true);
             if (Skill4 != false) WriteProperty(stream, "skill4", Skill4, indent: true);
-            if (Skill5 != false) WriteProperty(stream, "skill5", Skill5, indent: true);
             if (Comment != "") WriteProperty(stream, "comment", Comment, indent: true);
             foreach (var property in UnknownProperties)
             {

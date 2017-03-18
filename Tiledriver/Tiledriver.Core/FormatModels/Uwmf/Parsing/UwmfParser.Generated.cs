@@ -98,7 +98,6 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
             block.GetValueFor("Skill2").SetOptionalBoolean(value => parsedBlock.Skill2 = value, "Thing", "Skill2");
             block.GetValueFor("Skill3").SetOptionalBoolean(value => parsedBlock.Skill3 = value, "Thing", "Skill3");
             block.GetValueFor("Skill4").SetOptionalBoolean(value => parsedBlock.Skill4 = value, "Thing", "Skill4");
-            block.GetValueFor("Skill5").SetOptionalBoolean(value => parsedBlock.Skill5 = value, "Thing", "Skill5");
             block.GetValueFor("Comment").SetOptionalString(value => parsedBlock.Comment = value, "Thing", "Comment");
             return parsedBlock;
         }

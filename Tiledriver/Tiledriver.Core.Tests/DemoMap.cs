@@ -156,7 +156,6 @@ namespace Tiledriver.Core.Tests
                     skill2: true,
                     skill3: true,
                     skill4: true,
-                    skill5: true,
                     ambush: true);
             }));
         }

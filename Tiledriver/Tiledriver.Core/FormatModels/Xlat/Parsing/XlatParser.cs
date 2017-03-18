@@ -283,7 +283,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
             return
                 new ThingTemplate(
                     oldNum: oldnum,
-                    actor: actor,
+                    type: actor,
                     angles: angles,
                     holowall: flags.HasFlag(ThingFlags.Holowall),
                     pathing: flags.HasFlag(ThingFlags.Pathing),

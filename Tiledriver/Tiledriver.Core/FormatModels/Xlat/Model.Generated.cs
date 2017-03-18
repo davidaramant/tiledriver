@@ -114,15 +114,15 @@ namespace Tiledriver.Core.FormatModels.Xlat
                 _oldNum = value;
             }
         }
-        private bool _actorHasBeenSet = false;
-        private string _actor;
-        public string Actor
+        private bool _typeHasBeenSet = false;
+        private string _type;
+        public string Type
         {
-            get { return _actor; }
+            get { return _type; }
             set
             {
-                _actorHasBeenSet = true;
-                _actor = value;
+                _typeHasBeenSet = true;
+                _type = value;
             }
         }
         private bool _anglesHasBeenSet = false;
@@ -183,7 +183,7 @@ namespace Tiledriver.Core.FormatModels.Xlat
         public ThingTemplate() { }
         public ThingTemplate(
             ushort oldNum,
-            string actor,
+            string type,
             int angles,
             bool holowall,
             bool pathing,
@@ -191,7 +191,7 @@ namespace Tiledriver.Core.FormatModels.Xlat
             int minskill)
         {
             OldNum = oldNum;
-            Actor = actor;
+            Type = type;
             Angles = angles;
             Holowall = holowall;
             Pathing = pathing;
@@ -202,7 +202,7 @@ namespace Tiledriver.Core.FormatModels.Xlat
         public void CheckSemanticValidity()
         {
             if (!_oldNumHasBeenSet) throw new InvalidUwmfException("Did not set OldNum on ThingTemplate");
-            if (!_actorHasBeenSet) throw new InvalidUwmfException("Did not set Actor on ThingTemplate");
+            if (!_typeHasBeenSet) throw new InvalidUwmfException("Did not set Type on ThingTemplate");
             if (!_anglesHasBeenSet) throw new InvalidUwmfException("Did not set Angles on ThingTemplate");
             if (!_holowallHasBeenSet) throw new InvalidUwmfException("Did not set Holowall on ThingTemplate");
             if (!_pathingHasBeenSet) throw new InvalidUwmfException("Did not set Pathing on ThingTemplate");

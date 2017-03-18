@@ -86,7 +86,6 @@ namespace Tiledriver.Metadata
                     new Property("skill2", PropertyType.Boolean, defaultValue:false),
                     new Property("skill3", PropertyType.Boolean, defaultValue:false),
                     new Property("skill4", PropertyType.Boolean, defaultValue:false),
-                    new Property("skill5", PropertyType.Boolean, defaultValue:false),
                     new Property("comment",type:PropertyType.String, defaultValue:string.Empty),
                     new Property("unknownProperties", PropertyType.UnknownProperties),
                 }),
