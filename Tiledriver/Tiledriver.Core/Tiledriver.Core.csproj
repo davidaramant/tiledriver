@@ -100,6 +100,7 @@
     <Compile Include="FormatModels\Wad\WadFile.cs" />
     <Compile Include="FormatModels\Xlat\FlatMappings.cs" />
     <Compile Include="FormatModels\Xlat\InvalidXlatException.cs" />
+    <Compile Include="FormatModels\Xlat\IThingMapping.cs" />
     <Compile Include="FormatModels\Xlat\MapTranslatorInfo.cs" />
     <Compile Include="FormatModels\Xlat\Model.Generated.cs">
       <DependentUpon>Model.tt</DependentUpon>

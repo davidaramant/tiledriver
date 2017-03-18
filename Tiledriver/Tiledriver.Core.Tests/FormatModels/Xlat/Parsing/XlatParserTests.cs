@@ -216,6 +216,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
 
             var trigger = translator.ThingMappings.PositionlessTriggers.Lookup((ushort)123).OrElse(() => new AssertionException("Did not include trigger."));
 
+            Assert.That(trigger.OldNum, Is.EqualTo(123), "Did not set oldNum");
             Assert.That(trigger.Action, Is.EqualTo("someaction"), "Did not set action");
             Assert.That(trigger.ActivateEast, Is.False, "Did not set Activate East");
         }
@@ -246,6 +247,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
             Assert.That(translator.ThingMappings.ThingDefinitions, Has.Count.EqualTo(1), "Did not parse thing definition.");
             var thingDef = translator.ThingMappings.ThingDefinitions.First();
             Assert.That(thingDef.Key, Is.EqualTo(23), "Did not parse old num.");
+            Assert.That(thingDef.Value.OldNum, Is.EqualTo(23), "Did not part OldNum");
             Assert.That(thingDef.Value.Actor, Is.EqualTo("Puddle"), "Did not parse actor.");
             Assert.That(thingDef.Value.Angles, Is.EqualTo(4), "Did not parse angles.");
             Assert.That(thingDef.Value.Pathing, Is.False, "Did not parse pathing.");

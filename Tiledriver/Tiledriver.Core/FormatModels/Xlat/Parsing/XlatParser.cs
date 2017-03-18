@@ -173,6 +173,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
                 throw new ParsingException("Bad structure for trigger.");
             }
             var trigger = ParsePositionlessTrigger(exp);
+            trigger.OldNum = oldnum;
 
             tileMappings.PositionlessTriggers.Add(oldnum, trigger);
         }
@@ -284,6 +285,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
             thingMappings.ThingDefinitions.Add(
                 oldnum,
                 new ThingDefinition(
+                    oldNum: oldnum,
                     actor: actor,
                     angles: angles,
                     holowall: flags.HasFlag(ThingFlags.Holowall),
@@ -373,6 +375,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
                 throw new ParsingException("Bad structure for trigger.");
             }
             var trigger = ParsePositionlessTrigger(exp);
+            trigger.OldNum = oldnum;
 
             thingMappings.PositionlessTriggers.Add(oldnum, trigger);
         }

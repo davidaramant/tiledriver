@@ -39,8 +39,8 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
                 elevators: Enumerable.Empty<ushort>(),
                 positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>
                 {
-                    { 1, new PositionlessTrigger(action:"Action1") },
-                    { 2, new PositionlessTrigger(action:"Action2") }
+                    { 1, new PositionlessTrigger(oldNum:1,action:"Action1") },
+                    { 2, new PositionlessTrigger(oldNum:2,action:"Action2") }
                 },
                 thingDefinitions: new Dictionary<ushort, ThingDefinition>());
 
@@ -48,8 +48,8 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
                 elevators: Enumerable.Empty<ushort>(),
                 positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>
                 {
-                    { 2, new PositionlessTrigger(action:"ActionNew2") },
-                    { 3, new PositionlessTrigger(action:"Action3") }
+                    { 2, new PositionlessTrigger(oldNum:2,action:"ActionNew2") },
+                    { 3, new PositionlessTrigger(oldNum:3,action:"Action3") }
                 },
                 thingDefinitions: new Dictionary<ushort, ThingDefinition>());
 
@@ -79,8 +79,8 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
                 positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>(),
                 thingDefinitions: new Dictionary<ushort, ThingDefinition>
                 {
-                    {1,new ThingDefinition(actor:"A1",angles:0,holowall:false,pathing:false,ambush:false,minskill:0) },
-                    {2,new ThingDefinition(actor:"A2",angles:0,holowall:false,pathing:false,ambush:false,minskill:0) },
+                    {1,new ThingDefinition(oldNum:1,actor:"A1",angles:0,holowall:false,pathing:false,ambush:false,minskill:0) },
+                    {2,new ThingDefinition(oldNum:2,actor:"A2",angles:0,holowall:false,pathing:false,ambush:false,minskill:0) },
                 });
 
             var tm2 = new ThingMappings(
@@ -88,8 +88,8 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
                 positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>(),
                 thingDefinitions: new Dictionary<ushort, ThingDefinition>
                 {
-                    {2,new ThingDefinition(actor:"A2new",angles:0,holowall:false,pathing:false,ambush:false,minskill:0) },
-                    {3,new ThingDefinition(actor:"A3",angles:0,holowall:false,pathing:false,ambush:false,minskill:0) },
+                    {2,new ThingDefinition(oldNum:2,actor:"A2new",angles:0,holowall:false,pathing:false,ambush:false,minskill:0) },
+                    {3,new ThingDefinition(oldNum:3,actor:"A3",angles:0,holowall:false,pathing:false,ambush:false,minskill:0) },
                 });
 
             tm1.Add(tm2);

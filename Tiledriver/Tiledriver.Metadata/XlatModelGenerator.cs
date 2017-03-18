@@ -25,7 +25,15 @@ namespace Tiledriver.Core.FormatModels.Xlat");
 
             foreach (var block in XlatDefinitions.Blocks)
             {
-                output.Line($"public sealed partial class {block.ClassName.ToPascalCase()}");
+                var allInheritance =
+                    block.BaseClass.SelectOrElse(className => new[] { className }, () => new string[0])
+                        .Concat(block.ImplementedInterfaces).ToArray();
+
+                var inheritance = allInheritance.Any()
+                    ? " :" + string.Join(",", allInheritance.Select(s => " " + s))
+                    : string.Empty;
+
+                output.Line($"public sealed partial class {block.ClassName.ToPascalCase()}{inheritance}");
                 output.OpenParen();
 
                 WriteProperties(block, output);

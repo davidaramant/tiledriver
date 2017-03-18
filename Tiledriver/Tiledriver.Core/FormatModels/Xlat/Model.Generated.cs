@@ -72,8 +72,48 @@ namespace Tiledriver.Core.FormatModels.Xlat
         partial void AdditionalSemanticChecks();
     }
 
-    public sealed partial class ThingDefinition
+    public sealed partial class Elevator : IThingMapping
     {
+        private bool _oldNumHasBeenSet = false;
+        private ushort _oldNum;
+        public ushort OldNum
+        {
+            get { return _oldNum; }
+            set
+            {
+                _oldNumHasBeenSet = true;
+                _oldNum = value;
+            }
+        }
+        public Elevator() { }
+        public Elevator(
+            ushort oldNum)
+        {
+            OldNum = oldNum;
+            AdditionalSemanticChecks();
+        }
+        public void CheckSemanticValidity()
+        {
+            if (!_oldNumHasBeenSet) throw new InvalidUwmfException("Did not set OldNum on Elevator");
+            AdditionalSemanticChecks();
+        }
+
+        partial void AdditionalSemanticChecks();
+    }
+
+    public sealed partial class ThingDefinition : IThingMapping
+    {
+        private bool _oldNumHasBeenSet = false;
+        private ushort _oldNum;
+        public ushort OldNum
+        {
+            get { return _oldNum; }
+            set
+            {
+                _oldNumHasBeenSet = true;
+                _oldNum = value;
+            }
+        }
         private bool _actorHasBeenSet = false;
         private string _actor;
         public string Actor
@@ -142,6 +182,7 @@ namespace Tiledriver.Core.FormatModels.Xlat
         }
         public ThingDefinition() { }
         public ThingDefinition(
+            ushort oldNum,
             string actor,
             int angles,
             bool holowall,
@@ -149,6 +190,7 @@ namespace Tiledriver.Core.FormatModels.Xlat
             bool ambush,
             int minskill)
         {
+            OldNum = oldNum;
             Actor = actor;
             Angles = angles;
             Holowall = holowall;
@@ -159,6 +201,7 @@ namespace Tiledriver.Core.FormatModels.Xlat
         }
         public void CheckSemanticValidity()
         {
+            if (!_oldNumHasBeenSet) throw new InvalidUwmfException("Did not set OldNum on ThingDefinition");
             if (!_actorHasBeenSet) throw new InvalidUwmfException("Did not set Actor on ThingDefinition");
             if (!_anglesHasBeenSet) throw new InvalidUwmfException("Did not set Angles on ThingDefinition");
             if (!_holowallHasBeenSet) throw new InvalidUwmfException("Did not set Holowall on ThingDefinition");
@@ -171,8 +214,19 @@ namespace Tiledriver.Core.FormatModels.Xlat
         partial void AdditionalSemanticChecks();
     }
 
-    public sealed partial class PositionlessTrigger
+    public sealed partial class PositionlessTrigger : IThingMapping
     {
+        private bool _oldNumHasBeenSet = false;
+        private ushort _oldNum;
+        public ushort OldNum
+        {
+            get { return _oldNum; }
+            set
+            {
+                _oldNumHasBeenSet = true;
+                _oldNum = value;
+            }
+        }
         private bool _actionHasBeenSet = false;
         private string _action;
         public string Action
@@ -202,6 +256,7 @@ namespace Tiledriver.Core.FormatModels.Xlat
         public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
         public PositionlessTrigger() { }
         public PositionlessTrigger(
+            ushort oldNum,
             string action,
             int arg0 = 0,
             int arg1 = 0,
@@ -220,6 +275,7 @@ namespace Tiledriver.Core.FormatModels.Xlat
             string comment = "",
             IEnumerable<UnknownProperty> unknownProperties = null)
         {
+            OldNum = oldNum;
             Action = action;
             Arg0 = arg0;
             Arg1 = arg1;
@@ -241,6 +297,7 @@ namespace Tiledriver.Core.FormatModels.Xlat
         }
         public void CheckSemanticValidity()
         {
+            if (!_oldNumHasBeenSet) throw new InvalidUwmfException("Did not set OldNum on PositionlessTrigger");
             if (!_actionHasBeenSet) throw new InvalidUwmfException("Did not set Action on PositionlessTrigger");
             AdditionalSemanticChecks();
         }

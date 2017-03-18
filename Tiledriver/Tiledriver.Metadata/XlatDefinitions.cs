@@ -25,10 +25,19 @@ namespace Tiledriver.Metadata
                     new Property("positionlessTrigger", type:PropertyType.Block),
                 }),
 
-            new Block("thingDefinition",
-                parsing:Parsing.Manual,
+            new Block("elevator",
+                implements:new []{"IThingMapping"},
                 properties:new []
                 {
+                    new Property("oldNum",PropertyType.Ushort,isMetaData:true),
+                }),
+
+            new Block("thingDefinition",
+                parsing:Parsing.Manual,
+                implements:new []{"IThingMapping"},
+                properties:new []
+                {
+                    new Property("oldNum",PropertyType.Ushort,isMetaData:true),
                     new Property("actor",type:PropertyType.String),
                     new Property("angles",type:PropertyType.Integer),
                     new Property("holowall",type:PropertyType.Boolean),
@@ -38,8 +47,10 @@ namespace Tiledriver.Metadata
                 }),
 
             new Block("positionlessTrigger",
+                implements:new []{"IThingMapping"},
                 properties:new []
                 {
+                    new Property("oldNum",PropertyType.Ushort,isMetaData:true),
                     new Property("action",PropertyType.String),
                     new Property("arg0",PropertyType.Integer, defaultValue:0),
                     new Property("arg1",PropertyType.Integer, defaultValue:0),
@@ -55,7 +66,7 @@ namespace Tiledriver.Metadata
                     new Property("monsterUse", type:PropertyType.Boolean ,defaultValue:false),
                     new Property("repeatable", type:PropertyType.Boolean ,defaultValue:false),
                     new Property("secret", type:PropertyType.Boolean ,defaultValue:false),
-                    new Property("comment",type:PropertyType.String,defaultValue:string.Empty), 
+                    new Property("comment",type:PropertyType.String,defaultValue:string.Empty),
                     new Property("unknownProperties", PropertyType.UnknownProperties),
                 }),
 

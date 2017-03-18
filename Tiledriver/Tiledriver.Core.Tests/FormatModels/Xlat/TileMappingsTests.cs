@@ -43,7 +43,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
             CheckMerge(
                 tm1.AmbushModzones,
                 amz => amz.Fillzone,
-                new [] {false,true,true});
+                new[] { false, true, true });
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
             CheckMerge(
                 tm1.ChangeTriggerModzones,
                 ctmz => ctmz.Action,
-                new[] { "A1","A2new","A3" });
+                new[] { "A1", "A2new", "A3" });
         }
 
         [Test]
@@ -121,8 +121,8 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
                 tiles: new Dictionary<ushort, Tile>(),
                 positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>
                 {
-                    { 1, new PositionlessTrigger(action:"Action1") },
-                    { 2, new PositionlessTrigger(action:"Action2") }
+                    { 1, new PositionlessTrigger(oldNum:1,action:"Action1") },
+                    { 2, new PositionlessTrigger(oldNum:2,action:"Action2") }
                 },
                 zones: new Dictionary<ushort, Zone>());
 
@@ -132,8 +132,8 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
                 tiles: new Dictionary<ushort, Tile>(),
                 positionlessTriggers: new Dictionary<ushort, PositionlessTrigger>
                 {
-                    { 2, new PositionlessTrigger(action:"ActionNew2") },
-                    { 3, new PositionlessTrigger(action:"Action3") }
+                    { 2, new PositionlessTrigger(oldNum:2,action:"ActionNew2") },
+                    { 3, new PositionlessTrigger(oldNum:3,action:"Action3") }
                 },
                 zones: new Dictionary<ushort, Zone>());
 
@@ -179,8 +179,8 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
         }
 
         private static void CheckMerge<T, TCompare>(
-            Dictionary<ushort, T> dict, 
-            Func<T, TCompare> compareSelector, 
+            Dictionary<ushort, T> dict,
+            Func<T, TCompare> compareSelector,
             IEnumerable<TCompare> expected)
         {
             Assert.That(
