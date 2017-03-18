@@ -335,30 +335,6 @@ namespace Tiledriver.Core.FormatModels.Xlat
         partial void AdditionalSemanticChecks();
     }
 
-    public sealed partial class ThingMappings
-    {
-        public List<ushort> Elevators { get; } = new List<ushort>();
-        public Dictionary<ushort,TriggerTemplate> TriggerTemplates { get; } = new Dictionary<ushort,TriggerTemplate>();
-        public Dictionary<ushort,ThingTemplate> ThingTemplates { get; } = new Dictionary<ushort,ThingTemplate>();
-        public ThingMappings() { }
-        public ThingMappings(
-            IEnumerable<ushort> elevators,
-            Dictionary<ushort,TriggerTemplate> triggerTemplates,
-            Dictionary<ushort,ThingTemplate> thingTemplates)
-        {
-            Elevators.AddRange(elevators);
-            TriggerTemplates.AddRange(triggerTemplates);
-            ThingTemplates.AddRange(thingTemplates);
-            AdditionalSemanticChecks();
-        }
-        public void CheckSemanticValidity()
-        {
-            AdditionalSemanticChecks();
-        }
-
-        partial void AdditionalSemanticChecks();
-    }
-
     public sealed partial class FlatMappings
     {
         public List<string> Ceilings { get; } = new List<string>();

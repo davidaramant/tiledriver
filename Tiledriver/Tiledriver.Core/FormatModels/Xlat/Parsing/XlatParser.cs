@@ -14,7 +14,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
         public static MapTranslatorInfo Parse(IEnumerable<Expression> xlatExpressions)
         {
             var tileMappings = new TileMappings();
-            var thingMappings = new ThingMappings();
+            var thingMappings = new List<IThingMapping>();
             var flatMappings = new FlatMappings();
             var enableLightLevels = false;
 
@@ -47,7 +47,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
                     case "things":
                         ValidateSectionBlock(exp, "things");
                         var parsedThings = ParseThings(exp.SubExpressions);
-                        thingMappings.Add(parsedThings);
+                        thingMappings.AddRange(parsedThings);
                         break;
 
                     case "flats":
@@ -217,15 +217,14 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
 
         #region Things
 
-        private static ThingMappings ParseThings(IEnumerable<Expression> expressions)
+        private static IEnumerable<IThingMapping> ParseThings(IEnumerable<Expression> expressions)
         {
-            var thingMappings = new ThingMappings();
             foreach (var exp in expressions)
             {
                 if (!exp.Name.HasValue)
                 {
                     // Must be a thing definition
-                    ParseThingDefinition(exp, thingMappings);
+                    yield return ParseThingDefinition(exp);
                 }
                 else
                 {
@@ -233,11 +232,11 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
                     switch (name.ToLower())
                     {
                         case "elevator":
-                            ParseElevator(exp, thingMappings);
+                            yield return ParseElevator(exp);
                             break;
 
                         case "trigger":
-                            ParseTrigger(exp, thingMappings);
+                            yield return ParseTrigger(exp);
                             break;
 
                         default:
@@ -245,10 +244,9 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
                     }
                 }
             }
-            return thingMappings;
         }
 
-        private static void ParseThingDefinition(Expression exp, ThingMappings thingMappings)
+        private static IThingMapping ParseThingDefinition(Expression exp)
         {
             if (exp.Qualifiers.Any() || exp.SubExpressions.Any() || !exp.Values.Any() || exp.HasAssignments)
             {
@@ -282,8 +280,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
                 throw new ParsingException("Unexpected additional values in thing definition.");
             }
 
-            thingMappings.ThingTemplates.Add(
-                oldnum,
+            return
                 new ThingTemplate(
                     oldNum: oldnum,
                     actor: actor,
@@ -291,7 +288,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
                     holowall: flags.HasFlag(ThingFlags.Holowall),
                     pathing: flags.HasFlag(ThingFlags.Pathing),
                     ambush: flags.HasFlag(ThingFlags.Ambush),
-                    minskill: minskill));
+                    minskill: minskill);
         }
 
         private static ThingFlags ParseThingFlags(Queue<Token> valueQueue)
@@ -357,17 +354,17 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
             Ambush = 4,
         }
 
-        private static void ParseElevator(Expression exp, ThingMappings thingMappings)
+        private static IThingMapping ParseElevator(Expression exp)
         {
             var oldnum = exp.Oldnum.OrElse(() => new ParsingException("No oldnum found in elevator definition."));
             if (exp.Qualifiers.Any() || exp.SubExpressions.Any() || exp.Values.Any() || exp.HasAssignments)
             {
                 throw new ParsingException("Bad structure for elevator.");
             }
-            thingMappings.Elevators.Add(oldnum);
+            return new Elevator(oldnum);
         }
 
-        private static void ParseTrigger(Expression exp, ThingMappings thingMappings)
+        private static IThingMapping ParseTrigger(Expression exp)
         {
             var oldnum = exp.Oldnum.OrElse(() => new ParsingException("No oldnum found in trigger definition."));
             if (exp.Qualifiers.Any() || exp.SubExpressions.Any() || exp.Values.Any())
@@ -377,7 +374,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
             var trigger = ParsePositionlessTrigger(exp);
             trigger.OldNum = oldnum;
 
-            thingMappings.TriggerTemplates.Add(oldnum, trigger);
+            return trigger;
         }
 
         #endregion Things

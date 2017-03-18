@@ -1,20 +1,28 @@
 ﻿// Copyright (c) 2016, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
+using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 
 namespace Tiledriver.Core.FormatModels.Xlat
 {
     public sealed class MapTranslatorInfo
     {
+        private readonly Dictionary<ushort, IThingMapping> _thingMappingLookup = new Dictionary<ushort, IThingMapping>();
+
+        [NotNull]
         public TileMappings TileMappings { get; }
-        public ThingMappings ThingMappings { get; }
+        [NotNull]
+        public IEnumerable<IThingMapping> ThingMappings { get; }
+
+        [NotNull]
         public FlatMappings FlatMappings { get; }
         public bool EnableLightLevels { get; }
 
         public MapTranslatorInfo(
             [NotNull] TileMappings tileMappings,
-            [NotNull] ThingMappings thingMappings,
+            [NotNull] IEnumerable<IThingMapping> thingMappings,
             [NotNull] FlatMappings flatMappings,
             bool enableLightLevels)
         {
@@ -22,6 +30,28 @@ namespace Tiledriver.Core.FormatModels.Xlat
             ThingMappings = thingMappings;
             FlatMappings = flatMappings;
             EnableLightLevels = enableLightLevels;
+
+            foreach (var mapping in thingMappings)
+            {
+                switch (mapping)
+                {
+                    case ThingTemplate thing when thing.Angles > 0:
+                        for (var i = thing.OldNum; i < thing.OldNum + thing.Angles; i++)
+                        {
+                            _thingMappingLookup[i] = thing;
+                        }
+                        break;
+
+                    default:
+                        _thingMappingLookup[mapping.OldNum] = mapping;
+                        break;
+                }
+            }
+        }
+
+        public IThingMapping LookupThingMapping(ushort oldNum)
+        {
+            return _thingMappingLookup[oldNum];
         }
     }
 }

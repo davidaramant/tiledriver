@@ -82,16 +82,6 @@ namespace Tiledriver.Metadata
                     new Property("zone",type:PropertyType.MappedBlockList),
                 }),
 
-            new Block("things",className:"ThingMappings",
-                parsing:Parsing.Manual,
-                isSubBlock:false,
-                properties:new []
-                {
-                    new Property("elevator",type:PropertyType.List, collectionType:"ushort"),
-                    new Property("triggerTemplate",type:PropertyType.MappedBlockList),
-                    new Property("thingTemplate",type:PropertyType.MappedBlockList),
-                }),
-
             new Block("flats",className:"FlatMappings",
                 parsing:Parsing.Manual,
                 isSubBlock:false,

@@ -63,23 +63,18 @@ namespace Tiledriver.Core.MapTranslators
 
         private IEnumerable<Thing> TranslateThings(BinaryMap binaryMap)
         {
-            var idsWithPositions =
+            var oldThings =
                 binaryMap.Plane1.
-                    Select((value, index) => new {Value = value, Index = index}).
-                    Where(p => p.Value != 0).
-                    Select(p => new
+                    Select((oldNum, index) => new
                     {
-                        Index = p.Index,
-                        Id = p.Value,
-                        X = p.Index % binaryMap.Size.Width,
-                        Y = p.Index / binaryMap.Size.Height,
-                    });
+                        OldNum = oldNum,
+                        X = index % binaryMap.Size.Width,
+                        Y = index / binaryMap.Size.Width,
+                    }).
+                    Where(p => p.OldNum != 0);
 
-            foreach (var idWithPosition in idsWithPositions)
+            foreach (var oldThing in oldThings)
             {
-                // TODO: Can an elevator, thing, and trigger have the same mapping id?
-
-                var definition = _translatorInfo.ThingMappings.ThingTemplates[idWithPosition.Id];
             }
             yield break;
         }

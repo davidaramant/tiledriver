@@ -111,7 +111,6 @@
     <Compile Include="FormatModels\Xlat\Parsing\XlatSyntaxAnalyzer.cs" />
     <Compile Include="FormatModels\Xlat\Parsing\XlatLexer.cs" />
     <Compile Include="FormatModels\Xlat\Parsing\XlatParser.cs" />
-    <Compile Include="FormatModels\Xlat\ThingMappings.cs" />
     <Compile Include="FormatModels\Xlat\TileMappings.cs" />
     <Compile Include="LevelGeometry\IRegion.cs" />
     <Compile Include="LevelGeometry\MapTile.cs" />
