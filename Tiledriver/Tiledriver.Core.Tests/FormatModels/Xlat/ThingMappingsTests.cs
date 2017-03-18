@@ -12,7 +12,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
     public sealed class ThingMappingsTests
     {
         [Test]
-        public void ShouldMergeElevatorMappings()
+        public void ShouldConcatElevatorMappings()
         {
             var tm1 = new ThingMappings(
                 elevators: new ushort[] { 1, 2, 3 },
@@ -28,8 +28,8 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
 
             Assert.That(
                 tm1.Elevators,
-                Is.EquivalentTo(new ushort[] { 1, 2, 3, 4, 5 }),
-                "Did not merge elevators.");
+                Is.EquivalentTo(new ushort[] { 1, 2, 3, 3, 4, 5 }),
+                "Did not concatenate elevators.");
         }
 
         [Test]

@@ -76,7 +76,7 @@ namespace Tiledriver.Metadata
                 isSubBlock:false,
                 properties:new []
                 {
-                    new Property("elevator",type:PropertyType.Set, collectionType:"ushort"),
+                    new Property("elevator",type:PropertyType.List, collectionType:"ushort"),
                     new Property("positionlessTrigger",type:PropertyType.MappedBlockList),
                     new Property("thingDefinition",type:PropertyType.MappedBlockList),
                 }),

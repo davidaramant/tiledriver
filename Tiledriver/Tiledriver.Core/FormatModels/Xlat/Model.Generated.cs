@@ -280,7 +280,7 @@ namespace Tiledriver.Core.FormatModels.Xlat
 
     public sealed partial class ThingMappings
     {
-        public HashSet<ushort> Elevators { get; } = new HashSet<ushort>();
+        public List<ushort> Elevators { get; } = new List<ushort>();
         public Dictionary<ushort,PositionlessTrigger> PositionlessTriggers { get; } = new Dictionary<ushort,PositionlessTrigger>();
         public Dictionary<ushort,ThingDefinition> ThingDefinitions { get; } = new Dictionary<ushort,ThingDefinition>();
         public ThingMappings() { }
