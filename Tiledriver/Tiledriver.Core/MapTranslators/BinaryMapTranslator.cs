@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data.OleDb;
 using System.Linq;
 using AutoMapper;
 using Functional.Maybe;
@@ -37,12 +38,13 @@ namespace Tiledriver.Core.MapTranslators
 
             var zones = new List<Zone> { new Zone() };
 
+            // TODO: Is this Boolean necessary?
             var hasSectorInfo = binaryMap.Plane2.Any(num => num != 0);
             var sectors = hasSectorInfo ? TranslateSectors(binaryMap) : CreateDefaultSector(mapInfo);
 
             var triggers = new List<Trigger>();
             var tileSpaces = TranslateTileSpaces(binaryMap, triggers);
-            var things = TranslateThings(binaryMap, triggers);
+            var things = TranslateThings(binaryMap, triggers, tileSpaces);
 
             return new MapData(
                 nameSpace: "Wolf3D",
@@ -60,7 +62,7 @@ namespace Tiledriver.Core.MapTranslators
             );
         }
 
-        private IEnumerable<Thing> TranslateThings(BinaryMap binaryMap, List<Trigger> triggers)
+        private IEnumerable<Thing> TranslateThings(BinaryMap binaryMap, List<Trigger> triggers, TileSpace[] tileSpaces)
         {
             int TranslateAngle(ThingTemplate template, ushort oldNum)
             {
@@ -77,17 +79,7 @@ namespace Tiledriver.Core.MapTranslators
                 return angle;
             }
 
-            var oldThings =
-                binaryMap.Plane1.
-                    Select((oldNum, index) => new
-                    {
-                        OldNum = oldNum,
-                        X = index % binaryMap.Size.Width,
-                        Y = index / binaryMap.Size.Width,
-                    }).
-                    Where(p => p.OldNum != 0);
-
-            foreach (var oldThing in oldThings)
+            foreach (var oldThing in binaryMap.GetAllSpots(planeIndex: 1).Where(spot => spot.OldNum != 0))
             {
                 // TODO: Report errors here
                 var mapping = _translatorInfo.LookupThingMapping(oldThing.OldNum);
@@ -108,7 +100,11 @@ namespace Tiledriver.Core.MapTranslators
                             skill3: thingTemplate.Minskill <= 2,
                             skill4: thingTemplate.Minskill <= 3);
 
-                        // TODO: Holowall
+                        if (thingTemplate.Holowall)
+                        {
+                            // TODO: Do something here
+                        }
+
                         // TODO: Ambush can also be set from tiles
 
                         yield return thing;
@@ -148,9 +144,8 @@ namespace Tiledriver.Core.MapTranslators
             };
         }
 
-        private IEnumerable<TileSpace> TranslateTileSpaces(BinaryMap binaryMap, List<Trigger> triggers)
+        private TileSpace[] TranslateTileSpaces(BinaryMap binaryMap, List<Trigger> triggers)
         {
-            var length = binaryMap.Size.Width * binaryMap.Size.Height;
             var spaces =
                 Enumerable.Range(1, binaryMap.Size.Height * binaryMap.Size.Width).
                 Select(_ => new TileSpace(tile: -1, sector: 0, zone: -1)).
@@ -167,23 +162,18 @@ namespace Tiledriver.Core.MapTranslators
             // TODO: Change Trigger Modzones
             // TODO: Zone Templates
 
-            for (int i = 0; i < length; i++)
+            foreach (var spot in binaryMap.GetAllSpots(planeIndex: 0))
             {
-                var x = i % binaryMap.Size.Width;
-                var y = i / binaryMap.Size.Width;
-
-                var oldNum = binaryMap.Plane0[i];
-
-                if (tileIndexMapping.TryGetValue(oldNum, out var tileIndex))
+                if (tileIndexMapping.TryGetValue(spot.OldNum, out var tileIndex))
                 {
-                    spaces[i].Tile = tileIndex;
+                    spaces[spot.Index].Tile = tileIndex;
                 }
 
-                if (triggerLookup.TryGetValue(oldNum, out var triggerTemplate))
+                if (triggerLookup.TryGetValue(spot.OldNum, out var triggerTemplate))
                 {
                     var trigger = _autoMapper.Map<Trigger>(triggerTemplate);
-                    trigger.X = x;
-                    trigger.Y = y;
+                    trigger.X = spot.X;
+                    trigger.Y = spot.Y;
                     trigger.Z = 0;
                     triggers.Add(trigger);
                 }
