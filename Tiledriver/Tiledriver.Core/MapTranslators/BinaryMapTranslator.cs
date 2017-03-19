@@ -44,9 +44,11 @@ namespace Tiledriver.Core.MapTranslators
             var hasSectorInfo = binaryMap.Plane2.Any(num => num != 0);
             var sectors = hasSectorInfo ? TranslateSectors(binaryMap) : CreateDefaultSector(mapInfo);
 
+            var ambushSpots = new HashSet<Point>();
+
             var triggers = new List<Trigger>();
-            var tileSpaces = TranslateTileSpaces(binaryMap, triggers);
-            var things = TranslateThings(binaryMap, triggers, tileSpaces);
+            var tileSpaces = TranslateTileSpaces(binaryMap, triggers, ambushSpots);
+            var things = TranslateThings(binaryMap, triggers, tileSpaces, ambushSpots);
 
             return new MapData(
                 nameSpace: "Wolf3D",
@@ -64,7 +66,7 @@ namespace Tiledriver.Core.MapTranslators
             );
         }
 
-        private IEnumerable<Thing> TranslateThings(BinaryMap binaryMap, List<Trigger> triggers, TileSpace[] tileSpaces)
+        private IEnumerable<Thing> TranslateThings(BinaryMap binaryMap, List<Trigger> triggers, TileSpace[] tileSpaces, HashSet<Point> ambushSpots)
         {
             int TranslateAngle(ThingTemplate template, ushort oldNum)
             {
@@ -95,7 +97,7 @@ namespace Tiledriver.Core.MapTranslators
                             y: oldThing.Location.Y + 0.5,
                             z: 0,
                             angle: TranslateAngle(thingTemplate, oldThing.OldNum),
-                            ambush: thingTemplate.Ambush,
+                            ambush: thingTemplate.Ambush || ambushSpots.Contains(oldThing.Location),
                             patrol: thingTemplate.Pathing,
                             skill1: thingTemplate.Minskill <= 1,
                             skill2: thingTemplate.Minskill <= 1,
@@ -146,7 +148,7 @@ namespace Tiledriver.Core.MapTranslators
             };
         }
 
-        private TileSpace[] TranslateTileSpaces(BinaryMap binaryMap, List<Trigger> triggers)
+        private TileSpace[] TranslateTileSpaces(BinaryMap binaryMap, List<Trigger> triggers, HashSet<Point> ambushSpots)
         {
             var spaces =
                 Enumerable.Range(1, binaryMap.Size.Height * binaryMap.Size.Width).
@@ -158,9 +160,9 @@ namespace Tiledriver.Core.MapTranslators
                 Select((template, index) => new { OldNum = template.OldNum, TileIndex = index }).
                 ToDictionary(pair => pair.OldNum, pair => pair.TileIndex);
 
-            var triggerLookup = _translatorInfo.TileMappings.TriggerTemplates.CondenseToDictionary(t => t.OldNum, t => t);
+            var triggerLookup = _translatorInfo.TileMappings.TriggerTemplates.CondenseToDictionary(tt => tt.OldNum, tt => tt);
+            var ambushLookup = _translatorInfo.TileMappings.AmbushModzones.CondenseToDictionary(amz => amz.OldNum, amz => amz);
 
-            // TODO: Ambush Modzones
             // TODO: Change Trigger Modzones
             // TODO: Zone Templates
 
@@ -180,6 +182,18 @@ namespace Tiledriver.Core.MapTranslators
                     triggers.Add(trigger);
                 }
 
+                if (ambushLookup.TryGetValue(spot.OldNum, out var ambushModzone))
+                {
+                    ambushSpots.Add(spot.Location);
+                    if (ambushModzone.Fillzone)
+                    {
+                        // TODO: Fillzone
+                    }
+                    else
+                    {
+                        // TODO: Non-fillzone
+                    }
+                }
             }
 
             return spaces;
