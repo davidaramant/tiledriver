@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data.OleDb;
 using System.Drawing;
 using System.Linq;
 using AutoMapper;
@@ -13,7 +12,6 @@ using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.MapInfos;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Xlat;
-using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.MapTranslators
 {
@@ -161,6 +159,9 @@ namespace Tiledriver.Core.MapTranslators
 
             var triggerLookup = _translatorInfo.TileMappings.TriggerTemplates.CondenseToDictionary(tt => tt.OldNum, tt => tt);
             var ambushLookup = _translatorInfo.TileMappings.AmbushModzones.CondenseToDictionary(amz => amz.OldNum, amz => amz);
+            var changeTriggerLookup = _translatorInfo.TileMappings.ChangeTriggerModzones.CondenseToDictionary(ctmz => ctmz.OldNum, ctmz => ctmz);
+
+            var changeTriggerSpots = new List<(Point, ChangeTriggerModzone)>();
 
             // TODO: Change Trigger Modzones
             // TODO: Zone Templates
@@ -192,6 +193,27 @@ namespace Tiledriver.Core.MapTranslators
                     {
                         // TODO: Non-fillzone
                     }
+                }
+
+                if (changeTriggerLookup.TryGetValue(spot.OldNum, out var changeTriggerModzone))
+                {
+                    changeTriggerSpots.Add((spot.Location, changeTriggerModzone));
+                    if (changeTriggerModzone.Fillzone)
+                    {
+                        // TODO: Fillzone
+                    }
+                    else
+                    {
+                        // TODO: non-fillzone
+                    }
+                }
+            }
+
+            foreach (var (location, changeTrigger) in changeTriggerSpots)
+            {
+                foreach (var adjacentLocation in location.GetAdjacentPoints(binaryMap.Size))
+                {
+                    
                 }
             }
 

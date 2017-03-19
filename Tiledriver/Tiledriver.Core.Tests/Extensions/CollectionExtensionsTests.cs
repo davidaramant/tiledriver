@@ -13,11 +13,11 @@ namespace Tiledriver.Core.Tests.Extensions
         [Test]
         public void ShouldCondenseSequenceToDictionary()
         {
-            var list = new[]
+            var list = new (int,string)[]
             {
-                Tuple.Create(1,"one"),
-                Tuple.Create(2,"two"),
-                Tuple.Create(1,"one again")
+                (1,"one"),
+                (2,"two"),
+                (1,"one again")
             };
 
             var d = list.CondenseToDictionary(t => t.Item1, t => t.Item2);

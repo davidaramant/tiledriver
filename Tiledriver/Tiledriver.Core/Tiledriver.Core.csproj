@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\CollectionExtensions.cs" />
+    <Compile Include="Extensions\PointExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="FormatModels\Common\BaseLexer.cs" />
     <Compile Include="FormatModels\Common\BinaryMap.cs" />
