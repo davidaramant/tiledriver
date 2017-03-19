@@ -14,168 +14,113 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
     public sealed class TileMappingsTests
     {
         [Test]
-        public void ShouldMergeAmbushModzoneMappings()
+        public void ShouldAppendAmbushModzoneMappings()
         {
-            var tm1 = new TileMappings(
-                ambushModzones: new Dictionary<ushort, AmbushModzone>
+            var tm1 = Create(
+                ambushModzones: new[]
                 {
-                    {1,new AmbushModzone(fillzone:false) },
-                    {2,new AmbushModzone(fillzone:false) },
-                },
-                changeTriggerModzones: new Dictionary<ushort, ChangeTriggerModzone>(),
-                tiles: new Dictionary<ushort, Tile>(),
-                triggerTemplates: new Dictionary<ushort, TriggerTemplate>(),
-                zones: new Dictionary<ushort, Zone>());
+                    new AmbushModzone(oldNum:1,fillzone:false),
+                    new AmbushModzone(oldNum:2,fillzone:false),
+                });
 
-            var tm2 = new TileMappings(
-                ambushModzones: new Dictionary<ushort, AmbushModzone>
+            var tm2 = Create(
+                ambushModzones: new[]
                 {
-                    {2,new AmbushModzone(fillzone:true) },
-                    {3,new AmbushModzone(fillzone:true) },
-                },
-                changeTriggerModzones: new Dictionary<ushort, ChangeTriggerModzone>(),
-                tiles: new Dictionary<ushort, Tile>(),
-                triggerTemplates: new Dictionary<ushort, TriggerTemplate>(),
-                zones: new Dictionary<ushort, Zone>());
+                    new AmbushModzone(oldNum:2,fillzone:true),
+                    new AmbushModzone(oldNum:3,fillzone:true),
+                });
 
             tm1.Add(tm2);
 
-            CheckMerge(
-                tm1.AmbushModzones,
-                amz => amz.Fillzone,
-                new[] { false, true, true });
+            Assert.That(tm1.AmbushModzones, Has.Count.EqualTo(4));
         }
 
         [Test]
-        public void ShouldMergeChangeTriggerModzoneMappings()
+        public void ShouldAppendChangeTriggerModzoneMappings()
         {
-            var tm1 = new TileMappings(
-                ambushModzones: new Dictionary<ushort, AmbushModzone>(),
-                changeTriggerModzones: new Dictionary<ushort, ChangeTriggerModzone>
+            var tm1 = Create(
+                changeTriggerModzones: new[]
                 {
-                    {1,new ChangeTriggerModzone("A1",new TriggerTemplate()) },
-                    {2,new ChangeTriggerModzone("A2",new TriggerTemplate()) },
-                },
-                tiles: new Dictionary<ushort, Tile>(),
-                triggerTemplates: new Dictionary<ushort, TriggerTemplate>(),
-                zones: new Dictionary<ushort, Zone>());
+                   new ChangeTriggerModzone(1,"A1",new TriggerTemplate()),
+                   new ChangeTriggerModzone(2,"A2",new TriggerTemplate()),
+                });
 
-            var tm2 = new TileMappings(
-                ambushModzones: new Dictionary<ushort, AmbushModzone>(),
-                changeTriggerModzones: new Dictionary<ushort, ChangeTriggerModzone>
+            var tm2 = Create(
+                changeTriggerModzones: new[]
                 {
-                    {2,new ChangeTriggerModzone("A2new",new TriggerTemplate()) },
-                    {3,new ChangeTriggerModzone("A3",new TriggerTemplate()) },
-                },
-                tiles: new Dictionary<ushort, Tile>(),
-                triggerTemplates: new Dictionary<ushort, TriggerTemplate>(),
-                zones: new Dictionary<ushort, Zone>());
+                    new ChangeTriggerModzone(2,"A2new",new TriggerTemplate()),
+                    new ChangeTriggerModzone(3, "A3",new TriggerTemplate()),
+                });
 
             tm1.Add(tm2);
 
-            CheckMerge(
-                tm1.ChangeTriggerModzones,
-                ctmz => ctmz.Action,
-                new[] { "A1", "A2new", "A3" });
+            Assert.That(tm1.ChangeTriggerModzones, Has.Count.EqualTo(4));
         }
 
         [Test]
         public void ShouldMergeTileMappings()
         {
-            var tm1 = new TileMappings(
-                ambushModzones: new Dictionary<ushort, AmbushModzone>(),
-                changeTriggerModzones: new Dictionary<ushort, ChangeTriggerModzone>(),
-                tiles: new Dictionary<ushort, Tile>
+            var tm1 = Create(
+                tileTemplates: new []
                 {
-                    {1,new Tile(textureEast:"T1",textureNorth:"whatever",textureSouth:"whatever",textureWest:"whatever") },
-                    {2,new Tile(textureEast:"T2",textureNorth:"whatever",textureSouth:"whatever",textureWest:"whatever") },
-                },
-                triggerTemplates: new Dictionary<ushort, TriggerTemplate>(),
-                zones: new Dictionary<ushort, Zone>());
+                    new TileTemplate(oldNum:1,textureEast:"T1",textureNorth:"whatever",textureSouth:"whatever",textureWest:"whatever"),
+                    new TileTemplate(oldNum:2,textureEast:"T2",textureNorth:"whatever",textureSouth:"whatever",textureWest:"whatever"),
+                });
 
-            var tm2 = new TileMappings(
-                ambushModzones: new Dictionary<ushort, AmbushModzone>(),
-                changeTriggerModzones: new Dictionary<ushort, ChangeTriggerModzone>(),
-                tiles: new Dictionary<ushort, Tile>
+            var tm2 = Create(
+                tileTemplates: new []
                 {
-                    {2,new Tile(textureEast:"T2new",textureNorth:"whatever",textureSouth:"whatever",textureWest:"whatever") },
-                    {3,new Tile(textureEast:"T3",textureNorth:"whatever",textureSouth:"whatever",textureWest:"whatever") },
-                },
-                triggerTemplates: new Dictionary<ushort, TriggerTemplate>(),
-                zones: new Dictionary<ushort, Zone>());
+                    new TileTemplate(oldNum:2,textureEast:"T2new",textureNorth:"whatever",textureSouth:"whatever",textureWest:"whatever"),
+                    new TileTemplate(oldNum:3,textureEast:"T3",textureNorth:"whatever",textureSouth:"whatever",textureWest:"whatever"),
+                });
 
             tm1.Add(tm2);
 
-            CheckMerge(
-                tm1.Tiles,
-                tile => tile.TextureEast,
-                new[] { "T1", "T2new", "T3" });
+            Assert.That(tm1.TileTemplates,Has.Count.EqualTo(4));
         }
 
         [Test]
-        public void ShouldMergePositionlessTriggerMappings()
+        public void ShouldMergeTriggerTemplateMappings()
         {
-            var tm1 = new TileMappings(
-                ambushModzones: new Dictionary<ushort, AmbushModzone>(),
-                changeTriggerModzones: new Dictionary<ushort, ChangeTriggerModzone>(),
-                tiles: new Dictionary<ushort, Tile>(),
-                triggerTemplates: new Dictionary<ushort, TriggerTemplate>
+            var tm1 = Create(
+                triggerTemplates: new[]
                 {
-                    { 1, new TriggerTemplate(oldNum:1,action:"Action1") },
-                    { 2, new TriggerTemplate(oldNum:2,action:"Action2") }
-                },
-                zones: new Dictionary<ushort, Zone>());
+                    new TriggerTemplate(oldNum:1,action:"Action1"),
+                    new TriggerTemplate(oldNum:2,action:"Action2")
+                });
 
-            var tm2 = new TileMappings(
-                ambushModzones: new Dictionary<ushort, AmbushModzone>(),
-                changeTriggerModzones: new Dictionary<ushort, ChangeTriggerModzone>(),
-                tiles: new Dictionary<ushort, Tile>(),
-                triggerTemplates: new Dictionary<ushort, TriggerTemplate>
+            var tm2 = Create(
+                triggerTemplates: new[]
                 {
-                    { 2, new TriggerTemplate(oldNum:2,action:"ActionNew2") },
-                    { 3, new TriggerTemplate(oldNum:3,action:"Action3") }
-                },
-                zones: new Dictionary<ushort, Zone>());
+                    new TriggerTemplate(oldNum:2,action:"ActionNew2"),
+                    new TriggerTemplate(oldNum:3,action:"Action3")
+                });
 
             tm1.Add(tm2);
 
-            CheckMerge(
-                tm1.TriggerTemplates,
-                trigger => trigger.Action,
-                new[] { "Action1", "ActionNew2", "Action3" });
+            Assert.That(tm1.TriggerTemplates, Has.Count.EqualTo(4));
         }
 
         [Test]
         public void ShouldMergeZoneMappings()
         {
-            var tm1 = new TileMappings(
-                ambushModzones: new Dictionary<ushort, AmbushModzone>(),
-                changeTriggerModzones: new Dictionary<ushort, ChangeTriggerModzone>(),
-                tiles: new Dictionary<ushort, Tile>(),
-                triggerTemplates: new Dictionary<ushort, TriggerTemplate>(),
-                zones: new Dictionary<ushort, Zone>
+            var tm1 = Create(
+                zonesTemplates: new[]
                 {
-                    {1,new Zone(comment:"C1") },
-                    {2,new Zone(comment:"C2") },
+                    new ZoneTemplate(oldNum:1,comment:"C1"),
+                    new ZoneTemplate(oldNum:2,comment:"C2"),
                 });
 
-            var tm2 = new TileMappings(
-                ambushModzones: new Dictionary<ushort, AmbushModzone>(),
-                changeTriggerModzones: new Dictionary<ushort, ChangeTriggerModzone>(),
-                tiles: new Dictionary<ushort, Tile>(),
-                triggerTemplates: new Dictionary<ushort, TriggerTemplate>(),
-                zones: new Dictionary<ushort, Zone>
+            var tm2 = Create(
+                zonesTemplates: new[]
                 {
-                    {2,new Zone(comment:"C2new") },
-                    {3,new Zone(comment:"C3") },
+                    new ZoneTemplate(oldNum:2,comment:"C2new"),
+                    new ZoneTemplate(oldNum:3,comment:"C3"),
                 });
 
             tm1.Add(tm2);
 
-            CheckMerge(
-                tm1.Zones,
-                zone => zone.Comment,
-                new[] { "C1", "C2new", "C3" });
+            Assert.That(tm1.ZoneTemplates, Has.Count.EqualTo(4));
         }
 
         private static void CheckMerge<T, TCompare>(
@@ -197,6 +142,21 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
                 dict.Values.Select(compareSelector),
                 Is.EquivalentTo(expected),
                 "Unexpected values.");
+        }
+
+        private static TileMappings Create(
+            IEnumerable<AmbushModzone> ambushModzones = null,
+            IEnumerable<ChangeTriggerModzone> changeTriggerModzones = null,
+            IEnumerable<TileTemplate> tileTemplates = null,
+            IEnumerable<TriggerTemplate> triggerTemplates = null,
+            IEnumerable<ZoneTemplate> zonesTemplates = null)
+        {
+            return new TileMappings(
+                ambushModzones: ambushModzones ?? Enumerable.Empty<AmbushModzone>(),
+                changeTriggerModzones: changeTriggerModzones ?? Enumerable.Empty<ChangeTriggerModzone>(),
+                tileTemplates: tileTemplates ?? Enumerable.Empty<TileTemplate>(),
+                triggerTemplates: triggerTemplates ?? Enumerable.Empty<TriggerTemplate>(),
+                zoneTemplates: zonesTemplates ?? Enumerable.Empty<ZoneTemplate>());
         }
     }
 }

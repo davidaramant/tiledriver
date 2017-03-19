@@ -41,7 +41,14 @@ namespace TestRunner
             var mapInfos = LoadMapInfo();
 
 
-            var autoMapperConfig = new MapperConfiguration(cfg => cfg.CreateMap<TriggerTemplate, Trigger>());
+            var autoMapperConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<TriggerTemplate, Trigger>();
+                cfg.CreateMap<ZoneTemplate, Zone>();
+                cfg.CreateMap<TileTemplate, Tile>();
+            });
+            
+
             var autoMapper = autoMapperConfig.CreateMapper();
 
 

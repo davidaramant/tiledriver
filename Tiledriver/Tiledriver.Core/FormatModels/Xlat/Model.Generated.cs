@@ -243,16 +243,30 @@ namespace Tiledriver.Core.FormatModels.Xlat
 
     public sealed partial class AmbushModzone
     {
+        private bool _oldNumHasBeenSet = false;
+        private ushort _oldNum;
+        public ushort OldNum
+        {
+            get { return _oldNum; }
+            set
+            {
+                _oldNumHasBeenSet = true;
+                _oldNum = value;
+            }
+        }
         public bool Fillzone { get; set; } = false;
         public AmbushModzone() { }
         public AmbushModzone(
+            ushort oldNum,
             bool fillzone = false)
         {
+            OldNum = oldNum;
             Fillzone = fillzone;
             AdditionalSemanticChecks();
         }
         public void CheckSemanticValidity()
         {
+            if (!_oldNumHasBeenSet) throw new InvalidUwmfException("Did not set OldNum on AmbushModzone");
             AdditionalSemanticChecks();
         }
 
@@ -261,6 +275,17 @@ namespace Tiledriver.Core.FormatModels.Xlat
 
     public sealed partial class ChangeTriggerModzone
     {
+        private bool _oldNumHasBeenSet = false;
+        private ushort _oldNum;
+        public ushort OldNum
+        {
+            get { return _oldNum; }
+            set
+            {
+                _oldNumHasBeenSet = true;
+                _oldNum = value;
+            }
+        }
         private bool _actionHasBeenSet = false;
         private string _action;
         public string Action
@@ -286,10 +311,12 @@ namespace Tiledriver.Core.FormatModels.Xlat
         public bool Fillzone { get; set; } = false;
         public ChangeTriggerModzone() { }
         public ChangeTriggerModzone(
+            ushort oldNum,
             string action,
             TriggerTemplate triggerTemplate,
             bool fillzone = false)
         {
+            OldNum = oldNum;
             Action = action;
             TriggerTemplate = triggerTemplate;
             Fillzone = fillzone;
@@ -297,6 +324,7 @@ namespace Tiledriver.Core.FormatModels.Xlat
         }
         public void CheckSemanticValidity()
         {
+            if (!_oldNumHasBeenSet) throw new InvalidUwmfException("Did not set OldNum on ChangeTriggerModzone");
             if (!_actionHasBeenSet) throw new InvalidUwmfException("Did not set Action on ChangeTriggerModzone");
             if (!_triggerTemplateHasBeenSet) throw new InvalidUwmfException("Did not set TriggerTemplate on ChangeTriggerModzone");
             AdditionalSemanticChecks();
@@ -305,26 +333,182 @@ namespace Tiledriver.Core.FormatModels.Xlat
         partial void AdditionalSemanticChecks();
     }
 
+    public sealed partial class TileTemplate
+    {
+        private bool _oldNumHasBeenSet = false;
+        private ushort _oldNum;
+        public ushort OldNum
+        {
+            get { return _oldNum; }
+            set
+            {
+                _oldNumHasBeenSet = true;
+                _oldNum = value;
+            }
+        }
+        private bool _textureEastHasBeenSet = false;
+        private string _textureEast;
+        public string TextureEast
+        {
+            get { return _textureEast; }
+            set
+            {
+                _textureEastHasBeenSet = true;
+                _textureEast = value;
+            }
+        }
+        private bool _textureNorthHasBeenSet = false;
+        private string _textureNorth;
+        public string TextureNorth
+        {
+            get { return _textureNorth; }
+            set
+            {
+                _textureNorthHasBeenSet = true;
+                _textureNorth = value;
+            }
+        }
+        private bool _textureWestHasBeenSet = false;
+        private string _textureWest;
+        public string TextureWest
+        {
+            get { return _textureWest; }
+            set
+            {
+                _textureWestHasBeenSet = true;
+                _textureWest = value;
+            }
+        }
+        private bool _textureSouthHasBeenSet = false;
+        private string _textureSouth;
+        public string TextureSouth
+        {
+            get { return _textureSouth; }
+            set
+            {
+                _textureSouthHasBeenSet = true;
+                _textureSouth = value;
+            }
+        }
+        public bool BlockingEast { get; set; } = true;
+        public bool BlockingNorth { get; set; } = true;
+        public bool BlockingWest { get; set; } = true;
+        public bool BlockingSouth { get; set; } = true;
+        public bool OffsetVertical { get; set; } = false;
+        public bool OffsetHorizontal { get; set; } = false;
+        public bool DontOverlay { get; set; } = false;
+        public int Mapped { get; set; } = 0;
+        public string SoundSequence { get; set; } = "";
+        public string TextureOverhead { get; set; } = "";
+        public string Comment { get; set; } = "";
+        public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
+        public TileTemplate() { }
+        public TileTemplate(
+            ushort oldNum,
+            string textureEast,
+            string textureNorth,
+            string textureWest,
+            string textureSouth,
+            bool blockingEast = true,
+            bool blockingNorth = true,
+            bool blockingWest = true,
+            bool blockingSouth = true,
+            bool offsetVertical = false,
+            bool offsetHorizontal = false,
+            bool dontOverlay = false,
+            int mapped = 0,
+            string soundSequence = "",
+            string textureOverhead = "",
+            string comment = "",
+            IEnumerable<UnknownProperty> unknownProperties = null)
+        {
+            OldNum = oldNum;
+            TextureEast = textureEast;
+            TextureNorth = textureNorth;
+            TextureWest = textureWest;
+            TextureSouth = textureSouth;
+            BlockingEast = blockingEast;
+            BlockingNorth = blockingNorth;
+            BlockingWest = blockingWest;
+            BlockingSouth = blockingSouth;
+            OffsetVertical = offsetVertical;
+            OffsetHorizontal = offsetHorizontal;
+            DontOverlay = dontOverlay;
+            Mapped = mapped;
+            SoundSequence = soundSequence;
+            TextureOverhead = textureOverhead;
+            Comment = comment;
+            UnknownProperties.AddRange(unknownProperties ?? Enumerable.Empty<UnknownProperty>());
+            AdditionalSemanticChecks();
+        }
+        public void CheckSemanticValidity()
+        {
+            if (!_oldNumHasBeenSet) throw new InvalidUwmfException("Did not set OldNum on TileTemplate");
+            if (!_textureEastHasBeenSet) throw new InvalidUwmfException("Did not set TextureEast on TileTemplate");
+            if (!_textureNorthHasBeenSet) throw new InvalidUwmfException("Did not set TextureNorth on TileTemplate");
+            if (!_textureWestHasBeenSet) throw new InvalidUwmfException("Did not set TextureWest on TileTemplate");
+            if (!_textureSouthHasBeenSet) throw new InvalidUwmfException("Did not set TextureSouth on TileTemplate");
+            AdditionalSemanticChecks();
+        }
+
+        partial void AdditionalSemanticChecks();
+    }
+
+    public sealed partial class ZoneTemplate
+    {
+        private bool _oldNumHasBeenSet = false;
+        private ushort _oldNum;
+        public ushort OldNum
+        {
+            get { return _oldNum; }
+            set
+            {
+                _oldNumHasBeenSet = true;
+                _oldNum = value;
+            }
+        }
+        public string Comment { get; set; } = "";
+        public List<UnknownProperty> UnknownProperties { get; } = new List<UnknownProperty>();
+        public ZoneTemplate() { }
+        public ZoneTemplate(
+            ushort oldNum,
+            string comment = "",
+            IEnumerable<UnknownProperty> unknownProperties = null)
+        {
+            OldNum = oldNum;
+            Comment = comment;
+            UnknownProperties.AddRange(unknownProperties ?? Enumerable.Empty<UnknownProperty>());
+            AdditionalSemanticChecks();
+        }
+        public void CheckSemanticValidity()
+        {
+            if (!_oldNumHasBeenSet) throw new InvalidUwmfException("Did not set OldNum on ZoneTemplate");
+            AdditionalSemanticChecks();
+        }
+
+        partial void AdditionalSemanticChecks();
+    }
+
     public sealed partial class TileMappings
     {
-        public Dictionary<ushort,AmbushModzone> AmbushModzones { get; } = new Dictionary<ushort,AmbushModzone>();
-        public Dictionary<ushort,ChangeTriggerModzone> ChangeTriggerModzones { get; } = new Dictionary<ushort,ChangeTriggerModzone>();
-        public Dictionary<ushort,Tile> Tiles { get; } = new Dictionary<ushort,Tile>();
-        public Dictionary<ushort,TriggerTemplate> TriggerTemplates { get; } = new Dictionary<ushort,TriggerTemplate>();
-        public Dictionary<ushort,Zone> Zones { get; } = new Dictionary<ushort,Zone>();
+        public List<AmbushModzone> AmbushModzones { get; } = new List<AmbushModzone>();
+        public List<ChangeTriggerModzone> ChangeTriggerModzones { get; } = new List<ChangeTriggerModzone>();
+        public List<TileTemplate> TileTemplates { get; } = new List<TileTemplate>();
+        public List<TriggerTemplate> TriggerTemplates { get; } = new List<TriggerTemplate>();
+        public List<ZoneTemplate> ZoneTemplates { get; } = new List<ZoneTemplate>();
         public TileMappings() { }
         public TileMappings(
-            Dictionary<ushort,AmbushModzone> ambushModzones,
-            Dictionary<ushort,ChangeTriggerModzone> changeTriggerModzones,
-            Dictionary<ushort,Tile> tiles,
-            Dictionary<ushort,TriggerTemplate> triggerTemplates,
-            Dictionary<ushort,Zone> zones)
+            IEnumerable<AmbushModzone> ambushModzones,
+            IEnumerable<ChangeTriggerModzone> changeTriggerModzones,
+            IEnumerable<TileTemplate> tileTemplates,
+            IEnumerable<TriggerTemplate> triggerTemplates,
+            IEnumerable<ZoneTemplate> zoneTemplates)
         {
             AmbushModzones.AddRange(ambushModzones);
             ChangeTriggerModzones.AddRange(changeTriggerModzones);
-            Tiles.AddRange(tiles);
+            TileTemplates.AddRange(tileTemplates);
             TriggerTemplates.AddRange(triggerTemplates);
-            Zones.AddRange(zones);
+            ZoneTemplates.AddRange(zoneTemplates);
             AdditionalSemanticChecks();
         }
         public void CheckSemanticValidity()

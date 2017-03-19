@@ -108,7 +108,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
 
         private static void ParseModZone(Expression exp, TileMappings tileMappings)
         {
-            var oldnum = exp.Oldnum.OrElse(() => new ParsingException("No oldnum found in modzone definition."));
+            var oldNum = exp.Oldnum.OrElse(() => new ParsingException("No oldnum found in modzone definition."));
 
             var qualifierQueue = new Queue<Token>(exp.Qualifiers);
 
@@ -134,7 +134,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
                 {
                     throw new ParsingException("Invalid structure of ambush modzone.");
                 }
-                tileMappings.AmbushModzones.Add(oldnum, new AmbushModzone(fillzone: fillzone));
+                tileMappings.AmbushModzones.Add(new AmbushModzone(oldNum: oldNum, fillzone: fillzone));
             }
             else if (qualifier.ToLower() == "changetrigger")
             {
@@ -145,7 +145,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
                 }
 
                 var trigger = ParsePositionlessTrigger(exp);
-                tileMappings.ChangeTriggerModzones.Add(oldnum, new ChangeTriggerModzone(action, trigger, fillzone));
+                tileMappings.ChangeTriggerModzones.Add(new ChangeTriggerModzone(oldNum, action, trigger, fillzone));
             }
             else
             {
@@ -155,14 +155,37 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
 
         private static void ParseTile(Expression exp, TileMappings tileMappings)
         {
-            var oldnum = exp.Oldnum.OrElse(() => new ParsingException("No oldnum found in tile definition."));
+            var oldNum = exp.Oldnum.OrElse(() => new ParsingException("No oldnum found in tile definition."));
             if (exp.Qualifiers.Any() || exp.SubExpressions.Any() || exp.Values.Any())
             {
                 throw new ParsingException("Bad structure for tile.");
             }
-            var zone = Uwmf.Parsing.UwmfParser.ParseTile(exp);
+            var tile = ParseTile(exp);
+            tile.OldNum = oldNum;
 
-            tileMappings.Tiles.Add(oldnum, zone);
+            tileMappings.TileTemplates.Add(tile);
+        }
+
+        public static TileTemplate ParseTile(IHaveAssignments block)
+        {
+            // TODO: This is moronic
+            var parsedBlock = new TileTemplate();
+            block.GetValueFor("TextureEast").SetRequiredString(value => parsedBlock.TextureEast = value, "Tile", "TextureEast");
+            block.GetValueFor("TextureNorth").SetRequiredString(value => parsedBlock.TextureNorth = value, "Tile", "TextureNorth");
+            block.GetValueFor("TextureWest").SetRequiredString(value => parsedBlock.TextureWest = value, "Tile", "TextureWest");
+            block.GetValueFor("TextureSouth").SetRequiredString(value => parsedBlock.TextureSouth = value, "Tile", "TextureSouth");
+            block.GetValueFor("BlockingEast").SetOptionalBoolean(value => parsedBlock.BlockingEast = value, "Tile", "BlockingEast");
+            block.GetValueFor("BlockingNorth").SetOptionalBoolean(value => parsedBlock.BlockingNorth = value, "Tile", "BlockingNorth");
+            block.GetValueFor("BlockingWest").SetOptionalBoolean(value => parsedBlock.BlockingWest = value, "Tile", "BlockingWest");
+            block.GetValueFor("BlockingSouth").SetOptionalBoolean(value => parsedBlock.BlockingSouth = value, "Tile", "BlockingSouth");
+            block.GetValueFor("OffsetVertical").SetOptionalBoolean(value => parsedBlock.OffsetVertical = value, "Tile", "OffsetVertical");
+            block.GetValueFor("OffsetHorizontal").SetOptionalBoolean(value => parsedBlock.OffsetHorizontal = value, "Tile", "OffsetHorizontal");
+            block.GetValueFor("DontOverlay").SetOptionalBoolean(value => parsedBlock.DontOverlay = value, "Tile", "DontOverlay");
+            block.GetValueFor("Mapped").SetOptionalInteger(value => parsedBlock.Mapped = value, "Tile", "Mapped");
+            block.GetValueFor("SoundSequence").SetOptionalString(value => parsedBlock.SoundSequence = value, "Tile", "SoundSequence");
+            block.GetValueFor("TextureOverhead").SetOptionalString(value => parsedBlock.TextureOverhead = value, "Tile", "TextureOverhead");
+            block.GetValueFor("Comment").SetOptionalString(value => parsedBlock.Comment = value, "Tile", "Comment");
+            return parsedBlock;
         }
 
         private static void ParseTrigger(Expression exp, TileMappings tileMappings)
@@ -175,7 +198,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
             var trigger = ParsePositionlessTrigger(exp);
             trigger.OldNum = oldnum;
 
-            tileMappings.TriggerTemplates.Add(oldnum, trigger);
+            tileMappings.TriggerTemplates.Add(trigger);
         }
 
         private static TriggerTemplate ParsePositionlessTrigger(IHaveAssignments block)
@@ -203,14 +226,23 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
 
         private static void ParseSoundZone(Expression exp, TileMappings tileMappings)
         {
-            var oldnum = exp.Oldnum.OrElse(() => new ParsingException("No oldnum found in sound zone definition."));
+            var oldNum = exp.Oldnum.OrElse(() => new ParsingException("No oldnum found in sound zone definition."));
             if (exp.Qualifiers.Any() || exp.SubExpressions.Any() || exp.Values.Any())
             {
                 throw new ParsingException("Bad structure for sound zone.");
             }
-            var zone = Uwmf.Parsing.UwmfParser.ParseZone(exp);
+            var zone = ParseZone(exp);
+            zone.OldNum = oldNum;
 
-            tileMappings.Zones.Add(oldnum, zone);
+            tileMappings.ZoneTemplates.Add(zone);
+        }
+
+        public static ZoneTemplate ParseZone(IHaveAssignments block)
+        {
+            // HACK: This is copy-pasted from the generated UWMF parser code
+            var parsedBlock = new ZoneTemplate();
+            block.GetValueFor("Comment").SetOptionalString(value => parsedBlock.Comment = value, "Zone", "Comment");
+            return parsedBlock;
         }
 
         #endregion Tiles

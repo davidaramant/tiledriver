@@ -50,7 +50,7 @@ namespace Tiledriver.Core.MapTranslators
                 width: binaryMap.Size.Width,
                 height: binaryMap.Size.Height,
                 name: mapInfo.MapName.OrElse(binaryMap.Name),
-                tiles: _translatorInfo.TileMappings.Tiles.Values,
+                tiles: _translatorInfo.TileMappings.TileTemplates.Select(template => _autoMapper.Map<Tile>(template)),
                 sectors: sectors,
                 zones: zones,
                 planes: new List<Plane> { new Plane(depth: 64) },
@@ -150,19 +150,21 @@ namespace Tiledriver.Core.MapTranslators
             var length = binaryMap.Size.Width * binaryMap.Size.Height;
             var spaces =
                 Enumerable.Range(1, binaryMap.Size.Height * binaryMap.Size.Width).
-                Select(_ => new TileSpace(tile: -1, sector: 0, zone: 0)).
+                Select(_ => new TileSpace(tile: -1, sector: 0, zone: -1)).
                 ToArray();
+
+            var tileIndexMapping =
+                _translatorInfo.TileMappings.TileTemplates.
+                Select((template, index) => new {OldNum = template.OldNum, TileIndex = index}).
+                ToDictionary(pair => pair.OldNum, pair => pair.TileIndex);
 
             for (int i = 0; i < length; i++)
             {
                 var oldNum = binaryMap.Plane0[i];
 
-                if (_translatorInfo.TileMappings.Tiles.TryGetValue(oldNum, out var tile))
+                if (tileIndexMapping.TryGetValue(oldNum, out var tileIndex))
                 {
-                    // TODO: This is godawful
-                    var l = _translatorInfo.TileMappings.Tiles.Values.ToList();
-                    var index = l.IndexOf(tile);
-                    spaces[i].Tile = index;
+                    spaces[i].Tile = tileIndex;
                 }
             }
 

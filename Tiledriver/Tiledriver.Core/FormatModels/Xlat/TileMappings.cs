@@ -9,11 +9,11 @@ namespace Tiledriver.Core.FormatModels.Xlat
     {
         public void Add(TileMappings newMappings)
         {
-            AmbushModzones.Merge(newMappings.AmbushModzones);
-            ChangeTriggerModzones.Merge(newMappings.ChangeTriggerModzones);
-            Tiles.Merge(newMappings.Tiles);
-            TriggerTemplates.Merge(newMappings.TriggerTemplates);
-            Zones.Merge(newMappings.Zones);
+            AmbushModzones.AddRange(newMappings.AmbushModzones);
+            ChangeTriggerModzones.AddRange(newMappings.ChangeTriggerModzones);
+            TileTemplates.AddRange(newMappings.TileTemplates);
+            TriggerTemplates.AddRange(newMappings.TriggerTemplates);
+            ZoneTemplates.AddRange(newMappings.ZoneTemplates);
         }
     }
 }

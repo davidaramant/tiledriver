@@ -68,10 +68,10 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 })
             });
 
-            var mz1 = translator.TileMappings.AmbushModzones.Lookup((ushort)1).OrElse(() => new AssertionException("Did not include modzone."));
+            var mz1 = translator.TileMappings.AmbushModzones.Single(amz => amz.OldNum == 1);
             Assert.That(mz1.Fillzone, Is.False, "Did not parse modzone without ambush flag.");
 
-            var mz2 = translator.TileMappings.AmbushModzones.Lookup((ushort)2).OrElse(() => new AssertionException("Did not include modzone."));
+            var mz2 = translator.TileMappings.AmbushModzones.Single(amz => amz.OldNum == 2);
             Assert.That(mz2.Fillzone, Is.True, "Did not parse modzone with ambush flag.");
         }
 
@@ -94,8 +94,9 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 })
             });
 
-            var trigger = translator.TileMappings.ChangeTriggerModzones.Lookup((ushort)123).OrElse(() => new AssertionException("Did not include modzone."));
+            var trigger = translator.TileMappings.ChangeTriggerModzones.Single();
 
+            Assert.That(trigger.OldNum, Is.EqualTo(123), "Did not parse Old Num");
             Assert.That(trigger.Fillzone, Is.True, "Did not parse Fillzone");
             Assert.That(trigger.Action, Is.EqualTo("someoriginalaction"), "Did not parse action.");
             Assert.That(trigger.TriggerTemplate.Action, Is.EqualTo("someaction"), "Did not parse trigger action.");
@@ -123,8 +124,9 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 })
             });
 
-            var tile = translator.TileMappings.Tiles.Lookup((ushort)123).OrElse(() => new AssertionException("Did not include tile."));
+            var tile = translator.TileMappings.TileTemplates.Single();
 
+            Assert.That(tile.OldNum, Is.EqualTo(123), "Did not set Old Num.");
             Assert.That(tile.TextureEast, Is.EqualTo("tex1"), "Did not set Texture East");
             Assert.That(tile.TextureNorth, Is.EqualTo("tex2"), "Did not set Texture North");
             Assert.That(tile.TextureSouth, Is.EqualTo("tex3"), "Did not set Texture South");
@@ -150,8 +152,9 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 })
             });
 
-            var trigger = translator.TileMappings.TriggerTemplates.Lookup((ushort)123).OrElse(() => new AssertionException("Did not include trigger."));
+            var trigger = translator.TileMappings.TriggerTemplates.Single();
 
+            Assert.That(trigger.OldNum, Is.EqualTo(123), "Did not set Old Num");
             Assert.That(trigger.Action, Is.EqualTo("someaction"), "Did not set action");
             Assert.That(trigger.ActivateEast, Is.False, "Did not set Activate East");
         }
@@ -171,7 +174,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 })
             });
 
-            Assert.That(translator.TileMappings.Zones.ContainsKey(123), Is.True, "Did not parse sound zone.");
+            Assert.That(translator.TileMappings.ZoneTemplates.Single().OldNum, Is.EqualTo(123), "Did not parse sound zone.");
         }
 
         #endregion Tiles section
@@ -216,8 +219,8 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                     });
 
             IThingMapping mapping = null;
-            Assert.DoesNotThrow(()=>mapping = translator.LookupThingMapping(123),"Did not have mapping.");
-            Assert.That(mapping,Is.TypeOf<TriggerTemplate>(),"Wrong type parsed.");
+            Assert.DoesNotThrow(() => mapping = translator.LookupThingMapping(123), "Did not have mapping.");
+            Assert.That(mapping, Is.TypeOf<TriggerTemplate>(), "Wrong type parsed.");
 
             var trigger = (TriggerTemplate)mapping;
 
@@ -236,7 +239,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                         {
                             Expression.ValueList(
                                 name:Maybe<Identifier>.Nothing,
-                                oldnum:Maybe<ushort>.Nothing, 
+                                oldnum:Maybe<ushort>.Nothing,
                                 qualifiers:Enumerable.Empty<Token>(),
                                 values:new[]
                                 {
@@ -273,7 +276,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                         {
                             Expression.ValueList(
                                 name:Maybe<Identifier>.Nothing,
-                                oldnum:Maybe<ushort>.Nothing, 
+                                oldnum:Maybe<ushort>.Nothing,
                                 qualifiers:Enumerable.Empty<Token>(),
                                 values:new[]
                                 {
@@ -313,7 +316,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                         {
                             Expression.ValueList(
                                 name:Maybe<Identifier>.Nothing,
-                                oldnum:Maybe<ushort>.Nothing, 
+                                oldnum:Maybe<ushort>.Nothing,
                                 qualifiers:Enumerable.Empty<Token>(),
                                 values:new[]
                                 {

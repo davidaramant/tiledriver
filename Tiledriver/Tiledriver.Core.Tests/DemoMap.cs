@@ -164,8 +164,8 @@ namespace Tiledriver.Core.Tests
         {
             var entries = new TileSpace[height, width];
 
-            Func<TileSpace> solidTile = () => new TileSpace(0, 0, -1);
-            Func<TileSpace> emptyTile = () => new TileSpace(-1, 0, 0);
+            Func<TileSpace> solidTile = () => new TileSpace(tile: 0, sector: 0, zone: -1);
+            Func<TileSpace> emptyTile = () => new TileSpace(tile: -1, sector: 0, zone: 0);
 
             // ### Build a big empty square
 

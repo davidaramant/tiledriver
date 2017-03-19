@@ -58,6 +58,7 @@ namespace Tiledriver.Metadata
                 parsing:Parsing.Manual,
                 properties:new []
                 {
+                    new Property("oldNum",type:PropertyType.Ushort,isMetaData:true),
                     new Property("fillzone", type:PropertyType.Boolean, defaultValue:false),
                 }),
 
@@ -65,9 +66,40 @@ namespace Tiledriver.Metadata
                 parsing:Parsing.Manual,
                 properties:new []
                 {
+                    new Property("oldNum",type:PropertyType.Ushort,isMetaData:true),
                     new Property("fillzone", type:PropertyType.Boolean, defaultValue:false),
                     new Property("action", type:PropertyType.String),
                     new Property("triggerTemplate", type:PropertyType.Block),
+                }),
+
+            new Block("tileTemplate",
+                properties:new []
+                {
+                    new Property("oldNum",type:PropertyType.Ushort,isMetaData:true),
+                    new Property("textureEast",PropertyType.String),
+                    new Property("textureNorth",PropertyType.String),
+                    new Property("textureWest",PropertyType.String),
+                    new Property("textureSouth",PropertyType.String),
+                    new Property("blockingEast",PropertyType.Boolean, defaultValue:true),
+                    new Property("blockingNorth",PropertyType.Boolean, defaultValue:true),
+                    new Property("blockingWest",PropertyType.Boolean, defaultValue:true),
+                    new Property("blockingSouth",PropertyType.Boolean, defaultValue:true),
+                    new Property("offsetVertical",PropertyType.Boolean, defaultValue:false),
+                    new Property("offsetHorizontal",PropertyType.Boolean, defaultValue:false),
+                    new Property("dontOverlay",PropertyType.Boolean, defaultValue:false),
+                    new Property("mapped",PropertyType.Integer,defaultValue:0),
+                    new Property("soundSequence",type:PropertyType.String, defaultValue:string.Empty),
+                    new Property("textureOverhead",type:PropertyType.String, defaultValue:string.Empty),
+                    new Property("comment",type:PropertyType.String, defaultValue:string.Empty),
+                    new Property("unknownProperties", PropertyType.UnknownProperties),
+                }),
+
+            new Block("zoneTemplate",
+                properties:new []
+                {
+                    new Property("oldNum",type:PropertyType.Ushort,isMetaData:true),
+                    new Property("comment",type:PropertyType.String, defaultValue:string.Empty),
+                    new Property("unknownProperties", PropertyType.UnknownProperties),
                 }),
 
             new Block("tiles",className:"TileMappings",
@@ -75,11 +107,11 @@ namespace Tiledriver.Metadata
                 isSubBlock:false,
                 properties:new[]
                 {
-                    new Property("ambushModzone",type:PropertyType.MappedBlockList),
-                    new Property("changeTriggerModzone",type:PropertyType.MappedBlockList),
-                    new Property("tile",type:PropertyType.MappedBlockList),
-                    new Property("triggerTemplate",type:PropertyType.MappedBlockList),
-                    new Property("zone",type:PropertyType.MappedBlockList),
+                    new Property("ambushModzone",type:PropertyType.List),
+                    new Property("changeTriggerModzone",type:PropertyType.List),
+                    new Property("tileTemplate",type:PropertyType.List),
+                    new Property("triggerTemplate",type:PropertyType.List),
+                    new Property("zoneTemplate",type:PropertyType.List),
                 }),
 
             new Block("flats",className:"FlatMappings",
