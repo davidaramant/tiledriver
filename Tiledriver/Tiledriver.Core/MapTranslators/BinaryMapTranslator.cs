@@ -41,8 +41,8 @@ namespace Tiledriver.Core.MapTranslators
             var sectors = hasSectorInfo ? TranslateSectors(binaryMap) : CreateDefaultSector(mapInfo);
 
             var triggers = new List<Trigger>();
+            var tileSpaces = TranslateTileSpaces(binaryMap, triggers);
             var things = TranslateThings(binaryMap, triggers);
-            var tileSpaces = TranslateTileSpaces(binaryMap, mapInfo);
 
             return new MapData(
                 nameSpace: "Wolf3D",
@@ -145,7 +145,7 @@ namespace Tiledriver.Core.MapTranslators
             };
         }
 
-        private IEnumerable<TileSpace> TranslateTileSpaces(BinaryMap binaryMap, Map mapInfo)
+        private IEnumerable<TileSpace> TranslateTileSpaces(BinaryMap binaryMap, List<Trigger> triggers)
         {
             var length = binaryMap.Size.Width * binaryMap.Size.Height;
             var spaces =
@@ -155,17 +155,32 @@ namespace Tiledriver.Core.MapTranslators
 
             var tileIndexMapping =
                 _translatorInfo.TileMappings.TileTemplates.
-                Select((template, index) => new {OldNum = template.OldNum, TileIndex = index}).
+                Select((template, index) => new { OldNum = template.OldNum, TileIndex = index }).
                 ToDictionary(pair => pair.OldNum, pair => pair.TileIndex);
+
+            var triggerLookup = _translatorInfo.TileMappings.TriggerTemplates.ToDictionary(t => t.OldNum, t => t);
 
             for (int i = 0; i < length; i++)
             {
+                var x = i % binaryMap.Size.Width;
+                var y = i / binaryMap.Size.Width;
+
                 var oldNum = binaryMap.Plane0[i];
 
                 if (tileIndexMapping.TryGetValue(oldNum, out var tileIndex))
                 {
                     spaces[i].Tile = tileIndex;
                 }
+
+                if (triggerLookup.TryGetValue(oldNum, out var triggerTemplate))
+                {
+                    var trigger = _autoMapper.Map<Trigger>(triggerTemplate);
+                    trigger.X = x;
+                    trigger.Y = y;
+                    trigger.Z = 0;
+                    triggers.Add(trigger);
+                }
+
             }
 
             return spaces;
