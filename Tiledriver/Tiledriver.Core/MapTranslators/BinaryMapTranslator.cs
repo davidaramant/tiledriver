@@ -97,8 +97,8 @@ namespace Tiledriver.Core.MapTranslators
                     case ThingTemplate thingTemplate:
                         var thing = new Thing(
                             type: thingTemplate.Type,
-                            x: oldThing.X,
-                            y: oldThing.Y,
+                            x: oldThing.X + 0.5,
+                            y: oldThing.Y + 0.5,
                             z: 0,
                             angle: TranslateAngle(thingTemplate, oldThing.OldNum),
                             ambush: thingTemplate.Ambush,
