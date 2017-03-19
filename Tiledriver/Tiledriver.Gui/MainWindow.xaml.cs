@@ -3,7 +3,9 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
@@ -136,6 +138,14 @@ namespace Tiledriver.Gui
             }
         }
 
+        private void RunCurrentMap(object sender, RoutedEventArgs e)
+        {
+            if (_vm.MapData != null)
+            {
+                LoadMapInEcWolf(_vm.MapData, "temp.wad");
+            }
+        }
+
         private void SetMap(MapData map)
         {
             _vm.MapData = map;
@@ -145,6 +155,36 @@ namespace Tiledriver.Gui
         private void QuitApplication(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private static void LoadMapInEcWolf(MapData uwmfMap, string wadPath)
+        {
+            const string inputFile = "ECWolfPath.txt";
+
+            if (!File.Exists(inputFile))
+            {
+                throw new Exception(
+                    $"Could not find {inputFile}.  " +
+                    "Create this file in the output directory containing a single line with the full path to ECWolf.exe.  " +
+                    "Do not quote the path.");
+            }
+
+            var ecWolfPath = File.ReadAllLines(inputFile).Single();
+
+            if (Path.GetFileName(ecWolfPath).ToLowerInvariant() != "ecwolf.exe")
+            {
+                ecWolfPath = Path.Combine(ecWolfPath, "ecwolf.exe");
+            }
+
+            var wad = new WadFile();
+            wad.Append(new Marker("MAP01"));
+            wad.Append(new UwmfLump("TEXTMAP", uwmfMap));
+            wad.Append(new Marker("ENDMAP"));
+            wad.SaveTo(wadPath);
+
+            Process.Start(
+                ecWolfPath,
+                $"--file \"{wadPath}\" --hard --nowait --tedlevel map01");
         }
     }
 }
