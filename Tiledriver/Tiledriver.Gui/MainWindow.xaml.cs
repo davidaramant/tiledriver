@@ -7,7 +7,9 @@ using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Uwmf.Parsing;
+using Tiledriver.Core.FormatModels.Wad;
 using Tiledriver.Gui.ViewModels;
 
 namespace Tiledriver.Gui
@@ -83,15 +85,15 @@ namespace Tiledriver.Gui
 
         private void SelectDefaultMapFile(object sender, RoutedEventArgs e)
         {
-            OpenMapFile(_packagedMapFilesDir + "FIXEDTEXTMAP.txt");
+            OpenUwmfTextFile(_packagedMapFilesDir + "FIXEDTEXTMAP.txt");
         }
 
         private void SelectDemoMapFile(object sender, RoutedEventArgs e)
         {
-            OpenMapFile(_packagedMapFilesDir + "thingdemo.txt");
+            OpenUwmfTextFile(_packagedMapFilesDir + "thingdemo.txt");
         }
 
-        private void OpenMapFile(string filePath)
+        private void OpenUwmfTextFile(string filePath)
         {
             if (!File.Exists(filePath)) return;
 
@@ -100,9 +102,44 @@ namespace Tiledriver.Gui
             using (var textReader = new StreamReader(stream, Encoding.ASCII))
             {
                 var sa = new UwmfSyntaxAnalyzer();
-                _vm.MapData = UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader)));
-                Application.Current.MainWindow.Title = $"Tiledriver UWMF Viewer - {_vm.MapData.Name}";
+                SetMap(UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader))));
             }
+        }
+
+        private void OpenMapFile(string filePath)
+        {
+            switch (Path.GetExtension(filePath)?.ToLowerInvariant())
+            {
+                case ".txt":
+                case ".uwmf":
+                    OpenUwmfTextFile(filePath);
+                    break;
+
+                case ".wad":
+                    OpenWadFile(filePath);
+                    break;
+            }
+        }
+
+        private void OpenWadFile(string filePath)
+        {
+            var wad = WadFile.Read(filePath);
+
+            var mapBytes = wad[1].GetData();
+            using (var ms = new MemoryStream(mapBytes))
+            using (var textReader = new StreamReader(ms, Encoding.ASCII))
+            {
+                var sa = new UwmfSyntaxAnalyzer();
+                var map = UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader)));
+
+                SetMap(map);
+            }
+        }
+
+        private void SetMap(MapData map)
+        {
+            _vm.MapData = map;
+            Application.Current.MainWindow.Title = $"Tiledriver UWMF Viewer - {_vm.MapData.Name}";
         }
 
         private void QuitApplication(object sender, RoutedEventArgs e)

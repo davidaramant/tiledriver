@@ -25,7 +25,7 @@
             <ToolBarTray DockPanel.Dock="Top" Orientation="Horizontal">
                 <ToolBar>
                     <Button Click="SelectMapFile"
-                            Content="Open Map" Margin="4" />
+                            Content="Open Map..." Margin="4" />
                     <Button Click="SelectDefaultMapFile"
                             Content="Demo Map" Margin="4" />
                     <Button Click="SelectDemoMapFile"
