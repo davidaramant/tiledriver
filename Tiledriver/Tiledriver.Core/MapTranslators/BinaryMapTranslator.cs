@@ -210,10 +210,32 @@ namespace Tiledriver.Core.MapTranslators
 
             foreach (var (location, changeTrigger) in changeTriggerSpots)
             {
-                foreach (var (directionFromLocation, candidatePosition) in 
+                foreach (var (directionFromLocation, candidatePosition) in
                     location.GetAdjacentPoints(binaryMap.Size, start: Direction.West, clockWise: true))
                 {
+                    var directionToLocation = directionFromLocation.Reverse();
 
+                    if (!changeTrigger.TriggerTemplate.ActivatesIn(directionToLocation))
+                        continue;
+
+                    foreach (var existingTrigger in triggers.ToArray().Where(t =>
+                                    t.X == candidatePosition.X &&
+                                    t.Y == candidatePosition.Y &&
+                                    t.Action == changeTrigger.Action))
+                    {
+                        existingTrigger.SetActivation(directionToLocation, false);
+
+                        // Mutating trigger template!!!
+                        changeTrigger.TriggerTemplate.SetAllActivations(false);
+                        changeTrigger.TriggerTemplate.SetActivation(directionToLocation, true);
+
+                        var newTrigger = _autoMapper.Map<Trigger>(changeTrigger.TriggerTemplate);
+                        newTrigger.X = existingTrigger.X;
+                        newTrigger.Y = existingTrigger.Y;
+                        newTrigger.Z = existingTrigger.Z;
+
+                        triggers.Add(newTrigger);
+                    }
                 }
             }
 
