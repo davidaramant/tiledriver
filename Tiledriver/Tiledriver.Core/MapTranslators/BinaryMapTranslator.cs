@@ -108,6 +108,9 @@ namespace Tiledriver.Core.MapTranslators
                             skill3: thingTemplate.Minskill <= 2,
                             skill4: thingTemplate.Minskill <= 3);
 
+                        // TODO: Holowall
+                        // TODO: Ambush can also be set from tiles
+
                         yield return thing;
                         break;
 
@@ -159,6 +162,10 @@ namespace Tiledriver.Core.MapTranslators
                 ToDictionary(pair => pair.OldNum, pair => pair.TileIndex);
 
             var triggerLookup = _translatorInfo.TileMappings.TriggerTemplates.ToDictionary(t => t.OldNum, t => t);
+
+            // TODO: Ambush Modzones
+            // TODO: Change Trigger Modzones
+            // TODO: Zone Templates
 
             for (int i = 0; i < length; i++)
             {
