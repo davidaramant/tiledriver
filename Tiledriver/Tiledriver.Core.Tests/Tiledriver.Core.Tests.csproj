@@ -71,7 +71,7 @@
   <ItemGroup>
     <Compile Include="DemoMap.cs" />
     <Compile Include="Extensions\CollectionExtensionsTests.cs" />
-    <Compile Include="Extensions\PointExtensionTests.cs" />
+    <Compile Include="Extensions\DirectionExtensionTests.cs" />
     <Compile Include="FormatModels\GameMaps\ExpanderTests.cs" />
     <Compile Include="FormatModels\Common\BaseLexerTests.cs" />
     <Compile Include="FormatModels\MapInfos\Parsing\MapInfoLexerTests.cs" />

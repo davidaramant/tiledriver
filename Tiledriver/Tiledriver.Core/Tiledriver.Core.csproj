@@ -70,10 +70,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\CollectionExtensions.cs" />
-    <Compile Include="Extensions\PointExtensions.cs" />
+    <Compile Include="Extensions\DirectionExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="FormatModels\Common\BaseLexer.cs" />
     <Compile Include="FormatModels\Common\BinaryMap.cs" />
+    <Compile Include="FormatModels\Common\Direction.cs" />
     <Compile Include="FormatModels\Common\OldMapSpot.cs" />
     <Compile Include="FormatModels\GameMaps\GameMapsBundle.cs" />
     <Compile Include="FormatModels\GameMaps\MapHeader.cs" />

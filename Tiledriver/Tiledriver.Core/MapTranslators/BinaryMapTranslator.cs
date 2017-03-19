@@ -163,7 +163,6 @@ namespace Tiledriver.Core.MapTranslators
 
             var changeTriggerSpots = new List<(Point, ChangeTriggerModzone)>();
 
-            // TODO: Change Trigger Modzones
             // TODO: Zone Templates
 
             foreach (var spot in binaryMap.GetAllSpots(planeIndex: 0))
@@ -211,9 +210,10 @@ namespace Tiledriver.Core.MapTranslators
 
             foreach (var (location, changeTrigger) in changeTriggerSpots)
             {
-                foreach (var adjacentLocation in location.GetAdjacentPoints(binaryMap.Size))
+                foreach (var (directionFromLocation, candidatePosition) in 
+                    location.GetAdjacentPoints(binaryMap.Size, start: Direction.West, clockWise: true))
                 {
-                    
+
                 }
             }
 
