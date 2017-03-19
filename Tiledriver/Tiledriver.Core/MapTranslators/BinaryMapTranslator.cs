@@ -106,10 +106,9 @@ namespace Tiledriver.Core.MapTranslators
 
                         if (thingTemplate.Holowall)
                         {
-                            // TODO: Do something here
+                            // TODO: Is this irrelevant for UWMF?  It seems to make the tile instance non-solid.
+                            // This would have to modify the tile list to do anything
                         }
-
-                        // TODO: Ambush can also be set from tiles
 
                         yield return thing;
                         break;
