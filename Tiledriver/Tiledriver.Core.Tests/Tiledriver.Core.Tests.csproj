@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DemoMap.cs" />
+    <Compile Include="Extensions\CollectionExtensionsTests.cs" />
     <Compile Include="FormatModels\GameMaps\ExpanderTests.cs" />
     <Compile Include="FormatModels\Common\BaseLexerTests.cs" />
     <Compile Include="FormatModels\MapInfos\Parsing\MapInfoLexerTests.cs" />

@@ -4,9 +4,11 @@
 using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.Drawing;
 using System.Linq;
 using AutoMapper;
 using Functional.Maybe;
+using Tiledriver.Core.Extensions;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.MapInfos;
 using Tiledriver.Core.FormatModels.Uwmf;
@@ -89,8 +91,8 @@ namespace Tiledriver.Core.MapTranslators
                     case ThingTemplate thingTemplate:
                         var thing = new Thing(
                             type: thingTemplate.Type,
-                            x: oldThing.X + 0.5,
-                            y: oldThing.Y + 0.5,
+                            x: oldThing.Location.X + 0.5,
+                            y: oldThing.Location.Y + 0.5,
                             z: 0,
                             angle: TranslateAngle(thingTemplate, oldThing.OldNum),
                             ambush: thingTemplate.Ambush,
@@ -116,8 +118,8 @@ namespace Tiledriver.Core.MapTranslators
 
                     case TriggerTemplate triggerTemplate:
                         var trigger = _autoMapper.Map<Trigger>(triggerTemplate);
-                        trigger.X = oldThing.X;
-                        trigger.Y = oldThing.Y;
+                        trigger.X = oldThing.Location.X;
+                        trigger.Y = oldThing.Location.Y;
                         trigger.Z = 0;
                         triggers.Add(trigger);
                         break;
@@ -156,7 +158,7 @@ namespace Tiledriver.Core.MapTranslators
                 Select((template, index) => new { OldNum = template.OldNum, TileIndex = index }).
                 ToDictionary(pair => pair.OldNum, pair => pair.TileIndex);
 
-            var triggerLookup = _translatorInfo.TileMappings.TriggerTemplates.ToDictionary(t => t.OldNum, t => t);
+            var triggerLookup = _translatorInfo.TileMappings.TriggerTemplates.CondenseToDictionary(t => t.OldNum, t => t);
 
             // TODO: Ambush Modzones
             // TODO: Change Trigger Modzones
@@ -172,8 +174,8 @@ namespace Tiledriver.Core.MapTranslators
                 if (triggerLookup.TryGetValue(spot.OldNum, out var triggerTemplate))
                 {
                     var trigger = _autoMapper.Map<Trigger>(triggerTemplate);
-                    trigger.X = spot.X;
-                    trigger.Y = spot.Y;
+                    trigger.X = spot.Location.X;
+                    trigger.Y = spot.Location.Y;
                     trigger.Z = 0;
                     triggers.Add(trigger);
                 }
