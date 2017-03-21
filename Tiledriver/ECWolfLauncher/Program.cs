@@ -14,6 +14,7 @@ using Tiledriver.Core.FormatModels.GameMaps;
 using Tiledriver.Core.FormatModels.MapInfos;
 using Tiledriver.Core.FormatModels.MapInfos.Parsing;
 using Tiledriver.Core.FormatModels.Uwmf;
+using Tiledriver.Core.FormatModels.Uwmf.Parsing;
 using Tiledriver.Core.FormatModels.Wad;
 using Tiledriver.Core.FormatModels.Xlat;
 using Tiledriver.Core.FormatModels.Xlat.Parsing;
@@ -30,6 +31,107 @@ namespace TestRunner
         {
             //LoadMapInEcWolf(DemoMap.Create(), Path.GetFullPath("demo.wad"));
             TranslatorTest();
+            //Flatten();
+        }
+
+        private static void Flatten()
+        {
+            var input = @"C:\Users\david\Desktop\maps\translated.wad";
+
+            var map = OpenWadFile(input);
+            map.Name = "Flatland";
+
+            for (int tileIndex = 0; tileIndex < map.Tiles.Count; tileIndex++)
+            {
+                var tile = map.Tiles[tileIndex];
+
+                var texture = PickTexture(tile);
+
+                //tile.TextureNorth = tile.TextureSouth = tile.TextureEast = tile.TextureWest = "-";
+
+                var sectorIndex = map.Sectors.Count;
+                map.Sectors.Add(new Sector(textureCeiling: "#383838", textureFloor: texture));
+
+                var spaces = map.PlaneMaps[0].TileSpaces.Where(ts => ts.Tile == tileIndex);
+
+                foreach (var space in spaces)
+                {
+                    space.Sector = sectorIndex;
+                    space.Tile = -1;
+                }
+            }
+
+            var index = map.Tiles.Count;
+            map.Tiles.Add(new Tile
+            {
+                TextureEast = "#383838",
+                TextureNorth = "#383838",
+                TextureSouth = "#383838",
+                TextureWest = "#383838",
+                BlockingEast = true,
+                BlockingNorth = true,
+                BlockingSouth = true,
+                BlockingWest = true,
+            });
+
+            // shift all things + triggers
+            foreach (var thing in map.Things)
+            {
+                thing.X++;
+                thing.Y++;
+            }
+            foreach (var trigger in map.Triggers)
+            {
+                trigger.X++;
+                trigger.Y++;
+            }
+
+            map.Width = map.Height = 66;
+
+            // Add sides
+            var solidTile = new TileSpace(index, 0, -1);
+            var ts2 = map.PlaneMaps[0].TileSpaces;
+            for (int row = 0; row < 64; row++)
+            {
+                ts2.Insert(row * 64 + 2 * row, solidTile);
+                ts2.Insert(row * 64 + 2 * row + 65, solidTile);
+            }
+
+            // Add top/bottom
+            ts2.InsertRange(0, Enumerable.Repeat(solidTile, 66));
+            ts2.InsertRange(4290, Enumerable.Repeat(solidTile, 66));
+
+
+            LoadMapInEcWolf(map, "flatland.wad");
+        }
+
+        private static string PickTexture(Tile tile)
+        {
+            if (tile.OffsetVertical)
+            {
+                if (tile.TextureEast.StartsWith("DOOR1"))
+                    return "DOOR1_1";
+                return "DOOR2_1";
+            }
+
+
+
+            return tile.TextureNorth;
+        }
+
+        private static MapData OpenWadFile(string filePath)
+        {
+            var wad = WadFile.Read(filePath);
+
+            var mapBytes = wad[1].GetData();
+            using (var ms = new MemoryStream(mapBytes))
+            using (var textReader = new StreamReader(ms, Encoding.ASCII))
+            {
+                var sa = new UwmfSyntaxAnalyzer();
+                var map = UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader)));
+
+                return map;
+            }
         }
 
         private static void TranslatorTest()
@@ -47,12 +149,12 @@ namespace TestRunner
                 cfg.CreateMap<ZoneTemplate, Zone>();
                 cfg.CreateMap<TileTemplate, Tile>();
             });
-            
+
 
             var autoMapper = autoMapperConfig.CreateMapper();
 
 
-            var translator = new BinaryMapTranslator(translatorInfo: xlat, autoMapper:autoMapper);
+            var translator = new BinaryMapTranslator(translatorInfo: xlat, autoMapper: autoMapper);
             var uwmfMap = translator.Translate(bMap, mapInfos.Maps[0]);
 
             LoadMapInEcWolf(uwmfMap, Path.GetFullPath("translated.wad"));
