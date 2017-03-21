@@ -149,7 +149,7 @@ namespace Tiledriver.Gui
         private void SetMap(MapData map)
         {
             _vm.MapData = map;
-            Application.Current.MainWindow.Title = $"Tiledriver UWMF Viewer - {_vm.MapData.Name}";
+            Application.Current.MainWindow.Title = $"Tiledriver - {_vm.MapData.Name}";
         }
 
         private void QuitApplication(object sender, RoutedEventArgs e)
