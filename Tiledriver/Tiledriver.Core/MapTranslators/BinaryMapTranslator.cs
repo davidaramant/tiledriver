@@ -28,8 +28,9 @@ namespace Tiledriver.Core.MapTranslators
 
         public MapData Translate(BinaryMap binaryMap, Map mapInfo)
         {
-            // MapInfo has:
-            // - specialActions
+            // TODO: MapInfo - specialActions
+
+
             // TODO: Support map name lookups.  This requires parsing the LANGUAGE lump
 
             // Plane 0 - map geometry
@@ -39,7 +40,7 @@ namespace Tiledriver.Core.MapTranslators
             var zones = new List<Zone> { new Zone() };
 
             // TODO: Is this Boolean necessary?
-            var hasSectorInfo = binaryMap.Plane2.Any(num => num != 0);
+            var hasSectorInfo = binaryMap.FloorCeilingPlane.Any(num => num != 0);
             var sectors = hasSectorInfo ? TranslateSectors(binaryMap) : CreateDefaultSector(mapInfo);
 
             var ambushSpots = new HashSet<Point>();
@@ -106,6 +107,7 @@ namespace Tiledriver.Core.MapTranslators
                         {
                             // TODO: Is this irrelevant for UWMF?  It seems to make the tile instance non-solid.
                             // This would have to modify the tile list to do anything
+                            // This IS relevant because XLAT won't get loaded for UWMF
                         }
 
                         yield return thing;
@@ -223,6 +225,7 @@ namespace Tiledriver.Core.MapTranslators
                                     t.Y == candidatePosition.Y &&
                                     t.Action == changeTrigger.Action))
                     {
+                        // TODO: I think this is supposed to remove the existing trigger
                         existingTrigger.SetActivation(directionToLocation, false);
 
                         // Mutating trigger template!!!

@@ -24,7 +24,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
 
                 switch (name.ToLower())
                 {
-                    // TODO: Is there a 'disable' as well?
+                    // TODO: Is there a 'disable' as well?  (yes, there is)
                     case "enable":
                         if (exp.Oldnum.HasValue || exp.HasAssignments || exp.Values.Any() || exp.Qualifiers.Count() != 1 || exp.SubExpressions.Any())
                         {
@@ -168,7 +168,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
 
         public static TileTemplate ParseTile(IHaveAssignments block)
         {
-            // TODO: This is moronic
+            // TODO: Copying these methods is moronic
             var parsedBlock = new TileTemplate();
             block.GetValueFor("TextureEast").SetRequiredString(value => parsedBlock.TextureEast = value, "Tile", "TextureEast");
             block.GetValueFor("TextureNorth").SetRequiredString(value => parsedBlock.TextureNorth = value, "Tile", "TextureNorth");

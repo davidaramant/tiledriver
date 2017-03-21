@@ -13,9 +13,9 @@ namespace Tiledriver.Core.FormatModels.Common
         public string Name { get; }
         public Size Size { get; }
 
-        public ImmutableArray<ushort> Plane0 { get; }
-        public ImmutableArray<ushort> Plane1 { get; }
-        public ImmutableArray<ushort> Plane2 { get; }
+        public ImmutableArray<ushort> GeometryPlane { get; }
+        public ImmutableArray<ushort> ThingPlane { get; }
+        public ImmutableArray<ushort> FloorCeilingPlane { get; }
 
         public BinaryMap(
             string name,
@@ -27,11 +27,12 @@ namespace Tiledriver.Core.FormatModels.Common
         {
             Name = name;
             Size = new Size(width, height);
-            Plane0 = plane0.ToImmutableArray();
-            Plane1 = plane1.ToImmutableArray();
-            Plane2 = plane2.ToImmutableArray();
+            GeometryPlane = plane0.ToImmutableArray();
+            ThingPlane = plane1.ToImmutableArray();
+            FloorCeilingPlane = plane2.ToImmutableArray();
         }
 
+        // TODO: Make an enum for the plane index
         public IEnumerable<OldMapSpot> GetAllSpots(int planeIndex)
         {
             ImmutableArray<ushort> PickPlane(int index)
@@ -39,11 +40,11 @@ namespace Tiledriver.Core.FormatModels.Common
                 switch (index)
                 {
                     case 0:
-                        return Plane0;
+                        return GeometryPlane;
                     case 1:
-                        return Plane1;
+                        return ThingPlane;
                     case 2:
-                        return Plane2;
+                        return FloorCeilingPlane;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(planeIndex));
                 }
