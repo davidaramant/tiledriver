@@ -140,6 +140,27 @@ namespace Tiledriver.Core.FormatModels.Uwmf
         }
 
         partial void AdditionalSemanticChecks();
+
+        public Tile Clone()
+        {
+            return new Tile(
+                textureEast: TextureEast,
+                textureNorth: TextureNorth,
+                textureWest: TextureWest,
+                textureSouth: TextureSouth,
+                blockingEast: BlockingEast,
+                blockingNorth: BlockingNorth,
+                blockingWest: BlockingWest,
+                blockingSouth: BlockingSouth,
+                offsetVertical: OffsetVertical,
+                offsetHorizontal: OffsetHorizontal,
+                dontOverlay: DontOverlay,
+                mapped: Mapped,
+                soundSequence: SoundSequence,
+                textureOverhead: TextureOverhead,
+                comment: Comment,
+                unknownProperties: UnknownProperties);
+        }
     }
 
     public sealed partial class Sector : BaseUwmfBlock, IWriteableUwmfBlock

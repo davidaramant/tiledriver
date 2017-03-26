@@ -4,17 +4,21 @@
 - WAD file resource provider
 - File system resource provider
 - PK3 resource provider
-- Fix bugs in map translator
 - Glue all the components together
+- WDC 3.1 map loader
+- Map Translator:
+    - HOLOWALL
+    - Zones
+    - floors / ceilings
 
 ## Long term
 
 ### Backend
 
-- Convert the WDC 3.1 format levels to UWMF
 - Support Spear of Destiny
-- UWMF unknown block / property parsing
-
+- UWMF:
+    - unknown block / property parsing
+    - Refactor parser to make sense
 
 ### GUI Application
 

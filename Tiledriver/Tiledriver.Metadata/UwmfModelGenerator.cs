@@ -34,12 +34,38 @@ namespace Tiledriver.Core.FormatModels.Uwmf");
                 WriteWriteToMethod(block, output);
                 WriteSemanticValidityMethods(output, block);
 
+                if (block.SupportsCloning)
+                {
+                    WriteCloneMethod(output, block);
+                }
+
                 output.CloseParen();
                 output.Line();
             } // end classes
             output.CloseParen(); // End namespace
 
             return output.GetString();
+        }
+
+        private static void WriteCloneMethod(IndentedWriter output, Block block)
+        {
+            // TODO: Deep cloning - the unknown properties will point to the same instances
+            output.
+                Line().
+                Line($"public {block.ClassName.ToPascalCase()} Clone()").
+                OpenParen().
+                Line($"return new {block.ClassName.ToPascalCase()}(").IncreaseIndent();
+
+            foreach (var indexed in block.OrderedProperties().Select((param, index) => new { param, index }))
+            {
+                var postfix = indexed.index == block.Properties.Count() - 1 ? ");" : ",";
+
+                output.Line(indexed.param.ArgumentName + ": " + indexed.param.PropertyName + postfix);
+            }
+
+            output.
+                DecreaseIndent().
+                CloseParen();
         }
 
         private static void WriteProperties(Block block, IndentedWriter sb)
