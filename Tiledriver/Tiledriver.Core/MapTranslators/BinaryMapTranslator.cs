@@ -110,11 +110,36 @@ namespace Tiledriver.Core.MapTranslators
 
                         if (thingTemplate.Holowall)
                         {
+                            void MakeTilePassthrough(TileSpace space)
+                            {
+                                if (!space.HasTile)
+                                    return;
+
+                                var tileClone = tiles[space.Tile].Clone();
+                                tileClone.SetAllBlocking(enabled: false);
+                                space.Tile = tiles.Count;
+                                tiles.Add(tileClone);
+                            }
+
                             var tileSpace = tileSpaces[oldThing.Index];
-                            var tileClone = tiles[tileSpace.Tile].Clone();
-                            tileClone.SetAllBlocking(enabled: false);
-                            tileSpace.Tile = tiles.Count;
-                            tiles.Add(tileClone);
+
+                            if (tileSpace.HasTile)
+                            {
+                                MakeTilePassthrough(tileSpace);
+
+                                // If we created a holowall and we path into another wall it should also become non-solid.
+                                if (thingTemplate.Pathing)
+                                {
+                                    var thingDirection = (Direction)(thing.Angle / 90);
+                                    int PositionToIndex(Point position) => position.Y * binaryMap.Size.Width + position.X;
+
+                                    oldThing.Location.GetAdjacentPoints(binaryMap.Size).
+                                        FirstMaybe(pair => pair.direction == thingDirection).
+                                        Select(pair => PositionToIndex(pair.point)).
+                                        Select(index => tileSpaces[index]).
+                                        Do(MakeTilePassthrough);
+                                }
+                            }
                         }
 
                         yield return thing;
@@ -219,10 +244,7 @@ namespace Tiledriver.Core.MapTranslators
                 }
             }
 
-            int PositionToIndex(Point position)
-            {
-                return position.Y * binaryMap.Size.Width + position.X;
-            }
+            int PositionToIndex(Point position) => position.Y * binaryMap.Size.Width + position.X;
             // For fill zone spots, set the zone to the first valid adjacent zone (if any)
             foreach (var fillSpot in zoneFillSpots)
             {

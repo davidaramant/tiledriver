@@ -7,6 +7,8 @@ namespace Tiledriver.Core.FormatModels.Uwmf
 {
     public partial class TileSpace
     {
+        public bool HasTile => Tile != -1;
+
         public string AsString()
         {
             CheckSemanticValidity();

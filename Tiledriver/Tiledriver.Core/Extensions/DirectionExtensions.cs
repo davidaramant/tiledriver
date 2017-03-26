@@ -21,8 +21,8 @@ namespace Tiledriver.Core.Extensions
         public static IEnumerable<(Direction direction, Point point)> GetAdjacentPoints(
             this Point origin,
             Size bounds,
-            bool clockWise,
-            Direction start)
+            bool clockWise = true,
+            Direction start = Direction.North)
         {
             foreach (var direction in GetDirections(start, clockWise))
             {
