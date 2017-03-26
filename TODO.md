@@ -7,8 +7,9 @@
 - Glue all the components together
 - WDC 3.1 map loader
 - Map Translator:
-    - HOLOWALL
+    - Test HOLOWALL
     - Zones
+    - Elevators
     - floors / ceilings
 
 ## Long term

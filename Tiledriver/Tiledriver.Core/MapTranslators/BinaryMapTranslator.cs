@@ -37,8 +37,6 @@ namespace Tiledriver.Core.MapTranslators
             // Plane 1 - things
             // Plane 2 - floor/ceiling
 
-            var zones = new List<Zone> { new Zone() };
-
             // TODO: Is this Boolean necessary?
             var hasSectorInfo = binaryMap.FloorCeilingPlane.Any(num => num != 0);
             var sectors = hasSectorInfo ? TranslateSectors(binaryMap) : CreateDefaultSector(mapInfo);
@@ -58,7 +56,8 @@ namespace Tiledriver.Core.MapTranslators
                 name: mapInfo.MapName.OrElse(binaryMap.Name),
                 tiles: tiles,
                 sectors: sectors,
-                zones: zones,
+                zones: _translatorInfo.TileMappings.ZoneTemplates.
+                    Select(zt => new Zone(comment: zt.Comment, unknownProperties: zt.UnknownProperties)),
                 planes: new List<Plane> { new Plane(depth: 64) },
                 planeMaps: new[] { new PlaneMap(tileSpaces: tileSpaces), },
                 things: things,
@@ -67,9 +66,9 @@ namespace Tiledriver.Core.MapTranslators
         }
 
         private IEnumerable<Thing> TranslateThings(
-            BinaryMap binaryMap, 
-            List<Trigger> triggers, 
-            TileSpace[] tileSpaces, 
+            BinaryMap binaryMap,
+            List<Trigger> triggers,
+            TileSpace[] tileSpaces,
             HashSet<Point> ambushSpots,
             List<Tile> tiles)
         {
@@ -113,7 +112,7 @@ namespace Tiledriver.Core.MapTranslators
                         {
                             var tileSpace = tileSpaces[oldThing.Index];
                             var tileClone = tiles[tileSpace.Tile].Clone();
-                            tileClone.SetAllBlocking(enabled:false);
+                            tileClone.SetAllBlocking(enabled: false);
                             tileSpace.Tile = tiles.Count;
                             tiles.Add(tileClone);
                         }
@@ -162,6 +161,11 @@ namespace Tiledriver.Core.MapTranslators
                 Select(_ => new TileSpace(tile: -1, sector: 0, zone: -1)).
                 ToArray();
 
+            var zoneLookup =
+                _translatorInfo.TileMappings.ZoneTemplates.
+                Select((zt, index) => new { zt, index }).
+                ToDictionary(pair => pair.zt.OldNum, pair => pair.index);
+
             var tileIndexMapping =
                 _translatorInfo.TileMappings.TileTemplates.
                 Select((template, index) => new { OldNum = template.OldNum, TileIndex = index }).
@@ -173,7 +177,7 @@ namespace Tiledriver.Core.MapTranslators
 
             var changeTriggerSpots = new List<(Point, ChangeTriggerModzone)>();
 
-            // TODO: Zone Templates
+            var zoneFillSpots = new List<Point>();
 
             foreach (var spot in binaryMap.GetAllSpots(planeIndex: 0))
             {
@@ -196,11 +200,7 @@ namespace Tiledriver.Core.MapTranslators
                     ambushSpots.Add(spot.Location);
                     if (ambushModzone.Fillzone)
                     {
-                        // TODO: Fillzone
-                    }
-                    else
-                    {
-                        // TODO: Non-fillzone
+                        zoneFillSpots.Add(spot.Location);
                     }
                 }
 
@@ -209,13 +209,29 @@ namespace Tiledriver.Core.MapTranslators
                     changeTriggerSpots.Add((spot.Location, changeTriggerModzone));
                     if (changeTriggerModzone.Fillzone)
                     {
-                        // TODO: Fillzone
-                    }
-                    else
-                    {
-                        // TODO: non-fillzone
+                        zoneFillSpots.Add(spot.Location);
                     }
                 }
+
+                if (zoneLookup.TryGetValue(spot.OldNum, out var zoneIndex))
+                {
+                    spaces[spot.Index].Zone = zoneIndex;
+                }
+            }
+
+            int PositionToIndex(Point position)
+            {
+                return position.Y * binaryMap.Size.Width + position.X;
+            }
+            // For fill zone spots, set the zone to the first valid adjacent zone (if any)
+            foreach (var fillSpot in zoneFillSpots)
+            {
+                var fillSpotIndex = PositionToIndex(fillSpot);
+
+                fillSpot.GetAdjacentPoints(binaryMap.Size, start: Direction.East, clockWise: false)
+                    .Select(adjacent => spaces[PositionToIndex(adjacent.point)].Zone)
+                    .FirstMaybe(zoneId => zoneId != -1)
+                    .Do(zoneId => spaces[fillSpotIndex].Zone = zoneId);
             }
 
             foreach (var (location, changeTrigger) in changeTriggerSpots)
@@ -225,6 +241,7 @@ namespace Tiledriver.Core.MapTranslators
                 {
                     var directionToLocation = directionFromLocation.Reverse();
 
+                    // This logic depends on mutating the trigger template in the below loop
                     if (!changeTrigger.TriggerTemplate.ActivatesIn(directionToLocation))
                         continue;
 
@@ -233,7 +250,6 @@ namespace Tiledriver.Core.MapTranslators
                                     t.Y == candidatePosition.Y &&
                                     t.Action == changeTrigger.Action))
                     {
-                        // TODO: I think this is supposed to remove the existing trigger
                         existingTrigger.SetActivation(directionToLocation, false);
 
                         // Mutating trigger template!!!

@@ -100,6 +100,7 @@
     <Compile Include="FormatModels\MapInfos\Parsing\MapInfoBlock.cs" />
     <Compile Include="FormatModels\MapInfos\Parsing\MapInfoLexer.cs" />
     <Compile Include="FormatModels\MapInfos\Parsing\MapInfoTextReader.cs" />
+    <Compile Include="FormatModels\Uwmf\Tile.cs" />
     <Compile Include="FormatModels\Uwmf\Trigger.cs" />
     <Compile Include="FormatModels\Wad\DataLump.cs" />
     <Compile Include="FormatModels\Wad\ILump.cs" />

@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using Tiledriver.Core.FormatModels.Common;
 
 namespace Tiledriver.Core.Extensions
@@ -22,8 +21,8 @@ namespace Tiledriver.Core.Extensions
         public static IEnumerable<(Direction direction, Point point)> GetAdjacentPoints(
             this Point origin,
             Size bounds,
-            bool clockWise = false,
-            Direction start = Direction.East)
+            bool clockWise,
+            Direction start)
         {
             foreach (var direction in GetDirections(start, clockWise))
             {

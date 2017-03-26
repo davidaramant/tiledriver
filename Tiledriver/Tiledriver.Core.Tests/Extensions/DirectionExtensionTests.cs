@@ -30,15 +30,15 @@ namespace Tiledriver.Core.Tests.Extensions
             var location = new Point(x, y);
             var bounds = new Size(width, height);
 
-            Assert.That(location.GetAdjacentPoints(bounds).ToArray(), Has.Length.EqualTo(expectedAdjacent));
+            Assert.That(location.GetAdjacentPoints(bounds, clockWise: false, start: Direction.East).ToArray(), Has.Length.EqualTo(expectedAdjacent));
         }
 
         [Test]
         public void ShouldReturnPointsInDefaultOrder()
         {
             VerifyDirections(
-                clockWise: false, 
-                start: Direction.East, 
+                clockWise: false,
+                start: Direction.East,
                 expectedDirections: new[] { Direction.East, Direction.North, Direction.West, Direction.South, });
         }
 
@@ -54,10 +54,10 @@ namespace Tiledriver.Core.Tests.Extensions
         [Test]
         public void ShouldGetDirectionsInCounterClockwiseOrder()
         {
-            var actual = DirectionExtensions.GetDirections(start: Direction.North,clockWise:false).ToArray();
-            var expected = new[] {Direction.North, Direction.West, Direction.South, Direction.East,};
+            var actual = DirectionExtensions.GetDirections(start: Direction.North, clockWise: false).ToArray();
+            var expected = new[] { Direction.North, Direction.West, Direction.South, Direction.East, };
 
-            Assert.That(actual,Is.EqualTo(expected));
+            Assert.That(actual, Is.EqualTo(expected));
         }
 
         [Test]
