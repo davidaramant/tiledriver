@@ -38,7 +38,7 @@ namespace Tiledriver.Core.MapTranslators
             // Plane 2 - floor/ceiling
 
             // TODO: Is this Boolean necessary?
-            var hasSectorInfo = binaryMap.FloorCeilingPlane.Any(num => num != 0);
+            var hasSectorInfo = binaryMap.SectorPlane.Any(num => num != 0);
             var sectors = hasSectorInfo ? TranslateSectors(binaryMap) : CreateDefaultSector(mapInfo);
             var tiles = _translatorInfo.TileMappings.TileTemplates.Select(template => _autoMapper.Map<Tile>(template)).ToList();
 
@@ -87,7 +87,7 @@ namespace Tiledriver.Core.MapTranslators
                 return angle;
             }
 
-            foreach (var oldThing in binaryMap.GetAllSpots(planeIndex: 1).Where(spot => spot.OldNum != 0))
+            foreach (var oldThing in binaryMap.GetAllSpots(BinaryMapPlaneId.Thing).Where(spot => spot.OldNum != 0))
             {
                 // TODO: Report errors here
                 var mapping = _translatorInfo.LookupThingMapping(oldThing.OldNum);
@@ -204,7 +204,7 @@ namespace Tiledriver.Core.MapTranslators
 
             var zoneFillSpots = new List<Point>();
 
-            foreach (var spot in binaryMap.GetAllSpots(planeIndex: 0))
+            foreach (var spot in binaryMap.GetAllSpots(BinaryMapPlaneId.Geometry))
             {
                 if (tileIndexMapping.TryGetValue(spot.OldNum, out var tileIndex))
                 {

@@ -8,9 +8,9 @@
 - WDC 3.1 map loader
 - Map Translator:
     - Test HOLOWALL
-    - Zones
-    - Elevators
+    - MapInfo special actions
     - floors / ceilings
+    - Better error reporting
 
 ## Long term
 
@@ -20,6 +20,9 @@
 - UWMF:
     - unknown block / property parsing
     - Refactor parser to make sense
+- Map Translator
+    - Elevators
+    - Name lookups from Languages
 
 ### GUI Application
 

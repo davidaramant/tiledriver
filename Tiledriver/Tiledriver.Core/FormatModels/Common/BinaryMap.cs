@@ -8,6 +8,13 @@ using System.Drawing;
 
 namespace Tiledriver.Core.FormatModels.Common
 {
+    public enum BinaryMapPlaneId
+    {
+        Geometry,
+        Thing,
+        Sector,
+    }
+
     public sealed class BinaryMap
     {
         public string Name { get; }
@@ -15,7 +22,7 @@ namespace Tiledriver.Core.FormatModels.Common
 
         public ImmutableArray<ushort> GeometryPlane { get; }
         public ImmutableArray<ushort> ThingPlane { get; }
-        public ImmutableArray<ushort> FloorCeilingPlane { get; }
+        public ImmutableArray<ushort> SectorPlane { get; }
 
         public BinaryMap(
             string name,
@@ -29,28 +36,27 @@ namespace Tiledriver.Core.FormatModels.Common
             Size = new Size(width, height);
             GeometryPlane = plane0.ToImmutableArray();
             ThingPlane = plane1.ToImmutableArray();
-            FloorCeilingPlane = plane2.ToImmutableArray();
+            SectorPlane = plane2.ToImmutableArray();
         }
 
-        // TODO: Make an enum for the plane index
-        public IEnumerable<OldMapSpot> GetAllSpots(int planeIndex)
+        public IEnumerable<OldMapSpot> GetAllSpots(BinaryMapPlaneId planeId)
         {
-            ImmutableArray<ushort> PickPlane(int index)
+            ImmutableArray<ushort> PickPlane(BinaryMapPlaneId id)
             {
-                switch (index)
+                switch (id)
                 {
-                    case 0:
+                    case BinaryMapPlaneId.Geometry:
                         return GeometryPlane;
-                    case 1:
+                    case BinaryMapPlaneId.Thing:
                         return ThingPlane;
-                    case 2:
-                        return FloorCeilingPlane;
+                    case BinaryMapPlaneId.Sector:
+                        return SectorPlane;
                     default:
-                        throw new ArgumentOutOfRangeException(nameof(planeIndex));
+                        throw new ArgumentOutOfRangeException(nameof(planeId), $"Unknown plane ID: {id}");
                 }
             }
 
-            var plane = PickPlane(planeIndex);
+            var plane = PickPlane(planeId);
 
             for (int index = 0; index < plane.Length; index++)
             {
