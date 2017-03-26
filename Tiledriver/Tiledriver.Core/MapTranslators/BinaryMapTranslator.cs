@@ -42,12 +42,13 @@ namespace Tiledriver.Core.MapTranslators
             // TODO: Is this Boolean necessary?
             var hasSectorInfo = binaryMap.FloorCeilingPlane.Any(num => num != 0);
             var sectors = hasSectorInfo ? TranslateSectors(binaryMap) : CreateDefaultSector(mapInfo);
+            var tiles = _translatorInfo.TileMappings.TileTemplates.Select(template => _autoMapper.Map<Tile>(template)).ToList();
 
             var ambushSpots = new HashSet<Point>();
 
             var triggers = new List<Trigger>();
             var tileSpaces = TranslateTileSpaces(binaryMap, triggers, ambushSpots);
-            var things = TranslateThings(binaryMap, triggers, tileSpaces, ambushSpots);
+            var things = TranslateThings(binaryMap, triggers, tileSpaces, ambushSpots, tiles);
 
             return new MapData(
                 nameSpace: "Wolf3D",
@@ -55,7 +56,7 @@ namespace Tiledriver.Core.MapTranslators
                 width: binaryMap.Size.Width,
                 height: binaryMap.Size.Height,
                 name: mapInfo.MapName.OrElse(binaryMap.Name),
-                tiles: _translatorInfo.TileMappings.TileTemplates.Select(template => _autoMapper.Map<Tile>(template)),
+                tiles: tiles,
                 sectors: sectors,
                 zones: zones,
                 planes: new List<Plane> { new Plane(depth: 64) },
@@ -65,7 +66,12 @@ namespace Tiledriver.Core.MapTranslators
             );
         }
 
-        private IEnumerable<Thing> TranslateThings(BinaryMap binaryMap, List<Trigger> triggers, TileSpace[] tileSpaces, HashSet<Point> ambushSpots)
+        private IEnumerable<Thing> TranslateThings(
+            BinaryMap binaryMap, 
+            List<Trigger> triggers, 
+            TileSpace[] tileSpaces, 
+            HashSet<Point> ambushSpots,
+            List<Tile> tiles)
         {
             int TranslateAngle(ThingTemplate template, ushort oldNum)
             {
@@ -105,9 +111,11 @@ namespace Tiledriver.Core.MapTranslators
 
                         if (thingTemplate.Holowall)
                         {
-                            // TODO: Is this irrelevant for UWMF?  It seems to make the tile instance non-solid.
-                            // This would have to modify the tile list to do anything
-                            // This IS relevant because XLAT won't get loaded for UWMF
+                            var tileSpace = tileSpaces[oldThing.Index];
+                            var tileClone = tiles[tileSpace.Tile].Clone();
+                            tileClone.SetAllBlocking(enabled:false);
+                            tileSpace.Tile = tiles.Count;
+                            tiles.Add(tileClone);
                         }
 
                         yield return thing;
