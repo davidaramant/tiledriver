@@ -62,41 +62,46 @@ namespace Tiledriver.Core.FormatModels.Wad
             _lumps.Add(lump);
         }
 
+        public void SaveTo(Stream stream)
+        {
+            stream.WriteText("PWAD");
+            stream.WriteInt(_lumps.Count);
+
+            // Fill in this position after writing the data
+            int directoryOffsetPosition = (int)stream.Position;
+            stream.Position += 4;
+
+            var metadata = new List<LumpMetadata>();
+            foreach (var lump in _lumps)
+            {
+                int startOfLump = (int)stream.Position;
+
+                lump.WriteTo(stream);
+
+                metadata.Add(new LumpMetadata(
+                    position: startOfLump,
+                    size: (int)stream.Position - startOfLump,
+                    name: lump.Name));
+            }
+
+            int startOfDirectory = (int)stream.Position;
+
+            // Write directory
+            foreach (var lumpMetadata in metadata)
+            {
+                lumpMetadata.WriteTo(stream);
+            }
+
+            // Go back and set the directory position
+            stream.Position = directoryOffsetPosition;
+            stream.WriteInt(startOfDirectory);
+        }
+
         public void SaveTo(string filePath)
         {
             using (var fs = File.Open(filePath, FileMode.Create))
             {
-                fs.WriteText("PWAD");
-                fs.WriteInt(_lumps.Count);
-
-                // Fill in this position after writing the data
-                int directoryOffsetPosition = (int)fs.Position;
-                fs.Position += 4;
-
-                var metadata = new List<LumpMetadata>();
-                foreach (var lump in _lumps)
-                {
-                    int startOfLump = (int)fs.Position;
-
-                    lump.WriteTo(fs);
-
-                    metadata.Add(new LumpMetadata(
-                        position: startOfLump,
-                        size: (int)fs.Position - startOfLump,
-                        name: lump.Name));
-                }
-
-                int startOfDirectory = (int)fs.Position;
-
-                // Write directory
-                foreach (var lumpMetadata in metadata)
-                {
-                    lumpMetadata.WriteTo(fs);
-                }
-
-                // Go back and set the directory position
-                fs.Position = directoryOffsetPosition;
-                fs.WriteInt(startOfDirectory);
+                SaveTo(fs);
             }
         }
 
@@ -120,8 +125,7 @@ namespace Tiledriver.Core.FormatModels.Wad
 
             var directory =
                 Enumerable.Range(1, numLumps).
-                Select(_ => LumpMetadata.ReadFrom(stream)).
-                ToArray();
+                Select(_ => LumpMetadata.ReadFrom(stream));
 
             return new WadFile(directory.Select<LumpMetadata, ILump>(info =>
             {
