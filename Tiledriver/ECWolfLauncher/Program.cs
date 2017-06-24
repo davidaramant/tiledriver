@@ -19,6 +19,7 @@ using Tiledriver.Core.FormatModels.Wad;
 using Tiledriver.Core.FormatModels.Xlat;
 using Tiledriver.Core.FormatModels.Xlat.Parsing;
 using Tiledriver.Core.MapTranslators;
+using Tiledriver.Core.Settings;
 
 namespace TestRunner
 {
@@ -162,7 +163,9 @@ namespace TestRunner
 
         private static BinaryMap LoadBinaryMap()
         {
-            var basePath = @"C:\Program Files (x86)\Steam\steamapps\common\Wolfenstein 3D\base";
+            var paths = new SteamGameSearcher().GetGamePaths();
+
+            var basePath = Path.Combine(paths.Wolf3D.Value, "base");
             var mapHeadPath = Path.Combine(basePath, "MAPHEAD.WL6");
             var gameMapsPath = Path.Combine(basePath, "GAMEMAPS.WL6");
 

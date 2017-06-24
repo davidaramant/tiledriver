@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="Extensions\Collections\CollectionExtensions.cs" />
     <Compile Include="Extensions\Directions\DirectionExtensions.cs" />
+    <Compile Include="Extensions\MaybeFileSystem\MaybeFileSystemExtensions.cs" />
     <Compile Include="Extensions\Strings\StringExtensions.cs" />
     <Compile Include="FormatModels\Common\BaseLexer.cs" />
     <Compile Include="FormatModels\Common\BinaryMap.cs" />
@@ -160,6 +161,8 @@
     <Compile Include="FormatModels\Uwmf\TileSpace.cs" />
     <Compile Include="FormatModels\Uwmf\UnknownBlock.cs" />
     <Compile Include="FormatModels\Uwmf\UnknownProperty.cs" />
+    <Compile Include="Settings\SteamGameSearcher.cs" />
+    <Compile Include="Settings\GamePaths.cs" />
     <Compile Include="Wolf3D\Actor.cs" />
     <Compile Include="Wolf3D\AllWolfTextures.cs" />
     <Compile Include="Wolf3D\RegionTheme.cs" />
