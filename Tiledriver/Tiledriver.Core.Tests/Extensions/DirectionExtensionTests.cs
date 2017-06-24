@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
-using Tiledriver.Core.Extensions;
+using Tiledriver.Core.Extensions.Directions;
 using Tiledriver.Core.FormatModels.Common;
 
 namespace Tiledriver.Core.Tests.Extensions

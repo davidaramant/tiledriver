@@ -69,9 +69,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\CollectionExtensions.cs" />
-    <Compile Include="Extensions\DirectionExtensions.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\Collections\CollectionExtensions.cs" />
+    <Compile Include="Extensions\Directions\DirectionExtensions.cs" />
+    <Compile Include="Extensions\Strings\StringExtensions.cs" />
     <Compile Include="FormatModels\Common\BaseLexer.cs" />
     <Compile Include="FormatModels\Common\BinaryMap.cs" />
     <Compile Include="FormatModels\Common\Direction.cs" />

@@ -1,9 +1,6 @@
 ﻿// Copyright (c) 2017, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using System.Globalization;
-using System.Linq;
-using Tiledriver.Core.Extensions;
 using Tiledriver.Core.FormatModels.Common;
 
 namespace Tiledriver.Core.FormatModels.MapInfos.Parsing

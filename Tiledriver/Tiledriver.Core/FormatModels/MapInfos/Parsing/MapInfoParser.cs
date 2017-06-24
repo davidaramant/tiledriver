@@ -1,13 +1,12 @@
 ﻿// Copyright (c) 2017, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
 using Functional.Maybe;
-using Tiledriver.Core.Extensions;
+using Tiledriver.Core.Extensions.Strings;
 using Tiledriver.Core.FormatModels.Common;
 
 namespace Tiledriver.Core.FormatModels.MapInfos.Parsing

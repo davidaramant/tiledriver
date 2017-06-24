@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using JetBrains.Annotations;
-using Tiledriver.Core.Extensions;
+using Tiledriver.Core.Extensions.Strings;
 using Tiledriver.Core.FormatModels.Common;
 
 namespace Tiledriver.Core.FormatModels.MapInfos.Parsing

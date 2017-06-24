@@ -3,7 +3,6 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using Tiledriver.Core.Extensions;
 using Tiledriver.Core.FormatModels.Uwmf;
 
 namespace Tiledriver.Core.FormatModels.Xlat

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using Tiledriver.Core.FormatModels.Common;
 
-namespace Tiledriver.Core.Extensions
+namespace Tiledriver.Core.Extensions.Directions
 {
     public static class DirectionExtensions
     {

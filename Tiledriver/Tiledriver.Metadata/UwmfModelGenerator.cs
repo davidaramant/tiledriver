@@ -18,7 +18,6 @@ namespace Tiledriver.Metadata
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Tiledriver.Core.Extensions;
 
 namespace Tiledriver.Core.FormatModels.Uwmf");
 

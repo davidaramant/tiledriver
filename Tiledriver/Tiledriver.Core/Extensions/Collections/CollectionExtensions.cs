@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Tiledriver.Core.Extensions
+namespace Tiledriver.Core.Extensions.Collections
 {
     public static class CollectionExtensions
     {
