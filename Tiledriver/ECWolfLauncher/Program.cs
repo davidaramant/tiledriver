@@ -163,7 +163,7 @@ namespace TestRunner
 
         private static BinaryMap LoadBinaryMap()
         {
-            var paths = new SteamGameSearcher().GetGamePaths();
+            var paths = SteamGameSearcher.GetGamePaths();
 
             var basePath = Path.Combine(paths.Wolf3D.Value, "base");
             var mapHeadPath = Path.Combine(basePath, "MAPHEAD.WL6");
