@@ -13,6 +13,7 @@ using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.GameMaps;
 using Tiledriver.Core.FormatModels.MapInfos;
 using Tiledriver.Core.FormatModels.MapInfos.Parsing;
+using Tiledriver.Core.FormatModels.Pk3;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Uwmf.Parsing;
 using Tiledriver.Core.FormatModels.Wad;
@@ -31,8 +32,28 @@ namespace TestRunner
         static void Main(string[] args)
         {
             //LoadMapInEcWolf(DemoMap.Create(), Path.GetFullPath("demo.wad"));
-            TranslatorTest();
+            //TranslatorTest();
             //Flatten();
+            Pk3Test();
+        }
+
+        private static void Pk3Test()
+        {
+            var path = @"C:\Users\david\Downloads\wolfbel.pk3";
+
+            using (var pk3 = Pk3File.Open(path))
+            {
+                Console.Out.WriteLine(string.Join(Environment.NewLine, pk3.GetAllEntryNames()));
+
+                using (var ws = pk3.Lookup("maps/map01.wad"))
+                {
+                    using (var outS = File.OpenWrite("map01.wad"))
+                    {
+                        ws.CopyTo(outS);
+                    }
+                }
+            }
+            Console.ReadLine();
         }
 
         private static void Flatten()
