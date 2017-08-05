@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.MapRanker;
 using System.Collections.Generic;
+using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.Tests.MapRanker
 {
@@ -12,14 +13,15 @@ namespace Tiledriver.Core.Tests.MapRanker
     public class HasExitTests
     {
         private HasExit _target;
-        private MapData data;
+        private MapData _data;
 
         [SetUp]
         public void FixtureSetup()
         {
             var exitTypes = new List<string>(new string[] { "Exit_Normal", "Exit_Secret", "Exit_VictorySpin", "Exit_Victory" });
-            data = DemoMap.Create();
-            data.Triggers.RemoveAll(t => exitTypes.Contains(t.Action));
+            _data = DemoMap.Create();
+            _data.Triggers.RemoveAll(t => exitTypes.Contains(t.Action));
+            _data.Things.RemoveAll(t => t.Type == Actor.MechaHitler.ClassName);
 
             _target = new HasExit();
         }
@@ -30,16 +32,23 @@ namespace Tiledriver.Core.Tests.MapRanker
         [TestCase("Exit_Victory")]
         public void TrueWhenMapHasExit(string exit)
         {
-            data.Triggers.Add(new Trigger(0, 0, 0, exit));
+            _data.Triggers.Add(new Trigger(0, 0, 0, exit));
 
-            Assert.That(_target.Passes(data), Is.True);
+            Assert.That(_target.Passes(_data), Is.True);
 
         }
 
         [Test]
         public void FalseWhenMapHasNoExit()
         {
-            Assert.That(_target.Passes(data), Is.False);
+            Assert.That(_target.Passes(_data), Is.False);
+        }
+
+        [Test]
+        public void TrueWhenMapHasMechaHitler()
+        {
+            _data.Things.Add(new Thing(Actor.MechaHitler.ClassName, 2, 2, 0, 0));
+            Assert.That(_target.Passes(_data), Is.True);
         }
     }
 }
