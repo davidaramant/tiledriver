@@ -35,14 +35,48 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
             ExpandRoom(discoveredLocations, firstLocation);
 
+            //todo expore new rooms
+
             return null;
         }
 
         private static void ExpandRoom(IList<MapLocation> discoveredLocations, MapLocation fromLocation)
         {
-            if (fromLocation.CanMoveUp())
+            if (fromLocation.CanMoveNorth())
             {
-                
+                var targetSpace = fromLocation.North();
+                if (!discoveredLocations.Contains(targetSpace))
+                {
+                    discoveredLocations.Add(targetSpace);
+                    ExpandRoom(discoveredLocations, targetSpace);
+                }
+            }
+            if (fromLocation.CanMoveWest())
+            {
+                var targetSpace = fromLocation.West();
+                if (!discoveredLocations.Contains(targetSpace))
+                {
+                    discoveredLocations.Add(targetSpace);
+                    ExpandRoom(discoveredLocations, targetSpace);
+                }
+            }
+            if (fromLocation.CanMoveSouth())
+            {
+                var targetSpace = fromLocation.South();
+                if (!discoveredLocations.Contains(targetSpace))
+                {
+                    discoveredLocations.Add(targetSpace);
+                    ExpandRoom(discoveredLocations, targetSpace);
+                }
+            }
+            if (fromLocation.CanMoveEast())
+            {
+                var targetSpace = fromLocation.East();
+                if (!discoveredLocations.Contains(targetSpace))
+                {
+                    discoveredLocations.Add(targetSpace);
+                    ExpandRoom(discoveredLocations, targetSpace);
+                }
             }
         }
 
