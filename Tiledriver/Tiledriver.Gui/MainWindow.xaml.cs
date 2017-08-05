@@ -106,7 +106,7 @@ namespace Tiledriver.Gui
             using (var textReader = new StreamReader(stream, Encoding.ASCII))
             {
                 var sa = new UwmfSyntaxAnalyzer();
-                SetMap(UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader))));
+                SetMap(UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader))), filePath);
             }
         }
 
@@ -136,7 +136,7 @@ namespace Tiledriver.Gui
                 var sa = new UwmfSyntaxAnalyzer();
                 var map = UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader)));
 
-                SetMap(map);
+                SetMap(map, filePath);
             }
         }
 
@@ -157,10 +157,10 @@ namespace Tiledriver.Gui
             LoadMapInEcWolf(_vm.MapData, path);
         }
 
-        private void SetMap(MapData map)
+        private void SetMap(MapData map, string filePath)
         {
             _vm.MapData = map;
-            Application.Current.MainWindow.Title = $"Tiledriver - {_vm.MapData.Name}";
+            Application.Current.MainWindow.Title = $"Tiledriver - {_vm.MapData.Name} - {new FileInfo(filePath).Name}";
         }
 
         private void QuitApplication(object sender, RoutedEventArgs e)
