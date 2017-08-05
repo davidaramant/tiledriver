@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2016, Ryan Clarke and Jason Giles
-// Copyright (c) 2017, David Aramant
+// Copyright (c) 2017, David Aramant and Aaron Alexander
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System;
@@ -152,7 +152,9 @@ namespace Tiledriver.Gui
                     MessageBoxImage.Information);
                 return;
             }
-            LoadMapInEcWolf(_vm.MapData, "temp.wad");
+
+            var path = Path.Combine(Path.GetTempPath(), "temp.wad");
+            LoadMapInEcWolf(_vm.MapData, path);
         }
 
         private void SetMap(MapData map)
