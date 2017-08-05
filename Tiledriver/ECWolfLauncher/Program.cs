@@ -33,6 +33,7 @@ namespace TestRunner
         {
             //LoadMapInEcWolf(DemoMap.Create(), Path.GetFullPath("demo.wad"));
             //TranslatorTest();
+            //GenerateWadFiles();
             //Flatten();
             Pk3Test();
         }
@@ -156,9 +157,24 @@ namespace TestRunner
             }
         }
 
+        private static void GenerateWadFiles()
+        {
+            for (int i = 0; i < 60; i++)
+            {
+                var uwmfMap = GetMapFromGameData(i);
+                SaveWadFile(uwmfMap, Path.GetFullPath($"translated-{i}.wad"));
+            }
+        }
+
         private static void TranslatorTest()
         {
-            var bMap = LoadBinaryMap();
+            var uwmfMap = GetMapFromGameData(0);
+            LoadMapInEcWolf(uwmfMap, Path.GetFullPath("translated.wad"));
+        }
+
+        private static MapData GetMapFromGameData(int index)
+        {
+            var bMap = LoadBinaryMap(index);
 
             var xlat = LoadXlat();
 
@@ -177,12 +193,10 @@ namespace TestRunner
 
 
             var translator = new BinaryMapTranslator(translatorInfo: xlat, autoMapper: autoMapper);
-            var uwmfMap = translator.Translate(bMap, mapInfos.Maps[0]);
-
-            LoadMapInEcWolf(uwmfMap, Path.GetFullPath("translated.wad"));
+            return translator.Translate(bMap, mapInfos.Maps[index]);
         }
 
-        private static BinaryMap LoadBinaryMap()
+        private static BinaryMap LoadBinaryMap(int index)
         {
             var paths = SteamGameSearcher.GetGamePaths();
 
@@ -195,7 +209,7 @@ namespace TestRunner
             {
                 var gameMaps = GameMapsBundle.Load(headerStream, mapsStream);
 
-                return gameMaps.LoadMap(0, mapsStream);
+                return gameMaps.LoadMap(index, mapsStream);
             }
         }
 
@@ -247,15 +261,20 @@ namespace TestRunner
                 ecWolfPath = Path.Combine(ecWolfPath, "ecwolf.exe");
             }
 
+            SaveWadFile(uwmfMap, wadPath);
+
+            Process.Start(
+                ecWolfPath,
+                $"--file \"{wadPath}\" --hard --nowait --tedlevel map01");
+        }
+
+        private static void SaveWadFile(MapData uwmfMap, string wadPath)
+        {
             var wad = new WadFile();
             wad.Append(new Marker("MAP01"));
             wad.Append(new UwmfLump("TEXTMAP", uwmfMap));
             wad.Append(new Marker("ENDMAP"));
             wad.SaveTo(wadPath);
-
-            Process.Start(
-                ecWolfPath,
-                $"--file \"{wadPath}\" --hard --nowait --tedlevel map01");
         }
     }
 }
