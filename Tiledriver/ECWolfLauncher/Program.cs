@@ -32,10 +32,9 @@ namespace TestRunner
         static void Main(string[] args)
         {
             //LoadMapInEcWolf(DemoMap.Create(), Path.GetFullPath("demo.wad"));
-            //TranslatorTest();
-            //GenerateWadFiles();
+            //TranslateAllWolf3DMaps();
             //Flatten();
-            Pk3Test();
+            //Pk3Test();
         }
 
         private static void Pk3Test()
@@ -157,29 +156,10 @@ namespace TestRunner
             }
         }
 
-        private static void GenerateWadFiles()
+        private static void TranslateAllWolf3DMaps()
         {
-            for (int i = 0; i < 60; i++)
-            {
-                var uwmfMap = GetMapFromGameData(i);
-                SaveWadFile(uwmfMap, Path.GetFullPath($"translated-{i}.wad"));
-            }
-        }
-
-        private static void TranslatorTest()
-        {
-            var uwmfMap = GetMapFromGameData(0);
-            LoadMapInEcWolf(uwmfMap, Path.GetFullPath("translated.wad"));
-        }
-
-        private static MapData GetMapFromGameData(int index)
-        {
-            var bMap = LoadBinaryMap(index);
-
-            var xlat = LoadXlat();
-
             var mapInfos = LoadMapInfo();
-
+            var xlat = LoadXlat();
 
             var autoMapperConfig = new MapperConfiguration(cfg =>
             {
@@ -188,15 +168,41 @@ namespace TestRunner
                 cfg.CreateMap<TileTemplate, Tile>();
             });
 
-
             var autoMapper = autoMapperConfig.CreateMapper();
-
-
             var translator = new BinaryMapTranslator(translatorInfo: xlat, autoMapper: autoMapper);
-            return translator.Translate(bMap, mapInfos.Maps[index]);
+
+            var paths = SteamGameSearcher.GetGamePaths();
+
+            var basePath = Path.Combine(paths.Wolf3D.Value, "base");
+            var mapHeadPath = Path.Combine(basePath, "MAPHEAD.WL6");
+            var gameMapsPath = Path.Combine(basePath, "GAMEMAPS.WL6");
+
+            var outputPath = "Translated";
+
+            if (Directory.Exists(outputPath))
+            {
+                Directory.Delete(outputPath, recursive: true);
+            }
+
+            using (var headerStream = File.OpenRead(mapHeadPath))
+            using (var mapsStream = File.OpenRead(gameMapsPath))
+            {
+                var gameMaps = GameMapsBundle.Load(headerStream, mapsStream);
+                for (int mapIndex = 0; mapIndex < mapInfos.Maps.Count; mapIndex++)
+                {
+                    var bMap = gameMaps.LoadMap(mapIndex, mapsStream);
+
+                    var uwmfMap = translator.Translate(bMap, mapInfos.Maps[mapIndex]);
+
+                    using (var outStream = File.OpenWrite(Path.Combine(outputPath, $"Wolf3D {mapIndex + 1:00} - {uwmfMap.Name}.uwmf")))
+                    {
+                        uwmfMap.WriteTo(outStream);
+                    }
+                }
+            }
         }
 
-        private static BinaryMap LoadBinaryMap(int index)
+        private static BinaryMap LoadBinaryMap()
         {
             var paths = SteamGameSearcher.GetGamePaths();
 
@@ -209,7 +215,7 @@ namespace TestRunner
             {
                 var gameMaps = GameMapsBundle.Load(headerStream, mapsStream);
 
-                return gameMaps.LoadMap(index, mapsStream);
+                return gameMaps.LoadMap(0, mapsStream);
             }
         }
 
@@ -261,20 +267,15 @@ namespace TestRunner
                 ecWolfPath = Path.Combine(ecWolfPath, "ecwolf.exe");
             }
 
-            SaveWadFile(uwmfMap, wadPath);
-
-            Process.Start(
-                ecWolfPath,
-                $"--file \"{wadPath}\" --hard --nowait --tedlevel map01");
-        }
-
-        private static void SaveWadFile(MapData uwmfMap, string wadPath)
-        {
             var wad = new WadFile();
             wad.Append(new Marker("MAP01"));
             wad.Append(new UwmfLump("TEXTMAP", uwmfMap));
             wad.Append(new Marker("ENDMAP"));
             wad.SaveTo(wadPath);
+
+            Process.Start(
+                ecWolfPath,
+                $"--file \"{wadPath}\" --hard --nowait --tedlevel map01");
         }
     }
 }
