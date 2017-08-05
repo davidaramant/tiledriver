@@ -45,7 +45,7 @@ namespace Tiledriver.Gui.ViewModels
         {
             _trigger = trigger;
 
-            _geometry = Geometry.Parse(CirclePath);
+            _geometry = Geometry.Parse(FourArrowPath);
             _fill = DarkSlateBlue.ToBrush();
             _stroke = DarkBlue.ToBrush();
 
