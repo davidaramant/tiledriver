@@ -4,8 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.Wolf3D;
 
@@ -37,7 +35,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
             //todo expore new rooms
 
-            return null;
+            return new Room();
         }
 
         private static void ExpandRoom(IList<MapLocation> discoveredLocations, MapLocation fromLocation)

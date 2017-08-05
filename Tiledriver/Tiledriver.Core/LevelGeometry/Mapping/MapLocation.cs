@@ -9,7 +9,7 @@ using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.LevelGeometry.Mapping
 {
-    class MapLocation
+    public class MapLocation
     {
         private readonly MapData _data;
 
@@ -24,11 +24,25 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
         public int X { get; }
 
-        public Tile Tile => _data.Tiles[TilesSpace.Tile];
+        public Tile Tile
+        {
+            get => _data.Tiles[TilesSpace.Tile];
+            set
+            {
+                var index = _data.Tiles.IndexOf(value);
+                TilesSpace.Tile = index;
+            }
+        }
 
         public TileSpace TilesSpace => _data.PlaneMaps[0].TileSpaces[X * _data.Width + Y];
 
         public IEnumerable<Thing> Things => _data.Things.Where(t => (int)Math.Floor(t.X) == X && (int)Math.Floor(t.Y) == Y);
+
+        public void AddThing(string className)
+        {
+            var thing = new Thing(className, X + 0.5, Y + 0.5, 0, 0);
+            _data.Things.Add(thing);
+        }
 
         public IEnumerable<Trigger> Actions => _data.Triggers.Where(t => t.X == X && t.Y == Y);
 
@@ -66,72 +80,35 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
         public bool CanMoveNorth()
         {
-            if (Tile.BlockingNorth)
-                return false;
-
-            var targetArea = North();
-
-            if (targetArea == null)
-                return false;
-
-            if (targetArea.Tile.BlockingSouth)
-                return false;
-
-            if (targetArea.Things.Any(t => Actor.GetAll().Single(a => a.ClassName == t.Type).Blocks))
-                return false;
-
-            return true;
+            return CanMove(t => t.BlockingNorth, t => t.BlockingSouth, North);
         }
 
         public bool CanMoveWest()
         {
-            if (Tile.BlockingWest)
-                return false;
-
-            var targetArea = West();
-
-            if (targetArea == null)
-                return false;
-
-            if (targetArea.Tile.BlockingEast)
-                return false;
-
-            if (targetArea.Things.Any(t => Actor.GetAll().Single(a => a.ClassName == t.Type).Blocks))
-                return false;
-
-            return true;
+            return CanMove(t => t.BlockingWest, t => t.BlockingEast, West);
         }
 
         public bool CanMoveSouth()
         {
-            if (Tile.BlockingSouth)
-                return false;
-
-            var targetArea = South();
-
-            if (targetArea == null)
-                return false;
-
-            if (targetArea.Tile.BlockingNorth)
-                return false;
-
-            if (targetArea.Things.Any(t => Actor.GetAll().Single(a => a.ClassName == t.Type).Blocks))
-                return false;
-
-            return true;
+            return CanMove(t => t.BlockingSouth, t => t.BlockingNorth, South);
         }
 
         public bool CanMoveEast()
         {
-            if (Tile.BlockingEast)
+            return CanMove(t => t.BlockingEast, t => t.BlockingWest, East);
+        }
+
+        private bool CanMove(Func<Tile, bool> targetDirection, Func<Tile, bool> inverseDirection, Func<MapLocation> tileSelector)
+        {
+            if (targetDirection(Tile))
                 return false;
 
-            var targetArea = East();
+            var targetArea = tileSelector();
 
             if (targetArea == null)
                 return false;
 
-            if (targetArea.Tile.BlockingWest)
+            if (inverseDirection(targetArea.Tile))
                 return false;
 
             if (targetArea.Things.Any(t => Actor.GetAll().Single(a => a.ClassName == t.Type).Blocks))
