@@ -42,7 +42,7 @@ BrokenCage,122,"""Decorations""",false,"""""",true
 Bones1,52,"""Decorations""",true,"""""",false
 Bones5,123,"""Decorations""",false,"""""",false
 BunkBed,55,"""Decorations""",true,"""""",true
-Basket,56,"""Decorations""",true,"""""",true
+Basket,56,"""Decorations""",true,"""""",false
 DeadRat,125,"""Decorations""",false,"""""",false
 Barrel,68,"""Decorations""",true,"""""",true
 HorizontalBarrel,151,"""Decorations""",false,"""""",true
