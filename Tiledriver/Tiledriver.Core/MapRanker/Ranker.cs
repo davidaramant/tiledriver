@@ -22,7 +22,13 @@ namespace Tiledriver.Core.MapRanker
 
         public int RankLevel(MapData data)
         {
-            return -1;
+            foreach (var rule in _factory.Rules)
+            {
+                if (!rule.Passes(data))
+                    return -1;
+            }
+
+            return 1;
         }
     }
 }
