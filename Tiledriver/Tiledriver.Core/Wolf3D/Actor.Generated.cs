@@ -96,7 +96,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            blocks: true  
         );
         /// <summary>
         /// HorizontalGreenBarrel
@@ -107,7 +107,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            blocks: true  
         );
         /// <summary>
         /// TableWithChairs
@@ -118,7 +118,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            blocks: true  
         );
         /// <summary>
         /// TableWithChairs2
@@ -129,7 +129,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            blocks: true  
         );
         /// <summary>
         /// FloorLamp

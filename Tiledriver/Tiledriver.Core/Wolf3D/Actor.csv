@@ -6,10 +6,10 @@ AngelOfDeath,27,"""Bosses""",false,"""""",false
 DevilIncarnate,103,"""Bosses""",false,"""""",false
 Puddle,33,"""Decorations""",true,"""""",false
 Puddle2,105,"""Decorations""",false,"""""",false
-GreenBarrel,34,"""Decorations""",true,"""""",false
-HorizontalGreenBarrel,106,"""Decorations""",false,"""""",false
-TableWithChairs,35,"""Decorations""",true,"""""",false
-TableWithChairs2,107,"""Decorations""",false,"""""",false
+GreenBarrel,34,"""Decorations""",true,"""""",true
+HorizontalGreenBarrel,106,"""Decorations""",false,"""""",true
+TableWithChairs,35,"""Decorations""",true,"""""",true
+TableWithChairs2,107,"""Decorations""",false,"""""",true
 FloorLamp,36,"""Decorations""",true,"""""",false
 TallFloorLamp,108,"""Decorations""",false,"""""",false
 Chandelier,37,"""Decorations""",true,"""""",false
