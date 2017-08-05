@@ -1,11 +1,9 @@
-﻿// Copyright (c) 2017, Aaron Alexander
+﻿// Copyright (c) 2017, Leon Organ
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using System.Linq;
 using NUnit.Framework;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.MapRanker;
-using Tiledriver.Core.Wolf3D;
 using System.Collections.Generic;
 
 namespace Tiledriver.Core.Tests.MapRanker
@@ -13,13 +11,8 @@ namespace Tiledriver.Core.Tests.MapRanker
     [TestFixture]
     public class HasExitTests
     {
-        private readonly HasExit _target;
+        private HasExit _target;
         private MapData data;
-
-        public HasExitTests()
-        {
-            _target = new HasExit();
-        }
 
         [SetUp]
         public void FixtureSetup()
@@ -27,6 +20,8 @@ namespace Tiledriver.Core.Tests.MapRanker
             var exitTypes = new List<string>(new string[] { "Exit_Normal", "Exit_Secret", "Exit_VictorySpin", "Exit_Victory" });
             data = DemoMap.Create();
             data.Triggers.RemoveAll(t => exitTypes.Contains(t.Action));
+
+            _target = new HasExit();
         }
 
         [TestCase("Exit_Normal")]
