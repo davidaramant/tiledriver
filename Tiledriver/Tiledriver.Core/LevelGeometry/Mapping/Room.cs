@@ -8,10 +8,12 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
     public class Room : IRoom
     {
         public IDictionary<IPassage, IRoom> AdjacentRooms { get; }
+        public IList<MapLocation> Locations { get; }
 
         public Room()
         {
             AdjacentRooms = new Dictionary<IPassage, IRoom>();
+            Locations = new List<MapLocation>();
         }
     }
 }
