@@ -12,9 +12,10 @@ namespace Tiledriver.Core.Tests.MapRanker
     [TestFixture]
     public class HasStartPositionTest
     {
-        private readonly HasStartPosition _target;
+        private HasStartPosition _target;
 
-        public HasStartPositionTest()
+        [SetUp]
+        public void Setup()
         {
             _target = new HasStartPosition();
         }

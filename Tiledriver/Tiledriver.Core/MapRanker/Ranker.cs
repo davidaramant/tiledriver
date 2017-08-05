@@ -9,7 +9,6 @@ namespace Tiledriver.Core.MapRanker
     {
         private readonly  IRuleFactory _factory;
 
-
         public Ranker()
             : this(new RuleFactory())
         {

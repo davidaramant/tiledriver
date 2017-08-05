@@ -12,6 +12,7 @@ namespace Tiledriver.Core.MapRanker
             get
             {
                 yield return new HasStartPosition();
+                yield return new StartPositionValid();
             }
         }
     }
