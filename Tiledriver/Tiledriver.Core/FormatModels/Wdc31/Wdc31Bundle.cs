@@ -2,18 +2,53 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
+using Tiledriver.Core.FormatModels.Common;
 
 namespace Tiledriver.Core.FormatModels.Wdc31
 {
-    public sealed class Wdc31Bundle
+    public static class Wdc31Bundle
     {
         private const string FileVersion = "WDC3.1";
-        private readonly Header _header;
 
-        public static Wdc31Bundle Load(Stream mapStream)
+        public static IEnumerable<BinaryMap> ReadMaps(Stream mapStream)
         {
-            throw new NotImplementedException();
+            using (var reader = new BinaryReader(mapStream, Encoding.ASCII, leaveOpen: true))
+            {
+                var header = Header.Read(reader);
+
+                if (header.FileVersion != FileVersion)
+                {
+                    throw new ParsingException("Invalid WDC file version.");
+                }
+
+                foreach (var mapIndex in Enumerable.Range(0, header.NumberOfMaps))
+                {
+                    var mapName = new string(reader.ReadChars(header.MaxMapNameLength));
+                    var mapWidth = reader.ReadUInt16();
+                    var mapHeight = reader.ReadUInt16();
+                    var planes = new List<ushort[]>();
+
+                    foreach (var planeIndex in Enumerable.Range(0, header.NumberOfMapPlanes))
+                    {
+                        var planeData = new ushort[mapWidth * mapHeight];
+                        for (int i = 0; i < planeData.Length; i++)
+                        {
+                            planeData[i] = reader.ReadUInt16();
+                        }
+                        planes.Add(planeData);
+                    }
+
+                    yield return new BinaryMap(
+                        mapName,
+                        width: mapWidth,
+                        height: mapHeight,
+                        planes: planes);
+                }
+            }
         }
     }
 }
