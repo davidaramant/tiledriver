@@ -64,7 +64,11 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             TryExpand(loc => loc.CanMoveWest(), loc => loc.West(), room, fromLocation);
             TryExpand(loc => loc.CanMoveSouth(), loc => loc.South(), room, fromLocation);
             TryExpand(loc => loc.CanMoveEast(), loc => loc.East(), room, fromLocation);
-            
+
+            TryPassage(loc => loc.North(), t => t.Action == "Door_Open" && t.Arg4 == 1, loc => loc.Tile == null || loc.Tile.BlockingSouth, fromLocation, passages);
+            TryPassage(loc => loc.West(), t => t.Action == "Door_Open" && t.Arg4 == 0, loc => loc.Tile == null || loc.Tile.BlockingEast, fromLocation, passages);
+            TryPassage(loc => loc.South(), t => t.Action == "Door_Open" && t.Arg4 == 1, loc => loc.Tile == null || loc.Tile.BlockingNorth, fromLocation, passages);
+            TryPassage(loc => loc.East(), t => t.Action == "Door_Open" && t.Arg4 == 0, loc => loc.Tile == null || loc.Tile.BlockingWest, fromLocation, passages);
 
             return passages;
         }
