@@ -116,7 +116,6 @@
     <Compile Include="FormatModels\Wad\UwmfLump.cs" />
     <Compile Include="FormatModels\Wad\WadFile.cs" />
     <Compile Include="FormatModels\Wdc31\Header.cs" />
-    <Compile Include="FormatModels\Wdc31\MapInfo.cs" />
     <Compile Include="FormatModels\Wdc31\Wdc31Bundle.cs" />
     <Compile Include="FormatModels\Xlat\FlatMappings.cs" />
     <Compile Include="FormatModels\Xlat\InvalidXlatException.cs" />

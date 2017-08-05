@@ -51,9 +51,7 @@ namespace Tiledriver.Core.FormatModels.GameMaps
                 name: header.Name,
                 width: header.Width,
                 height: header.Height,
-                plane0: plane0Data,
-                plane1: plane1Data,
-                plane2: plane2Data);
+                planes: new[] { plane0Data, plane1Data, plane2Data });
         }
 
         private void LoadPlane(ushort[] planeData, PlaneMetadata planeInfo, Stream mapsStream)

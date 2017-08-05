@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Drawing;
+using System.Linq;
 
 namespace Tiledriver.Core.FormatModels.Common
 {
@@ -20,43 +21,24 @@ namespace Tiledriver.Core.FormatModels.Common
         public string Name { get; }
         public Size Size { get; }
 
-        public ImmutableArray<ushort> GeometryPlane { get; }
-        public ImmutableArray<ushort> ThingPlane { get; }
-        public ImmutableArray<ushort> SectorPlane { get; }
+        private readonly ushort[][] _planes;
 
         public BinaryMap(
             string name,
             ushort width,
             ushort height,
-            ushort[] plane0,
-            ushort[] plane1,
-            ushort[] plane2)
+            IEnumerable<ushort[]> planes)
         {
             Name = name;
             Size = new Size(width, height);
-            GeometryPlane = plane0.ToImmutableArray();
-            ThingPlane = plane1.ToImmutableArray();
-            SectorPlane = plane2.ToImmutableArray();
+            _planes = planes.ToArray();
         }
+
+        public IEnumerable<ushort> GetRawPlaneData(BinaryMapPlaneId planeId) => _planes[(int)planeId];
 
         public IEnumerable<OldMapSpot> GetAllSpots(BinaryMapPlaneId planeId)
         {
-            ImmutableArray<ushort> PickPlane(BinaryMapPlaneId id)
-            {
-                switch (id)
-                {
-                    case BinaryMapPlaneId.Geometry:
-                        return GeometryPlane;
-                    case BinaryMapPlaneId.Thing:
-                        return ThingPlane;
-                    case BinaryMapPlaneId.Sector:
-                        return SectorPlane;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(planeId), $"Unknown plane ID: {id}");
-                }
-            }
-
-            var plane = PickPlane(planeId);
+            var plane = _planes[(int)planeId];
 
             for (int index = 0; index < plane.Length; index++)
             {

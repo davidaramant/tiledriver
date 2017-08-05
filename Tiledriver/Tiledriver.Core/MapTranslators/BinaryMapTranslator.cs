@@ -39,7 +39,7 @@ namespace Tiledriver.Core.MapTranslators
             // Plane 2 - floor/ceiling
 
             // TODO: Is this Boolean necessary?
-            var hasSectorInfo = binaryMap.SectorPlane.Any(num => num != 0);
+            var hasSectorInfo = binaryMap.GetRawPlaneData(BinaryMapPlaneId.Sector).Any(num => num != 0);
             var sectors = hasSectorInfo ? TranslateSectors(binaryMap) : CreateDefaultSector(mapInfo);
             var tiles = _translatorInfo.TileMappings.TileTemplates.Select(template => _autoMapper.Map<Tile>(template)).ToList();
 
