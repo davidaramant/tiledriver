@@ -28,15 +28,28 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
         public Tile Tile
         {
-            get => _data.Tiles[TilesSpace.Tile];
+            get
+            {
+                if (TilesSpace.Tile == -1)
+                    return null;
+
+                return _data.Tiles[TilesSpace.Tile];
+            }
             set
             {
-                var index = _data.Tiles.IndexOf(value);
-                TilesSpace.Tile = index;
+                if (null == value)
+                {
+                    TilesSpace.Tile = -1;
+                }
+                else
+                {
+                    var index = _data.Tiles.IndexOf(value);
+                    TilesSpace.Tile = index;
+                }
             }
         }
 
-        public TileSpace TilesSpace => _data.PlaneMaps[0].TileSpaces[X * _data.Width + Y];
+        public TileSpace TilesSpace => _data.PlaneMaps[0].TileSpaces[Y * _data.Width + X];
 
         public IEnumerable<Thing> Things => _data.Things.Where(t => (int)Math.Floor(t.X) == X && (int)Math.Floor(t.Y) == Y);
 
@@ -100,17 +113,23 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             return CanMove(t => t.BlockingEast, t => t.BlockingWest, East);
         }
 
-        private bool CanMove(Func<Tile, bool> targetDirection, Func<Tile, bool> inverseDirection, Func<MapLocation> tileSelector)
+        private bool CanMove(Func<Tile, bool> blockInTargetDirection, Func<Tile, bool> blockingInInverseDirection, Func<MapLocation> targetSelector)
         {
-            if (targetDirection(Tile))
-                return false;
+            if (null != Tile)
+            {
+                if (blockInTargetDirection(Tile))
+                    return false;
+            }
 
-            var targetArea = tileSelector();
+            var targetArea = targetSelector();
 
             if (targetArea == null)
                 return false;
 
-            if (inverseDirection(targetArea.Tile))
+            if (null == targetArea.Tile)
+                return true;
+
+            if (blockingInInverseDirection(targetArea.Tile))
                 return false;
 
             if (targetArea.Things.Any(t => Actor.GetAll().Single(a => a.ClassName == t.Type).Blocks))

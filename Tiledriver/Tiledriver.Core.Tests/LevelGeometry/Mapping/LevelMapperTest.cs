@@ -87,6 +87,47 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
 
         /// <remarks>
         /// Room Shape:
+        /// XXX
+        /// XNX
+        /// XXX
+        /// </remarks>
+        [Test]
+        public void ShouldHandleNullSpace()
+        {
+            AddStart(2, 2);
+
+            AddSpace(2, 2, _tileNorthWestWalls);
+            AddSpace(3, 2, _tileNorthWalls);
+            AddSpace(4, 2, _tileNorthEastWalls);
+
+            AddSpace(2, 3, _tileWestWalls);
+            AddSpace(3, 3);
+            AddSpace(4, 3, _tileEastWalls);
+
+            AddSpace(2, 4, _tileSouthWestWalls);
+            AddSpace(3, 4, _tileSouthWalls);
+            AddSpace(4, 4, _tileSouthEastWalls);
+
+            var room = LevelMapper.Map(_data);
+
+            Assert.That(room, Is.Not.Null);
+            Assert.That(room.Locations.Count, Is.EqualTo(9));
+
+            AssertLocationInRoom(room, 2, 2);
+            AssertLocationInRoom(room, 3, 2);
+            AssertLocationInRoom(room, 4, 2);
+
+            AssertLocationInRoom(room, 2, 3);
+            AssertLocationInRoom(room, 3, 2);
+            AssertLocationInRoom(room, 4, 3);
+
+            AssertLocationInRoom(room, 2, 4);
+            AssertLocationInRoom(room, 3, 4);
+            AssertLocationInRoom(room, 4, 4);
+        }
+
+        /// <remarks>
+        /// Room Shape:
         /// XXXXX
         /// X   X 
         /// XXX X
@@ -154,10 +195,47 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             AssertLocationInRoom(room, 2, 3);
         }
 
+        /// <remarks>
+        /// Room Shape:
+        /// BBB
+        /// BNB
+        /// BBB
+        /// </remarks>
+        [Test]
+        public void ShouldBlockFromOutside()
+        {
+            AddStart(3, 3);
+
+            AddSpace(2, 2, _tileAllWalls);
+            AddSpace(3, 2, _tileAllWalls);
+            AddSpace(4, 2, _tileAllWalls);
+
+            AddSpace(2, 3, _tileAllWalls);
+            AddSpace(3, 3);
+            AddSpace(4, 3, _tileAllWalls);
+
+            AddSpace(2, 4, _tileAllWalls);
+            AddSpace(3, 4, _tileAllWalls);
+            AddSpace(4, 4, _tileAllWalls);
+
+            var room = LevelMapper.Map(_data);
+
+            Assert.That(room, Is.Not.Null);
+            Assert.That(room.Locations.Count, Is.EqualTo(1));
+
+            AssertLocationInRoom(room, 3, 3);
+        }
+
         private void AddStart(int x, int y)
         {
             var location = new MapLocation(_data, x, y);
             location.AddThing(Actor.Player1Start.ClassName);
+        }
+
+        private void AddSpace(int x, int y)
+        {
+            var location = new MapLocation(_data, x, y);
+            location.Tile = null;
         }
 
         private void AddSpace(int x, int y, Tile tile)
