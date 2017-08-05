@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2017, Aaron Alexander
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -31,6 +32,8 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
 
                 Assert.That(room, Is.Not.Null);
                 Assert.That(room.Locations, Is.Not.Empty);
+
+                Console.WriteLine($"Found #{room.Locations.Count} locations in the start room");
             }
         }
 
