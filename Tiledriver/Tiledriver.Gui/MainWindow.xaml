@@ -26,12 +26,16 @@
                 <ToolBar>
                     <Button Click="SelectMapFile"
                             Content="Open Map..." Margin="4" />
-                    <Button Click="RunCurrentMap"
-                            Content="Run Current Map..." Margin="4" />
                     <Button Click="SelectDefaultMapFile"
                             Content="Demo Map" Margin="4" />
                     <Button Click="SelectDemoMapFile"
                             Content="Things Map" Margin="4" />
+                </ToolBar>
+                <ToolBar>
+                    <Button Click="RunCurrentMap"
+                            Content="Run Current Map..." Margin="4" />
+                    <Button Click="EditECWolfPath"
+                            Content="Edit ECWolfPath.txt" Margin="4" />
                 </ToolBar>
                 <ToolBar>
                     <Label Content="Zoom" Foreground="{StaticResource GrayNormalBrush}" />
