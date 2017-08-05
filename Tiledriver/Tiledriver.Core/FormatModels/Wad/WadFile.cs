@@ -125,7 +125,8 @@ namespace Tiledriver.Core.FormatModels.Wad
 
             var directory =
                 Enumerable.Range(1, numLumps).
-                Select(_ => LumpMetadata.ReadFrom(stream));
+                Select(_ => LumpMetadata.ReadFrom(stream))
+                .ToList();
 
             return new WadFile(directory.Select<LumpMetadata, ILump>(info =>
             {
