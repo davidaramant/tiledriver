@@ -13,9 +13,11 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
     {
         public static IRoom Map(MapData data)
         {
+            var discoveredRooms = new List<IRoom>();
+
             var startPosition = FindStart(data);
 
-            return MapRoom(data, startPosition);
+            return MapRoom(discoveredRooms, startPosition);
         }
 
         private static MapLocation FindStart(MapData data)
@@ -25,57 +27,75 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             return new MapLocation(data, (int)Math.Floor(startThing.X), (int)Math.Floor(startThing.Y));
         }
 
-        private static IRoom MapRoom(MapData data, MapLocation firstLocation)
+        private static IRoom MapRoom(IList<IRoom> discoveredRooms, MapLocation firstLocation)
         {
-            var discoveredLocations = new List<MapLocation>();
+            var newRoom = new Room();
 
-            discoveredLocations.Add(firstLocation);
+            newRoom.Locations.Add(firstLocation);
 
-            ExpandRoom(discoveredLocations, firstLocation);
+            var passages = ExpandRoom(newRoom, firstLocation);
 
-            //todo expore new rooms
+            
+            foreach (var passage in passages)
+            {
+                var existingRoom = discoveredRooms.FirstOrDefault(
+                    r => r.Locations.Any(loc => loc.X == passage.Value.X && loc.Y == passage.Value.Y));
+                if ( existingRoom != null )
+                {
+                    if (newRoom != existingRoom)
+                    {
+                        newRoom.AdjacentRooms.Add(passage.Key, existingRoom);
+                    }
+                }
+                else
+                {
+                    newRoom.AdjacentRooms.Add(passage.Key, MapRoom(discoveredRooms, passage.Value));
+                }
+            }
 
             return new Room();
         }
 
-        private static void ExpandRoom(IList<MapLocation> discoveredLocations, MapLocation fromLocation)
+        private static IDictionary<IPassage, MapLocation> ExpandRoom(IRoom room, MapLocation fromLocation)
         {
             if (fromLocation.CanMoveNorth())
             {
                 var targetSpace = fromLocation.North();
-                if (!discoveredLocations.Contains(targetSpace))
+                if (!room.Locations.Contains(targetSpace))
                 {
-                    discoveredLocations.Add(targetSpace);
-                    ExpandRoom(discoveredLocations, targetSpace);
+                    room.Locations.Add(targetSpace);
+                    ExpandRoom(room, targetSpace);
                 }
             }
             if (fromLocation.CanMoveWest())
             {
                 var targetSpace = fromLocation.West();
-                if (!discoveredLocations.Contains(targetSpace))
+                if (!room.Locations.Contains(targetSpace))
                 {
-                    discoveredLocations.Add(targetSpace);
-                    ExpandRoom(discoveredLocations, targetSpace);
+                    room.Locations.Add(targetSpace);
+                    ExpandRoom(room, targetSpace);
                 }
             }
             if (fromLocation.CanMoveSouth())
             {
                 var targetSpace = fromLocation.South();
-                if (!discoveredLocations.Contains(targetSpace))
+                if (!room.Locations.Contains(targetSpace))
                 {
-                    discoveredLocations.Add(targetSpace);
-                    ExpandRoom(discoveredLocations, targetSpace);
+                    room.Locations.Add(targetSpace);
+                    ExpandRoom(room, targetSpace);
                 }
             }
             if (fromLocation.CanMoveEast())
             {
                 var targetSpace = fromLocation.East();
-                if (!discoveredLocations.Contains(targetSpace))
+                if (!room.Locations.Contains(targetSpace))
                 {
-                    discoveredLocations.Add(targetSpace);
-                    ExpandRoom(discoveredLocations, targetSpace);
+                    room.Locations.Add(targetSpace);
+                    ExpandRoom(room, targetSpace);
                 }
             }
+
+            return null;
         }
 
         
