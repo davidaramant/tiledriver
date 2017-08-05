@@ -69,15 +69,20 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
         private static Dictionary<IList<Passage>, MapLocation> FindPassages(Room newRoom)
         {
             var passages = new Dictionary<IList<Passage>, MapLocation>();
+
+            var isEWDoor = new Func< Trigger, bool>(t => t.Action == "Door_Open" && t.Arg4 == 0);
+            var isNSDoor = new Func<Trigger, bool>(t => t.Action == "Door_Open" && t.Arg4 == 1);
+            var isPushWall = new Func<Trigger, bool>(t => t.Action == "Pushwall_Move");
+
             foreach (var location in newRoom.Locations)
             {
-                TryPassage(loc => loc.North(), t => t.Action == "Door_Open" && t.Arg4 == 1,
+                TryPassage(loc => loc.North(), t => isNSDoor(t) || isPushWall(t),
                     loc => loc.Tile == null || !loc.Tile.BlockingSouth, location, passages);
-                TryPassage(loc => loc.West(), t => t.Action == "Door_Open" && t.Arg4 == 0,
+                TryPassage(loc => loc.West(), t => isEWDoor(t) || isPushWall(t),
                     loc => loc.Tile == null || !loc.Tile.BlockingEast, location, passages);
-                TryPassage(loc => loc.South(), t => t.Action == "Door_Open" && t.Arg4 == 1,
+                TryPassage(loc => loc.South(), t => isNSDoor(t) || isPushWall(t),
                     loc => loc.Tile == null || !loc.Tile.BlockingNorth, location, passages);
-                TryPassage(loc => loc.East(), t => t.Action == "Door_Open" && t.Arg4 == 0,
+                TryPassage(loc => loc.East(), t => isEWDoor(t) || isPushWall(t),
                     loc => loc.Tile == null || !loc.Tile.BlockingWest, location, passages);
             }
             return passages;
