@@ -126,13 +126,13 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             if (targetArea == null)
                 return false;
 
+            if (targetArea.HasBlocker())
+                return false;
+
             if (null == targetArea.Tile)
                 return true;
 
             if (blockingInInverseDirection(targetArea.Tile))
-                return false;
-
-            if (targetArea.HasBlocker())
                 return false;
 
             return true;

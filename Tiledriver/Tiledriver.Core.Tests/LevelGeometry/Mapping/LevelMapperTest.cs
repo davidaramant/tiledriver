@@ -170,7 +170,6 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             AssertLocationInRoom(room, 6, 4);
         }
 
-
         /// <remarks>
         /// Room Shape:
         /// XX
@@ -197,9 +196,43 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
 
         /// <remarks>
         /// Room Shape:
-        /// BBB
-        /// BNB
-        /// BBB
+        /// XXW
+        /// XBW
+        /// WWW
+        /// </remarks>
+        [Test]
+        public void ShouldExcludeBlockingSpaceInNullTile()
+        {
+            AddStart(2, 2);
+
+            AddSpace(2, 2, _tileNorthWestWalls);
+            AddSpace(3, 2, _tileNorthWalls);
+            AddSpace(4, 2, _tileAllWalls);
+
+            AddSpace(2, 3, _tileWestWalls);
+            AddSpace(3, 3);
+            AddSpace(4, 3, _tileAllWalls);
+
+            AddSpace(2, 4, _tileAllWalls);
+            AddSpace(3, 4, _tileAllWalls);
+            AddSpace(4, 4, _tileAllWalls);
+
+            AddBlocker(3, 3);
+
+            var room = LevelMapper.Map(_data);
+
+            Assert.That(room, Is.Not.Null);
+            Assert.That(room.Locations.Count, Is.EqualTo(3));
+            AssertLocationInRoom(room, 2, 2);
+            AssertLocationInRoom(room, 3, 2);
+            AssertLocationInRoom(room, 2, 3);
+        }
+
+        /// <remarks>
+        /// Room Shape:
+        /// WWW
+        /// WNW
+        /// WWW
         /// </remarks>
         [Test]
         public void ShouldBlockFromOutside()
