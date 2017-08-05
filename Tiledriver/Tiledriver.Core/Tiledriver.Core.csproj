@@ -138,6 +138,7 @@
     <Compile Include="MapRanker\IRuleFactory.cs" />
     <Compile Include="MapRanker\Ranker.cs" />
     <Compile Include="MapRanker\RuleFactory.cs" />
+    <Compile Include="MapRanker\StartPositionValid.cs" />
     <Compile Include="MapTranslators\BinaryMapTranslator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FormatModels\Uwmf\BaseUwmfBlock.cs" />
