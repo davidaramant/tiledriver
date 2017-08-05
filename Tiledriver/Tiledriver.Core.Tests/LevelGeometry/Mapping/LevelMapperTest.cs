@@ -57,6 +57,8 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             var room = LevelMapper.Map(_data);
 
             Assert.That(room, Is.Not.Null);
+            Assert.That(room.Locations.Count, Is.EqualTo(1));
+            AssertLocationInRoom(room, 2, 2);
         }
 
         /// <remarks>
@@ -77,6 +79,10 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
 
             Assert.That(room, Is.Not.Null);
             Assert.That(room.Locations.Count, Is.EqualTo(4));
+            AssertLocationInRoom(room, 2, 2);
+            AssertLocationInRoom(room, 3, 2);
+            AssertLocationInRoom(room, 2, 3);
+            AssertLocationInRoom(room, 3, 3);
         }
 
         /// <remarks>
@@ -106,13 +112,28 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             var room = LevelMapper.Map(_data);
 
             Assert.That(room, Is.Not.Null);
+            Assert.That(room.Locations.Count, Is.EqualTo(11));
+
+            AssertLocationInRoom(room, 2, 2);
+            AssertLocationInRoom(room, 3, 2);
+            AssertLocationInRoom(room, 4, 2);
+            AssertLocationInRoom(room, 5, 2);
+            AssertLocationInRoom(room, 6, 2);
+
+            AssertLocationInRoom(room, 2, 3);
+            AssertLocationInRoom(room, 6, 3);
+
+            AssertLocationInRoom(room, 2, 4);
+            AssertLocationInRoom(room, 3, 4);
+            AssertLocationInRoom(room, 4, 4);
+            AssertLocationInRoom(room, 6, 4);
         }
 
 
         /// <remarks>
         /// Room Shape:
-        /// XB
         /// XX
+        /// XB
         /// </remarks>
         [Test]
         public void ShouldExcludeBlockingSpace()
@@ -127,6 +148,10 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             var room = LevelMapper.Map(_data);
 
             Assert.That(room, Is.Not.Null);
+            Assert.That(room.Locations.Count, Is.EqualTo(3));
+            AssertLocationInRoom(room, 2, 2);
+            AssertLocationInRoom(room, 3, 2);
+            AssertLocationInRoom(room, 2, 3);
         }
 
         private void AddStart(int x, int y)
@@ -199,6 +224,11 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
 
             _tileWestNorthEastWalls = new Tile("GSTONEA1", "GSTONEA1", "GSTONEA1", "GSTONEA1", true, true, true, false);
             _data.Tiles.Add(_tileWestNorthEastWalls);
+        }
+
+        private void AssertLocationInRoom(IRoom room, int x, int y)
+        {
+            Assert.That(room.Locations.Any(location => location.X == x && location.Y == y));
         }
     }
 }
