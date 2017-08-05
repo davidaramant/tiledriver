@@ -11,13 +11,15 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 {
     public static class LevelMapper
     {
-        public static IRoom Map(MapData data)
+        public static LevelMap Map(MapData data)
         {
             var discoveredRooms = new List<IRoom>();
 
             var startPosition = FindStart(data);
 
-            return MapRoom(discoveredRooms, startPosition);
+            var startingRoom = MapRoom(discoveredRooms, startPosition);
+
+            return new LevelMap(startingRoom, discoveredRooms);
         }
 
         private static MapLocation FindStart(MapData data)
@@ -30,17 +32,26 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
         private static IRoom MapRoom(IList<IRoom> discoveredRooms, MapLocation firstLocation)
         {
             var newRoom = new Room();
+            discoveredRooms.Add(newRoom);
 
             newRoom.Locations.Add(firstLocation);
 
-            var passages = ExpandRoom(newRoom, firstLocation);
+            ExpandRoom(newRoom, firstLocation);
 
-            
+            var passages = new Dictionary<IList<Passage>, MapLocation>();
+            foreach (var location in newRoom.Locations)
+            {
+                TryPassage(loc => loc.North(), t => t.Action == "Door_Open" && t.Arg4 == 1, loc => loc.Tile == null || !loc.Tile.BlockingSouth, location, passages);
+                TryPassage(loc => loc.West(), t => t.Action == "Door_Open" && t.Arg4 == 0, loc => loc.Tile == null || !loc.Tile.BlockingEast, location, passages);
+                TryPassage(loc => loc.South(), t => t.Action == "Door_Open" && t.Arg4 == 1, loc => loc.Tile == null || !loc.Tile.BlockingNorth, location, passages);
+                TryPassage(loc => loc.East(), t => t.Action == "Door_Open" && t.Arg4 == 0, loc => loc.Tile == null || !loc.Tile.BlockingWest, location, passages);
+            }
+
             foreach (var passage in passages)
             {
                 var existingRoom = discoveredRooms.FirstOrDefault(
                     r => r.Locations.Any(loc => loc.X == passage.Value.X && loc.Y == passage.Value.Y));
-                if ( existingRoom != null )
+                if (existingRoom != null)
                 {
                     if (newRoom != existingRoom)
                     {
@@ -56,21 +67,12 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             return newRoom;
         }
 
-        private static IDictionary<IList<Passage>, MapLocation> ExpandRoom(IRoom room, MapLocation fromLocation)
+        private static void ExpandRoom(IRoom room, MapLocation fromLocation)
         {
-            var passages = new Dictionary<IList<Passage>, MapLocation>();
-           
             TryExpand(loc => loc.CanMoveNorth(), loc => loc.North(), room, fromLocation);
             TryExpand(loc => loc.CanMoveWest(), loc => loc.West(), room, fromLocation);
             TryExpand(loc => loc.CanMoveSouth(), loc => loc.South(), room, fromLocation);
             TryExpand(loc => loc.CanMoveEast(), loc => loc.East(), room, fromLocation);
-
-            TryPassage(loc => loc.North(), t => t.Action == "Door_Open" && t.Arg4 == 1, loc => loc.Tile == null || loc.Tile.BlockingSouth, fromLocation, passages);
-            TryPassage(loc => loc.West(), t => t.Action == "Door_Open" && t.Arg4 == 0, loc => loc.Tile == null || loc.Tile.BlockingEast, fromLocation, passages);
-            TryPassage(loc => loc.South(), t => t.Action == "Door_Open" && t.Arg4 == 1, loc => loc.Tile == null || loc.Tile.BlockingNorth, fromLocation, passages);
-            TryPassage(loc => loc.East(), t => t.Action == "Door_Open" && t.Arg4 == 0, loc => loc.Tile == null || loc.Tile.BlockingWest, fromLocation, passages);
-
-            return passages;
         }
 
         private static void TryPassage(
@@ -89,7 +91,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                 if (targetPassageSpace == null)
                     return;
 
-                var targetPassage = targetPassageSpace.Actions.FirstOrDefault(hasProperFacingDoor);
+                var targetPassage = targetPassageSpace.Triggers.FirstOrDefault(hasProperFacingDoor);
            
                 if (targetPassage == null)
                     return;

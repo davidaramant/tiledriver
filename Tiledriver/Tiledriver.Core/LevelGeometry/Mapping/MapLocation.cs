@@ -59,7 +59,14 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             _data.Things.Add(thing);
         }
 
-        public IEnumerable<Trigger> Actions => _data.Triggers.Where(t => t.X == X && t.Y == Y);
+        public IEnumerable<Trigger> Triggers => _data.Triggers.Where(t => t.X == X && t.Y == Y);
+
+        public Trigger AddTrigger(string action)
+        {
+            var trigger = new Trigger(X, Y, 0, action);
+            _data.Triggers.Add(trigger);
+            return trigger;
+        }
 
         public MapLocation North()
         {
