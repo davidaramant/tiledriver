@@ -137,12 +137,8 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
             return true;
         }
-		
-		public bool HasBlocker()
-        {
-            return Things.Any(t => Actor.GetAll().Single(a => a.ClassName == t.Type).Blocks);
-        }
 
+<<<<<<< 87ffe25a83d79750cdb9f930ae32710f2af003c7
         public override bool Equals(object obj)
         {
             var castedOther = obj as MapLocation;
@@ -158,5 +154,11 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
         }
 
         private string DebuggerDisplay => $"MapLocation: ({X}, {Y})";
+=======
+        public bool HasBlocker()
+        {
+            return Things.Any(t => Actor.GetAll().Single(a => a.ClassName == t.Type).Blocks);
+        }
+>>>>>>> passage v1 not hooked up
     }
 }
