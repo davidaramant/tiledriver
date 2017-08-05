@@ -76,6 +76,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             var room = LevelMapper.Map(_data);
 
             Assert.That(room, Is.Not.Null);
+            Assert.That(room.Locations.Count, Is.EqualTo(4));
         }
 
         /// <remarks>

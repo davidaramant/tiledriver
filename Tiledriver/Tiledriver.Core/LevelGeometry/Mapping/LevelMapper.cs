@@ -53,7 +53,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                 }
             }
 
-            return new Room();
+            return newRoom;
         }
 
         private static IDictionary<IPassage, MapLocation> ExpandRoom(IRoom room, MapLocation fromLocation)
@@ -95,7 +95,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                 }
             }
 
-            return null;
+            return new Dictionary<IPassage, MapLocation>();
         }
 
         

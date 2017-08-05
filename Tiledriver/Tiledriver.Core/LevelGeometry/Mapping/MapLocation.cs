@@ -3,13 +3,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.LevelGeometry.Mapping
 {
-    public class MapLocation
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
+    public class MapLocation : IEquatable<MapLocation>
     {
         private readonly MapData _data;
 
@@ -64,7 +66,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
         public MapLocation South()
         {
-            if (Y < _data.Height-1)
+            if (Y > _data.Height-1)
                 return null;
 
             return new MapLocation(_data, X, Y + 1);
@@ -72,7 +74,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
         public MapLocation East()
         {
-            if (X < _data.Width - 1)
+            if (X > _data.Width - 1)
                 return null;
 
             return new MapLocation(_data, X+1, Y);
@@ -116,5 +118,21 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
             return true;
         }
+
+        public override bool Equals(object obj)
+        {
+            var castedOther = obj as MapLocation;
+            return Equals(castedOther);
+        }
+
+        public bool Equals(MapLocation other)
+        {
+            if (null == other)
+                return false;
+
+            return X == other.X && Y == other.Y;
+        }
+
+        private string DebuggerDisplay => $"MapLocation: ({X}, {Y})";
     }
 }
