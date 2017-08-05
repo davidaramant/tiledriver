@@ -133,6 +133,7 @@
     <Compile Include="LevelGeometry\IRegion.cs" />
     <Compile Include="LevelGeometry\MapTile.cs" />
     <Compile Include="LevelGeometry\SparseMap.cs" />
+    <Compile Include="MapRanker\HasExit.cs" />
     <Compile Include="MapRanker\HasStartPosition.cs" />
     <Compile Include="MapRanker\IRule.cs" />
     <Compile Include="MapRanker\IRuleFactory.cs" />
