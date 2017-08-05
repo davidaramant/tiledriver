@@ -54,7 +54,8 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             AddStart(2, 2);
             AddSpace(2, 2, _tileAllWalls);
 
-            var room = LevelMapper.Map(_data);
+            var levelMap = LevelMapper.Map(_data);
+            var room = levelMap.StartingRoom;
 
             Assert.That(room, Is.Not.Null);
             Assert.That(room.Locations.Count, Is.EqualTo(1));
@@ -75,7 +76,8 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             AddSpace(3, 3, _tileSouthEastWalls);
             AddSpace(2, 3, _tileSouthWestWalls);
 
-            var room = LevelMapper.Map(_data);
+            var levelMap = LevelMapper.Map(_data);
+            var room = levelMap.StartingRoom;
 
             Assert.That(room, Is.Not.Null);
             Assert.That(room.Locations.Count, Is.EqualTo(4));
@@ -108,7 +110,8 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             AddSpace(3, 4, _tileSouthWalls);
             AddSpace(4, 4, _tileSouthEastWalls);
 
-            var room = LevelMapper.Map(_data);
+            var levelMap = LevelMapper.Map(_data);
+            var room = levelMap.StartingRoom;
 
             Assert.That(room, Is.Not.Null);
             Assert.That(room.Locations.Count, Is.EqualTo(9));
@@ -150,7 +153,8 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             AddSpace(4, 4, _tileNorthEastSouthWalls);
             AddSpace(6, 4, _tileEastSouthWestWalls);
 
-            var room = LevelMapper.Map(_data);
+            var levelMap = LevelMapper.Map(_data);
+            var room = levelMap.StartingRoom;
 
             Assert.That(room, Is.Not.Null);
             Assert.That(room.Locations.Count, Is.EqualTo(11));
@@ -185,7 +189,8 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             AddSpace(2, 3, _tileSouthWestWalls);
             AddBlocker(3, 3);
 
-            var room = LevelMapper.Map(_data);
+            var levelMap = LevelMapper.Map(_data);
+            var room = levelMap.StartingRoom;
 
             Assert.That(room, Is.Not.Null);
             Assert.That(room.Locations.Count, Is.EqualTo(3));
@@ -219,7 +224,8 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
 
             AddBlocker(3, 3);
 
-            var room = LevelMapper.Map(_data);
+            var levelMap = LevelMapper.Map(_data);
+            var room = levelMap.StartingRoom;
 
             Assert.That(room, Is.Not.Null);
             Assert.That(room.Locations.Count, Is.EqualTo(3));
@@ -251,12 +257,99 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             AddSpace(3, 4, _tileAllWalls);
             AddSpace(4, 4, _tileAllWalls);
 
-            var room = LevelMapper.Map(_data);
+            var levelMap = LevelMapper.Map(_data);
+            var room = levelMap.StartingRoom;
 
             Assert.That(room, Is.Not.Null);
             Assert.That(room.Locations.Count, Is.EqualTo(1));
 
             AssertLocationInRoom(room, 3, 3);
+        }
+
+        /// <remarks>
+        /// Room Shape:
+        /// XX X
+        /// XXDX
+        /// </remarks>
+        [Test]
+        public void ShouldFindTwoConnectedRooms()
+        {
+            AddStart(2, 2);
+
+            AddSpace(2, 2, _tileNorthWestWalls);
+            AddSpace(3, 2, _tileNorthEastWalls);
+            AddSpace(3, 3, _tileSouthWalls);
+            AddSpace(2, 3, _tileSouthWestWalls);
+
+            AddDoor(4, 3, true);
+
+            AddSpace(5, 2, _tileWestNorthEastWalls);
+            AddSpace(5, 3, _tileSouthEastWalls);
+
+            var levelMap = LevelMapper.Map(_data);
+            var room = levelMap.StartingRoom;
+
+            Assert.That(room, Is.Not.Null);
+
+            Assert.That(room.Locations.Count, Is.EqualTo(4));
+            AssertLocationInRoom(room, 2, 2);
+            AssertLocationInRoom(room, 3, 2);
+            AssertLocationInRoom(room, 2, 3);
+            AssertLocationInRoom(room, 3, 3);
+
+            Assert.That(room.AdjacentRooms.Count, Is.EqualTo(1));
+
+            var firstTransition = room.AdjacentRooms.First();
+
+            Assert.That(firstTransition.Key.Count, Is.EqualTo(1));
+            Assert.That(firstTransition.Value, Is.Not.Null);
+            Assert.That(firstTransition.Value.Locations.Count, Is.EqualTo(2));
+            AssertLocationInRoom(firstTransition.Value, 5, 2);
+            AssertLocationInRoom(firstTransition.Value, 5, 3);
+        }
+
+        /// <remarks>
+        /// Room Shape:
+        /// XX   X
+        /// XXDDDX
+        /// </remarks>
+        [Test]
+        public void ShouldFindTwoConnectedRoomsWithMultipleDoors()
+        {
+            AddStart(2, 2);
+
+            AddSpace(2, 2, _tileNorthWestWalls);
+            AddSpace(3, 2, _tileNorthEastWalls);
+            AddSpace(3, 3, _tileSouthWalls);
+            AddSpace(2, 3, _tileSouthWestWalls);
+
+            AddDoor(4, 3, true);
+            AddDoor(5, 3, true);
+            AddDoor(6, 3, true);
+
+            AddSpace(7, 2, _tileWestNorthEastWalls);
+            AddSpace(7, 3, _tileSouthEastWalls);
+
+            var levelMap = LevelMapper.Map(_data);
+            var room = levelMap.StartingRoom;
+
+            Assert.That(room, Is.Not.Null);
+
+            Assert.That(room.Locations.Count, Is.EqualTo(4));
+            AssertLocationInRoom(room, 2, 2);
+            AssertLocationInRoom(room, 3, 2);
+            AssertLocationInRoom(room, 2, 3);
+            AssertLocationInRoom(room, 3, 3);
+
+            Assert.That(room.AdjacentRooms.Count, Is.EqualTo(1));
+
+            var firstTransition = room.AdjacentRooms.First();
+
+            Assert.That(firstTransition.Key.Count, Is.EqualTo(3));
+            Assert.That(firstTransition.Value, Is.Not.Null);
+            Assert.That(firstTransition.Value.Locations.Count, Is.EqualTo(2));
+            AssertLocationInRoom(firstTransition.Value, 7, 2);
+            AssertLocationInRoom(firstTransition.Value, 7, 3);
         }
 
         private void AddStart(int x, int y)
@@ -277,6 +370,16 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             location.Tile = tile;
         }
 
+        private void AddDoor(int x, int y, bool isEastWest)
+        {
+            var location = new MapLocation(_data, x, y);
+            location.Tile = _tileAllWalls;
+
+            var doorTrigger = location.AddTrigger("Door_Open");
+            if (!isEastWest)
+                doorTrigger.Arg4 = 1;
+        }
+
         private void AddBlocker(int x, int y)
         {
             var location = new MapLocation(_data, x, y);
@@ -287,6 +390,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
         {
             _planeMap.TileSpaces.ForEach(space => space.Tile = -1);
             _data.Things.Clear();
+            _data.Triggers.Clear();
         }
 
         private void SetupTiles()

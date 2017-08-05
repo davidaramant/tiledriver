@@ -10,7 +10,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
     {
         private readonly MapLocation _loc;
 
-        public Trigger Door => _loc.Actions.Single(t=>t.Action == "Door_Open");
+        public Trigger Door => _loc.Triggers.Single(t=>t.Action == "Door_Open");
 
         public Passage(MapLocation loc)
         {

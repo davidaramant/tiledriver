@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using Tiledriver.Core.FormatModels.Uwmf.Parsing;
@@ -28,12 +29,14 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
                 var sa = new UwmfSyntaxAnalyzer();
                 var map = UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader)));
 
-                var room = LevelMapper.Map(map);
+                var levelMap = LevelMapper.Map(map);
+                var room = levelMap.StartingRoom;
 
                 Assert.That(room, Is.Not.Null);
                 Assert.That(room.Locations, Is.Not.Empty);
 
-                Console.WriteLine($"Found #{room.Locations.Count} locations in the start room");
+                Console.WriteLine($"Found {room.Locations.Count} locations in the start room");
+                Console.WriteLine($"Found {levelMap.AllRooms.Count()} rooms in the level");
             }
         }
 
