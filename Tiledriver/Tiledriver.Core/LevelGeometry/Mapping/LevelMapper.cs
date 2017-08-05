@@ -38,31 +38,9 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
             ExpandRoom(newRoom, firstLocation);
 
-            var passages = new Dictionary<IList<Passage>, MapLocation>();
-            foreach (var location in newRoom.Locations)
-            {
-                TryPassage(loc => loc.North(), t => t.Action == "Door_Open" && t.Arg4 == 1, loc => loc.Tile == null || !loc.Tile.BlockingSouth, location, passages);
-                TryPassage(loc => loc.West(), t => t.Action == "Door_Open" && t.Arg4 == 0, loc => loc.Tile == null || !loc.Tile.BlockingEast, location, passages);
-                TryPassage(loc => loc.South(), t => t.Action == "Door_Open" && t.Arg4 == 1, loc => loc.Tile == null || !loc.Tile.BlockingNorth, location, passages);
-                TryPassage(loc => loc.East(), t => t.Action == "Door_Open" && t.Arg4 == 0, loc => loc.Tile == null || !loc.Tile.BlockingWest, location, passages);
-            }
+            var passages = FindPassages(newRoom);
 
-            foreach (var passage in passages)
-            {
-                var existingRoom = discoveredRooms.FirstOrDefault(
-                    r => r.Locations.Any(loc => loc.X == passage.Value.X && loc.Y == passage.Value.Y));
-                if (existingRoom != null)
-                {
-                    if (newRoom != existingRoom)
-                    {
-                        newRoom.AdjacentRooms.Add(passage.Key, existingRoom);
-                    }
-                }
-                else
-                {
-                    newRoom.AdjacentRooms.Add(passage.Key, MapRoom(discoveredRooms, passage.Value));
-                }
-            }
+            ExplorePassages(discoveredRooms, passages, newRoom);
 
             return newRoom;
         }
@@ -73,6 +51,36 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             TryExpand(loc => loc.CanMoveWest(), loc => loc.West(), room, fromLocation);
             TryExpand(loc => loc.CanMoveSouth(), loc => loc.South(), room, fromLocation);
             TryExpand(loc => loc.CanMoveEast(), loc => loc.East(), room, fromLocation);
+        }
+
+        private static void TryExpand(Func<MapLocation, bool> moveCheck, Func<MapLocation, MapLocation> targetTile, IRoom room, MapLocation fromLocation)
+        {
+            if (moveCheck(fromLocation))
+            {
+                var targetSpace = targetTile(fromLocation);
+                if (!room.Locations.Contains(targetSpace))
+                {
+                    room.Locations.Add(targetSpace);
+                    ExpandRoom(room, targetSpace);
+                }
+            }
+        }
+
+        private static Dictionary<IList<Passage>, MapLocation> FindPassages(Room newRoom)
+        {
+            var passages = new Dictionary<IList<Passage>, MapLocation>();
+            foreach (var location in newRoom.Locations)
+            {
+                TryPassage(loc => loc.North(), t => t.Action == "Door_Open" && t.Arg4 == 1,
+                    loc => loc.Tile == null || !loc.Tile.BlockingSouth, location, passages);
+                TryPassage(loc => loc.West(), t => t.Action == "Door_Open" && t.Arg4 == 0,
+                    loc => loc.Tile == null || !loc.Tile.BlockingEast, location, passages);
+                TryPassage(loc => loc.South(), t => t.Action == "Door_Open" && t.Arg4 == 1,
+                    loc => loc.Tile == null || !loc.Tile.BlockingNorth, location, passages);
+                TryPassage(loc => loc.East(), t => t.Action == "Door_Open" && t.Arg4 == 0,
+                    loc => loc.Tile == null || !loc.Tile.BlockingWest, location, passages);
+            }
+            return passages;
         }
 
         private static void TryPassage(
@@ -118,19 +126,25 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
         }
 
-        private static void TryExpand(Func<MapLocation, bool> moveCheck, Func<MapLocation, MapLocation> targetTile, IRoom room, MapLocation fromLocation)
+        private static void ExplorePassages(IList<IRoom> discoveredRooms, Dictionary<IList<Passage>, MapLocation> passages, Room newRoom)
         {
-            if (moveCheck(fromLocation))
+            foreach (var passage in passages)
             {
-                var targetSpace = targetTile(fromLocation);
-                if (!room.Locations.Contains(targetSpace))
+                var existingRoom = discoveredRooms.FirstOrDefault(
+                    r => r.Locations.Any(loc => loc.X == passage.Value.X && loc.Y == passage.Value.Y));
+                if (existingRoom != null)
                 {
-                    room.Locations.Add(targetSpace);
-                    ExpandRoom(room, targetSpace);
+                    if (newRoom != existingRoom)
+                    {
+                        newRoom.AdjacentRooms.Add(passage.Key, existingRoom);
+                    }
+                }
+                else
+                {
+                    newRoom.AdjacentRooms.Add(passage.Key, MapRoom(discoveredRooms, passage.Value));
                 }
             }
         }
-
 
     }
 }
