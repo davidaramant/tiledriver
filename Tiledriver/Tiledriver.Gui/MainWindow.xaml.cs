@@ -18,6 +18,8 @@ namespace Tiledriver.Gui
 {
     public partial class MainWindow
     {
+        private static string ECWolfPathConfigurationFile = "ECWolfPath.txt";
+
         private readonly MainVm _vm = new MainVm();
 
         private int _tileSize = 24;
@@ -140,10 +142,17 @@ namespace Tiledriver.Gui
 
         private void RunCurrentMap(object sender, RoutedEventArgs e)
         {
-            if (_vm.MapData != null)
+            if (_vm.MapData == null)
             {
-                LoadMapInEcWolf(_vm.MapData, "temp.wad");
+                MessageBox.Show(
+                    "This will run the current map in ecwolf.exe. " +
+                    "Open a map and try again.",
+                    "No Map Loaded",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+                return;
             }
+            LoadMapInEcWolf(_vm.MapData, "temp.wad");
         }
 
         private void SetMap(MapData map)
@@ -159,21 +168,34 @@ namespace Tiledriver.Gui
 
         private static void LoadMapInEcWolf(MapData uwmfMap, string wadPath)
         {
-            const string inputFile = "ECWolfPath.txt";
-
-            if (!File.Exists(inputFile))
+            if (!File.Exists(ECWolfPathConfigurationFile))
             {
-                throw new Exception(
-                    $"Could not find {inputFile}.  " +
-                    "Create this file in the output directory containing a single line with the full path to ECWolf.exe.  " +
-                    "Do not quote the path.");
+                MessageBox.Show(
+                    $"Could not find {ECWolfPathConfigurationFile}. " +
+                    "Create this file in the output directory containing a single line with the full path to ECWolf.exe. " +
+                    "Do not quote the path.",
+                    "Missing configuration file",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return;
             }
 
-            var ecWolfPath = File.ReadAllLines(inputFile).Single();
+            var ecWolfPath = File.ReadAllLines(ECWolfPathConfigurationFile).Single();
 
             if (Path.GetFileName(ecWolfPath).ToLowerInvariant() != "ecwolf.exe")
             {
                 ecWolfPath = Path.Combine(ecWolfPath, "ecwolf.exe");
+            }
+
+            if (!File.Exists(ecWolfPath))
+            {
+                MessageBox.Show(
+                    $"Could not find \"{ecWolfPath}\". " +
+                    $"Verify that the path to ecwolf.exe in {ECWolfPathConfigurationFile} is correct.",
+                    "Incorrect ecwolf.exe path",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return;
             }
 
             var wad = new WadFile();
@@ -185,6 +207,21 @@ namespace Tiledriver.Gui
             Process.Start(
                 ecWolfPath,
                 $"--file \"{wadPath}\" --hard --nowait --tedlevel map01");
+        }
+
+        private void EditECWolfPath(object sender, RoutedEventArgs e)
+        {
+            if (!File.Exists(ECWolfPathConfigurationFile))
+            {
+                File.CreateText(ECWolfPathConfigurationFile);
+            }
+
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "explorer.exe",
+                Arguments = ECWolfPathConfigurationFile,
+                UseShellExecute = true,
+            });
         }
     }
 }

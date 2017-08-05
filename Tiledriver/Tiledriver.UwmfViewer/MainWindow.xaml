@@ -1,13 +1,13 @@
-﻿<Controls:MetroWindow x:Class="Tiledriver.Gui.MainWindow"
+﻿<Controls:MetroWindow x:Class="Tiledriver.UwmfViewer.MainWindow"
                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                      xmlns:local="clr-namespace:Tiledriver.Gui"
+                      xmlns:local="clr-namespace:Tiledriver.UwmfViewer"
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-                      xmlns:views="clr-namespace:Tiledriver.Gui.Views"
+                      xmlns:views="clr-namespace:Tiledriver.UwmfViewer.Views"
                       mc:Ignorable="d"
-                      Title="Tiledriver"
+                      Title="Tiledriver UWMF Viewer"
                       BorderThickness="0"
                       GlowBrush="Black"
                       WindowStartupLocation="CenterScreen">
@@ -25,17 +25,11 @@
             <ToolBarTray DockPanel.Dock="Top" Orientation="Horizontal">
                 <ToolBar>
                     <Button Click="SelectMapFile"
-                            Content="Open Map..." Margin="4" />
+                            Content="Open Map" Margin="4" />
                     <Button Click="SelectDefaultMapFile"
                             Content="Demo Map" Margin="4" />
                     <Button Click="SelectDemoMapFile"
                             Content="Things Map" Margin="4" />
-                </ToolBar>
-                <ToolBar>
-                    <Button Click="RunCurrentMap"
-                            Content="Run Current Map..." Margin="4" />
-                    <Button Click="EditECWolfPath"
-                            Content="Edit ECWolfPath.txt" Margin="4" />
                 </ToolBar>
                 <ToolBar>
                     <Label Content="Zoom" Foreground="{StaticResource GrayNormalBrush}" />
