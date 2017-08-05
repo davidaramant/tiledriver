@@ -123,6 +123,11 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                     ExpandRoom(room, targetSpace);
                 }
             }
+<<<<<<< 87ffe25a83d79750cdb9f930ae32710f2af003c7
+
+            return new Dictionary<IPassage, MapLocation>();
+=======
+>>>>>>> passage v1 not hooked up
         }
 
 
