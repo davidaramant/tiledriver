@@ -17,6 +17,8 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
     public class Room : IRoom
     {
         private readonly ObservableCollection<MapLocation> _locations;
+        private int goldKeys;
+        private int silverKeys;
 
         public Room(int roomNumber)
         {
@@ -73,6 +75,8 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
         public IList<Thing> Health { get; }
         public int Lives { get; private set; }
         public int BoringTiles { get; private set; }
+        public bool HasGoldKey => goldKeys > 0;
+        public bool HasSilverKey => silverKeys > 0;
 
         private void _locations_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -107,6 +111,10 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                         change(Health, mapLocationThing);
                     if (mapLocationThing.Type == Actor.OneUp.ClassName)
                         Lives += increment;
+                    if (mapLocationThing.Type == Actor.GoldKey.ClassName)
+                        goldKeys += increment;
+                    if (mapLocationThing.Type == Actor.SilverKey.ClassName)
+                        silverKeys+=increment;
                 }
 
                 if (mapLocation.Tile == null && mapLocation.Things.Count() == 0)
