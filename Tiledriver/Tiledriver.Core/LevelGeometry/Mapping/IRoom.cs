@@ -11,13 +11,13 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
         string Name { get; }
         bool IsStartingRoom { get; }
         bool IsEndingRoom { get; }
-        int UnopenableDoors { get; }
-        IEnumerable<Thing> Enemies { get; }
-        IEnumerable<Thing> Bosses { get; }
-        IEnumerable<Thing> Weapons { get; }
+        int UnopenableDoors { get; set; }
+        IList<Thing> Enemies { get; }
+        IList<Thing> Bosses { get; }
+        IList<Thing> Weapons { get; }
         int Ammo { get; }
-        IEnumerable<Thing> Treasure { get; }
-        int Health { get; }
+        IList<Thing> Treasure { get; }
+        IList<Thing> Health { get; }
         int Lives { get; }
         
         IDictionary<IList<Passage>, IRoom> AdjacentRooms { get; }
