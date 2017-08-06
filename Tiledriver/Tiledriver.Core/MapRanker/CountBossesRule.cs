@@ -4,7 +4,6 @@
 using System.Linq;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.LevelGeometry.Mapping;
-using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.MapRanker
 {
@@ -15,17 +14,7 @@ namespace Tiledriver.Core.MapRanker
     {
         public int Rank(MapData data, LevelMap levelMap)
         {
-            var bossTypes = new[]
-            {
-                Actor.MechaHitler.ClassName,
-                Actor.FakeHitler.ClassName,
-                Actor.Hans.ClassName,
-                Actor.Gretel.ClassName,
-                Actor.FatFace.ClassName,
-                Actor.Schabbs.ClassName
-            };
-
-            return data.Things.Count(thing => bossTypes.Contains(thing.Type)) * 15;
+            return levelMap.AllRooms.SelectMany(room => room.Bosses).Count() * 15;
         }
     }
 }
