@@ -2,6 +2,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System.Collections.Generic;
+using Functional.Maybe;
 using JetBrains.Annotations;
 
 namespace Tiledriver.Core.FormatModels.Xlat
@@ -51,6 +52,11 @@ namespace Tiledriver.Core.FormatModels.Xlat
         public IThingMapping LookupThingMapping(ushort oldNum)
         {
             return _thingMappingLookup[oldNum];
+        }
+
+        public Maybe<IThingMapping> TryLookupThingMapping(ushort oldNum)
+        {
+            return _thingMappingLookup.Lookup(oldNum);
         }
     }
 }
