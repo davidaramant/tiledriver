@@ -122,7 +122,8 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
         public bool CanExit()
         {
-            if (Things.Any(thing => thing.Type == Actor.MechaHitler.ClassName))
+            var exitBosses = new[] {Actor.MechaHitler.ClassName, Actor.Schabbs.ClassName, Actor.Gift.ClassName, Actor.FatFace.ClassName};
+            if (Things.Any(thing => exitBosses.Contains(thing.Type)))
                 return true;
 
             var validExitTriggers = new[] { "Exit_Normal", "Exit_Secret", "Exit_VictorySpin", "Exit_Victory" };
