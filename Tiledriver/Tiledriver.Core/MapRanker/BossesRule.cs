@@ -4,6 +4,7 @@
 using System.Linq;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.LevelGeometry.Mapping;
+using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.MapRanker
 {
@@ -16,7 +17,14 @@ namespace Tiledriver.Core.MapRanker
 
         public int Rank(MapData data, LevelMap levelMap)
         {
-            return levelMap.AllRooms.SelectMany(room => room.Bosses).Count() * PointMultiplier;
+            var bosses = levelMap.AllRooms.SelectMany(room => room.Bosses).ToList();
+            var bossScore = bosses.Count * PointMultiplier;
+
+            // Special handling since mechahitler is actually two bosses disguised as one
+            if (bosses.Any(boss => boss.Type == Actor.MechaHitler.ClassName))
+                bossScore += PointMultiplier;
+
+            return bossScore;
         }
     }
 }
