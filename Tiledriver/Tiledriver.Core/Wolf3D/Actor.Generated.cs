@@ -492,7 +492,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: true  
+            blocks: false  
         );
         /// <summary>
         /// DeadRat

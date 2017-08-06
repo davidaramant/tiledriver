@@ -272,7 +272,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
         /// XXDX
         /// </remarks>
         [Test]
-        public void ShouldFindTwoConnectedRooms()
+        public void ShouldFindTwoConnectedRoomsWithADoor()
         {
             AddStart(2, 2);
 
@@ -352,6 +352,48 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             AssertLocationInRoom(firstTransition.Value, 7, 3);
         }
 
+        /// <remarks>
+        /// Room Shape:
+        /// XX X
+        /// XXPX
+        /// </remarks>
+        [Test]
+        public void ShouldFindTwoConnectedRoomsWithAPushwall()
+        {
+            AddStart(2, 2);
+
+            AddSpace(2, 2, _tileNorthWestWalls);
+            AddSpace(3, 2, _tileNorthEastWalls);
+            AddSpace(3, 3, _tileSouthWalls);
+            AddSpace(2, 3, _tileSouthWestWalls);
+
+            AddPushwall(4, 3);
+
+            AddSpace(5, 2, _tileWestNorthEastWalls);
+            AddSpace(5, 3, _tileSouthEastWalls);
+
+            var levelMap = LevelMapper.Map(_data);
+            var room = levelMap.StartingRoom;
+
+            Assert.That(room, Is.Not.Null);
+
+            Assert.That(room.Locations.Count, Is.EqualTo(4));
+            AssertLocationInRoom(room, 2, 2);
+            AssertLocationInRoom(room, 3, 2);
+            AssertLocationInRoom(room, 2, 3);
+            AssertLocationInRoom(room, 3, 3);
+
+            Assert.That(room.AdjacentRooms.Count, Is.EqualTo(1));
+
+            var firstTransition = room.AdjacentRooms.First();
+
+            Assert.That(firstTransition.Key.Count, Is.EqualTo(1));
+            Assert.That(firstTransition.Value, Is.Not.Null);
+            Assert.That(firstTransition.Value.Locations.Count, Is.EqualTo(2));
+            AssertLocationInRoom(firstTransition.Value, 5, 2);
+            AssertLocationInRoom(firstTransition.Value, 5, 3);
+        }
+
         private void AddStart(int x, int y)
         {
             var location = new MapLocation(_data, x, y);
@@ -378,6 +420,14 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             var doorTrigger = location.AddTrigger("Door_Open");
             if (!isEastWest)
                 doorTrigger.Arg4 = 1;
+        }
+
+        private void AddPushwall(int x, int y)
+        {
+            var location = new MapLocation(_data, x, y);
+            location.Tile = _tileAllWalls;
+
+            location.AddTrigger("Pushwall_Move");
         }
 
         private void AddBlocker(int x, int y)
