@@ -23,6 +23,11 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             Name = $"#{roomNumber}";
             AdjacentRooms = new Dictionary<IList<Passage>, IRoom>();
             _locations = new ObservableCollection<MapLocation>();
+            Bosses = new List<Thing>();
+            Enemies = new List<Thing>();
+            Weapons = new List<Thing>();
+            Treasure = new List<Thing>();
+            Health = new List<Thing>();
             _locations.CollectionChanged += _locations_CollectionChanged;
         }
 
