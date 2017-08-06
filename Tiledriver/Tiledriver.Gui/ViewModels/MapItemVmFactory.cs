@@ -33,5 +33,10 @@ namespace Tiledriver.Gui.ViewModels
             var sector = _mapData.SectorAt(tileSpace.Sector);
             return new SquareVm(x, y, tile, sector, tileSpace.Zone);
         }
+
+        public TriggerVm BuildTrigger(Trigger trigger)
+        {
+            return new TriggerVm(trigger);
+        }
     }
 }
