@@ -41,6 +41,11 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                 AttemptLocks();
             } while (keysFound < CountKeys());
 
+            foreach (var lockedWay in _lockedWays)
+            {
+                lockedWay.FromRoom.UnopenableDoors++;
+            }
+
             return new LevelMap(startingRoom, _discoveredRooms);
         }
 
