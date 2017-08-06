@@ -13,6 +13,8 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
         public Trigger Door => Location.Triggers.SingleOrDefault(t=>t.Action == "Door_Open");
 
+        public Trigger Pushwall => Location.Triggers.SingleOrDefault(t=>t.Action == "Pushwall_Move");
+
         public Passage(MapLocation loc)
         {
             Location = loc;
