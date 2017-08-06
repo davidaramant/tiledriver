@@ -57,12 +57,12 @@ namespace Tiledriver.Gui.ViewModels
             NorthSouth
         }
 
-        public TriggerVm(Core.FormatModels.Uwmf.Trigger trigger, string actionName)
+        public TriggerVm(Core.FormatModels.Uwmf.Trigger trigger)
         {
             this._trigger = trigger;
-            this._actionName = actionName;
+            this._actionName = trigger.Action;
 
-            var template = _templates.ContainsKey(actionName) ? _templates[actionName] : Default;
+            var template = _templates.ContainsKey(_actionName) ? _templates[_actionName] : Default;
 
             _geometry = template.Geometry;
             _fill = template.Fill;
