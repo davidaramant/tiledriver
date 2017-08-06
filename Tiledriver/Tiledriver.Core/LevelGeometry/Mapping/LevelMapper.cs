@@ -11,8 +11,8 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 {
     public class LevelMapper
     {
-        private IList<Thing> _silverLocations;
-        private IList<Thing> _goldLocations;
+        private List<Thing> _silverLocations;
+        private List<Thing> _goldLocations;
         private bool _hasSilver;
         private bool _hasGold;
         private IList<IRoom> _discoveredRooms = new List<IRoom>();
@@ -26,6 +26,8 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
             _silverLocations = data.Things.Where(t=>t.Type == Actor.SilverKey.ClassName).ToList();
             _goldLocations = data.Things.Where(t => t.Type == Actor.GoldKey.ClassName).ToList();
+            _goldLocations.AddRange(data.Things.Where(t => t.Type == Actor.Hans.ClassName).ToList());
+            _goldLocations.AddRange(data.Things.Where(t => t.Type == Actor.Gretel.ClassName).ToList());
 
             var startPosition = FindStart(data);
 
