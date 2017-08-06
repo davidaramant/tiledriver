@@ -3,6 +3,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -13,6 +14,8 @@ using System.Windows.Input;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Uwmf.Parsing;
 using Tiledriver.Core.FormatModels.Wad;
+using Tiledriver.Core.LevelGeometry.Mapping;
+using Tiledriver.Core.MapRanker;
 using Tiledriver.Gui.ViewModels;
 
 namespace Tiledriver.Gui
@@ -29,6 +32,8 @@ namespace Tiledriver.Gui
 
         private readonly string _packagedMapFilesDir = System.AppDomain.CurrentDomain.BaseDirectory + "..\\..\\MapFiles\\";
 
+        private readonly BackgroundWorker _scoringWorker;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -38,6 +43,10 @@ namespace Tiledriver.Gui
             MapCanvas.NotifyNewMapItems += DetailPane.Update;
             KeyDown += MainWindow_KeyDown;
             _tileSize = Properties.Settings.Default.tileSize;
+
+            _scoringWorker = new BackgroundWorker();
+            _scoringWorker.DoWork += RunScoringAlgorithm;
+            _scoringWorker.RunWorkerCompleted += FinishedScoring;
         }
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
@@ -182,6 +191,36 @@ namespace Tiledriver.Gui
         {
             _vm.MapData = map;
             Application.Current.MainWindow.Title = $"Tiledriver - {_vm.MapData.Name} - {new FileInfo(filePath).Name}";
+
+            MapScore.Content = "Calculating...";
+
+            _scoringWorker.RunWorkerAsync(map);
+
+
+        }
+
+        private void RunScoringAlgorithm(object sender, DoWorkEventArgs e)
+        {
+            var data = (MapData) e.Argument;
+
+            try
+            {
+                var ranker = new Ranker();
+                var score = ranker.RankLevel(data);
+
+                e.Result = score.ToString();
+            }
+            catch (Exception ex)
+            {
+                e.Result = "Invalid";
+
+                Console.Error.WriteLine(ex.Message);
+            }
+        }
+
+        private void FinishedScoring(object sender, RunWorkerCompletedEventArgs e)
+        {
+            MapScore.Content = e.Result;
         }
 
         private static void LoadMapInEcWolf(MapData uwmfMap, string wadPath)

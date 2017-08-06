@@ -87,10 +87,6 @@
     <Compile Include="FormatModels\Xlat\TileMappingsTests.cs" />
     <Compile Include="LevelGeometry\Mapping\LevelMapperIntegrationTest.cs" />
     <Compile Include="LevelGeometry\Mapping\LevelMapperTest.cs" />
-    <Compile Include="MapRanker\HasExitTests.cs" />
-    <Compile Include="MapRanker\HasStartPositionTest.cs" />
-    <Compile Include="MapRanker\RuleFactoryTest.cs" />
-    <Compile Include="MapRanker\StartPositionValidTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FormatModels\Uwmf\Parsing\UwmfLexerTests.cs" />
     <Compile Include="FormatModels\Uwmf\Parsing\UwmfSyntaxAnalyzerTests.cs" />
@@ -139,7 +135,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="LegacyMaps\" />
+    <Folder Include="MapRanker\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

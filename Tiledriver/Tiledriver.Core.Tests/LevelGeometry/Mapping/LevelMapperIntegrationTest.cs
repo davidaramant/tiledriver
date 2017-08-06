@@ -10,12 +10,32 @@ using NUnit.Framework;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Uwmf.Parsing;
 using Tiledriver.Core.LevelGeometry.Mapping;
+using Tiledriver.Core.MapRanker;
 
 namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
 {
     [TestFixture]
     public class LevelMapperIntegrationTest
     {
+        private bool _writeMapDetails = false;
+        private bool _writeGraphVizFiles = false;
+
+        private StreamWriter _mapDetailsWriter;
+
+        [OneTimeSetUp]
+        public void Start()
+        {
+            if (_writeMapDetails)
+                _mapDetailsWriter = new StreamWriter("C:\\temp\\rooms.txt");
+        }
+
+        [OneTimeTearDown]
+        public void Stop()
+        {
+            if (_writeMapDetails)
+                _mapDetailsWriter.Dispose();
+        }
+
         [Test]
         [TestCaseSource(nameof(TestDefinitions))]
         public void Test(string path)
@@ -44,7 +64,15 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
                     Console.WriteLine();
                 }
 
-                ProduceGraphs(map, levelMap);
+                var ranker = new Ranker();
+                var score = ranker.RankLevel(map);
+                Console.WriteLine($"Score: {score}");
+
+                if (_writeMapDetails)
+                    _mapDetailsWriter.WriteLine($"Map {map.Name}: {levelMap.AllRooms.Count()} rooms, score={score}");
+
+                if (_writeGraphVizFiles)
+                    ProduceGraphs(map, levelMap);
             }
         }
 
