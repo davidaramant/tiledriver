@@ -11,6 +11,8 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 {
     public class LevelMapper
     {
+        private IList<Thing> silverLocations;
+        private IList<Thing> goldLocations;
         private bool hasSilver;
         private bool hasGold;
         private IList<IRoom> discoveredRooms = new List<IRoom>();
@@ -21,6 +23,9 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             hasSilver = false;
             hasGold = false;
             discoveredRooms.Clear();
+
+            silverLocations = data.Things.Where(t=>t.Type == Actor.SilverKey.ClassName).ToList();
+            goldLocations = data.Things.Where(t => t.Type == Actor.GoldKey.ClassName).ToList();
 
             var startPosition = FindStart(data);
 
@@ -59,8 +64,8 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             TryExpand(loc => loc.CanMoveSouth(), loc => loc.South(), room, fromLocation);
             TryExpand(loc => loc.CanMoveEast(), loc => loc.East(), room, fromLocation);
 
-            hasGold |= room.Locations.Any(loc => loc.Things.Any(thing => thing.Type == Actor.GoldKey.ClassName));
-            hasSilver |= room.Locations.Any(loc => loc.Things.Any(thing => thing.Type == Actor.SilverKey.ClassName));
+            hasGold |= room.Locations.Any(loc => goldLocations.Any(key=>(int)key.X == loc.X && (int)key.Y==loc.Y));
+            hasSilver |= room.Locations.Any(loc => silverLocations.Any(key => (int)key.X == loc.X && (int)key.Y == loc.Y));
         }
 
         private void TryExpand(Func<MapLocation, bool> moveCheck, Func<MapLocation, MapLocation> targetTile, IRoom room, MapLocation fromLocation)
