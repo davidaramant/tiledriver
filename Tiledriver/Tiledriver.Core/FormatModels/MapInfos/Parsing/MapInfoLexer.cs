@@ -62,17 +62,13 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             }
 
             var nextLine = reader.PeekLine();
-            if (nextLine == null || nextLine == "}")
-            {
-                return new MapInfoProperty(new Identifier(line));
-            }
-            else if (nextLine == "{")
+            if (nextLine == "{")
             {
                 return ParseBlock(line, reader);
             }
             else
             {
-                throw new ParsingException("Unknown construct in MapInfo.");
+                return new MapInfoProperty(new Identifier(line));
             }
         }
 
