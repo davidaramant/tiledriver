@@ -16,6 +16,25 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
     [TestFixture]
     public class LevelMapperIntegrationTest
     {
+        private bool _writeMapDetails = false;
+        private bool _writeGraphVizFiles = false;
+
+        private StreamWriter _mapDetailsWriter;
+
+        [OneTimeSetUp]
+        public void Start()
+        {
+            if (_writeMapDetails)
+                _mapDetailsWriter = new StreamWriter("C:\\temp\\rooms.txt");
+        }
+
+        [OneTimeTearDown]
+        public void Stop()
+        {
+            if (_writeMapDetails)
+                _mapDetailsWriter.Dispose();
+        }
+
         [Test]
         [TestCaseSource(nameof(TestDefinitions))]
         public void Test(string path)
@@ -44,7 +63,11 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
                     Console.WriteLine();
                 }
 
-                ProduceGraphs(map, levelMap);
+                if (_writeMapDetails)
+                    _mapDetailsWriter.WriteLine($"Map {map.Name}: {levelMap.AllRooms.Count()} rooms");
+
+                if (_writeGraphVizFiles)
+                    ProduceGraphs(map, levelMap);
             }
         }
 
