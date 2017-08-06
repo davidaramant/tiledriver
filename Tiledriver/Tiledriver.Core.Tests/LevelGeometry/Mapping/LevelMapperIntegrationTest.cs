@@ -20,11 +20,8 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
         [TestCaseSource(nameof(TestDefinitions))]
         public void Test(string path)
         {
-            var wad = WadFile.Read(path);
-
-            var mapBytes = wad[1].GetData();
-            using (var ms = new MemoryStream(mapBytes))
-            using (var textReader = new StreamReader(ms, Encoding.ASCII))
+            using (var stream = File.OpenRead(path))
+            using (var textReader = new StreamReader(stream, Encoding.ASCII))
             {
                 var sa = new UwmfSyntaxAnalyzer();
                 var map = UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader)));
@@ -43,7 +40,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
         public static IEnumerable<string> TestDefinitions()
         {
             var mapDirectory = new DirectoryInfo(Path.Combine(TestContext.CurrentContext.TestDirectory, "LegacyMaps"));
-            foreach (var file in mapDirectory.GetFiles("*.wad"))
+            foreach (var file in mapDirectory.GetFiles("*.uwmf"))
             {
                 yield return file.FullName;
             }
