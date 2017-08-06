@@ -6,6 +6,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
@@ -24,6 +25,8 @@ namespace Tiledriver.Gui
 
         private int _tileSize = 24;
 
+        private string _filePath;
+
         private readonly string _packagedMapFilesDir = System.AppDomain.CurrentDomain.BaseDirectory + "..\\..\\MapFiles\\";
 
         public MainWindow()
@@ -34,6 +37,7 @@ namespace Tiledriver.Gui
             _vm.PropertyChanged += SubscribeMapCanvasToMapChanges;
             MapCanvas.NotifyNewMapItems += DetailPane.Update;
             KeyDown += MainWindow_KeyDown;
+            _tileSize = Properties.Settings.Default.tileSize;
         }
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
@@ -97,6 +101,14 @@ namespace Tiledriver.Gui
             OpenUwmfTextFile(_packagedMapFilesDir + "thingdemo.txt");
         }
 
+        private void SelectEgressMapFile(object sender, RoutedEventArgs e)
+        {
+            if (Properties.Settings.Default.filePath.Length > 0)
+            {
+                OpenMapFile(Properties.Settings.Default.filePath);
+            }
+        }
+
         private void OpenUwmfTextFile(string filePath)
         {
             if (!File.Exists(filePath)) return;
@@ -107,6 +119,7 @@ namespace Tiledriver.Gui
             {
                 var sa = new UwmfSyntaxAnalyzer();
                 SetMap(UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader))), filePath);
+                UpdateFilePath(filePath);
             }
         }
 
@@ -125,8 +138,15 @@ namespace Tiledriver.Gui
             }
         }
 
+        private void UpdateFilePath(string filePath)
+        {
+            _filePath = filePath;
+        }
+
         private void OpenWadFile(string filePath)
         {
+            if (!File.Exists(filePath)) return;
+
             var wad = WadFile.Read(filePath);
 
             var mapBytes = wad[1].GetData();
@@ -137,6 +157,7 @@ namespace Tiledriver.Gui
                 var map = UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader)));
 
                 SetMap(map, filePath);
+                UpdateFilePath(filePath);
             }
         }
 
@@ -161,11 +182,6 @@ namespace Tiledriver.Gui
         {
             _vm.MapData = map;
             Application.Current.MainWindow.Title = $"Tiledriver - {_vm.MapData.Name} - {new FileInfo(filePath).Name}";
-        }
-
-        private void QuitApplication(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
         }
 
         private static void LoadMapInEcWolf(MapData uwmfMap, string wadPath)
@@ -224,6 +240,13 @@ namespace Tiledriver.Gui
                 Arguments = ECWolfPathConfigurationFile,
                 UseShellExecute = true,
             });
+        }
+
+        private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Properties.Settings.Default.filePath = _filePath;
+            Properties.Settings.Default.tileSize = _tileSize;
+            Properties.Settings.Default.Save();
         }
     }
 }
