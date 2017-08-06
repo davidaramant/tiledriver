@@ -70,6 +70,7 @@
     </ApplicationDefinition>
     <Compile Include="Converters\HexToBrushConverter.cs" />
     <Compile Include="Converters\EmptyStringVisibilityConverter.cs" />
+    <Compile Include="Utilities\WinExplorerFileComparer.cs" />
     <Compile Include="ViewModels\BaseNotifyingVm.cs" />
     <Compile Include="ViewModels\DetailProperties.cs" />
     <Compile Include="ViewModels\DetailViewVm.cs" />
