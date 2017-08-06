@@ -11,7 +11,9 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
     {
         public MapLocation Location { get; }
 
-        public Trigger Door => Location.Triggers.Single(t=>t.Action == "Door_Open");
+        public Trigger Door => Location.Triggers.SingleOrDefault(t=>t.Action == "Door_Open");
+
+        public Trigger Pushwall => Location.Triggers.SingleOrDefault(t=>t.Action == "Pushwall_Move");
 
         public Passage(MapLocation loc)
         {

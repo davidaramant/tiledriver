@@ -12,7 +12,7 @@
                   PanningMode="Both">
         <Canvas x:Name="FullArea"
                 SnapsToDevicePixels="True"
-                Margin="32">
+                Margin="0">
         </Canvas>
     </ScrollViewer>
 </UserControl>

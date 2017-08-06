@@ -182,6 +182,7 @@ namespace Tiledriver.Gui.ViewModels
             { "Door_OpenSilver", DoorOpenSilver() },
             { "Door_OpenGold", DoorOpenGold() },
             { "Door_OpenBoth", DoorOpenBoth() },
+            { "Door_Open3", DoorOpenBoth() },
             { "Pushwall_Move", PushwallMove() },
             { "Exit_Normal", ExitNormal() },
             { "Exit_Secret", ExitSecret() },

@@ -33,6 +33,12 @@
                             Content="Things Map" Margin="4" />
                     <Button Click="SelectEgressMapFile"
                             Content="Egress Map" Margin="4" />
+                    <Button Click="LoadPreviousMap"
+                            Content="⏴" Margin="4,4,1,4"
+                            ToolTip="Previous Map in Folder"/>
+                    <Button Click="LoadNextMap"
+                            Content="⏵" Margin="1,4,4,4" 
+                            ToolTip="Next Map in Folder" />
                 </ToolBar>
                 <ToolBar>
                     <Button Click="RunCurrentMap"
@@ -65,6 +71,8 @@
                          Grid.Row="1"
                          Grid.Column="0"
                          BorderThickness="0,0,0.5,0"
+                         Margin="0"
+                         Padding="0"
                          BorderBrush="{StaticResource GrayNormalBrush}" />
         <views:DetailView x:Name="DetailPane"
                           Grid.Row="1"

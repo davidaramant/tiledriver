@@ -8,18 +8,17 @@ using Tiledriver.Core.LevelGeometry.Mapping;
 namespace Tiledriver.Core.MapRanker
 {
     /// <summary>
-    /// Negative 5 points for each small room
+    /// One point for every 8 health items
     /// </summary>
-    public class SmallRoomRule : IRankingRule
+    public class HealthRule : IRankingRule
     {
-        private const int SmallRoomSize = 5;
-        private const int SmallRoomScore = -3;
+        private const int HealthDivisor = 8;
 
         public int Rank(MapData data, LevelMap levelMap)
         {
-            var smallRoomCount = levelMap.AllRooms.Count(room => room.Locations.Count <= SmallRoomSize);
+            var allHealth = levelMap.AllRooms.SelectMany(room => room.Health);
 
-            return smallRoomCount * SmallRoomScore;
+            return allHealth.Count() / HealthDivisor;
         }
     }
 }

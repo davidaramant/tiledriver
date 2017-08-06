@@ -19,7 +19,8 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
         IList<Thing> Treasure { get; }
         IList<Thing> Health { get; }
         int Lives { get; }
-        
+        int BoringTiles { get; }
+
         IDictionary<IList<Passage>, IRoom> AdjacentRooms { get; }
         IList<MapLocation> Locations { get; }
     }

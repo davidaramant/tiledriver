@@ -3,6 +3,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -16,6 +17,7 @@ using Tiledriver.Core.FormatModels.Uwmf.Parsing;
 using Tiledriver.Core.FormatModels.Wad;
 using Tiledriver.Core.LevelGeometry.Mapping;
 using Tiledriver.Core.MapRanker;
+using Tiledriver.Gui.Utilities;
 using Tiledriver.Gui.ViewModels;
 
 namespace Tiledriver.Gui
@@ -28,11 +30,11 @@ namespace Tiledriver.Gui
 
         private int _tileSize = 24;
 
-        private string _filePath;
+        private string _currentFilePath;
 
         private readonly string _packagedMapFilesDir = System.AppDomain.CurrentDomain.BaseDirectory + "..\\..\\MapFiles\\";
 
-        private readonly BackgroundWorker _scoringWorker;
+        private BackgroundWorker _scoringWorker;
 
         public MainWindow()
         {
@@ -43,10 +45,6 @@ namespace Tiledriver.Gui
             MapCanvas.NotifyNewMapItems += DetailPane.Update;
             KeyDown += MainWindow_KeyDown;
             _tileSize = Properties.Settings.Default.tileSize;
-
-            _scoringWorker = new BackgroundWorker();
-            _scoringWorker.DoWork += RunScoringAlgorithm;
-            _scoringWorker.RunWorkerCompleted += FinishedScoring;
         }
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
@@ -149,7 +147,7 @@ namespace Tiledriver.Gui
 
         private void UpdateFilePath(string filePath)
         {
-            _filePath = filePath;
+            _currentFilePath = filePath;
         }
 
         private void OpenWadFile(string filePath)
@@ -190,18 +188,22 @@ namespace Tiledriver.Gui
         private void SetMap(MapData map, string filePath)
         {
             _vm.MapData = map;
-            Application.Current.MainWindow.Title = $"Tiledriver - {_vm.MapData.Name} - {new FileInfo(filePath).Name}";
+            Application.Current.MainWindow.Title = $"Tiledriver - {_vm.MapData.Name} ({Path.GetFileName(filePath)})";
 
             MapScore.Content = "Calculating...";
 
+            // HACK: Make a new BGW every time to prevent crashes when loading maps quickly
+            _scoringWorker?.CancelAsync();
+            _scoringWorker?.Dispose();
+            _scoringWorker = new BackgroundWorker { WorkerSupportsCancellation = true };
+            _scoringWorker.DoWork += RunScoringAlgorithm;
+            _scoringWorker.RunWorkerCompleted += FinishedScoring;
             _scoringWorker.RunWorkerAsync(map);
-
-
         }
 
         private void RunScoringAlgorithm(object sender, DoWorkEventArgs e)
         {
-            var data = (MapData) e.Argument;
+            var data = (MapData)e.Argument;
 
             try
             {
@@ -220,7 +222,10 @@ namespace Tiledriver.Gui
 
         private void FinishedScoring(object sender, RunWorkerCompletedEventArgs e)
         {
-            MapScore.Content = e.Result;
+            if (!e.Cancelled)
+            {
+                MapScore.Content = e.Result;
+            }
         }
 
         private static void LoadMapInEcWolf(MapData uwmfMap, string wadPath)
@@ -283,9 +288,47 @@ namespace Tiledriver.Gui
 
         private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Properties.Settings.Default.filePath = _filePath;
+            Properties.Settings.Default.filePath = _currentFilePath;
             Properties.Settings.Default.tileSize = _tileSize;
             Properties.Settings.Default.Save();
+        }
+
+        private void LoadPreviousMap(object sender, RoutedEventArgs e)
+        {
+            var files = GetFilesInMapDirectory();
+            var currentIndex = files.IndexOf(_currentFilePath);
+            if (currentIndex > 0)
+            {
+                OpenMapFile(files[currentIndex - 1]);
+            }
+        }
+
+        private void LoadNextMap(object sender, RoutedEventArgs e)
+        {
+            var files = GetFilesInMapDirectory();
+            var currentIndex = files.IndexOf(_currentFilePath);
+            if (currentIndex >= 0 && currentIndex < files.Count)
+            {
+                OpenMapFile(files[currentIndex + 1]);
+            }
+        }
+
+        private List<string> GetFilesInMapDirectory()
+        {
+            if (!File.Exists(_currentFilePath))
+                return new List<string>();
+
+            var currentDirectory = Path.GetDirectoryName(_currentFilePath);
+            if (currentDirectory == null)
+                return new List<string>();
+
+            return
+                Directory.GetFiles(currentDirectory, "*.*").
+                    Where(s =>
+                        s.EndsWith(".wad", StringComparison.OrdinalIgnoreCase) ||
+                        s.EndsWith(".uwmf", StringComparison.OrdinalIgnoreCase)).
+                    OrderBy(name => name, new WinExplorerFileComparer()).
+                    ToList();
         }
     }
 }

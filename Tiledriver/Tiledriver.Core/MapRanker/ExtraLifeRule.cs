@@ -8,18 +8,17 @@ using Tiledriver.Core.LevelGeometry.Mapping;
 namespace Tiledriver.Core.MapRanker
 {
     /// <summary>
-    /// Negative 5 points for each small room
+    /// Two points for every (reachable) extra life.
     /// </summary>
-    public class SmallRoomRule : IRankingRule
+    public class ExtraLifeRule : IRankingRule
     {
-        private const int SmallRoomSize = 5;
-        private const int SmallRoomScore = -3;
+        private const int PointsPerLife = 2;
 
         public int Rank(MapData data, LevelMap levelMap)
         {
-            var smallRoomCount = levelMap.AllRooms.Count(room => room.Locations.Count <= SmallRoomSize);
+            var allLives = levelMap.AllRooms.Sum(x => x.Lives);
 
-            return smallRoomCount * SmallRoomScore;
+            return allLives / PointsPerLife;
         }
     }
 }

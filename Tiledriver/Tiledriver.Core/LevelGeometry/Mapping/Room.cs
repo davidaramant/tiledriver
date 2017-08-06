@@ -72,6 +72,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
         public IList<Thing> Treasure { get; }
         public IList<Thing> Health { get; }
         public int Lives { get; private set; }
+        public int BoringTiles { get; private set; }
 
         private void _locations_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -107,6 +108,9 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                     if (mapLocationThing.Type == Actor.OneUp.ClassName)
                         Lives += increment;
                 }
+
+                if (mapLocation.Tile == null && mapLocation.Things.Count() == 0)
+                    BoringTiles += increment;
             }
         }
 

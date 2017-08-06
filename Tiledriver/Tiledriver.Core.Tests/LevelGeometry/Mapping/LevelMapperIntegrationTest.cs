@@ -17,7 +17,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
     [TestFixture]
     public class LevelMapperIntegrationTest
     {
-        private bool _writeMapDetails = false;
+        private bool _writeMapDetails = true;
         private bool _writeGraphVizFiles = false;
 
         private StreamWriter _mapDetailsWriter;
@@ -56,6 +56,10 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
                 Console.WriteLine($"Found {room.Locations.Count} locations in the start room");
                 Console.WriteLine($"Found {levelMap.AllRooms.Count()} rooms in the level");
 
+                var ranker = new Ranker();
+                var score = ranker.RankLevel(map);
+                Console.WriteLine($"Score: {score}");
+
                 Console.WriteLine();
                 foreach (var currentRoom in levelMap.AllRooms)
                 {
@@ -63,10 +67,6 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
                     Console.Write(string.Join(", ", currentRoom.Locations.Select(l => $"({l.X},{l.Y})")));
                     Console.WriteLine();
                 }
-
-                var ranker = new Ranker();
-                var score = ranker.RankLevel(map);
-                Console.WriteLine($"Score: {score}");
 
                 if (_writeMapDetails)
                     _mapDetailsWriter.WriteLine($"Map {map.Name}: {levelMap.AllRooms.Count()} rooms, score={score}");
