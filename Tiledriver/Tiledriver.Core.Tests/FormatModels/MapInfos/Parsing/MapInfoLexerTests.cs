@@ -31,6 +31,14 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
         }
 
         [Test]
+        public void ShouldHandleMultiplePropertiesWithoutValues()
+        {
+            VerifyLexing("a\nb",
+                new MapInfoProperty(new Identifier("a")),
+                new MapInfoProperty(new Identifier("b")));
+        }
+
+        [Test]
         public void ShouldHandlePropertyWithValues()
         {
             VerifyLexing("a = 1, 2, 3",

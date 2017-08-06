@@ -1,11 +1,13 @@
 ﻿// Copyright (c) 2017, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
+using System;
 using System.IO;
+using Functional.Maybe;
 
 namespace Tiledriver.Core.FormatModels
 {
-    public interface IResourceProvider
+    public interface IResourceProvider : IDisposable
     {
         /// <summary>
         /// Looks up a resource path.
@@ -14,5 +16,7 @@ namespace Tiledriver.Core.FormatModels
         /// <returns>The stream for the resource.</returns>
         /// <exception cref="EntryNotFoundException"/>
         Stream Lookup(string path);
+
+        Maybe<Stream> TryLookup(string path);
     }
 }

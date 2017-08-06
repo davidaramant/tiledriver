@@ -36,6 +36,14 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
                 Console.WriteLine($"Found {room.Locations.Count} locations in the start room");
                 Console.WriteLine($"Found {levelMap.AllRooms.Count()} rooms in the level");
 
+                Console.WriteLine();
+                foreach (var currentRoom in levelMap.AllRooms)
+                {
+                    Console.Write($"Room {currentRoom.Name}: ");
+                    Console.Write(string.Join(", ", currentRoom.Locations.Select(l => $"({l.X},{l.Y})")));
+                    Console.WriteLine();
+                }
+
                 ProduceGraphs(map, levelMap);
             }
         }
@@ -47,16 +55,34 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             var currentDirectory = TestContext.CurrentContext.TestDirectory;
             var outputPath = Path.Combine(currentDirectory, name);
 
+            var maximumLocationSize = levelMap.AllRooms.Max(room => room.Locations.Count);
+            var minimumSize = 1.0;
+            var maximumSize = 15.0;
+
             var contentBuilder = new StringBuilder();
             contentBuilder.AppendLine("graph {");
             contentBuilder.AppendLine($"label=\"{map.Name}\";");
 
             contentBuilder.AppendLine("{");
-            contentBuilder.AppendLine($"\"{levelMap.StartingRoom.Name}\" [color=yellow, style=filled]");
-            foreach (var endingRoom in levelMap.EndingRooms)
+
+            foreach (var room in levelMap.AllRooms)
             {
-                contentBuilder.AppendLine($"\"{endingRoom.Name}\" [color=red, style=filled]");
+                contentBuilder.Append($"\"{room.Name}\" [");
+                if (room == levelMap.StartingRoom)
+                {
+                    contentBuilder.Append("color=yellow, style=filled, ");
+                }
+                else if (levelMap.EndingRooms.Contains(room))
+                {
+                    contentBuilder.Append("color=orange, style=filled, ");
+                }
+
+                var roomSize = (double) room.Locations.Count / maximumLocationSize * maximumSize;
+                if (roomSize < minimumSize)
+                    roomSize = minimumSize;
+                contentBuilder.AppendLine($"shape=circle, width={roomSize:F2}, fontsize=22];");
             }
+
             contentBuilder.AppendLine("}");
 
             foreach (var room in levelMap.AllRooms)
