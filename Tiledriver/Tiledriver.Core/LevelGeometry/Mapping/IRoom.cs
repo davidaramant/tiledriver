@@ -20,6 +20,8 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
         IList<Thing> Health { get; }
         int Lives { get; }
         int BoringTiles { get; }
+        bool HasGoldKey { get; }
+        bool HasSilverKey { get;}
 
         IDictionary<IList<Passage>, IRoom> AdjacentRooms { get; }
         IList<MapLocation> Locations { get; }
