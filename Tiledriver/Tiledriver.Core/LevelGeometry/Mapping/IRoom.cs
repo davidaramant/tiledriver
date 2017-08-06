@@ -7,6 +7,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 {
     public interface IRoom
     {
+        string Name { get; }
         IDictionary<IList<Passage>, IRoom> AdjacentRooms { get; }
         IList<MapLocation> Locations { get; }
     }
