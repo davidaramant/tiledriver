@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using JetBrains.Annotations;
+using Piglet.Lexer;
 using Tiledriver.Core.Extensions.Strings;
 using Tiledriver.Core.FormatModels.Common;
 
@@ -14,6 +15,22 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
 {
     public sealed class MapInfoLexer
     {
+        // TODO: Using a Piglet lexer might be overkill for parsing a single line
+        // It also does not validate that stuff is comma separated
+        private static readonly ILexer<string> ParameterLexer = LexerFactory<string>.Configure(configurator =>
+        {
+            // Quoted strings
+            configurator.Token("\"(\\\\.|[^\"])*\"", f => f);
+
+            // Ignore freestanding commas outside of quoted strings
+            configurator.Ignore(",");
+
+            // Returns a string for each parameter found (non-whitespace other than commas)
+            configurator.Token(@"[^\s,]+", f => f);
+
+            // Ignores all white space
+            configurator.Ignore(@"\s+");
+        });
         private readonly IResourceProvider _resourceProvider;
 
         public MapInfoLexer(IResourceProvider resourceProvider)
@@ -78,7 +95,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
 
             return new MapInfoProperty(
                 new Identifier(line.Substring(0, firstEqualsIndex).Trim()),
-                line.Substring(firstEqualsIndex + 1).Split(',').Select(v => v.Trim()));
+                ParseCommaSeparatedParameters(line.Substring(firstEqualsIndex + 1)));
         }
 
         private MapInfoBlock ParseBlock(string startLine, MapInfoTextReader reader)
@@ -99,6 +116,11 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             }
 
             return new MapInfoBlock(new Identifier(name), metadata, children);
+        }
+
+        public static IEnumerable<string> ParseCommaSeparatedParameters(string input)
+        {
+            return ParameterLexer.Tokenize(input).Select(token => token.Item2);
         }
     }
 }
