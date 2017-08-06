@@ -137,6 +137,7 @@
     <Compile Include="LevelGeometry\Mapping\Keys.cs" />
     <Compile Include="LevelGeometry\Mapping\LevelMap.cs" />
     <Compile Include="MapRanker\AmmoRule.cs" />
+    <Compile Include="MapRanker\BoringTileRule.cs" />
     <Compile Include="MapRanker\Constants.cs" />
     <Compile Include="MapRanker\CountBossesRule.cs" />
     <Compile Include="MapRanker\CountExitsRule.cs" />
@@ -146,6 +147,7 @@
     <Compile Include="MapRanker\EnemyVarietyRule.cs" />
     <Compile Include="MapRanker\ExtraLifeRule.cs" />
     <Compile Include="MapRanker\HealthRule.cs" />
+    <Compile Include="MapRanker\PushWallRule.cs" />
     <Compile Include="MapRanker\LockedDoorsRule.cs" />
     <Compile Include="MapRanker\RoomCountRule.cs" />
     <Compile Include="MapRanker\PassagesRule.cs" />
