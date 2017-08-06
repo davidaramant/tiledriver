@@ -18,6 +18,7 @@ using Tiledriver.Core.FormatModels.Pk3;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Uwmf.Parsing;
 using Tiledriver.Core.FormatModels.Wad;
+using Tiledriver.Core.FormatModels.Wdc31;
 using Tiledriver.Core.FormatModels.Xlat;
 using Tiledriver.Core.FormatModels.Xlat.Parsing;
 using Tiledriver.Core.MapTranslators;
