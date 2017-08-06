@@ -7,14 +7,15 @@ using Tiledriver.Core.LevelGeometry.Mapping;
 
 namespace Tiledriver.Core.MapRanker
 {
-    /// <summary>
-    /// Adds a score of 2 for each reachable exit.
-    /// </summary>
-    public class CountExitsRule : IRankingRule
+    public class SmallRoomRule : IRankingRule
     {
+        private const int SmallRoomSize = 6;
+
         public int Rank(MapData data, LevelMap levelMap)
         {
-            return levelMap.EndingRooms.Count() * 2;
+            var smallRoomCount = levelMap.AllRooms.Count(room => room.Locations.Count <= SmallRoomSize);
+
+            return smallRoomCount / 4 * -1;
         }
     }
 }
