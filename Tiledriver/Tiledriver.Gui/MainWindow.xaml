@@ -32,7 +32,8 @@
                     <Button Click="SelectDemoMapFile"
                             Content="Things Map" Margin="4" />
                     <Button Click="SelectEgressMapFile"
-                            Content="Egress Map" Margin="4" />
+                            Content="Egress Map" Margin="4"
+                            ToolTip="Reloads map that was displayed when app exited"/>
                     <Button Click="LoadPreviousMap"
                             Content="⏴" Margin="4,4,1,4"
                             ToolTip="Previous Map in Folder"/>
