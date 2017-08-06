@@ -36,6 +36,14 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
                 Console.WriteLine($"Found {room.Locations.Count} locations in the start room");
                 Console.WriteLine($"Found {levelMap.AllRooms.Count()} rooms in the level");
 
+                Console.WriteLine();
+                foreach (var currentRoom in levelMap.AllRooms)
+                {
+                    Console.Write($"{currentRoom.Name}: ");
+                    Console.Write(string.Join(", ", currentRoom.Locations.Select(l => $"({l.X},{l.Y})")));
+                    Console.WriteLine();
+                }
+
                 ProduceGraphs(map, levelMap);
             }
         }
