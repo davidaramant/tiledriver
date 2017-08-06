@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.LevelGeometry.Mapping;
+using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.Utils
 {
@@ -61,7 +62,16 @@ namespace Tiledriver.Core.Utils
             {
                 foreach (var passageRoomPair in room.AdjacentRooms)
                 {
-                    contentBuilder.AppendLine($"\"{room.Name}\" -- \"{passageRoomPair.Value.Name}\";");
+                    contentBuilder.Append($"\"{room.Name}\" -- \"{passageRoomPair.Value.Name}\"");
+
+                    if (passageRoomPair.Key.Any(passage => passage.LockLevel == LockLevel.Gold))
+                        contentBuilder.Append(" [color=gold]");
+                    if (passageRoomPair.Key.Any(passage => passage.LockLevel == LockLevel.Silver))
+                        contentBuilder.Append(" [color=silver]");
+                    if (passageRoomPair.Key.Any(passage => passage.LockLevel == LockLevel.Both))
+                        contentBuilder.Append(" [color=cyan]");
+
+                    contentBuilder.AppendLine(";");
                 }
             }
 
