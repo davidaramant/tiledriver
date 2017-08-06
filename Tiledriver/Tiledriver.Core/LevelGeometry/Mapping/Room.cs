@@ -126,6 +126,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
         {
             Actor.Dog.ClassName,
             Actor.FakeHitler.ClassName,
+            Actor.Mutant.ClassName,
             Actor.Guard.ClassName,
             Actor.Officer.ClassName,
             Actor.WolfensteinSS.ClassName
