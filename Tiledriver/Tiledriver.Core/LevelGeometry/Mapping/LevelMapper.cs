@@ -86,17 +86,19 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                 var fromLocation = locationsToProcess[0];
                 locationsToProcess.RemoveAt(0);
 
-                TryExpand(loc => loc.CanMoveNorth(), loc => loc.North(), room, fromLocation, locationsToProcess);
-                TryExpand(loc => loc.CanMoveWest(), loc => loc.West(), room, fromLocation, locationsToProcess);
-                TryExpand(loc => loc.CanMoveSouth(), loc => loc.South(), room, fromLocation, locationsToProcess);
-                TryExpand(loc => loc.CanMoveEast(), loc => loc.East(), room, fromLocation, locationsToProcess);
+                var n = TryExpand(loc => loc.CanMoveNorth(), loc => loc.North(), room, fromLocation, locationsToProcess);
+                var w = TryExpand(loc => loc.CanMoveWest(), loc => loc.West(), room, fromLocation, locationsToProcess);
+                var s = TryExpand(loc => loc.CanMoveSouth(), loc => loc.South(), room, fromLocation, locationsToProcess);
+                var e= TryExpand(loc => loc.CanMoveEast(), loc => loc.East(), room, fromLocation, locationsToProcess);
+
+                fromLocation.Cooridor = (n && s && !e && !w) || (!n && !s && e && w);
             }
 
             _hasGold |= room.Locations.Any(loc => _goldLocations.Any(key=>(int)key.X == loc.X && (int)key.Y==loc.Y));
             _hasSilver |= room.Locations.Any(loc => _silverLocations.Any(key => (int)key.X == loc.X && (int)key.Y == loc.Y));
         }
 
-        private void TryExpand(Func<MapLocation, bool> moveCheck, Func<MapLocation, MapLocation> targetTile, IRoom room, MapLocation fromLocation, List<MapLocation> locationsToProcess)
+        private bool TryExpand(Func<MapLocation, bool> moveCheck, Func<MapLocation, MapLocation> targetTile, IRoom room, MapLocation fromLocation, List<MapLocation> locationsToProcess)
         {
             if (moveCheck(fromLocation))
             {
@@ -106,7 +108,10 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                     room.Locations.Add(targetSpace);
                     locationsToProcess.Add(targetSpace);
                 }
+                return true;
             }
+
+            return false;
         }
 
         private Dictionary<IList<Passage>, MapLocation> FindPassages(IRoom room)

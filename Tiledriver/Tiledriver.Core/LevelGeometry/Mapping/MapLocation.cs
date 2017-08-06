@@ -26,6 +26,8 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
         public int X { get; }
 
+        public bool Cooridor { get; set; }
+
         public Tile Tile
         {
             get
