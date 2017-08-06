@@ -139,9 +139,17 @@
     <Compile Include="MapRanker\Constants.cs" />
     <Compile Include="MapRanker\CountBossesRule.cs" />
     <Compile Include="MapRanker\CountExitsRule.cs" />
+    <Compile Include="MapRanker\EnemyCountRule.cs" />
+    <Compile Include="MapRanker\EnemyDistributionRule.cs" />
+    <Compile Include="MapRanker\EnemyToRoomSizeRule.cs" />
+    <Compile Include="MapRanker\EnemyVarietyRule.cs" />
+    <Compile Include="MapRanker\RoomCountRule.cs" />
+    <Compile Include="MapRanker\PassagesRule.cs" />
     <Compile Include="MapRanker\HasExitRule.cs" />
     <Compile Include="MapRanker\HasStartRule.cs" />
     <Compile Include="MapRanker\IRankingRule.cs" />
+    <Compile Include="MapRanker\SmallRoomRule.cs" />
+    <Compile Include="MapRanker\UnopenableDoorsRule.cs" />
     <Compile Include="Wolf3D\LockLevel.cs" />
     <Compile Include="LevelGeometry\Mapping\MapLocation.cs" />
     <Compile Include="LevelGeometry\Mapping\IPassage.cs" />

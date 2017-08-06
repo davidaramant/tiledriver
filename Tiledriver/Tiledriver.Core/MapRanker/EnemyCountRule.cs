@@ -8,13 +8,15 @@ using Tiledriver.Core.LevelGeometry.Mapping;
 namespace Tiledriver.Core.MapRanker
 {
     /// <summary>
-    /// Adds a score of 2 for each reachable exit.
+    /// One point for every 5 enemies in the level
     /// </summary>
-    public class CountExitsRule : IRankingRule
+    public class EnemyCountRule : IRankingRule
     {
+        private const int EnemyDivisor = 5;
+
         public int Rank(MapData data, LevelMap levelMap)
         {
-            return levelMap.EndingRooms.Count() * 2;
+            return levelMap.AllRooms.Sum(room => room.Enemies.Count()) / EnemyDivisor;
         }
     }
 }

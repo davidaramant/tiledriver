@@ -9,7 +9,7 @@ using Tiledriver.Core.Wolf3D;
 namespace Tiledriver.Core.MapRanker
 {
     /// <summary>
-    /// Scores each boss as a positive 10.
+    /// Scores each boss as a positive 15.
     /// </summary>
     public class CountBossesRule : IRankingRule
     {
@@ -25,7 +25,7 @@ namespace Tiledriver.Core.MapRanker
                 Actor.Schabbs.ClassName
             };
 
-            return data.Things.Count(thing => bossTypes.Contains(thing.Type)) * 10;
+            return data.Things.Count(thing => bossTypes.Contains(thing.Type)) * 15;
         }
     }
 }

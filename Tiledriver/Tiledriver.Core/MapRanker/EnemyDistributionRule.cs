@@ -8,13 +8,18 @@ using Tiledriver.Core.LevelGeometry.Mapping;
 namespace Tiledriver.Core.MapRanker
 {
     /// <summary>
-    /// Adds a score of 2 for each reachable exit.
+    /// One point for each 10% of rooms with enemies.
     /// </summary>
-    public class CountExitsRule : IRankingRule
+    public class EnemyDistributionRule : IRankingRule
     {
         public int Rank(MapData data, LevelMap levelMap)
         {
-            return levelMap.EndingRooms.Count() * 2;
+            var roomCount = levelMap.AllRooms.Count();
+            var roomsWithEnemies = levelMap.AllRooms.Count(room => room.Enemies.Any());
+
+            var percentageWithEnemies = (double) roomsWithEnemies / roomCount;
+
+            return (int) (percentageWithEnemies * 10);
         }
     }
 }

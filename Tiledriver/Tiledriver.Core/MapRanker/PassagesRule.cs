@@ -8,13 +8,15 @@ using Tiledriver.Core.LevelGeometry.Mapping;
 namespace Tiledriver.Core.MapRanker
 {
     /// <summary>
-    /// Adds a score of 2 for each reachable exit.
+    /// One point for each passageway
     /// </summary>
-    public class CountExitsRule : IRankingRule
+    public class PassagesRule : IRankingRule
     {
         public int Rank(MapData data, LevelMap levelMap)
         {
-            return levelMap.EndingRooms.Count() * 2;
+            var passagesBetweenRooms = levelMap.AllRooms.Sum(room => room.AdjacentRooms.Count) / 2;
+
+            return passagesBetweenRooms;
         }
     }
 }
