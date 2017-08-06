@@ -10,7 +10,8 @@
                       Title="Tiledriver"
                       BorderThickness="0"
                       GlowBrush="Black"
-                      WindowStartupLocation="CenterScreen">
+                      WindowStartupLocation="CenterScreen"
+                      Closing="WindowClosing">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -30,6 +31,8 @@
                             Content="Demo Map" Margin="4" />
                     <Button Click="SelectDemoMapFile"
                             Content="Things Map" Margin="4" />
+                    <Button Click="SelectEgressMapFile"
+                            Content="Egress Map" Margin="4" />
                 </ToolBar>
                 <ToolBar>
                     <Button Click="RunCurrentMap"
