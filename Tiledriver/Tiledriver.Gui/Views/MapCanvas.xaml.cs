@@ -66,7 +66,7 @@ namespace Tiledriver.Gui.Views
             // Triggers
             foreach (var trigger in mapData.Triggers)
             {
-                AddMapItem(new TriggerVm(trigger, trigger.Action));
+                AddMapItem(new TriggerVm(trigger));
             }
         }
 
