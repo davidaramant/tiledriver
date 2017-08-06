@@ -31,7 +31,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
         private static IRoom MapRoom(IList<IRoom> discoveredRooms, MapLocation firstLocation)
         {
-            var newRoom = new Room();
+            var newRoom = new Room(discoveredRooms.Count + 1);
             discoveredRooms.Add(newRoom);
 
             newRoom.Locations.Add(firstLocation);

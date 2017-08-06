@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
+using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Uwmf.Parsing;
 using Tiledriver.Core.FormatModels.Wad;
 using Tiledriver.Core.LevelGeometry.Mapping;
@@ -34,6 +35,34 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
 
                 Console.WriteLine($"Found {room.Locations.Count} locations in the start room");
                 Console.WriteLine($"Found {levelMap.AllRooms.Count()} rooms in the level");
+
+                ProduceGraphs(map, levelMap);
+            }
+        }
+
+        private void ProduceGraphs(MapData map, LevelMap levelMap)
+        {
+            var name = $"{map.Name}.gv";
+
+            var currentDirectory = TestContext.CurrentContext.TestDirectory;
+            var outputPath = Path.Combine(currentDirectory, name);
+
+            var contentBuilder = new StringBuilder();
+            contentBuilder.AppendLine("graph {");
+
+            foreach (var room in levelMap.AllRooms)
+            {
+                foreach (var passageRoomPair in room.AdjacentRooms)
+                {
+                    contentBuilder.AppendLine($"\"{room.Name}\" -- \"{passageRoomPair.Value.Name}\";");
+                }
+            }
+
+            contentBuilder.AppendLine("}");
+
+            using (var writer = new StreamWriter(outputPath))
+            {
+                writer.Write(contentBuilder.ToString());
             }
         }
 
