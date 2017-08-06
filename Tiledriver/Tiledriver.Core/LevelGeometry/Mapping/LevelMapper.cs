@@ -124,29 +124,32 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                 if (targetPassage == null)
                     return;
 
-                switch ((LockLevel)targetPassage.Arg3)
+                if (targetPassage.Action == "Door_Open")
                 {
-                    case LockLevel.Silver:
-                        if (!hasSilver)
-                        {
-                            lockedWays.Add(passageTrail);
-                            return;
-                        }
-                        break;
-                    case LockLevel.Gold:
-                        if (!hasGold)
-                        {
-                            lockedWays.Add(passageTrail);
-                            return;
-                        }
-                        break;
-                    case LockLevel.Both:
-                        if (!hasSilver || !hasGold)
-                        {
-                            lockedWays.Add(passageTrail);
-                            return;
-                        }
-                        break;
+                    switch ((LockLevel) targetPassage.Arg3)
+                    {
+                        case LockLevel.Silver:
+                            if (!hasSilver)
+                            {
+                                lockedWays.Add(passageTrail);
+                                return;
+                            }
+                            break;
+                        case LockLevel.Gold:
+                            if (!hasGold)
+                            {
+                                lockedWays.Add(passageTrail);
+                                return;
+                            }
+                            break;
+                        case LockLevel.Both:
+                            if (!hasSilver || !hasGold)
+                            {
+                                lockedWays.Add(passageTrail);
+                                return;
+                            }
+                            break;
+                    }
                 }
 
                 passageTrail.Add(new Passage(targetPassageSpace));
