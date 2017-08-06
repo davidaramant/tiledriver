@@ -17,7 +17,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
     [TestFixture]
     public class LevelMapperIntegrationTest
     {
-        private bool _writeMapDetails = false;
+        private bool _writeMapDetails = true;
         private bool _writeGraphVizFiles = false;
 
         private StreamWriter _mapDetailsWriter;

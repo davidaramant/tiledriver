@@ -13,7 +13,7 @@ namespace Tiledriver.Core.MapRanker
     public class SmallRoomRule : IRankingRule
     {
         private const int SmallRoomSize = 5;
-        private const int SmallRoomScore = -5;
+        private const int SmallRoomScore = -3;
 
         public int Rank(MapData data, LevelMap levelMap)
         {
