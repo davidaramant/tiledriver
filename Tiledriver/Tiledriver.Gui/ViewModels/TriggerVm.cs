@@ -61,8 +61,7 @@ namespace Tiledriver.Gui.ViewModels
         {
             this._trigger = trigger;
             this._actionName = trigger.Action;
-
-            var template = _templates.ContainsKey(_actionName) ? _templates[_actionName] : Default;
+            var template = SelectTemplate(trigger);
 
             _geometry = template.Geometry;
             _fill = template.Fill;
@@ -166,9 +165,23 @@ namespace Tiledriver.Gui.ViewModels
             }
         }
 
+        private TriggerVmTemplate SelectTemplate(Core.FormatModels.Uwmf.Trigger trigger)
+        {
+            var key = trigger.Action;
+            if (! _templates.ContainsKey(key)) return Default;
+            if (key == "Door_Open" && ((LockLevel)trigger.Arg3 != LockLevel.None))
+            {
+                key += ((LockLevel)trigger.Arg3);
+            }
+            return _templates[key];
+        }
+
         private static Dictionary<string, TriggerVmTemplate> _templates = new Dictionary<string, TriggerVmTemplate>
         {
             { "Door_Open", DoorOpen() },
+            { "Door_OpenSilver", DoorOpenSilver() },
+            { "Door_OpenGold", DoorOpenGold() },
+            { "Door_OpenBoth", DoorOpenBoth() },
             { "Pushwall_Move", PushwallMove() },
             { "Exit_Normal", ExitNormal() },
             { "Exit_Secret", ExitSecret() },
@@ -184,6 +197,9 @@ namespace Tiledriver.Gui.ViewModels
         private static TriggerVmTemplate Default => new TriggerVmTemplate(SquarePath, Transparent(), White);
 
         private static TriggerVmTemplate DoorOpen() => new TriggerVmTemplate(SquarePath, Transparent(), Brown);
+        private static TriggerVmTemplate DoorOpenSilver() => new TriggerVmTemplate(SquarePath, Transparent(Violet), Brown);
+        private static TriggerVmTemplate DoorOpenGold() => new TriggerVmTemplate(SquarePath, Transparent(Gold), Brown);
+        private static TriggerVmTemplate DoorOpenBoth() => new TriggerVmTemplate(SquarePath, Transparent(Blue), Brown);
         private static TriggerVmTemplate PushwallMove() => new TriggerVmTemplate(SquarePath, Transparent(), Yellow);
         private static TriggerVmTemplate ExitNormal() => new TriggerVmTemplate(SquarePath, Transparent(), Green);
         private static TriggerVmTemplate ExitSecret() => new TriggerVmTemplate(SquarePath, Transparent(), Blue);
@@ -209,9 +225,15 @@ namespace Tiledriver.Gui.ViewModels
             }
         }
 
-        private static Color Transparent()
+        // FIXME There must be a better way to do this.
+        private static Color Transparent(Color? nullableColor = null)
         {
-            return Color.FromArgb(0, 0, 0, 0);
+            if (nullableColor == null)
+            {
+                return Color.FromArgb(0, 0, 0, 0);
+            }
+            Color color = nullableColor ?? Black;
+            return Color.FromArgb(127, color.R, color.G, color.B);
         }
     }
 }
