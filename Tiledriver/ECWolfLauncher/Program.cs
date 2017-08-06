@@ -41,7 +41,7 @@ namespace TestRunner
 
 
 
-        private static void ExportMapsFromPk3(string pk3Path, string outputBasePath)
+        private static void ExportMapsFromPk3(string pk3Path, string outputBasePath = ".")
         {
             var ecWolfPk3Path = Path.ChangeExtension(GetECWolfExePath(), "pk3");
 
