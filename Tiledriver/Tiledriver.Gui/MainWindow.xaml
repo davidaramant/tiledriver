@@ -55,6 +55,10 @@
                             IsEnabled="False" Margin="4" 
                             FontWeight="ExtraBold" />
                 </ToolBar>
+                <ToolBar>
+                    <Label Content="Map Score: "></Label>
+                    <Label x:Name="MapScore" Content="Unavailable"></Label>
+                </ToolBar>
             </ToolBarTray>
         </DockPanel>
         <views:MapCanvas x:Name="MapCanvas"
