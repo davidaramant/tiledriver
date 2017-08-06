@@ -68,7 +68,9 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
             newRoom.Locations.Add(firstLocation);
 
-            ExpandRoom(newRoom, firstLocation);
+            var locationsToProcess = new List<MapLocation> {firstLocation};
+
+            ExpandRoom(newRoom, locationsToProcess);
 
             var passages = FindPassages(newRoom);
 
@@ -77,18 +79,24 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             return newRoom;
         }
 
-        private void ExpandRoom(IRoom room, MapLocation fromLocation)
+        private void ExpandRoom(IRoom room, List<MapLocation> locationsToProcess)
         {
-            TryExpand(loc => loc.CanMoveNorth(), loc => loc.North(), room, fromLocation);
-            TryExpand(loc => loc.CanMoveWest(), loc => loc.West(), room, fromLocation);
-            TryExpand(loc => loc.CanMoveSouth(), loc => loc.South(), room, fromLocation);
-            TryExpand(loc => loc.CanMoveEast(), loc => loc.East(), room, fromLocation);
+            while (locationsToProcess.Count > 0)
+            {
+                var fromLocation = locationsToProcess[0];
+                locationsToProcess.RemoveAt(0);
+
+                TryExpand(loc => loc.CanMoveNorth(), loc => loc.North(), room, fromLocation, locationsToProcess);
+                TryExpand(loc => loc.CanMoveWest(), loc => loc.West(), room, fromLocation, locationsToProcess);
+                TryExpand(loc => loc.CanMoveSouth(), loc => loc.South(), room, fromLocation, locationsToProcess);
+                TryExpand(loc => loc.CanMoveEast(), loc => loc.East(), room, fromLocation, locationsToProcess);
+            }
 
             _hasGold |= room.Locations.Any(loc => _goldLocations.Any(key=>(int)key.X == loc.X && (int)key.Y==loc.Y));
             _hasSilver |= room.Locations.Any(loc => _silverLocations.Any(key => (int)key.X == loc.X && (int)key.Y == loc.Y));
         }
 
-        private void TryExpand(Func<MapLocation, bool> moveCheck, Func<MapLocation, MapLocation> targetTile, IRoom room, MapLocation fromLocation)
+        private void TryExpand(Func<MapLocation, bool> moveCheck, Func<MapLocation, MapLocation> targetTile, IRoom room, MapLocation fromLocation, List<MapLocation> locationsToProcess)
         {
             if (moveCheck(fromLocation))
             {
@@ -96,7 +104,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                 if (!room.Locations.Contains(targetSpace))
                 {
                     room.Locations.Add(targetSpace);
-                    ExpandRoom(room, targetSpace);
+                    locationsToProcess.Add(targetSpace);
                 }
             }
         }
