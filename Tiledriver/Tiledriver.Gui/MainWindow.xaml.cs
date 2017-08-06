@@ -8,15 +8,14 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Uwmf.Parsing;
 using Tiledriver.Core.FormatModels.Wad;
-using Tiledriver.Core.LevelGeometry.Mapping;
 using Tiledriver.Core.MapRanker;
+using Tiledriver.Core.Utils;
 using Tiledriver.Gui.Utilities;
 using Tiledriver.Gui.ViewModels;
 
@@ -329,6 +328,28 @@ namespace Tiledriver.Gui
                         s.EndsWith(".uwmf", StringComparison.OrdinalIgnoreCase)).
                     OrderBy(name => name, new WinExplorerFileComparer()).
                     ToList();
+        }
+
+        private void ShowGraph(object sender, RoutedEventArgs e)
+        {
+            var graphDetails = GraphVizRenderer.BuildGraphDefinition(_vm.MapData);
+
+            var tempGraphFile = Path.GetTempFileName() + ".gv";
+            var tempPngFile = Path.GetTempFileName() + ".png";
+
+            using (var graphWriter = new StreamWriter(tempGraphFile))
+                graphWriter.Write(graphDetails);
+
+            using (var process = new Process())
+            {
+                process.StartInfo.FileName = @"C:\Program Files (x86)\Graphviz2.38\bin\dot.exe";
+                process.StartInfo.Arguments = $"-Tpng \"{tempGraphFile}\" -o \"{tempPngFile}\"";
+                process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                process.Start();
+                process.WaitForExit();
+            }
+
+            Process.Start(tempPngFile);
         }
     }
 }

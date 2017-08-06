@@ -11,13 +11,14 @@ using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Uwmf.Parsing;
 using Tiledriver.Core.LevelGeometry.Mapping;
 using Tiledriver.Core.MapRanker;
+using Tiledriver.Core.Utils;
 
 namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
 {
     [TestFixture]
     public class LevelMapperIntegrationTest
     {
-        private bool _writeMapDetails = true;
+        private bool _writeMapDetails = false;
         private bool _writeGraphVizFiles = false;
 
         private StreamWriter _mapDetailsWriter;
@@ -80,52 +81,14 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
         {
             var name = $"{map.Name}.gv";
 
+            var content = GraphVizRenderer.BuildGraphDefinition(map, levelMap);
+
             var currentDirectory = TestContext.CurrentContext.TestDirectory;
             var outputPath = Path.Combine(currentDirectory, name);
 
-            var maximumLocationSize = levelMap.AllRooms.Max(room => room.Locations.Count);
-            var minimumSize = 1.0;
-            var maximumSize = 15.0;
-
-            var contentBuilder = new StringBuilder();
-            contentBuilder.AppendLine("graph {");
-            contentBuilder.AppendLine($"label=\"{map.Name}\";");
-
-            contentBuilder.AppendLine("{");
-
-            foreach (var room in levelMap.AllRooms)
-            {
-                contentBuilder.Append($"\"{room.Name}\" [");
-                if (room == levelMap.StartingRoom)
-                {
-                    contentBuilder.Append("color=yellow, style=filled, ");
-                }
-                else if (levelMap.EndingRooms.Contains(room))
-                {
-                    contentBuilder.Append("color=orange, style=filled, ");
-                }
-
-                var roomSize = (double) room.Locations.Count / maximumLocationSize * maximumSize;
-                if (roomSize < minimumSize)
-                    roomSize = minimumSize;
-                contentBuilder.AppendLine($"shape=circle, width={roomSize:F2}, fontsize=22];");
-            }
-
-            contentBuilder.AppendLine("}");
-
-            foreach (var room in levelMap.AllRooms)
-            {
-                foreach (var passageRoomPair in room.AdjacentRooms)
-                {
-                    contentBuilder.AppendLine($"\"{room.Name}\" -- \"{passageRoomPair.Value.Name}\";");
-                }
-            }
-
-            contentBuilder.AppendLine("}");
-
             using (var writer = new StreamWriter(outputPath))
             {
-                writer.Write(contentBuilder.ToString());
+                writer.Write(content);
             }
         }
 

@@ -159,6 +159,7 @@
     <Compile Include="MapRanker\TreasureRule.cs" />
     <Compile Include="MapRanker\UnopenableDoorsRule.cs" />
     <Compile Include="MapRanker\WeaponsRule.cs" />
+    <Compile Include="Utils\GraphVizRenderer.cs" />
     <Compile Include="Wolf3D\LockLevel.cs" />
     <Compile Include="LevelGeometry\Mapping\MapLocation.cs" />
     <Compile Include="LevelGeometry\Mapping\IPassage.cs" />
