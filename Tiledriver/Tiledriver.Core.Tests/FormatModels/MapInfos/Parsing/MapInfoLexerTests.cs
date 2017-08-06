@@ -45,6 +45,46 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
                 new MapInfoProperty(new Identifier("a"), new[] { "1", "2", "3" }));
         }
 
+        [TestCase("NoWhiteSpace")]
+        [TestCase("White Space")]
+        [TestCase("With,Comma")]
+        public void ShouldHandlePropertyWithStringValues(string s)
+        {
+            VerifyLexing($"a = \"{s}\"",
+                new MapInfoProperty(new Identifier("a"), new[] { $"\"{s}\"" }));
+        }
+
+        #region Paramter parsing
+
+        [TestCase("\"\"\"", "\"\"\"")]
+        [TestCase("1", "1")]
+        [TestCase("\"string\"", "\"string\"")]
+        [TestCase("\"string with whitespace\"", "\"string with whitespace\"")]
+        [TestCase("\"string,with,commas\"", "\"string,with,commas\"")]
+        [TestCase("   \"string needing trimming\"     ", "\"string needing trimming\"")]
+        public void ShouldParseSingleParameters(string input, string expected)
+        {
+            AssertParsing(input, expected);
+        }
+
+        [Test]
+        public void ShouldParseMultipleParameters()
+        {
+            AssertParsing(
+                "   1   ,  \"a string\",  \"comma,string\"  ",
+                "1",
+                "\"a string\"",
+                "\"comma,string\"");
+        }
+
+        private static void AssertParsing(string input, params string[] expectedResults)
+        {
+            var actualResults = MapInfoLexer.ParseCommaSeparatedParameters(input);
+            Assert.That(actualResults.ToArray(), Is.EqualTo(expectedResults.ToArray()), "Did not parse parameters correctly.");
+        }
+
+        #endregion
+
         [Test]
         public void ShouldHandleBlock()
         {
