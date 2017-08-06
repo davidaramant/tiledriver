@@ -4,6 +4,7 @@
 using System;
 using System.Linq;
 using Tiledriver.Core.FormatModels.Uwmf;
+using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.LevelGeometry.Mapping
 {
@@ -12,6 +13,18 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
         public MapLocation Location { get; }
 
         public Trigger Door => Location.Triggers.SingleOrDefault(t=>t.Action == "Door_Open");
+
+        public LockLevel LockLevel
+        {
+            get
+            {
+                var door = Door;
+                if (null == door)
+                    return LockLevel.None;
+
+                return (LockLevel)door.Arg3;
+            }
+        }
 
         public Trigger Pushwall => Location.Triggers.SingleOrDefault(t=>t.Action == "Pushwall_Move");
 
