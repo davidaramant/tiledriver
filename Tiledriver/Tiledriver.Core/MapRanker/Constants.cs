@@ -5,7 +5,7 @@ namespace Tiledriver.Core.MapRanker
 {
     public static class Constants
     {
-        public static int InvalidScore = -100;
+        public static int InvalidScore = -1000;
         public static int ValidScore = 0;
     }
 }

@@ -12,6 +12,8 @@ namespace Tiledriver.Core.MapRanker
     /// </summary>
     public class EnemyDistributionRule : IRankingRule
     {
+        private const double TippingPoint = 0.6;
+
         public int Rank(MapData data, LevelMap levelMap)
         {
             var roomCount = levelMap.AllRooms.Count();
@@ -19,7 +21,12 @@ namespace Tiledriver.Core.MapRanker
 
             var percentageWithEnemies = (double) roomsWithEnemies / roomCount;
 
-            return (int) (percentageWithEnemies * 10);
+            if (percentageWithEnemies <= TippingPoint)
+            {
+                return (int) (percentageWithEnemies * 10);
+            }
+
+            return (int) ((percentageWithEnemies - TippingPoint) * -10 + TippingPoint * 10);
         }
     }
 }

@@ -9,11 +9,13 @@ namespace Tiledriver.Core.MapRanker
 {
     public class UnopenableDoorsRule : IRankingRule
     {
+        private const int UnopenablePenalty = -10;
+
         public int Rank(MapData data, LevelMap levelMap)
         {
             var unopenableDoors = levelMap.AllRooms.Sum(room => room.UnopenableDoors);
 
-            return unopenableDoors * -2;
+            return unopenableDoors * UnopenablePenalty;
         }
     }
 }

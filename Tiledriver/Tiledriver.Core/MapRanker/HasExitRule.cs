@@ -8,7 +8,7 @@ using Tiledriver.Core.LevelGeometry.Mapping;
 namespace Tiledriver.Core.MapRanker
 {
     /// <summary>
-    /// Scores 0 for valid, scores -100 for invalid.
+    /// Scores 0 for valid, scores -1000 for invalid.
     /// </summary>
     public class HasExitRule : IRankingRule
     {
