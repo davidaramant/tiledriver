@@ -14,6 +14,17 @@ namespace Tiledriver.Core.FormatModels.Wdc31
     {
         private const string FileVersion = "WDC3.1";
 
+        public static bool IsValid(Stream mapStream)
+        {
+            using (var reader = new BinaryReader(mapStream, Encoding.ASCII, leaveOpen: true))
+            {
+                var version = new string(reader.ReadChars(6));
+                bool isValid = version == FileVersion;
+                mapStream.Position -= 6;
+                return isValid;
+            }
+        }
+
         public static IEnumerable<BinaryMap> ReadMaps(Stream mapStream)
         {
             using (var reader = new BinaryReader(mapStream, Encoding.ASCII, leaveOpen: true))
@@ -27,7 +38,7 @@ namespace Tiledriver.Core.FormatModels.Wdc31
 
                 foreach (var mapIndex in Enumerable.Range(0, header.NumberOfMaps))
                 {
-                    var mapName = new string(reader.ReadChars(header.MaxMapNameLength));
+                    var mapName = new string(reader.ReadChars(header.MaxMapNameLength).TakeWhile(c=>c!=0).ToArray());
                     var mapWidth = reader.ReadUInt16();
                     var mapHeight = reader.ReadUInt16();
                     var planes = new List<ushort[]>();
