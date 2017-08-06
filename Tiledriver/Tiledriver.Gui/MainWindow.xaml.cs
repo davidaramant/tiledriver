@@ -192,7 +192,7 @@ namespace Tiledriver.Gui
         private void SetMap(MapData map, string filePath)
         {
             _vm.MapData = map;
-            Application.Current.MainWindow.Title = $"Tiledriver - {_vm.MapData.Name} - {new FileInfo(filePath).Name}";
+            Application.Current.MainWindow.Title = $"Tiledriver - {_vm.MapData.Name} ({Path.GetFileName(filePath)})";
 
             MapScore.Content = "Calculating...";
 
