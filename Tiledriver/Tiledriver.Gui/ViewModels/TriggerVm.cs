@@ -168,12 +168,11 @@ namespace Tiledriver.Gui.ViewModels
         private TriggerVmTemplate SelectTemplate(Core.FormatModels.Uwmf.Trigger trigger)
         {
             var key = trigger.Action;
-            if (! _templates.ContainsKey(key)) return Default;
             if (key == "Door_Open" && ((LockLevel)trigger.Arg3 != LockLevel.None))
             {
                 key += ((LockLevel)trigger.Arg3);
             }
-            return _templates[key];
+            return _templates.ContainsKey(key) ? _templates[key] : Default;
         }
 
         private static Dictionary<string, TriggerVmTemplate> _templates = new Dictionary<string, TriggerVmTemplate>
@@ -182,7 +181,6 @@ namespace Tiledriver.Gui.ViewModels
             { "Door_OpenSilver", DoorOpenSilver() },
             { "Door_OpenGold", DoorOpenGold() },
             { "Door_OpenBoth", DoorOpenBoth() },
-            { "Door_Open3", DoorOpenBoth() },
             { "Pushwall_Move", PushwallMove() },
             { "Exit_Normal", ExitNormal() },
             { "Exit_Secret", ExitSecret() },
