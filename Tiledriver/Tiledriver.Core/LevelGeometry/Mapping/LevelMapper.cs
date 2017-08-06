@@ -51,7 +51,6 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
             var startingRoom = MapRoom(startPosition);
 
-
             int keysFound;
 
             do
@@ -59,7 +58,6 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                 keysFound = (hasGold ? 0 : 1) + (hasSilver ? 0 : 1);
                 AttemptLocks();
             } while (keysFound < (hasGold ? 0 : 1) + (hasSilver ? 0 : 1));
-            
 
             return new LevelMap(startingRoom, discoveredRooms);
         }
@@ -227,7 +225,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
         private void AttemptLocks()
         {
-            foreach (var lockedWay in lockedWays)
+            foreach (var lockedWay in lockedWays.ToArray())
             {
                 switch (lockedWay.LockLevel)
                 {
@@ -238,7 +236,6 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                             Dictionary<IList<Passage>, MapLocation> passages = new Dictionary<IList<Passage>, MapLocation>();
                             TryPassage(lockedWay.GetNext, lockedWay.HasProperFormattedPassage, lockedWay.MoveBackCheck, lockedWay.FromLocation, lockedWay.FromRoom, passages);
                             ExplorePassages(passages, lockedWay.FromRoom);
-                            return;
                         }
                         break;
                     case LockLevel.Gold:
@@ -248,7 +245,6 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                             Dictionary<IList<Passage>, MapLocation> passages = new Dictionary<IList<Passage>, MapLocation>();
                             TryPassage(lockedWay.GetNext, lockedWay.HasProperFormattedPassage, lockedWay.MoveBackCheck, lockedWay.FromLocation, lockedWay.FromRoom, passages);
                             ExplorePassages(passages, lockedWay.FromRoom);
-                            return;
                         }
                         break;
                     case LockLevel.Both:
@@ -258,7 +254,6 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                             Dictionary<IList<Passage>, MapLocation> passages = new Dictionary<IList<Passage>, MapLocation>();
                             TryPassage(lockedWay.GetNext, lockedWay.HasProperFormattedPassage, lockedWay.MoveBackCheck, lockedWay.FromLocation, lockedWay.FromRoom, passages);
                             ExplorePassages(passages, lockedWay.FromRoom);
-                            return;
                         }
                         break;
                 }
