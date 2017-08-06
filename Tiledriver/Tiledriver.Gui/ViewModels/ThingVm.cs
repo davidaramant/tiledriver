@@ -105,12 +105,12 @@ namespace Tiledriver.Gui.ViewModels
             { "SilverKey", Key(Silver) },
             // DECORATIONS
             { "WhitePillar", Circle(White, LightGray) },
-            { "CeilingLight", Circle(LightYellow, LightGoldenrodYellow) },
+            { "CeilingLight", Circle(Orange, Goldenrod) },
             
             // CATEGORIES
             { "Bosses", Boss() },
             { "Ghosts", PacmanGhost() },
-            { "Decorations", Circle(Green, LightGreen) },
+            { "Decorations", Circle(DarkGreen, Green) },
             { "Treasure", Treasure() },
             { "Health", Health() },
             { "Weapons", Weapons() },
@@ -119,15 +119,15 @@ namespace Tiledriver.Gui.ViewModels
 
         private static ThingVmTemplate Default => new ThingVmTemplate(CirclePath, Violet, White);
 
-        private static ThingVmTemplate Player() => new ThingVmTemplate(ManPath, Fuchsia, Fuchsia, true);
-        private static ThingVmTemplate PatrolPoint() => new ThingVmTemplate(ArrowPath, Black, White, true);
-        private static ThingVmTemplate EnemyMan(Color fill) => new ThingVmTemplate(ManPath, fill, White, true);
+        private static ThingVmTemplate Player() => new ThingVmTemplate(ManPath, Fuchsia, DeepPink, true);
+        private static ThingVmTemplate PatrolPoint() => new ThingVmTemplate(ArrowPath, Black, LightGray, true);
+        private static ThingVmTemplate EnemyMan(Color fill) => new ThingVmTemplate(ManPath, fill, LightPink, true);
         private static ThingVmTemplate Boss() => new ThingVmTemplate(BossPath, Fuchsia, Fuchsia, true);
         private static ThingVmTemplate Key(Color fill) => new ThingVmTemplate(KeyPath, fill, fill);
         private static ThingVmTemplate PacmanGhost() => new ThingVmTemplate(PacmanGhostPath, GhostWhite, LightBlue);
         private static ThingVmTemplate Circle(Color fill, Color stroke) => new ThingVmTemplate(CirclePath, fill, stroke);
         private static ThingVmTemplate Dog() => new ThingVmTemplate(DogPath, Brown, SaddleBrown, shouldRotate:true);
-        private static ThingVmTemplate Treasure() => new ThingVmTemplate(CrownPath, Gold, Gold);
+        private static ThingVmTemplate Treasure() => new ThingVmTemplate(CrownPath, Gold, DarkGoldenrod);
         private static ThingVmTemplate Health() => new ThingVmTemplate(CrossPath, Blue, White);
         private static ThingVmTemplate Weapons() => new ThingVmTemplate(GunPath, Gray, LightGray);
         private static ThingVmTemplate Ammo() => new ThingVmTemplate(AmmoPath, Gray, LightGray);
