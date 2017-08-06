@@ -90,8 +90,15 @@ namespace Tiledriver.Core.MapTranslators
 
             foreach (var oldThing in binaryMap.GetAllSpots(BinaryMapPlaneId.Thing).Where(spot => spot.OldNum != 0))
             {
+                var possibleMapping = _translatorInfo.TryLookupThingMapping(oldThing.OldNum);
+
                 // TODO: Report errors here
-                var mapping = _translatorInfo.LookupThingMapping(oldThing.OldNum);
+                if (possibleMapping.IsNothing())
+                {
+                    continue;
+                }
+
+                var mapping = possibleMapping.Value;
 
                 switch (mapping)
                 {
@@ -147,8 +154,7 @@ namespace Tiledriver.Core.MapTranslators
                         break;
 
                     case Elevator elevator:
-                        // TODO: thing elevators
-                        break;
+                        throw new NotImplementedException("TODO: Thing elevators");
 
                     case TriggerTemplate triggerTemplate:
                         var trigger = _autoMapper.Map<Trigger>(triggerTemplate);
