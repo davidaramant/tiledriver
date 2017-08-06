@@ -11,41 +11,21 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 {
     public class LevelMapper
     {
-        private class LockedWay
-        {
-            public LockLevel LockLevel { get; }
-            public Func<MapLocation, MapLocation> GetNext { get; }
-            public Func<Trigger, bool> HasProperFormattedPassage { get; }
-            public Func<MapLocation, bool> MoveBackCheck { get; }
-            public MapLocation FromLocation { get; }
-            public IRoom FromRoom { get; }
-
-            public LockedWay(LockLevel lockLevel, Func<MapLocation, MapLocation> getNext, Func<Trigger, bool> hasProperFormattedPassage, Func<MapLocation, bool> moveBackCheck, MapLocation fromLocation, IRoom fromRoom)
-            {
-                LockLevel = lockLevel;
-                GetNext = getNext;
-                HasProperFormattedPassage = hasProperFormattedPassage;
-                MoveBackCheck = moveBackCheck;
-                FromLocation = fromLocation;
-                FromRoom = fromRoom;
-            }
-        }
-
-        private IList<Thing> silverLocations;
-        private IList<Thing> goldLocations;
-        private bool hasSilver;
-        private bool hasGold;
-        private IList<IRoom> discoveredRooms = new List<IRoom>();
-        private IList<LockedWay> lockedWays = new List<LockedWay>();
+        private IList<Thing> _silverLocations;
+        private IList<Thing> _goldLocations;
+        private bool _hasSilver;
+        private bool _hasGold;
+        private IList<IRoom> _discoveredRooms = new List<IRoom>();
+        private IList<LockedWay> _lockedWays = new List<LockedWay>();
 
         public LevelMap Map(MapData data)
         {
-            hasSilver = false;
-            hasGold = false;
-            discoveredRooms.Clear();
+            _hasSilver = false;
+            _hasGold = false;
+            _discoveredRooms.Clear();
 
-            silverLocations = data.Things.Where(t=>t.Type == Actor.SilverKey.ClassName).ToList();
-            goldLocations = data.Things.Where(t => t.Type == Actor.GoldKey.ClassName).ToList();
+            _silverLocations = data.Things.Where(t=>t.Type == Actor.SilverKey.ClassName).ToList();
+            _goldLocations = data.Things.Where(t => t.Type == Actor.GoldKey.ClassName).ToList();
 
             var startPosition = FindStart(data);
 
@@ -55,11 +35,16 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
             do
             {
-                keysFound = (hasGold ? 0 : 1) + (hasSilver ? 0 : 1);
+                keysFound = CountKeys();
                 AttemptLocks();
-            } while (keysFound < (hasGold ? 0 : 1) + (hasSilver ? 0 : 1));
+            } while (keysFound < CountKeys());
 
-            return new LevelMap(startingRoom, discoveredRooms);
+            return new LevelMap(startingRoom, _discoveredRooms);
+        }
+
+        private int CountKeys()
+        {
+            return (_hasGold ? 1 : 0) + (_hasSilver ? 1 : 0);
         }
 
         private MapLocation FindStart(MapData data)
@@ -71,8 +56,8 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
         private IRoom MapRoom(MapLocation firstLocation)
         {
-            var newRoom = new Room(discoveredRooms.Count + 1);
-            discoveredRooms.Add(newRoom);
+            var newRoom = new Room(_discoveredRooms.Count + 1);
+            _discoveredRooms.Add(newRoom);
 
             newRoom.Locations.Add(firstLocation);
 
@@ -92,8 +77,8 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             TryExpand(loc => loc.CanMoveSouth(), loc => loc.South(), room, fromLocation);
             TryExpand(loc => loc.CanMoveEast(), loc => loc.East(), room, fromLocation);
 
-            hasGold |= room.Locations.Any(loc => goldLocations.Any(key=>(int)key.X == loc.X && (int)key.Y==loc.Y));
-            hasSilver |= room.Locations.Any(loc => silverLocations.Any(key => (int)key.X == loc.X && (int)key.Y == loc.Y));
+            _hasGold |= room.Locations.Any(loc => _goldLocations.Any(key=>(int)key.X == loc.X && (int)key.Y==loc.Y));
+            _hasSilver |= room.Locations.Any(loc => _silverLocations.Any(key => (int)key.X == loc.X && (int)key.Y == loc.Y));
         }
 
         private void TryExpand(Func<MapLocation, bool> moveCheck, Func<MapLocation, MapLocation> targetTile, IRoom room, MapLocation fromLocation)
@@ -158,23 +143,23 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                     switch ((LockLevel) targetPassage.Arg3)
                     {
                         case LockLevel.Silver:
-                            if (!hasSilver)
+                            if (!_hasSilver)
                             {
-                                lockedWays.Add(new LockedWay((LockLevel)targetPassage.Arg3, getNext, hasProperFormattedPassage, moveBackCheck, fromLocation, fromRoom));
+                                _lockedWays.Add(new LockedWay((LockLevel)targetPassage.Arg3, getNext, hasProperFormattedPassage, moveBackCheck, fromLocation, fromRoom));
                                 return;
                             }
                             break;
                         case LockLevel.Gold:
-                            if (!hasGold)
+                            if (!_hasGold)
                             {
-                                lockedWays.Add(new LockedWay((LockLevel)targetPassage.Arg3, getNext, hasProperFormattedPassage, moveBackCheck, fromLocation, fromRoom));
+                                _lockedWays.Add(new LockedWay((LockLevel)targetPassage.Arg3, getNext, hasProperFormattedPassage, moveBackCheck, fromLocation, fromRoom));
                                 return;
                             }
                             break;
                         case LockLevel.Both:
-                            if (!hasSilver || !hasGold)
+                            if (!_hasSilver || !_hasGold)
                             {
-                                lockedWays.Add(new LockedWay((LockLevel)targetPassage.Arg3, getNext, hasProperFormattedPassage, moveBackCheck, fromLocation, fromRoom));
+                                _lockedWays.Add(new LockedWay((LockLevel)targetPassage.Arg3, getNext, hasProperFormattedPassage, moveBackCheck, fromLocation, fromRoom));
                                 return;
                             }
                             break;
@@ -207,7 +192,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
         {
             foreach (var passage in passages)
             {
-                var existingRoom = discoveredRooms.FirstOrDefault(
+                var existingRoom = _discoveredRooms.FirstOrDefault(
                     r => r.Locations.Any(loc => loc.X == passage.Value.X && loc.Y == passage.Value.Y));
                 if (existingRoom != null)
                 {
@@ -225,32 +210,32 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
         private void AttemptLocks()
         {
-            foreach (var lockedWay in lockedWays.ToArray())
+            foreach (var lockedWay in _lockedWays.ToArray())
             {
                 switch (lockedWay.LockLevel)
                 {
                     case LockLevel.Silver:
-                        if (hasSilver)
+                        if (_hasSilver)
                         {
-                            lockedWays.Remove(lockedWay);
+                            _lockedWays.Remove(lockedWay);
                             Dictionary<IList<Passage>, MapLocation> passages = new Dictionary<IList<Passage>, MapLocation>();
                             TryPassage(lockedWay.GetNext, lockedWay.HasProperFormattedPassage, lockedWay.MoveBackCheck, lockedWay.FromLocation, lockedWay.FromRoom, passages);
                             ExplorePassages(passages, lockedWay.FromRoom);
                         }
                         break;
                     case LockLevel.Gold:
-                        if (hasGold)
+                        if (_hasGold)
                         {
-                            lockedWays.Remove(lockedWay);
+                            _lockedWays.Remove(lockedWay);
                             Dictionary<IList<Passage>, MapLocation> passages = new Dictionary<IList<Passage>, MapLocation>();
                             TryPassage(lockedWay.GetNext, lockedWay.HasProperFormattedPassage, lockedWay.MoveBackCheck, lockedWay.FromLocation, lockedWay.FromRoom, passages);
                             ExplorePassages(passages, lockedWay.FromRoom);
                         }
                         break;
                     case LockLevel.Both:
-                        if (hasSilver || hasGold)
+                        if (_hasSilver || _hasGold)
                         {
-                            lockedWays.Remove(lockedWay);
+                            _lockedWays.Remove(lockedWay);
                             Dictionary<IList<Passage>, MapLocation> passages = new Dictionary<IList<Passage>, MapLocation>();
                             TryPassage(lockedWay.GetNext, lockedWay.HasProperFormattedPassage, lockedWay.MoveBackCheck, lockedWay.FromLocation, lockedWay.FromRoom, passages);
                             ExplorePassages(passages, lockedWay.FromRoom);
@@ -260,5 +245,24 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             }
         }
 
+        private class LockedWay
+        {
+            public LockLevel LockLevel { get; }
+            public Func<MapLocation, MapLocation> GetNext { get; }
+            public Func<Trigger, bool> HasProperFormattedPassage { get; }
+            public Func<MapLocation, bool> MoveBackCheck { get; }
+            public MapLocation FromLocation { get; }
+            public IRoom FromRoom { get; }
+
+            public LockedWay(LockLevel lockLevel, Func<MapLocation, MapLocation> getNext, Func<Trigger, bool> hasProperFormattedPassage, Func<MapLocation, bool> moveBackCheck, MapLocation fromLocation, IRoom fromRoom)
+            {
+                LockLevel = lockLevel;
+                GetNext = getNext;
+                HasProperFormattedPassage = hasProperFormattedPassage;
+                MoveBackCheck = moveBackCheck;
+                FromLocation = fromLocation;
+                FromRoom = fromRoom;
+            }
+        }
     }
 }
