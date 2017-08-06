@@ -86,7 +86,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
         public MapLocation South()
         {
-            if (Y > _data.Height-1)
+            if (Y+1 > _data.Height-1)
                 return null;
 
             return new MapLocation(_data, X, Y + 1);
@@ -94,7 +94,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
         public MapLocation East()
         {
-            if (X > _data.Width - 1)
+            if (X+1 > _data.Width - 1)
                 return null;
 
             return new MapLocation(_data, X+1, Y);

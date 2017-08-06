@@ -46,8 +46,8 @@ namespace Tiledriver.Core.MapTranslators
             var ambushSpots = new HashSet<Point>();
 
             var triggers = new List<Trigger>();
-            var tileSpaces = TranslateTileSpaces(binaryMap, triggers, ambushSpots);
-            var things = TranslateThings(binaryMap, triggers, tileSpaces, ambushSpots, tiles);
+            var tileSpaces = TranslateTileSpaces(binaryMap, triggers, ambushSpots).ToArray();
+            var things = TranslateThings(binaryMap, triggers, tileSpaces, ambushSpots, tiles).ToArray();
 
             return new MapData(
                 nameSpace: "Wolf3D",
