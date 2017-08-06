@@ -12,6 +12,7 @@ namespace Tiledriver.Gui.ViewModels
 {
     public abstract class MapItemVm
     {
+        public const string NoPath = "";
         public const string TrianglePath = "M 16 0 L 28 32 L 4 32 Z";
         public const string SquarePath = "M 0 0 L 1 0 L 1 1 L 0 1 Z";
         public const string EastWestDoorPath = "M 0 0 L 1 0 L 1 2 L 0 2 Z";

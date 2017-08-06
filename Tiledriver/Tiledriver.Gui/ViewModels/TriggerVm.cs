@@ -92,8 +92,8 @@ namespace Tiledriver.Gui.ViewModels
 
         public override double Left(double size) => (_trigger.X + 0.5) * size - Width(size) / 2;
         public override double Top(double size) => (_trigger.Y + 0.5) * size - Height(size) / 2;
-        public override double Height(double size) => size / 1.2;
-        public override double Width(double size) => size / 1.2;
+        public override double Height(double size) => size / 3.0;
+        public override double Width(double size) => size / 3.0;
 
         public override string DetailType => "Trigger";
 
@@ -165,12 +165,22 @@ namespace Tiledriver.Gui.ViewModels
             }
         }
 
+        private TriggerVmTemplate DecoratedDoor(Core.FormatModels.Uwmf.Trigger trigger)
+        {
+            var lockLevel = (LockLevel) trigger.Arg3;
+            if (lockLevel == LockLevel.Gold) return new TriggerVmTemplate(CirclePath, Gold, Black);
+            if (lockLevel == LockLevel.Silver) return new TriggerVmTemplate(CirclePath, Silver, Black);
+            if (lockLevel == LockLevel.Both) return new TriggerVmTemplate(CirclePath, Blue, Black);
+            return Default;
+        }
+
         private TriggerVmTemplate SelectTemplate(Core.FormatModels.Uwmf.Trigger trigger)
         {
             var key = trigger.Action;
-            if (key == "Door_Open" && ((LockLevel)trigger.Arg3 != LockLevel.None))
+            var requiresKey = ((LockLevel) trigger.Arg3 != LockLevel.None);
+            if ((key == "Door_Open") && requiresKey)
             {
-                key += ((LockLevel)trigger.Arg3);
+                return DecoratedDoor(trigger);
             }
             return _templates.ContainsKey(key) ? _templates[key] : Default;
         }
@@ -178,9 +188,6 @@ namespace Tiledriver.Gui.ViewModels
         private static Dictionary<string, TriggerVmTemplate> _templates = new Dictionary<string, TriggerVmTemplate>
         {
             { "Door_Open", DoorOpen() },
-            { "Door_OpenSilver", DoorOpenSilver() },
-            { "Door_OpenGold", DoorOpenGold() },
-            { "Door_OpenBoth", DoorOpenBoth() },
             { "Pushwall_Move", PushwallMove() },
             { "Exit_Normal", ExitNormal() },
             { "Exit_Secret", ExitSecret() },
@@ -195,10 +202,7 @@ namespace Tiledriver.Gui.ViewModels
 
         private static TriggerVmTemplate Default => new TriggerVmTemplate(SquarePath, Transparent(), White);
 
-        private static TriggerVmTemplate DoorOpen() => new TriggerVmTemplate(SquarePath, Transparent(), Brown);
-        private static TriggerVmTemplate DoorOpenSilver() => new TriggerVmTemplate(SquarePath, Transparent(Cyan), Brown);
-        private static TriggerVmTemplate DoorOpenGold() => new TriggerVmTemplate(SquarePath, Transparent(Gold), Brown);
-        private static TriggerVmTemplate DoorOpenBoth() => new TriggerVmTemplate(SquarePath, Transparent(Blue), Brown);
+        private static TriggerVmTemplate DoorOpen() => new TriggerVmTemplate(NoPath, Transparent(), Brown);
         private static TriggerVmTemplate PushwallMove() => new TriggerVmTemplate(SquarePath, Transparent(), Yellow);
         private static TriggerVmTemplate ExitNormal() => new TriggerVmTemplate(SquarePath, Transparent(), Green);
         private static TriggerVmTemplate ExitSecret() => new TriggerVmTemplate(SquarePath, Transparent(), Blue);
