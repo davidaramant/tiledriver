@@ -120,6 +120,29 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             return CanMove(t => t.BlockingEast, t => t.BlockingWest, East);
         }
 
+        public bool CanExit()
+        {
+            if (Things.Any(thing => thing.Type == Actor.MechaHitler.ClassName))
+                return true;
+
+            var validExitTriggers = new[] { "Exit_Normal", "Exit_Secret", "Exit_VictorySpin", "Exit_Victory" };
+            var exitTriggers = _data.Triggers.Where(trigger => validExitTriggers.Contains(trigger.Action));
+
+            foreach (var exitTrigger in exitTriggers)
+            {
+                if (exitTrigger.X == X && exitTrigger.Y == Y + 1 && exitTrigger.ActivateNorth)
+                    return true;
+                if (exitTrigger.X == X && exitTrigger.Y == Y - 1 && exitTrigger.ActivateSouth)
+                    return true;
+                if (exitTrigger.X == X + 1 && exitTrigger.Y == Y && exitTrigger.ActivateWest)
+                    return true;
+                if (exitTrigger.X == X - 1 && exitTrigger.Y == Y && exitTrigger.ActivateEast)
+                    return true;
+            }
+
+            return false;
+        }
+
         private bool CanMove(Func<Tile, bool> blockInTargetDirection, Func<Tile, bool> blockingInInverseDirection, Func<MapLocation> targetSelector)
         {
             if (null != Tile)
