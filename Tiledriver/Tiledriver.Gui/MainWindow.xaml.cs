@@ -34,7 +34,7 @@ namespace Tiledriver.Gui
 
         private readonly string _packagedMapFilesDir = System.AppDomain.CurrentDomain.BaseDirectory + "..\\..\\MapFiles\\";
 
-        private readonly BackgroundWorker _scoringWorker;
+        private BackgroundWorker _scoringWorker;
 
         public MainWindow()
         {
@@ -45,10 +45,6 @@ namespace Tiledriver.Gui
             MapCanvas.NotifyNewMapItems += DetailPane.Update;
             KeyDown += MainWindow_KeyDown;
             _tileSize = Properties.Settings.Default.tileSize;
-
-            _scoringWorker = new BackgroundWorker();
-            _scoringWorker.DoWork += RunScoringAlgorithm;
-            _scoringWorker.RunWorkerCompleted += FinishedScoring;
         }
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
@@ -196,14 +192,18 @@ namespace Tiledriver.Gui
 
             MapScore.Content = "Calculating...";
 
+            // HACK: Make a new BGW every time to prevent crashes when loading maps quickly
+            _scoringWorker?.CancelAsync();
+            _scoringWorker?.Dispose();
+            _scoringWorker = new BackgroundWorker { WorkerSupportsCancellation = true };
+            _scoringWorker.DoWork += RunScoringAlgorithm;
+            _scoringWorker.RunWorkerCompleted += FinishedScoring;
             _scoringWorker.RunWorkerAsync(map);
-
-
         }
 
         private void RunScoringAlgorithm(object sender, DoWorkEventArgs e)
         {
-            var data = (MapData) e.Argument;
+            var data = (MapData)e.Argument;
 
             try
             {
@@ -222,7 +222,10 @@ namespace Tiledriver.Gui
 
         private void FinishedScoring(object sender, RunWorkerCompletedEventArgs e)
         {
-            MapScore.Content = e.Result;
+            if (!e.Cancelled)
+            {
+                MapScore.Content = e.Result;
+            }
         }
 
         private static void LoadMapInEcWolf(MapData uwmfMap, string wadPath)
@@ -319,12 +322,12 @@ namespace Tiledriver.Gui
             if (currentDirectory == null)
                 return new List<string>();
 
-            return 
+            return
                 Directory.GetFiles(currentDirectory, "*.*").
                     Where(s =>
                         s.EndsWith(".wad", StringComparison.OrdinalIgnoreCase) ||
                         s.EndsWith(".uwmf", StringComparison.OrdinalIgnoreCase)).
-                    OrderBy(name=>name,new WinExplorerFileComparer()).
+                    OrderBy(name => name, new WinExplorerFileComparer()).
                     ToList();
         }
     }
