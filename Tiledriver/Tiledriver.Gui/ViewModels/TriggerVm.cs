@@ -197,7 +197,7 @@ namespace Tiledriver.Gui.ViewModels
         private static TriggerVmTemplate Default => new TriggerVmTemplate(SquarePath, Transparent(), White);
 
         private static TriggerVmTemplate DoorOpen() => new TriggerVmTemplate(SquarePath, Transparent(), Brown);
-        private static TriggerVmTemplate DoorOpenSilver() => new TriggerVmTemplate(SquarePath, Transparent(Violet), Brown);
+        private static TriggerVmTemplate DoorOpenSilver() => new TriggerVmTemplate(SquarePath, Transparent(Cyan), Brown);
         private static TriggerVmTemplate DoorOpenGold() => new TriggerVmTemplate(SquarePath, Transparent(Gold), Brown);
         private static TriggerVmTemplate DoorOpenBoth() => new TriggerVmTemplate(SquarePath, Transparent(Blue), Brown);
         private static TriggerVmTemplate PushwallMove() => new TriggerVmTemplate(SquarePath, Transparent(), Yellow);
