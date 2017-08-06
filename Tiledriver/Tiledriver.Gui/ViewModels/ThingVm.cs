@@ -76,8 +76,6 @@ namespace Tiledriver.Gui.ViewModels
             {
                 yield return new DetailProperties(null, "Category", _category);
 
-                yield return new DetailProperties("Position", "X", _thing.X.ToString());
-                yield return new DetailProperties("Position", "Y", _thing.Y.ToString());
                 yield return new DetailProperties("Position", "Angle", _thing.Angle.ToString());
 
                 yield return new DetailProperties("Skill Level", "Level 1", _thing.Skill1 ? "Yes" : "No");

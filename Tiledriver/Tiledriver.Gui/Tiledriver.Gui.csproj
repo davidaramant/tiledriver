@@ -77,7 +77,7 @@
     <Compile Include="ViewModels\MainVm.cs" />
     <Compile Include="Utilities\MapExtensions.cs" />
     <Compile Include="ViewModels\MapCanvasVm.cs" />
-    <Compile Include="ViewModels\PushwallVm.cs" />
+    <Compile Include="ViewModels\TriggerVm.cs" />
     <Compile Include="Views\DetailView.xaml.cs">
       <DependentUpon>DetailView.xaml</DependentUpon>
     </Compile>

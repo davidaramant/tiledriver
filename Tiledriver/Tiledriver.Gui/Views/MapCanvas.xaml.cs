@@ -64,9 +64,9 @@ namespace Tiledriver.Gui.Views
             }
 
             // Triggers
-            foreach (var pushWallTrigger in mapData.Triggers.Where(t => t.Action == "Pushwall_Move"))
+            foreach (var trigger in mapData.Triggers)
             {
-                AddMapItem(new PushwallVm(pushWallTrigger));
+                AddMapItem(new TriggerVm(trigger, trigger.Action));
             }
         }
 
