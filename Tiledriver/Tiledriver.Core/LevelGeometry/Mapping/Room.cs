@@ -4,7 +4,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.LevelGeometry.Mapping
@@ -41,14 +40,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
         {
             get
             {
-//                var validExitThings = new[] {"Exit_Normal", "Exit_Secret", "Exit_VictorySpin", "Exit_Victory"};
-//                foreach (var location in Locations)
-//                {
-//                    if (location.Triggers.Any(trigger => validExitThings.Contains(trigger.Action)))
-//                        return true;
-//                }
-
-                return false;
+                return Locations.Any(location => location.CanExit());
             }
         }
 
