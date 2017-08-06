@@ -119,10 +119,10 @@ namespace Tiledriver.Gui.ViewModels
 
         private static ThingVmTemplate Default => new ThingVmTemplate(CirclePath, Violet, White);
 
-        private static ThingVmTemplate Player() => new ThingVmTemplate(ManPath, Black, Yellow, true);
+        private static ThingVmTemplate Player() => new ThingVmTemplate(ManPath, Fuchsia, Fuchsia, true);
         private static ThingVmTemplate PatrolPoint() => new ThingVmTemplate(ArrowPath, Black, White, true);
         private static ThingVmTemplate EnemyMan(Color fill) => new ThingVmTemplate(ManPath, fill, White, true);
-        private static ThingVmTemplate Boss() => new ThingVmTemplate(BossPath, Red, White, true);
+        private static ThingVmTemplate Boss() => new ThingVmTemplate(BossPath, Fuchsia, Fuchsia, true);
         private static ThingVmTemplate Key(Color fill) => new ThingVmTemplate(KeyPath, fill, fill);
         private static ThingVmTemplate PacmanGhost() => new ThingVmTemplate(PacmanGhostPath, GhostWhite, LightBlue);
         private static ThingVmTemplate Circle(Color fill, Color stroke) => new ThingVmTemplate(CirclePath, fill, stroke);
