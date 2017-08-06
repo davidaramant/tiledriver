@@ -111,7 +111,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                         change(Health, mapLocationThing);
                     if (mapLocationThing.Type == Actor.OneUp.ClassName)
                         Lives += increment;
-                    if (mapLocationThing.Type == Actor.GoldKey.ClassName)
+                    if (mapLocationThing.Type == Actor.GoldKey.ClassName || mapLocationThing.Type == Actor.Hans.ClassName || mapLocationThing.Type == Actor.Gretel.ClassName)
                         goldKeys += increment;
                     if (mapLocationThing.Type == Actor.SilverKey.ClassName)
                         silverKeys+=increment;
