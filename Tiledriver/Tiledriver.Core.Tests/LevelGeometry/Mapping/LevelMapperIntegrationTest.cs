@@ -9,7 +9,6 @@ using System.Text;
 using NUnit.Framework;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Uwmf.Parsing;
-using Tiledriver.Core.FormatModels.Wad;
 using Tiledriver.Core.LevelGeometry.Mapping;
 
 namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
@@ -50,6 +49,15 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
 
             var contentBuilder = new StringBuilder();
             contentBuilder.AppendLine("graph {");
+            contentBuilder.AppendLine($"label=\"{map.Name}\";");
+
+            contentBuilder.AppendLine("{");
+            contentBuilder.AppendLine($"\"{levelMap.StartingRoom.Name}\" [color=yellow, style=filled]");
+            foreach (var endingRoom in levelMap.EndingRooms)
+            {
+                contentBuilder.AppendLine($"\"{endingRoom.Name}\" [color=red, style=filled]");
+            }
+            contentBuilder.AppendLine("}");
 
             foreach (var room in levelMap.AllRooms)
             {

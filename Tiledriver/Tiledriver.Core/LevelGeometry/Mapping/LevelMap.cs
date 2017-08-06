@@ -2,6 +2,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Tiledriver.Core.LevelGeometry.Mapping
 {
@@ -15,6 +16,11 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
         {
             StartingRoom = startingRoom;
             AllRooms = allRooms;
+        }
+
+        public IEnumerable<IRoom> EndingRooms
+        {
+            get { return AllRooms.Where(room => room.IsEndingRoom); }
         }
     }
 }
