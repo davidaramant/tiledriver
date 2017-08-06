@@ -38,23 +38,98 @@ namespace TestRunner
             //Pk3Test();
         }
 
-        private static void Pk3Test()
+
+
+        private static void ExportMapsFromPk3(string pk3Path, string outputBasePath)
         {
-            var path = @"C:\Users\david\Downloads\wolfbel.pk3";
+            var ecWolfPk3Path = Path.ChangeExtension(GetECWolfExePath(), "pk3");
 
-            using (var pk3 = Pk3File.Open(path))
+            var levelSetName = Path.GetFileNameWithoutExtension(pk3Path);
+
+            var outputPath = Path.Combine(outputBasePath, $"{levelSetName} Translated");
+            if (Directory.Exists(outputPath))
             {
-                Console.Out.WriteLine(string.Join(Environment.NewLine, pk3.GetAllEntryNames()));
+                Directory.Delete(outputPath, recursive: true);
+            }
+            Directory.CreateDirectory(outputPath);
 
-                using (var ws = pk3.Lookup("maps/map01.wad"))
+            var autoMapperConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<TriggerTemplate, Trigger>();
+                cfg.CreateMap<ZoneTemplate, Zone>();
+                cfg.CreateMap<TileTemplate, Tile>();
+            });
+
+            var autoMapper = autoMapperConfig.CreateMapper();
+            
+            using (var resources = new CompoundResourceProvider())
+            using (var basePk3 = Pk3File.Open(ecWolfPk3Path))
+            using (var pk3 = Pk3File.Open(pk3Path))
+            {
+                resources.AddProvider(basePk3);
+                resources.AddProvider(pk3);
+
+                var mapInfos = LoadMapInfo(resources);
+                var xlat = LoadXlat(resources, resources.Lookup(mapInfos.GameInfo.Value.Translator.Value));
+                var translator = new BinaryMapTranslator(translatorInfo: xlat, autoMapper: autoMapper);
+
+                for (int mapIndex = 0; mapIndex < mapInfos.Maps.Count; mapIndex++)
                 {
-                    using (var outS = File.OpenWrite("map01.wad"))
+                    var mapInfo = mapInfos.Maps[mapIndex];
+
+                    using (var wadStream = new MemoryStream())
                     {
-                        ws.CopyTo(outS);
+                        resources.Lookup($"maps/{mapInfo.MapLump}.wad").CopyTo(wadStream);
+                        wadStream.Position = 0;
+
+                        var wad = WadFile.Read(wadStream);
+                        var mapFileBytes = wad[1].GetData();
+                        using (var ms = new MemoryStream(mapFileBytes))
+                        {
+                            var binaryMap = Wdc31Bundle.ReadMaps(ms).Single();
+
+                            var uwmfMap = translator.Translate(binaryMap, mapInfo);
+
+                            var fileSafeName = uwmfMap.Name;
+                            foreach (var invalidChar in Path.GetInvalidFileNameChars())
+                            {
+                                fileSafeName = fileSafeName.Replace(invalidChar.ToString(), string.Empty);
+                            }
+                            fileSafeName = fileSafeName.Trim();
+
+                            using (var outStream =
+                                File.OpenWrite(Path.Combine(outputPath, $"{levelSetName} {mapIndex + 1} - {fileSafeName}.uwmf")))
+                            {
+                                uwmfMap.WriteTo(outStream);
+                            }
+                        }
                     }
                 }
             }
-            Console.ReadLine();
+        }
+
+
+
+        private static MapTranslatorInfo LoadXlat(IResourceProvider provider, Stream xlatStream)
+        {
+            using (var textReader = new StreamReader(xlatStream, Encoding.ASCII))
+            {
+                var lexer = new XlatLexer(textReader);
+                var syntaxAnalzer = new XlatSyntaxAnalyzer(provider);
+                var result = syntaxAnalzer.Analyze(lexer);
+                return XlatParser.Parse(result);
+            }
+        }
+
+        private static MapInfo LoadMapInfo(IResourceProvider provider)
+        {
+            using (var stream = provider.Lookup("MAPINFO.txt"))
+            using (var textReader = new StreamReader(stream, Encoding.ASCII))
+            {
+                var lexer = new MapInfoLexer(provider);
+                var elements = lexer.Analyze(textReader).ToArray();
+                return MapInfoParser.Parse(elements);
+            }
         }
 
         private static void Flatten()
@@ -251,6 +326,21 @@ namespace TestRunner
 
         private static void LoadMapInEcWolf(MapData uwmfMap, string wadPath)
         {
+            var ecWolfPath = GetECWolfExePath();
+
+            var wad = new WadFile();
+            wad.Append(new Marker("MAP01"));
+            wad.Append(new UwmfLump("TEXTMAP", uwmfMap));
+            wad.Append(new Marker("ENDMAP"));
+            wad.SaveTo(wadPath);
+
+            Process.Start(
+                ecWolfPath,
+                $"--file \"{wadPath}\" --hard --nowait --tedlevel map01");
+        }
+
+        private static string GetECWolfExePath()
+        {
             const string inputFile = "ECWolfPath.txt";
 
             if (!File.Exists(inputFile))
@@ -267,16 +357,7 @@ namespace TestRunner
             {
                 ecWolfPath = Path.Combine(ecWolfPath, "ecwolf.exe");
             }
-
-            var wad = new WadFile();
-            wad.Append(new Marker("MAP01"));
-            wad.Append(new UwmfLump("TEXTMAP", uwmfMap));
-            wad.Append(new Marker("ENDMAP"));
-            wad.SaveTo(wadPath);
-
-            Process.Start(
-                ecWolfPath,
-                $"--file \"{wadPath}\" --hard --nowait --tedlevel map01");
+            return ecWolfPath;
         }
     }
 }
