@@ -9,27 +9,34 @@ using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.LevelGeometry.Mapping
 {
-    public static class LevelMapper
+    public class LevelMapper
     {
-        public static LevelMap Map(MapData data)
+        private bool hasSilver;
+        private bool hasGold;
+        private IList<IRoom> discoveredRooms = new List<IRoom>();
+        private IList<IList<Passage>> lockedWays = new List<IList<Passage>>();
+
+        public LevelMap Map(MapData data)
         {
-            var discoveredRooms = new List<IRoom>();
+            hasSilver = false;
+            hasGold = false;
+            discoveredRooms.Clear();
 
             var startPosition = FindStart(data);
 
-            var startingRoom = MapRoom(discoveredRooms, startPosition);
+            var startingRoom = MapRoom(startPosition);
 
             return new LevelMap(startingRoom, discoveredRooms);
         }
 
-        private static MapLocation FindStart(MapData data)
+        private MapLocation FindStart(MapData data)
         {
             var startThing = data.Things.Single(thing => thing.Type == Actor.Player1Start.ClassName);
 
             return new MapLocation(data, (int)Math.Floor(startThing.X), (int)Math.Floor(startThing.Y));
         }
 
-        private static IRoom MapRoom(IList<IRoom> discoveredRooms, MapLocation firstLocation)
+        private IRoom MapRoom(MapLocation firstLocation)
         {
             var newRoom = new Room(discoveredRooms.Count + 1);
             discoveredRooms.Add(newRoom);
@@ -40,20 +47,23 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
             var passages = FindPassages(newRoom);
 
-            ExplorePassages(discoveredRooms, passages, newRoom);
+            ExplorePassages(passages, newRoom);
 
             return newRoom;
         }
 
-        private static void ExpandRoom(IRoom room, MapLocation fromLocation)
+        private void ExpandRoom(IRoom room, MapLocation fromLocation)
         {
             TryExpand(loc => loc.CanMoveNorth(), loc => loc.North(), room, fromLocation);
             TryExpand(loc => loc.CanMoveWest(), loc => loc.West(), room, fromLocation);
             TryExpand(loc => loc.CanMoveSouth(), loc => loc.South(), room, fromLocation);
             TryExpand(loc => loc.CanMoveEast(), loc => loc.East(), room, fromLocation);
+
+            hasGold |= room.Locations.Any(loc => loc.Things.Any(thing => thing.Type == Actor.GoldKey.ClassName));
+            hasSilver |= room.Locations.Any(loc => loc.Things.Any(thing => thing.Type == Actor.SilverKey.ClassName));
         }
 
-        private static void TryExpand(Func<MapLocation, bool> moveCheck, Func<MapLocation, MapLocation> targetTile, IRoom room, MapLocation fromLocation)
+        private void TryExpand(Func<MapLocation, bool> moveCheck, Func<MapLocation, MapLocation> targetTile, IRoom room, MapLocation fromLocation)
         {
             if (moveCheck(fromLocation))
             {
@@ -66,7 +76,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             }
         }
 
-        private static Dictionary<IList<Passage>, MapLocation> FindPassages(Room newRoom)
+        private Dictionary<IList<Passage>, MapLocation> FindPassages(Room newRoom)
         {
             var passages = new Dictionary<IList<Passage>, MapLocation>();
 
@@ -88,9 +98,9 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             return passages;
         }
 
-        private static void TryPassage(
+        private void TryPassage(
             Func<MapLocation, MapLocation> getNext,
-            Func<Trigger, bool> hasProperFacingDoor,
+            Func<Trigger, bool> hasProperFormattedPassage,
             Func<MapLocation, bool> moveBackCheck,
             MapLocation fromLocation, 
             Dictionary<IList<Passage>, MapLocation> passages)
@@ -104,10 +114,35 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                 if (targetPassageSpace == null)
                     return;
 
-                var targetPassage = targetPassageSpace.Triggers.FirstOrDefault(hasProperFacingDoor);
+                var targetPassage = targetPassageSpace.Triggers.FirstOrDefault(hasProperFormattedPassage);
            
                 if (targetPassage == null)
                     return;
+
+                switch ((LockLevel)targetPassage.Arg3)
+                {
+                    case LockLevel.Silver:
+                        if (!hasSilver)
+                        {
+                            lockedWays.Add(passageTrail);
+                            return;
+                        }
+                        break;
+                    case LockLevel.Gold:
+                        if (!hasGold)
+                        {
+                            lockedWays.Add(passageTrail);
+                            return;
+                        }
+                        break;
+                    case LockLevel.Both:
+                        if (!hasSilver || !hasGold)
+                        {
+                            lockedWays.Add(passageTrail);
+                            return;
+                        }
+                        break;
+                }
 
                 passageTrail.Add(new Passage(targetPassageSpace));
 
@@ -131,7 +166,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
         }
 
-        private static void ExplorePassages(IList<IRoom> discoveredRooms, Dictionary<IList<Passage>, MapLocation> passages, Room newRoom)
+        private void ExplorePassages(Dictionary<IList<Passage>, MapLocation> passages, Room newRoom)
         {
             foreach (var passage in passages)
             {
@@ -146,7 +181,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                 }
                 else
                 {
-                    newRoom.AdjacentRooms.Add(passage.Key, MapRoom(discoveredRooms, passage.Value));
+                    newRoom.AdjacentRooms.Add(passage.Key, MapRoom(passage.Value));
                 }
             }
         }

@@ -26,8 +26,9 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             {
                 var sa = new UwmfSyntaxAnalyzer();
                 var map = UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader)));
+                var mapper = new LevelMapper();
 
-                var levelMap = LevelMapper.Map(map);
+                var levelMap = mapper.Map(map);
                 var room = levelMap.StartingRoom;
 
                 Assert.That(room, Is.Not.Null);

@@ -54,7 +54,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             AddStart(2, 2);
             AddSpace(2, 2, _tileAllWalls);
 
-            var levelMap = LevelMapper.Map(_data);
+            var levelMap = new LevelMapper().Map(_data);
             var room = levelMap.StartingRoom;
 
             Assert.That(room, Is.Not.Null);
@@ -76,7 +76,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             AddSpace(3, 3, _tileSouthEastWalls);
             AddSpace(2, 3, _tileSouthWestWalls);
 
-            var levelMap = LevelMapper.Map(_data);
+            var levelMap = new LevelMapper().Map(_data);
             var room = levelMap.StartingRoom;
 
             Assert.That(room, Is.Not.Null);
@@ -110,7 +110,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             AddSpace(3, 4, _tileSouthWalls);
             AddSpace(4, 4, _tileSouthEastWalls);
 
-            var levelMap = LevelMapper.Map(_data);
+            var levelMap = new LevelMapper().Map(_data);
             var room = levelMap.StartingRoom;
 
             Assert.That(room, Is.Not.Null);
@@ -153,7 +153,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             AddSpace(4, 4, _tileNorthEastSouthWalls);
             AddSpace(6, 4, _tileEastSouthWestWalls);
 
-            var levelMap = LevelMapper.Map(_data);
+            var levelMap = new LevelMapper().Map(_data);
             var room = levelMap.StartingRoom;
 
             Assert.That(room, Is.Not.Null);
@@ -189,7 +189,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             AddSpace(2, 3, _tileSouthWestWalls);
             AddBlocker(3, 3);
 
-            var levelMap = LevelMapper.Map(_data);
+            var levelMap = new LevelMapper().Map(_data);
             var room = levelMap.StartingRoom;
 
             Assert.That(room, Is.Not.Null);
@@ -224,7 +224,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
 
             AddBlocker(3, 3);
 
-            var levelMap = LevelMapper.Map(_data);
+            var levelMap = new LevelMapper().Map(_data);
             var room = levelMap.StartingRoom;
 
             Assert.That(room, Is.Not.Null);
@@ -257,7 +257,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             AddSpace(3, 4, _tileAllWalls);
             AddSpace(4, 4, _tileAllWalls);
 
-            var levelMap = LevelMapper.Map(_data);
+            var levelMap = new LevelMapper().Map(_data);
             var room = levelMap.StartingRoom;
 
             Assert.That(room, Is.Not.Null);
@@ -286,7 +286,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             AddSpace(5, 2, _tileWestNorthEastWalls);
             AddSpace(5, 3, _tileSouthEastWalls);
 
-            var levelMap = LevelMapper.Map(_data);
+            var levelMap = new LevelMapper().Map(_data);
             var room = levelMap.StartingRoom;
 
             Assert.That(room, Is.Not.Null);
@@ -330,7 +330,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             AddSpace(7, 2, _tileWestNorthEastWalls);
             AddSpace(7, 3, _tileSouthEastWalls);
 
-            var levelMap = LevelMapper.Map(_data);
+            var levelMap = new LevelMapper().Map(_data);
             var room = levelMap.StartingRoom;
 
             Assert.That(room, Is.Not.Null);
@@ -355,6 +355,83 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
         /// <remarks>
         /// Room Shape:
         /// XX X
+        /// XXLX
+        /// </remarks>
+        [Test]
+        public void ShouldFindOnlyOneConnectedRoomsWithALockedDoorAndNoKey()
+        {
+            AddStart(2, 2);
+
+            AddSpace(2, 2, _tileNorthWestWalls);
+            AddSpace(3, 2, _tileNorthEastWalls);
+            AddSpace(3, 3, _tileSouthWalls);
+            AddSpace(2, 3, _tileSouthWestWalls);
+
+            AddDoor(4, 3, true, LockLevel.Silver);
+
+            AddSpace(5, 2, _tileWestNorthEastWalls);
+            AddSpace(5, 3, _tileSouthEastWalls);
+
+            var levelMap = new LevelMapper().Map(_data);
+            var room = levelMap.StartingRoom;
+
+            Assert.That(room, Is.Not.Null);
+
+            Assert.That(room.Locations.Count, Is.EqualTo(4));
+            AssertLocationInRoom(room, 2, 2);
+            AssertLocationInRoom(room, 3, 2);
+            AssertLocationInRoom(room, 2, 3);
+            AssertLocationInRoom(room, 3, 3);
+
+            Assert.That(room.AdjacentRooms.Count, Is.EqualTo(0));
+        }
+
+        /// <remarks>
+        /// Room Shape:
+        /// XX X
+        /// XXLX
+        /// </remarks>
+        [Test]
+        public void ShouldFindTwoConnectedRoomsWithALockedDoorWithKey()
+        {
+            AddStart(2, 2);
+
+            AddSpace(2, 2, _tileNorthWestWalls);
+            AddSpace(3, 2, _tileNorthEastWalls);
+            AddKey(3, 2, Keys.Silver);
+            AddSpace(3, 3, _tileSouthWalls);
+            AddSpace(2, 3, _tileSouthWestWalls);
+
+            AddDoor(4, 3, true, LockLevel.Silver);
+
+            AddSpace(5, 2, _tileWestNorthEastWalls);
+            AddSpace(5, 3, _tileSouthEastWalls);
+
+            var levelMap = new LevelMapper().Map(_data);
+            var room = levelMap.StartingRoom;
+
+            Assert.That(room, Is.Not.Null);
+
+            Assert.That(room.Locations.Count, Is.EqualTo(4));
+            AssertLocationInRoom(room, 2, 2);
+            AssertLocationInRoom(room, 3, 2);
+            AssertLocationInRoom(room, 2, 3);
+            AssertLocationInRoom(room, 3, 3);
+
+            Assert.That(room.AdjacentRooms.Count, Is.EqualTo(1));
+
+            var firstTransition = room.AdjacentRooms.First();
+
+            Assert.That(firstTransition.Key.Count, Is.EqualTo(1));
+            Assert.That(firstTransition.Value, Is.Not.Null);
+            Assert.That(firstTransition.Value.Locations.Count, Is.EqualTo(2));
+            AssertLocationInRoom(firstTransition.Value, 5, 2);
+            AssertLocationInRoom(firstTransition.Value, 5, 3);
+        }
+
+        /// <remarks>
+        /// Room Shape:
+        /// XX X
         /// XXPX
         /// </remarks>
         [Test]
@@ -372,7 +449,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             AddSpace(5, 2, _tileWestNorthEastWalls);
             AddSpace(5, 3, _tileSouthEastWalls);
 
-            var levelMap = LevelMapper.Map(_data);
+            var levelMap = new LevelMapper().Map(_data);
             var room = levelMap.StartingRoom;
 
             Assert.That(room, Is.Not.Null);
@@ -412,14 +489,21 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             location.Tile = tile;
         }
 
-        private void AddDoor(int x, int y, bool isEastWest)
+        private void AddDoor(int x, int y, bool isEastWest, LockLevel lockLevel = LockLevel.None)
         {
             var location = new MapLocation(_data, x, y);
             location.Tile = _tileAllWalls;
 
             var doorTrigger = location.AddTrigger("Door_Open");
+            doorTrigger.Arg3 = (int)lockLevel;
             if (!isEastWest)
                 doorTrigger.Arg4 = 1;
+        }
+
+        private void AddKey(int x, int y, Keys key)
+        {
+            var location = new MapLocation(_data, x, y);
+            location.AddThing(key==Keys.Silver ? Actor.SilverKey.ClassName : Actor.GoldKey.ClassName);
         }
 
         private void AddPushwall(int x, int y)
