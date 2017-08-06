@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.LevelGeometry.Mapping
@@ -12,6 +13,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
     public class Room : IRoom
     {
         public string Name { get; }
+        public int Lives { get; }
         public IDictionary<IList<Passage>, IRoom> AdjacentRooms { get; }
         public IList<MapLocation> Locations { get; }
 
@@ -43,6 +45,14 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                 return Locations.Any(location => location.CanExit());
             }
         }
+
+        public int UnopenableDoors { get; }
+        public IEnumerable<Thing> Enemies { get; }
+        public IEnumerable<Thing> Bosses { get; }
+        public IEnumerable<Thing> Weapons { get; }
+        public int Ammo { get; }
+        public IEnumerable<Thing> Treasure { get; }
+        public int Health { get; }
 
         private string DebuggerDisplay => $"Room: Name={Name}; Locations={Locations.Count})";
     }
