@@ -12,7 +12,7 @@ namespace Tiledriver.Core.MapRanker
     /// </summary>
     public class RoomCountRule : IRankingRule
     {
-        private const int RoomScore = 2;
+        private const int RoomScore = 1;
 
         public int Rank(MapData data, LevelMap levelMap)
         {
