@@ -6950,6 +6950,20 @@ thing
 }
 thing
 {
+	x = 41.5;
+	y = 25.5;
+	z = 0;
+	angle = 135;
+	type = "SilverKey";
+	ambush = false;
+	patrol = false;
+	skill1 = true;
+	skill2 = true;
+	skill3 = true;
+	skill4 = true;
+}
+thing
+{
 	x = 37.5;
 	y = 23.5;
 	z = 0;
@@ -10321,7 +10335,7 @@ trigger
 	arg0 = 37;
 	arg1 = 16;
 	arg2 = 300;
-	arg3 = 0;
+	arg3 = 2;
 	arg4 = 0;
 	playeruse = true;
 	monsteruse = true;
@@ -10342,7 +10356,7 @@ trigger
 	arg0 = 38;
 	arg1 = 16;
 	arg2 = 300;
-	arg3 = 0;
+	arg3 = 101;
 	arg4 = 0;
 	playeruse = true;
 	monsteruse = true;
