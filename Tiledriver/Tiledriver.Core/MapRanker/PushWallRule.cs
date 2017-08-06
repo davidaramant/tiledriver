@@ -14,17 +14,24 @@ namespace Tiledriver.Core.MapRanker
         public int Rank(MapData data, LevelMap levelMap)
         {
             var pushWallCount = 0;
+            var doorCount = 0;
             foreach (var room in levelMap.AllRooms)
             {
                 foreach (var adjacentPair in room.AdjacentRooms)
                 {
                     foreach (var passage in adjacentPair.Key)
                     {
-                        var pushwallAction = passage.Pushwall;
-                        if (null != pushwallAction)
+                        if (null != passage.Pushwall)
                             pushWallCount++;
+                        else if (null != passage.Door)
+                            doorCount++;
                     }
                 }
+            }
+
+            if (pushWallCount > doorCount)
+            {
+                return (doorCount - pushWallCount);
             }
 
             return pushWallCount;
