@@ -49,6 +49,18 @@ namespace Tiledriver.Core.Utils
                 {
                     contentBuilder.Append("color=orange, style=filled, ");
                 }
+                else if (room.HasGoldKey && room.HasSilverKey)
+                {
+                    contentBuilder.Append("color=cyan, style=filled, ");
+                }
+                else if (room.HasGoldKey)
+                {
+                    contentBuilder.Append("color=gold, style=filled, ");
+                }
+                else if (room.HasSilverKey)
+                {
+                    contentBuilder.Append("color=silver, style=filled, ");
+                }
 
                 var roomSize = (double)room.Locations.Count / maximumLocationSize * maximumSize;
                 if (roomSize < minimumSize)
