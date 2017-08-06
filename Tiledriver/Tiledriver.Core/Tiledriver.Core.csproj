@@ -135,7 +135,7 @@
     <Compile Include="LevelGeometry\IRegion.cs" />
     <Compile Include="LevelGeometry\Mapping\Keys.cs" />
     <Compile Include="LevelGeometry\Mapping\LevelMap.cs" />
-    <Compile Include="LevelGeometry\Mapping\LockLevel.cs" />
+    <Compile Include="Wolf3D\LockLevel.cs" />
     <Compile Include="LevelGeometry\Mapping\MapLocation.cs" />
     <Compile Include="LevelGeometry\Mapping\IPassage.cs" />
     <Compile Include="LevelGeometry\Mapping\IRoom.cs" />
