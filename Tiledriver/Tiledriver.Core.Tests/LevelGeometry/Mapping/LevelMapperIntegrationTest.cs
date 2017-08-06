@@ -10,6 +10,7 @@ using NUnit.Framework;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Uwmf.Parsing;
 using Tiledriver.Core.LevelGeometry.Mapping;
+using Tiledriver.Core.MapRanker;
 
 namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
 {
@@ -63,8 +64,12 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
                     Console.WriteLine();
                 }
 
+                var ranker = new Ranker();
+                var score = ranker.RankLevel(map);
+                Console.WriteLine($"Score: {score}");
+
                 if (_writeMapDetails)
-                    _mapDetailsWriter.WriteLine($"Map {map.Name}: {levelMap.AllRooms.Count()} rooms");
+                    _mapDetailsWriter.WriteLine($"Map {map.Name}: {levelMap.AllRooms.Count()} rooms, score={score}");
 
                 if (_writeGraphVizFiles)
                     ProduceGraphs(map, levelMap);
