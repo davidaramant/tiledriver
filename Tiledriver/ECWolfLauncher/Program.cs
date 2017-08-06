@@ -109,8 +109,6 @@ namespace TestRunner
             }
         }
 
-
-
         private static MapTranslatorInfo LoadXlat(IResourceProvider provider, Stream xlatStream)
         {
             using (var textReader = new StreamReader(xlatStream, Encoding.ASCII))
