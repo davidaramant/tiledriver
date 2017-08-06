@@ -9,7 +9,7 @@ using Tiledriver.Core.Wolf3D;
 namespace Tiledriver.Core.MapRanker
 {
     /// <summary>
-    /// Scores 0 for valid, -100 for invalid
+    /// Scores 0 for valid, -1000 for invalid
     /// </summary>
     public class HasStartRule : IRankingRule
     {

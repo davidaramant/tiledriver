@@ -8,11 +8,11 @@ using Tiledriver.Core.LevelGeometry.Mapping;
 namespace Tiledriver.Core.MapRanker
 {
     /// <summary>
-    /// One point for every 5 enemies in the level
+    /// One point for every 3 enemies in the level
     /// </summary>
     public class EnemyCountRule : IRankingRule
     {
-        private const int EnemyDivisor = 5;
+        private const int EnemyDivisor = 3;
 
         public int Rank(MapData data, LevelMap levelMap)
         {

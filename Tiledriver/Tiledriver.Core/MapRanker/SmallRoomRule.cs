@@ -7,15 +7,19 @@ using Tiledriver.Core.LevelGeometry.Mapping;
 
 namespace Tiledriver.Core.MapRanker
 {
+    /// <summary>
+    /// Negative 5 points for each small room
+    /// </summary>
     public class SmallRoomRule : IRankingRule
     {
-        private const int SmallRoomSize = 6;
+        private const int SmallRoomSize = 5;
+        private const int SmallRoomScore = -5;
 
         public int Rank(MapData data, LevelMap levelMap)
         {
             var smallRoomCount = levelMap.AllRooms.Count(room => room.Locations.Count <= SmallRoomSize);
 
-            return smallRoomCount / 4 * -1;
+            return smallRoomCount * SmallRoomScore;
         }
     }
 }
