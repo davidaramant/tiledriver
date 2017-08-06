@@ -43,10 +43,12 @@ namespace Tiledriver.Core.FormatModels.Uwmf
             int definedCount,
             string name)
         {
+            var invalidIds = entries.Select(idGrabber).Where(id => id >= definedCount);
+
             // TODO: Add something about which plane map this was found in
-            if (entries.Select(idGrabber).Any(id => id >= definedCount))
+            if (invalidIds.Any())
             {
-                throw new InvalidUwmfException($"Invalid ids found for {name}.");
+                throw new InvalidUwmfException($"Invalid ids found for {name}: " + String.Join(", ", invalidIds));
             }
         }
     }    
