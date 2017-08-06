@@ -105,7 +105,7 @@ namespace Tiledriver.Gui.ViewModels
             { "SilverKey", Key(Silver) },
             // DECORATIONS
             { "WhitePillar", Circle(White, LightGray) },
-            { "CeilingLight", Circle(Orange, Goldenrod) },
+            { "CeilingLight", Circle(DarkOrange, DarkGoldenrod) },
             
             // CATEGORIES
             { "Bosses", Boss() },
@@ -121,7 +121,7 @@ namespace Tiledriver.Gui.ViewModels
 
         private static ThingVmTemplate Player() => new ThingVmTemplate(ManPath, Fuchsia, DeepPink, true);
         private static ThingVmTemplate PatrolPoint() => new ThingVmTemplate(ArrowPath, Black, LightGray, true);
-        private static ThingVmTemplate EnemyMan(Color fill) => new ThingVmTemplate(ManPath, fill, LightPink, true);
+        private static ThingVmTemplate EnemyMan(Color fill) => new ThingVmTemplate(ManPath, fill, Red, true);
         private static ThingVmTemplate Boss() => new ThingVmTemplate(BossPath, Fuchsia, Fuchsia, true);
         private static ThingVmTemplate Key(Color fill) => new ThingVmTemplate(KeyPath, fill, fill);
         private static ThingVmTemplate PacmanGhost() => new ThingVmTemplate(PacmanGhostPath, GhostWhite, LightBlue);
@@ -129,8 +129,8 @@ namespace Tiledriver.Gui.ViewModels
         private static ThingVmTemplate Dog() => new ThingVmTemplate(DogPath, Brown, SaddleBrown, shouldRotate:true);
         private static ThingVmTemplate Treasure() => new ThingVmTemplate(CrownPath, Gold, DarkGoldenrod);
         private static ThingVmTemplate Health() => new ThingVmTemplate(CrossPath, Blue, White);
-        private static ThingVmTemplate Weapons() => new ThingVmTemplate(GunPath, Gray, LightGray);
-        private static ThingVmTemplate Ammo() => new ThingVmTemplate(AmmoPath, Gray, LightGray);
+        private static ThingVmTemplate Weapons() => new ThingVmTemplate(GunPath, Gray, DarkGray);
+        private static ThingVmTemplate Ammo() => new ThingVmTemplate(AmmoPath, Gray, DarkGray);
 
         private class ThingVmTemplate
         {
