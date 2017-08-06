@@ -141,6 +141,7 @@
     <Compile Include="MapRanker\Constants.cs" />
     <Compile Include="MapRanker\BossesRule.cs" />
     <Compile Include="MapRanker\ExitsRule.cs" />
+    <Compile Include="MapRanker\CoordiorRule.cs" />
     <Compile Include="MapRanker\EnemyCountRule.cs" />
     <Compile Include="MapRanker\EnemyDistributionRule.cs" />
     <Compile Include="MapRanker\EnemyToRoomSizeRule.cs" />
