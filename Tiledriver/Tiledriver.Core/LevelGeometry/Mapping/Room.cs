@@ -17,7 +17,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
         public Room(int roomNumber)
         {
-            Name = $"Room #{roomNumber}";
+            Name = $"#{roomNumber}";
             AdjacentRooms = new Dictionary<IList<Passage>, IRoom>();
             Locations = new List<MapLocation>();
         }
