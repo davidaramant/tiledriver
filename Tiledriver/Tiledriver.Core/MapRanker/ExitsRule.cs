@@ -8,13 +8,13 @@ using Tiledriver.Core.LevelGeometry.Mapping;
 namespace Tiledriver.Core.MapRanker
 {
     /// <summary>
-    /// Scores each boss as a positive 15.
+    /// Adds a score of 5 for each reachable exit.
     /// </summary>
-    public class CountBossesRule : IRankingRule
+    public class ExitsRule : IRankingRule
     {
         public int Rank(MapData data, LevelMap levelMap)
         {
-            return levelMap.AllRooms.SelectMany(room => room.Bosses).Count() * 15;
+            return levelMap.EndingRooms.Count() * 5;
         }
     }
 }
