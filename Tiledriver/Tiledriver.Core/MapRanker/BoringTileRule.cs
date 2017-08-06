@@ -22,8 +22,6 @@ namespace Tiledriver.Core.MapRanker
 
             var boringPercentage = boringLocations / (double)allLocations;
 
-            Console.WriteLine("Boring Percent: {0}", boringPercentage);
-
             if (boringPercentage <= AcceptablePercentage)
                 return 0;
 
