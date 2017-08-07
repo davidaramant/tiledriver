@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Tiledriver.Core.FormatModels.Uwmf;
+using Tiledriver.Core.Wolf3D;
 using Tiledriver.Gui.Views;
 using static System.Windows.Media.Colors;
 
@@ -76,7 +77,7 @@ namespace Tiledriver.Gui.ViewModels
             {
                 yield return new DetailProperties(null, "Category", _category);
 
-                yield return new DetailProperties("Position", "Angle", _thing.Angle.ToString());
+                yield return new DetailProperties("Position", "Angle", (_thing.Angle % 360).ToString());
 
                 yield return new DetailProperties("Skill Level", "Level 1", _thing.Skill1 ? "Yes" : "No");
                 yield return new DetailProperties("Skill Level", "Level 2", _thing.Skill2 ? "Yes" : "No");
@@ -93,6 +94,10 @@ namespace Tiledriver.Gui.ViewModels
             // SPECIAL
             { "$Player1Start", Player() },
             { "PatrolPoint", PatrolPoint() },
+            { Actor.Blinky.ClassName, PacmanGhost(Red) },
+            { Actor.Pinky.ClassName, PacmanGhost(Color.FromRgb(255,184,255)) },
+            { Actor.Inky.ClassName, PacmanGhost(Cyan) },
+            { Actor.Clyde.ClassName, PacmanGhost(Color.FromRgb(255,184,81)) },
             // GUARDS
             { "DeadGuard", Circle(Brown, SaddleBrown) },
             { "Dog", Dog() },
@@ -109,7 +114,6 @@ namespace Tiledriver.Gui.ViewModels
             
             // CATEGORIES
             { "Bosses", Boss() },
-            { "Ghosts", PacmanGhost() },
             { "Decorations", Circle(DarkGreen, Green) },
             { "Treasure", Treasure() },
             { "Health", Health() },
@@ -124,9 +128,9 @@ namespace Tiledriver.Gui.ViewModels
         private static ThingVmTemplate EnemyMan(Color fill) => new ThingVmTemplate(ManPath, fill, Red, true);
         private static ThingVmTemplate Boss() => new ThingVmTemplate(BossPath, Fuchsia, Fuchsia, true);
         private static ThingVmTemplate Key(Color fill) => new ThingVmTemplate(KeyPath, fill, fill);
-        private static ThingVmTemplate PacmanGhost() => new ThingVmTemplate(PacmanGhostPath, GhostWhite, LightBlue);
+        private static ThingVmTemplate PacmanGhost(Color color) => new ThingVmTemplate(PacmanGhostPath, color, GhostWhite);
         private static ThingVmTemplate Circle(Color fill, Color stroke) => new ThingVmTemplate(CirclePath, fill, stroke);
-        private static ThingVmTemplate Dog() => new ThingVmTemplate(DogPath, Brown, SaddleBrown, shouldRotate:true);
+        private static ThingVmTemplate Dog() => new ThingVmTemplate(DogPath, Brown, SaddleBrown, shouldRotate: true);
         private static ThingVmTemplate Treasure() => new ThingVmTemplate(CrownPath, Gold, DarkGoldenrod);
         private static ThingVmTemplate Health() => new ThingVmTemplate(CrossPath, Blue, White);
         private static ThingVmTemplate Weapons() => new ThingVmTemplate(GunPath, Gray, DarkGray);

@@ -306,7 +306,7 @@ namespace Tiledriver.Gui
         {
             var files = GetFilesInMapDirectory();
             var currentIndex = files.IndexOf(_currentFilePath);
-            if (currentIndex >= 0 && currentIndex < files.Count-1)
+            if (currentIndex >= 0 && currentIndex < files.Count - 1)
             {
                 OpenMapFile(files[currentIndex + 1]);
             }
