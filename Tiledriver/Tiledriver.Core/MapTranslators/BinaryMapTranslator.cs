@@ -93,12 +93,14 @@ namespace Tiledriver.Core.MapTranslators
                 var possibleMapping = _translatorInfo.TryLookupThingMapping(oldThing.OldNum);
 
                 // TODO: Report errors here
-                if (possibleMapping.IsNothing())
-                {
-                    continue;
-                }
-
-                var mapping = possibleMapping.Value;
+                var mapping = possibleMapping.OrElse(() => new ThingTemplate(
+                    oldNum: oldThing.OldNum,
+                    type: $"Unknown {oldThing.OldNum}",
+                    angles: 0,
+                    holowall: false,
+                    pathing: false,
+                    ambush: false,
+                    minskill: 0));
 
                 switch (mapping)
                 {
