@@ -98,7 +98,7 @@ namespace Tiledriver.Gui.Views
             {
                 Height = size,
                 Width = size,
-                Data = Geometry.Parse(MapItemVm.SquarePath),
+                Data = GeometryCache.SquarePath,
                 Fill = Colors.Transparent.ToBrush(),
                 Stroke = Colors.Red.ToBrush(),
                 StrokeThickness = 1,

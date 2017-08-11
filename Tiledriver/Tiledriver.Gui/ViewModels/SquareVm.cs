@@ -12,7 +12,7 @@ using Tiledriver.Gui.Views;
 
 namespace Tiledriver.Gui.ViewModels
 {
-    public class SquareVm : MapItemVm
+    public sealed class SquareVm : MapItemVm
     {
         private readonly int _x;
         private readonly int _y;
@@ -22,11 +22,11 @@ namespace Tiledriver.Gui.ViewModels
 
         public SquareVm(int x, int y, Tile tile, Sector sector, int zone)
         {
-            this._x = x;
-            this._y = y;
-            this._tile = tile;
-            this._sector = sector;
-            this._zone = zone;
+            _x = x;
+            _y = y;
+            _tile = tile;
+            _sector = sector;
+            _zone = zone;
             Coordinates = new Point(x, y);
             LayerType = LayerType.Tile;
         }
@@ -95,31 +95,31 @@ namespace Tiledriver.Gui.ViewModels
         private void SetProperties(Path element)
         {
             SolidColorBrush color;
-            string path;
+            Geometry path;
             if (_tile == null)
             {
                 color = Colors.Black.ToBrush();
-                path = MapItemVm.SquarePath;
+                path = GeometryCache.SquarePath;
             }
             else if (_tile.TextureNorth.StartsWith("DOOR"))
             {
                 color = Colors.Gray.ToBrush();
-                path = MapItemVm.NorthSouthDoorPath;
+                path = GeometryCache.NorthSouthDoorPath;
             }
             else if (_tile.TextureNorth.StartsWith("SLOT"))
             {
                 color = Colors.Gray.ToBrush();
-                path = MapItemVm.EastWestDoorPath;
+                path = GeometryCache.EastWestDoorPath;
             }
             else
             {
                 color = Colors.DarkGray.ToBrush();
-                path = MapItemVm.SquarePath;
+                path = GeometryCache.SquarePath;
             }
 
             element.Fill = color;
             element.Stroke = color;
-            element.Data = Geometry.Parse(path);
+            element.Data =path;
         }
     }
 }

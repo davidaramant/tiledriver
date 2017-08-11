@@ -163,9 +163,9 @@ namespace Tiledriver.Gui.ViewModels
         private Template DecoratedDoor(Core.FormatModels.Uwmf.Trigger trigger)
         {
             var lockLevel = (LockLevel) trigger.Arg3;
-            if (lockLevel == LockLevel.Gold) return new Template(CirclePath, Colors.Gold, Colors.Black);
-            if (lockLevel == LockLevel.Silver) return new Template(CirclePath, Colors.Silver, Colors.Black);
-            if (lockLevel == LockLevel.Both) return new Template(CirclePath, Colors.Blue, Colors.Black);
+            if (lockLevel == LockLevel.Gold) return new Template(GeometryCache.CirclePath, Colors.Gold, Colors.Black);
+            if (lockLevel == LockLevel.Silver) return new Template(GeometryCache.CirclePath, Colors.Silver, Colors.Black);
+            if (lockLevel == LockLevel.Both) return new Template(GeometryCache.CirclePath, Colors.Blue, Colors.Black);
             return Default;
         }
 
@@ -177,10 +177,10 @@ namespace Tiledriver.Gui.ViewModels
             {
                 return DecoratedDoor(trigger);
             }
-            return _templates.ContainsKey(key) ? _templates[key] : Default;
+            return Templates.ContainsKey(key) ? Templates[key] : Default;
         }
 
-        private static Dictionary<string, Template> _templates = new Dictionary<string, Template>
+        private static readonly Dictionary<string, Template> Templates = new Dictionary<string, Template>
         {
             { "Door_Open", DoorOpen() },
             { "Pushwall_Move", PushwallMove() },
@@ -195,19 +195,19 @@ namespace Tiledriver.Gui.ViewModels
             { "Elevator_SwitchFloor", ElevatorSwitchFloor() }
         };
 
-        private static Template Default => new Template(SquarePath, Transparent(), Colors.White);
+        private static Template Default => new Template(GeometryCache.SquarePath, Colors.Transparent, Colors.White);
 
-        private static Template DoorOpen() => new Template(NoPath, Transparent(), Colors.Brown);
-        private static Template PushwallMove() => new Template(SquarePath, Transparent(), Colors.Yellow);
-        private static Template ExitNormal() => new Template(SquarePath, Transparent(), Colors.Green);
-        private static Template ExitSecret() => new Template(SquarePath, Transparent(), Colors.Blue);
-        private static Template TeleportNewMap() => new Template(SquarePath, Transparent(), Colors.DarkGoldenrod);
-        private static Template ExitVictorySpin() => new Template(SquarePath, Transparent(), Colors.DarkOrchid);
-        private static Template ExitVictory() => new Template(SquarePath, Transparent(), Colors.DarkMagenta);
-        private static Template TriggerExecute() => new Template(SquarePath, Transparent(), Colors.DarkOrange);
-        private static Template StartConversation() => new Template(SquarePath, Transparent(), Colors.DarkSlateBlue);
-        private static Template DoorElevator() => new Template(SquarePath, Transparent(), Colors.DarkSalmon);
-        private static Template ElevatorSwitchFloor() => new Template(SquarePath, Transparent(), Colors.DarkMagenta);
+        private static Template DoorOpen() => new Template(GeometryCache.NoPath, Colors.Transparent, Colors.Brown);
+        private static Template PushwallMove() => new Template(GeometryCache.SquarePath, Colors.Transparent, Colors.Yellow);
+        private static Template ExitNormal() => new Template(GeometryCache.SquarePath, Colors.Transparent, Colors.Green);
+        private static Template ExitSecret() => new Template(GeometryCache.SquarePath, Colors.Transparent, Colors.Blue);
+        private static Template TeleportNewMap() => new Template(GeometryCache.SquarePath, Colors.Transparent, Colors.DarkGoldenrod);
+        private static Template ExitVictorySpin() => new Template(GeometryCache.SquarePath, Colors.Transparent, Colors.DarkOrchid);
+        private static Template ExitVictory() => new Template(GeometryCache.SquarePath, Colors.Transparent, Colors.DarkMagenta);
+        private static Template TriggerExecute() => new Template(GeometryCache.SquarePath, Colors.Transparent, Colors.DarkOrange);
+        private static Template StartConversation() => new Template(GeometryCache.SquarePath, Colors.Transparent, Colors.DarkSlateBlue);
+        private static Template DoorElevator() => new Template(GeometryCache.SquarePath, Colors.Transparent, Colors.DarkSalmon);
+        private static Template ElevatorSwitchFloor() => new Template(GeometryCache.SquarePath, Colors.Transparent, Colors.DarkMagenta);
 
         private sealed class Template
         {
@@ -215,23 +215,12 @@ namespace Tiledriver.Gui.ViewModels
             public SolidColorBrush Fill { get; }
             public SolidColorBrush Stroke { get; }
 
-            public Template(string path, Color fill, Color stroke)
+            public Template(Geometry geometry, Color fill, Color stroke)
             {
-                Geometry = Geometry.Parse(path);
+                Geometry = geometry;
                 Fill = fill.ToBrush();
                 Stroke = stroke.ToBrush();
             }
-        }
-
-        // FIXME There must be a better way to do this.
-        private static Color Transparent(Color? nullableColor = null)
-        {
-            if (nullableColor == null)
-            {
-                return Color.FromArgb(0, 0, 0, 0);
-            }
-            Color color = nullableColor.Value;
-            return Color.FromArgb(127, color.R, color.G, color.B);
         }
     }
 }

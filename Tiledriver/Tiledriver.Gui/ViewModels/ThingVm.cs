@@ -28,11 +28,11 @@ namespace Tiledriver.Gui.ViewModels
             _thing = thing;
             _category = category;
 
-            var template = 
-                _templates.ContainsKey(thing.Type) ? 
-                _templates[thing.Type] : 
-                    _templates.ContainsKey(category ?? "") ? 
-                    _templates[category] : 
+            var template =
+                Templates.ContainsKey(thing.Type) ?
+                Templates[thing.Type] :
+                    Templates.ContainsKey(category ?? "") ?
+                    Templates[category] :
                     Default;
 
             _geometry = template.Geometry;
@@ -93,28 +93,29 @@ namespace Tiledriver.Gui.ViewModels
             }
         }
 
-        private static Dictionary<string, Template> _templates = new Dictionary<string, Template>
+        private static readonly Dictionary<string, Template> Templates = new Dictionary<string, Template>
         {
             // SPECIAL
-            { "$Player1Start", Player() },
-            { "PatrolPoint", PatrolPoint() },
+            { Actor.Player1Start.ClassName, Player() },
+            { Actor.PatrolPoint.ClassName, PatrolPoint() },
+            // Ghosts
             { Actor.Blinky.ClassName, PacmanGhost(Colors.Red) },
             { Actor.Pinky.ClassName, PacmanGhost(Color.FromRgb(255,184,255)) },
             { Actor.Inky.ClassName, PacmanGhost(Colors.Cyan) },
             { Actor.Clyde.ClassName, PacmanGhost(Color.FromRgb(255,184,81)) },
             // GUARDS
-            { "DeadGuard", Circle(Colors.Brown, Colors.SaddleBrown) },
-            { "Dog", Dog() },
-            { "Guard", EnemyMan(Colors.SaddleBrown) },
-            { "Officer", EnemyMan(Colors.White) },
-            { "WolfensteinSS", EnemyMan(Colors.Blue) },
-            { "Mutant", EnemyMan(Colors.Green) },
+            { Actor.DeadGuard.ClassName, Circle(Colors.Brown, Colors.SaddleBrown) },
+            { Actor.Dog.ClassName, Dog() },
+            { Actor.Guard.ClassName, EnemyMan(Colors.SaddleBrown) },
+            { Actor.Officer.ClassName, EnemyMan(Colors.White) },
+            { Actor.WolfensteinSS.ClassName, EnemyMan(Colors.Blue) },
+            { Actor.Mutant.ClassName, EnemyMan(Colors.Green) },
             // KEYS
-            { "GoldKey", Key(Colors.Gold) },
-            { "SilverKey", Key(Colors.Silver) },
+            { Actor.GoldKey.ClassName, Key(Colors.Gold) },
+            { Actor.SilverKey.ClassName, Key(Colors.Silver) },
             // DECORATIONS
-            { "WhitePillar", Circle(Colors.White, Colors.LightGray) },
-            { "CeilingLight", Circle(Colors.DarkOrange, Colors.DarkGoldenrod) },
+            { Actor.WhitePillar.ClassName, Circle(Colors.White, Colors.LightGray) },
+            { Actor.CeilingLight.ClassName, Circle(Colors.DarkOrange, Colors.DarkGoldenrod) },
             
             // CATEGORIES
             { "Bosses", Boss() },
@@ -125,20 +126,20 @@ namespace Tiledriver.Gui.ViewModels
             { "Ammo", Ammo() },
         };
 
-        private static Template Default => new Template(CirclePath, Colors.Violet, Colors.White);
+        private static Template Default => new Template(GeometryCache.CirclePath, Colors.Violet, Colors.White);
 
-        private static Template Player() => new Template(ManPath, Colors.Fuchsia, Colors.DeepPink, true);
-        private static Template PatrolPoint() => new Template(ArrowPath, Colors.Black, Colors.LightGray, true);
-        private static Template EnemyMan(Color fill) => new Template(ManPath, fill, Colors.Red, true);
-        private static Template Boss() => new Template(BossPath, Colors.Fuchsia, Colors.Fuchsia, true);
-        private static Template Key(Color fill) => new Template(KeyPath, fill, fill);
-        private static Template PacmanGhost(Color color) => new Template(PacmanGhostPath, color, Colors.GhostWhite);
-        private static Template Circle(Color fill, Color stroke) => new Template(CirclePath, fill, stroke);
-        private static Template Dog() => new Template(DogPath, Colors.Brown, Colors.SaddleBrown, shouldRotate: true);
-        private static Template Treasure() => new Template(CrownPath, Colors.Gold, Colors.DarkGoldenrod);
-        private static Template Health() => new Template(CrossPath, Colors.Blue, Colors.White);
-        private static Template Weapons() => new Template(GunPath, Colors.Gray, Colors.DarkGray);
-        private static Template Ammo() => new Template(AmmoPath, Colors.Gray, Colors.DarkGray);
+        private static Template Player() => new Template(GeometryCache.ManPath, Colors.Fuchsia, Colors.DeepPink, true);
+        private static Template PatrolPoint() => new Template(GeometryCache.ArrowPath, Colors.Black, Colors.LightGray, true);
+        private static Template EnemyMan(Color fill) => new Template(GeometryCache.ManPath, fill, Colors.Red, true);
+        private static Template Boss() => new Template(GeometryCache.BossPath, Colors.Fuchsia, Colors.Fuchsia, true);
+        private static Template Key(Color fill) => new Template(GeometryCache.KeyPath, fill, fill);
+        private static Template PacmanGhost(Color color) => new Template(GeometryCache.PacmanGhostPath, color, Colors.GhostWhite);
+        private static Template Circle(Color fill, Color stroke) => new Template(GeometryCache.CirclePath, fill, stroke);
+        private static Template Dog() => new Template(GeometryCache.DogPath, Colors.Brown, Colors.SaddleBrown, shouldRotate: true);
+        private static Template Treasure() => new Template(GeometryCache.CrownPath, Colors.Gold, Colors.DarkGoldenrod);
+        private static Template Health() => new Template(GeometryCache.CrossPath, Colors.Blue, Colors.White);
+        private static Template Weapons() => new Template(GeometryCache.GunPath, Colors.Gray, Colors.DarkGray);
+        private static Template Ammo() => new Template(GeometryCache.AmmoPath, Colors.Gray, Colors.DarkGray);
 
         private sealed class Template
         {
@@ -147,9 +148,9 @@ namespace Tiledriver.Gui.ViewModels
             public SolidColorBrush Stroke { get; }
             public bool ShouldRotate { get; }
 
-            public Template(string path, Color fill, Color stroke, bool shouldRotate = false)
+            public Template(Geometry geometry, Color fill, Color stroke, bool shouldRotate = false)
             {
-                Geometry = Geometry.Parse(path);
+                Geometry = geometry;
                 Fill = fill.ToBrush();
                 Stroke = stroke.ToBrush();
                 ShouldRotate = shouldRotate;
