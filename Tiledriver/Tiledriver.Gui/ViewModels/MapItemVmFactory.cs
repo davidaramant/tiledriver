@@ -10,14 +10,14 @@ using Tiledriver.Gui.Utilities;
 
 namespace Tiledriver.Gui.ViewModels
 {
-    public class MapItemVmFactory
+    public sealed class MapItemVmFactory
     {
-        private MapData _mapData;
-        private IEnumerable<Actor> _actors = Actor.GetAll().Where(a => a.Wolf3D);
+        private readonly MapData _mapData;
+        private readonly IEnumerable<Actor> _actors = Actor.GetAll().Where(a => a.Wolf3D);
 
         public MapItemVmFactory(MapData mapData)
         {
-            this._mapData = mapData;
+            _mapData = mapData;
         }
 
         public ThingVm BuildThing(Thing thing)

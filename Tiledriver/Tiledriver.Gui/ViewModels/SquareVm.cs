@@ -56,39 +56,36 @@ namespace Tiledriver.Gui.ViewModels
 
         public override string DetailType => _tile == null ? "Space" : (_tile.TextureNorth.StartsWith("DOOR") || _tile.TextureNorth.StartsWith("SLOT")) ? "Door" : "Wall";
 
-        public override IEnumerable<DetailProperties> Details
+        public override IEnumerable<DetailProperties> GetDetails()
         {
-            get
+            yield return new DetailProperties("Position", "X", _x.ToString());
+            yield return new DetailProperties("Position", "Y", _y.ToString());
+
+            if (_sector != null)
             {
-                yield return new DetailProperties("Position", "X", _x.ToString());
-                yield return new DetailProperties("Position", "Y", _y.ToString());
+                yield return new DetailProperties("Sector", "CeilingTexture", _sector.TextureCeiling);
+                yield return new DetailProperties("Sector", "FloorTexture", _sector.TextureFloor);
+            }
 
-                if (_sector != null)
-                {
-                    yield return new DetailProperties("Sector", "CeilingTexture", _sector.TextureCeiling);
-                    yield return new DetailProperties("Sector", "FloorTexture", _sector.TextureFloor);
-                }
+            if (_zone >= 0)
+            {
+                yield return new DetailProperties("Miscellaneous", "Zone", _zone.ToString());
+            }
 
-                if (_zone >= 0)
-                {
-                    yield return new DetailProperties("Miscellaneous", "Zone", _zone.ToString());
-                }
-                
-                if (_tile != null)
-                {
-                    yield return new DetailProperties("Texture", "Texture North", _tile.TextureNorth);
-                    yield return new DetailProperties("Texture", "Texture East", _tile.TextureEast);
-                    yield return new DetailProperties("Texture", "Texture South", _tile.TextureSouth);
-                    yield return new DetailProperties("Texture", "Texture West", _tile.TextureWest);
+            if (_tile != null)
+            {
+                yield return new DetailProperties("Texture", "Texture North", _tile.TextureNorth);
+                yield return new DetailProperties("Texture", "Texture East", _tile.TextureEast);
+                yield return new DetailProperties("Texture", "Texture South", _tile.TextureSouth);
+                yield return new DetailProperties("Texture", "Texture West", _tile.TextureWest);
 
-                    yield return new DetailProperties("Texture Offset", "Offset Vertical", _tile.OffsetVertical ? "Yes" : "No");
-                    yield return new DetailProperties("Texture Offset", "Offset Horizontal", _tile.OffsetHorizontal ? "Yes" : "No");
+                yield return new DetailProperties("Texture Offset", "Offset Vertical", _tile.OffsetVertical ? "Yes" : "No");
+                yield return new DetailProperties("Texture Offset", "Offset Horizontal", _tile.OffsetHorizontal ? "Yes" : "No");
 
-                    yield return new DetailProperties("Texture Blocking", "Blocking North", _tile.BlockingNorth ? "Yes" : "No");
-                    yield return new DetailProperties("Texture Blocking", "Blocking East", _tile.BlockingEast ? "Yes" : "No");
-                    yield return new DetailProperties("Texture Blocking", "Blocking South", _tile.BlockingSouth ? "Yes" : "No");
-                    yield return new DetailProperties("Texture Blocking", "Blocking West", _tile.BlockingWest ? "Yes" : "No");
-                }
+                yield return new DetailProperties("Texture Blocking", "Blocking North", _tile.BlockingNorth ? "Yes" : "No");
+                yield return new DetailProperties("Texture Blocking", "Blocking East", _tile.BlockingEast ? "Yes" : "No");
+                yield return new DetailProperties("Texture Blocking", "Blocking South", _tile.BlockingSouth ? "Yes" : "No");
+                yield return new DetailProperties("Texture Blocking", "Blocking West", _tile.BlockingWest ? "Yes" : "No");
             }
         }
 
@@ -119,7 +116,7 @@ namespace Tiledriver.Gui.ViewModels
 
             element.Fill = color;
             element.Stroke = color;
-            element.Data =path;
+            element.Data = path;
         }
     }
 }

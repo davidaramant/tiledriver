@@ -18,7 +18,7 @@ namespace Tiledriver.Gui.ViewModels
         private readonly Geometry _geometry;
         private readonly SolidColorBrush _fill;
         private readonly SolidColorBrush _stroke;
-        private readonly string _argsCategory =  "Args";
+        private readonly string _argsCategory = "Args";
 
         enum Direction
         {
@@ -93,76 +93,73 @@ namespace Tiledriver.Gui.ViewModels
         public override string DetailType => "Trigger";
 
 
-        public override IEnumerable<DetailProperties> Details
+        public override IEnumerable<DetailProperties> GetDetails()
         {
-            get
+            yield return new DetailProperties("Info", "Name", _actionName.Replace("_", "__"));
+            yield return new DetailProperties("Info", "PlayerUse", _trigger.PlayerUse.ToString());
+            yield return new DetailProperties("Info", "MonsterUse", _trigger.MonsterUse.ToString());
+            yield return new DetailProperties("Info", "Repeatable", _trigger.Repeatable.ToString());
+            yield return new DetailProperties("Info", "PlayerCross", _trigger.PlayerCross.ToString());
+            yield return new DetailProperties("Info", "IsSecret", _trigger.Secret.ToString());
+            yield return new DetailProperties("Info", "Comment", _trigger.Comment);
+
+            yield return new DetailProperties("Activate", "North", _trigger.ActivateNorth.ToString());
+            yield return new DetailProperties("Activate", "South", _trigger.ActivateSouth.ToString());
+            yield return new DetailProperties("Activate", "East", _trigger.ActivateEast.ToString());
+            yield return new DetailProperties("Activate", "West", _trigger.ActivateWest.ToString());
+
+            if (_actionName == "Door_Open")
             {
-                yield return new DetailProperties("Info", "Name", _actionName.Replace("_", "__"));
-                yield return new DetailProperties("Info", "PlayerUse", _trigger.PlayerUse.ToString());
-                yield return new DetailProperties("Info", "MonsterUse", _trigger.MonsterUse.ToString());
-                yield return new DetailProperties("Info", "Repeatable", _trigger.Repeatable.ToString());
-                yield return new DetailProperties("Info", "PlayerCross", _trigger.PlayerCross.ToString());
-                yield return new DetailProperties("Info", "IsSecret", _trigger.Secret.ToString());
-                yield return new DetailProperties("Info", "Comment", _trigger.Comment);
-
-                yield return new DetailProperties("Activate", "North", _trigger.ActivateNorth.ToString());
-                yield return new DetailProperties("Activate", "South", _trigger.ActivateSouth.ToString());
-                yield return new DetailProperties("Activate", "East", _trigger.ActivateEast.ToString());
-                yield return new DetailProperties("Activate", "West", _trigger.ActivateWest.ToString());
-
-                if (_actionName == "Door_Open")
-                {
-                    yield return new DetailProperties(_argsCategory, "Tag", _trigger.Arg0.ToString());
-                    yield return new DetailProperties(_argsCategory, "Speed", _trigger.Arg1.ToString());
-                    yield return new DetailProperties(_argsCategory, "Delay", _trigger.Arg2.ToString());
-                    yield return new DetailProperties(_argsCategory, "Lock", ((LockLevel) _trigger.Arg3).ToString());
-                    yield return new DetailProperties(_argsCategory, "Type", ((DoorDirection) _trigger.Arg4).ToString());
-                }
-                else if (_actionName == "Pushwall_Move")
-                {
-                    yield return new DetailProperties(_argsCategory, "Tag", _trigger.Arg0.ToString());
-                    yield return new DetailProperties(_argsCategory, "Speed", _trigger.Arg1.ToString());
-                    yield return new DetailProperties(_argsCategory, "Direction", ((Direction) _trigger.Arg2).ToString());
-                    yield return new DetailProperties(_argsCategory, "Distance", _trigger.Arg3.ToString());
-                }
-                else if (_actionName == "Teleport_NewMap")
-                {
-                    yield return new DetailProperties(_argsCategory, "Map", _trigger.Arg0.ToString());
-                    yield return new DetailProperties(_argsCategory, "Position", _trigger.Arg1.ToString());
-                    yield return new DetailProperties(_argsCategory, "Flags", ((TeleportNewMapFlag) _trigger.Arg2).ToString());
-                }
-                else if (_actionName == "Trigger_Execute")
-                {
-                    yield return new DetailProperties(_argsCategory, "X", _trigger.Arg0.ToString());
-                    yield return new DetailProperties(_argsCategory, "Y", _trigger.Arg1.ToString());
-                    yield return new DetailProperties(_argsCategory, "Z", _trigger.Arg2.ToString());
-                }
-                else if (_actionName == "StartConversation")
-                {
-                    yield return new DetailProperties(_argsCategory, "Tid", _trigger.Arg0.ToString());
-                    yield return new DetailProperties(_argsCategory, "FaceTalker", _trigger.Arg1.ToString());
-                }
-                else if (_actionName == "Door_Elevator")
-                {
-                    yield return new DetailProperties(_argsCategory, "SwitchTag", _trigger.Arg0.ToString());
-                    yield return new DetailProperties(_argsCategory, "Speed", _trigger.Arg1.ToString());
-                    yield return new DetailProperties(_argsCategory, "Delay", _trigger.Arg2.ToString());
-                    yield return new DetailProperties(_argsCategory, "Lock", ((LockLevel)_trigger.Arg3).ToString());
-                    yield return new DetailProperties(_argsCategory, "Type", ((DoorDirection)_trigger.Arg4).ToString());
-                }
-                else if (_actionName == "Elevator_SwitchDoor")
-                {
-                    yield return new DetailProperties(_argsCategory, "ElevTag", _trigger.Arg0.ToString());
-                    yield return new DetailProperties(_argsCategory, "DoorTag", _trigger.Arg1.ToString());
-                    yield return new DetailProperties(_argsCategory, "CallSpeed", _trigger.Arg2.ToString());
-                    yield return new DetailProperties(_argsCategory, "NextTag", _trigger.Arg3.ToString());
-                }
+                yield return new DetailProperties(_argsCategory, "Tag", _trigger.Arg0.ToString());
+                yield return new DetailProperties(_argsCategory, "Speed", _trigger.Arg1.ToString());
+                yield return new DetailProperties(_argsCategory, "Delay", _trigger.Arg2.ToString());
+                yield return new DetailProperties(_argsCategory, "Lock", ((LockLevel)_trigger.Arg3).ToString());
+                yield return new DetailProperties(_argsCategory, "Type", ((DoorDirection)_trigger.Arg4).ToString());
+            }
+            else if (_actionName == "Pushwall_Move")
+            {
+                yield return new DetailProperties(_argsCategory, "Tag", _trigger.Arg0.ToString());
+                yield return new DetailProperties(_argsCategory, "Speed", _trigger.Arg1.ToString());
+                yield return new DetailProperties(_argsCategory, "Direction", ((Direction)_trigger.Arg2).ToString());
+                yield return new DetailProperties(_argsCategory, "Distance", _trigger.Arg3.ToString());
+            }
+            else if (_actionName == "Teleport_NewMap")
+            {
+                yield return new DetailProperties(_argsCategory, "Map", _trigger.Arg0.ToString());
+                yield return new DetailProperties(_argsCategory, "Position", _trigger.Arg1.ToString());
+                yield return new DetailProperties(_argsCategory, "Flags", ((TeleportNewMapFlag)_trigger.Arg2).ToString());
+            }
+            else if (_actionName == "Trigger_Execute")
+            {
+                yield return new DetailProperties(_argsCategory, "X", _trigger.Arg0.ToString());
+                yield return new DetailProperties(_argsCategory, "Y", _trigger.Arg1.ToString());
+                yield return new DetailProperties(_argsCategory, "Z", _trigger.Arg2.ToString());
+            }
+            else if (_actionName == "StartConversation")
+            {
+                yield return new DetailProperties(_argsCategory, "Tid", _trigger.Arg0.ToString());
+                yield return new DetailProperties(_argsCategory, "FaceTalker", _trigger.Arg1.ToString());
+            }
+            else if (_actionName == "Door_Elevator")
+            {
+                yield return new DetailProperties(_argsCategory, "SwitchTag", _trigger.Arg0.ToString());
+                yield return new DetailProperties(_argsCategory, "Speed", _trigger.Arg1.ToString());
+                yield return new DetailProperties(_argsCategory, "Delay", _trigger.Arg2.ToString());
+                yield return new DetailProperties(_argsCategory, "Lock", ((LockLevel)_trigger.Arg3).ToString());
+                yield return new DetailProperties(_argsCategory, "Type", ((DoorDirection)_trigger.Arg4).ToString());
+            }
+            else if (_actionName == "Elevator_SwitchDoor")
+            {
+                yield return new DetailProperties(_argsCategory, "ElevTag", _trigger.Arg0.ToString());
+                yield return new DetailProperties(_argsCategory, "DoorTag", _trigger.Arg1.ToString());
+                yield return new DetailProperties(_argsCategory, "CallSpeed", _trigger.Arg2.ToString());
+                yield return new DetailProperties(_argsCategory, "NextTag", _trigger.Arg3.ToString());
             }
         }
 
         private Template DecoratedDoor(Core.FormatModels.Uwmf.Trigger trigger)
         {
-            var lockLevel = (LockLevel) trigger.Arg3;
+            var lockLevel = (LockLevel)trigger.Arg3;
             if (lockLevel == LockLevel.Gold) return new Template(GeometryCache.CirclePath, Colors.Gold, Colors.Black);
             if (lockLevel == LockLevel.Silver) return new Template(GeometryCache.CirclePath, Colors.Silver, Colors.Black);
             if (lockLevel == LockLevel.Both) return new Template(GeometryCache.CirclePath, Colors.Blue, Colors.Black);
@@ -172,7 +169,7 @@ namespace Tiledriver.Gui.ViewModels
         private Template SelectTemplate(Core.FormatModels.Uwmf.Trigger trigger)
         {
             var key = trigger.Action;
-            var requiresKey = ((LockLevel) trigger.Arg3 != LockLevel.None);
+            var requiresKey = ((LockLevel)trigger.Arg3 != LockLevel.None);
             if ((key == "Door_Open") && requiresKey)
             {
                 return DecoratedDoor(trigger);

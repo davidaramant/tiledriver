@@ -75,22 +75,19 @@ namespace Tiledriver.Gui.ViewModels
 
         public override string DetailType => _thing?.Type ?? "Thing";
 
-        public override IEnumerable<DetailProperties> Details
+        public override IEnumerable<DetailProperties> GetDetails()
         {
-            get
-            {
-                yield return new DetailProperties(null, "Category", _category);
+            yield return new DetailProperties(null, "Category", _category);
 
-                yield return new DetailProperties("Position", "Angle", (_thing.Angle % 360).ToString());
+            yield return new DetailProperties("Position", "Angle", (_thing.Angle % 360).ToString());
 
-                yield return new DetailProperties("Skill Level", "Level 1", _thing.Skill1 ? "Yes" : "No");
-                yield return new DetailProperties("Skill Level", "Level 2", _thing.Skill2 ? "Yes" : "No");
-                yield return new DetailProperties("Skill Level", "Level 3", _thing.Skill3 ? "Yes" : "No");
-                yield return new DetailProperties("Skill Level", "Level 4", _thing.Skill4 ? "Yes" : "No");
+            yield return new DetailProperties("Skill Level", "Level 1", _thing.Skill1 ? "Yes" : "No");
+            yield return new DetailProperties("Skill Level", "Level 2", _thing.Skill2 ? "Yes" : "No");
+            yield return new DetailProperties("Skill Level", "Level 3", _thing.Skill3 ? "Yes" : "No");
+            yield return new DetailProperties("Skill Level", "Level 4", _thing.Skill4 ? "Yes" : "No");
 
-                yield return new DetailProperties("Special", "Ambush", _thing.Ambush ? "Yes" : "No");
-                yield return new DetailProperties("Special", "Patrol", _thing.Patrol ? "Yes" : "No");
-            }
+            yield return new DetailProperties("Special", "Ambush", _thing.Ambush ? "Yes" : "No");
+            yield return new DetailProperties("Special", "Patrol", _thing.Patrol ? "Yes" : "No");
         }
 
         private static readonly Dictionary<string, Template> Templates = new Dictionary<string, Template>

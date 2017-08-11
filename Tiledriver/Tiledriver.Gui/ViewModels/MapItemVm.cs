@@ -18,8 +18,8 @@ namespace Tiledriver.Gui.ViewModels
         public Path Thumbnail => CreatePath(24);
 
         public abstract string DetailType { get; }
-        public abstract IEnumerable<DetailProperties> Details { get; }
-        public Dictionary<string, List<DetailProperties>> GroupedDetails => Details.GroupBy(d => d.Category).ToDictionary(g => g.Key ?? "", g => g.ToList());
+        public abstract IEnumerable<DetailProperties> GetDetails();
+        public Dictionary<string, List<DetailProperties>> GroupedDetails => GetDetails().GroupBy(d => d.Category).ToDictionary(g => g.Key ?? "", g => g.ToList());
 
         protected Path Element;
         public abstract Path CreatePath(int size);
@@ -27,17 +27,13 @@ namespace Tiledriver.Gui.ViewModels
         public abstract double Top(double size);
         public abstract double Height(double size);
         public abstract double Width(double size);
-        public virtual void Rotate(double size) {}
-        public virtual void UnRotate(double size) { }
 
         public void UpdatePathSize(double size)
         {
             if (Element != null)
             {
-                UnRotate(Element.ActualHeight);
                 Element.Height = size;
                 Element.Width = size;
-                Rotate(size);
                 Canvas.SetLeft(Element, Left(size));
                 Canvas.SetTop(Element, Top(size));
             }
