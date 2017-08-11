@@ -1,9 +1,7 @@
 # TODOs
 
-- WDC 3.1 map loader
 - Add MapInfo Automap and Skill blocks to documentation
 - File system resource provider
-- Glue all the components together
 - Map Translator:
     - Test HOLOWALL
     - MapInfo special actions
