@@ -2,7 +2,6 @@
 // Copyright (c) 2017, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using System.Collections.Generic;
 using System.Linq;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.Wolf3D;
@@ -13,7 +12,6 @@ namespace Tiledriver.Gui.ViewModels
     public sealed class MapItemVmFactory
     {
         private readonly MapData _mapData;
-        private readonly IEnumerable<Actor> _actors = Actor.GetAll().Where(a => a.Wolf3D);
 
         public MapItemVmFactory(MapData mapData)
         {
@@ -22,7 +20,7 @@ namespace Tiledriver.Gui.ViewModels
 
         public ThingVm BuildThing(Thing thing)
         {
-            var category = _actors.SingleOrDefault(a => a.ClassName == thing.Type)?.Category;
+            var category = Actor.GetAll().SingleOrDefault(a => a.ClassName == thing.Type)?.Category;
             return new ThingVm(thing, category);
         }
 

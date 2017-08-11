@@ -5,6 +5,6 @@ namespace Tiledriver.Core.Wolf3D
 {
     public sealed partial class Actor
     {
-        public string ClassName => Prefix + _instanceName;
+        public string ClassName => ((this == Player1Start) ? "$" : "") + _instanceName;
     }
 }

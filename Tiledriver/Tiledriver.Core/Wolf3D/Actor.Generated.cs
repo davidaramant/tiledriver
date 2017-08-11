@@ -17,8 +17,6 @@ namespace Tiledriver.Core.Wolf3D
         private readonly string _instanceName;
         public readonly System.Int32 ID;
         public readonly System.String Category;
-        public readonly System.Boolean Wolf3D;
-        public readonly System.String Prefix;
         public readonly System.Boolean Solid;
 
         /// <summary>
@@ -28,8 +26,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Player1Start",
             iD: 1,   
             category: CategoryType.Special,   
-            wolf3D: true,   
-            prefix: "$",   
             solid: false  
         );
         /// <summary>
@@ -39,30 +35,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "PatrolPoint",
             iD: 10,   
             category: CategoryType.Special,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// AngelOfDeath
-        /// </summary>
-        public static readonly Actor AngelOfDeath = new Actor(
-            instanceName: "AngelOfDeath",
-            iD: 27,   
-            category: CategoryType.Bosses,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// DevilIncarnate
-        /// </summary>
-        public static readonly Actor DevilIncarnate = new Actor(
-            instanceName: "DevilIncarnate",
-            iD: 103,   
-            category: CategoryType.Bosses,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -72,19 +44,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Puddle",
             iD: 33,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// Puddle2
-        /// </summary>
-        public static readonly Actor Puddle2 = new Actor(
-            instanceName: "Puddle2",
-            iD: 105,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -94,19 +53,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "GreenBarrel",
             iD: 34,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: true  
-        );
-        /// <summary>
-        /// HorizontalGreenBarrel
-        /// </summary>
-        public static readonly Actor HorizontalGreenBarrel = new Actor(
-            instanceName: "HorizontalGreenBarrel",
-            iD: 106,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
             solid: true  
         );
         /// <summary>
@@ -116,19 +62,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "TableWithChairs",
             iD: 35,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: true  
-        );
-        /// <summary>
-        /// TableWithChairs2
-        /// </summary>
-        public static readonly Actor TableWithChairs2 = new Actor(
-            instanceName: "TableWithChairs2",
-            iD: 107,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
             solid: true  
         );
         /// <summary>
@@ -138,19 +71,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "FloorLamp",
             iD: 36,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: true  
-        );
-        /// <summary>
-        /// TallFloorLamp
-        /// </summary>
-        public static readonly Actor TallFloorLamp = new Actor(
-            instanceName: "TallFloorLamp",
-            iD: 108,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
             solid: true  
         );
         /// <summary>
@@ -160,19 +80,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Chandelier",
             iD: 37,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// Chandelier2
-        /// </summary>
-        public static readonly Actor Chandelier2 = new Actor(
-            instanceName: "Chandelier2",
-            iD: 109,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -182,19 +89,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "HangedMan",
             iD: 38,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: true  
-        );
-        /// <summary>
-        /// HangedMan2
-        /// </summary>
-        public static readonly Actor HangedMan2 = new Actor(
-            instanceName: "HangedMan2",
-            iD: 110,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
             solid: true  
         );
         /// <summary>
@@ -204,19 +98,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "WhitePillar",
             iD: 40,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: true  
-        );
-        /// <summary>
-        /// CrackedPillar
-        /// </summary>
-        public static readonly Actor CrackedPillar = new Actor(
-            instanceName: "CrackedPillar",
-            iD: 112,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
             solid: true  
         );
         /// <summary>
@@ -226,19 +107,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "GreenPlant",
             iD: 41,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: true  
-        );
-        /// <summary>
-        /// GreenPlant2
-        /// </summary>
-        public static readonly Actor GreenPlant2 = new Actor(
-            instanceName: "GreenPlant2",
-            iD: 113,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
             solid: true  
         );
         /// <summary>
@@ -248,19 +116,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "SkeletonFlat",
             iD: 42,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// SkeletonFlat2
-        /// </summary>
-        public static readonly Actor SkeletonFlat2 = new Actor(
-            instanceName: "SkeletonFlat2",
-            iD: 114,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -270,8 +125,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Sink",
             iD: 43,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
             solid: true  
         );
         /// <summary>
@@ -281,19 +134,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "BrownPlant",
             iD: 44,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: true  
-        );
-        /// <summary>
-        /// BrownPlant2
-        /// </summary>
-        public static readonly Actor BrownPlant2 = new Actor(
-            instanceName: "BrownPlant2",
-            iD: 115,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
             solid: true  
         );
         /// <summary>
@@ -303,19 +143,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Vase",
             iD: 45,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: true  
-        );
-        /// <summary>
-        /// Vase2
-        /// </summary>
-        public static readonly Actor Vase2 = new Actor(
-            instanceName: "Vase2",
-            iD: 116,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
             solid: true  
         );
         /// <summary>
@@ -325,19 +152,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "BareTable",
             iD: 46,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: true  
-        );
-        /// <summary>
-        /// MetalTable
-        /// </summary>
-        public static readonly Actor MetalTable = new Actor(
-            instanceName: "MetalTable",
-            iD: 117,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
             solid: true  
         );
         /// <summary>
@@ -347,30 +161,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "CeilingLight",
             iD: 47,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// CeilingLight2
-        /// </summary>
-        public static readonly Actor CeilingLight2 = new Actor(
-            instanceName: "CeilingLight2",
-            iD: 118,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// RedCeilingLight
-        /// </summary>
-        public static readonly Actor RedCeilingLight = new Actor(
-            instanceName: "RedCeilingLight",
-            iD: 85,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -380,8 +170,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "KitchenStuff",
             iD: 48,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -391,19 +179,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "SuitOfArmor",
             iD: 49,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: true  
-        );
-        /// <summary>
-        /// SuitOfArmor2
-        /// </summary>
-        public static readonly Actor SuitOfArmor2 = new Actor(
-            instanceName: "SuitOfArmor2",
-            iD: 120,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
             solid: true  
         );
         /// <summary>
@@ -413,19 +188,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "HangingCage",
             iD: 50,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: true  
-        );
-        /// <summary>
-        /// HangingCage2
-        /// </summary>
-        public static readonly Actor HangingCage2 = new Actor(
-            instanceName: "HangingCage2",
-            iD: 121,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
             solid: true  
         );
         /// <summary>
@@ -435,19 +197,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "SkeletonCage",
             iD: 51,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: true  
-        );
-        /// <summary>
-        /// BrokenCage
-        /// </summary>
-        public static readonly Actor BrokenCage = new Actor(
-            instanceName: "BrokenCage",
-            iD: 122,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
             solid: true  
         );
         /// <summary>
@@ -457,19 +206,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Bones1",
             iD: 52,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// Bones5
-        /// </summary>
-        public static readonly Actor Bones5 = new Actor(
-            instanceName: "Bones5",
-            iD: 123,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -479,8 +215,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "BunkBed",
             iD: 55,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
             solid: true  
         );
         /// <summary>
@@ -490,19 +224,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Basket",
             iD: 56,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// DeadRat
-        /// </summary>
-        public static readonly Actor DeadRat = new Actor(
-            instanceName: "DeadRat",
-            iD: 125,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -512,19 +233,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Barrel",
             iD: 68,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: true  
-        );
-        /// <summary>
-        /// HorizontalBarrel
-        /// </summary>
-        public static readonly Actor HorizontalBarrel = new Actor(
-            instanceName: "HorizontalBarrel",
-            iD: 151,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
             solid: true  
         );
         /// <summary>
@@ -534,19 +242,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Well",
             iD: 69,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: true  
-        );
-        /// <summary>
-        /// Well2
-        /// </summary>
-        public static readonly Actor Well2 = new Actor(
-            instanceName: "Well2",
-            iD: 152,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
             solid: true  
         );
         /// <summary>
@@ -556,19 +251,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "EmptyWell",
             iD: 70,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: true  
-        );
-        /// <summary>
-        /// EmptyWell2
-        /// </summary>
-        public static readonly Actor EmptyWell2 = new Actor(
-            instanceName: "EmptyWell2",
-            iD: 153,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
             solid: true  
         );
         /// <summary>
@@ -578,19 +260,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Flag",
             iD: 72,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: true  
-        );
-        /// <summary>
-        /// TeslaCoil
-        /// </summary>
-        public static readonly Actor TeslaCoil = new Actor(
-            instanceName: "TeslaCoil",
-            iD: 127,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
             solid: true  
         );
         /// <summary>
@@ -600,8 +269,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "CallApogee",
             iD: 73,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -611,19 +278,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Bones2",
             iD: 74,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// Bones6
-        /// </summary>
-        public static readonly Actor Bones6 = new Actor(
-            instanceName: "Bones6",
-            iD: 129,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -633,19 +287,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Bones3",
             iD: 75,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// BareLightBulb
-        /// </summary>
-        public static readonly Actor BareLightBulb = new Actor(
-            instanceName: "BareLightBulb",
-            iD: 130,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -655,19 +296,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Bones4",
             iD: 76,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// GreenSlime
-        /// </summary>
-        public static readonly Actor GreenSlime = new Actor(
-            instanceName: "GreenSlime",
-            iD: 131,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -677,8 +305,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Pots",
             iD: 77,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -688,8 +314,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Stove",
             iD: 78,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
             solid: true  
         );
         /// <summary>
@@ -699,8 +323,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Spears",
             iD: 79,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -710,196 +332,7 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Vines",
             iD: 80,   
             category: CategoryType.Decorations,   
-            wolf3D: true,   
-            prefix: "",   
             solid: false  
-        );
-        /// <summary>
-        /// Bubbles
-        /// </summary>
-        public static readonly Actor Bubbles = new Actor(
-            instanceName: "Bubbles",
-            iD: 135,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// TruckRear
-        /// </summary>
-        public static readonly Actor TruckRear = new Actor(
-            instanceName: "TruckRear",
-            iD: 91,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// BJWasHere
-        /// </summary>
-        public static readonly Actor BJWasHere = new Actor(
-            instanceName: "BJWasHere",
-            iD: 137,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// CageWithSkulls
-        /// </summary>
-        public static readonly Actor CageWithSkulls = new Actor(
-            instanceName: "CageWithSkulls",
-            iD: 84,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: true  
-        );
-        /// <summary>
-        /// CageWithRat
-        /// </summary>
-        public static readonly Actor CageWithRat = new Actor(
-            instanceName: "CageWithRat",
-            iD: 124,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: true  
-        );
-        /// <summary>
-        /// CageWithGore
-        /// </summary>
-        public static readonly Actor CageWithGore = new Actor(
-            instanceName: "CageWithGore",
-            iD: 83,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: true  
-        );
-        /// <summary>
-        /// CageWithGore2
-        /// </summary>
-        public static readonly Actor CageWithGore2 = new Actor(
-            instanceName: "CageWithGore2",
-            iD: 119,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: true  
-        );
-        /// <summary>
-        /// Skewer
-        /// </summary>
-        public static readonly Actor Skewer = new Actor(
-            instanceName: "Skewer",
-            iD: 82,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// SkullPile
-        /// </summary>
-        public static readonly Actor SkullPile = new Actor(
-            instanceName: "SkullPile",
-            iD: 150,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// CowCarcass
-        /// </summary>
-        public static readonly Actor CowCarcass = new Actor(
-            instanceName: "CowCarcass",
-            iD: 86,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// ChemicalTable
-        /// </summary>
-        public static readonly Actor ChemicalTable = new Actor(
-            instanceName: "ChemicalTable",
-            iD: 132,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// WellWithBlood
-        /// </summary>
-        public static readonly Actor WellWithBlood = new Actor(
-            instanceName: "WellWithBlood",
-            iD: 87,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: true  
-        );
-        /// <summary>
-        /// NuclearBarrel
-        /// </summary>
-        public static readonly Actor NuclearBarrel = new Actor(
-            instanceName: "NuclearBarrel",
-            iD: 133,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: true  
-        );
-        /// <summary>
-        /// SatanStatue
-        /// </summary>
-        public static readonly Actor SatanStatue = new Actor(
-            instanceName: "SatanStatue",
-            iD: 88,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: true  
-        );
-        /// <summary>
-        /// BlueColumn
-        /// </summary>
-        public static readonly Actor BlueColumn = new Actor(
-            instanceName: "BlueColumn",
-            iD: 134,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: true  
-        );
-        /// <summary>
-        /// BrownColumn
-        /// </summary>
-        public static readonly Actor BrownColumn = new Actor(
-            instanceName: "BrownColumn",
-            iD: 89,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: true  
-        );
-        /// <summary>
-        /// DevilStatue
-        /// </summary>
-        public static readonly Actor DevilStatue = new Actor(
-            instanceName: "DevilStatue",
-            iD: 136,   
-            category: CategoryType.Decorations,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: true  
         );
         /// <summary>
         /// FakeHitler
@@ -908,8 +341,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "FakeHitler",
             iD: 18,   
             category: CategoryType.Bosses,   
-            wolf3D: true,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -919,118 +350,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "MechaHitler",
             iD: 19,   
             category: CategoryType.Bosses,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// Trans
-        /// </summary>
-        public static readonly Actor Trans = new Actor(
-            instanceName: "Trans",
-            iD: 23,   
-            category: CategoryType.Bosses,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// SubmarineWilly
-        /// </summary>
-        public static readonly Actor SubmarineWilly = new Actor(
-            instanceName: "SubmarineWilly",
-            iD: 99,   
-            category: CategoryType.Bosses,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// UberMutant
-        /// </summary>
-        public static readonly Actor UberMutant = new Actor(
-            instanceName: "UberMutant",
-            iD: 24,   
-            category: CategoryType.Bosses,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// TheAxe
-        /// </summary>
-        public static readonly Actor TheAxe = new Actor(
-            instanceName: "TheAxe",
-            iD: 101,   
-            category: CategoryType.Bosses,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// Wilhelm
-        /// </summary>
-        public static readonly Actor Wilhelm = new Actor(
-            instanceName: "Wilhelm",
-            iD: 25,   
-            category: CategoryType.Bosses,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// ProfessorQuarkblitz
-        /// </summary>
-        public static readonly Actor ProfessorQuarkblitz = new Actor(
-            instanceName: "ProfessorQuarkblitz",
-            iD: 100,   
-            category: CategoryType.Bosses,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// DeathKnight
-        /// </summary>
-        public static readonly Actor DeathKnight = new Actor(
-            instanceName: "DeathKnight",
-            iD: 24,   
-            category: CategoryType.Bosses,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// Robot
-        /// </summary>
-        public static readonly Actor Robot = new Actor(
-            instanceName: "Robot",
-            iD: 102,   
-            category: CategoryType.Bosses,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// SpearOfDestiny
-        /// </summary>
-        public static readonly Actor SpearOfDestiny = new Actor(
-            instanceName: "SpearOfDestiny",
-            iD: 92,   
-            category: "SpearOfDestiny",   
-            wolf3D: false,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// SpearOfDestiny2
-        /// </summary>
-        public static readonly Actor SpearOfDestiny2 = new Actor(
-            instanceName: "SpearOfDestiny2",
-            iD: 138,   
-            category: "SpearOfDestiny",   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1040,41 +359,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Clip",
             iD: 59,   
             category: CategoryType.Ammo,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// ClipBox
-        /// </summary>
-        public static readonly Actor ClipBox = new Actor(
-            instanceName: "ClipBox",
-            iD: 90,   
-            category: CategoryType.Ammo,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// BlueClip
-        /// </summary>
-        public static readonly Actor BlueClip = new Actor(
-            instanceName: "BlueClip",
-            iD: 139,   
-            category: CategoryType.Ammo,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// ClipBox2
-        /// </summary>
-        public static readonly Actor ClipBox2 = new Actor(
-            instanceName: "ClipBox2",
-            iD: 140,   
-            category: CategoryType.Ammo,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1084,19 +368,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Cross",
             iD: 62,   
             category: CategoryType.Treasure,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// Radio
-        /// </summary>
-        public static readonly Actor Radio = new Actor(
-            instanceName: "Radio",
-            iD: 146,   
-            category: CategoryType.Treasure,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1106,19 +377,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Chalice",
             iD: 63,   
             category: CategoryType.Treasure,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// Plutonium
-        /// </summary>
-        public static readonly Actor Plutonium = new Actor(
-            instanceName: "Plutonium",
-            iD: 147,   
-            category: CategoryType.Treasure,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1128,19 +386,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "ChestofJewels",
             iD: 64,   
             category: CategoryType.Treasure,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// ControlPanel
-        /// </summary>
-        public static readonly Actor ControlPanel = new Actor(
-            instanceName: "ControlPanel",
-            iD: 148,   
-            category: CategoryType.Treasure,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1150,19 +395,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Crown",
             iD: 65,   
             category: CategoryType.Treasure,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// Bomb
-        /// </summary>
-        public static readonly Actor Bomb = new Actor(
-            instanceName: "Bomb",
-            iD: 149,   
-            category: CategoryType.Treasure,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1172,8 +404,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Hans",
             iD: 16,   
             category: CategoryType.Bosses,   
-            wolf3D: true,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1183,8 +413,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Gretel",
             iD: 20,   
             category: CategoryType.Bosses,   
-            wolf3D: true,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1194,8 +422,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Schabbs",
             iD: 17,   
             category: CategoryType.Bosses,   
-            wolf3D: true,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1205,8 +431,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Gift",
             iD: 21,   
             category: CategoryType.Bosses,   
-            wolf3D: true,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1216,8 +440,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "FatFace",
             iD: 22,   
             category: CategoryType.Bosses,   
-            wolf3D: true,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1227,8 +449,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Blinky",
             iD: 29,   
             category: CategoryType.Enemy,   
-            wolf3D: true,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1238,8 +458,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Inky",
             iD: 32,   
             category: CategoryType.Enemy,   
-            wolf3D: true,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1249,8 +467,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Pinky",
             iD: 31,   
             category: CategoryType.Enemy,   
-            wolf3D: true,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1260,41 +476,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Clyde",
             iD: 30,   
             category: CategoryType.Enemy,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// Spectre
-        /// </summary>
-        public static readonly Actor Spectre = new Actor(
-            instanceName: "Spectre",
-            iD: 28,   
-            category: CategoryType.Enemy,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// GhoulishGhost
-        /// </summary>
-        public static readonly Actor GhoulishGhost = new Actor(
-            instanceName: "GhoulishGhost",
-            iD: 104,   
-            category: CategoryType.Enemy,   
-            wolf3D: false,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// RadioactiveMist
-        /// </summary>
-        public static readonly Actor RadioactiveMist = new Actor(
-            instanceName: "RadioactiveMist",
-            iD: 157,   
-            category: CategoryType.Enemy,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1304,19 +485,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Guard",
             iD: 11,   
             category: CategoryType.Enemy,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// GreenGuard
-        /// </summary>
-        public static readonly Actor GreenGuard = new Actor(
-            instanceName: "GreenGuard",
-            iD: 93,   
-            category: CategoryType.Enemy,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1326,19 +494,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "DeadGuard",
             iD: 81,   
             category: CategoryType.Enemy,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// DeadGreenGuard
-        /// </summary>
-        public static readonly Actor DeadGreenGuard = new Actor(
-            instanceName: "DeadGreenGuard",
-            iD: 98,   
-            category: CategoryType.Enemy,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1348,19 +503,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Dog",
             iD: 14,   
             category: CategoryType.Enemy,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// Doberman
-        /// </summary>
-        public static readonly Actor Doberman = new Actor(
-            instanceName: "Doberman",
-            iD: 95,   
-            category: CategoryType.Enemy,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1370,19 +512,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Officer",
             iD: 12,   
             category: CategoryType.Enemy,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// LostOfficer
-        /// </summary>
-        public static readonly Actor LostOfficer = new Actor(
-            instanceName: "LostOfficer",
-            iD: 97,   
-            category: CategoryType.Enemy,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1392,19 +521,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Mutant",
             iD: 15,   
             category: CategoryType.Enemy,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// GunBat
-        /// </summary>
-        public static readonly Actor GunBat = new Actor(
-            instanceName: "GunBat",
-            iD: 96,   
-            category: CategoryType.Enemy,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1414,19 +530,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "WolfensteinSS",
             iD: 13,   
             category: CategoryType.Enemy,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// Schutzstafell
-        /// </summary>
-        public static readonly Actor Schutzstafell = new Actor(
-            instanceName: "Schutzstafell",
-            iD: 94,   
-            category: CategoryType.Enemy,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1436,19 +539,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "DogFood",
             iD: 39,   
             category: CategoryType.Health,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// DogFood2
-        /// </summary>
-        public static readonly Actor DogFood2 = new Actor(
-            instanceName: "DogFood2",
-            iD: 111,   
-            category: CategoryType.Health,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1458,19 +548,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Food",
             iD: 57,   
             category: CategoryType.Health,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// Food2
-        /// </summary>
-        public static readonly Actor Food2 = new Actor(
-            instanceName: "Food2",
-            iD: 142,   
-            category: CategoryType.Health,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1480,19 +557,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Medikit",
             iD: 58,   
             category: CategoryType.Health,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// Medikit2
-        /// </summary>
-        public static readonly Actor Medikit2 = new Actor(
-            instanceName: "Medikit2",
-            iD: 143,   
-            category: CategoryType.Health,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1502,19 +566,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "OneUp",
             iD: 66,   
             category: CategoryType.Health,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// OneUpPill
-        /// </summary>
-        public static readonly Actor OneUpPill = new Actor(
-            instanceName: "OneUpPill",
-            iD: 144,   
-            category: CategoryType.Health,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1524,19 +575,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Blood",
             iD: 67,   
             category: CategoryType.Health,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// Blood2
-        /// </summary>
-        public static readonly Actor Blood2 = new Actor(
-            instanceName: "Blood2",
-            iD: 145,   
-            category: CategoryType.Health,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1546,19 +584,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "Gibs",
             iD: 71,   
             category: CategoryType.Health,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// Gibs2
-        /// </summary>
-        public static readonly Actor Gibs2 = new Actor(
-            instanceName: "Gibs2",
-            iD: 126,   
-            category: CategoryType.Health,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1568,19 +593,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "GoldKey",
             iD: 53,   
             category: CategoryType.Key,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// YellowKey
-        /// </summary>
-        public static readonly Actor YellowKey = new Actor(
-            instanceName: "YellowKey",
-            iD: 154,   
-            category: CategoryType.Key,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1590,19 +602,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "SilverKey",
             iD: 54,   
             category: CategoryType.Key,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// CyanKey
-        /// </summary>
-        public static readonly Actor CyanKey = new Actor(
-            instanceName: "CyanKey",
-            iD: 155,   
-            category: CategoryType.Key,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1612,19 +611,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "MachineGun",
             iD: 60,   
             category: CategoryType.Weapons,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// BlueAK47
-        /// </summary>
-        public static readonly Actor BlueAK47 = new Actor(
-            instanceName: "BlueAK47",
-            iD: 141,   
-            category: CategoryType.Weapons,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
         /// <summary>
@@ -1634,19 +620,6 @@ namespace Tiledriver.Core.Wolf3D
             instanceName: "GatlingGunUpgrade",
             iD: 61,   
             category: CategoryType.Weapons,   
-            wolf3D: true,   
-            prefix: "",   
-            solid: false  
-        );
-        /// <summary>
-        /// BlueGatlingGunUpgrade
-        /// </summary>
-        public static readonly Actor BlueGatlingGunUpgrade = new Actor(
-            instanceName: "BlueGatlingGunUpgrade",
-            iD: 156,   
-            category: CategoryType.Weapons,   
-            wolf3D: false,   
-            prefix: "",   
             solid: false  
         );
 
@@ -1654,16 +627,12 @@ namespace Tiledriver.Core.Wolf3D
             string instanceName,
             System.Int32 iD,   
             System.String category,   
-            System.Boolean wolf3D,   
-            System.String prefix,   
             System.Boolean solid  
         )
         {
             _instanceName = instanceName;
             ID = iD; 
             Category = category; 
-            Wolf3D = wolf3D; 
-            Prefix = prefix; 
             Solid = solid; 
         }
 
@@ -1685,108 +654,46 @@ namespace Tiledriver.Core.Wolf3D
         {
             yield return Player1Start;
             yield return PatrolPoint;
-            yield return AngelOfDeath;
-            yield return DevilIncarnate;
             yield return Puddle;
-            yield return Puddle2;
             yield return GreenBarrel;
-            yield return HorizontalGreenBarrel;
             yield return TableWithChairs;
-            yield return TableWithChairs2;
             yield return FloorLamp;
-            yield return TallFloorLamp;
             yield return Chandelier;
-            yield return Chandelier2;
             yield return HangedMan;
-            yield return HangedMan2;
             yield return WhitePillar;
-            yield return CrackedPillar;
             yield return GreenPlant;
-            yield return GreenPlant2;
             yield return SkeletonFlat;
-            yield return SkeletonFlat2;
             yield return Sink;
             yield return BrownPlant;
-            yield return BrownPlant2;
             yield return Vase;
-            yield return Vase2;
             yield return BareTable;
-            yield return MetalTable;
             yield return CeilingLight;
-            yield return CeilingLight2;
-            yield return RedCeilingLight;
             yield return KitchenStuff;
             yield return SuitOfArmor;
-            yield return SuitOfArmor2;
             yield return HangingCage;
-            yield return HangingCage2;
             yield return SkeletonCage;
-            yield return BrokenCage;
             yield return Bones1;
-            yield return Bones5;
             yield return BunkBed;
             yield return Basket;
-            yield return DeadRat;
             yield return Barrel;
-            yield return HorizontalBarrel;
             yield return Well;
-            yield return Well2;
             yield return EmptyWell;
-            yield return EmptyWell2;
             yield return Flag;
-            yield return TeslaCoil;
             yield return CallApogee;
             yield return Bones2;
-            yield return Bones6;
             yield return Bones3;
-            yield return BareLightBulb;
             yield return Bones4;
-            yield return GreenSlime;
             yield return Pots;
             yield return Stove;
             yield return Spears;
             yield return Vines;
-            yield return Bubbles;
-            yield return TruckRear;
-            yield return BJWasHere;
-            yield return CageWithSkulls;
-            yield return CageWithRat;
-            yield return CageWithGore;
-            yield return CageWithGore2;
-            yield return Skewer;
-            yield return SkullPile;
-            yield return CowCarcass;
-            yield return ChemicalTable;
-            yield return WellWithBlood;
-            yield return NuclearBarrel;
-            yield return SatanStatue;
-            yield return BlueColumn;
-            yield return BrownColumn;
-            yield return DevilStatue;
             yield return FakeHitler;
             yield return MechaHitler;
-            yield return Trans;
-            yield return SubmarineWilly;
-            yield return UberMutant;
-            yield return TheAxe;
-            yield return Wilhelm;
-            yield return ProfessorQuarkblitz;
-            yield return DeathKnight;
-            yield return Robot;
-            yield return SpearOfDestiny;
-            yield return SpearOfDestiny2;
             yield return Clip;
-            yield return ClipBox;
-            yield return BlueClip;
-            yield return ClipBox2;
             yield return Cross;
-            yield return Radio;
             yield return Chalice;
-            yield return Plutonium;
             yield return ChestofJewels;
-            yield return ControlPanel;
             yield return Crown;
-            yield return Bomb;
             yield return Hans;
             yield return Gretel;
             yield return Schabbs;
@@ -1796,41 +703,22 @@ namespace Tiledriver.Core.Wolf3D
             yield return Inky;
             yield return Pinky;
             yield return Clyde;
-            yield return Spectre;
-            yield return GhoulishGhost;
-            yield return RadioactiveMist;
             yield return Guard;
-            yield return GreenGuard;
             yield return DeadGuard;
-            yield return DeadGreenGuard;
             yield return Dog;
-            yield return Doberman;
             yield return Officer;
-            yield return LostOfficer;
             yield return Mutant;
-            yield return GunBat;
             yield return WolfensteinSS;
-            yield return Schutzstafell;
             yield return DogFood;
-            yield return DogFood2;
             yield return Food;
-            yield return Food2;
             yield return Medikit;
-            yield return Medikit2;
             yield return OneUp;
-            yield return OneUpPill;
             yield return Blood;
-            yield return Blood2;
             yield return Gibs;
-            yield return Gibs2;
             yield return GoldKey;
-            yield return YellowKey;
             yield return SilverKey;
-            yield return CyanKey;
             yield return MachineGun;
-            yield return BlueAK47;
             yield return GatlingGunUpgrade;
-            yield return BlueGatlingGunUpgrade;
         }
     }
 }

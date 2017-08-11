@@ -144,7 +144,7 @@ namespace Tiledriver.Core.Tests
                 var x = 4 + offset;
                 var y = 2 + actorIndex;
 
-                mapData.PlaneMaps[0].TileSpaces[y * mapData.Width + x].Sector = actor.Wolf3D ? 1 : 2;
+                mapData.PlaneMaps[0].TileSpaces[y * mapData.Width + x].Sector =1;
 
                 return new Thing(
                     type: actor.ClassName,
