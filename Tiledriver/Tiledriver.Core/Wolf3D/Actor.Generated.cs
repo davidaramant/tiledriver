@@ -19,7 +19,7 @@ namespace Tiledriver.Core.Wolf3D
         public readonly System.String Category;
         public readonly System.Boolean Wolf3D;
         public readonly System.String Prefix;
-        public readonly System.Boolean Blocks;
+        public readonly System.Boolean Solid;
 
         /// <summary>
         /// Player1Start
@@ -30,7 +30,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Special",   
             wolf3D: true,   
             prefix: "$",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// PatrolPoint
@@ -41,7 +41,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Special",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// AngelOfDeath
@@ -52,7 +52,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Bosses",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// DevilIncarnate
@@ -63,7 +63,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Bosses",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Puddle
@@ -74,7 +74,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Puddle2
@@ -85,7 +85,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// GreenBarrel
@@ -96,7 +96,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// HorizontalGreenBarrel
@@ -107,7 +107,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// TableWithChairs
@@ -118,7 +118,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// TableWithChairs2
@@ -129,7 +129,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// FloorLamp
@@ -140,7 +140,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// TallFloorLamp
@@ -151,7 +151,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// Chandelier
@@ -162,7 +162,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Chandelier2
@@ -173,7 +173,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// HangedMan
@@ -184,7 +184,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// HangedMan2
@@ -195,7 +195,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// WhitePillar
@@ -206,7 +206,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// CrackedPillar
@@ -217,7 +217,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// GreenPlant
@@ -228,7 +228,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// GreenPlant2
@@ -239,7 +239,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// SkeletonFlat
@@ -250,7 +250,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// SkeletonFlat2
@@ -261,7 +261,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Sink
@@ -272,7 +272,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// BrownPlant
@@ -283,7 +283,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// BrownPlant2
@@ -294,7 +294,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// Vase
@@ -305,7 +305,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// Vase2
@@ -316,7 +316,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// BareTable
@@ -327,7 +327,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// MetalTable
@@ -338,7 +338,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// CeilingLight
@@ -349,7 +349,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// CeilingLight2
@@ -360,7 +360,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// RedCeilingLight
@@ -371,7 +371,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// KitchenStuff
@@ -382,7 +382,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// SuitOfArmor
@@ -393,7 +393,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// SuitOfArmor2
@@ -404,7 +404,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// HangingCage
@@ -415,7 +415,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// HangingCage2
@@ -426,7 +426,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// SkeletonCage
@@ -437,7 +437,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// BrokenCage
@@ -448,7 +448,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// Bones1
@@ -459,7 +459,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Bones5
@@ -470,7 +470,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// BunkBed
@@ -481,7 +481,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// Basket
@@ -492,7 +492,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// DeadRat
@@ -503,7 +503,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Barrel
@@ -514,7 +514,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// HorizontalBarrel
@@ -525,7 +525,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// Well
@@ -536,7 +536,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// Well2
@@ -547,7 +547,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// EmptyWell
@@ -558,7 +558,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// EmptyWell2
@@ -569,7 +569,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// Flag
@@ -580,7 +580,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// TeslaCoil
@@ -591,7 +591,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// CallApogee
@@ -602,7 +602,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Bones2
@@ -613,7 +613,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Bones6
@@ -624,7 +624,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Bones3
@@ -635,7 +635,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// BareLightBulb
@@ -646,7 +646,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Bones4
@@ -657,7 +657,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// GreenSlime
@@ -668,7 +668,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Pots
@@ -679,7 +679,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Stove
@@ -690,7 +690,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// Spears
@@ -701,7 +701,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Vines
@@ -712,7 +712,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Bubbles
@@ -723,7 +723,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// TruckRear
@@ -734,7 +734,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// BJWasHere
@@ -745,7 +745,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// CageWithSkulls
@@ -756,7 +756,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// CageWithRat
@@ -767,7 +767,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// CageWithGore
@@ -778,7 +778,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// CageWithGore2
@@ -789,7 +789,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// Skewer
@@ -800,7 +800,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// SkullPile
@@ -811,7 +811,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// CowCarcass
@@ -822,7 +822,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// ChemicalTable
@@ -833,7 +833,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// WellWithBlood
@@ -844,7 +844,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// NuclearBarrel
@@ -855,7 +855,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// SatanStatue
@@ -866,7 +866,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// BlueColumn
@@ -877,7 +877,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// BrownColumn
@@ -888,7 +888,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// DevilStatue
@@ -899,7 +899,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Decorations",   
             wolf3D: false,   
             prefix: "",   
-            blocks: true  
+            solid: true  
         );
         /// <summary>
         /// FakeHitler
@@ -910,7 +910,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Bosses",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// MechaHitler
@@ -921,7 +921,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Bosses",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Trans
@@ -932,7 +932,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Bosses",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// SubmarineWilly
@@ -943,7 +943,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Bosses",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// UberMutant
@@ -954,7 +954,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Bosses",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// TheAxe
@@ -965,7 +965,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Bosses",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Wilhelm
@@ -976,7 +976,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Bosses",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// ProfessorQuarkblitz
@@ -987,7 +987,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Bosses",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// DeathKnight
@@ -998,7 +998,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Bosses",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Robot
@@ -1009,7 +1009,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Bosses",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// SpearOfDestiny
@@ -1020,7 +1020,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "SpearOfDestiny",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// SpearOfDestiny2
@@ -1031,7 +1031,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "SpearOfDestiny",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Clip
@@ -1042,7 +1042,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Ammo",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// ClipBox
@@ -1053,7 +1053,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Ammo",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// BlueClip
@@ -1064,7 +1064,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Ammo",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// ClipBox2
@@ -1075,7 +1075,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Ammo",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Cross
@@ -1086,7 +1086,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Treasure",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Radio
@@ -1097,7 +1097,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Treasure",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Chalice
@@ -1108,7 +1108,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Treasure",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Plutonium
@@ -1119,7 +1119,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Treasure",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// ChestofJewels
@@ -1130,7 +1130,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Treasure",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// ControlPanel
@@ -1141,7 +1141,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Treasure",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Crown
@@ -1152,7 +1152,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Treasure",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Bomb
@@ -1163,7 +1163,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Treasure",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Hans
@@ -1174,7 +1174,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Bosses",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Gretel
@@ -1185,7 +1185,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Bosses",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Schabbs
@@ -1196,7 +1196,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Bosses",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Gift
@@ -1207,7 +1207,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Bosses",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// FatFace
@@ -1218,7 +1218,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Bosses",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Blinky
@@ -1229,7 +1229,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Ghosts",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Inky
@@ -1240,7 +1240,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Ghosts",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Pinky
@@ -1251,7 +1251,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Ghosts",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Clyde
@@ -1262,7 +1262,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Ghosts",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Spectre
@@ -1273,7 +1273,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Ghosts",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// GhoulishGhost
@@ -1284,7 +1284,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Ghosts",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// RadioactiveMist
@@ -1295,7 +1295,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Ghosts",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Guard
@@ -1306,7 +1306,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Guards",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// GreenGuard
@@ -1317,7 +1317,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Guards",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// DeadGuard
@@ -1328,7 +1328,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Guards",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// DeadGreenGuard
@@ -1339,7 +1339,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Guards",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Dog
@@ -1350,7 +1350,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Guards",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Doberman
@@ -1361,7 +1361,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Guards",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Officer
@@ -1372,7 +1372,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Guards",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// LostOfficer
@@ -1383,7 +1383,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Guards",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Mutant
@@ -1394,7 +1394,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Guards",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// GunBat
@@ -1405,7 +1405,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Guards",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// WolfensteinSS
@@ -1416,7 +1416,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Guards",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Schutzstafell
@@ -1427,7 +1427,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Guards",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// DogFood
@@ -1438,7 +1438,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Health",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// DogFood2
@@ -1449,7 +1449,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Health",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Food
@@ -1460,7 +1460,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Health",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Food2
@@ -1471,7 +1471,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Health",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Medikit
@@ -1482,7 +1482,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Health",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Medikit2
@@ -1493,7 +1493,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Health",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// OneUp
@@ -1504,7 +1504,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Health",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// OneUpPill
@@ -1515,7 +1515,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Health",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Blood
@@ -1526,7 +1526,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Health",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Blood2
@@ -1537,7 +1537,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Health",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Gibs
@@ -1548,7 +1548,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Health",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// Gibs2
@@ -1559,7 +1559,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Health",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// GoldKey
@@ -1570,7 +1570,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Keys",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// YellowKey
@@ -1581,7 +1581,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Keys",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// SilverKey
@@ -1592,7 +1592,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Keys",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// CyanKey
@@ -1603,7 +1603,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Keys",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// MachineGun
@@ -1614,7 +1614,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Weapons",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// BlueAK47
@@ -1625,7 +1625,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Weapons",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// GatlingGunUpgrade
@@ -1636,7 +1636,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Weapons",   
             wolf3D: true,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
         /// <summary>
         /// BlueGatlingGunUpgrade
@@ -1647,7 +1647,7 @@ namespace Tiledriver.Core.Wolf3D
             category: "Weapons",   
             wolf3D: false,   
             prefix: "",   
-            blocks: false  
+            solid: false  
         );
 
         private Actor(
@@ -1656,7 +1656,7 @@ namespace Tiledriver.Core.Wolf3D
             System.String category,   
             System.Boolean wolf3D,   
             System.String prefix,   
-            System.Boolean blocks  
+            System.Boolean solid  
         )
         {
             _instanceName = instanceName;
@@ -1664,7 +1664,7 @@ namespace Tiledriver.Core.Wolf3D
             Category = category; 
             Wolf3D = wolf3D; 
             Prefix = prefix; 
-            Blocks = blocks; 
+            Solid = solid; 
         }
 
         /// <summary>

@@ -1,4 +1,4 @@
-Name,ID,Category,Wolf3D,Prefix,Blocks
+Name,ID,Category,Wolf3D,Prefix,Solid
 WolfThing,System.Int32,System.String,System.Boolean,System.String, System.Boolean
 Player1Start,1,"""Special""",true,"""$""",false
 PatrolPoint,10,"""Special""",true,"""""",false

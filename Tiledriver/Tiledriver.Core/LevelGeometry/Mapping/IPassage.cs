@@ -38,6 +38,11 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             return Equals(obj as Passage);
         }
 
+        public override int GetHashCode()
+        {
+            return (Location != null ? Location.GetHashCode() : 0);
+        }
+
         public bool Equals(Passage other)
         {
             if (null == other)

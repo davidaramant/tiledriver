@@ -173,13 +173,21 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 		
 		public bool HasBlocker()
         {
-            return Things.Any(t => Actor.GetAll().Single(a => a.ClassName == t.Type).Blocks);
+            return Things.Any(t => Actor.GetAll().Single(a => a.ClassName == t.Type).Solid);
         }
 
         public override bool Equals(object obj)
         {
             var castedOther = obj as MapLocation;
             return Equals(castedOther);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (Y * 397) ^ X;
+            }
         }
 
         public bool Equals(MapLocation other)
