@@ -11,11 +11,10 @@ using System.Windows.Shapes;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.Wolf3D;
 using Tiledriver.Gui.Views;
-using static System.Windows.Media.Colors;
 
 namespace Tiledriver.Gui.ViewModels
 {
-    public class ThingVm : MapItemVm
+    public sealed class ThingVm : MapItemVm
     {
         private readonly Thing _thing;
         private readonly string _category;
@@ -26,10 +25,15 @@ namespace Tiledriver.Gui.ViewModels
 
         public ThingVm(Thing thing, string category)
         {
-            this._thing = thing;
-            this._category = category;
+            _thing = thing;
+            _category = category;
 
-            var template = _templates.ContainsKey(thing.Type) ? _templates[thing.Type] : _templates.ContainsKey(category ?? "") ? _templates[category] : Default;
+            var template = 
+                _templates.ContainsKey(thing.Type) ? 
+                _templates[thing.Type] : 
+                    _templates.ContainsKey(category ?? "") ? 
+                    _templates[category] : 
+                    Default;
 
             _geometry = template.Geometry;
             _fill = template.Fill;
@@ -42,7 +46,7 @@ namespace Tiledriver.Gui.ViewModels
 
         public override Path CreatePath(int size)
         {
-            Element = new Path()
+            Element = new Path
             {
                 Height = Height(size),
                 Width = Width(size),
@@ -89,61 +93,61 @@ namespace Tiledriver.Gui.ViewModels
             }
         }
 
-        private static Dictionary<string, ThingVmTemplate> _templates = new Dictionary<string, ThingVmTemplate>
+        private static Dictionary<string, Template> _templates = new Dictionary<string, Template>
         {
             // SPECIAL
             { "$Player1Start", Player() },
             { "PatrolPoint", PatrolPoint() },
-            { Actor.Blinky.ClassName, PacmanGhost(Red) },
+            { Actor.Blinky.ClassName, PacmanGhost(Colors.Red) },
             { Actor.Pinky.ClassName, PacmanGhost(Color.FromRgb(255,184,255)) },
-            { Actor.Inky.ClassName, PacmanGhost(Cyan) },
+            { Actor.Inky.ClassName, PacmanGhost(Colors.Cyan) },
             { Actor.Clyde.ClassName, PacmanGhost(Color.FromRgb(255,184,81)) },
             // GUARDS
-            { "DeadGuard", Circle(Brown, SaddleBrown) },
+            { "DeadGuard", Circle(Colors.Brown, Colors.SaddleBrown) },
             { "Dog", Dog() },
-            { "Guard", EnemyMan(SaddleBrown) },
-            { "Officer", EnemyMan(White) },
-            { "WolfensteinSS", EnemyMan(Blue) },
-            { "Mutant", EnemyMan(Green) },
+            { "Guard", EnemyMan(Colors.SaddleBrown) },
+            { "Officer", EnemyMan(Colors.White) },
+            { "WolfensteinSS", EnemyMan(Colors.Blue) },
+            { "Mutant", EnemyMan(Colors.Green) },
             // KEYS
-            { "GoldKey", Key(Gold) },
-            { "SilverKey", Key(Silver) },
+            { "GoldKey", Key(Colors.Gold) },
+            { "SilverKey", Key(Colors.Silver) },
             // DECORATIONS
-            { "WhitePillar", Circle(White, LightGray) },
-            { "CeilingLight", Circle(DarkOrange, DarkGoldenrod) },
+            { "WhitePillar", Circle(Colors.White, Colors.LightGray) },
+            { "CeilingLight", Circle(Colors.DarkOrange, Colors.DarkGoldenrod) },
             
             // CATEGORIES
             { "Bosses", Boss() },
-            { "Decorations", Circle(DarkGreen, Green) },
+            { "Decorations", Circle(Colors.DarkGreen, Colors.Green) },
             { "Treasure", Treasure() },
             { "Health", Health() },
             { "Weapons", Weapons() },
             { "Ammo", Ammo() },
         };
 
-        private static ThingVmTemplate Default => new ThingVmTemplate(CirclePath, Violet, White);
+        private static Template Default => new Template(CirclePath, Colors.Violet, Colors.White);
 
-        private static ThingVmTemplate Player() => new ThingVmTemplate(ManPath, Fuchsia, DeepPink, true);
-        private static ThingVmTemplate PatrolPoint() => new ThingVmTemplate(ArrowPath, Black, LightGray, true);
-        private static ThingVmTemplate EnemyMan(Color fill) => new ThingVmTemplate(ManPath, fill, Red, true);
-        private static ThingVmTemplate Boss() => new ThingVmTemplate(BossPath, Fuchsia, Fuchsia, true);
-        private static ThingVmTemplate Key(Color fill) => new ThingVmTemplate(KeyPath, fill, fill);
-        private static ThingVmTemplate PacmanGhost(Color color) => new ThingVmTemplate(PacmanGhostPath, color, GhostWhite);
-        private static ThingVmTemplate Circle(Color fill, Color stroke) => new ThingVmTemplate(CirclePath, fill, stroke);
-        private static ThingVmTemplate Dog() => new ThingVmTemplate(DogPath, Brown, SaddleBrown, shouldRotate: true);
-        private static ThingVmTemplate Treasure() => new ThingVmTemplate(CrownPath, Gold, DarkGoldenrod);
-        private static ThingVmTemplate Health() => new ThingVmTemplate(CrossPath, Blue, White);
-        private static ThingVmTemplate Weapons() => new ThingVmTemplate(GunPath, Gray, DarkGray);
-        private static ThingVmTemplate Ammo() => new ThingVmTemplate(AmmoPath, Gray, DarkGray);
+        private static Template Player() => new Template(ManPath, Colors.Fuchsia, Colors.DeepPink, true);
+        private static Template PatrolPoint() => new Template(ArrowPath, Colors.Black, Colors.LightGray, true);
+        private static Template EnemyMan(Color fill) => new Template(ManPath, fill, Colors.Red, true);
+        private static Template Boss() => new Template(BossPath, Colors.Fuchsia, Colors.Fuchsia, true);
+        private static Template Key(Color fill) => new Template(KeyPath, fill, fill);
+        private static Template PacmanGhost(Color color) => new Template(PacmanGhostPath, color, Colors.GhostWhite);
+        private static Template Circle(Color fill, Color stroke) => new Template(CirclePath, fill, stroke);
+        private static Template Dog() => new Template(DogPath, Colors.Brown, Colors.SaddleBrown, shouldRotate: true);
+        private static Template Treasure() => new Template(CrownPath, Colors.Gold, Colors.DarkGoldenrod);
+        private static Template Health() => new Template(CrossPath, Colors.Blue, Colors.White);
+        private static Template Weapons() => new Template(GunPath, Colors.Gray, Colors.DarkGray);
+        private static Template Ammo() => new Template(AmmoPath, Colors.Gray, Colors.DarkGray);
 
-        private class ThingVmTemplate
+        private sealed class Template
         {
             public Geometry Geometry { get; }
             public SolidColorBrush Fill { get; }
             public SolidColorBrush Stroke { get; }
             public bool ShouldRotate { get; }
 
-            public ThingVmTemplate(string path, Color fill, Color stroke, bool shouldRotate = false)
+            public Template(string path, Color fill, Color stroke, bool shouldRotate = false)
             {
                 Geometry = Geometry.Parse(path);
                 Fill = fill.ToBrush();

@@ -7,12 +7,11 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Tiledriver.Gui.Views;
-using static System.Windows.Media.Colors;
 using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Gui.ViewModels
 {
-    public class TriggerVm : MapItemVm
+    public sealed class TriggerVm : MapItemVm
     {
         private readonly Core.FormatModels.Uwmf.Trigger _trigger;
         private readonly string _actionName;
@@ -161,16 +160,16 @@ namespace Tiledriver.Gui.ViewModels
             }
         }
 
-        private TriggerVmTemplate DecoratedDoor(Core.FormatModels.Uwmf.Trigger trigger)
+        private Template DecoratedDoor(Core.FormatModels.Uwmf.Trigger trigger)
         {
             var lockLevel = (LockLevel) trigger.Arg3;
-            if (lockLevel == LockLevel.Gold) return new TriggerVmTemplate(CirclePath, Gold, Black);
-            if (lockLevel == LockLevel.Silver) return new TriggerVmTemplate(CirclePath, Silver, Black);
-            if (lockLevel == LockLevel.Both) return new TriggerVmTemplate(CirclePath, Blue, Black);
+            if (lockLevel == LockLevel.Gold) return new Template(CirclePath, Colors.Gold, Colors.Black);
+            if (lockLevel == LockLevel.Silver) return new Template(CirclePath, Colors.Silver, Colors.Black);
+            if (lockLevel == LockLevel.Both) return new Template(CirclePath, Colors.Blue, Colors.Black);
             return Default;
         }
 
-        private TriggerVmTemplate SelectTemplate(Core.FormatModels.Uwmf.Trigger trigger)
+        private Template SelectTemplate(Core.FormatModels.Uwmf.Trigger trigger)
         {
             var key = trigger.Action;
             var requiresKey = ((LockLevel) trigger.Arg3 != LockLevel.None);
@@ -181,7 +180,7 @@ namespace Tiledriver.Gui.ViewModels
             return _templates.ContainsKey(key) ? _templates[key] : Default;
         }
 
-        private static Dictionary<string, TriggerVmTemplate> _templates = new Dictionary<string, TriggerVmTemplate>
+        private static Dictionary<string, Template> _templates = new Dictionary<string, Template>
         {
             { "Door_Open", DoorOpen() },
             { "Pushwall_Move", PushwallMove() },
@@ -196,27 +195,27 @@ namespace Tiledriver.Gui.ViewModels
             { "Elevator_SwitchFloor", ElevatorSwitchFloor() }
         };
 
-        private static TriggerVmTemplate Default => new TriggerVmTemplate(SquarePath, Transparent(), White);
+        private static Template Default => new Template(SquarePath, Transparent(), Colors.White);
 
-        private static TriggerVmTemplate DoorOpen() => new TriggerVmTemplate(NoPath, Transparent(), Brown);
-        private static TriggerVmTemplate PushwallMove() => new TriggerVmTemplate(SquarePath, Transparent(), Yellow);
-        private static TriggerVmTemplate ExitNormal() => new TriggerVmTemplate(SquarePath, Transparent(), Green);
-        private static TriggerVmTemplate ExitSecret() => new TriggerVmTemplate(SquarePath, Transparent(), Blue);
-        private static TriggerVmTemplate TeleportNewMap() => new TriggerVmTemplate(SquarePath, Transparent(), DarkGoldenrod);
-        private static TriggerVmTemplate ExitVictorySpin() => new TriggerVmTemplate(SquarePath, Transparent(), DarkOrchid);
-        private static TriggerVmTemplate ExitVictory() => new TriggerVmTemplate(SquarePath, Transparent(), DarkMagenta);
-        private static TriggerVmTemplate TriggerExecute() => new TriggerVmTemplate(SquarePath, Transparent(), DarkOrange);
-        private static TriggerVmTemplate StartConversation() => new TriggerVmTemplate(SquarePath, Transparent(), DarkSlateBlue);
-        private static TriggerVmTemplate DoorElevator() => new TriggerVmTemplate(SquarePath, Transparent(), DarkSalmon);
-        private static TriggerVmTemplate ElevatorSwitchFloor() => new TriggerVmTemplate(SquarePath, Transparent(), DarkMagenta);
+        private static Template DoorOpen() => new Template(NoPath, Transparent(), Colors.Brown);
+        private static Template PushwallMove() => new Template(SquarePath, Transparent(), Colors.Yellow);
+        private static Template ExitNormal() => new Template(SquarePath, Transparent(), Colors.Green);
+        private static Template ExitSecret() => new Template(SquarePath, Transparent(), Colors.Blue);
+        private static Template TeleportNewMap() => new Template(SquarePath, Transparent(), Colors.DarkGoldenrod);
+        private static Template ExitVictorySpin() => new Template(SquarePath, Transparent(), Colors.DarkOrchid);
+        private static Template ExitVictory() => new Template(SquarePath, Transparent(), Colors.DarkMagenta);
+        private static Template TriggerExecute() => new Template(SquarePath, Transparent(), Colors.DarkOrange);
+        private static Template StartConversation() => new Template(SquarePath, Transparent(), Colors.DarkSlateBlue);
+        private static Template DoorElevator() => new Template(SquarePath, Transparent(), Colors.DarkSalmon);
+        private static Template ElevatorSwitchFloor() => new Template(SquarePath, Transparent(), Colors.DarkMagenta);
 
-        private class TriggerVmTemplate
+        private sealed class Template
         {
             public Geometry Geometry { get; }
             public SolidColorBrush Fill { get; }
             public SolidColorBrush Stroke { get; }
 
-            public TriggerVmTemplate(string path, Color fill, Color stroke)
+            public Template(string path, Color fill, Color stroke)
             {
                 Geometry = Geometry.Parse(path);
                 Fill = fill.ToBrush();
@@ -231,7 +230,7 @@ namespace Tiledriver.Gui.ViewModels
             {
                 return Color.FromArgb(0, 0, 0, 0);
             }
-            Color color = nullableColor ?? Black;
+            Color color = nullableColor.Value;
             return Color.FromArgb(127, color.R, color.G, color.B);
         }
     }
