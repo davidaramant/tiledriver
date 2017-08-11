@@ -11,8 +11,8 @@ namespace Tiledriver.Gui.ViewModels
         private ObservableCollection<MapItemVm> _mapItems;
         public ObservableCollection<MapItemVm> MapItems
         {
-            get { return _mapItems; }
-            set { NotifySet(ref _mapItems, value); }
+            get => _mapItems;
+            set => NotifySet(ref _mapItems, value);
         }
 
         public void Update(ObservableCollection<MapItemVm> mapItems)

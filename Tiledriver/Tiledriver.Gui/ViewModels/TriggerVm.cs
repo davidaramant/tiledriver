@@ -1,15 +1,11 @@
-﻿// Copyright (c) 2016, Ryan Clarke and Jason Giles
-// Copyright (c) 2017, David Aramant
+﻿// Copyright (c) 2017, David Aramant and Luke Gilbert
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using System;
 using System.Collections.Generic;
-using System.Security;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Gui.Views;
 using static System.Windows.Media.Colors;
 using Tiledriver.Core.Wolf3D;
