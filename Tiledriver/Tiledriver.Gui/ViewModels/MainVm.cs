@@ -11,8 +11,8 @@ namespace Tiledriver.Gui.ViewModels
         private MapData _mapData;
         public MapData MapData
         {
-            get { return _mapData; }
-            set { NotifySet(ref _mapData, value); }
+            get => _mapData;
+            set => NotifySet(ref _mapData, value);
         }
     }
 }
