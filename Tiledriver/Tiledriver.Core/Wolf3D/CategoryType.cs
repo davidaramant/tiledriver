@@ -13,6 +13,6 @@ namespace Tiledriver.Core.Wolf3D
         public const string Decorations = "Decorations";
         public const string Key = "Key";
         public const string Special = "Special";
-        public const string Enemy = "Guards";
+        public const string Enemy = "Enemy";
     }
 }
