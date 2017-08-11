@@ -134,7 +134,7 @@ namespace Tiledriver.Core.Tests
             {
                 DrawActors(mapData, indexedActorGroup.group, indexedActorGroup.index * 8);
             }
-            //DrawActors(map, Actor.GetAll().Where(a => a.Category == "Decorations"), 0);
+            //DrawActors(map, Actor.GetAll().Where(a => a.CategoryType == "Decorations"), 0);
         }
 
         private static void DrawActors(MapData mapData, IEnumerable<Actor> actors, int offset)

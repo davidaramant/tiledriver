@@ -160,9 +160,9 @@ namespace Tiledriver.Gui.ViewModels
         private Template DecoratedDoor(Core.FormatModels.Uwmf.Trigger trigger)
         {
             var lockLevel = (LockLevel)trigger.Arg3;
-            if (lockLevel == LockLevel.Gold) return new Template(GeometryCache.CirclePath, Colors.Gold, Colors.Black);
-            if (lockLevel == LockLevel.Silver) return new Template(GeometryCache.CirclePath, Colors.Silver, Colors.Black);
-            if (lockLevel == LockLevel.Both) return new Template(GeometryCache.CirclePath, Colors.Blue, Colors.Black);
+            if (lockLevel == LockLevel.Gold) return new Template(GeometryCache.Circle, Colors.Gold, Colors.Black);
+            if (lockLevel == LockLevel.Silver) return new Template(GeometryCache.Circle, Colors.Silver, Colors.Black);
+            if (lockLevel == LockLevel.Both) return new Template(GeometryCache.Circle, Colors.Blue, Colors.Black);
             return Default;
         }
 
@@ -192,19 +192,19 @@ namespace Tiledriver.Gui.ViewModels
             { "Elevator_SwitchFloor", ElevatorSwitchFloor() }
         };
 
-        private static Template Default => new Template(GeometryCache.SquarePath, Colors.Transparent, Colors.White);
+        private static Template Default => new Template(GeometryCache.Square, Colors.Transparent, Colors.White);
 
         private static Template DoorOpen() => new Template(GeometryCache.NoPath, Colors.Transparent, Colors.Brown);
-        private static Template PushwallMove() => new Template(GeometryCache.SquarePath, Colors.Transparent, Colors.Yellow);
-        private static Template ExitNormal() => new Template(GeometryCache.SquarePath, Colors.Transparent, Colors.Green);
-        private static Template ExitSecret() => new Template(GeometryCache.SquarePath, Colors.Transparent, Colors.Blue);
-        private static Template TeleportNewMap() => new Template(GeometryCache.SquarePath, Colors.Transparent, Colors.DarkGoldenrod);
-        private static Template ExitVictorySpin() => new Template(GeometryCache.SquarePath, Colors.Transparent, Colors.DarkOrchid);
-        private static Template ExitVictory() => new Template(GeometryCache.SquarePath, Colors.Transparent, Colors.DarkMagenta);
-        private static Template TriggerExecute() => new Template(GeometryCache.SquarePath, Colors.Transparent, Colors.DarkOrange);
-        private static Template StartConversation() => new Template(GeometryCache.SquarePath, Colors.Transparent, Colors.DarkSlateBlue);
-        private static Template DoorElevator() => new Template(GeometryCache.SquarePath, Colors.Transparent, Colors.DarkSalmon);
-        private static Template ElevatorSwitchFloor() => new Template(GeometryCache.SquarePath, Colors.Transparent, Colors.DarkMagenta);
+        private static Template PushwallMove() => new Template(GeometryCache.Square, Colors.Transparent, Colors.Yellow);
+        private static Template ExitNormal() => new Template(GeometryCache.Square, Colors.Transparent, Colors.Green);
+        private static Template ExitSecret() => new Template(GeometryCache.Square, Colors.Transparent, Colors.Blue);
+        private static Template TeleportNewMap() => new Template(GeometryCache.Square, Colors.Transparent, Colors.DarkGoldenrod);
+        private static Template ExitVictorySpin() => new Template(GeometryCache.Square, Colors.Transparent, Colors.DarkOrchid);
+        private static Template ExitVictory() => new Template(GeometryCache.Square, Colors.Transparent, Colors.DarkMagenta);
+        private static Template TriggerExecute() => new Template(GeometryCache.Square, Colors.Transparent, Colors.DarkOrange);
+        private static Template StartConversation() => new Template(GeometryCache.Square, Colors.Transparent, Colors.DarkSlateBlue);
+        private static Template DoorElevator() => new Template(GeometryCache.Square, Colors.Transparent, Colors.DarkSalmon);
+        private static Template ElevatorSwitchFloor() => new Template(GeometryCache.Square, Colors.Transparent, Colors.DarkMagenta);
 
         private sealed class Template
         {

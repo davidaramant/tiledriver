@@ -27,7 +27,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Player1Start = new Actor(
             instanceName: "Player1Start",
             iD: 1,   
-            category: "Special",   
+            category: CategoryType.Special,   
             wolf3D: true,   
             prefix: "$",   
             solid: false  
@@ -38,7 +38,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor PatrolPoint = new Actor(
             instanceName: "PatrolPoint",
             iD: 10,   
-            category: "Special",   
+            category: CategoryType.Special,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -49,7 +49,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor AngelOfDeath = new Actor(
             instanceName: "AngelOfDeath",
             iD: 27,   
-            category: "Bosses",   
+            category: CategoryType.Bosses,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -60,7 +60,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor DevilIncarnate = new Actor(
             instanceName: "DevilIncarnate",
             iD: 103,   
-            category: "Bosses",   
+            category: CategoryType.Bosses,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -71,7 +71,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Puddle = new Actor(
             instanceName: "Puddle",
             iD: 33,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -82,7 +82,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Puddle2 = new Actor(
             instanceName: "Puddle2",
             iD: 105,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -93,7 +93,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor GreenBarrel = new Actor(
             instanceName: "GreenBarrel",
             iD: 34,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: true  
@@ -104,7 +104,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor HorizontalGreenBarrel = new Actor(
             instanceName: "HorizontalGreenBarrel",
             iD: 106,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: true  
@@ -115,7 +115,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor TableWithChairs = new Actor(
             instanceName: "TableWithChairs",
             iD: 35,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: true  
@@ -126,7 +126,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor TableWithChairs2 = new Actor(
             instanceName: "TableWithChairs2",
             iD: 107,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: true  
@@ -137,7 +137,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor FloorLamp = new Actor(
             instanceName: "FloorLamp",
             iD: 36,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: true  
@@ -148,7 +148,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor TallFloorLamp = new Actor(
             instanceName: "TallFloorLamp",
             iD: 108,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: true  
@@ -159,7 +159,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Chandelier = new Actor(
             instanceName: "Chandelier",
             iD: 37,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -170,7 +170,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Chandelier2 = new Actor(
             instanceName: "Chandelier2",
             iD: 109,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -181,7 +181,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor HangedMan = new Actor(
             instanceName: "HangedMan",
             iD: 38,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: true  
@@ -192,7 +192,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor HangedMan2 = new Actor(
             instanceName: "HangedMan2",
             iD: 110,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: true  
@@ -203,7 +203,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor WhitePillar = new Actor(
             instanceName: "WhitePillar",
             iD: 40,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: true  
@@ -214,7 +214,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor CrackedPillar = new Actor(
             instanceName: "CrackedPillar",
             iD: 112,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: true  
@@ -225,7 +225,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor GreenPlant = new Actor(
             instanceName: "GreenPlant",
             iD: 41,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: true  
@@ -236,7 +236,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor GreenPlant2 = new Actor(
             instanceName: "GreenPlant2",
             iD: 113,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: true  
@@ -247,7 +247,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor SkeletonFlat = new Actor(
             instanceName: "SkeletonFlat",
             iD: 42,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -258,7 +258,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor SkeletonFlat2 = new Actor(
             instanceName: "SkeletonFlat2",
             iD: 114,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -269,7 +269,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Sink = new Actor(
             instanceName: "Sink",
             iD: 43,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: true  
@@ -280,7 +280,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor BrownPlant = new Actor(
             instanceName: "BrownPlant",
             iD: 44,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: true  
@@ -291,7 +291,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor BrownPlant2 = new Actor(
             instanceName: "BrownPlant2",
             iD: 115,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: true  
@@ -302,7 +302,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Vase = new Actor(
             instanceName: "Vase",
             iD: 45,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: true  
@@ -313,7 +313,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Vase2 = new Actor(
             instanceName: "Vase2",
             iD: 116,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: true  
@@ -324,7 +324,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor BareTable = new Actor(
             instanceName: "BareTable",
             iD: 46,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: true  
@@ -335,7 +335,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor MetalTable = new Actor(
             instanceName: "MetalTable",
             iD: 117,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: true  
@@ -346,7 +346,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor CeilingLight = new Actor(
             instanceName: "CeilingLight",
             iD: 47,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -357,7 +357,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor CeilingLight2 = new Actor(
             instanceName: "CeilingLight2",
             iD: 118,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -368,7 +368,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor RedCeilingLight = new Actor(
             instanceName: "RedCeilingLight",
             iD: 85,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -379,7 +379,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor KitchenStuff = new Actor(
             instanceName: "KitchenStuff",
             iD: 48,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -390,7 +390,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor SuitOfArmor = new Actor(
             instanceName: "SuitOfArmor",
             iD: 49,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: true  
@@ -401,7 +401,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor SuitOfArmor2 = new Actor(
             instanceName: "SuitOfArmor2",
             iD: 120,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: true  
@@ -412,7 +412,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor HangingCage = new Actor(
             instanceName: "HangingCage",
             iD: 50,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: true  
@@ -423,7 +423,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor HangingCage2 = new Actor(
             instanceName: "HangingCage2",
             iD: 121,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: true  
@@ -434,7 +434,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor SkeletonCage = new Actor(
             instanceName: "SkeletonCage",
             iD: 51,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: true  
@@ -445,7 +445,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor BrokenCage = new Actor(
             instanceName: "BrokenCage",
             iD: 122,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: true  
@@ -456,7 +456,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Bones1 = new Actor(
             instanceName: "Bones1",
             iD: 52,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -467,7 +467,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Bones5 = new Actor(
             instanceName: "Bones5",
             iD: 123,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -478,7 +478,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor BunkBed = new Actor(
             instanceName: "BunkBed",
             iD: 55,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: true  
@@ -489,7 +489,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Basket = new Actor(
             instanceName: "Basket",
             iD: 56,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -500,7 +500,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor DeadRat = new Actor(
             instanceName: "DeadRat",
             iD: 125,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -511,7 +511,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Barrel = new Actor(
             instanceName: "Barrel",
             iD: 68,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: true  
@@ -522,7 +522,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor HorizontalBarrel = new Actor(
             instanceName: "HorizontalBarrel",
             iD: 151,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: true  
@@ -533,7 +533,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Well = new Actor(
             instanceName: "Well",
             iD: 69,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: true  
@@ -544,7 +544,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Well2 = new Actor(
             instanceName: "Well2",
             iD: 152,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: true  
@@ -555,7 +555,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor EmptyWell = new Actor(
             instanceName: "EmptyWell",
             iD: 70,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: true  
@@ -566,7 +566,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor EmptyWell2 = new Actor(
             instanceName: "EmptyWell2",
             iD: 153,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: true  
@@ -577,7 +577,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Flag = new Actor(
             instanceName: "Flag",
             iD: 72,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: true  
@@ -588,7 +588,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor TeslaCoil = new Actor(
             instanceName: "TeslaCoil",
             iD: 127,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: true  
@@ -599,7 +599,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor CallApogee = new Actor(
             instanceName: "CallApogee",
             iD: 73,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -610,7 +610,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Bones2 = new Actor(
             instanceName: "Bones2",
             iD: 74,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -621,7 +621,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Bones6 = new Actor(
             instanceName: "Bones6",
             iD: 129,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -632,7 +632,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Bones3 = new Actor(
             instanceName: "Bones3",
             iD: 75,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -643,7 +643,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor BareLightBulb = new Actor(
             instanceName: "BareLightBulb",
             iD: 130,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -654,7 +654,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Bones4 = new Actor(
             instanceName: "Bones4",
             iD: 76,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -665,7 +665,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor GreenSlime = new Actor(
             instanceName: "GreenSlime",
             iD: 131,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -676,7 +676,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Pots = new Actor(
             instanceName: "Pots",
             iD: 77,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -687,7 +687,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Stove = new Actor(
             instanceName: "Stove",
             iD: 78,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: true  
@@ -698,7 +698,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Spears = new Actor(
             instanceName: "Spears",
             iD: 79,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -709,7 +709,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Vines = new Actor(
             instanceName: "Vines",
             iD: 80,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -720,7 +720,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Bubbles = new Actor(
             instanceName: "Bubbles",
             iD: 135,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -731,7 +731,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor TruckRear = new Actor(
             instanceName: "TruckRear",
             iD: 91,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -742,7 +742,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor BJWasHere = new Actor(
             instanceName: "BJWasHere",
             iD: 137,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -753,7 +753,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor CageWithSkulls = new Actor(
             instanceName: "CageWithSkulls",
             iD: 84,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: true  
@@ -764,7 +764,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor CageWithRat = new Actor(
             instanceName: "CageWithRat",
             iD: 124,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: true  
@@ -775,7 +775,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor CageWithGore = new Actor(
             instanceName: "CageWithGore",
             iD: 83,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: true  
@@ -786,7 +786,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor CageWithGore2 = new Actor(
             instanceName: "CageWithGore2",
             iD: 119,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: true  
@@ -797,7 +797,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Skewer = new Actor(
             instanceName: "Skewer",
             iD: 82,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -808,7 +808,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor SkullPile = new Actor(
             instanceName: "SkullPile",
             iD: 150,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -819,7 +819,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor CowCarcass = new Actor(
             instanceName: "CowCarcass",
             iD: 86,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -830,7 +830,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor ChemicalTable = new Actor(
             instanceName: "ChemicalTable",
             iD: 132,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -841,7 +841,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor WellWithBlood = new Actor(
             instanceName: "WellWithBlood",
             iD: 87,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: true  
@@ -852,7 +852,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor NuclearBarrel = new Actor(
             instanceName: "NuclearBarrel",
             iD: 133,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: true  
@@ -863,7 +863,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor SatanStatue = new Actor(
             instanceName: "SatanStatue",
             iD: 88,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: true  
@@ -874,7 +874,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor BlueColumn = new Actor(
             instanceName: "BlueColumn",
             iD: 134,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: true  
@@ -885,7 +885,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor BrownColumn = new Actor(
             instanceName: "BrownColumn",
             iD: 89,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: true  
@@ -896,7 +896,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor DevilStatue = new Actor(
             instanceName: "DevilStatue",
             iD: 136,   
-            category: "Decorations",   
+            category: CategoryType.Decorations,   
             wolf3D: false,   
             prefix: "",   
             solid: true  
@@ -907,7 +907,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor FakeHitler = new Actor(
             instanceName: "FakeHitler",
             iD: 18,   
-            category: "Bosses",   
+            category: CategoryType.Bosses,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -918,7 +918,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor MechaHitler = new Actor(
             instanceName: "MechaHitler",
             iD: 19,   
-            category: "Bosses",   
+            category: CategoryType.Bosses,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -929,7 +929,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Trans = new Actor(
             instanceName: "Trans",
             iD: 23,   
-            category: "Bosses",   
+            category: CategoryType.Bosses,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -940,7 +940,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor SubmarineWilly = new Actor(
             instanceName: "SubmarineWilly",
             iD: 99,   
-            category: "Bosses",   
+            category: CategoryType.Bosses,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -951,7 +951,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor UberMutant = new Actor(
             instanceName: "UberMutant",
             iD: 24,   
-            category: "Bosses",   
+            category: CategoryType.Bosses,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -962,7 +962,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor TheAxe = new Actor(
             instanceName: "TheAxe",
             iD: 101,   
-            category: "Bosses",   
+            category: CategoryType.Bosses,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -973,7 +973,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Wilhelm = new Actor(
             instanceName: "Wilhelm",
             iD: 25,   
-            category: "Bosses",   
+            category: CategoryType.Bosses,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -984,7 +984,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor ProfessorQuarkblitz = new Actor(
             instanceName: "ProfessorQuarkblitz",
             iD: 100,   
-            category: "Bosses",   
+            category: CategoryType.Bosses,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -995,7 +995,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor DeathKnight = new Actor(
             instanceName: "DeathKnight",
             iD: 24,   
-            category: "Bosses",   
+            category: CategoryType.Bosses,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -1006,7 +1006,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Robot = new Actor(
             instanceName: "Robot",
             iD: 102,   
-            category: "Bosses",   
+            category: CategoryType.Bosses,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -1039,7 +1039,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Clip = new Actor(
             instanceName: "Clip",
             iD: 59,   
-            category: "Ammo",   
+            category: CategoryType.Ammo,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1050,7 +1050,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor ClipBox = new Actor(
             instanceName: "ClipBox",
             iD: 90,   
-            category: "Ammo",   
+            category: CategoryType.Ammo,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -1061,7 +1061,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor BlueClip = new Actor(
             instanceName: "BlueClip",
             iD: 139,   
-            category: "Ammo",   
+            category: CategoryType.Ammo,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -1072,7 +1072,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor ClipBox2 = new Actor(
             instanceName: "ClipBox2",
             iD: 140,   
-            category: "Ammo",   
+            category: CategoryType.Ammo,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -1083,7 +1083,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Cross = new Actor(
             instanceName: "Cross",
             iD: 62,   
-            category: "Treasure",   
+            category: CategoryType.Treasure,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1094,7 +1094,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Radio = new Actor(
             instanceName: "Radio",
             iD: 146,   
-            category: "Treasure",   
+            category: CategoryType.Treasure,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -1105,7 +1105,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Chalice = new Actor(
             instanceName: "Chalice",
             iD: 63,   
-            category: "Treasure",   
+            category: CategoryType.Treasure,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1116,7 +1116,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Plutonium = new Actor(
             instanceName: "Plutonium",
             iD: 147,   
-            category: "Treasure",   
+            category: CategoryType.Treasure,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -1127,7 +1127,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor ChestofJewels = new Actor(
             instanceName: "ChestofJewels",
             iD: 64,   
-            category: "Treasure",   
+            category: CategoryType.Treasure,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1138,7 +1138,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor ControlPanel = new Actor(
             instanceName: "ControlPanel",
             iD: 148,   
-            category: "Treasure",   
+            category: CategoryType.Treasure,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -1149,7 +1149,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Crown = new Actor(
             instanceName: "Crown",
             iD: 65,   
-            category: "Treasure",   
+            category: CategoryType.Treasure,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1160,7 +1160,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Bomb = new Actor(
             instanceName: "Bomb",
             iD: 149,   
-            category: "Treasure",   
+            category: CategoryType.Treasure,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -1171,7 +1171,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Hans = new Actor(
             instanceName: "Hans",
             iD: 16,   
-            category: "Bosses",   
+            category: CategoryType.Bosses,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1182,7 +1182,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Gretel = new Actor(
             instanceName: "Gretel",
             iD: 20,   
-            category: "Bosses",   
+            category: CategoryType.Bosses,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1193,7 +1193,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Schabbs = new Actor(
             instanceName: "Schabbs",
             iD: 17,   
-            category: "Bosses",   
+            category: CategoryType.Bosses,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1204,7 +1204,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Gift = new Actor(
             instanceName: "Gift",
             iD: 21,   
-            category: "Bosses",   
+            category: CategoryType.Bosses,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1215,7 +1215,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor FatFace = new Actor(
             instanceName: "FatFace",
             iD: 22,   
-            category: "Bosses",   
+            category: CategoryType.Bosses,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1226,7 +1226,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Blinky = new Actor(
             instanceName: "Blinky",
             iD: 29,   
-            category: "Ghosts",   
+            category: CategoryType.Enemy,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1237,7 +1237,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Inky = new Actor(
             instanceName: "Inky",
             iD: 32,   
-            category: "Ghosts",   
+            category: CategoryType.Enemy,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1248,7 +1248,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Pinky = new Actor(
             instanceName: "Pinky",
             iD: 31,   
-            category: "Ghosts",   
+            category: CategoryType.Enemy,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1259,7 +1259,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Clyde = new Actor(
             instanceName: "Clyde",
             iD: 30,   
-            category: "Ghosts",   
+            category: CategoryType.Enemy,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1270,7 +1270,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Spectre = new Actor(
             instanceName: "Spectre",
             iD: 28,   
-            category: "Ghosts",   
+            category: CategoryType.Enemy,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -1281,7 +1281,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor GhoulishGhost = new Actor(
             instanceName: "GhoulishGhost",
             iD: 104,   
-            category: "Ghosts",   
+            category: CategoryType.Enemy,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -1292,7 +1292,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor RadioactiveMist = new Actor(
             instanceName: "RadioactiveMist",
             iD: 157,   
-            category: "Ghosts",   
+            category: CategoryType.Enemy,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -1303,7 +1303,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Guard = new Actor(
             instanceName: "Guard",
             iD: 11,   
-            category: "Guards",   
+            category: CategoryType.Enemy,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1314,7 +1314,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor GreenGuard = new Actor(
             instanceName: "GreenGuard",
             iD: 93,   
-            category: "Guards",   
+            category: CategoryType.Enemy,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -1325,7 +1325,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor DeadGuard = new Actor(
             instanceName: "DeadGuard",
             iD: 81,   
-            category: "Guards",   
+            category: CategoryType.Enemy,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1336,7 +1336,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor DeadGreenGuard = new Actor(
             instanceName: "DeadGreenGuard",
             iD: 98,   
-            category: "Guards",   
+            category: CategoryType.Enemy,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -1347,7 +1347,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Dog = new Actor(
             instanceName: "Dog",
             iD: 14,   
-            category: "Guards",   
+            category: CategoryType.Enemy,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1358,7 +1358,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Doberman = new Actor(
             instanceName: "Doberman",
             iD: 95,   
-            category: "Guards",   
+            category: CategoryType.Enemy,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -1369,7 +1369,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Officer = new Actor(
             instanceName: "Officer",
             iD: 12,   
-            category: "Guards",   
+            category: CategoryType.Enemy,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1380,7 +1380,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor LostOfficer = new Actor(
             instanceName: "LostOfficer",
             iD: 97,   
-            category: "Guards",   
+            category: CategoryType.Enemy,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -1391,7 +1391,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Mutant = new Actor(
             instanceName: "Mutant",
             iD: 15,   
-            category: "Guards",   
+            category: CategoryType.Enemy,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1402,7 +1402,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor GunBat = new Actor(
             instanceName: "GunBat",
             iD: 96,   
-            category: "Guards",   
+            category: CategoryType.Enemy,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -1413,7 +1413,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor WolfensteinSS = new Actor(
             instanceName: "WolfensteinSS",
             iD: 13,   
-            category: "Guards",   
+            category: CategoryType.Enemy,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1424,7 +1424,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Schutzstafell = new Actor(
             instanceName: "Schutzstafell",
             iD: 94,   
-            category: "Guards",   
+            category: CategoryType.Enemy,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -1435,7 +1435,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor DogFood = new Actor(
             instanceName: "DogFood",
             iD: 39,   
-            category: "Health",   
+            category: CategoryType.Health,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1446,7 +1446,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor DogFood2 = new Actor(
             instanceName: "DogFood2",
             iD: 111,   
-            category: "Health",   
+            category: CategoryType.Health,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -1457,7 +1457,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Food = new Actor(
             instanceName: "Food",
             iD: 57,   
-            category: "Health",   
+            category: CategoryType.Health,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1468,7 +1468,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Food2 = new Actor(
             instanceName: "Food2",
             iD: 142,   
-            category: "Health",   
+            category: CategoryType.Health,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -1479,7 +1479,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Medikit = new Actor(
             instanceName: "Medikit",
             iD: 58,   
-            category: "Health",   
+            category: CategoryType.Health,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1490,7 +1490,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Medikit2 = new Actor(
             instanceName: "Medikit2",
             iD: 143,   
-            category: "Health",   
+            category: CategoryType.Health,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -1501,7 +1501,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor OneUp = new Actor(
             instanceName: "OneUp",
             iD: 66,   
-            category: "Health",   
+            category: CategoryType.Health,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1512,7 +1512,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor OneUpPill = new Actor(
             instanceName: "OneUpPill",
             iD: 144,   
-            category: "Health",   
+            category: CategoryType.Health,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -1523,7 +1523,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Blood = new Actor(
             instanceName: "Blood",
             iD: 67,   
-            category: "Health",   
+            category: CategoryType.Health,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1534,7 +1534,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Blood2 = new Actor(
             instanceName: "Blood2",
             iD: 145,   
-            category: "Health",   
+            category: CategoryType.Health,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -1545,7 +1545,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Gibs = new Actor(
             instanceName: "Gibs",
             iD: 71,   
-            category: "Health",   
+            category: CategoryType.Health,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1556,7 +1556,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor Gibs2 = new Actor(
             instanceName: "Gibs2",
             iD: 126,   
-            category: "Health",   
+            category: CategoryType.Health,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -1567,7 +1567,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor GoldKey = new Actor(
             instanceName: "GoldKey",
             iD: 53,   
-            category: "Keys",   
+            category: CategoryType.Key,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1578,7 +1578,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor YellowKey = new Actor(
             instanceName: "YellowKey",
             iD: 154,   
-            category: "Keys",   
+            category: CategoryType.Key,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -1589,7 +1589,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor SilverKey = new Actor(
             instanceName: "SilverKey",
             iD: 54,   
-            category: "Keys",   
+            category: CategoryType.Key,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1600,7 +1600,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor CyanKey = new Actor(
             instanceName: "CyanKey",
             iD: 155,   
-            category: "Keys",   
+            category: CategoryType.Key,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -1611,7 +1611,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor MachineGun = new Actor(
             instanceName: "MachineGun",
             iD: 60,   
-            category: "Weapons",   
+            category: CategoryType.Weapons,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1622,7 +1622,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor BlueAK47 = new Actor(
             instanceName: "BlueAK47",
             iD: 141,   
-            category: "Weapons",   
+            category: CategoryType.Weapons,   
             wolf3D: false,   
             prefix: "",   
             solid: false  
@@ -1633,7 +1633,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor GatlingGunUpgrade = new Actor(
             instanceName: "GatlingGunUpgrade",
             iD: 61,   
-            category: "Weapons",   
+            category: CategoryType.Weapons,   
             wolf3D: true,   
             prefix: "",   
             solid: false  
@@ -1644,7 +1644,7 @@ namespace Tiledriver.Core.Wolf3D
         public static readonly Actor BlueGatlingGunUpgrade = new Actor(
             instanceName: "BlueGatlingGunUpgrade",
             iD: 156,   
-            category: "Weapons",   
+            category: CategoryType.Weapons,   
             wolf3D: false,   
             prefix: "",   
             solid: false  

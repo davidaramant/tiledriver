@@ -96,22 +96,22 @@ namespace Tiledriver.Gui.ViewModels
             if (_tile == null)
             {
                 color = Colors.Black.ToBrush();
-                path = GeometryCache.SquarePath;
+                path = GeometryCache.Square;
             }
             else if (_tile.TextureNorth.StartsWith("DOOR"))
             {
                 color = Colors.Gray.ToBrush();
-                path = GeometryCache.NorthSouthDoorPath;
+                path = GeometryCache.NorthSouthDoor;
             }
             else if (_tile.TextureNorth.StartsWith("SLOT"))
             {
                 color = Colors.Gray.ToBrush();
-                path = GeometryCache.EastWestDoorPath;
+                path = GeometryCache.EastWestDoor;
             }
             else
             {
                 color = Colors.DarkGray.ToBrush();
-                path = GeometryCache.SquarePath;
+                path = GeometryCache.Square;
             }
 
             element.Fill = color;
