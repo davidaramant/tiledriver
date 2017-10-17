@@ -106,6 +106,7 @@
     <Compile Include="FormatModels\MapInfos\Parsing\MapInfoBlock.cs" />
     <Compile Include="FormatModels\MapInfos\Parsing\MapInfoLexer.cs" />
     <Compile Include="FormatModels\MapInfos\Parsing\MapInfoTextReader.cs" />
+    <Compile Include="FormatModels\MapText\MapTextExporter.cs" />
     <Compile Include="FormatModels\Pk3\Pk3File.cs" />
     <Compile Include="FormatModels\Uwmf\Tile.cs" />
     <Compile Include="FormatModels\Uwmf\Trigger.cs" />
@@ -160,6 +161,7 @@
     <Compile Include="MapRanker\UnopenableDoorsRule.cs" />
     <Compile Include="MapRanker\WeaponsRule.cs" />
     <Compile Include="Utils\GraphVizRenderer.cs" />
+    <Compile Include="Wolf3D\ActionSpecial.cs" />
     <Compile Include="Wolf3D\CategoryType.cs" />
     <Compile Include="Wolf3D\LockLevel.cs" />
     <Compile Include="LevelGeometry\Mapping\MapLocation.cs" />

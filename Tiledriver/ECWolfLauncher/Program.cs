@@ -14,6 +14,7 @@ using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.GameMaps;
 using Tiledriver.Core.FormatModels.MapInfos;
 using Tiledriver.Core.FormatModels.MapInfos.Parsing;
+using Tiledriver.Core.FormatModels.MapText;
 using Tiledriver.Core.FormatModels.Pk3;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Uwmf.Parsing;
@@ -37,9 +38,31 @@ namespace TestRunner
             //TranslateAllWolf3DMaps();
             //Flatten();
             //Pk3Test();
+            ConvertMapsToSimpleText(
+                inputPath: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "maps"),
+                outputPath: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "textmaps"));
         }
 
+        private static void ConvertMapsToSimpleText(string inputPath, string outputPath)
+        {
+            if (Directory.Exists(outputPath))
+            {
+                Directory.Delete(outputPath, recursive: true);
+            }
+            Directory.CreateDirectory(outputPath);
 
+            var sa = new UwmfSyntaxAnalyzer();
+            foreach (var uwmfFilePath in Directory.EnumerateFiles(inputPath, "*.uwmf", SearchOption.AllDirectories))
+            {
+                var outputFilePath = Path.Combine(outputPath, Path.GetFileNameWithoutExtension(uwmfFilePath) + ".txt");
+
+                using (var stream = File.OpenRead(uwmfFilePath))
+                using (var textReader = new StreamReader(stream, Encoding.ASCII))
+                {
+                    MapTextExporter.Export(UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader))), outputFilePath);
+                }
+            }
+        }
 
         private static void ExportMapsFromPk3(string pk3Path, string outputBasePath = ".")
         {
@@ -62,7 +85,7 @@ namespace TestRunner
             });
 
             var autoMapper = autoMapperConfig.CreateMapper();
-            
+
             using (var resources = new CompoundResourceProvider())
             using (var basePk3 = Pk3File.Open(ecWolfPk3Path))
             using (var pk3 = Pk3File.Open(pk3Path))
