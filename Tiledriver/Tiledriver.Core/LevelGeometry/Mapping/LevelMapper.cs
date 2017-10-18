@@ -9,14 +9,14 @@ using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.LevelGeometry.Mapping
 {
-    public class LevelMapper
+    public sealed class LevelMapper
     {
         private List<Thing> _silverLocations;
         private List<Thing> _goldLocations;
         private bool _hasSilver;
         private bool _hasGold;
-        private IList<IRoom> _discoveredRooms = new List<IRoom>();
-        private IList<LockedWay> _lockedWays = new List<LockedWay>();
+        private readonly IList<IRoom> _discoveredRooms = new List<IRoom>();
+        private readonly IList<LockedWay> _lockedWays = new List<LockedWay>();
 
         public LevelMap Map(MapData data)
         {
@@ -24,7 +24,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             _hasGold = false;
             _discoveredRooms.Clear();
 
-            _silverLocations = data.Things.Where(t=>t.Type == Actor.SilverKey.ClassName).ToList();
+            _silverLocations = data.Things.Where(t => t.Type == Actor.SilverKey.ClassName).ToList();
             _goldLocations = data.Things.Where(t => t.Type == Actor.GoldKey.ClassName).ToList();
             _goldLocations.AddRange(data.Things.Where(t => t.Type == Actor.Hans.ClassName).ToList());
             _goldLocations.AddRange(data.Things.Where(t => t.Type == Actor.Gretel.ClassName).ToList());
@@ -68,7 +68,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
             newRoom.Locations.Add(firstLocation);
 
-            var locationsToProcess = new List<MapLocation> {firstLocation};
+            var locationsToProcess = new List<MapLocation> { firstLocation };
 
             ExpandRoom(newRoom, locationsToProcess);
 
@@ -89,12 +89,12 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                 var n = TryExpand(loc => loc.CanMoveNorth(), loc => loc.North(), room, fromLocation, locationsToProcess);
                 var w = TryExpand(loc => loc.CanMoveWest(), loc => loc.West(), room, fromLocation, locationsToProcess);
                 var s = TryExpand(loc => loc.CanMoveSouth(), loc => loc.South(), room, fromLocation, locationsToProcess);
-                var e= TryExpand(loc => loc.CanMoveEast(), loc => loc.East(), room, fromLocation, locationsToProcess);
+                var e = TryExpand(loc => loc.CanMoveEast(), loc => loc.East(), room, fromLocation, locationsToProcess);
 
                 fromLocation.Cooridor = (n && s && !e && !w) || (!n && !s && e && w);
             }
 
-            _hasGold |= room.Locations.Any(loc => _goldLocations.Any(key=>(int)key.X == loc.X && (int)key.Y==loc.Y));
+            _hasGold |= room.Locations.Any(loc => _goldLocations.Any(key => (int)key.X == loc.X && (int)key.Y == loc.Y));
             _hasSilver |= room.Locations.Any(loc => _silverLocations.Any(key => (int)key.X == loc.X && (int)key.Y == loc.Y));
         }
 
@@ -118,7 +118,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
         {
             var passages = new Dictionary<IList<Passage>, MapLocation>();
 
-            var isEWDoor = new Func< Trigger, bool>(t => t.Action == "Door_Open" && t.Arg4 == 0);
+            var isEWDoor = new Func<Trigger, bool>(t => t.Action == "Door_Open" && t.Arg4 == 0);
             var isNSDoor = new Func<Trigger, bool>(t => t.Action == "Door_Open" && t.Arg4 == 1);
             var isPushWall = new Func<Trigger, bool>(t => t.Action == "Pushwall_Move");
 
@@ -140,27 +140,27 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             Func<MapLocation, MapLocation> getNext,
             Func<Trigger, bool> hasProperFormattedPassage,
             Func<MapLocation, bool> moveBackCheck,
-            MapLocation fromLocation, 
+            MapLocation fromLocation,
             IRoom fromRoom,
             Dictionary<IList<Passage>, MapLocation> passages)
         {
             var passageTrail = new List<Passage>();
 
             do
-            { 
+            {
                 var targetPassageSpace = getNext(fromLocation);
 
                 if (targetPassageSpace == null)
                     return;
 
                 var targetPassage = targetPassageSpace.Triggers.FirstOrDefault(hasProperFormattedPassage);
-           
+
                 if (targetPassage == null)
                     return;
 
                 if (targetPassage.Action == "Door_Open")
                 {
-                    switch ((LockLevel) targetPassage.Arg3)
+                    switch ((LockLevel)targetPassage.Arg3)
                     {
                         case LockLevel.Silver:
                             if (!_hasSilver)
@@ -253,7 +253,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                         }
                         break;
                     case LockLevel.Both:
-                        if (_hasSilver || _hasGold)
+                        if (_hasSilver && _hasGold)
                         {
                             _lockedWays.Remove(lockedWay);
                             Dictionary<IList<Passage>, MapLocation> passages = new Dictionary<IList<Passage>, MapLocation>();

@@ -3,7 +3,7 @@
 
 namespace Tiledriver.Core.LevelGeometry.Mapping
 {
-    public enum Keys
+    public enum Key
     {
         Gold,
         Silver

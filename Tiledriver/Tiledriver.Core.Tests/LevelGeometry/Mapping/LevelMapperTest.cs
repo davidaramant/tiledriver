@@ -398,7 +398,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
 
             AddSpace(2, 2, _tileNorthWestWalls);
             AddSpace(3, 2, _tileNorthEastWalls);
-            AddKey(3, 2, Keys.Silver);
+            AddKey(3, 2, Key.Silver);
             AddSpace(3, 3, _tileSouthWalls);
             AddSpace(2, 3, _tileSouthWestWalls);
 
@@ -500,10 +500,10 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
                 doorTrigger.Arg4 = 1;
         }
 
-        private void AddKey(int x, int y, Keys key)
+        private void AddKey(int x, int y, Key key)
         {
             var location = new MapLocation(_data, x, y);
-            location.AddThing(key==Keys.Silver ? Actor.SilverKey.ClassName : Actor.GoldKey.ClassName);
+            location.AddThing(key==Key.Silver ? Actor.SilverKey.ClassName : Actor.GoldKey.ClassName);
         }
 
         private void AddPushwall(int x, int y)

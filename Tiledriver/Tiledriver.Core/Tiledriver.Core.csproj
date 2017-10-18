@@ -135,7 +135,7 @@
     <Compile Include="FormatModels\Xlat\TileMappings.cs" />
     <Compile Include="FormatModels\Xlat\TriggerTemplate.cs" />
     <Compile Include="LevelGeometry\IRegion.cs" />
-    <Compile Include="LevelGeometry\Mapping\Keys.cs" />
+    <Compile Include="LevelGeometry\Mapping\Key.cs" />
     <Compile Include="LevelGeometry\Mapping\LevelMap.cs" />
     <Compile Include="MapRanker\AmmoRule.cs" />
     <Compile Include="MapRanker\BoringTileRule.cs" />
