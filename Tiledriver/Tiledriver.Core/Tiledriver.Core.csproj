@@ -212,8 +212,6 @@
     <Compile Include="Settings\GamePaths.cs" />
     <Compile Include="Wolf3D\Actor.cs" />
     <Compile Include="Wolf3D\AllWolfTextures.cs" />
-    <Compile Include="Wolf3D\RegionTheme.cs" />
-    <Compile Include="Wolf3D\TileTheme.cs" />
     <Compile Include="Wolf3D\Actor.Generated.cs">
       <DependentUpon>Actor.tt</DependentUpon>
       <AutoGen>True</AutoGen>

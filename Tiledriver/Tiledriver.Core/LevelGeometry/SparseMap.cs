@@ -63,7 +63,7 @@ namespace Tiledriver.Core.LevelGeometry
 
                     case MapTileType.Textured:
                         return new TileSpace(
-                            tile: tile.Theme.Id,
+                            tile: tile.Tile,
                             sector: 0,
                             zone: indexedRegion.Item1,
                             tag: tile.Tag ?? 0);
@@ -97,7 +97,6 @@ namespace Tiledriver.Core.LevelGeometry
 
         public MapData Compile()
         {
-            // TODO: Move sector definition into TileTheme
             return new MapData
             (
                 nameSpace: "Wolf3D",
@@ -105,7 +104,7 @@ namespace Tiledriver.Core.LevelGeometry
                 name: Name,
                 width: Width,
                 height: Height,
-                tiles: TileTheme.GetAll().OrderBy(t => t.Id).Select(t => t.Definition),
+                tiles: DefaultTile.Tiles.Values,
                 sectors: new[]
                 {
                     new Sector
