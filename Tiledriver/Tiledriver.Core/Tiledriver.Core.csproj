@@ -163,6 +163,7 @@
     <Compile Include="Utils\GraphVizRenderer.cs" />
     <Compile Include="Wolf3D\ActionSpecial.cs" />
     <Compile Include="Wolf3D\CategoryType.cs" />
+    <Compile Include="Wolf3D\DefaultTile.cs" />
     <Compile Include="Wolf3D\LockLevel.cs" />
     <Compile Include="LevelGeometry\Mapping\MapLocation.cs" />
     <Compile Include="LevelGeometry\Mapping\IPassage.cs" />
