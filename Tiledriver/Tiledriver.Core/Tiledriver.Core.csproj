@@ -106,7 +106,11 @@
     <Compile Include="FormatModels\MapInfos\Parsing\MapInfoBlock.cs" />
     <Compile Include="FormatModels\MapInfos\Parsing\MapInfoLexer.cs" />
     <Compile Include="FormatModels\MapInfos\Parsing\MapInfoTextReader.cs" />
+    <Compile Include="FormatModels\MapMetadata\Extensions\ExtensionMethods.cs" />
+    <Compile Include="FormatModels\MapMetadata\MetaMap.cs" />
+    <Compile Include="FormatModels\MapMetadata\MetaMapAnalyzer.cs" />
     <Compile Include="FormatModels\MapText\MapTextExporter.cs" />
+    <Compile Include="FormatModels\MapMetadata\TileType.cs" />
     <Compile Include="FormatModels\Pk3\Pk3File.cs" />
     <Compile Include="FormatModels\Uwmf\Tile.cs" />
     <Compile Include="FormatModels\Uwmf\Trigger.cs" />
