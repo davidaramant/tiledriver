@@ -65,20 +65,25 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                     if (x >= 0)
                     {
                         var leftSide = new Point(x, spot.Y);
-                        metaMap[leftSide] = GetTileType(leftSide);
+                        var type = GetTileType(leftSide);
+                        metaMap[leftSide] = type;
+                        if (type == TileType.Door)
+                        {
+                            passagesToCheck.Enqueue(leftSide);
+                        }
                     }
                     x++;
 
                     bool emptySpanAbove = false;
                     bool emptySpanBelow = false;
 
-                    bool inEmptySpace = true;
-                    while (x < mapData.Width && inEmptySpace)
+                    while (x < mapData.Width)
                     {
-                        var currentSpot = new Point(x,spot.Y);
+                        var currentSpot = new Point(x, spot.Y);
                         var type = GetTileType(currentSpot);
                         metaMap[currentSpot] = type;
 
+                        bool inEmptySpace = true;
                         switch (type)
                         {
                             case TileType.Empty:
@@ -93,6 +98,8 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                             default:
                                 throw new Exception("How can this happen?");
                         }
+                        if (!inEmptySpace)
+                            break;
 
                         if (spot.Y > 0)
                         {

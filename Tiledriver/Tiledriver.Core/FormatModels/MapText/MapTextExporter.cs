@@ -1,45 +1,41 @@
 ﻿// Copyright (c) 2017, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using System.Collections.Immutable;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using Tiledriver.Core.FormatModels.Uwmf;
-using Tiledriver.Core.Wolf3D;
+using Tiledriver.Core.FormatModels.MapMetadata;
 
 namespace Tiledriver.Core.FormatModels.MapText
 {
     public static class MapTextExporter
     {
-        public static void Export(MapData map, string outputFilePath)
+        public static void Export(MetaMap map, string outputFilePath, bool unreachableIsSolid = true)
         {
-            var allDoors =
-                map.Triggers
-                .Where(t => t.Action == ActionSpecial.DoorOpen || t.Action == ActionSpecial.PushwallMove)
-                .Select(t => new Point(t.X, t.Y))
-                .ToImmutableHashSet();
-
-            string DetermineCharacter(int row, int col)
+            string DetermineCharacter(int x, int y)
             {
-                var index = row * map.Width + col;
-
-                var space = map.PlaneMaps[0].TileSpaces[index];
-                if (!space.HasTile)
-                    return " ";
-
-                return allDoors.Contains(new Point(col, row)) ? "□" : "█";
+                switch (map[x, y])
+                {
+                    case TileType.Empty:
+                        return " ";
+                    case TileType.Wall:
+                        return "█";
+                    case TileType.Door:
+                        return "□";
+                    case TileType.Unreachable:
+                        return unreachableIsSolid ? "█" : " ";
+                    default:
+                        return "!";
+                }
             }
 
             using (var writer = File.CreateText(outputFilePath))
             {
-                for (int rowIndex = 0; rowIndex < map.Height; rowIndex++)
+                for (int y = 0; y < map.Height; y++)
                 {
-                    for (int colIndex = 0; colIndex < map.Width; colIndex++)
+                    for (int x = 0; x < map.Width; x++)
                     {
-                        writer.Write(DetermineCharacter(rowIndex, colIndex));
+                        writer.Write(DetermineCharacter(x, y));
                     }
-                    if (rowIndex < map.Height - 1)
+                    if (y < map.Height - 1)
                         writer.WriteLine();
                 }
 

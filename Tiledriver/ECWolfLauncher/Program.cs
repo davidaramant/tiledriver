@@ -14,6 +14,7 @@ using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.GameMaps;
 using Tiledriver.Core.FormatModels.MapInfos;
 using Tiledriver.Core.FormatModels.MapInfos.Parsing;
+using Tiledriver.Core.FormatModels.MapMetadata;
 using Tiledriver.Core.FormatModels.MapText;
 using Tiledriver.Core.FormatModels.Pk3;
 using Tiledriver.Core.FormatModels.Uwmf;
@@ -35,13 +36,16 @@ namespace TestRunner
     {
         static void Main(string[] args)
         {
-            LoadMapInEcWolf(DemoMap.Create(), Path.GetFullPath("demo.wad"));
+            //LoadMapInEcWolf(DemoMap.Create(), Path.GetFullPath("demo.wad"));
             //TranslateAllWolf3DMaps();
             //Flatten();
             //Pk3Test();
+            ConvertMapsToSimpleText(
+                inputPath: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "maps"),
+                outputPath: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "textmaps-sparse"));
             //ConvertMapsToSimpleText(
-            //    inputPath: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "maps"),
-            //    outputPath: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "textmaps"));
+            //    inputPath: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "testinput"),
+            //    outputPath: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "textmaps-new"));
         }
 
         private static void ConvertMapsToSimpleText(string inputPath, string outputPath)
@@ -60,7 +64,9 @@ namespace TestRunner
                 using (var stream = File.OpenRead(uwmfFilePath))
                 using (var textReader = new StreamReader(stream, Encoding.ASCII))
                 {
-                    MapTextExporter.Export(UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader))), outputFilePath);
+                    var mapData = UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader)));
+                    var metaMap = MetaMapAnalyzer.Analyze(mapData);
+                    MapTextExporter.Export(metaMap, outputFilePath, unreachableIsSolid:false);
                 }
             }
         }
