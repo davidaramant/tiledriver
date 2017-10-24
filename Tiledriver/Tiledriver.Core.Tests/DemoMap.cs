@@ -164,31 +164,31 @@ namespace Tiledriver.Core.Tests
         {
             var entries = new TileSpace[height, width];
 
-            Func<TileSpace> solidTile = () => new TileSpace(tile: 0, sector: 0, zone: -1);
-            Func<TileSpace> emptyTile = () => new TileSpace(tile: -1, sector: 0, zone: 0);
+            TileSpace SolidTile() => new TileSpace(tile: 0, sector: 0, zone: -1);
+            TileSpace EmptyTile() => new TileSpace(tile: -1, sector: 0, zone: 0);
 
             // ### Build a big empty square
 
             // Top wall
             for (var col = 0; col < width; col++)
             {
-                entries[0, col] = solidTile();
+                entries[0, col] = SolidTile();
             }
 
             for (var row = 1; row < height - 1; row++)
             {
-                entries[row, 0] = solidTile();
+                entries[row, 0] = SolidTile();
                 for (var col = 1; col < width - 1; col++)
                 {
-                    entries[row, col] = emptyTile();
+                    entries[row, col] = EmptyTile();
                 }
-                entries[row, width - 1] = solidTile();
+                entries[row, width - 1] = SolidTile();
             }
 
             // bottom wall
             for (var col = 0; col < width; col++)
             {
-                entries[height - 1, col] = solidTile();
+                entries[height - 1, col] = SolidTile();
             }
 
 

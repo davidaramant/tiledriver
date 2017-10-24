@@ -24,6 +24,7 @@ using Tiledriver.Core.FormatModels.Xlat;
 using Tiledriver.Core.FormatModels.Xlat.Parsing;
 using Tiledriver.Core.MapTranslators;
 using Tiledriver.Core.Settings;
+using Tiledriver.Core.Tests;
 
 namespace TestRunner
 {
@@ -34,13 +35,13 @@ namespace TestRunner
     {
         static void Main(string[] args)
         {
-            //LoadMapInEcWolf(DemoMap.Create(), Path.GetFullPath("demo.wad"));
+            LoadMapInEcWolf(DemoMap.Create(), Path.GetFullPath("demo.wad"));
             //TranslateAllWolf3DMaps();
             //Flatten();
             //Pk3Test();
-            ConvertMapsToSimpleText(
-                inputPath: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "maps"),
-                outputPath: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "textmaps"));
+            //ConvertMapsToSimpleText(
+            //    inputPath: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "maps"),
+            //    outputPath: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "textmaps"));
         }
 
         private static void ConvertMapsToSimpleText(string inputPath, string outputPath)
