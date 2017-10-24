@@ -42,7 +42,7 @@ namespace TestRunner
             //Pk3Test();
             ConvertMapsToSimpleText(
                 inputPath: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "maps"),
-                outputPath: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "textmaps-sparse"));
+                outputPath: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "textmaps-sparse2"));
             //ConvertMapsToSimpleText(
             //    inputPath: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "testinput"),
             //    outputPath: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "textmaps-new"));
