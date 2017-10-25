@@ -1,18 +1,15 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A32B1E60-62EE-4EF9-892B-1B8A3BB2396C}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Tiledriver.Core</RootNamespace>
-    <AssemblyName>Tiledriver.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
+    <TargetFramework>net462</TargetFramework>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,241 +30,83 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper, Version=6.1.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.6.1.0\lib\net45\AutoMapper.dll</HintPath>
-    </Reference>
-    <Reference Include="Functional.Maybe, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Functional.Maybe.1.1.1\lib\net45\Functional.Maybe.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="JetBrains.Annotations, Version=10.4.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>..\packages\JetBrains.Annotations.10.4.0\lib\net\JetBrains.Annotations.dll</HintPath>
-    </Reference>
-    <Reference Include="Piglet, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Piglet.1.4.0\lib\net40\Piglet.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="SharpCompress, Version=0.17.1.0, Culture=neutral, PublicKeyToken=afb0a02973931d96, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpCompress.0.17.1\lib\net45\SharpCompress.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Collections.Immutable, Version=1.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Collections.Immutable.1.3.1\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.ValueTuple, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.3.1\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="AutoMapper" Version="6.1.0" />
+    <PackageReference Include="Functional.Maybe" Version="1.1.1" />
+    <PackageReference Include="JetBrains.Annotations" Version="10.4.0" />
+    <PackageReference Include="Piglet" Version="1.4.0" />
+    <PackageReference Include="SharpCompress" Version="0.17.1" />
+    <PackageReference Include="System.Collections.Immutable" Version="1.3.1" />
+    <PackageReference Include="System.ValueTuple" Version="4.3.1" />
+    <PackageReference Include="MahApps.Metro" Version="1.2.4.0" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\Collections\CollectionExtensions.cs" />
-    <Compile Include="Extensions\Directions\DirectionExtensions.cs" />
-    <Compile Include="Extensions\MaybeFileSystem\MaybeFileSystemExtensions.cs" />
-    <Compile Include="Extensions\Strings\StringExtensions.cs" />
-    <Compile Include="FormatModels\Common\BaseLexer.cs" />
-    <Compile Include="FormatModels\Common\BinaryMap.cs" />
-    <Compile Include="FormatModels\Common\Direction.cs" />
-    <Compile Include="FormatModels\Common\OldMapSpot.cs" />
-    <Compile Include="FormatModels\CompoundResourceProvider.cs" />
-    <Compile Include="FormatModels\EntryNotFoundException.cs" />
-    <Compile Include="FormatModels\GameMaps\GameMapsBundle.cs" />
-    <Compile Include="FormatModels\GameMaps\MapHeader.cs" />
-    <Compile Include="FormatModels\GameMaps\OffsetData.cs" />
-    <Compile Include="FormatModels\GameMaps\PlaneMetadata.cs" />
-    <Compile Include="FormatModels\GameMaps\Expander.cs" />
-    <Compile Include="FormatModels\IResourceProvider.cs" />
-    <Compile Include="FormatModels\MapInfos\IIntermissionAction.cs" />
-    <Compile Include="FormatModels\MapInfos\Model.Generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="FormatModels\MapInfos\Parsing\Extensions.cs" />
-    <Compile Include="FormatModels\MapInfos\Parsing\IMapInfoElement.cs" />
-    <Compile Include="FormatModels\MapInfos\Parsing\MapInfoParser.cs" />
-    <Compile Include="FormatModels\MapInfos\Parsing\MapInfoParser.Generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MapInfoParser.tt</DependentUpon>
-    </Compile>
-    <Compile Include="FormatModels\MapInfos\Parsing\MapInfoProperty.cs" />
-    <Compile Include="FormatModels\MapInfos\Parsing\MapInfoBlock.cs" />
-    <Compile Include="FormatModels\MapInfos\Parsing\MapInfoLexer.cs" />
-    <Compile Include="FormatModels\MapInfos\Parsing\MapInfoTextReader.cs" />
-    <Compile Include="FormatModels\MapMetadata\Extensions\ExtensionMethods.cs" />
-    <Compile Include="FormatModels\MapMetadata\MetaMap.cs" />
-    <Compile Include="FormatModels\MapMetadata\MetaMapAnalyzer.cs" />
-    <Compile Include="FormatModels\MapText\MapTextExporter.cs" />
-    <Compile Include="FormatModels\MapMetadata\TileType.cs" />
-    <Compile Include="FormatModels\Pk3\Pk3File.cs" />
-    <Compile Include="FormatModels\Uwmf\Tile.cs" />
-    <Compile Include="FormatModels\Uwmf\Trigger.cs" />
-    <Compile Include="FormatModels\Wad\DataLump.cs" />
-    <Compile Include="FormatModels\Wad\ILump.cs" />
-    <Compile Include="FormatModels\Wad\Marker.cs" />
-    <Compile Include="FormatModels\Wad\LumpName.cs" />
-    <Compile Include="FormatModels\Wad\StreamExtensions\Extensions.cs" />
-    <Compile Include="FormatModels\Wad\UwmfLump.cs" />
-    <Compile Include="FormatModels\Wad\WadFile.cs" />
-    <Compile Include="FormatModels\Wdc31\Header.cs" />
-    <Compile Include="FormatModels\Wdc31\Wdc31Bundle.cs" />
-    <Compile Include="FormatModels\Xlat\FlatMappings.cs" />
-    <Compile Include="FormatModels\Xlat\InvalidXlatException.cs" />
-    <Compile Include="FormatModels\Xlat\IThingMapping.cs" />
-    <Compile Include="FormatModels\Xlat\MapTranslatorInfo.cs" />
-    <Compile Include="FormatModels\Xlat\Model.Generated.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="FormatModels\Xlat\Parsing\Expression.cs" />
-    <Compile Include="FormatModels\Xlat\Parsing\XlatSyntaxAnalyzer.cs" />
-    <Compile Include="FormatModels\Xlat\Parsing\XlatLexer.cs" />
-    <Compile Include="FormatModels\Xlat\Parsing\XlatParser.cs" />
-    <Compile Include="FormatModels\Xlat\TileMappings.cs" />
-    <Compile Include="FormatModels\Xlat\TriggerTemplate.cs" />
-    <Compile Include="LevelGeometry\IRegion.cs" />
-    <Compile Include="LevelGeometry\Mapping\Key.cs" />
-    <Compile Include="LevelGeometry\Mapping\LevelMap.cs" />
-    <Compile Include="MapRanker\AmmoRule.cs" />
-    <Compile Include="MapRanker\BoringTileRule.cs" />
-    <Compile Include="MapRanker\Constants.cs" />
-    <Compile Include="MapRanker\BossesRule.cs" />
-    <Compile Include="MapRanker\ExitsRule.cs" />
-    <Compile Include="MapRanker\CoordiorRule.cs" />
-    <Compile Include="MapRanker\EnemyCountRule.cs" />
-    <Compile Include="MapRanker\EnemyDistributionRule.cs" />
-    <Compile Include="MapRanker\EnemyToRoomSizeRule.cs" />
-    <Compile Include="MapRanker\EnemyVarietyRule.cs" />
-    <Compile Include="MapRanker\ExtraLifeRule.cs" />
-    <Compile Include="MapRanker\HealthRule.cs" />
-    <Compile Include="MapRanker\PushWallRule.cs" />
-    <Compile Include="MapRanker\LockedDoorsRule.cs" />
-    <Compile Include="MapRanker\RoomCountRule.cs" />
-    <Compile Include="MapRanker\PassagesRule.cs" />
-    <Compile Include="MapRanker\HasExitRule.cs" />
-    <Compile Include="MapRanker\HasStartRule.cs" />
-    <Compile Include="MapRanker\IRankingRule.cs" />
-    <Compile Include="MapRanker\SmallRoomRule.cs" />
-    <Compile Include="MapRanker\TreasureRule.cs" />
-    <Compile Include="MapRanker\UnopenableDoorsRule.cs" />
-    <Compile Include="MapRanker\WeaponsRule.cs" />
-    <Compile Include="Utils\GraphVizRenderer.cs" />
-    <Compile Include="Wolf3D\ActionSpecial.cs" />
-    <Compile Include="Wolf3D\CategoryType.cs" />
-    <Compile Include="Wolf3D\DefaultTile.cs" />
-    <Compile Include="Wolf3D\LockLevel.cs" />
-    <Compile Include="LevelGeometry\Mapping\MapLocation.cs" />
-    <Compile Include="LevelGeometry\Mapping\IPassage.cs" />
-    <Compile Include="LevelGeometry\Mapping\IRoom.cs" />
-    <Compile Include="LevelGeometry\Mapping\LevelMapper.cs" />
-    <Compile Include="LevelGeometry\Mapping\Room.cs" />
-    <Compile Include="LevelGeometry\MapTile.cs" />
-    <Compile Include="LevelGeometry\SparseMap.cs" />
-    <Compile Include="MapRanker\IRuleFactory.cs" />
-    <Compile Include="MapRanker\Ranker.cs" />
-    <Compile Include="MapRanker\RuleFactory.cs" />
-    <Compile Include="MapTranslators\BinaryMapTranslator.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FormatModels\Uwmf\BaseUwmfBlock.cs" />
-    <Compile Include="FormatModels\Uwmf\InvalidUwmfException.cs" />
-    <Compile Include="FormatModels\Uwmf\Model.Generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="FormatModels\Uwmf\Parsing\ArrayBlock.cs" />
-    <Compile Include="FormatModels\Common\Assignment.cs" />
-    <Compile Include="FormatModels\Uwmf\Parsing\Block.cs" />
-    <Compile Include="FormatModels\Common\ILexer.cs" />
-    <Compile Include="FormatModels\Common\IHaveAssignments.cs" />
-    <Compile Include="FormatModels\Uwmf\Parsing\UwmfSyntaxAnalyzer.cs" />
-    <Compile Include="FormatModels\Common\SyntaxExtensions.cs" />
-    <Compile Include="FormatModels\Uwmf\Parsing\UwmfLexer.cs" />
-    <Compile Include="FormatModels\Uwmf\Parsing\UwmfParser.cs" />
-    <Compile Include="FormatModels\Uwmf\Parsing\UwmfParser.Generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>UwmfParser.tt</DependentUpon>
-    </Compile>
-    <Compile Include="FormatModels\Common\Token.cs" />
-    <Compile Include="FormatModels\Common\Identifier.cs" />
-    <Compile Include="FormatModels\Common\ParsingException.cs" />
-    <Compile Include="FormatModels\Uwmf\Parsing\UwmfSyntaxTree.cs" />
-    <Compile Include="FormatModels\Uwmf\PlaneMap.cs" />
-    <Compile Include="FormatModels\Uwmf\IWriteableUwmfBlock.cs" />
-    <Compile Include="FormatModels\Uwmf\MapData.cs" />
-    <Compile Include="FormatModels\Uwmf\TileSpace.cs" />
-    <Compile Include="FormatModels\Uwmf\UnknownBlock.cs" />
-    <Compile Include="FormatModels\Uwmf\UnknownProperty.cs" />
-    <Compile Include="Settings\SteamGameSearcher.cs" />
-    <Compile Include="Settings\GamePaths.cs" />
-    <Compile Include="Wolf3D\Actor.cs" />
-    <Compile Include="Wolf3D\AllWolfTextures.cs" />
-    <Compile Include="Wolf3D\Actor.Generated.cs">
-      <DependentUpon>Actor.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
     <None Include="Wolf3D\Actor.csv" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="EnumGenerator.t4">
-      <LastGenOutput>EnumGenerator1.Generated.cs</LastGenOutput>
+    <None Include="EnumGenerator.t4" />
+    <None Update="FormatModels\MapInfos\Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Model.Generated.cs</LastGenOutput>
+    </None>
+    <None Update="FormatModels\MapInfos\Parsing\MapInfoParser.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>MapInfoParser.Generated.cs</LastGenOutput>
+    </None>
+    <None Update="FormatModels\Uwmf\Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Model.Generated.cs</LastGenOutput>
+    </None>
+    <None Update="FormatModels\Uwmf\Parsing\UwmfParser.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>UwmfParser.Generated.cs</LastGenOutput>
+    </None>
+    <None Update="FormatModels\Xlat\Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Model.Generated.cs</LastGenOutput>
+    </None>
+    <None Update="Wolf3D\Actor.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Actor.Generated.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FormatModels\MapInfos\Model.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Model.Generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="FormatModels\MapInfos\Parsing\MapInfoParser.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>MapInfoParser.Generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="FormatModels\Uwmf\Model.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Model.Generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="FormatModels\Uwmf\Parsing\UwmfParser.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>UwmfParser.Generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="FormatModels\Xlat\Model.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Model.Generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Wolf3D\Actor.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Actor.Generated.cs</LastGenOutput>
-    </Content>
+    <Compile Update="FormatModels\MapInfos\Model.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Update="FormatModels\MapInfos\Parsing\MapInfoParser.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>MapInfoParser.tt</DependentUpon>
+    </Compile>
+    <Compile Update="FormatModels\Uwmf\Model.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Update="FormatModels\Uwmf\Parsing\UwmfParser.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>UwmfParser.tt</DependentUpon>
+    </Compile>
+    <Compile Update="FormatModels\Xlat\Model.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Wolf3D\Actor.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Actor.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

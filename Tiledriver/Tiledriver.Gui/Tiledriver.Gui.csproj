@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{78D8C305-7C91-40C8-8399-CFB7CBAB291A}</ProjectGuid>
+    <ProjectGuid>{CD23D39F-F30D-4FC9-BB4E-9A56061B6450}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tiledriver.Gui</RootNamespace>
