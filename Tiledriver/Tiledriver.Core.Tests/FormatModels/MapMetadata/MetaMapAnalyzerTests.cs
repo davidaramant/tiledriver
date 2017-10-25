@@ -58,7 +58,22 @@ namespace Tiledriver.Core.Tests.FormatModels.MapMetadata
             var mapData = new MapData
             {
                 Width = shortHandMap.GetLength(1),
-                Height = shortHandMap.GetLength(0)
+                Height = shortHandMap.GetLength(0),
+                Tiles =
+                {
+                    new Tile
+                    {
+                        Comment = "Wall",
+                    },
+                    new Tile
+                    {
+                        BlockingWest = false,
+                        BlockingNorth = false,
+                        BlockingEast = false,
+                        BlockingSouth = false,
+                        Comment = "Holowall",
+                    }
+                }
             };
             mapData.PlaneMaps.Add(new PlaneMap());
 
