@@ -3,6 +3,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -15,8 +16,9 @@ using Tiledriver.Core.FormatModels.GameMaps;
 using Tiledriver.Core.FormatModels.MapInfos;
 using Tiledriver.Core.FormatModels.MapInfos.Parsing;
 using Tiledriver.Core.FormatModels.MapMetadata;
-using Tiledriver.Core.FormatModels.MapText;
 using Tiledriver.Core.FormatModels.Pk3;
+using Tiledriver.Core.FormatModels.SimpleMapImage;
+using Tiledriver.Core.FormatModels.SimpleMapText;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Uwmf.Parsing;
 using Tiledriver.Core.FormatModels.Wad;
@@ -36,16 +38,54 @@ namespace TestRunner
     {
         static void Main(string[] args)
         {
+            var desktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+
             //LoadMapInEcWolf(DemoMap.Create(), Path.GetFullPath("demo.wad"));
             //TranslateAllWolf3DMaps();
             //Flatten();
             //Pk3Test();
-            ConvertMapsToSimpleText(
-                inputPath: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "maps"),
-                outputPath: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "textmaps-sparse2"));
             //ConvertMapsToSimpleText(
-            //    inputPath: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "testinput"),
-            //    outputPath: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "textmaps-new"));
+            //    inputPath: Path.Combine(desktop), "maps"),
+            //    outputPath: Path.Combine(desktop), "textmaps-sparse2"));
+            //ConvertMapsToSimpleText(
+            //    inputPath: Path.Combine(desktop), "testinput"),
+            //    outputPath: Path.Combine(desktop), "textmaps-new"));
+            ConvertMapsToSimpleImages(
+                inputPath: Path.Combine(desktop, "maps"),
+                outputDirsWithPalettes: new List<(string path, MapPalette palette)>
+                {
+                    (Path.Combine(desktop,"imagemaps-sparse"), MapPalette.HighlightWalls),
+                    (Path.Combine(desktop,"imagemaps-solid"), MapPalette.CarveOutRooms),
+                });
+        }
+
+        private static void ConvertMapsToSimpleImages(string inputPath, List<(string path, MapPalette palette)> outputDirsWithPalettes)
+        {
+            foreach (var outputPath in outputDirsWithPalettes.Select(p => p.path))
+            {
+                if (Directory.Exists(outputPath))
+                {
+                    Directory.Delete(outputPath, recursive: true);
+                }
+                Directory.CreateDirectory(outputPath);
+            }
+
+            var sa = new UwmfSyntaxAnalyzer();
+            foreach (var uwmfFilePath in Directory.EnumerateFiles(inputPath, "*.uwmf", SearchOption.AllDirectories))
+            {
+                using (var stream = File.OpenRead(uwmfFilePath))
+                using (var textReader = new StreamReader(stream, Encoding.ASCII))
+                {
+                    var mapData = UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader)));
+                    var metaMap = MetaMapAnalyzer.Analyze(mapData);
+
+                    foreach (var output in outputDirsWithPalettes)
+                    {
+                        var outputFilePath = Path.Combine(output.path, Path.GetFileNameWithoutExtension(uwmfFilePath) + ".png");
+                        SimpleMapImageExporter.Export(metaMap, output.palette, outputFilePath);
+                    }
+                }
+            }
         }
 
         private static void ConvertMapsToSimpleText(string inputPath, string outputPath)
@@ -66,7 +106,7 @@ namespace TestRunner
                 {
                     var mapData = UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader)));
                     var metaMap = MetaMapAnalyzer.Analyze(mapData);
-                    MapTextExporter.Export(metaMap, outputFilePath, unreachableIsSolid:false);
+                    SimpleMapTextExporter.Export(metaMap, outputFilePath, unreachableIsSolid: false);
                 }
             }
         }

@@ -4,9 +4,9 @@
 using System.IO;
 using Tiledriver.Core.FormatModels.MapMetadata;
 
-namespace Tiledriver.Core.FormatModels.MapText
+namespace Tiledriver.Core.FormatModels.SimpleMapText
 {
-    public static class MapTextExporter
+    public static class SimpleMapTextExporter
     {
         public static void Export(MetaMap map, string outputFilePath, bool unreachableIsSolid = true)
         {
