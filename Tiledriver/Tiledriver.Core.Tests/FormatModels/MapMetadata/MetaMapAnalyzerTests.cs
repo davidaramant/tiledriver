@@ -15,42 +15,87 @@ namespace Tiledriver.Core.Tests.FormatModels.MapMetadata
         [Test]
         public void ShouldAnalyzeSimpleRoom()
         {
-            var level = new char[,]
+            //    0   1   2   3   4   5   6   7   8   9   0
+            var level = new[,]
             {
-                { '#', '#', '#', '#', '#'},
-                { '#', ' ', ' ', ' ', '#'},
-                { '#', ' ', 'S', ' ', '#'},
-                { '#', ' ', ' ', ' ', '#'},
-                { '#', '#', '#', '#', '#'},
+                {'#','#','#','#','#'},
+                {'#',' ',' ',' ','#'},
+                {'#',' ','S',' ','#'},
+                {'#',' ',' ',' ','#'},
+                {'#','#','#','#','#'},
             };
-            var mapData = ExpandMapFromShorthand(level);
+            var expectedOutput = new[,]
+            {
+                {'~','#','#','#','~'},
+                {'#',' ',' ',' ','#'},
+                {'#',' ',' ',' ','#'},
+                {'#',' ',' ',' ','#'},
+                {'~','#','#','#','~'},
+            };
+            AssertMapAnalyzedCorrectly(level, expectedOutput);
+        }
 
+        [Test]
+        public void ShouldHandleStackedDoors()
+        {
+            //    0   1   2   3   4   5   6   7   8   9   0
+            var level = new[,]
+            {
+                {'#','#','#','#','#','#','#','#','#','#','#'},
+                {'#','#','#','#','#',' ','#','#','#','#','#'},
+                {'#','#','#','#','#','D','#','#','#','#','#'},
+                {'#','#','#','#','#','D','#','#','#','#','#'},
+                {'#','#','#','#','#',' ','#','#','#','#','#'},
+                {'#',' ','D','D',' ','S',' ','D','D',' ','#'},
+                {'#','#','#','#','#',' ','#','#','#','#','#'},
+                {'#','#','#','#','#','D','#','#','#','#','#'},
+                {'#','#','#','#','#','D','#','#','#','#','#'},
+                {'#','#','#','#','#',' ','#','#','#','#','#'},
+                {'#','#','#','#','#','#','#','#','#','#','#'},
+            };
+            var expectedOutput = new[,]
+            {
+                {'~','~','~','~','~','#','~','~','~','~','~'},
+                {'~','~','~','~','#',' ','#','~','~','~','~'},
+                {'~','~','~','~','~','D','~','~','~','~','~'},
+                {'~','~','~','~','~','D','~','~','~','~','~'},
+                {'~','#','~','~','#',' ','#','~','~','#','~'},
+                {'#',' ','D','D',' ',' ',' ','D','D',' ','#'},
+                {'~','#','~','~','#',' ','#','~','~','#','~'},
+                {'~','~','~','~','~','D','~','~','~','~','~'},
+                {'~','~','~','~','~','D','~','~','~','~','~'},
+                {'~','~','~','~','#',' ','#','~','~','~','~'},
+                {'~','~','~','~','~','#','~','~','~','~','~'},
+            };
+            AssertMapAnalyzedCorrectly(level, expectedOutput);
+        }
+
+        private static void AssertMapAnalyzedCorrectly(char[,] shortHandMap, char[,] shortHandMetaMap)
+        {
+            var mapData = ExpandMapFromShorthand(shortHandMap);
             var metaMap = MetaMapAnalyzer.Analyze(mapData);
 
-            for (int x = 1; x < 4; x++)
+            for (int y = 0; y < mapData.Height; y++)
             {
-                AssertSpot(metaMap, x, 0, TileType.Wall);
-                AssertSpot(metaMap, x, 4, TileType.Wall);
-            }
-
-            for (int y = 1; y < 4; y++)
-            {
-                AssertSpot(metaMap, 0, y, TileType.Wall);
-                AssertSpot(metaMap, 4, y, TileType.Wall);
-            }
-
-            for (int y = 1; y < 4; y++)
-            {
-                for (int x = 1; x < 4; x++)
+                for (int x = 0; x < mapData.Width; x++)
                 {
-                    AssertSpot(metaMap, x, y, TileType.Empty);
+                    Assert.That(metaMap[x, y], Is.EqualTo(ExpandTile(shortHandMetaMap[y, x])), $"Unexpected tile type at ({x},{y})");
                 }
             }
         }
 
-        private static void AssertSpot(MetaMap metaMap, int x, int y, TileType expectedType)
+        private static TileType ExpandTile(char shortHandType)
         {
-            Assert.That(metaMap[x, y], Is.EqualTo(expectedType), $"Unexpected tile type at ({x},{y})");
+            switch (shortHandType)
+            {
+                case '#': return TileType.Wall;
+                case ' ': return TileType.Empty;
+                case 'D': return TileType.Door;
+                case 'P': return TileType.PushWall;
+                case '~': return TileType.Unreachable;
+                default:
+                    throw new AssertionException("Unknown character in shorthand meta map");
+            }
         }
 
         private static MapData ExpandMapFromShorthand(char[,] shortHandMap)
@@ -83,18 +128,26 @@ namespace Tiledriver.Core.Tests.FormatModels.MapMetadata
                 {
                     switch (shortHandMap[y, x])
                     {
-                        case '*':
+                        case '*': // void
                             mapData.PlaneMaps[0].TileSpaces.Add(new TileSpace(tile: -1, sector: -1, zone: -1));
                             break;
-                        case '#':
+                        case '#': // wall
                             mapData.PlaneMaps[0].TileSpaces.Add(new TileSpace(tile: 0, sector: 0, zone: -1));
                             break;
-                        case ' ':
+                        case ' ': // empty space
                             mapData.PlaneMaps[0].TileSpaces.Add(new TileSpace(tile: -1, sector: 0, zone: -1));
                             break;
-                        case 'S':
+                        case 'S': // start position
                             mapData.PlaneMaps[0].TileSpaces.Add(new TileSpace(tile: -1, sector: 0, zone: -1));
                             mapData.Things.Add(new Thing { X = x, Y = y, Type = Actor.Player1Start.ClassName });
+                            break;
+                        case 'D': // door
+                            mapData.PlaneMaps[0].TileSpaces.Add(new TileSpace(tile: 0, sector: 0, zone: -1));
+                            mapData.Triggers.Add(new Trigger { X = x, Y = y, Action = ActionSpecial.DoorOpen });
+                            break;
+                        case 'P': // pushwall
+                            mapData.PlaneMaps[0].TileSpaces.Add(new TileSpace(tile: 0, sector: 0, zone: -1));
+                            mapData.Triggers.Add(new Trigger { X = x, Y = y, Action = ActionSpecial.PushwallMove });
                             break;
                         default:
                             throw new AssertionException("Unknown character in shorthand map");
