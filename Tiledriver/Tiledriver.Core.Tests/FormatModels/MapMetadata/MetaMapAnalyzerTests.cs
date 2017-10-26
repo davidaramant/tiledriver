@@ -143,6 +143,34 @@ namespace Tiledriver.Core.Tests.FormatModels.MapMetadata
             AssertMapAnalyzedCorrectly(level, expectedOutput);
         }
 
+        [Test]
+        public void ShouldHandleFreeStandingPushwalls()
+        {
+            //    0   1   2   3   4   5   6
+            var level = new[,]
+            {
+                {'#','#','#','#','#','#','#'}, // 0
+                {'#','P',' ',' ',' ','P','#'}, // 1
+                {'#',' ',' ','P',' ',' ','#'}, // 2
+                {'#',' ','P','S','P',' ','#'}, // 3
+                {'#',' ',' ','P',' ',' ','#'}, // 4
+                {'#','P',' ',' ',' ','P','#'}, // 5
+                {'#','#','#','#','#','#','#'}, // 6
+            };
+            var expectedOutput = new[,]
+            {
+                {'~','#','#','#','#','#','~'}, // 0
+                {'#','P',' ',' ',' ','P','#'}, // 1
+                {'#',' ',' ','P',' ',' ','#'}, // 2
+                {'#',' ','P',' ','P',' ','#'}, // 3
+                {'#',' ',' ','P',' ',' ','#'}, // 4
+                {'#','P',' ',' ',' ','P','#'}, // 5
+                {'~','#','#','#','#','#','~'}, // 6
+            };
+            //    0   1   2   3   4   5   6
+            AssertMapAnalyzedCorrectly(level, expectedOutput);
+        }
+
         private static void AssertMapAnalyzedCorrectly(char[,] shortHandMap, char[,] shortHandMetaMap)
         {
             var mapData = ExpandMapFromShorthand(shortHandMap);
