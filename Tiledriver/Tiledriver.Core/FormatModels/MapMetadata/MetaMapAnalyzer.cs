@@ -16,9 +16,14 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
     {
         public static MetaMap Analyze(MapData mapData)
         {
-            var allDoorLocations =
+            var doorLocations =
                 mapData.Triggers
-                    .Where(t => t.Action == ActionSpecial.DoorOpen || t.Action == ActionSpecial.PushwallMove)
+                    .Where(t => t.Action == ActionSpecial.DoorOpen )
+                    .Select(t => new Point(t.X, t.Y))
+                    .ToImmutableHashSet();
+            var pushWallLocations =
+                mapData.Triggers
+                    .Where(t => t.Action == ActionSpecial.PushwallMove)
                     .Select(t => new Point(t.X, t.Y))
                     .ToImmutableHashSet();
 
@@ -30,8 +35,11 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                 if (!tileSpace.HasTile)
                     return TileType.Empty;
 
-                if (allDoorLocations.Contains(p))
+                if (doorLocations.Contains(p))
                     return TileType.Door;
+
+                if (pushWallLocations.Contains(p))
+                    return TileType.PushWall;
 
                 var tile = mapData.Tiles[tileSpace.Tile];
                 var isHoloWall = !tile.BlockingEast && !tile.BlockingNorth && !tile.BlockingWest && !tile.BlockingSouth;
@@ -64,6 +72,12 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                     {
                         spotsToCheck.Enqueue(leftSide.Left());
                     }
+                    else if (type == TileType.PushWall)
+                    {
+                        spotsToCheck.Enqueue(leftSide.Above());
+                        spotsToCheck.Enqueue(leftSide.Left());
+                        spotsToCheck.Enqueue(leftSide.Below());
+                    }
                 }
                 x++;
 
@@ -82,9 +96,13 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                         case TileType.Empty:
                             break;
                         case TileType.Door:
-                            // This can only happen with back-to-back doors/push walls.  
-                            // Who knows which direction that came from, so check them all.
-                            spotsToCheck.AddAllSurrounding(currentSpot);
+                            spotsToCheck.Enqueue(currentSpot.Right());
+                            inEmptySpace = false;
+                            break;
+                        case TileType.PushWall:
+                            spotsToCheck.Enqueue(currentSpot.Above());
+                            spotsToCheck.Enqueue(currentSpot.Right());
+                            spotsToCheck.Enqueue(currentSpot.Below());
                             inEmptySpace = false;
                             break;
                         case TileType.Wall:
@@ -101,6 +119,7 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                         var pointAbove = currentSpot.Above();
                         if (!emptySpanAbove)
                         {
+                            var tileType = GetTileType(pointAbove);
                             switch (GetTileType(pointAbove))
                             {
                                 case TileType.Empty:
@@ -108,8 +127,14 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                                     spotsToCheck.Enqueue(pointAbove);
                                     break;
                                 case TileType.Door:
+                                    metaMap[pointAbove] = tileType;
                                     spotsToCheck.Enqueue(pointAbove.Above());
-                                    metaMap[pointAbove] = TileType.Door;
+                                    break;
+                                case TileType.PushWall:
+                                    spotsToCheck.Enqueue(pointAbove.Left());
+                                    spotsToCheck.Enqueue(pointAbove.Above());
+                                    spotsToCheck.Enqueue(pointAbove.Right());
+                                    metaMap[pointAbove] = tileType;
                                     break;
                                 case TileType.Wall:
                                     metaMap[pointAbove] = TileType.Wall;
@@ -120,13 +145,21 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                         }
                         else
                         {
-                            switch (GetTileType(pointAbove))
+                            var tileType = GetTileType(pointAbove);
+                            switch (tileType)
                             {
                                 case TileType.Empty:
                                     break;
                                 case TileType.Door:
+                                    metaMap[pointAbove] = tileType;
                                     spotsToCheck.Enqueue(pointAbove.Above());
-                                    metaMap[pointAbove] = TileType.Door;
+                                    emptySpanAbove = false;
+                                    break;
+                                case TileType.PushWall:
+                                    spotsToCheck.Enqueue(pointAbove.Left());
+                                    spotsToCheck.Enqueue(pointAbove.Above());
+                                    spotsToCheck.Enqueue(pointAbove.Right());
+                                    metaMap[pointAbove] = tileType;
                                     emptySpanAbove = false;
                                     break;
                                 case TileType.Wall:
@@ -144,7 +177,8 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                         var pointBelow = currentSpot.Below();
                         if (!emptySpanBelow)
                         {
-                            switch (GetTileType(pointBelow))
+                            var tileType = GetTileType(pointBelow);
+                            switch (tileType)
                             {
                                 case TileType.Empty:
                                     emptySpanBelow = true;
@@ -152,7 +186,13 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                                     break;
                                 case TileType.Door:
                                     spotsToCheck.Enqueue(pointBelow.Below());
-                                    metaMap[pointBelow] = TileType.Door;
+                                    metaMap[pointBelow] = tileType;
+                                    break;
+                                case TileType.PushWall:
+                                    spotsToCheck.Enqueue(pointBelow.Left());
+                                    spotsToCheck.Enqueue(pointBelow.Below());
+                                    spotsToCheck.Enqueue(pointBelow.Right());
+                                    metaMap[pointBelow] = tileType;
                                     break;
                                 case TileType.Wall:
                                     metaMap[pointBelow] = TileType.Wall;
@@ -163,13 +203,21 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                         }
                         else
                         {
-                            switch (GetTileType(pointBelow))
+                            var tileType = GetTileType(pointBelow);
+                            switch (tileType)
                             {
                                 case TileType.Empty:
                                     break;
                                 case TileType.Door:
                                     spotsToCheck.Enqueue(pointBelow.Below());
-                                    metaMap[pointBelow] = TileType.Door;
+                                    metaMap[pointBelow] = tileType;
+                                    emptySpanBelow = false;
+                                    break;
+                                case TileType.PushWall:
+                                    spotsToCheck.Enqueue(pointBelow.Left());
+                                    spotsToCheck.Enqueue(pointBelow.Below());
+                                    spotsToCheck.Enqueue(pointBelow.Right());
+                                    metaMap[pointBelow] = tileType;
                                     emptySpanBelow = false;
                                     break;
                                 case TileType.Wall:
@@ -183,16 +231,6 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                     }
 
                     x++;
-                }
-                if (x < mapData.Width)
-                {
-                    var rightSide = new Point(x, spot.Y);
-                    var type = GetTileType(rightSide);
-                    metaMap[rightSide] = type;
-                    if (type == TileType.Door)
-                    {
-                        spotsToCheck.Enqueue(rightSide.Right());
-                    }
                 }
             }
 
