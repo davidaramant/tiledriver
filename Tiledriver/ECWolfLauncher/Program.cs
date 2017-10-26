@@ -44,22 +44,32 @@ namespace TestRunner
             //TranslateAllWolf3DMaps();
             //Flatten();
             //Pk3Test();
-            ConvertMapsToSimpleText(
+            ConvertMapsToSimpleFormat(
                 inputPath: Path.Combine(desktop, "maps"),
-                sparseOutputPath: Path.Combine(desktop, "textmaps-sparse"),
-                solidOutputPath: Path.Combine(desktop, "textmaps-solid"));
-            //ConvertMapsToSimpleImages(
-            //    inputPath: Path.Combine(desktop, "maps"),
-            //    outputDirsWithPalettes: new List<(string path, MapPalette palette)>
-            //    {
-            //        (Path.Combine(desktop,"imagemaps-sparse"), MapPalette.HighlightWalls),
-            //        (Path.Combine(desktop,"imagemaps-solid"), MapPalette.CarveOutRooms),
-            //    });
+                outputDirsWithSaveMethods: new List<(string path, Action<MetaMap, string> saveMethod)>
+                {
+                    (
+                    Path.Combine(desktop,"imagemaps-sparse"),
+                    (metaMap,fileNameWithNoExtension)=>SimpleMapImageExporter.Export(metaMap,MapPalette.HighlightWalls,fileNameWithNoExtension+".png")
+                    ),
+                    (
+                    Path.Combine(desktop,"imagemaps-solid"),
+                    (metaMap,fileNameWithNoExtension)=>SimpleMapImageExporter.Export(metaMap,MapPalette.CarveOutRooms,fileNameWithNoExtension+".png")
+                    ),
+                    (
+                    Path.Combine(desktop,"textmaps-sparse"),
+                    (metaMap,fileNameWithNoExtension)=>SimpleMapTextExporter.Export(metaMap,fileNameWithNoExtension+".txt",unreachableIsSolid:false)
+                    ),
+                    (
+                    Path.Combine(desktop,"textmaps-solid"),
+                    (metaMap,fileNameWithNoExtension)=>SimpleMapTextExporter.Export(metaMap,fileNameWithNoExtension+".txt",unreachableIsSolid:true)
+                    ),
+                });
         }
 
-        private static void ConvertMapsToSimpleImages(string inputPath, List<(string path, MapPalette palette)> outputDirsWithPalettes)
+        private static void ConvertMapsToSimpleFormat(string inputPath, List<(string path, Action<MetaMap, string> saveMethod)> outputDirsWithSaveMethods)
         {
-            foreach (var outputPath in outputDirsWithPalettes.Select(p => p.path))
+            foreach (var outputPath in outputDirsWithSaveMethods.Select(p => p.path))
             {
                 if (Directory.Exists(outputPath))
                 {
@@ -69,51 +79,24 @@ namespace TestRunner
             }
 
             var sa = new UwmfSyntaxAnalyzer();
-            foreach (var uwmfFilePath in Directory.EnumerateFiles(inputPath, "*.uwmf", SearchOption.AllDirectories))
+            var filesToGoThrough = Directory.GetFiles(inputPath, "*.uwmf", SearchOption.AllDirectories);
+            int current = 0;
+            foreach (var uwmfFilePath in filesToGoThrough)
             {
+                current++;
+                Console.WriteLine($"File: {current}/{filesToGoThrough.Length}");
+
                 using (var stream = File.OpenRead(uwmfFilePath))
                 using (var textReader = new StreamReader(stream, Encoding.ASCII))
                 {
                     var mapData = UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader)));
                     var metaMap = MetaMapAnalyzer.Analyze(mapData);
 
-                    foreach (var output in outputDirsWithPalettes)
+                    foreach (var output in outputDirsWithSaveMethods)
                     {
                         var outputFilePath = Path.Combine(output.path, Path.GetFileNameWithoutExtension(uwmfFilePath) + ".png");
-                        SimpleMapImageExporter.Export(metaMap, output.palette, outputFilePath);
+                        output.saveMethod(metaMap, outputFilePath);
                     }
-                }
-            }
-        }
-
-        private static void ConvertMapsToSimpleText(string inputPath, string sparseOutputPath, string solidOutputPath)
-        {
-            if (Directory.Exists(sparseOutputPath))
-            {
-                Directory.Delete(sparseOutputPath, recursive: true);
-            }
-            Directory.CreateDirectory(sparseOutputPath);
-            if (Directory.Exists(solidOutputPath))
-            {
-                Directory.Delete(solidOutputPath, recursive: true);
-            }
-            Directory.CreateDirectory(solidOutputPath);
-
-            var sa = new UwmfSyntaxAnalyzer();
-            foreach (var uwmfFilePath in Directory.EnumerateFiles(inputPath, "*.uwmf", SearchOption.AllDirectories))
-            {
-
-                using (var stream = File.OpenRead(uwmfFilePath))
-                using (var textReader = new StreamReader(stream, Encoding.ASCII))
-                {
-                    var mapData = UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader)));
-                    var metaMap = MetaMapAnalyzer.Analyze(mapData);
-
-                    var sparseOutputFilePath = Path.Combine(sparseOutputPath, Path.GetFileNameWithoutExtension(uwmfFilePath) + ".txt");
-                    SimpleMapTextExporter.Export(metaMap, sparseOutputFilePath, unreachableIsSolid: false);
-
-                    var solidOutputFilePath = Path.Combine(solidOutputPath, Path.GetFileNameWithoutExtension(uwmfFilePath) + ".txt");
-                    SimpleMapTextExporter.Export(metaMap, solidOutputFilePath, unreachableIsSolid: true);
                 }
             }
         }
