@@ -19,6 +19,7 @@ namespace Tiledriver.Core.FormatModels.SimpleMapText
                     case TileType.Wall:
                         return "█";
                     case TileType.Door:
+                    case TileType.PushWall:
                         return "□";
                     case TileType.Unreachable:
                         return unreachableIsSolid ? "█" : " ";

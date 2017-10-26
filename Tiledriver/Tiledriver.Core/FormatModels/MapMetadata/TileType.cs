@@ -8,6 +8,7 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
         Unreachable,
         Empty,
         Wall,
+        PushWall,
         Door,
     }
 }
