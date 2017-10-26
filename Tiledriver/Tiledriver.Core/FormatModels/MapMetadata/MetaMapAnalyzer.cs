@@ -58,6 +58,7 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                 if (!bounds.Contains(spot) || metaMap[spot] != TileType.Unreachable)
                     continue;
 
+                bool shouldStop = false;
                 int x = spot.X;
                 while (x >= 0 && !GetSpace(x, spot.Y).HasTile)
                 {
@@ -68,24 +69,36 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                     var leftSide = new Point(x, spot.Y);
                     var type = GetTileType(leftSide);
                     metaMap[leftSide] = type;
-                    if (type == TileType.Door)
+                    switch (type)
                     {
-                        // Doors can be stacked - keep going!
-                        var left = leftSide.Left();
-                        while (GetTileType(left) == TileType.Door)
-                        {
-                            metaMap[left] = TileType.Door;
-                            left = left.Left();
-                        }
-                        spotsToCheck.Enqueue(left);
-                    }
-                    else if (type == TileType.PushWall)
-                    {
-                        spotsToCheck.Enqueue(leftSide.Above());
-                        spotsToCheck.Enqueue(leftSide.Left());
-                        spotsToCheck.Enqueue(leftSide.Below());
+                        case TileType.Door:
+                            // Doors can be stacked - keep going!
+                            var left = leftSide.Left();
+                            while (GetTileType(left) == TileType.Door)
+                            {
+                                metaMap[left] = TileType.Door;
+                                left = left.Left();
+                            }
+                            spotsToCheck.Enqueue(left);
+                            break;
+                        case TileType.PushWall:
+                            spotsToCheck.Enqueue(leftSide.Above());
+                            spotsToCheck.Enqueue(leftSide.Left());
+                            spotsToCheck.Enqueue(leftSide.Below());
+                            break;
+                        case TileType.Empty:
+                            break;
+                        case TileType.Wall:
+                            if (x == spot.X)
+                            {
+                                metaMap[spot] = TileType.Wall;
+                                shouldStop = true;
+                            }
+                            break;
                     }
                 }
+                if( shouldStop)
+                    continue;
                 x++;
 
                 bool emptySpanAbove = false;

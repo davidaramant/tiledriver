@@ -2,6 +2,8 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Tiledriver.Core.FormatModels.MapMetadata;
 using Tiledriver.Core.FormatModels.Uwmf;
@@ -70,17 +72,66 @@ namespace Tiledriver.Core.Tests.FormatModels.MapMetadata
             AssertMapAnalyzedCorrectly(level, expectedOutput);
         }
 
+        [Test]
+        public void ShouldHandleStackedPushwalls()
+        {
+            //    0   1   2   3   4   5   6   7   8   9   0
+            var level = new[,]
+            {
+                {'#','#','#','#','#','#','#','#','#','#','#'}, // 0
+                {'#','#','#','#','#',' ','#','#','#','#','#'}, // 1
+                {'#','#','#','#','#','P','#','#','#','#','#'}, // 2
+                {'#','#','#','#','#','P','#','#','#','#','#'}, // 3
+                {'#','#','#','#','#',' ','#','#','#','#','#'}, // 4
+                {'#',' ','P','P',' ','S',' ','P','P',' ','#'}, // 5
+                {'#','#','#','#','#',' ','#','#','#','#','#'}, // 6
+                {'#','#','#','#','#','P','#','#','#','#','#'}, // 7
+                {'#','#','#','#','#','P','#','#','#','#','#'}, // 8
+                {'#','#','#','#','#',' ','#','#','#','#','#'}, // 9
+                {'#','#','#','#','#','#','#','#','#','#','#'}, // 0
+            };
+            var expectedOutput = new[,]
+            {
+                {'~','~','~','~','~','#','~','~','~','~','~'}, // 0
+                {'~','~','~','~','#',' ','#','~','~','~','~'}, // 1
+                {'~','~','~','~','#','P','#','~','~','~','~'}, // 2
+                {'~','~','~','~','#','P','#','~','~','~','~'}, // 3
+                {'~','#','#','#','#',' ','#','#','#','#','~'}, // 4
+                {'#',' ','P','P',' ',' ',' ','P','P',' ','#'}, // 5
+                {'~','#','#','#','#',' ','#','#','#','#','~'}, // 6
+                {'~','~','~','~','#','P','#','~','~','~','~'}, // 7
+                {'~','~','~','~','#','P','#','~','~','~','~'}, // 8
+                {'~','~','~','~','#',' ','#','~','~','~','~'}, // 9
+                {'~','~','~','~','~','#','~','~','~','~','~'}, // 0
+            };
+            //    0   1   2   3   4   5   6   7   8   9   0
+            AssertMapAnalyzedCorrectly(level, expectedOutput);
+        }
+
         private static void AssertMapAnalyzedCorrectly(char[,] shortHandMap, char[,] shortHandMetaMap)
         {
             var mapData = ExpandMapFromShorthand(shortHandMap);
             var metaMap = MetaMapAnalyzer.Analyze(mapData);
 
+            var failures = new List<string>();
+
             for (int y = 0; y < mapData.Height; y++)
             {
                 for (int x = 0; x < mapData.Width; x++)
                 {
-                    Assert.That(metaMap[x, y], Is.EqualTo(ExpandTile(shortHandMetaMap[y, x])), $"Unexpected tile type at ({x},{y})");
+                    var actual = metaMap[x, y];
+                    var expected = ExpandTile(shortHandMetaMap[y, x]);
+                    if (actual != expected)
+                    {
+                        failures.Add($"({x},{y}): Expected {expected}, got {actual}");
+                    }
                 }
+            }
+
+            if (failures.Any())
+            {
+                Assert.Fail(
+                    string.Join("\n", failures));
             }
         }
 
