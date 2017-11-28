@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using AutoMapper;
+using Functional.Maybe;
 using Moq;
 using Tiledriver.Core.FormatModels;
 using Tiledriver.Core.FormatModels.Common;
@@ -38,33 +39,50 @@ namespace TestRunner
     {
         static void Main(string[] args)
         {
-            var desktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+            try
+            {
+                var desktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 
-            //LoadMapInEcWolf(DemoMap.Create(), Path.GetFullPath("demo.wad"));
-            //TranslateAllWolf3DMaps();
-            //Flatten();
-            //Pk3Test();
-            ConvertMapsToSimpleFormat(
-                inputPath: Path.Combine(desktop, "maps"),
-                outputDirsWithSaveMethods: new List<(string path, Action<MetaMap, string> saveMethod)>
-                {
-                    (
-                    Path.Combine(desktop,"imagemaps-sparse"),
-                    (metaMap,fileNameWithNoExtension)=>SimpleMapImageExporter.Export(metaMap,MapPalette.HighlightWalls,fileNameWithNoExtension+".png")
-                    ),
-                    (
-                    Path.Combine(desktop,"imagemaps-solid"),
-                    (metaMap,fileNameWithNoExtension)=>SimpleMapImageExporter.Export(metaMap,MapPalette.CarveOutRooms,fileNameWithNoExtension+".png")
-                    ),
-                    (
-                    Path.Combine(desktop,"textmaps-sparse"),
-                    (metaMap,fileNameWithNoExtension)=>SimpleMapTextExporter.Export(metaMap,fileNameWithNoExtension+".txt",unreachableIsSolid:false)
-                    ),
-                    (
-                    Path.Combine(desktop,"textmaps-solid"),
-                    (metaMap,fileNameWithNoExtension)=>SimpleMapTextExporter.Export(metaMap,fileNameWithNoExtension+".txt",unreachableIsSolid:true)
-                    ),
-                });
+                BatchConvertGameMaps(
+                    baseInputPath: @"C:\Users\david\Desktop\Wolf3D Maps\Wolf3D User Maps\oldschool",
+                    outputPath: @"C:\Users\david\Desktop\Wolf3D Maps\Wolf3D User Maps\oldschool - converted");
+
+                //ExportMapsFromPk3(
+                //    pk3Path: @"C:\Users\david\Desktop\Wolf3D Maps\Wolf3D User Maps\astrostein_spiff.pk3",
+                //    outputBasePath: @"C:\Users\david\Desktop\Wolf3D Maps\Wolf3D User Maps");
+
+                //LoadMapInEcWolf(DemoMap.Create(), Path.GetFullPath("demo.wad"));
+                //TranslateGameMapsFormat();
+                //Flatten();
+                //Pk3Test();
+                //ConvertMapsToSimpleFormat(
+                //    inputPath: Path.Combine(desktop, "maps"),
+                //    outputDirsWithSaveMethods: new List<(string path, Action<MetaMap, string> saveMethod)>
+                //    {
+                //        (
+                //        Path.Combine(desktop,"imagemaps-sparse"),
+                //        (metaMap,fileNameWithNoExtension)=>SimpleMapImageExporter.Export(metaMap,MapPalette.HighlightWalls,fileNameWithNoExtension+".png")
+                //        ),
+                //        (
+                //        Path.Combine(desktop,"imagemaps-solid"),
+                //        (metaMap,fileNameWithNoExtension)=>SimpleMapImageExporter.Export(metaMap,MapPalette.CarveOutRooms,fileNameWithNoExtension+".png")
+                //        ),
+                //        (
+                //        Path.Combine(desktop,"textmaps-sparse"),
+                //        (metaMap,fileNameWithNoExtension)=>SimpleMapTextExporter.Export(metaMap,fileNameWithNoExtension+".txt",unreachableIsSolid:false)
+                //        ),
+                //        (
+                //        Path.Combine(desktop,"textmaps-solid"),
+                //        (metaMap,fileNameWithNoExtension)=>SimpleMapTextExporter.Export(metaMap,fileNameWithNoExtension+".txt",unreachableIsSolid:true)
+                //        ),
+                //    });
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Console.ReadLine();
+            }
         }
 
         private static void ConvertMapsToSimpleFormat(string inputPath, List<(string path, Action<MetaMap, string> saveMethod)> outputDirsWithSaveMethods)
@@ -130,7 +148,7 @@ namespace TestRunner
                 resources.AddProvider(basePk3);
                 resources.AddProvider(pk3);
 
-                var mapInfos = LoadMapInfo(resources);
+                var mapInfos = LoadMapInfo(resources, mapInfoStream: resources.TryLookup("MAPINFO.txt").Or(() => resources.TryLookup("MAPINFO")).Value);
                 var xlat = LoadXlat(resources, resources.Lookup(mapInfos.GameInfo.Value.Translator.Value));
                 var translator = new BinaryMapTranslator(translatorInfo: xlat, autoMapper: autoMapper);
 
@@ -180,10 +198,10 @@ namespace TestRunner
             }
         }
 
-        private static MapInfo LoadMapInfo(IResourceProvider provider)
+        private static MapInfo LoadMapInfo(IResourceProvider provider, Stream mapInfoStream)
         {
-            using (var stream = provider.Lookup("MAPINFO.txt"))
-            using (var textReader = new StreamReader(stream, Encoding.ASCII))
+            using (mapInfoStream)
+            using (var textReader = new StreamReader(mapInfoStream, Encoding.ASCII))
             {
                 var lexer = new MapInfoLexer(provider);
                 var elements = lexer.Analyze(textReader).ToArray();
@@ -293,8 +311,54 @@ namespace TestRunner
 
         private static void TranslateAllWolf3DMaps()
         {
-            var mapInfos = LoadMapInfo();
-            var xlat = LoadXlat();
+            var paths = SteamGameSearcher.GetGamePaths();
+
+            var basePath = Path.Combine(paths.Wolf3D.Value, "base");
+            var mapHeadPath = Path.Combine(basePath, "MAPHEAD.WL6");
+            var gameMapsPath = Path.Combine(basePath, "GAMEMAPS.WL6");
+
+            if (Directory.Exists("Wolf3D Maps"))
+            {
+                Directory.Delete("Wolf3D Maps", recursive: true);
+            }
+
+            TranslateGameMapsFormat(
+                mapHeadPath,
+                gameMapsPath,
+                outputPath: "Wolf3D Maps",
+                levelSetName: "Wolf3D");
+        }
+
+        private static void BatchConvertGameMaps(
+            string baseInputPath,
+            string outputPath)
+        {
+            if (Directory.Exists(outputPath))
+            {
+                Directory.Delete(outputPath, recursive: true);
+            }
+            Directory.CreateDirectory(outputPath);
+
+            foreach (var levelSetDir in Directory.GetDirectories(baseInputPath))
+            {
+                var levelSetName = Path.GetFileName(levelSetDir);
+                Console.WriteLine(levelSetName);
+
+                TranslateGameMapsFormat(
+                    mapHeadPath: Directory.EnumerateFiles(levelSetDir, "MAPHEAD.*").Single(),
+                    gameMapsPath: Directory.EnumerateFiles(levelSetDir, "GAMEMAPS.*").Single(),
+                    outputPath: outputPath,
+                    levelSetName: levelSetName);
+            }
+        }
+
+        private static void TranslateGameMapsFormat(
+            string mapHeadPath,
+            string gameMapsPath,
+            string outputPath,
+            string levelSetName)
+        {
+            var ecWolfPk3Path = Path.ChangeExtension(GetECWolfExePath(), "pk3");
 
             var autoMapperConfig = new MapperConfiguration(cfg =>
             {
@@ -304,82 +368,36 @@ namespace TestRunner
             });
 
             var autoMapper = autoMapperConfig.CreateMapper();
-            var translator = new BinaryMapTranslator(translatorInfo: xlat, autoMapper: autoMapper);
 
-            var paths = SteamGameSearcher.GetGamePaths();
-
-            var basePath = Path.Combine(paths.Wolf3D.Value, "base");
-            var mapHeadPath = Path.Combine(basePath, "MAPHEAD.WL6");
-            var gameMapsPath = Path.Combine(basePath, "GAMEMAPS.WL6");
-
-            var outputPath = "Translated";
-
-            if (Directory.Exists(outputPath))
+            using (var resources = Pk3File.Open(ecWolfPk3Path))
             {
-                Directory.Delete(outputPath, recursive: true);
-            }
+                var mapInfos = LoadMapInfo(resources, mapInfoStream: resources.Lookup("mapinfo/wolf3d.txt"));
+                var xlat = LoadXlat(resources, resources.Lookup(mapInfos.GameInfo.Value.Translator.Value));
+                var translator = new BinaryMapTranslator(translatorInfo: xlat, autoMapper: autoMapper);
 
-            using (var headerStream = File.OpenRead(mapHeadPath))
-            using (var mapsStream = File.OpenRead(gameMapsPath))
-            {
-                var gameMaps = GameMapsBundle.Load(headerStream, mapsStream);
-                for (int mapIndex = 0; mapIndex < mapInfos.Maps.Count; mapIndex++)
+                using (var headerStream = File.OpenRead(mapHeadPath))
+                using (var mapsStream = File.OpenRead(gameMapsPath))
                 {
-                    var bMap = gameMaps.LoadMap(mapIndex, mapsStream);
-
-                    var uwmfMap = translator.Translate(bMap, mapInfos.Maps[mapIndex]);
-
-                    using (var outStream = File.OpenWrite(Path.Combine(outputPath, $"Wolf3D {mapIndex + 1:00} - {uwmfMap.Name}.uwmf")))
+                    var gameMaps = GameMapsBundle.Load(headerStream, mapsStream);
+                    for (int mapIndex = 0; mapIndex < mapInfos.Maps.Count; mapIndex++)
                     {
-                        uwmfMap.WriteTo(outStream);
+                        var bMap = gameMaps.LoadMap(mapIndex, mapsStream);
+
+                        var uwmfMap = translator.Translate(bMap, mapInfos.Maps[mapIndex]);
+
+                        var fileName = $"{levelSetName} {mapIndex + 1:00} - {uwmfMap.Name}.uwmf";
+
+                        foreach (char c in Path.GetInvalidFileNameChars())
+                        {
+                            fileName = fileName.Replace(c.ToString(), "");
+                        }
+                        
+                        using (var outStream = File.OpenWrite(Path.Combine(outputPath, fileName)))
+                        {
+                            uwmfMap.WriteTo(outStream);
+                        }
                     }
                 }
-            }
-        }
-
-        private static BinaryMap LoadBinaryMap()
-        {
-            var paths = SteamGameSearcher.GetGamePaths();
-
-            var basePath = Path.Combine(paths.Wolf3D.Value, "base");
-            var mapHeadPath = Path.Combine(basePath, "MAPHEAD.WL6");
-            var gameMapsPath = Path.Combine(basePath, "GAMEMAPS.WL6");
-
-            using (var headerStream = File.OpenRead(mapHeadPath))
-            using (var mapsStream = File.OpenRead(gameMapsPath))
-            {
-                var gameMaps = GameMapsBundle.Load(headerStream, mapsStream);
-
-                return gameMaps.LoadMap(0, mapsStream);
-            }
-        }
-
-        private static MapTranslatorInfo LoadXlat()
-        {
-            using (var stream = File.OpenRead(Path.Combine("..", "..", "..", "Tiledriver.Core.Tests", "FormatModels", "Xlat", "Parsing", "wolf3d.txt")))
-            using (var textReader = new StreamReader(stream, Encoding.ASCII))
-            {
-                var lexer = new XlatLexer(textReader);
-                var syntaxAnalzer = new XlatSyntaxAnalyzer(Mock.Of<IResourceProvider>());
-                var result = syntaxAnalzer.Analyze(lexer);
-                return XlatParser.Parse(result);
-            }
-        }
-
-        private static MapInfo LoadMapInfo()
-        {
-            var mockProvider = new Mock<IResourceProvider>();
-            mockProvider.Setup(_ => _.Lookup("mapinfo/wolfcommon.txt"))
-                .Returns(File.OpenRead(
-                        Path.Combine("..", "..", "..", "Tiledriver.Core.Tests", "FormatModels", "MapInfos",
-                        "Parsing", "wolfcommon.txt")));
-
-            using (var stream = File.OpenRead(Path.Combine("..", "..", "..", "Tiledriver.Core.Tests", "FormatModels", "MapInfos", "Parsing", "wolf3d.txt")))
-            using (var textReader = new StreamReader(stream, Encoding.ASCII))
-            {
-                var lexer = new MapInfoLexer(mockProvider.Object);
-                var elements = lexer.Analyze(textReader).ToArray();
-                return MapInfoParser.Parse(elements);
             }
         }
 
