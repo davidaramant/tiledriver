@@ -44,7 +44,7 @@ namespace TestRunner
                 var desktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 
                 BatchConvertGameMaps(
-                    baseInputPath: @"C:\Users\david\Desktop\Wolf3D Maps\Wolf3D User Maps\oldschool",
+                    baseInputPath: @"C:\Users\david\Desktop\Wolf3D Maps\Wolf3D User Maps\oldschoolsw",
                     outputPath: @"C:\Users\david\Desktop\Wolf3D Maps\Wolf3D User Maps\oldschool - converted");
 
                 //ExportMapsFromPk3(
@@ -344,12 +344,21 @@ namespace TestRunner
                 var levelSetName = Path.GetFileName(levelSetDir);
                 Console.WriteLine(levelSetName);
 
-                TranslateGameMapsFormat(
-                    mapHeadPath: Directory.EnumerateFiles(levelSetDir, "MAPHEAD.*").Single(),
-                    gameMapsPath: Directory.EnumerateFiles(levelSetDir, "GAMEMAPS.*").Single(),
-                    outputPath: outputPath,
-                    levelSetName: levelSetName);
+                try
+                {
+                    TranslateGameMapsFormat(
+                        mapHeadPath: Directory.EnumerateFiles(levelSetDir, "MAPHEAD.*").Single(),
+                        gameMapsPath: Directory.EnumerateFiles(levelSetDir, "GAMEMAPS.*").Single(),
+                        outputPath: outputPath,
+                        levelSetName: levelSetName);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("FAILED:\n" + e);
+                }
             }
+            Console.WriteLine("Done!");
+            Console.ReadKey();
         }
 
         private static void TranslateGameMapsFormat(
@@ -379,7 +388,7 @@ namespace TestRunner
                 using (var mapsStream = File.OpenRead(gameMapsPath))
                 {
                     var gameMaps = GameMapsBundle.Load(headerStream, mapsStream);
-                    for (int mapIndex = 0; mapIndex < mapInfos.Maps.Count; mapIndex++)
+                    for (int mapIndex = 0; mapIndex < gameMaps.Maps.Length; mapIndex++)
                     {
                         var bMap = gameMaps.LoadMap(mapIndex, mapsStream);
 
@@ -391,7 +400,7 @@ namespace TestRunner
                         {
                             fileName = fileName.Replace(c.ToString(), "");
                         }
-                        
+
                         using (var outStream = File.OpenWrite(Path.Combine(outputPath, fileName)))
                         {
                             uwmfMap.WriteTo(outStream);
