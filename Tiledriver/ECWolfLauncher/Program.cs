@@ -44,7 +44,7 @@ namespace TestRunner
                 var desktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 
                 BatchConvertGameMaps(
-                    baseInputPath: @"C:\Users\david\Desktop\Wolf3D Maps\Wolf3D User Maps\oldschoolsw",
+                    baseInputPath: @"C:\Users\david\Desktop\Wolf3D Maps\Wolf3D User Maps\oldschoolspear",
                     outputPath: @"C:\Users\david\Desktop\Wolf3D Maps\Wolf3D User Maps\oldschool - converted");
 
                 //ExportMapsFromPk3(
@@ -339,26 +339,85 @@ namespace TestRunner
             }
             Directory.CreateDirectory(outputPath);
 
-            foreach (var levelSetDir in Directory.GetDirectories(baseInputPath))
-            {
-                var levelSetName = Path.GetFileName(levelSetDir);
-                Console.WriteLine(levelSetName);
+                string FindPathOf(string path, string name) =>
+                    Directory.EnumerateFiles(path, name + ".*", SearchOption.AllDirectories).
+                    Single(f => Path.GetExtension(f).ToLowerInvariant() != "bak");
 
-                try
+            TranslateGameMapsFormat(
+                Directory.GetDirectories(baseInputPath).Select(levelSetDir =>
                 {
-                    TranslateGameMapsFormat(
-                        mapHeadPath: Directory.EnumerateFiles(levelSetDir, "MAPHEAD.*").Single(),
-                        gameMapsPath: Directory.EnumerateFiles(levelSetDir, "GAMEMAPS.*").Single(),
-                        outputPath: outputPath,
-                        levelSetName: levelSetName);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("FAILED:\n" + e);
-                }
-            }
+                    var name = Path.GetFileName(levelSetDir);
+                    var mapHeadPath = FindPathOf(levelSetDir,"MAPHEAD");
+                    var gameMapsPath = FindPathOf(levelSetDir,"GAMEMAPS");
+
+                    return (mapHeadPath, gameMapsPath, name);
+                }),
+                outputPath);
+
             Console.WriteLine("Done!");
             Console.ReadKey();
+        }
+
+        private static void TranslateGameMapsFormat(
+            IEnumerable<(
+            string mapHeadPath,
+            string gameMapsPath,
+            string name)> levelSets,
+            string outputPath)
+        {
+            var ecWolfPk3Path = Path.ChangeExtension(GetECWolfExePath(), "pk3");
+
+            var autoMapperConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<TriggerTemplate, Trigger>();
+                cfg.CreateMap<ZoneTemplate, Zone>();
+                cfg.CreateMap<TileTemplate, Tile>();
+            });
+
+            var autoMapper = autoMapperConfig.CreateMapper();
+
+            using (var resources = Pk3File.Open(ecWolfPk3Path))
+            {
+                var mapInfos = LoadMapInfo(resources, mapInfoStream: resources.Lookup("mapinfo/spear.txt"));
+                var xlat = LoadXlat(resources, resources.Lookup(mapInfos.GameInfo.Value.Translator.Value));
+                var translator = new BinaryMapTranslator(translatorInfo: xlat, autoMapper: autoMapper);
+
+                foreach (var levelSet in levelSets)
+                {
+                    Console.WriteLine(levelSet);
+                    try
+                    {
+                        using (var headerStream = File.OpenRead(levelSet.mapHeadPath))
+                        using (var mapsStream = File.OpenRead(levelSet.gameMapsPath))
+                        {
+                            var gameMaps = GameMapsBundle.Load(headerStream, mapsStream);
+                            for (int mapIndex = 0; mapIndex < gameMaps.Maps.Length; mapIndex++)
+                            {
+                                var bMap = gameMaps.LoadMap(mapIndex, mapsStream);
+
+                                var uwmfMap = translator.Translate(bMap, mapInfos.Maps[mapIndex]);
+
+                                var fileName = $"{levelSet.name} {mapIndex + 1:00} - {uwmfMap.Name}.uwmf";
+
+                                foreach (char c in Path.GetInvalidFileNameChars())
+                                {
+                                    fileName = fileName.Replace(c.ToString(), "");
+                                }
+
+                                using (var outStream = File.OpenWrite(Path.Combine(outputPath, fileName)))
+                                {
+                                    uwmfMap.WriteTo(outStream);
+                                }
+                            }
+                        }
+
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"\n\t{levelSet.name} FAILED:\n\t" + e + "\n");
+                    }
+                }
+            }
         }
 
         private static void TranslateGameMapsFormat(
@@ -380,7 +439,7 @@ namespace TestRunner
 
             using (var resources = Pk3File.Open(ecWolfPk3Path))
             {
-                var mapInfos = LoadMapInfo(resources, mapInfoStream: resources.Lookup("mapinfo/wolf3d.txt"));
+                var mapInfos = LoadMapInfo(resources, mapInfoStream: resources.Lookup("mapinfo/spear.txt"));
                 var xlat = LoadXlat(resources, resources.Lookup(mapInfos.GameInfo.Value.Translator.Value));
                 var translator = new BinaryMapTranslator(translatorInfo: xlat, autoMapper: autoMapper);
 
