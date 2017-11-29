@@ -319,10 +319,16 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                         textScreen = textScreen.WithTexts( ParseStringImmutableList(property, "TextScreen text") );
                         break;
                     case "textalignment":
-                        textScreen = textScreen.WithTextAlignment( ParseString(property, "TextScreen textalignment") );
+                        textScreen = textScreen.WithTextAlignment( ParseIdentifier(property, "TextScreen textalignment") );
+                        break;
+                    case "textanchor":
+                        textScreen = textScreen.WithTextAnchor( ParseIdentifier(property, "TextScreen textanchor") );
                         break;
                     case "textcolor":
                         textScreen = textScreen.WithTextColor( ParseString(property, "TextScreen textcolor") );
+                        break;
+                    case "textdelay":
+                        textScreen = textScreen.WithTextDelay( ParseDouble(property, "TextScreen textdelay") );
                         break;
                     case "textspeed":
                         textScreen = textScreen.WithTextSpeed( ParseInteger(property, "TextScreen textspeed") );
@@ -394,7 +400,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                         defaultMap = defaultMap.WithEnsureInventories( ParseStringImmutableList(property, "DefaultMap ensureinventory") );
                         break;
                     case "exitfade":
-                        defaultMap = defaultMap.WithExitFade( ParseInteger(property, "DefaultMap exitfade") );
+                        defaultMap = defaultMap.WithExitFade( ParseExitFadeInfo(property, "DefaultMap exitfade") );
                         break;
                     case "floornumber":
                         defaultMap = defaultMap.WithFloorNumber( ParseInteger(property, "DefaultMap floornumber") );
@@ -475,7 +481,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                         addDefaultMap = addDefaultMap.WithEnsureInventories( ParseStringImmutableList(property, "AddDefaultMap ensureinventory") );
                         break;
                     case "exitfade":
-                        addDefaultMap = addDefaultMap.WithExitFade( ParseInteger(property, "AddDefaultMap exitfade") );
+                        addDefaultMap = addDefaultMap.WithExitFade( ParseExitFadeInfo(property, "AddDefaultMap exitfade") );
                         break;
                     case "floornumber":
                         addDefaultMap = addDefaultMap.WithFloorNumber( ParseInteger(property, "AddDefaultMap floornumber") );
@@ -556,7 +562,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                         map = map.WithEnsureInventories( ParseStringImmutableList(property, "Map ensureinventory") );
                         break;
                     case "exitfade":
-                        map = map.WithExitFade( ParseInteger(property, "Map exitfade") );
+                        map = map.WithExitFade( ParseExitFadeInfo(property, "Map exitfade") );
                         break;
                     case "floornumber":
                         map = map.WithFloorNumber( ParseInteger(property, "Map floornumber") );

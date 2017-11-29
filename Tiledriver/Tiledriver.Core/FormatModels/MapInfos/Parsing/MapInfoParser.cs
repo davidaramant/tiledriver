@@ -163,8 +163,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
 
         private static int ParseInteger(string s, string context)
         {
-            int result;
-            if (!int.TryParse(s, NumberStyles.None, CultureInfo.InvariantCulture, out result))
+            if (!int.TryParse(s, NumberStyles.None, CultureInfo.InvariantCulture, out var result))
             {
                 throw new ParsingException($"{context} was not an integer: " + s);
             }
@@ -178,6 +177,15 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             property.AssertValuesLength(1, context);
 
             return ParseInteger(property.Values[0], context);
+        }
+
+        private static double ParseDouble(string s, string context)
+        {
+            if (!double.TryParse(s, NumberStyles.None, CultureInfo.InvariantCulture, out var result))
+            {
+                throw new ParsingException($"{context} was not an integer: " + s);
+            }
+            return result;
         }
 
         private static double ParseDouble(IMapInfoElement element, string context)
@@ -384,8 +392,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
 
             var v = property.Values[0];
 
-            double time = 0;
-            if (double.TryParse(v, out time))
+            if (double.TryParse(v, out var time))
             {
                 return IntermissionTime.Default.WithTime(time);
             }
@@ -423,6 +430,22 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
                 default:
                     throw new ParsingException($"Unexpected number of values for {context}: {v.Length}");
             }
+        }
+
+        public static ExitFadeInfo ParseExitFadeInfo(IMapInfoElement element, string context)
+        {
+            var property = element.AssertAsProperty(context);
+
+            var v = property.Values;
+
+            if (v.Length != 2)
+            {
+                throw new ParsingException($"Unexpected number of values for {context}: {v.Length}");
+            }
+
+            return new ExitFadeInfo(
+                color: ParseQuotedStringWithMinLength(v[0], 1, context).ToMaybe(), 
+                time: ParseDouble(v[1], context).ToMaybe());            
         }
 
         public static SpecialAction ParseSpecialAction(IMapInfoElement element, string context)

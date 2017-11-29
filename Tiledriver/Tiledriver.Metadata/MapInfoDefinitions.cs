@@ -279,8 +279,10 @@ namespace Tiledriver.Metadata
                     {
                         new Property(formatName: "text", name: "Texts", singularName: "Text",
                             type: PropertyType.ImmutableList, collectionType: "string"),
-                        new Property(formatName: "textalignment", name: "textAlignment", type: PropertyType.String),
+                        new Property(formatName: "textalignment", name: "textAlignment", type: PropertyType.Identifier),
+                        new Property(formatName: "textanchor", name: "textAnchor", type: PropertyType.Identifier),
                         new Property(formatName: "textcolor", name: "textColor", type: PropertyType.String),
+                        new Property(formatName: "textdelay", name: "textDelay", type: PropertyType.Double), 
                         new Property(formatName: "textspeed", name: "textSpeed", type: PropertyType.Integer),
                         new Property("position", type: PropertyType.Block, collectionType: "TextScreenPosition"),
                     });
@@ -323,7 +325,7 @@ namespace Tiledriver.Metadata
                         new Property(formatName: "defaultfloor", name: "defaultFloor", type: PropertyType.String),
                         new Property(formatName: "ensureinventory", name: "EnsureInventories",
                             singularName: "EnsureInventory", type: PropertyType.ImmutableList, collectionType: "string"),
-                        new Property(formatName: "exitfade", name: "exitFade", type: PropertyType.Integer),
+                        new Property(formatName: "exitfade", name: "exitFade", type: PropertyType.Block, collectionType:"ExitFadeInfo"),
                         new Property(formatName: "floornumber", name: "floorNumber", type: PropertyType.Integer),
                         new Property(formatName: "highscoresgraphic", name: "highScoresGraphic",
                             type: PropertyType.String),
@@ -365,6 +367,14 @@ namespace Tiledriver.Metadata
                         new Property("Name", PropertyType.String),
                         new Property("EndSequence", PropertyType.Boolean, defaultValue: false),
                     });
+
+            yield return new Block("ExitFadeInfo",
+                parsing: Parsing.Manual,
+                properties: new[]
+                {
+                    new Property("Color", PropertyType.String),
+                    new Property("Time", PropertyType.Double),
+                });
 
             yield return new Block("specialaction", className: "SpecialAction",
                     parsing: Parsing.Manual,

@@ -3568,7 +3568,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
     {
         public ImmutableList<string> Texts { get; } = ImmutableList<string>.Empty;
         public Maybe<string> TextAlignment { get; } = Maybe<string>.Nothing;
+        public Maybe<string> TextAnchor { get; } = Maybe<string>.Nothing;
         public Maybe<string> TextColor { get; } = Maybe<string>.Nothing;
+        public Maybe<double> TextDelay { get; } = Maybe<double>.Nothing;
         public Maybe<int> TextSpeed { get; } = Maybe<int>.Nothing;
         public Maybe<TextScreenPosition> Position { get; } = Maybe<TextScreenPosition>.Nothing;
         public static TextScreen Default = new TextScreen();
@@ -3580,7 +3582,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             Maybe<IntermissionTime> time,
             IEnumerable<string> texts,
             Maybe<string> textAlignment,
+            Maybe<string> textAnchor,
             Maybe<string> textColor,
+            Maybe<double> textDelay,
             Maybe<int> textSpeed,
             Maybe<TextScreenPosition> position)
             : base(
@@ -3591,7 +3595,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         {
             Texts = texts.ToImmutableList();
             TextAlignment = textAlignment;
+            TextAnchor = textAnchor;
             TextColor = textColor;
+            TextDelay = textDelay;
             TextSpeed = textSpeed;
             Position = position;
         }
@@ -3604,7 +3610,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 time: Time,
                 texts: Texts,
                 textAlignment: TextAlignment,
+                textAnchor: TextAnchor,
                 textColor: TextColor,
+                textDelay: TextDelay,
                 textSpeed: TextSpeed,
                 position: Position);
         }
@@ -3617,7 +3625,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 time: Time,
                 texts: Texts,
                 textAlignment: TextAlignment,
+                textAnchor: TextAnchor,
                 textColor: TextColor,
+                textDelay: TextDelay,
                 textSpeed: TextSpeed,
                 position: Position);
         }
@@ -3630,7 +3640,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 time: Time,
                 texts: Texts,
                 textAlignment: TextAlignment,
+                textAnchor: TextAnchor,
                 textColor: TextColor,
+                textDelay: TextDelay,
                 textSpeed: TextSpeed,
                 position: Position);
         }
@@ -3643,7 +3655,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 time: time.ToMaybe(),
                 texts: Texts,
                 textAlignment: TextAlignment,
+                textAnchor: TextAnchor,
                 textColor: TextColor,
+                textDelay: TextDelay,
                 textSpeed: TextSpeed,
                 position: Position);
         }
@@ -3656,7 +3670,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 time: Time,
                 texts: texts,
                 textAlignment: TextAlignment,
+                textAnchor: TextAnchor,
                 textColor: TextColor,
+                textDelay: TextDelay,
                 textSpeed: TextSpeed,
                 position: Position);
         }
@@ -3669,7 +3685,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 time: Time,
                 texts: Texts.Add(text),
                 textAlignment: TextAlignment,
+                textAnchor: TextAnchor,
                 textColor: TextColor,
+                textDelay: TextDelay,
                 textSpeed: TextSpeed,
                 position: Position);
         }
@@ -3682,7 +3700,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 time: Time,
                 texts: Texts,
                 textAlignment: textAlignment.ToMaybe(),
+                textAnchor: TextAnchor,
                 textColor: TextColor,
+                textDelay: TextDelay,
+                textSpeed: TextSpeed,
+                position: Position);
+        }
+        public TextScreen WithTextAnchor( string textAnchor )
+        {
+            return new TextScreen(
+                background: Background,
+                draw: Draw,
+                music: Music,
+                time: Time,
+                texts: Texts,
+                textAlignment: TextAlignment,
+                textAnchor: textAnchor.ToMaybe(),
+                textColor: TextColor,
+                textDelay: TextDelay,
                 textSpeed: TextSpeed,
                 position: Position);
         }
@@ -3695,7 +3730,24 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 time: Time,
                 texts: Texts,
                 textAlignment: TextAlignment,
+                textAnchor: TextAnchor,
                 textColor: textColor.ToMaybe(),
+                textDelay: TextDelay,
+                textSpeed: TextSpeed,
+                position: Position);
+        }
+        public TextScreen WithTextDelay( double textDelay )
+        {
+            return new TextScreen(
+                background: Background,
+                draw: Draw,
+                music: Music,
+                time: Time,
+                texts: Texts,
+                textAlignment: TextAlignment,
+                textAnchor: TextAnchor,
+                textColor: TextColor,
+                textDelay: textDelay.ToMaybe(),
                 textSpeed: TextSpeed,
                 position: Position);
         }
@@ -3708,7 +3760,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 time: Time,
                 texts: Texts,
                 textAlignment: TextAlignment,
+                textAnchor: TextAnchor,
                 textColor: TextColor,
+                textDelay: TextDelay,
                 textSpeed: textSpeed.ToMaybe(),
                 position: Position);
         }
@@ -3721,7 +3775,9 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 time: Time,
                 texts: Texts,
                 textAlignment: TextAlignment,
+                textAnchor: TextAnchor,
                 textColor: TextColor,
+                textDelay: TextDelay,
                 textSpeed: TextSpeed,
                 position: position.ToMaybe());
         }
@@ -3816,7 +3872,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             Maybe<string> defaultCeiling,
             Maybe<string> defaultFloor,
             IEnumerable<string> ensureInventories,
-            Maybe<int> exitFade,
+            Maybe<ExitFadeInfo> exitFade,
             Maybe<int> floorNumber,
             Maybe<string> highScoresGraphic,
             Maybe<int> levelBonus,
@@ -4064,7 +4120,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 par: Par,
                 translator: Translator);
         }
-        public DefaultMap WithExitFade( int exitFade )
+        public DefaultMap WithExitFade( ExitFadeInfo exitFade )
         {
             return new DefaultMap(
                 borderTexture: BorderTexture,
@@ -4520,7 +4576,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             Maybe<string> defaultCeiling,
             Maybe<string> defaultFloor,
             IEnumerable<string> ensureInventories,
-            Maybe<int> exitFade,
+            Maybe<ExitFadeInfo> exitFade,
             Maybe<int> floorNumber,
             Maybe<string> highScoresGraphic,
             Maybe<int> levelBonus,
@@ -4768,7 +4824,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 par: Par,
                 translator: Translator);
         }
-        public AddDefaultMap WithExitFade( int exitFade )
+        public AddDefaultMap WithExitFade( ExitFadeInfo exitFade )
         {
             return new AddDefaultMap(
                 borderTexture: BorderTexture,
@@ -5195,7 +5251,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
         public Maybe<string> DefaultCeiling { get; } = Maybe<string>.Nothing;
         public Maybe<string> DefaultFloor { get; } = Maybe<string>.Nothing;
         public ImmutableList<string> EnsureInventories { get; } = ImmutableList<string>.Empty;
-        public Maybe<int> ExitFade { get; } = Maybe<int>.Nothing;
+        public Maybe<ExitFadeInfo> ExitFade { get; } = Maybe<ExitFadeInfo>.Nothing;
         public Maybe<int> FloorNumber { get; } = Maybe<int>.Nothing;
         public Maybe<string> HighScoresGraphic { get; } = Maybe<string>.Nothing;
         public Maybe<int> LevelBonus { get; } = Maybe<int>.Nothing;
@@ -5219,7 +5275,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             Maybe<string> defaultCeiling,
             Maybe<string> defaultFloor,
             IEnumerable<string> ensureInventories,
-            Maybe<int> exitFade,
+            Maybe<ExitFadeInfo> exitFade,
             Maybe<int> floorNumber,
             Maybe<string> highScoresGraphic,
             Maybe<int> levelBonus,
@@ -5275,7 +5331,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             Maybe<string> defaultCeiling,
             Maybe<string> defaultFloor,
             IEnumerable<string> ensureInventories,
-            Maybe<int> exitFade,
+            Maybe<ExitFadeInfo> exitFade,
             Maybe<int> floorNumber,
             Maybe<string> highScoresGraphic,
             Maybe<int> levelBonus,
@@ -5553,7 +5609,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos
                 mapName: MapName,
                 mapNameLookup: MapNameLookup);
         }
-        public Map WithExitFade( int exitFade )
+        public Map WithExitFade( ExitFadeInfo exitFade )
         {
             return new Map(
                 borderTexture: BorderTexture,
@@ -6188,6 +6244,33 @@ namespace Tiledriver.Core.FormatModels.MapInfos
             return new NextMapInfo(
                 name: Name,
                 endSequence: endSequence.ToMaybe());
+        }
+    }
+
+    public sealed partial class ExitFadeInfo
+    {
+        public Maybe<string> Color { get; } = Maybe<string>.Nothing;
+        public Maybe<double> Time { get; } = Maybe<double>.Nothing;
+        public static ExitFadeInfo Default = new ExitFadeInfo();
+        private ExitFadeInfo() { }
+        public ExitFadeInfo(
+            Maybe<string> color,
+            Maybe<double> time)
+        {
+            Color = color;
+            Time = time;
+        }
+        public ExitFadeInfo WithColor( string color )
+        {
+            return new ExitFadeInfo(
+                color: color.ToMaybe(),
+                time: Time);
+        }
+        public ExitFadeInfo WithTime( double time )
+        {
+            return new ExitFadeInfo(
+                color: Color,
+                time: time.ToMaybe());
         }
     }
 
