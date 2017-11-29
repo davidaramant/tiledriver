@@ -83,6 +83,12 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
             {
                 return ParseBlock(line, reader);
             }
+            else if (line.Contains("{}"))
+            {
+                // HACK: Handle empty, one-line blocks better
+                var name = line.Split(new[] {' ', '\t'}, StringSplitOptions.RemoveEmptyEntries)[0];
+                return new MapInfoBlock(new Identifier(name), Enumerable.Empty<string>(), Enumerable.Empty<IMapInfoElement>());
+            }
             else
             {
                 return new MapInfoProperty(new Identifier(line));

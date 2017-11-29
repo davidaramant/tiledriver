@@ -146,6 +146,17 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
         }
 
         [Test]
+        public void ShouldHandleEmptyBlock()
+        {
+            VerifyLexing(
+                "block {}",
+                new MapInfoBlock(
+                    new Identifier("block"),
+                    Enumerable.Empty<string>(),
+                    Enumerable.Empty<IMapInfoElement>()));
+        }
+
+        [Test]
         public void ShouldTokenizeMapInfoWithoutInclude()
         {
             using (var stream = File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "MapInfos", "Parsing", "wolfcommon.txt")))
@@ -172,6 +183,24 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
                 var result = lexer.Analyze(textReader).ToArray();
             }
         }
+
+        [Test]
+        public void ShouldTokenizeSpearMapInfo()
+        {
+            var mockProvider = new Mock<IResourceProvider>();
+            mockProvider.Setup(_ => _.Lookup("mapinfo/wolfcommon.txt"))
+                .Returns(File.OpenRead(
+                    Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "MapInfos",
+                        "Parsing", "wolfcommon.txt")));
+
+            using (var stream = File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "MapInfos", "Parsing", "spear.txt")))
+            using (var textReader = new StreamReader(stream, Encoding.ASCII))
+            {
+                var lexer = new MapInfoLexer(mockProvider.Object);
+                var result = lexer.Analyze(textReader).ToArray();
+            }
+        }
+
 
         private static void VerifyLexing(string input, params IMapInfoElement[] expectedElements)
         {
@@ -220,8 +249,6 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
         {
             Assert.That(actual.Name, Is.EqualTo(expected.Name), "Block name did not match.");
             Assert.That(actual.Metadata, Is.EquivalentTo(expected.Metadata), "Block metadata did not match.");
-
-
         }
     }
 }
