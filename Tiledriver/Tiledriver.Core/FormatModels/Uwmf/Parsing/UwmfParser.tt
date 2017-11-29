@@ -4,7 +4,7 @@
 #>
 <#@ template debug="false" hostspecific="false" language="C#" #>
 <#@ assembly name="System.Core" #>
-<#@ assembly name="$(SolutionDir)Tiledriver.Metadata\bin\$(Configuration)\Tiledriver.Metadata.dll" #>
+<#@ assembly name="$(SolutionDir)Tiledriver.Metadata\bin\$(Configuration)\net47\Tiledriver.Metadata.dll" #>
 <#@ import namespace="System" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Collections.Generic" #>

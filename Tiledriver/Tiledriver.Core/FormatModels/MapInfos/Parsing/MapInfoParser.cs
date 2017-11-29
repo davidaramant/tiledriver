@@ -384,8 +384,8 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
 
             var v = property.Values[0];
 
-            int time = 0;
-            if (int.TryParse(v, out time))
+            double time = 0;
+            if (double.TryParse(v, out time))
             {
                 return IntermissionTime.Default.WithTime(time);
             }

@@ -233,7 +233,7 @@ namespace Tiledriver.Metadata
                     parsing: Parsing.Manual,
                     properties: new[]
                     {
-                        new Property("time", type: PropertyType.Integer),
+                        new Property("time", type: PropertyType.Double),
                         new Property("TitleTime",type:PropertyType.Boolean),
                     });
 
