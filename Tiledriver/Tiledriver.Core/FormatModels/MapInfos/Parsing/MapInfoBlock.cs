@@ -16,7 +16,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
         MapInfoBlock IMapInfoElement.AsBlock() => this;
         MapInfoProperty IMapInfoElement.AsProperty()
         {
-            throw new NotSupportedException();
+            throw new NotSupportedException("Attempted to access block as property.");
         }
 
         public Identifier Name { get; }

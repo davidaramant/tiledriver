@@ -11,7 +11,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
         {
             if (block.Metadata.Length != length)
             {
-                throw new ParsingException($"Expected {length} pieces of metadata for {context} but found {block.Metadata.Length}.");
+                throw new ParsingException($"Expected {length} pieces of metadata for '{context}' but found {block.Metadata.Length}.");
             }
         }
 
@@ -19,14 +19,14 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
         {
             if (property.Values.Length != length)
             {
-                throw new ParsingException($"Expected {length} values for {context} but found {property.Values.Length}.");
+                throw new ParsingException($"Expected {length} values for '{context}' but found {property.Values.Length}.");
             }
         }
 
         public static MapInfoProperty AssertAsProperty(this IMapInfoElement element, string context)
         {
             if(element.IsBlock)
-                throw new ParsingException($"Expecting a property for {context} but found a block.");
+                throw new ParsingException($"Expecting a property for '{context}' but found a block.");
 
             return element.AsProperty();
         }
@@ -34,7 +34,7 @@ namespace Tiledriver.Core.FormatModels.MapInfos.Parsing
         public static MapInfoBlock AssertAsBlock(this IMapInfoElement element, string context)
         {
             if (!element.IsBlock)
-                throw new ParsingException($"Expecting a block for {context} but found a property.");
+                throw new ParsingException($"Expecting a block for '{context}' but found a property.");
 
             return element.AsBlock();
         }
