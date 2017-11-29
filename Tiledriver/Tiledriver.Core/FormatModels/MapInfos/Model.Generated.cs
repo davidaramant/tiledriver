@@ -3339,18 +3339,18 @@ namespace Tiledriver.Core.FormatModels.MapInfos
 
     public sealed partial class IntermissionTime
     {
-        public Maybe<int> Time { get; } = Maybe<int>.Nothing;
+        public Maybe<double> Time { get; } = Maybe<double>.Nothing;
         public Maybe<bool> TitleTime { get; } = Maybe<bool>.Nothing;
         public static IntermissionTime Default = new IntermissionTime();
         private IntermissionTime() { }
         public IntermissionTime(
-            Maybe<int> time,
+            Maybe<double> time,
             Maybe<bool> titleTime)
         {
             Time = time;
             TitleTime = titleTime;
         }
-        public IntermissionTime WithTime( int time )
+        public IntermissionTime WithTime( double time )
         {
             return new IntermissionTime(
                 time: time.ToMaybe(),
