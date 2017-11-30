@@ -18,13 +18,32 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
     public sealed class XlatParserTests
     {
         [Test]
-        public void ShouldParseRealXlat()
+        public void ShouldParseWolf3DXlat()
         {
             using (var stream = File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "Xlat", "Parsing", "wolf3d.txt")))
             using (var textReader = new StreamReader(stream, Encoding.ASCII))
             {
                 var lexer = new XlatLexer(textReader);
                 var syntaxAnalzer = new XlatSyntaxAnalyzer(Mock.Of<IResourceProvider>());
+                var result = syntaxAnalzer.Analyze(lexer);
+                var translator = XlatParser.Parse(result);
+            }
+        }
+
+        [Test]
+        public void ShouldParseSpearXlat()
+        {
+            var mockProvider = new Mock<IResourceProvider>();
+            mockProvider.Setup(_ => _.Lookup("xlat/wolf3d.txt"))
+                .Returns(File.OpenRead(
+                    Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "xlat",
+                        "Parsing", "wolf3d.txt")));
+
+            using (var stream = File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "Xlat", "Parsing", "spear.txt")))
+            using (var textReader = new StreamReader(stream, Encoding.ASCII))
+            {
+                var lexer = new XlatLexer(textReader);
+                var syntaxAnalzer = new XlatSyntaxAnalyzer(mockProvider.Object);
                 var result = syntaxAnalzer.Analyze(lexer);
                 var translator = XlatParser.Parse(result);
             }

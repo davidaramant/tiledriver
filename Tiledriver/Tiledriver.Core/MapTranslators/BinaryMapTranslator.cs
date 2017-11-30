@@ -41,7 +41,7 @@ namespace Tiledriver.Core.MapTranslators
             // TODO: Is this Boolean necessary?
             var hasSectorInfo = binaryMap.GetRawPlaneData(BinaryMapPlaneId.Sector).Any(num => num != 0);
             var sectors = hasSectorInfo ? TranslateSectors(binaryMap) : CreateDefaultSector(mapInfo);
-            var tiles = _translatorInfo.TileMappings.TileTemplates.Select(template => _autoMapper.Map<Tile>(template)).ToList();
+            var tiles = _translatorInfo.TileMappings.GetCondensedTileTemplates().Select(template => _autoMapper.Map<Tile>(template)).ToList();
 
             var ambushSpots = new HashSet<Point>();
 
@@ -200,10 +200,7 @@ namespace Tiledriver.Core.MapTranslators
                 Select((zt, index) => new { zt, index }).
                 ToDictionary(pair => pair.zt.OldNum, pair => pair.index);
 
-            var tileIndexMapping =
-                _translatorInfo.TileMappings.TileTemplates.
-                Select((template, index) => new { OldNum = template.OldNum, TileIndex = index }).
-                ToDictionary(pair => pair.OldNum, pair => pair.TileIndex);
+            var tileIndexMapping =_translatorInfo.TileMappings.GetTileIndexLookup();
 
             var triggerLookup = _translatorInfo.TileMappings.TriggerTemplates.CondenseToDictionary(tt => tt.OldNum, tt => tt);
             var ambushLookup = _translatorInfo.TileMappings.AmbushModzones.CondenseToDictionary(amz => amz.OldNum, amz => amz);
