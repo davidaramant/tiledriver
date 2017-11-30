@@ -44,7 +44,6 @@
   <ItemGroup>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FormatModels\MapInfos\Parsing\spear.txt">
