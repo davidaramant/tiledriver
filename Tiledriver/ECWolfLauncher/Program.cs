@@ -347,8 +347,8 @@ namespace TestRunner
                 Directory.GetDirectories(baseInputPath).Select(levelSetDir =>
                 {
                     var name = Path.GetFileName(levelSetDir);
-                    var mapHeadPath = FindPathOf(levelSetDir,"MAPHEAD");
-                    var gameMapsPath = FindPathOf(levelSetDir,"GAMEMAPS");
+                    Func<string> mapHeadPath = ()=>FindPathOf(levelSetDir,"MAPHEAD");
+                    Func<string> gameMapsPath = ()=>FindPathOf(levelSetDir,"GAMEMAPS");
 
                     return (mapHeadPath, gameMapsPath, name);
                 }),
@@ -360,8 +360,8 @@ namespace TestRunner
 
         private static void TranslateGameMapsFormat(
             IEnumerable<(
-            string mapHeadPath,
-            string gameMapsPath,
+            Func<string> mapHeadPath,
+            Func<string> gameMapsPath,
             string name)> levelSets,
             string outputPath)
         {
@@ -384,11 +384,11 @@ namespace TestRunner
 
                 foreach (var levelSet in levelSets)
                 {
-                    Console.WriteLine(levelSet);
+                    Console.WriteLine(levelSet.name);
                     try
                     {
-                        using (var headerStream = File.OpenRead(levelSet.mapHeadPath))
-                        using (var mapsStream = File.OpenRead(levelSet.gameMapsPath))
+                        using (var headerStream = File.OpenRead(levelSet.mapHeadPath()))
+                        using (var mapsStream = File.OpenRead(levelSet.gameMapsPath()))
                         {
                             var gameMaps = GameMapsBundle.Load(headerStream, mapsStream);
                             for (int mapIndex = 0; mapIndex < gameMaps.Maps.Length; mapIndex++)
