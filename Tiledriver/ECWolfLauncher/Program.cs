@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using AutoMapper;
 using Functional.Maybe;
 using Moq;
@@ -43,38 +44,42 @@ namespace TestRunner
             {
                 var desktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 
-                BatchConvertGameMaps(
-                    baseInputPath: @"C:\Users\david\Desktop\Wolf3D Maps\Wolf3D User Maps\oldschoolspear",
-                    outputPath: @"C:\Users\david\Desktop\Wolf3D Maps\Wolf3D User Maps\oldschool - converted");
+                //BatchConvertGameMaps(
+                //    baseInputPath: @"C:\Users\david\Desktop\Wolf3D Maps\Wolf3D User Maps\oldschoolspear",
+                //    outputPath: @"C:\Users\david\Desktop\Wolf3D Maps\Wolf3D User Maps\oldschool - converted");
 
                 //ExportMapsFromPk3(
                 //    pk3Path: @"C:\Users\david\Desktop\Wolf3D Maps\Wolf3D User Maps\astrostein_spiff.pk3",
                 //    outputBasePath: @"C:\Users\david\Desktop\Wolf3D Maps\Wolf3D User Maps");
+
+                AnalyzeMaps(
+                    inputPath: @"C:\Users\david\Desktop\Wolf3D Maps\UDMF",
+                    outputPath: @"C:\Users\david\Desktop\Wolf3D Maps\UDMF\metamaps");
 
                 //LoadMapInEcWolf(DemoMap.Create(), Path.GetFullPath("demo.wad"));
                 //TranslateGameMapsFormat();
                 //Flatten();
                 //Pk3Test();
                 //ConvertMapsToSimpleFormat(
-                //    inputPath: Path.Combine(desktop, "maps"),
+                //    inputPath: Path.Combine(desktop, "benchmark"),
                 //    outputDirsWithSaveMethods: new List<(string path, Action<MetaMap, string> saveMethod)>
                 //    {
+                //        //(
+                //        //"imagemaps-sparse",
+                //        //(metaMap,fileNameWithNoExtension)=>SimpleMapImageExporter.Export(metaMap,MapPalette.HighlightWalls,fileNameWithNoExtension+".png")
+                //        //),
                 //        (
-                //        Path.Combine(desktop,"imagemaps-sparse"),
-                //        (metaMap,fileNameWithNoExtension)=>SimpleMapImageExporter.Export(metaMap,MapPalette.HighlightWalls,fileNameWithNoExtension+".png")
-                //        ),
-                //        (
-                //        Path.Combine(desktop,"imagemaps-solid"),
+                //        "imagemaps-solid",
                 //        (metaMap,fileNameWithNoExtension)=>SimpleMapImageExporter.Export(metaMap,MapPalette.CarveOutRooms,fileNameWithNoExtension+".png")
                 //        ),
-                //        (
-                //        Path.Combine(desktop,"textmaps-sparse"),
-                //        (metaMap,fileNameWithNoExtension)=>SimpleMapTextExporter.Export(metaMap,fileNameWithNoExtension+".txt",unreachableIsSolid:false)
-                //        ),
-                //        (
-                //        Path.Combine(desktop,"textmaps-solid"),
-                //        (metaMap,fileNameWithNoExtension)=>SimpleMapTextExporter.Export(metaMap,fileNameWithNoExtension+".txt",unreachableIsSolid:true)
-                //        ),
+                //        //(
+                //        //"textmaps-sparse",
+                //        //(metaMap,fileNameWithNoExtension)=>SimpleMapTextExporter.Export(metaMap,fileNameWithNoExtension+".txt",unreachableIsSolid:false)
+                //        //),
+                //        //(
+                //        //"textmaps-solid",
+                //        //(metaMap,fileNameWithNoExtension)=>SimpleMapTextExporter.Export(metaMap,fileNameWithNoExtension+".txt",unreachableIsSolid:true)
+                //        //),
                 //    });
 
             }
@@ -85,9 +90,31 @@ namespace TestRunner
             }
         }
 
+        private static void AnalyzeMaps(string inputPath, string outputPath)
+        {
+            if (Directory.Exists(outputPath))
+            {
+                Directory.Delete(outputPath, recursive: true);
+            }
+            Directory.CreateDirectory(outputPath);
+
+            var sa = new UwmfSyntaxAnalyzer();
+            var filesToGoThrough = Directory.GetFiles(inputPath, "*.uwmf", SearchOption.AllDirectories);
+            Parallel.ForEach(filesToGoThrough, uwmfFilePath =>
+            {
+                using (var stream = File.OpenRead(uwmfFilePath))
+                using (var textReader = new StreamReader(stream, Encoding.ASCII))
+                {
+                    var mapData = UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader)));
+                    var metaMap = MetaMapAnalyzer.Analyze(mapData);
+                    metaMap.Save(Path.Combine(outputPath, Path.GetFileNameWithoutExtension(uwmfFilePath) + ".metamap"));
+                }
+            });
+        }
+
         private static void ConvertMapsToSimpleFormat(string inputPath, List<(string path, Action<MetaMap, string> saveMethod)> outputDirsWithSaveMethods)
         {
-            foreach (var outputPath in outputDirsWithSaveMethods.Select(p => p.path))
+            foreach (var outputPath in outputDirsWithSaveMethods.Select(p => Path.Combine(inputPath, p.path)))
             {
                 if (Directory.Exists(outputPath))
                 {
@@ -112,7 +139,7 @@ namespace TestRunner
 
                     foreach (var output in outputDirsWithSaveMethods)
                     {
-                        var outputFilePath = Path.Combine(output.path, Path.GetFileNameWithoutExtension(uwmfFilePath) + ".png");
+                        var outputFilePath = Path.Combine(inputPath, output.path, Path.GetFileNameWithoutExtension(uwmfFilePath) + ".png");
                         output.saveMethod(metaMap, outputFilePath);
                     }
                 }
@@ -339,16 +366,16 @@ namespace TestRunner
             }
             Directory.CreateDirectory(outputPath);
 
-                string FindPathOf(string path, string name) =>
-                    Directory.EnumerateFiles(path, name + ".*", SearchOption.AllDirectories).
-                    Single(f => Path.GetExtension(f).ToLowerInvariant() != "bak");
+            string FindPathOf(string path, string name) =>
+                Directory.EnumerateFiles(path, name + ".*", SearchOption.AllDirectories).
+                Single(f => Path.GetExtension(f).ToLowerInvariant() != "bak");
 
             TranslateGameMapsFormat(
                 Directory.GetDirectories(baseInputPath).Select(levelSetDir =>
                 {
                     var name = Path.GetFileName(levelSetDir);
-                    Func<string> mapHeadPath = ()=>FindPathOf(levelSetDir,"MAPHEAD");
-                    Func<string> gameMapsPath = ()=>FindPathOf(levelSetDir,"GAMEMAPS");
+                    Func<string> mapHeadPath = () => FindPathOf(levelSetDir, "MAPHEAD");
+                    Func<string> gameMapsPath = () => FindPathOf(levelSetDir, "GAMEMAPS");
 
                     return (mapHeadPath, gameMapsPath, name);
                 }),
