@@ -25,7 +25,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Parsing
 
         public Maybe<Token> GetValueFor(Identifier name)
         {
-            return _properties.Lookup(name);
+            return _properties.TryGetValue(name, out var value) ? value.ToMaybe() : Maybe<Token>.Nothing;
         }
 
         public Block(Identifier name, IEnumerable<Assignment> propertyAssignments)

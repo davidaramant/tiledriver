@@ -101,7 +101,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Parsing
 
         public Maybe<Token> GetValueFor(Identifier name)
         {
-            return _properties.Lookup(name);
+            return _properties.TryGetValue(name, out var value) ? value.ToMaybe() : Maybe<Token>.Nothing;
         }
 
         public Maybe<Identifier> Name { get; }
