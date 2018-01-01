@@ -38,11 +38,12 @@
     <ProjectReference Include="..\Tiledriver.Core\Tiledriver.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="6.1.1" />
+    <PackageReference Include="AutoMapper" Version="6.2.2" />
     <PackageReference Include="Castle.Core" Version="4.2.1" />
     <PackageReference Include="Functional.Maybe" Version="1.1.1" />
-    <PackageReference Include="JetBrains.Annotations" Version="11.0.0" />
-    <PackageReference Include="Moq" Version="4.7.142" />
+    <PackageReference Include="JetBrains.Annotations" Version="11.1.0" />
+    <PackageReference Include="Moq" Version="4.8.0" />
+    <PackageReference Include="ShellProgressBar" Version="4.0.0" />
     <PackageReference Include="System.Collections.Immutable" Version="1.4.0" />
     <PackageReference Include="System.ValueTuple" Version="4.4.0" />
   </ItemGroup>

@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Functional.Maybe;
 using Moq;
+using ShellProgressBar;
 using Tiledriver.Core.FormatModels;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.GameMaps;
@@ -58,8 +59,9 @@ namespace TestRunner
                 //    inputPath: @"C:\Users\david\Desktop\Wolf3D Maps\UDMF",
                 //    outputPath: @"C:\Users\david\Desktop\Wolf3D Maps\metamaps");
 
-                RemoveDuplicateMaps(
-                    inputPath: @"C:\Users\david\Desktop\Wolf3D Maps\metamaps");
+                RotateMaps(inputPath: @"C:\Users\david\Desktop\Wolf3D Maps\metamaps");
+                //RemoveDuplicateMaps(
+                //    inputPath: @"C:\Users\david\Desktop\Wolf3D Maps\metamaps");
 
                 //LoadMapInEcWolf(DemoMap.Create(), Path.GetFullPath("demo.wad"));
                 //TranslateGameMapsFormat();
@@ -92,6 +94,42 @@ namespace TestRunner
             {
                 Console.WriteLine(e);
                 Console.ReadLine();
+            }
+        }
+
+        private static void RotateMaps(string inputPath)
+        {
+            string MutateFileName(string path, string postfix)
+            {
+                var fileName = Path.GetFileNameWithoutExtension(path) + " " + postfix;
+
+                return Path.Combine(Path.GetDirectoryName(path), fileName + ".metamap");
+            }
+
+            var filesToGoThrough = Directory.GetFiles(inputPath, "*.metamap", SearchOption.AllDirectories);
+
+            using (var progress = new ProgressBar(filesToGoThrough.Length, "Duplicating maps..."))
+            {
+                Parallel.ForEach(filesToGoThrough, metaMapPath =>
+                {
+                    var map = MetaMap.Load(metaMapPath);
+
+                    map.Mirror().Save(MutateFileName(metaMapPath, "m"));
+
+                    var rotated90 = map.Rotate90();
+                    rotated90.Save(MutateFileName(metaMapPath, "r1"));
+                    rotated90.Mirror().Save(MutateFileName(metaMapPath, "r1m"));
+
+                    var rotated180 = rotated90.Rotate90();
+                    rotated180.Save(MutateFileName(metaMapPath, "r2"));
+                    rotated180.Mirror().Save(MutateFileName(metaMapPath, "r2m"));
+
+                    var rotated270 = rotated180.Rotate90();
+                    rotated270.Save(MutateFileName(metaMapPath, "r3"));
+                    rotated270.Mirror().Save(MutateFileName(metaMapPath, "r3m"));
+
+                    progress.Tick();
+                });
             }
         }
 
@@ -130,7 +168,7 @@ namespace TestRunner
                     fileToKeep = wolf3DMaps.Single();
                 }
 
-                var filesToRemove = filePaths.Except(new[] {fileToKeep});
+                var filesToRemove = filePaths.Except(new[] { fileToKeep });
                 foreach (var file in filesToRemove)
                 {
                     File.Delete(file);
