@@ -36,6 +36,13 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
             _tiles = new TileType[width * height];
         }
 
+        private MetaMap(int width, int height, TileType[] tiles)
+        {
+            Width = width;
+            Height = height;
+            _tiles = tiles;
+        }
+
         public void Save(string path)
         {
             using (var fs = File.Open(path, FileMode.Create))
@@ -53,6 +60,39 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                     }
                 }
             }
+        }
+
+        public MetaMap Rotate90()
+        {
+            System.Diagnostics.Debug.Assert(Width == 64 && Height == 64, "This is hardcoded to work with 64x64 maps");
+            var rotated = new TileType[Width * Height];
+
+            for (int row = 0; row < 64; ++row)
+            {
+                for (int col = 0; col < 64; ++col)
+                {
+                    rotated[row * 64 + col] = _tiles[(64 - col - 1) * 64 + row];
+                }
+            }
+
+            return new MetaMap(Width, Height, rotated);
+        }
+
+        public MetaMap Mirror()
+        {
+            System.Diagnostics.Debug.Assert(Width == 64 && Height == 64, "This is hardcoded to work with 64x64 maps");
+            var mirrored = new TileType[Width * Height];
+
+            for (int row = 0; row < 64; ++row)
+            {
+                for (int col = 0; col < 32; ++col)
+                {
+                    mirrored[row * 64 + col] = _tiles[row * 64 + (63 - col)];
+                    mirrored[row * 64 + (63 - col)] = _tiles[row * 64 + col];
+                }
+            }
+
+            return new MetaMap(Width, Height, mirrored);
         }
 
         public static MetaMap Load(string path)
@@ -73,7 +113,7 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                 {
                     for (int x = 0; x < width; x++)
                     {
-                        map[x, y] = (TileType) reader.ReadByte();
+                        map[x, y] = (TileType)reader.ReadByte();
                     }
                 }
 
