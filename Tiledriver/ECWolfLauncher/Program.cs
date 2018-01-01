@@ -3,10 +3,12 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -52,9 +54,12 @@ namespace TestRunner
                 //    pk3Path: @"C:\Users\david\Desktop\Wolf3D Maps\Wolf3D User Maps\astrostein_spiff.pk3",
                 //    outputBasePath: @"C:\Users\david\Desktop\Wolf3D Maps\Wolf3D User Maps");
 
-                AnalyzeMaps(
-                    inputPath: @"C:\Users\david\Desktop\Wolf3D Maps\UDMF",
-                    outputPath: @"C:\Users\david\Desktop\Wolf3D Maps\UDMF\metamaps");
+                //AnalyzeMaps(
+                //    inputPath: @"C:\Users\david\Desktop\Wolf3D Maps\UDMF",
+                //    outputPath: @"C:\Users\david\Desktop\Wolf3D Maps\metamaps");
+
+                RemoveDuplicateMaps(
+                    inputPath: @"C:\Users\david\Desktop\Wolf3D Maps\metamaps");
 
                 //LoadMapInEcWolf(DemoMap.Create(), Path.GetFullPath("demo.wad"));
                 //TranslateGameMapsFormat();
@@ -90,6 +95,49 @@ namespace TestRunner
             }
         }
 
+        private static void RemoveDuplicateMaps(string inputPath)
+        {
+            var duplicateFileGroups =
+                Directory.GetFiles(inputPath, "*.metamap", SearchOption.AllDirectories).
+                AsParallel().
+                Select(filePath =>
+                    {
+                        using (var md5 = new MD5CryptoServiceProvider())
+                        using (var fs = File.OpenRead(filePath))
+                        {
+                            return (filePath: filePath, hash: BitConverter.ToString(md5.ComputeHash(fs)));
+                        }
+                    }).
+                GroupBy(tuple => tuple.hash).
+                Where(group => group.Count() > 1);
+
+            foreach (var dupeGroup in duplicateFileGroups)
+            {
+                var filePaths = dupeGroup.Select(tuple => tuple.filePath).ToArray();
+
+                string fileToKeep = filePaths.First();
+
+                var wolf3DMaps = filePaths.
+                    Where(path => Path.GetFileNameWithoutExtension(path).Contains("Wolf3D")).
+                    ToArray();
+
+                if (wolf3DMaps.Count() > 1)
+                {
+                    throw new Exception("Wolf3D maps are duplicates????");
+                }
+                else if (wolf3DMaps.Length == 1)
+                {
+                    fileToKeep = wolf3DMaps.Single();
+                }
+
+                var filesToRemove = filePaths.Except(new[] {fileToKeep});
+                foreach (var file in filesToRemove)
+                {
+                    File.Delete(file);
+                }
+            }
+        }
+
         private static void AnalyzeMaps(string inputPath, string outputPath)
         {
             if (Directory.Exists(outputPath))
@@ -98,18 +146,30 @@ namespace TestRunner
             }
             Directory.CreateDirectory(outputPath);
 
+            var failures = new ConcurrentBag<string>();
+
             var sa = new UwmfSyntaxAnalyzer();
             var filesToGoThrough = Directory.GetFiles(inputPath, "*.uwmf", SearchOption.AllDirectories);
             Parallel.ForEach(filesToGoThrough, uwmfFilePath =>
             {
-                using (var stream = File.OpenRead(uwmfFilePath))
-                using (var textReader = new StreamReader(stream, Encoding.ASCII))
+                var filename = Path.GetFileNameWithoutExtension(uwmfFilePath);
+                try
                 {
-                    var mapData = UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader)));
-                    var metaMap = MetaMapAnalyzer.Analyze(mapData);
-                    metaMap.Save(Path.Combine(outputPath, Path.GetFileNameWithoutExtension(uwmfFilePath) + ".metamap"));
+                    using (var stream = File.OpenRead(uwmfFilePath))
+                    using (var textReader = new StreamReader(stream, Encoding.ASCII))
+                    {
+                        var mapData = UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader)));
+                        var metaMap = MetaMapAnalyzer.Analyze(mapData);
+                        metaMap.Save(Path.Combine(outputPath, filename + ".metamap"));
+                    }
+                }
+                catch (Exception e)
+                {
+                    failures.Add(filename + "\t" + e.Message);
                 }
             });
+
+            File.WriteAllLines(Path.Combine(outputPath, "errors.txt"), failures);
         }
 
         private static void ConvertMapsToSimpleFormat(string inputPath, List<(string path, Action<MetaMap, string> saveMethod)> outputDirsWithSaveMethods)
