@@ -59,7 +59,8 @@ namespace TestRunner
                 //    inputPath: @"C:\Users\david\Desktop\Wolf3D Maps\UDMF",
                 //    outputPath: @"C:\Users\david\Desktop\Wolf3D Maps\metamaps");
 
-                RotateMaps(inputPath: @"C:\Users\david\Desktop\Wolf3D Maps\metamaps");
+                //RotateMaps(inputPath: @"C:\Users\david\Desktop\Wolf3D Maps\metamaps");
+                TestMapNameComparer();
                 //RemoveDuplicateMaps(
                 //    inputPath: @"C:\Users\david\Desktop\Wolf3D Maps\metamaps");
 
@@ -133,10 +134,125 @@ namespace TestRunner
             }
         }
 
+        public static void TestMapNameComparer()
+        {
+            void TestTypeDetermination(string name, MapNameComparer.Type expectedType)
+            {
+                var actualType = MapNameComparer.DetermineType(name);
+
+                Console.WriteLine($"Checking type for ({name})...");
+                if (actualType != expectedType)
+                {
+                    Console.WriteLine($"  FAILED!\n  Expected:\t{expectedType}\n  Actual:\t{actualType}");
+                }
+                else
+                {
+                    Console.WriteLine("  Passed!");
+                }
+            }
+
+            TestTypeDetermination("Wolf3D Map 1", MapNameComparer.Type.Wolf3D);
+            TestTypeDetermination("Wolf3D Map 1 r3m", MapNameComparer.Type.Wolf3D | MapNameComparer.Type.Rotated270 | MapNameComparer.Type.Mirrored);
+            TestTypeDetermination("Custom Map", MapNameComparer.Type.Custom);
+            TestTypeDetermination("Custom Map m", MapNameComparer.Type.Custom | MapNameComparer.Type.Mirrored);
+            TestTypeDetermination("Custom Map r1", MapNameComparer.Type.Custom | MapNameComparer.Type.Rotated90);
+            TestTypeDetermination("Custom Map r1m", MapNameComparer.Type.Custom | MapNameComparer.Type.Rotated90 | MapNameComparer.Type.Mirrored);
+            TestTypeDetermination("Custom Map r2", MapNameComparer.Type.Custom | MapNameComparer.Type.Rotated180);
+            TestTypeDetermination("Custom Map r2m", MapNameComparer.Type.Custom | MapNameComparer.Type.Rotated180 | MapNameComparer.Type.Mirrored);
+            TestTypeDetermination("Custom Map r3", MapNameComparer.Type.Custom | MapNameComparer.Type.Rotated270);
+            TestTypeDetermination("Custom Map r3m", MapNameComparer.Type.Custom | MapNameComparer.Type.Rotated270 | MapNameComparer.Type.Mirrored);
+
+            void TestComparison(string x, string y, int expected)
+            {
+                Console.WriteLine($"Testing comparison for ({x}) and ({y})...");
+                var actual = new MapNameComparer().Compare(x, y);
+                if (actual != expected)
+                {
+                    Console.WriteLine($"  FAILED!\n  Expected {expected} but got {actual}");
+                }
+                else
+                {
+                    Console.WriteLine("  Passed!");
+                }
+            }
+
+            TestComparison("Wolf3D Map 1", "Custom Map", -1);
+            TestComparison("Custom Map", "Wolf3D Map 1", 1);
+            TestComparison("Wolf3D Map 1", "Wolf3D Map 4", 0);
+            TestComparison("Custom Map 1", "Custom Map 4", 0);
+            TestComparison("Custom Map 1", "Custom Map 4 m", -1);
+            TestComparison("Wolf3D Map r3m", "Custom Map", -1);
+
+            Console.ReadLine();
+        }
+
+        sealed class MapNameComparer : Comparer<string>
+        {
+            [Flags]
+            public enum Type
+            {
+                Wolf3D,
+                Mirrored = 1 << 0,
+                Rotated90 = 1 << 1,
+                Rotated180 = 1 << 2,
+                Rotated270 = 1 << 3,
+                Custom = 1 << 4,
+            }
+
+            public static Type DetermineType(string path)
+            {
+                var fileName = Path.GetFileNameWithoutExtension(path);
+
+                var type = fileName.Contains("Wolf3D") ? Type.Wolf3D : Type.Custom;
+
+                if (fileName.EndsWith(" m"))
+                {
+                    type |= Type.Mirrored;
+                }
+                else if (fileName.EndsWith(" r1"))
+                {
+                    type |= Type.Rotated90;
+                }
+                else if (fileName.EndsWith(" r1m"))
+                {
+                    type |= Type.Mirrored;
+                    type |= Type.Rotated90;
+                }
+                else if (fileName.EndsWith(" r2"))
+                {
+                    type |= Type.Rotated180;
+                }
+                else if (fileName.EndsWith(" r2m"))
+                {
+                    type |= Type.Mirrored;
+                    type |= Type.Rotated180;
+                }
+                else if (fileName.EndsWith(" r3"))
+                {
+                    type |= Type.Rotated270;
+                }
+                else if (fileName.EndsWith(" r3m"))
+                {
+                    type |= Type.Mirrored;
+                    type |= Type.Rotated270;
+                }
+
+                return type;
+            }
+
+            public override int Compare(string x, string y)
+            {
+                var xType = DetermineType(x);
+                var yType = DetermineType(y);
+
+                return xType.CompareTo(yType);
+            }
+        }
+
         private static void RemoveDuplicateMaps(string inputPath)
         {
             var duplicateFileGroups =
-                Directory.GetFiles(inputPath, "*.metamap", SearchOption.AllDirectories).
+                Directory.EnumerateFiles(inputPath, "*.metamap", SearchOption.AllDirectories).
                 AsParallel().
                 Select(filePath =>
                     {
@@ -147,26 +263,16 @@ namespace TestRunner
                         }
                     }).
                 GroupBy(tuple => tuple.hash).
-                Where(group => group.Count() > 1);
+                Where(group => group.Count() > 1).
+                ToArray();
+
+            var comparer = new MapNameComparer();
 
             foreach (var dupeGroup in duplicateFileGroups)
             {
-                var filePaths = dupeGroup.Select(tuple => tuple.filePath).ToArray();
-
+                var filePaths = dupeGroup.Select(tuple => tuple.filePath).OrderBy(filePath => filePath, comparer).ToArray();
+                
                 string fileToKeep = filePaths.First();
-
-                var wolf3DMaps = filePaths.
-                    Where(path => Path.GetFileNameWithoutExtension(path).Contains("Wolf3D")).
-                    ToArray();
-
-                if (wolf3DMaps.Count() > 1)
-                {
-                    throw new Exception("Wolf3D maps are duplicates????");
-                }
-                else if (wolf3DMaps.Length == 1)
-                {
-                    fileToKeep = wolf3DMaps.Single();
-                }
 
                 var filesToRemove = filePaths.Except(new[] { fileToKeep });
                 foreach (var file in filesToRemove)
