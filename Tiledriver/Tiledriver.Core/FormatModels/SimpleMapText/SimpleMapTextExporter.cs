@@ -10,6 +10,14 @@ namespace Tiledriver.Core.FormatModels.SimpleMapText
     {
         public static void Export(MetaMap map, string outputFilePath, bool unreachableIsSolid = true)
         {
+            using (var fs = File.CreateText(outputFilePath))
+            {
+                Export(map, fs, unreachableIsSolid);
+            }
+        }
+
+        public static void Export(MetaMap map, TextWriter writer, bool unreachableIsSolid = true)
+        {
             string DetermineCharacter(int x, int y)
             {
                 switch (map[x, y])
@@ -28,20 +36,17 @@ namespace Tiledriver.Core.FormatModels.SimpleMapText
                 }
             }
 
-            using (var writer = File.CreateText(outputFilePath))
+            for (int y = 0; y < map.Height; y++)
             {
-                for (int y = 0; y < map.Height; y++)
+                for (int x = 0; x < map.Width; x++)
                 {
-                    for (int x = 0; x < map.Width; x++)
-                    {
-                        writer.Write(DetermineCharacter(x, y));
-                    }
-                    if (y < map.Height - 1)
-                        writer.WriteLine();
+                    writer.Write(DetermineCharacter(x, y));
                 }
-
-                writer.Flush();
+                if (y < map.Height - 1)
+                    writer.WriteLine();
             }
+
+            writer.Flush();
         }
     }
 }
