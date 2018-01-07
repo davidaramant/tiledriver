@@ -60,9 +60,8 @@ namespace TestRunner
                 //    outputPath: @"C:\Users\david\Desktop\Wolf3D Maps\metamaps");
 
                 //RotateMaps(inputPath: @"C:\Users\david\Desktop\Wolf3D Maps\metamaps");
-                TestMapNameComparer();
-                //RemoveDuplicateMaps(
-                //    inputPath: @"C:\Users\david\Desktop\Wolf3D Maps\metamaps");
+                //TestMapNameComparer();
+                RemoveDuplicateMaps(inputPath: @"C:\Users\david\Desktop\Wolf3D Maps\metamaps");
 
                 //LoadMapInEcWolf(DemoMap.Create(), Path.GetFullPath("demo.wad"));
                 //TranslateGameMapsFormat();
@@ -268,18 +267,23 @@ namespace TestRunner
 
             var comparer = new MapNameComparer();
 
+            var deletedFiles = new List<string>();
+
             foreach (var dupeGroup in duplicateFileGroups)
             {
                 var filePaths = dupeGroup.Select(tuple => tuple.filePath).OrderBy(filePath => filePath, comparer).ToArray();
-                
+
                 string fileToKeep = filePaths.First();
 
                 var filesToRemove = filePaths.Except(new[] { fileToKeep });
+                deletedFiles.Add($"{Path.GetFileName(fileToKeep)} - Duplicates: " + string.Join(", ", filesToRemove.Select(Path.GetFileName)));
                 foreach (var file in filesToRemove)
                 {
                     File.Delete(file);
                 }
             }
+
+            File.WriteAllLines("deleted maps.txt", deletedFiles);
         }
 
         private static void AnalyzeMaps(string inputPath, string outputPath)
