@@ -61,7 +61,19 @@ namespace TestRunner
 
                 //RotateMaps(inputPath: @"C:\Users\david\Desktop\Wolf3D Maps\metamaps");
                 //TestMapNameComparer();
-                RemoveDuplicateMaps(inputPath: @"C:\Users\david\Desktop\Wolf3D Maps\metamaps");
+                //RemoveDuplicateMaps(inputPath: @"C:\Users\david\Desktop\Wolf3D Maps\metamaps");
+
+                var basePath = @"C:\git\tiledriver\ml";
+
+                void MapToImage(string mapName)
+                {
+                    var mapPath = Path.Combine(basePath, mapName);
+                    var map = MetaMap.Load(mapPath);
+                    SimpleMapImageExporter.Export(map, MapPalette.CarveOutRooms, mapPath + ".png");
+                }
+
+                MapToImage("test.metamap");
+                MapToImage("roundtripped.metamap");
 
                 //LoadMapInEcWolf(DemoMap.Create(), Path.GetFullPath("demo.wad"));
                 //TranslateGameMapsFormat();
