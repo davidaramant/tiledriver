@@ -51,24 +51,23 @@ def save_metamap(metamap, filename):
     """Saves a metamap to a file"""
     with open(filename, "wb") as fout:
         fout.write(struct.pack('Q', METAMAP_FILE_VERSION))
-        
+
         width = metamap.shape[0]
         height = metamap.shape[1]
-        
+
         fout.write(struct.pack('i', width))
         fout.write(struct.pack('i', height))
         for y in range(height):
             for x in range(width):
                 tile_type = TileType.WALL
-                if metamap[x,y,EncodingDim.PLAYABLE] == 1:
+                if metamap[x, y, EncodingDim.PLAYABLE] == 1:
                     tile_type = TileType.EMPTY
-                elif metamap[x,y,EncodingDim.SOLID] == 1:
+                elif metamap[x, y, EncodingDim.SOLID] == 1:
                     tile_type = TileType.WALL
-                elif metamap[x,y,EncodingDim.PASSAGE] == 1:
+                elif metamap[x, y, EncodingDim.PASSAGE] == 1:
                     tile_type = TileType.DOOR
 
                 fout.write(struct.pack('b', tile_type))
-
     return
 
 if __name__ == '__main__':
