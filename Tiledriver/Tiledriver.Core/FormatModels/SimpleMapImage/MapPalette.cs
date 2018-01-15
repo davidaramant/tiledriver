@@ -59,5 +59,13 @@ namespace Tiledriver.Core.FormatModels.SimpleMapImage
             pushWall: Color.Red,
             unreachable: Color.Black,
             unknown: Color.Fuchsia);
+
+        public static readonly MapPalette Full = new MapPalette(
+            empty: Color.DarkCyan,
+            wall: Color.White,
+            door: Color.Red,
+            pushWall: Color.Orange,
+            unreachable: Color.Black,
+            unknown: Color.Fuchsia);
     }
 }

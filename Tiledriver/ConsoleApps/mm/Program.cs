@@ -30,7 +30,8 @@ namespace mm
         public enum ImagePalette
         {
             CarveOutRooms,
-            HighlightWalls
+            HighlightWalls,
+            Full
         }
 
         static void Main(string[] args)
@@ -61,6 +62,7 @@ namespace mm
                 switch (palette)
                 {
                     case ImagePalette.HighlightWalls: return MapPalette.HighlightWalls;
+                    case ImagePalette.Full: return MapPalette.Full;
 
                     case ImagePalette.CarveOutRooms:
                     default:
