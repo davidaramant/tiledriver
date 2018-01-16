@@ -60,11 +60,11 @@ def save_metamap(metamap, filename):
         for y in range(height):
             for x in range(width):
                 tile_type = TileType.WALL
-                if metamap[x, y, EncodingDim.PLAYABLE] == 1:
+                if metamap[y, x, EncodingDim.PLAYABLE] == 1:
                     tile_type = TileType.EMPTY
-                elif metamap[x, y, EncodingDim.SOLID] == 1:
+                elif metamap[y, x, EncodingDim.SOLID] == 1:
                     tile_type = TileType.WALL
-                elif metamap[x, y, EncodingDim.PASSAGE] == 1:
+                elif metamap[y, x, EncodingDim.PASSAGE] == 1:
                     tile_type = TileType.DOOR
 
                 fout.write(struct.pack('b', tile_type))
