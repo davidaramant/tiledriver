@@ -2,7 +2,6 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using CommandLine;
 using Tiledriver.Core.FormatModels.MapMetadata;
@@ -25,6 +24,9 @@ namespace mm
 
             [Option("imagename", HelpText = "Name of the image file (by default, use the map name)")]
             public string ImageName { get; set; }
+
+            [Option('s', "scale", Default = 1, Required = false, HelpText = "How much to scale the output image.")]
+            public uint Scale { get; set; }
         }
 
         public enum ImagePalette
@@ -71,9 +73,9 @@ namespace mm
             }
 
             var imagePath = Path.Combine(Path.GetDirectoryName(opts.InputMapPath), imageName);
-            SimpleMapImageExporter.Export(map, PickPalette(opts.Theme), imagePath);
+            SimpleMapImageExporter.Export(map, PickPalette(opts.Theme), imagePath, scale:opts.Scale);
 
-            Console.WriteLine($"Wrote {imagePath}.");
+            Console.WriteLine($"Wrote {imagePath} with color theme {opts.Theme} at scale {opts.Scale}x.");
         }
     }
 }
