@@ -62,10 +62,10 @@ namespace Tiledriver.Core.FormatModels.SimpleMapImage
 
         public static readonly MapPalette Full = new MapPalette(
             empty: Color.DarkCyan,
-            wall: Color.White,
+            wall: Color.Black,
             door: Color.Red,
             pushWall: Color.Orange,
-            unreachable: Color.Black,
+            unreachable: Color.Gray,
             unknown: Color.Fuchsia);
     }
 }
