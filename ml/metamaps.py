@@ -2,6 +2,7 @@
 import struct
 from enum import IntEnum
 import numpy as np
+import random
 
 METAMAP_FILE_VERSION = 0x100
 
@@ -19,6 +20,21 @@ class EncodingDim(IntEnum):
     SOLID = 1
     PASSAGE = 2
 
+def generate_junk_map():
+    width = 64
+    height = 64
+    size = width * height
+
+    junk_map = np.zeros([size, len(EncodingDim)])
+
+    for i in range(size):
+        tile_type = random.randint(0, len(EncodingDim) - 1)
+        junk_map[i, tile_type] = 1
+
+    junk_map.shape = (width, height, len(EncodingDim))
+
+    return junk_map
+
 def load_metamap(filename):
     """Loads a metamap from a file into a numpy array of shape (width, height, 3)"""
     with open(filename, "rb") as fin:
@@ -32,7 +48,7 @@ def load_metamap(filename):
         size = width * height
 
         raw_map = np.fromfile(fin, dtype=np.uint8)
-        one_hot = np.zeros([size, 3])
+        one_hot = np.zeros([size, len(EncodingDim)])
 
         for i in range(size):
             tile_type = TileType(raw_map[i])
@@ -71,7 +87,5 @@ def save_metamap(metamap, filename):
     return
 
 if __name__ == '__main__':
-    # TODO: The map is being transposed
-    metamap = load_metamap("test.metamap")
-    print("metamap shape: " + str(metamap.shape))
-    save_metamap(metamap, "roundtripped.metamap")
+    metamap = generate_junk_map()
+    print(metamap)
