@@ -76,7 +76,15 @@ namespace TestRunner
                 //MapToImage("test.metamap");
                 //MapToImage("roundtripped.metamap");
 
-                LoadMapInEcWolf(CAGenerator.Generate(), projectPath: Path.GetFullPath("Cave"));
+
+                //LoadMapInEcWolf(CAGenerator.Generate(), projectPath: Path.GetFullPath("Cave"));
+
+                var caMap = CAGenerator.Generate();
+
+                var metaMap = MetaMapAnalyzer.Analyze(caMap);
+                SimpleMapImageExporter.Export(metaMap, MapPalette.Full, "caMap.png", scale: 10);
+                Process.Start("caMap.png");
+
                 //TranslateGameMapsFormat();
                 //Flatten();
                 //Pk3Test();
