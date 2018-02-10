@@ -76,7 +76,7 @@ namespace TestRunner
                 //MapToImage("test.metamap");
                 //MapToImage("roundtripped.metamap");
 
-                LoadMapInEcWolf(CAGenerator.Generate(), Path.GetFullPath("ca.wad"));
+                LoadMapInEcWolf(CAGenerator.Generate(), projectPath: Path.GetFullPath("Cave"));
                 //TranslateGameMapsFormat();
                 //Flatten();
                 //Pk3Test();
@@ -717,19 +717,35 @@ namespace TestRunner
             }
         }
 
-        private static void LoadMapInEcWolf(MapData uwmfMap, string wadPath)
+        private static void LoadMapInEcWolf(MapData uwmfMap, string projectPath = "")
         {
+            string wadFilePath = "demo.wad";
+            string pathToLoad = Path.GetFullPath(wadFilePath);
+
+            if (!string.IsNullOrWhiteSpace(projectPath))
+            {
+                var mapsSubDir = Path.Combine(projectPath, "maps");
+
+                if (!Directory.Exists(mapsSubDir))
+                {
+                    Directory.CreateDirectory(mapsSubDir);
+                }
+
+                wadFilePath = Path.Combine(mapsSubDir, "Map01.wad");
+                pathToLoad = Path.GetFullPath(projectPath);
+            }
+
             var ecWolfPath = GetECWolfExePath();
 
             var wad = new WadFile();
             wad.Append(new Marker("MAP01"));
             wad.Append(new UwmfLump("TEXTMAP", uwmfMap));
             wad.Append(new Marker("ENDMAP"));
-            wad.SaveTo(wadPath);
+            wad.SaveTo(wadFilePath);
 
             Process.Start(
                 ecWolfPath,
-                $"--file \"{wadPath}\" --data wl6 --hard --nowait --tedlevel map01");
+                $"--file \"{pathToLoad}\" --data wl6 --hard --nowait --tedlevel map01");
         }
 
         private static string GetECWolfExePath()

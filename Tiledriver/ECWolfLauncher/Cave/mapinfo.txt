@@ -1,0 +1,5 @@
+include "mapinfo/wolfcommon.txt"
+
+map "MAP01" "TEST"
+{
+}
