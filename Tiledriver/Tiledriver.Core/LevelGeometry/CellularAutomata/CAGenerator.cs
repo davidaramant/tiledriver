@@ -79,10 +79,9 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
         {
             TileSpace SolidTile() => new TileSpace(tile: 0, sector: 0, zone: -1);
             TileSpace EmptyTile() => new TileSpace(tile: -1, sector: 0, zone: 0);
-            var caBoard = RunCAGeneration(width: width, height: height, buildInitialBorder: true);
+            var caBoard = RunCAGeneration(width: width, height: height, buildInitialBorder: true, jaggedBorderBonus: .3);
 
             var entries = new TileSpace[height, width];
-
 
             // ### Build a big empty square
             // Top wall
@@ -117,7 +116,7 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
             }
         }
 
-        private static CellType[,] RunCAGeneration(int width, int height, bool buildInitialBorder)
+        private static CellType[,] RunCAGeneration(int width, int height, bool buildInitialBorder, double jaggedBorderBonus)
         {
             var board = new CellType[height, width];
 
@@ -135,9 +134,13 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
                     {
                         board[row, col] = CellType.Rock;
                     }
+                    if (col == 1 || col == width - 2 || row == 1 || row == height - 2)
+                    {
+                        board[row, col] = random.NextDouble() <= probabilityOfRock + jaggedBorderBonus ? CellType.Rock : CellType.Empty;
+                    }
                     else
                     {
-                        board[row, col] = random.NextDouble() >= probabilityOfRock ? CellType.Empty : CellType.Rock;
+                        board[row, col] = random.NextDouble() <= probabilityOfRock ? CellType.Rock : CellType.Empty;
                     }                    
                 }
             }
