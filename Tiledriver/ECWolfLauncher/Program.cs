@@ -729,7 +729,7 @@ namespace TestRunner
 
             Process.Start(
                 ecWolfPath,
-                $"--file \"{wadPath}\" --hard --nowait --tedlevel map01");
+                $"--file \"{wadPath}\" --data wl6 --hard --nowait --tedlevel map01");
         }
 
         private static string GetECWolfExePath()
