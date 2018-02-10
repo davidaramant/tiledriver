@@ -123,8 +123,8 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
 
             var random = new Random(0);
 
-            const double probabilityOfRock = 0.5;
-            const int generations = 1;
+            const double probabilityOfRock = 0.6;
+            const int generations = 4;
             const int minRockNeighborsToLive = 5;
 
             for (int row = 0; row < height; row++)
