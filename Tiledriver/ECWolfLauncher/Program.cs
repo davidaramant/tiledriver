@@ -30,6 +30,7 @@ using Tiledriver.Core.FormatModels.Wad;
 using Tiledriver.Core.FormatModels.Wdc31;
 using Tiledriver.Core.FormatModels.Xlat;
 using Tiledriver.Core.FormatModels.Xlat.Parsing;
+using Tiledriver.Core.LevelGeometry.CellularAutomata;
 using Tiledriver.Core.MapTranslators;
 using Tiledriver.Core.Settings;
 using Tiledriver.Core.Tests;
@@ -63,19 +64,19 @@ namespace TestRunner
                 //TestMapNameComparer();
                 //RemoveDuplicateMaps(inputPath: @"C:\Users\david\Desktop\Wolf3D Maps\metamaps");
 
-                var basePath = @"C:\git\tiledriver\ml";
+                //var basePath = @"C:\git\tiledriver\ml";
 
-                void MapToImage(string mapName)
-                {
-                    var mapPath = Path.Combine(basePath, mapName);
-                    var map = MetaMap.Load(mapPath);
-                    SimpleMapImageExporter.Export(map, MapPalette.CarveOutRooms, mapPath + ".png");
-                }
+                //void MapToImage(string mapName)
+                //{
+                //    var mapPath = Path.Combine(basePath, mapName);
+                //    var map = MetaMap.Load(mapPath);
+                //    SimpleMapImageExporter.Export(map, MapPalette.CarveOutRooms, mapPath + ".png");
+                //}
 
-                MapToImage("test.metamap");
-                MapToImage("roundtripped.metamap");
+                //MapToImage("test.metamap");
+                //MapToImage("roundtripped.metamap");
 
-                //LoadMapInEcWolf(DemoMap.Create(), Path.GetFullPath("demo.wad"));
+                LoadMapInEcWolf(CAGenerator.Generate(), Path.GetFullPath("ca.wad"));
                 //TranslateGameMapsFormat();
                 //Flatten();
                 //Pk3Test();

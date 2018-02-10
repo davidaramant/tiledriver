@@ -238,6 +238,7 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
-/.vscode/.ropeproject
+
+/.vscode
 /ml/*.png
-.vscode/
+/Tiledriver/ECWolfLauncher/*.wad
