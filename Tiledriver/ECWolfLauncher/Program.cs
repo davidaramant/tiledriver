@@ -81,7 +81,7 @@ namespace TestRunner
 
                 var caMap = CAGenerator.Generate();
 
-                var metaMap = MetaMapAnalyzer.Analyze(caMap);
+                var metaMap = MetaMapAnalyzer.Analyze(caMap, includeAllEmptyAreas:true);
                 SimpleMapImageExporter.Export(metaMap, MapPalette.Full, "caMap.png", scale: 10);
                 Process.Start("caMap.png");
 
