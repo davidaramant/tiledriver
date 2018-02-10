@@ -34,18 +34,18 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
                 {
                     new Tile
                     (
-                        textureNorth: "GSTONEA1",
-                        textureSouth: "GSTONEA1",
-                        textureEast: "GSTONEA2",
-                        textureWest: "GSTONEA2"
+                        textureNorth: "brock2",
+                        textureSouth: "brock2",
+                        textureEast: "brock2a",
+                        textureWest: "brock2a"
                     ),
                 },
                 sectors: new[]
                 {
                     new Sector
                     (
-                        textureCeiling: "#C0C0C0",
-                        textureFloor: "#A0A0A0"
+                        textureCeiling: "br_dark",
+                        textureFloor: "br"
                     ),
                 },
                 zones: new[]
