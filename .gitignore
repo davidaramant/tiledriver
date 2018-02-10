@@ -11,6 +11,7 @@ ml/*.metamap
 *.userosscache
 *.sln.docstates
 
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
@@ -242,3 +243,4 @@ _Pvt_Extensions
 /.vscode
 /ml/*.png
 /Tiledriver/ECWolfLauncher/*.wad
+/Tiledriver/ECWolfLauncher/ECWolfPath.txt
