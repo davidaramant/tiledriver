@@ -30,5 +30,13 @@ namespace Tiledriver.Core.Extensions.Collections
                 collection.Enqueue(item);
             }
         }
+
+        public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> sequence)
+        {
+            foreach (var item in sequence)
+            {
+                collection.Add(item);
+            }
+        }
     }
 }
