@@ -1,5 +1,5 @@
 include "mapinfo/wolfcommon.txt"
 
-map "MAP01" "TEST"
+map "MAP01" "The Best Cave in the World"
 {
 }
