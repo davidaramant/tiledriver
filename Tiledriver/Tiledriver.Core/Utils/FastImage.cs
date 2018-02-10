@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Tiledriver.Core.Utils
 {
-    public sealed class FastImage
+    public sealed class FastImage : IFastImage
     {
         public const int JpgQuality = 85;
 
