@@ -88,7 +88,10 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                 }
             }
 
-            return new RoomGraph(roomIds.Select(id => new Room(GetAllSpacesWithId(roomMap, id))));
+            return new RoomGraph(
+                metaMap.Width, 
+                metaMap.Height, 
+                roomIds.Select(id => new Room(GetAllSpacesWithId(roomMap, id))));
         }
 
         private static IEnumerable<Point> GetAllPlayableSpaces(MetaMap metaMap)
