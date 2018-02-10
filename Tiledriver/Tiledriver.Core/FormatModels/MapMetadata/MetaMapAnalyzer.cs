@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Drawing;
 using System.Linq;
+using Tiledriver.Core.Extensions.Collections;
 using Tiledriver.Core.FormatModels.MapMetadata.Extensions;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.Wolf3D;
@@ -14,11 +15,11 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
 {
     public static class MetaMapAnalyzer
     {
-        public static MetaMap Analyze(MapData mapData)
+        public static MetaMap Analyze(MapData mapData, bool includeAllEmptyAreas = false)
         {
             var doorLocations =
                 mapData.Triggers
-                    .Where(t => t.Action == ActionSpecial.DoorOpen )
+                    .Where(t => t.Action == ActionSpecial.DoorOpen)
                     .Select(t => new Point(t.X, t.Y))
                     .ToImmutableHashSet();
             var pushWallLocations =
@@ -50,7 +51,19 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
             var metaMap = new MetaMap(mapData.Width, mapData.Height);
 
             var spotsToCheck = new Queue<Point>();
-            spotsToCheck.Enqueue(mapData.Things.Single(t => t.Type == Actor.Player1Start.ClassName).GetPosition());
+
+            // Do we start with the player position, or check every single empty spot in the map?
+            if (!includeAllEmptyAreas)
+            {
+                spotsToCheck.Enqueue(mapData.Things.Single(t => t.Type == Actor.Player1Start.ClassName).GetPosition());
+            }
+            else
+            {
+                spotsToCheck.AddRange(
+                    Enumerable.Range(0, mapData.Width * mapData.Height).
+                    Select(i => new Point(i % mapData.Width, i / mapData.Width)).
+                    Where(p => GetTileType(p) == TileType.Empty));
+            }
 
             while (spotsToCheck.Any())
             {
@@ -97,7 +110,7 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                             break;
                     }
                 }
-                if( shouldStop)
+                if (shouldStop)
                     continue;
                 x++;
 
