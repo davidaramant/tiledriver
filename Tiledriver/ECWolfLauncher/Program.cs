@@ -89,8 +89,8 @@ namespace TestRunner
 
                 //SimpleMapImageExporter.Export(metaMap, MapPalette.Full, "caMap.png", scale: 10);
                 //Process.Start("caMap.png");
-                SimpleMapImageExporter.Export(roomGraph, "graph.png", scale: 10);
-                Process.Start("graph.png");
+                //SimpleMapImageExporter.Export(roomGraph, "graph.png", scale: 10);
+                //Process.Start("graph.png");
                 //SimpleMapImageExporter.Export(trimmedRoomGraph, "trimmed-graph.png", scale: 10);
                 //Process.Start("trimmed-graph.png");
 
@@ -113,7 +113,7 @@ namespace TestRunner
                 playerStart.X = firstPlayableSpaceIndex % clonedMap.Width + 0.5;
                 playerStart.Y = firstPlayableSpaceIndex / clonedMap.Width + 0.5;
 
-                //LoadMapInEcWolf(clonedMap, "Cave");
+                LoadMapInEcWolf(clonedMap, "Cave");
 
                 //TranslateGameMapsFormat();
                 //Flatten();

@@ -54,7 +54,4 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Cave\" />
-  </ItemGroup>
 </Project>
