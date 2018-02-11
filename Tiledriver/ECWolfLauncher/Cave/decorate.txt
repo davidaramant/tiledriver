@@ -1,0 +1,9 @@
+actor Stalagmite1 414
+{
+	states
+	{
+		Spawn:
+			STG1 A -1
+			stop
+	}
+}
