@@ -74,19 +74,22 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
                             continue;
 
                         // check for line of sight
-                        var pointsBetween = BresenhamLine(lightSpot, tileSpot);
-
-                        if (pointsBetween.Any(p => map.TileSpaceAt(p).HasTile))
+                        var obscured = false;
+                        foreach (var pointInBetween in BresenhamLine(origin: lightSpot, destination: tileSpot))
                         {
-                            if (pointsBetween.First(p => map.TileSpaceAt(p).HasTile) != tileSpot)
+                            if (map.TileSpaceAt(pointInBetween).HasTile && pointInBetween != tileSpot)
                             {
-                                continue;
+                                obscured = true;
+                                break;
                             }
                         }
 
-                        var d2 = GetDistanceSquared(lightSpot, tileSpot);
-                        var lightIncrement = PickLightLevelIncrement(radius2, d2);
-                        lightMap.Lighten(tileSpot, lightIncrement);
+                        if (!obscured)
+                        {
+                            var d2 = GetDistanceSquared(lightSpot, tileSpot);
+                            var lightIncrement = PickLightLevelIncrement(radius2, d2);
+                            lightMap.Lighten(tileSpot, lightIncrement);
+                        }
                     }
                 }
             }
@@ -110,19 +113,12 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
         }
 
         // Returns the list of points from origin to destination 
-        private static List<Point> BresenhamLine(Point origin, Point destination)
-        {
-            return BresenhamLine(origin.X, origin.Y, destination.X, destination.Y);
-        }
+        private static IEnumerable<Point> BresenhamLine(Point origin, Point destination) =>
+            BresenhamLine(origin.X, origin.Y, destination.X, destination.Y);
 
         // Returns the list of points from (x0, y0) to (x1, y1)
-        private static List<Point> BresenhamLine(int x0, int y0, int x1, int y1)
+        private static IEnumerable<Point> BresenhamLine(int x0, int y0, int x1, int y1)
         {
-            // Optimization: it would be preferable to calculate in
-            // advance the size of "result" and to use a fixed-size array
-            // instead of a list.
-            List<Point> result = new List<Point>();
-
             bool steep = Math.Abs(y1 - y0) > Math.Abs(x1 - x0);
             if (steep)
             {
@@ -143,8 +139,11 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
             if (y0 < y1) ystep = 1; else ystep = -1;
             for (int x = x0; x <= x1; x++)
             {
-                if (steep) result.Add(new Point(y, x));
-                else result.Add(new Point(x, y));
+                if (steep)
+                    yield return new Point(y, x);
+                else
+                    yield return new Point(x, y);
+
                 error += deltay;
                 if (2 * error >= deltax)
                 {
@@ -152,8 +151,6 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
                     error -= deltax;
                 }
             }
-
-            return result;
         }
 
 
