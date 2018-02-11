@@ -79,11 +79,18 @@ namespace TestRunner
 
                 //LoadMapInEcWolf(CAGenerator.Generate(), projectPath: Path.GetFullPath("Cave"));
 
-                var caMap = CAGenerator.Generate();
+                var caMap = CAGenerator.Generate(width:128,height:128);
 
-                var metaMap = MetaMapAnalyzer.Analyze(caMap, includeAllEmptyAreas:true);
-                SimpleMapImageExporter.Export(metaMap, MapPalette.Full, "caMap.png", scale: 10);
-                Process.Start("caMap.png");
+                var metaMap = MetaMapAnalyzer.Analyze(caMap, includeAllEmptyAreas: true);
+                var roomGraph = RoomAnalyzer.Analyze(metaMap);               
+                var trimmedRoomGraph = new RoomGraph(roomGraph.Width,roomGraph.Height,roomGraph.Where(room=>room.Area > 30));
+
+                //SimpleMapImageExporter.Export(metaMap, MapPalette.Full, "caMap.png", scale: 10);
+                //Process.Start("caMap.png");
+                SimpleMapImageExporter.Export(roomGraph, "graph.png", scale: 10);
+                Process.Start("graph.png");
+                SimpleMapImageExporter.Export(trimmedRoomGraph, "trimmed-graph.png", scale: 10);
+                Process.Start("trimmed-graph.png");
 
                 //TranslateGameMapsFormat();
                 //Flatten();
