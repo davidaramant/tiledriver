@@ -10,12 +10,13 @@ using Tiledriver.Core.FormatModels.MapMetadata;
 using Tiledriver.Core.FormatModels.MapMetadata.Extensions;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Uwmf.Extensions;
-using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.LevelGeometry.Lighting
 {
     public static class LightTracer
     {
+        public const int LightLevels = 4;
+        
         private sealed class LightMap
         {
             private readonly int[,] _map;
@@ -23,7 +24,7 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
             public void Lighten(Point point, int amount)
             {
                 var current = _map[point.Y, point.X];
-                _map[point.Y, point.X] = Math.Min(current + amount, 3);
+                _map[point.Y, point.X] = Math.Min(current + amount, LightLevels - 1);
             }
 
             public IEnumerable<int> GetLightLevels()
