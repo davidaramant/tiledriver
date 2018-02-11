@@ -20,13 +20,8 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
         {
             private readonly int[,] _map;
             public LightMap(int width, int height) => _map = new int[width, height];
-            public int Height => _map.GetLength(0);
-            public int Width => _map.GetLength(1);
             public void Lighten(Point point, int amount)
             {
-                if (point.X < 0 || point.X > Width - 1 || point.Y < 0 || point.Y > Height - 1)
-                    return;
-
                 var current = _map[point.Y, point.X];
                 _map[point.Y, point.X] = Math.Min(current + amount, 3);
             }
@@ -52,13 +47,15 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
 
             var lightMap = new LightMap(map.Height, map.Width);
             var lightSpots = FindValidSpotsForLights(map, room);
-            foreach (var spot in lightSpots)
+
+            var bounds = new Size(map.Width, map.Height);
+            foreach (var lightSpot in lightSpots)
             {
                 map.Things.Add(
                     new Thing(
                         type: "Candle",
-                        x: spot.X + 0.5,
-                        y: spot.Y + 0.5,
+                        x: lightSpot.X + 0.5,
+                        y: lightSpot.Y + 0.5,
                         z: 0,
                         angle: 0,
                         skill1: true,
@@ -70,13 +67,26 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
                 {
                     for (int x = 0; x < diameter; x++)
                     {
-                        var tileLocation = new Point(
-                            spot.X - radius + x,
-                            spot.Y - radius + y);
+                        var tileSpot = new Point(
+                            lightSpot.X - radius + x,
+                            lightSpot.Y - radius + y);
+                        if (!bounds.Contains(tileSpot))
+                            continue;
 
-                        var d2 = GetDistanceSquared(spot, tileLocation);
+                        // check for line of sight
+                        var pointsBetween = BresenhamLine(lightSpot, tileSpot);
+
+                        if (pointsBetween.Any(p => map.TileSpaceAt(p).HasTile))
+                        {
+                            if (pointsBetween.First(p => map.TileSpaceAt(p).HasTile) != tileSpot)
+                            {
+                                continue;
+                            }
+                        }
+
+                        var d2 = GetDistanceSquared(lightSpot, tileSpot);
                         var lightIncrement = PickLightLevelIncrement(radius2, d2);
-                        lightMap.Lighten(tileLocation, lightIncrement);
+                        lightMap.Lighten(tileSpot, lightIncrement);
                     }
                 }
             }
@@ -90,6 +100,62 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
                 }
             }
         }
+
+        // Swap the values of A and B
+        private static void Swap<T>(ref T a, ref T b)
+        {
+            T c = a;
+            a = b;
+            b = c;
+        }
+
+        // Returns the list of points from origin to destination 
+        private static List<Point> BresenhamLine(Point origin, Point destination)
+        {
+            return BresenhamLine(origin.X, origin.Y, destination.X, destination.Y);
+        }
+
+        // Returns the list of points from (x0, y0) to (x1, y1)
+        private static List<Point> BresenhamLine(int x0, int y0, int x1, int y1)
+        {
+            // Optimization: it would be preferable to calculate in
+            // advance the size of "result" and to use a fixed-size array
+            // instead of a list.
+            List<Point> result = new List<Point>();
+
+            bool steep = Math.Abs(y1 - y0) > Math.Abs(x1 - x0);
+            if (steep)
+            {
+                Swap(ref x0, ref y0);
+                Swap(ref x1, ref y1);
+            }
+            if (x0 > x1)
+            {
+                Swap(ref x0, ref x1);
+                Swap(ref y0, ref y1);
+            }
+
+            int deltax = x1 - x0;
+            int deltay = Math.Abs(y1 - y0);
+            int error = 0;
+            int ystep;
+            int y = y0;
+            if (y0 < y1) ystep = 1; else ystep = -1;
+            for (int x = x0; x <= x1; x++)
+            {
+                if (steep) result.Add(new Point(y, x));
+                else result.Add(new Point(x, y));
+                error += deltay;
+                if (2 * error >= deltax)
+                {
+                    y += ystep;
+                    error -= deltax;
+                }
+            }
+
+            return result;
+        }
+
 
         private static double GetDistanceSquared(Point p1, Point p2) =>
             (p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y);
