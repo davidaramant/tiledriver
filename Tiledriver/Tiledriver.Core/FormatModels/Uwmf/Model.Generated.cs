@@ -158,7 +158,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf
                 soundSequence: SoundSequence,
                 textureOverhead: TextureOverhead,
                 comment: Comment,
-                unknownProperties: UnknownProperties);
+                unknownProperties: UnknownProperties.Select(item => item.Clone()));
         }
     }
 
@@ -224,6 +224,15 @@ namespace Tiledriver.Core.FormatModels.Uwmf
         }
 
         partial void AdditionalSemanticChecks();
+
+        public Sector Clone()
+        {
+            return new Sector(
+                textureCeiling: TextureCeiling,
+                textureFloor: TextureFloor,
+                comment: Comment,
+                unknownProperties: UnknownProperties.Select(item => item.Clone()));
+        }
     }
 
     public sealed partial class Zone : BaseUwmfBlock, IWriteableUwmfBlock
@@ -258,6 +267,13 @@ namespace Tiledriver.Core.FormatModels.Uwmf
         }
 
         partial void AdditionalSemanticChecks();
+
+        public Zone Clone()
+        {
+            return new Zone(
+                comment: Comment,
+                unknownProperties: UnknownProperties.Select(item => item.Clone()));
+        }
     }
 
     public sealed partial class Plane : BaseUwmfBlock, IWriteableUwmfBlock
@@ -307,6 +323,14 @@ namespace Tiledriver.Core.FormatModels.Uwmf
         }
 
         partial void AdditionalSemanticChecks();
+
+        public Plane Clone()
+        {
+            return new Plane(
+                depth: Depth,
+                comment: Comment,
+                unknownProperties: UnknownProperties.Select(item => item.Clone()));
+        }
     }
 
     public sealed partial class TileSpace : BaseUwmfBlock
@@ -367,6 +391,15 @@ namespace Tiledriver.Core.FormatModels.Uwmf
         }
 
         partial void AdditionalSemanticChecks();
+
+        public TileSpace Clone()
+        {
+            return new TileSpace(
+                tile: Tile,
+                sector: Sector,
+                zone: Zone,
+                tag: Tag);
+        }
     }
 
     public sealed partial class PlaneMap : BaseUwmfBlock, IWriteableUwmfBlock
@@ -394,6 +427,12 @@ namespace Tiledriver.Core.FormatModels.Uwmf
         }
 
         partial void AdditionalSemanticChecks();
+
+        public PlaneMap Clone()
+        {
+            return new PlaneMap(
+                tileSpaces: TileSpaces.Select(item => item.Clone()));
+        }
     }
 
     public sealed partial class Thing : BaseUwmfBlock, IWriteableUwmfBlock
@@ -527,6 +566,24 @@ namespace Tiledriver.Core.FormatModels.Uwmf
         }
 
         partial void AdditionalSemanticChecks();
+
+        public Thing Clone()
+        {
+            return new Thing(
+                type: Type,
+                x: X,
+                y: Y,
+                z: Z,
+                angle: Angle,
+                ambush: Ambush,
+                patrol: Patrol,
+                skill1: Skill1,
+                skill2: Skill2,
+                skill3: Skill3,
+                skill4: Skill4,
+                comment: Comment,
+                unknownProperties: UnknownProperties.Select(item => item.Clone()));
+        }
     }
 
     public sealed partial class Trigger : BaseUwmfBlock, IWriteableUwmfBlock
@@ -677,6 +734,31 @@ namespace Tiledriver.Core.FormatModels.Uwmf
         }
 
         partial void AdditionalSemanticChecks();
+
+        public Trigger Clone()
+        {
+            return new Trigger(
+                x: X,
+                y: Y,
+                z: Z,
+                action: Action,
+                arg0: Arg0,
+                arg1: Arg1,
+                arg2: Arg2,
+                arg3: Arg3,
+                arg4: Arg4,
+                activateEast: ActivateEast,
+                activateNorth: ActivateNorth,
+                activateWest: ActivateWest,
+                activateSouth: ActivateSouth,
+                playerCross: PlayerCross,
+                playerUse: PlayerUse,
+                monsterUse: MonsterUse,
+                repeatable: Repeatable,
+                secret: Secret,
+                comment: Comment,
+                unknownProperties: UnknownProperties.Select(item => item.Clone()));
+        }
     }
 
     public sealed partial class MapData : BaseUwmfBlock, IWriteableUwmfBlock
@@ -815,6 +897,26 @@ namespace Tiledriver.Core.FormatModels.Uwmf
         }
 
         partial void AdditionalSemanticChecks();
+
+        public MapData Clone()
+        {
+            return new MapData(
+                nameSpace: NameSpace,
+                tileSize: TileSize,
+                name: Name,
+                width: Width,
+                height: Height,
+                tiles: Tiles.Select(item => item.Clone()),
+                sectors: Sectors.Select(item => item.Clone()),
+                zones: Zones.Select(item => item.Clone()),
+                planes: Planes.Select(item => item.Clone()),
+                planeMaps: PlaneMaps.Select(item => item.Clone()),
+                things: Things.Select(item => item.Clone()),
+                triggers: Triggers.Select(item => item.Clone()),
+                comment: Comment,
+                unknownProperties: UnknownProperties.Select(item => item.Clone()),
+                unknownBlocks: UnknownBlocks.Select(item => item.Clone()));
+        }
     }
 
 }

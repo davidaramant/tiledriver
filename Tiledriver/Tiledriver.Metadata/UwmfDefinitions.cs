@@ -10,7 +10,6 @@ namespace Tiledriver.Metadata
         public static readonly IEnumerable<Block> Blocks = new[]
         {
             new Block("tile",
-                supportsCloning:true,
                 properties:new []
                 {
                     new Property("textureEast",PropertyType.String),

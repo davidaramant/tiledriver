@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Tiledriver.Core.FormatModels.Common;
 
 namespace Tiledriver.Core.FormatModels.Uwmf
@@ -28,6 +29,14 @@ namespace Tiledriver.Core.FormatModels.Uwmf
             WriteLine(stream, "}");
 
             return stream;
+        }
+
+        public UnknownBlock Clone()
+        {
+            var block = new UnknownBlock(Name);
+            block.Properties.AddRange(Properties.Select(p => p.Clone()));
+
+            return block;
         }
     }
 }

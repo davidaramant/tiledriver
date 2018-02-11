@@ -32,11 +32,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf");
                 WriteConstructors(output, block);
                 WriteWriteToMethod(block, output);
                 WriteSemanticValidityMethods(output, block);
-
-                if (block.SupportsCloning)
-                {
-                    WriteCloneMethod(output, block);
-                }
+                WriteCloneMethod(output, block);
 
                 output.CloseParen();
                 output.Line();
@@ -48,7 +44,6 @@ namespace Tiledriver.Core.FormatModels.Uwmf");
 
         private static void WriteCloneMethod(IndentedWriter output, Block block)
         {
-            // TODO: Deep cloning - the unknown properties will point to the same instances
             output.
                 Line().
                 Line($"public {block.ClassName.ToPascalCase()} Clone()").
@@ -59,6 +54,11 @@ namespace Tiledriver.Core.FormatModels.Uwmf");
             {
                 var postfix = indexed.index == block.Properties.Count() - 1 ? ");" : ",";
 
+                if (!indexed.param.IsScalarField)
+                {
+                    postfix = ".Select(item => item.Clone())" + postfix;
+
+                }
                 output.Line(indexed.param.ArgumentName + ": " + indexed.param.PropertyName + postfix);
             }
 

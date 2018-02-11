@@ -33,7 +33,6 @@ namespace Tiledriver.Metadata
         public IEnumerable<string> ImplementedInterfaces { get; }
         public bool SupportsUnknownProperties => Properties.Any(p => p.Type == PropertyType.UnknownProperties);
         public bool SupportsUnknownBlocks => Properties.Any(p => p.Type == PropertyType.UnknownBlocks);
-        public bool SupportsCloning { get; }
 
         public IEnumerable<Property> OrderedProperties()
         {
@@ -51,11 +50,9 @@ namespace Tiledriver.Metadata
             bool isAbstract = false,
             IEnumerable<string> implements = null,
             IEnumerable<string> canSetPropertiesFrom = null,
-            IEnumerable<string> propertyFallbacksFrom = null,
-            bool supportsCloning = false) :
+            IEnumerable<string> propertyFallbacksFrom = null) :
             base(formatName, className ?? formatName)
         {
-            SupportsCloning = supportsCloning;
             IsSubBlock = isSubBlock;
             NormalWriting = normalWriting;
             ParsingMode = parsing;

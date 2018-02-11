@@ -15,5 +15,10 @@ namespace Tiledriver.Core.FormatModels.Uwmf
             Name = name;
             Value = value;
         }
+
+        public UnknownProperty Clone()
+        {
+            return new UnknownProperty(Name, Value);
+        }
     }
 }
