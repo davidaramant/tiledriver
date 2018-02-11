@@ -79,7 +79,7 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
         {
             TileSpace SolidTile() => new TileSpace(tile: 0, sector: 0, zone: -1);
             TileSpace EmptyTile() => new TileSpace(tile: -1, sector: 0, zone: 0);
-            var caBoard = RunCAGeneration(width: width, height: height, buildInitialBorder: true, jaggedBorderBonus: .3);
+            var caBoard = RunCAGeneration(width: width, height: height, buildInitialBorder: true);
 
             var entries = new TileSpace[height, width];
 
@@ -116,7 +116,7 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
             }
         }
 
-        private static CellType[,] RunCAGeneration(int width, int height, bool buildInitialBorder, double jaggedBorderBonus)
+        private static CellType[,] RunCAGeneration(int width, int height, bool buildInitialBorder)
         {
             var board = new CellType[height, width];
 
@@ -126,22 +126,20 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
             const int generations = 4;
             const int minRockNeighborsToLive = 5;
 
+            const int borderOffset = 3;
+
             for (int row = 0; row < height; row++)
             {
                 for (int col = 0; col < width; col++)
                 {
-                    if (buildInitialBorder && col == 0 || col == width - 1 || row == 0 || row == height - 1)
+                    if (buildInitialBorder && col < borderOffset || col > (width - 1 - borderOffset) || row < borderOffset || row > (height - borderOffset))
                     {
                         board[row, col] = CellType.Rock;
-                    }
-                    if (col == 1 || col == width - 2 || row == 1 || row == height - 2)
-                    {
-                        board[row, col] = random.NextDouble() <= probabilityOfRock + jaggedBorderBonus ? CellType.Rock : CellType.Empty;
                     }
                     else
                     {
                         board[row, col] = random.NextDouble() <= probabilityOfRock ? CellType.Rock : CellType.Empty;
-                    }                    
+                    }
                 }
             }
 
