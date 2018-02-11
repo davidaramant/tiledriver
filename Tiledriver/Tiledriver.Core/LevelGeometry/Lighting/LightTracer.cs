@@ -16,23 +16,97 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
 {
     public static class LightTracer
     {
+        private sealed class LightMap
+        {
+            private readonly int[,] _map;
+            public LightMap(int width, int height) => _map = new int[width, height];
+            public int Height => _map.GetLength(0);
+            public int Width => _map.GetLength(1);
+            public void Lighten(Point point, int amount)
+            {
+                if (point.X < 0 || point.X > Width - 1 || point.Y < 0 || point.Y > Height - 1)
+                    return;
+
+                var current = _map[point.Y, point.X];
+                _map[point.Y, point.X] = Math.Min(current + amount, 3);
+            }
+
+            public IEnumerable<int> GetLightLevels()
+            {
+                for (int y = 0; y < _map.GetLength(0); y++)
+                {
+                    for (int x = 0; x < _map.GetLength(1); x++)
+                    {
+                        yield return _map[y, x];
+                    }
+                }
+            }
+        }
+
         public static void AddRandomLightsToMap(MapData map, Room room)
         {
+            const int radius = 4;
+            var radius2 = radius * radius;
+
+            const int diameter = 2 * radius + 1;
+
+            var lightMap = new LightMap(map.Height, map.Width);
             var lightSpots = FindValidSpotsForLights(map, room);
             foreach (var spot in lightSpots)
             {
                 map.Things.Add(
                     new Thing(
                         type: "Candle",
-                        x: spot.X + 0.5, 
-                        y: spot.Y + 0.5, 
-                        z: 0, 
-                        angle: 0, 
-                        skill1: true, 
-                        skill2: true, 
-                        skill3: true, 
+                        x: spot.X + 0.5,
+                        y: spot.Y + 0.5,
+                        z: 0,
+                        angle: 0,
+                        skill1: true,
+                        skill2: true,
+                        skill3: true,
                         skill4: true));
+
+                for (int y = 0; y < diameter; y++)
+                {
+                    for (int x = 0; x < diameter; x++)
+                    {
+                        var tileLocation = new Point(
+                            spot.X - radius + x,
+                            spot.Y - radius + y);
+
+                        var d2 = GetDistanceSquared(spot, tileLocation);
+                        var lightIncrement = PickLightLevelIncrement(radius2, d2);
+                        lightMap.Lighten(tileLocation, lightIncrement);
+                    }
+                }
             }
+
+            foreach (var (level, ts) in lightMap.GetLightLevels().Zip(map.PlaneMaps[0].TileSpaces, (level, ts) => (level, ts)))
+            {
+                ts.Sector = level;
+                if (ts.HasTile)
+                {
+                    ts.Tile = level;
+                }
+            }
+        }
+
+        private static double GetDistanceSquared(Point p1, Point p2) =>
+            (p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y);
+
+        private static byte PickLightLevelIncrement(int lightRadiusSquared, double distanceSquared)
+        {
+            if (distanceSquared > lightRadiusSquared)
+            {
+                return 0;
+            }
+
+            if (distanceSquared >= (lightRadiusSquared / 4.0))
+            {
+                return 1;
+            }
+
+            return 2;
         }
 
         public static HashSet<Point> FindValidSpotsForLights(
@@ -52,8 +126,10 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
             {
                 var possibleSpot = room.ElementAt(random.Next(room.Area));
 
-                if (WouldBlockHorizontally(map, possibleSpot) ||
-                    WouldBlockVertically(map, possibleSpot) ||
+                var surroundedVertically = IsSurroundedVertically(map, possibleSpot);
+                var surroundedHorizontally = IsSurroundedHorizontally(map, possibleSpot);
+
+                if ((surroundedVertically ^ surroundedHorizontally) ||
                     existingThingSpots.Contains(possibleSpot))
                 {
                     continue;
@@ -65,10 +141,10 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
             return spots;
         }
 
-        private static bool WouldBlockHorizontally(MapData map, Point possibleSpot) =>
+        private static bool IsSurroundedVertically(MapData map, Point possibleSpot) =>
             map.TileSpaceAt(possibleSpot.Left()).HasTile && map.TileSpaceAt(possibleSpot.Right()).HasTile;
 
-        private static bool WouldBlockVertically(MapData map, Point possibleSpot) =>
+        private static bool IsSurroundedHorizontally(MapData map, Point possibleSpot) =>
             map.TileSpaceAt(possibleSpot.Above()).HasTile && map.TileSpaceAt(possibleSpot.Below()).HasTile;
     }
 }
