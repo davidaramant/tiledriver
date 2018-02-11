@@ -21,7 +21,10 @@ actor Candle 515
 	states
 	{
 		Spawn:
-			CAND A -1
-			stop
+			CAND C random(5, 30)
+			CAND B random(2, 4)
+			CAND A random(5, 30)
+			CAND B random(2, 4)
+			loop
 	}
 }
