@@ -43,7 +43,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf
             int definedCount,
             string name)
         {
-            var invalidIds = entries.Select(idGrabber).Where(id => id >= definedCount);
+            var invalidIds = entries.Select(idGrabber).Where(id => id >= definedCount).Distinct();
 
             // TODO: Add something about which plane map this was found in
             if (invalidIds.Any())
