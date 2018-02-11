@@ -54,22 +54,22 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                 }
 
                 // left
-                if (spot.X > 0 && roomMap[spot.Y, spot.X - 1] != currentRoomId)
+                if (spot.X > 0 && roomMap[spot.Y, spot.X - 1] != currentRoomId && roomMap[spot.Y, spot.X - 1] != 0)
                 {
                     currentRoomId = JoinSpots(spot, spot.Left());
                 }
                 // right
-                if (spot.X < metaMap.Width - 1 && roomMap[spot.Y, spot.X + 1] != currentRoomId)
+                if (spot.X < metaMap.Width - 1 && roomMap[spot.Y, spot.X + 1] != currentRoomId && roomMap[spot.Y, spot.X + 1] != 0)
                 {
                     currentRoomId = JoinSpots(spot, spot.Right());
                 }
                 // top
-                if (spot.Y > 0 && roomMap[spot.Y - 1, spot.X] != currentRoomId)
+                if (spot.Y > 0 && roomMap[spot.Y - 1, spot.X] != currentRoomId && roomMap[spot.Y - 1, spot.X] != 0)
                 {
                     currentRoomId = JoinSpots(spot, spot.Above());
                 }
                 // bottom
-                if (spot.Y < metaMap.Height - 1 && roomMap[spot.Y + 1, spot.X] != currentRoomId)
+                if (spot.Y < metaMap.Height - 1 && roomMap[spot.Y + 1, spot.X] != currentRoomId && roomMap[spot.Y + 1, spot.X] != 0)
                 {
                     currentRoomId = JoinSpots(spot, spot.Below());
                 }
@@ -89,8 +89,8 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
             }
 
             return new RoomGraph(
-                metaMap.Width, 
-                metaMap.Height, 
+                metaMap.Width,
+                metaMap.Height,
                 roomIds.Select(id => new Room(GetAllSpacesWithId(roomMap, id))));
         }
 
