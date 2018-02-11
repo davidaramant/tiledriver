@@ -8,5 +8,6 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Extensions
     public static class UwmfExtensions
     {
         public static TileSpace TileSpaceAt(this MapData map, Point p) => map.PlaneMaps[0].TileSpaces[p.Y * map.Width + p.X];
+        public static Point TilePosition(this Thing thing) => new Point((int)thing.X, (int)thing.Y);
     }
 }

@@ -26,6 +26,7 @@ using Tiledriver.Core.FormatModels.Pk3;
 using Tiledriver.Core.FormatModels.SimpleMapImage;
 using Tiledriver.Core.FormatModels.SimpleMapText;
 using Tiledriver.Core.FormatModels.Uwmf;
+using Tiledriver.Core.FormatModels.Uwmf.Extensions;
 using Tiledriver.Core.FormatModels.Uwmf.Parsing;
 using Tiledriver.Core.FormatModels.Wad;
 using Tiledriver.Core.FormatModels.Wdc31;
@@ -115,6 +116,12 @@ namespace TestRunner
                 var playerStart = clonedMap.Things.First(thing => thing.Type == Actor.Player1Start.ClassName);
                 playerStart.X = firstPlayableSpaceIndex % clonedMap.Width + 0.5;
                 playerStart.Y = firstPlayableSpaceIndex / clonedMap.Width + 0.5;
+                
+                // remove things that are now in walls
+                var thingListCopy = clonedMap.Things.ToList();
+                clonedMap.Things.Clear();
+                clonedMap.Things.AddRange(thingListCopy.Where(t => !clonedMap.TileSpaceAt(t.TilePosition()).HasTile));
+
                 // ***************************************
 
                 LightTracer.AddRandomLightsToMap(clonedMap, largeRoom);
