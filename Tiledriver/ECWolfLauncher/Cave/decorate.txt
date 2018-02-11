@@ -1,3 +1,12 @@
+actor Stalactite1 313
+{
+	states
+	{
+		Spawn:
+			STC1 A -1
+			stop
+	}
+}
 actor Stalagmite1 414
 {
 	states
