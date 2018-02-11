@@ -23,7 +23,7 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
             {
                 map.Things.Add(
                     new Thing(
-                        type: Actor.FloorLamp.ClassName, // TODO: Replace with torch
+                        type: "Candle",
                         x: spot.X + 0.5, 
                         y: spot.Y + 0.5, 
                         z: 0, 

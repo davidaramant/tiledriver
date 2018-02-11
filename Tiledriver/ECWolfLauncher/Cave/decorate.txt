@@ -16,3 +16,12 @@ actor Stalagmite1 414
 			stop
 	}
 }
+actor Candle 515
+{
+	states
+	{
+		Spawn:
+			CAND A -1
+			stop
+	}
+}

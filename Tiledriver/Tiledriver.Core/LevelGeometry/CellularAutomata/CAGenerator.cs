@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2018, David Aramant
+﻿// Copyright (c) 2018, David Aramant, Grant Kimsey
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System;
