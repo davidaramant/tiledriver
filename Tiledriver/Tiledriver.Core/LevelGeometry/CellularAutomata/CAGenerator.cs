@@ -123,7 +123,7 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
             var random = new Random(0);
 
             const double probabilityOfRock = 0.6;
-            const int generations = 4;
+            const int generations = 6;
             const int minRockNeighborsToLive = 5;
 
             const int borderOffset = 3;

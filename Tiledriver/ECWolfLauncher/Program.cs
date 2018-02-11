@@ -6,6 +6,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -34,6 +35,7 @@ using Tiledriver.Core.LevelGeometry.CellularAutomata;
 using Tiledriver.Core.MapTranslators;
 using Tiledriver.Core.Settings;
 using Tiledriver.Core.Tests;
+using Tiledriver.Core.Wolf3D;
 
 namespace TestRunner
 {
@@ -79,18 +81,39 @@ namespace TestRunner
 
                 //LoadMapInEcWolf(CAGenerator.Generate(), projectPath: Path.GetFullPath("Cave"));
 
-                var caMap = CAGenerator.Generate(width:128,height:128);
+                var caMap = CAGenerator.Generate(width: 128, height: 128);
 
                 var metaMap = MetaMapAnalyzer.Analyze(caMap, includeAllEmptyAreas: true);
-                var roomGraph = RoomAnalyzer.Analyze(metaMap);               
-                var trimmedRoomGraph = new RoomGraph(roomGraph.Width,roomGraph.Height,roomGraph.Where(room=>room.Area > 30));
+                var roomGraph = RoomAnalyzer.Analyze(metaMap);
+                var trimmedRoomGraph = new RoomGraph(roomGraph.Width, roomGraph.Height, new[] { roomGraph.OrderBy(r => r.Area).Last() });
 
                 //SimpleMapImageExporter.Export(metaMap, MapPalette.Full, "caMap.png", scale: 10);
                 //Process.Start("caMap.png");
                 SimpleMapImageExporter.Export(roomGraph, "graph.png", scale: 10);
                 Process.Start("graph.png");
-                SimpleMapImageExporter.Export(trimmedRoomGraph, "trimmed-graph.png", scale: 10);
-                Process.Start("trimmed-graph.png");
+                //SimpleMapImageExporter.Export(trimmedRoomGraph, "trimmed-graph.png", scale: 10);
+                //Process.Start("trimmed-graph.png");
+
+                var largeRoom = trimmedRoomGraph.First();
+                var clonedMap = caMap.Clone();
+                for (int row = 0; row < clonedMap.Height; row++)
+                {
+                    for (int col = 0; col < clonedMap.Width; col++)
+                    {
+                        if (!largeRoom.Contains(new Point(col, row)))
+                        {
+                            var index = row * clonedMap.Width + col;
+                            clonedMap.PlaneMaps[0].TileSpaces[index].Tile = 0;
+                        }
+                    }
+                }
+
+                var firstPlayableSpaceIndex = clonedMap.PlaneMaps[0].TileSpaces.Select((ts, index) => (ts, index)).First(_ => !_.Item1.HasTile).Item2;
+                var playerStart = clonedMap.Things.First(thing => thing.Type == Actor.Player1Start.ClassName);
+                playerStart.X = firstPlayableSpaceIndex % clonedMap.Width + 0.5;
+                playerStart.Y = firstPlayableSpaceIndex / clonedMap.Width + 0.5;
+
+                //LoadMapInEcWolf(clonedMap, "Cave");
 
                 //TranslateGameMapsFormat();
                 //Flatten();
