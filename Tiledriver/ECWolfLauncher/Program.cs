@@ -32,6 +32,7 @@ using Tiledriver.Core.FormatModels.Wdc31;
 using Tiledriver.Core.FormatModels.Xlat;
 using Tiledriver.Core.FormatModels.Xlat.Parsing;
 using Tiledriver.Core.LevelGeometry.CellularAutomata;
+using Tiledriver.Core.LevelGeometry.Lighting;
 using Tiledriver.Core.MapTranslators;
 using Tiledriver.Core.Settings;
 using Tiledriver.Core.Tests;
@@ -94,6 +95,8 @@ namespace TestRunner
                 //SimpleMapImageExporter.Export(trimmedRoomGraph, "trimmed-graph.png", scale: 10);
                 //Process.Start("trimmed-graph.png");
 
+                // ************************************
+                // Strip out all but the largest room
                 var largeRoom = trimmedRoomGraph.First();
                 var clonedMap = caMap.Clone();
                 for (int row = 0; row < clonedMap.Height; row++)
@@ -112,6 +115,9 @@ namespace TestRunner
                 var playerStart = clonedMap.Things.First(thing => thing.Type == Actor.Player1Start.ClassName);
                 playerStart.X = firstPlayableSpaceIndex % clonedMap.Width + 0.5;
                 playerStart.Y = firstPlayableSpaceIndex / clonedMap.Width + 0.5;
+                // ***************************************
+
+                LightTracer.AddRandomLightsToMap(clonedMap, largeRoom);
 
                 LoadMapInEcWolf(clonedMap, "Cave");
 

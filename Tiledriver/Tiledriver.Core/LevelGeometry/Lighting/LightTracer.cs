@@ -10,11 +10,31 @@ using Tiledriver.Core.FormatModels.MapMetadata;
 using Tiledriver.Core.FormatModels.MapMetadata.Extensions;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Uwmf.Extensions;
+using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.LevelGeometry.Lighting
 {
     public static class LightTracer
     {
+        public static void AddRandomLightsToMap(MapData map, Room room)
+        {
+            var lightSpots = FindValidSpotsForLights(map, room);
+            foreach (var spot in lightSpots)
+            {
+                map.Things.Add(
+                    new Thing(
+                        type: Actor.FloorLamp.ClassName, // TODO: Replace with torch
+                        x: spot.X + 0.5, 
+                        y: spot.Y + 0.5, 
+                        z: 0, 
+                        angle: 0, 
+                        skill1: true, 
+                        skill2: true, 
+                        skill3: true, 
+                        skill4: true));
+            }
+        }
+
         public static HashSet<Point> FindValidSpotsForLights(
             MapData map,
             Room room,
