@@ -17,24 +17,25 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
             Rock
         }
 
-        public static MapData Generate(int width = 128, int height = 128)
+        public static MapData Generate(
+            int width = 128,
+            int height = 128,
+            double probabilityOfRock = 0.6,
+            int generations = 6,
+            int minRockNeighborsToLive = 5,
+            int borderOffset = 3,
+            double stalagmiteProb = 0.015,
+            double stalactiteProb = 0.03)
         {
-            const double probabilityOfRock = 0.6;
-            const int generations = 6;
-            const int minRockNeighborsToLive = 5;
-            const int borderOffset = 3;
-            const double stalagmiteProb = 0.015;
-            const double stalactiteProb = 0.03;
-
-            var geometry = CreateGeometry(
+           var geometry = CreateGeometry(
                 width,
                 height,
-                probabilityOfRock, 
+                probabilityOfRock,
                 generations,
                 minRockNeighborsToLive,
                 borderOffset,
-                stalagmiteProb, 
-                stalactiteProb, 
+                stalagmiteProb,
+                stalactiteProb,
                 out var decorations).ToList();
             var playerStartingPositionIndex = geometry.FindIndex(ts => !ts.HasTile);
 
@@ -120,14 +121,14 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
         }
 
         private static IEnumerable<TileSpace> CreateGeometry(
-            int width, 
-            int height, 
-            double rockProb, 
-            int generations, 
+            int width,
+            int height,
+            double rockProb,
+            int generations,
             int minRockNeighborsToLive,
             int boardBorderOffset,
-            double stalagmiteProb, 
-            double stalactiteProb, 
+            double stalagmiteProb,
+            double stalactiteProb,
             out IEnumerable<Thing> decorations)
         {
             TileSpace SolidTile() => new TileSpace(tile: 0, sector: 0, zone: -1);
@@ -135,7 +136,7 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
 
             var randomGenerator = new Random(0);
             var caBoard = RunCAGeneration(width, height, randomGenerator, rockProb, generations, minRockNeighborsToLive, boardBorderOffset);
-            
+
             var entries = new TileSpace[height, width];
             var decorationList = new List<Thing>();
 
@@ -153,7 +154,7 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
                 {
                     entries[row, col] = caBoard[row, col] == CellType.Empty ? EmptyTile() : SolidTile();
                     var decoration = GetDecorationForCoordinates(caBoard, randomGenerator, stalactiteProb, stalagmiteProb, row, col);
-                    if(decoration != null)
+                    if (decoration != null)
                     {
                         decorationList.Add(decoration);
                     }
@@ -182,7 +183,7 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
 
         private static CellType[,] RunCAGeneration(int width, int height, Random random, double probabilityOfRock, int generations, int minRockNeighborsToLive, int borderOffset)
         {
-            var board = new CellType[height, width];                 
+            var board = new CellType[height, width];
 
             for (int row = 0; row < height; row++)
             {
@@ -283,16 +284,16 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
 
         private static Thing GetDecorationForCoordinates(CellType[,] board, Random randomGenerator, double stalactiteProb, double stalagmiteProb, int row, int col)
         {
-            if(board[row, col] == CellType.Rock)
+            if (board[row, col] == CellType.Rock)
             {
                 return null;
-            }                        
-            
+            }
+
             if (IsSpaceInCove(board, row, col))
             {
                 return GenerateRandomTreasureAtCoordinates(randomGenerator, col, row);
             }
-            if(randomGenerator.NextDouble() < stalactiteProb)
+            if (randomGenerator.NextDouble() < stalactiteProb)
             {
                 return GenerateThingAtCoordinateCenter("Stalactite1", col, row);
             }
@@ -309,10 +310,10 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
             //north-facing deep cove is this | | this |   or this   |
             //                               |_|      |_|         |_|
             var isNorthFacingDeepCove = (board[row - 1, col - 1] == CellType.Rock || board[row - 1, col + 1] == CellType.Rock) &&
-                board[row, col - 1] == CellType.Rock && 
-                board[row + 1, col - 1] == CellType.Rock && 
-                board[row + 1, col] == CellType.Rock && 
-                board[row + 1, col + 1] == CellType.Rock && 
+                board[row, col - 1] == CellType.Rock &&
+                board[row + 1, col - 1] == CellType.Rock &&
+                board[row + 1, col] == CellType.Rock &&
+                board[row + 1, col + 1] == CellType.Rock &&
                 board[row, col + 1] == CellType.Rock;
 
             var isEastFacingDeepCove = (board[row - 1, col + 1] == CellType.Rock || board[row + 1, col + 1] == CellType.Rock) &&
@@ -320,10 +321,10 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
                 board[row, col - 1] == CellType.Rock &&
                 board[row + 1, col - 1] == CellType.Rock &&
                 board[row + 1, col] == CellType.Rock &&
-                board[row - 1, col] == CellType.Rock;                
+                board[row - 1, col] == CellType.Rock;
 
             var isWestFacingDeepCove = (board[row - 1, col - 1] == CellType.Rock || board[row + 1, col - 1] == CellType.Rock) &&
-                board[row - 1, col] == CellType.Rock &&                
+                board[row - 1, col] == CellType.Rock &&
                 board[row + 1, col] == CellType.Rock &&
                 board[row + 1, col + 1] == CellType.Rock &&
                 board[row, col + 1] == CellType.Rock &&
@@ -331,8 +332,8 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
 
             var isSouthFacingDeepCove = (board[row + 1, col - 1] == CellType.Rock || board[row + 1, col + 1] == CellType.Rock) &&
                 board[row - 1, col - 1] == CellType.Rock &&
-                board[row, col - 1] == CellType.Rock &&                
-                board[row - 1, col] == CellType.Rock &&                
+                board[row, col - 1] == CellType.Rock &&
+                board[row - 1, col] == CellType.Rock &&
                 board[row, col + 1] == CellType.Rock &&
                 board[row - 1, col + 1] == CellType.Rock;
 
