@@ -34,18 +34,54 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
                 {
                     new Tile
                     (
-                        textureNorth: "brock2",
-                        textureSouth: "brock2",
-                        textureEast: "brock2a",
-                        textureWest: "brock2a"
+                        textureNorth: "bw0a",
+                        textureSouth: "bw0a",
+                        textureEast: "bw0b",
+                        textureWest: "bw0b"
+                    ),
+                    new Tile
+                    (
+                        textureNorth: "bw1a",
+                        textureSouth: "bw1a",
+                        textureEast: "bw1b",
+                        textureWest: "bw1b"
+                    ),
+                    new Tile
+                    (
+                        textureNorth: "bw2a",
+                        textureSouth: "bw2a",
+                        textureEast: "bw2b",
+                        textureWest: "bw2b"
+                    ),
+                    new Tile
+                    (
+                        textureNorth: "bw3a",
+                        textureSouth: "bw3a",
+                        textureEast: "bw3b",
+                        textureWest: "bw3b"
                     ),
                 },
                 sectors: new[]
                 {
                     new Sector
                     (
-                        textureCeiling: "br_dark",
-                        textureFloor: "br"
+                        textureCeiling: "bf0",
+                        textureFloor: "bf0"
+                    ),
+                    new Sector
+                    (
+                        textureCeiling: "bf1",
+                        textureFloor: "bf1"
+                    ),
+                    new Sector
+                    (
+                        textureCeiling: "bf2",
+                        textureFloor: "bf2"
+                    ),
+                    new Sector
+                    (
+                        textureCeiling: "bf3",
+                        textureFloor: "bf3"
                     ),
                 },
                 zones: new[]
