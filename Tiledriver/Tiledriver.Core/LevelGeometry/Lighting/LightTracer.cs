@@ -47,7 +47,6 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
             int lightRadius = 4,
             double percentAreaToCoverWithLights = 0.015)
         {
-            var radius2 = lightRadius * lightRadius;
             int diameter = 2 * lightRadius + 1;
 
             var lightMap = new LightMap(map.Height, map.Width);
@@ -92,7 +91,7 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
                         if (!obscured)
                         {
                             var d2 = GetDistanceSquared(lightSpot, tileSpot);
-                            var lightIncrement = PickLightLevelIncrement(radius2, d2);
+                            var lightIncrement = PickLightLevelIncrement(lightRadius, d2);
                             lightMap.Lighten(tileSpot, lightIncrement);
                         }
                     }
@@ -162,23 +161,20 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
         private static double GetDistanceSquared(Point p1, Point p2) =>
             (p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y);
 
-        private static int PickLightLevelIncrement(int lightRadiusSquared, double distanceSquared)
+        private static int PickLightLevelIncrement(int radius, double distanceSquared)
         {
-            if (distanceSquared > lightRadiusSquared)
-            {
-                return 0;
-            }
-
+            var distanceStep = (double)radius / NormalLightLevels;
             for (int level = 0; level < NormalLightLevels; level++)
             {
-                double level2 = (level + 1) * (level + 1);
-                if (distanceSquared >= (lightRadiusSquared / level2))
+                var minDistance = radius - level * distanceStep;
+
+                if (distanceSquared >= minDistance * minDistance)
                 {
-                    return level + 1;
+                    return level;
                 }
             }
 
-            return NormalLightLevels - 1;
+            return NormalLightLevels;
         }
 
         public static HashSet<Point> FindValidSpotsForLights(
