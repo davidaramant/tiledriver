@@ -23,6 +23,8 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
         {
             private readonly int[,] _map;
             public LightMap(int width, int height) => _map = new int[width, height];
+            public int this[int row, int col] => _map[row, col];
+            public int this[Point p] => _map[p.Y, p.X];
             public void Lighten(Point point, int amount)
             {
                 var current = _map[point.Y, point.X];
@@ -47,24 +49,12 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
             int lightRadius = 4,
             double percentAreaToCoverWithLights = 0.015)
         {
-            map.Tiles.Clear();
-            map.Tiles.AddRange(Enumerable.Range(0, LightTracer.LightLevels).Select(level => new Tile
-            (
-                textureNorth: $"bwa{level}",
-                textureSouth: $"bwa{level}",
-                textureEast: $"bwb{level}",
-                textureWest: $"bwb{level}"
-            )));
-
             map.Sectors.Clear();
-            map.Sectors.AddRange(Enumerable.Range(0, LightTracer.LightLevels).Select(level=> new Sector
+            map.Sectors.AddRange(Enumerable.Range(0, LightTracer.LightLevels).Select(level => new Sector
             (
-                textureCeiling:$"bf{level}",
-                textureFloor:$"bf{level}"
+                textureCeiling: $"bf{level}",
+                textureFloor: $"bf{level}"
             )));
-
-            // TODO: Generate tiles on-demand to make the faces light up correctly
-
 
             int diameter = 2 * lightRadius + 1;
 
@@ -120,11 +110,80 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
             foreach (var (level, ts) in lightMap.GetLightLevels().Zip(map.PlaneMaps[0].TileSpaces, (level, ts) => (level, ts)))
             {
                 ts.Sector = level;
-                if (ts.HasTile)
+            }
+
+            int GetNeighborLevel(Point point)
+            {
+                if (!bounds.Contains(point))
+                    return 0;
+                return lightMap[point];
+            }
+
+            var tileSequence = new TileSequence();
+            for (var row = 0; row < map.Height; row++)
+            {
+                for (var col = 0; col < map.Width; col++)
                 {
-                    ts.Tile = level;
+                    var tileSpot = new Point(col, row);
+                    var ts = map.TileSpaceAt(tileSpot);
+                    if (!ts.HasTile)
+                        continue;
+
+                    var neighbors = new NeighborLevels(
+                        north: GetNeighborLevel(tileSpot.Above()),
+                        east: GetNeighborLevel(tileSpot.Right()),
+                        south: GetNeighborLevel(tileSpot.Below()),
+                        west: GetNeighborLevel(tileSpot.Left())
+                    );
+
+                    ts.Tile = tileSequence.GetTileIndex(neighbors);
                 }
             }
+
+            map.Tiles.Clear();
+            map.Tiles.AddRange(tileSequence.GetTileDefinitions());
+
+        }
+
+        struct NeighborLevels
+        {
+            public readonly int North;
+            public readonly int East;
+            public readonly int South;
+            public readonly int West;
+
+            public NeighborLevels(int north, int east, int south, int west)
+            {
+                North = north;
+                East = east;
+                South = south;
+                West = west;
+            }
+        }
+
+        sealed class TileSequence
+        {
+            private readonly Dictionary<NeighborLevels, int> _levelComboToIndex = new Dictionary<NeighborLevels, int>();
+
+            public int GetTileIndex(NeighborLevels neighbors)
+            {
+                if (_levelComboToIndex.TryGetValue(neighbors, out int index))
+                {
+                    return index;
+                }
+
+                var nextIndex = _levelComboToIndex.Count;
+                _levelComboToIndex.Add(neighbors, nextIndex);
+                return nextIndex;
+            }
+
+            public IEnumerable<Tile> GetTileDefinitions() =>
+                _levelComboToIndex.OrderBy(pair => pair.Value).Select(pair =>
+                new Tile(
+                    textureNorth: $"bwa{pair.Key.North}",
+                    textureSouth: $"bwa{pair.Key.South}",
+                    textureEast: $"bwb{pair.Key.East}",
+                    textureWest: $"bwb{pair.Key.West}"));
         }
 
         // Swap the values of A and B
