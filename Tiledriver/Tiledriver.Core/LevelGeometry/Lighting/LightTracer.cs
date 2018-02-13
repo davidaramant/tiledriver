@@ -187,15 +187,15 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
             var existingThingSpots = map.Things.Select(t => new Point((int)t.X, (int)t.Y)).ToImmutableHashSet();
 
             var spots = new HashSet<Point>();
-
             var random = new Random(0);
 
             while (spots.Count < lightsToPlace)
             {
                 var possibleSpot = room.ElementAt(random.Next(room.Area));
 
-                var surroundedVertically = IsSurroundedVertically(map, possibleSpot);
-                var surroundedHorizontally = IsSurroundedHorizontally(map, possibleSpot);
+                // The light doesn't block, so this isn't needed
+                var surroundedVertically = false; //IsSurroundedVertically(map, possibleSpot);
+                var surroundedHorizontally = false; //IsSurroundedHorizontally(map, possibleSpot);
 
                 if ((surroundedVertically ^ surroundedHorizontally) ||
                     existingThingSpots.Contains(possibleSpot))
