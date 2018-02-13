@@ -16,7 +16,7 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
     public static class LightTracer
     {
         public const int LightLevels = 10;
-        public const int Overbrights = 2;
+        public const int Overbrights = 3;
         public const int NormalLightLevels = LightLevels - Overbrights;
 
         private sealed class LightMap
