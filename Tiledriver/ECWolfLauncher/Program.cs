@@ -83,17 +83,29 @@ namespace TestRunner
 
                 //LoadMapInEcWolf(CAGenerator.Generate(), projectPath: Path.GetFullPath("Cave"));
 
-                var caMap = CAGenerator.Generate(width: 128, height: 128);
+                //// Visualize multiple generations
+                //foreach (var generation in Enumerable.Range(0, 7))
+                //{
+                //    var genMap = CAGenerator.Generate(width: 128, height: 128, generations: generation);
 
+                //    var genMetaMap = MetaMapAnalyzer.Analyze(genMap, includeAllEmptyAreas: true);
+
+                //    SimpleMapImageExporter.Export(genMetaMap, MapPalette.CarveOutRooms, $"{generation:00} - CA Gen {generation}.png", scale: 10);
+                //}
+
+
+                var caMap = CAGenerator.Generate(width: 128, height: 128, stalagmiteProb:0.02,stalactiteProb:0.04, generations:6);
                 var metaMap = MetaMapAnalyzer.Analyze(caMap, includeAllEmptyAreas: true);
                 var roomGraph = RoomAnalyzer.Analyze(metaMap);
-                var trimmedRoomGraph = new RoomGraph(roomGraph.Width, roomGraph.Height, new[] { roomGraph.OrderBy(r => r.Area).Last() });
+                var trimmedRoomGraph = new RoomGraph(roomGraph.Width, roomGraph.Height,
+                    new[] { roomGraph.OrderBy(r => r.Area).Last() });
 
-                //SimpleMapImageExporter.Export(metaMap, MapPalette.Full, "caMap.png", scale: 10);
+
+                //SimpleMapImageExporter.Export(metaMap, MapPalette.CarveOutRooms, $"caMap.png", scale: 10);
                 //Process.Start("caMap.png");
-                //SimpleMapImageExporter.Export(roomGraph, "graph.png", scale: 10);
+                //SimpleMapImageExporter.Export(roomGraph, "07 - Enclosed playable spaces.png", scale: 10);
                 //Process.Start("graph.png");
-                //SimpleMapImageExporter.Export(trimmedRoomGraph, "trimmed-graph.png", scale: 10);
+                //SimpleMapImageExporter.Export(trimmedRoomGraph, "08 - Only largest room.png", scale: 10);
                 //Process.Start("trimmed-graph.png");
 
                 // ************************************
@@ -116,7 +128,7 @@ namespace TestRunner
                 var playerStart = clonedMap.Things.First(thing => thing.Type == Actor.Player1Start.ClassName);
                 playerStart.X = firstPlayableSpaceIndex % clonedMap.Width + 0.5;
                 playerStart.Y = firstPlayableSpaceIndex / clonedMap.Width + 0.5;
-                
+
                 // remove things that are now in walls
                 var thingListCopy = clonedMap.Things.ToList();
                 clonedMap.Things.Clear();
@@ -124,7 +136,7 @@ namespace TestRunner
 
                 // ***************************************
 
-                LightTracer.AddRandomLightsToMap(clonedMap, largeRoom);
+                LightTracer.AddRandomLightsToMap(clonedMap, largeRoom, lightRadius: 15, percentAreaToCoverWithLights: 0.01);
 
                 LoadMapInEcWolf(clonedMap, "Cave");
 

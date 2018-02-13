@@ -15,8 +15,10 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
 {
     public static class LightTracer
     {
-        public const int LightLevels = 4;
-        
+        public const int LightLevels = 10;
+        public const int Overbrights = 2;
+        public const int NormalLightLevels = LightLevels - Overbrights;
+
         private sealed class LightMap
         {
             private readonly int[,] _map;
@@ -39,15 +41,17 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
             }
         }
 
-        public static void AddRandomLightsToMap(MapData map, Room room)
+        public static void AddRandomLightsToMap(
+            MapData map,
+            Room room,
+            int lightRadius = 4,
+            double percentAreaToCoverWithLights = 0.015)
         {
-            const int radius = 4;
-            var radius2 = radius * radius;
-
-            const int diameter = 2 * radius + 1;
+            var radius2 = lightRadius * lightRadius;
+            int diameter = 2 * lightRadius + 1;
 
             var lightMap = new LightMap(map.Height, map.Width);
-            var lightSpots = FindValidSpotsForLights(map, room);
+            var lightSpots = FindValidSpotsForLights(map, room, percentageAreaToCover: percentAreaToCoverWithLights);
 
             var bounds = new Size(map.Width, map.Height);
             foreach (var lightSpot in lightSpots)
@@ -69,8 +73,8 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
                     for (int x = 0; x < diameter; x++)
                     {
                         var tileSpot = new Point(
-                            lightSpot.X - radius + x,
-                            lightSpot.Y - radius + y);
+                            lightSpot.X - lightRadius + x,
+                            lightSpot.Y - lightRadius + y);
                         if (!bounds.Contains(tileSpot))
                             continue;
 
@@ -158,19 +162,23 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
         private static double GetDistanceSquared(Point p1, Point p2) =>
             (p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y);
 
-        private static byte PickLightLevelIncrement(int lightRadiusSquared, double distanceSquared)
+        private static int PickLightLevelIncrement(int lightRadiusSquared, double distanceSquared)
         {
             if (distanceSquared > lightRadiusSquared)
             {
                 return 0;
             }
 
-            if (distanceSquared >= (lightRadiusSquared / 4.0))
+            for (int level = 0; level < NormalLightLevels; level++)
             {
-                return 1;
+                double level2 = (level + 1) * (level + 1);
+                if (distanceSquared >= (lightRadiusSquared / level2))
+                {
+                    return level + 1;
+                }
             }
 
-            return 2;
+            return NormalLightLevels - 1;
         }
 
         public static HashSet<Point> FindValidSpotsForLights(

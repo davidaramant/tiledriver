@@ -51,31 +51,73 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
                 {
                     new Tile
                     (
-                        textureNorth: "bw0a",
-                        textureSouth: "bw0a",
-                        textureEast: "bw0b",
-                        textureWest: "bw0b"
+                        textureNorth: "bwa0",
+                        textureSouth: "bwa0",
+                        textureEast: "bwb0",
+                        textureWest: "bwb0"
                     ),
                     new Tile
                     (
-                        textureNorth: "bw1a",
-                        textureSouth: "bw1a",
-                        textureEast: "bw1b",
-                        textureWest: "bw1b"
+                        textureNorth: "bwa1",
+                        textureSouth: "bwa1",
+                        textureEast: "bwb1",
+                        textureWest: "bwb1"
                     ),
                     new Tile
                     (
-                        textureNorth: "bw2a",
-                        textureSouth: "bw2a",
-                        textureEast: "bw2b",
-                        textureWest: "bw2b"
+                        textureNorth: "bwa2",
+                        textureSouth: "bwa2",
+                        textureEast: "bwb2",
+                        textureWest: "bwb2"
                     ),
                     new Tile
                     (
-                        textureNorth: "bw3a",
-                        textureSouth: "bw3a",
-                        textureEast: "bw3b",
-                        textureWest: "bw3b"
+                        textureNorth: "bwa3",
+                        textureSouth: "bwa3",
+                        textureEast: "bwb3",
+                        textureWest: "bwb3"
+                    ),
+                    new Tile
+                    (
+                        textureNorth: "bwa4",
+                        textureSouth: "bwa4",
+                        textureEast: "bwb4",
+                        textureWest: "bwb4"
+                    ),
+                    new Tile
+                    (
+                        textureNorth: "bwa5",
+                        textureSouth: "bwa5",
+                        textureEast: "bwb5",
+                        textureWest: "bwb5"
+                    ),
+                    new Tile
+                    (
+                        textureNorth: "bwa6",
+                        textureSouth: "bwa6",
+                        textureEast: "bwb6",
+                        textureWest: "bwb6"
+                    ),
+                    new Tile
+                    (
+                        textureNorth: "bwa7",
+                        textureSouth: "bwa7",
+                        textureEast: "bwb7",
+                        textureWest: "bwb7"
+                    ),
+                    new Tile
+                    (
+                        textureNorth: "bwa8",
+                        textureSouth: "bwa8",
+                        textureEast: "bwb8",
+                        textureWest: "bwb8"
+                    ),
+                    new Tile
+                    (
+                        textureNorth: "bwa9",
+                        textureSouth: "bwa9",
+                        textureEast: "bwb9",
+                        textureWest: "bwb9"
                     ),
                 },
                 sectors: new[]
@@ -100,6 +142,37 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
                         textureCeiling: "bf3",
                         textureFloor: "bf3"
                     ),
+                    new Sector
+                    (
+                        textureCeiling: "bf4",
+                        textureFloor: "bf4"
+                    ),
+                    new Sector
+                    (
+                        textureCeiling: "bf5",
+                        textureFloor: "bf5"
+                    ),
+                    new Sector
+                    (
+                        textureCeiling: "bf6",
+                        textureFloor: "bf6"
+                    ),
+                    new Sector
+                    (
+                        textureCeiling: "bf7",
+                        textureFloor: "bf7"
+                    ),
+                    new Sector
+                    (
+                        textureCeiling: "bf8",
+                        textureFloor: "bf8"
+                    ),
+                    new Sector
+                    (
+                        textureCeiling: "bf9",
+                        textureFloor: "bf9"
+                    ),
+
                 },
                 zones: new[]
                 {
