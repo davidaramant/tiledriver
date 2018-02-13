@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tiledriver.Core.FormatModels.Uwmf;
-using Tiledriver.Core.LevelGeometry.Lighting;
 using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.LevelGeometry.CellularAutomata
@@ -40,8 +39,6 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
                  out var decorations).ToList();
             var playerStartingPositionIndex = geometry.FindIndex(ts => !ts.HasTile);
 
-            // HACK: The LightTracer should replace the tiles
-            // Also, it should generate tiles as needed so the walls would be correctly lit
             var map = new MapData
             (
                 nameSpace: "Wolf3D",
@@ -50,18 +47,22 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
                 width: width,
                 height: height,
                 comment: "",
-                tiles: Enumerable.Range(0, LightTracer.LightLevels).Select(level => new Tile
-                (
-                    textureNorth: $"bwa{level}",
-                    textureSouth: $"bwa{level}",
-                    textureEast: $"bwb{level}",
-                    textureWest: $"bwb{level}"
-                )),
-                sectors: Enumerable.Range(0, LightTracer.LightLevels).Select(level=> new Sector
-                (
-                    textureCeiling:$"bf{level}",
-                    textureFloor:$"bf{level}")
-                ),
+                tiles: new []
+                {
+                    new Tile(
+                        textureNorth: "#c0c0c0",
+                        textureSouth: "#c0c0c0",
+                        textureEast: "#b0b0b0",
+                        textureWest: "#b0b0b0"
+                    ),
+                },
+                sectors: new []
+                {
+                    new Sector(                
+                        textureCeiling:"#909090",
+                        textureFloor:"909090"
+                    ), 
+                },
                 zones: new[]
                 {
                     new Zone(),

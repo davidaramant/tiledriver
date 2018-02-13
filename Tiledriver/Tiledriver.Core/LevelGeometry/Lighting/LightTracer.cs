@@ -47,6 +47,25 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
             int lightRadius = 4,
             double percentAreaToCoverWithLights = 0.015)
         {
+            map.Tiles.Clear();
+            map.Tiles.AddRange(Enumerable.Range(0, LightTracer.LightLevels).Select(level => new Tile
+            (
+                textureNorth: $"bwa{level}",
+                textureSouth: $"bwa{level}",
+                textureEast: $"bwb{level}",
+                textureWest: $"bwb{level}"
+            )));
+
+            map.Sectors.Clear();
+            map.Sectors.AddRange(Enumerable.Range(0, LightTracer.LightLevels).Select(level=> new Sector
+            (
+                textureCeiling:$"bf{level}",
+                textureFloor:$"bf{level}"
+            )));
+
+            // TODO: Generate tiles on-demand to make the faces light up correctly
+
+
             int diameter = 2 * lightRadius + 1;
 
             var lightMap = new LightMap(map.Height, map.Width);
