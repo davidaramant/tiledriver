@@ -15,8 +15,8 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
 {
     public static class LightTracer
     {
-        public const int LightLevels = 10;
-        public const int Overbrights = 3;
+        public const int LightLevels = 30;
+        public const int Overbrights = 15;
         public const int NormalLightLevels = LightLevels - Overbrights;
 
         private sealed class LightMap
@@ -193,7 +193,7 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
             {
                 var possibleSpot = room.ElementAt(random.Next(room.Area));
 
-                // The light doesn't block, so this isn't needed
+                // HACK: The light doesn't block, so this isn't needed
                 var surroundedVertically = false; //IsSurroundedVertically(map, possibleSpot);
                 var surroundedHorizontally = false; //IsSurroundedHorizontally(map, possibleSpot);
 

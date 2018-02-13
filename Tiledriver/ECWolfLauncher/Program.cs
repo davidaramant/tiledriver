@@ -136,7 +136,7 @@ namespace TestRunner
 
                 // ***************************************
 
-                LightTracer.AddRandomLightsToMap(clonedMap, largeRoom, lightRadius: 10, percentAreaToCoverWithLights: 0.009);
+                LightTracer.AddRandomLightsToMap(clonedMap, largeRoom, lightRadius: 15, percentAreaToCoverWithLights: 0.005);
 
                 LoadMapInEcWolf(clonedMap, "Cave");
 

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tiledriver.Core.FormatModels.Uwmf;
+using Tiledriver.Core.LevelGeometry.Lighting;
 using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.LevelGeometry.CellularAutomata
@@ -27,18 +28,20 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
             double stalagmiteProb = 0.015,
             double stalactiteProb = 0.03)
         {
-           var geometry = CreateGeometry(
-                width,
-                height,
-                probabilityOfRock,
-                generations,
-                minRockNeighborsToLive,
-                borderOffset,
-                stalagmiteProb,
-                stalactiteProb,
-                out var decorations).ToList();
+            var geometry = CreateGeometry(
+                 width,
+                 height,
+                 probabilityOfRock,
+                 generations,
+                 minRockNeighborsToLive,
+                 borderOffset,
+                 stalagmiteProb,
+                 stalactiteProb,
+                 out var decorations).ToList();
             var playerStartingPositionIndex = geometry.FindIndex(ts => !ts.HasTile);
 
+            // HACK: The LightTracer should replace the tiles
+            // Also, it should generate tiles as needed so the walls would be correctly lit
             var map = new MapData
             (
                 nameSpace: "Wolf3D",
@@ -47,133 +50,18 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
                 width: width,
                 height: height,
                 comment: "",
-                tiles: new[]
-                {
-                    new Tile
-                    (
-                        textureNorth: "bwa0",
-                        textureSouth: "bwa0",
-                        textureEast: "bwb0",
-                        textureWest: "bwb0"
-                    ),
-                    new Tile
-                    (
-                        textureNorth: "bwa1",
-                        textureSouth: "bwa1",
-                        textureEast: "bwb1",
-                        textureWest: "bwb1"
-                    ),
-                    new Tile
-                    (
-                        textureNorth: "bwa2",
-                        textureSouth: "bwa2",
-                        textureEast: "bwb2",
-                        textureWest: "bwb2"
-                    ),
-                    new Tile
-                    (
-                        textureNorth: "bwa3",
-                        textureSouth: "bwa3",
-                        textureEast: "bwb3",
-                        textureWest: "bwb3"
-                    ),
-                    new Tile
-                    (
-                        textureNorth: "bwa4",
-                        textureSouth: "bwa4",
-                        textureEast: "bwb4",
-                        textureWest: "bwb4"
-                    ),
-                    new Tile
-                    (
-                        textureNorth: "bwa5",
-                        textureSouth: "bwa5",
-                        textureEast: "bwb5",
-                        textureWest: "bwb5"
-                    ),
-                    new Tile
-                    (
-                        textureNorth: "bwa6",
-                        textureSouth: "bwa6",
-                        textureEast: "bwb6",
-                        textureWest: "bwb6"
-                    ),
-                    new Tile
-                    (
-                        textureNorth: "bwa7",
-                        textureSouth: "bwa7",
-                        textureEast: "bwb7",
-                        textureWest: "bwb7"
-                    ),
-                    new Tile
-                    (
-                        textureNorth: "bwa8",
-                        textureSouth: "bwa8",
-                        textureEast: "bwb8",
-                        textureWest: "bwb8"
-                    ),
-                    new Tile
-                    (
-                        textureNorth: "bwa9",
-                        textureSouth: "bwa9",
-                        textureEast: "bwb9",
-                        textureWest: "bwb9"
-                    ),
-                },
-                sectors: new[]
-                {
-                    new Sector
-                    (
-                        textureCeiling: "bf0",
-                        textureFloor: "bf0"
-                    ),
-                    new Sector
-                    (
-                        textureCeiling: "bf1",
-                        textureFloor: "bf1"
-                    ),
-                    new Sector
-                    (
-                        textureCeiling: "bf2",
-                        textureFloor: "bf2"
-                    ),
-                    new Sector
-                    (
-                        textureCeiling: "bf3",
-                        textureFloor: "bf3"
-                    ),
-                    new Sector
-                    (
-                        textureCeiling: "bf4",
-                        textureFloor: "bf4"
-                    ),
-                    new Sector
-                    (
-                        textureCeiling: "bf5",
-                        textureFloor: "bf5"
-                    ),
-                    new Sector
-                    (
-                        textureCeiling: "bf6",
-                        textureFloor: "bf6"
-                    ),
-                    new Sector
-                    (
-                        textureCeiling: "bf7",
-                        textureFloor: "bf7"
-                    ),
-                    new Sector
-                    (
-                        textureCeiling: "bf8",
-                        textureFloor: "bf8"
-                    ),
-                    new Sector
-                    (
-                        textureCeiling: "bf9",
-                        textureFloor: "bf9"
-                    ),
-
-                },
+                tiles: Enumerable.Range(0, LightTracer.LightLevels).Select(level => new Tile
+                (
+                    textureNorth: $"bwa{level}",
+                    textureSouth: $"bwa{level}",
+                    textureEast: $"bwb{level}",
+                    textureWest: $"bwb{level}"
+                )),
+                sectors: Enumerable.Range(0, LightTracer.LightLevels).Select(level=> new Sector
+                (
+                    textureCeiling:$"bf{level}",
+                    textureFloor:$"bf{level}")
+                ),
                 zones: new[]
                 {
                     new Zone(),
