@@ -16,3 +16,5 @@ Tiledriver is licensed with the BSD 3-clause license.  See the file LICENSE for 
 * Aaron Alexander
 * Leon Organ
 * Luke Gilbert
+* Jeremy Jarvis
+* Grant Kimsey
