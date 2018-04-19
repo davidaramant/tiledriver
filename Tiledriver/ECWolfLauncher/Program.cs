@@ -94,7 +94,7 @@ namespace TestRunner
                 //}
 
 
-                var caMap = CAGenerator.Generate(width: 128, height: 128, stalagmiteProb:0.02,stalactiteProb:0.04, generations:6);
+                var caMap = CAGenerator.Generate(width: 128, height: 128, stalagmiteProb:0.02,stalactiteProb:0.04, generations:6, seed:0);
                 var metaMap = MetaMapAnalyzer.Analyze(caMap, includeAllEmptyAreas: true);
                 var roomGraph = RoomAnalyzer.Analyze(metaMap);
                 var trimmedRoomGraph = new RoomGraph(roomGraph.Width, roomGraph.Height,

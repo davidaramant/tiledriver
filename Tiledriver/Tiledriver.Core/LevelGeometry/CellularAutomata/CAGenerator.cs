@@ -25,7 +25,8 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
             int minRockNeighborsToLive = 5,
             int borderOffset = 3,
             double stalagmiteProb = 0.015,
-            double stalactiteProb = 0.03)
+            double stalactiteProb = 0.03,
+            int? seed = null)
         {
             var geometry = CreateGeometry(
                  width,
@@ -36,7 +37,8 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
                  borderOffset,
                  stalagmiteProb,
                  stalactiteProb,
-                 out var decorations).ToList();
+                 out var decorations,
+                 seed).ToList();
             var playerStartingPositionIndex = geometry.FindIndex(ts => !ts.HasTile);
 
             var map = new MapData
@@ -91,12 +93,13 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
             int boardBorderOffset,
             double stalagmiteProb,
             double stalactiteProb,
-            out IEnumerable<Thing> decorations)
+            out IEnumerable<Thing> decorations, 
+            int? seed)
         {
             TileSpace SolidTile() => new TileSpace(tile: 0, sector: 0, zone: -1);
             TileSpace EmptyTile() => new TileSpace(tile: -1, sector: 0, zone: 0);
 
-            var randomGenerator = new Random(0);
+            var randomGenerator = seed.HasValue ? new Random(seed.Value) : new Random();
             var caBoard = RunCAGeneration(width, height, randomGenerator, rockProb, generations, minRockNeighborsToLive, boardBorderOffset);
 
             var entries = new TileSpace[height, width];
@@ -143,7 +146,14 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
             return tileSpaces;
         }
 
-        private static CellType[,] RunCAGeneration(int width, int height, Random random, double probabilityOfRock, int generations, int minRockNeighborsToLive, int borderOffset)
+        private static CellType[,] RunCAGeneration(
+            int width, 
+            int height, 
+            Random random, 
+            double probabilityOfRock, 
+            int generations, 
+            int minRockNeighborsToLive, 
+            int borderOffset)
         {
             var board = new CellType[height, width];
 
