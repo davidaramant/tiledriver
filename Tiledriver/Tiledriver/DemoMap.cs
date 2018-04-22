@@ -317,9 +317,9 @@ namespace Tiledriver
         }
 
 
-        public static Map CreateRandomWithSparseMap()
+        public static Map CreateRandomWithSparseMap(int seed = 14)
         {
-            Random random = new Random(14);
+            Random random = new Random(seed);
             var tagSequence = new TagSequence();
             var sparseMap = new SparseMap(64, 64);
 
