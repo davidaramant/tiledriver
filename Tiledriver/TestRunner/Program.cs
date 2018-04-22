@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ShellProgressBar;
 using Tiledriver;
 
 namespace TestRunner
@@ -14,7 +15,9 @@ namespace TestRunner
     {
         static void Main(string[] args)
         {
-            CreateRandomMaps(10, @"C:\Users\david\Desktop\Wolf3D Maps\TiledriverV1Maps");
+            CreateRandomMaps(34257, @"C:\Users\david\Desktop\Wolf3D Maps\TiledriverV1Maps");
+            Console.Out.WriteLine("Done!");
+            Console.In.ReadLine();
             return;
 
             const string inputFile = "ECWolfPath.txt";
@@ -45,15 +48,19 @@ namespace TestRunner
             int maxDigitWidth = count.ToString().Length;
             var indexFormat = "D" + maxDigitWidth;
 
-            Parallel.For(0, count, index =>
+            using (var progress = new ProgressBar(count, "Creating maps..."))
             {
-                var map = DemoMap.CreateRandomWithSparseMap(index);
-                using(var fs = File.OpenWrite(Path.Combine(outputPath, $"Seed{index.ToString(indexFormat)}.uwmf")))
+                Parallel.For(0, count, index =>
                 {
-                    map.WriteTo(fs);
-                }
-                
-            });
+                    var map = DemoMap.CreateRandomWithSparseMap(index);
+                    using (var fs = new FileStream(Path.Combine(outputPath, $"Seed{index.ToString(indexFormat)}.uwmf"), FileMode.Create))
+                    {
+                        map.WriteTo(fs);
+                    }
+
+                    progress.Tick();
+                });
+            }
         }
     }
 }
