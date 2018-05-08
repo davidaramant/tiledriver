@@ -61,9 +61,9 @@ namespace TestRunner
                 //    outputBasePath: @"C:\Users\david\Desktop\Wolf3D Maps\Wolf3D User Maps");
 
                 //AnalyzeMaps(
-                //    inputPath: @"C:\Users\david\Desktop\Wolf3D Maps\UDMF",
-                //    outputPath: @"C:\Users\david\Desktop\Wolf3D Maps\metamaps");
-
+                //    inputPath: @"C:\Users\david\Desktop\Wolf3D Maps\TiledriverV1Maps",
+                //    outputPath: @"C:\Users\david\Desktop\Wolf3D Maps\TiledriverV1MetaMaps");
+                //return;
                 //RotateMaps(inputPath: @"C:\Users\david\Desktop\Wolf3D Maps\metamaps");
                 //TestMapNameComparer();
                 //RemoveDuplicateMaps(inputPath: @"C:\Users\david\Desktop\Wolf3D Maps\metamaps");
@@ -94,7 +94,7 @@ namespace TestRunner
                 //}
 
 
-                var caMap = CAGenerator.Generate(width: 128, height: 128, stalagmiteProb:0.02,stalactiteProb:0.04, generations:6, seed:0);
+                var caMap = CAGenerator.Generate(width: 128, height: 128, stalagmiteProb: 0.02, stalactiteProb: 0.04, generations: 6, seed: 0);
                 var metaMap = MetaMapAnalyzer.Analyze(caMap, includeAllEmptyAreas: true);
                 var roomGraph = RoomAnalyzer.Analyze(metaMap);
                 var trimmedRoomGraph = new RoomGraph(roomGraph.Width, roomGraph.Height,
@@ -374,24 +374,28 @@ namespace TestRunner
 
             var sa = new UwmfSyntaxAnalyzer();
             var filesToGoThrough = Directory.GetFiles(inputPath, "*.uwmf", SearchOption.AllDirectories);
-            Parallel.ForEach(filesToGoThrough, uwmfFilePath =>
+            using (var progress = new ProgressBar(filesToGoThrough.Length, "Analyzing maps..."))
             {
-                var filename = Path.GetFileNameWithoutExtension(uwmfFilePath);
-                try
+                Parallel.ForEach(filesToGoThrough, uwmfFilePath =>
                 {
-                    using (var stream = File.OpenRead(uwmfFilePath))
-                    using (var textReader = new StreamReader(stream, Encoding.ASCII))
+                    var filename = Path.GetFileNameWithoutExtension(uwmfFilePath);
+                    try
                     {
-                        var mapData = UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader)));
-                        var metaMap = MetaMapAnalyzer.Analyze(mapData);
-                        metaMap.Save(Path.Combine(outputPath, filename + ".metamap"));
+                        using (var stream = File.OpenRead(uwmfFilePath))
+                        using (var textReader = new StreamReader(stream, Encoding.ASCII))
+                        {
+                            var mapData = UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader)));
+                            var metaMap = MetaMapAnalyzer.Analyze(mapData);
+                            metaMap.Save(Path.Combine(outputPath, filename + ".metamap"));
+                        }
                     }
-                }
-                catch (Exception e)
-                {
-                    failures.Add(filename + "\t" + e.Message);
-                }
-            });
+                    catch (Exception e)
+                    {
+                        failures.Add(filename + "\t" + e.Message);
+                    }
+                    progress.Tick();
+                });
+            }
 
             File.WriteAllLines(Path.Combine(outputPath, "errors.txt"), failures);
         }
