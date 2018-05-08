@@ -68,6 +68,11 @@ namespace TestRunner
                 //TestMapNameComparer();
                 //RemoveDuplicateMaps(inputPath: @"C:\Users\david\Desktop\Wolf3D Maps\metamaps");
 
+                MergeMetaMaps(
+                    @"C:\git\tiledriver-ml\metamaps_user",
+                    @"C:\git\tiledriver-ml\MegaMetaMap");
+                return;
+
                 //var basePath = @"C:\git\tiledriver\ml";
 
                 //void MapToImage(string mapName)
@@ -170,6 +175,49 @@ namespace TestRunner
             {
                 Console.WriteLine(e);
                 Console.ReadLine();
+            }
+        }
+
+        private static void MergeMetaMaps(string metaMapsInputPath, string outputPath)
+        {
+            int TypeToIndex(TileType type)
+            {
+                switch (type)
+                {
+                    case TileType.Empty:
+                        return 0;
+                    case TileType.Unreachable:
+                    case TileType.Wall:
+                        return 1;
+                    case TileType.PushWall:
+                    case TileType.Door:
+                    default:
+                        return 2;
+                }
+            }
+
+            Console.WriteLine("Loading maps...");
+            var maps = Directory.GetFiles(metaMapsInputPath).AsParallel().Select(MetaMap.Load).ToList();
+
+            using (var fw = File.Open(outputPath, FileMode.Create))
+            using (var writer = new BinaryWriter(fw))
+            using (var progress = new ProgressBar(maps.Count, "Condensing maps..."))
+            {
+                foreach (var map in maps)
+                {
+                    foreach (var rowIndex in Enumerable.Range(0, 64))
+                    {
+                        var row = new byte[64 * 3];
+                        foreach (var colIndex in Enumerable.Range(0, 64))
+                        {
+                            var actualIndex = 3 * colIndex + TypeToIndex(map[colIndex, rowIndex]);
+                            row[actualIndex] = 1;
+                        }
+
+                        writer.Write(row);
+                    }
+                }
+                progress.Tick();
             }
         }
 
