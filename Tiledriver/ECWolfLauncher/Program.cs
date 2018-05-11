@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -16,6 +17,7 @@ using AutoMapper;
 using Functional.Maybe;
 using Moq;
 using ShellProgressBar;
+using Tiledriver.Core.Extensions.Strings;
 using Tiledriver.Core.FormatModels;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.GameMaps;
@@ -52,6 +54,26 @@ namespace TestRunner
             {
                 var desktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 
+                //var badEndings = new[] {"m", "r1", "r1m", "r2", "r2m", "r3", "r3m"}.
+                //    Select(s => " " + s + ".metamap").
+                //    ToImmutableArray();
+                //ConvertMetaMapsToImages(
+                //    Directory.EnumerateFiles(@"C:\Users\david\Desktop\Wolf3D Maps\metamaps").Where(name=>!badEndings.Any(name.EndsWith)), 
+                //    outputPath:@"C:\Users\david\Desktop\Wolf3D Maps\Images");
+
+                var goodMaps = 
+                    Directory.EnumerateFiles(@"C:\Users\david\Desktop\Wolf3D Maps\Images").
+                    Select(Path.GetFileNameWithoutExtension).
+                    ToImmutableHashSet();
+
+                MergeMetaMaps(
+                    @"C:\git\tiledriver-ml\metamaps_user",
+                    @"C:\git\tiledriver-ml\MegaMetaMapTrimmed", 
+                    goodMaps: goodMaps,
+                    condenseSolidRows: true);
+
+                return;
+
                 //BatchConvertGameMaps(
                 //    baseInputPath: @"C:\Users\david\Desktop\Wolf3D Maps\Wolf3D User Maps\oldschoolspear",
                 //    outputPath: @"C:\Users\david\Desktop\Wolf3D Maps\Wolf3D User Maps\oldschool - converted");
@@ -67,24 +89,6 @@ namespace TestRunner
                 //RotateMaps(inputPath: @"C:\Users\david\Desktop\Wolf3D Maps\metamaps");
                 //TestMapNameComparer();
                 //RemoveDuplicateMaps(inputPath: @"C:\Users\david\Desktop\Wolf3D Maps\metamaps");
-
-                MergeMetaMaps(
-                    @"C:\git\tiledriver-ml\metamaps_user",
-                    @"C:\git\tiledriver-ml\MegaMetaMap");
-                return;
-
-                //var basePath = @"C:\git\tiledriver\ml";
-
-                //void MapToImage(string mapName)
-                //{
-                //    var mapPath = Path.Combine(basePath, mapName);
-                //    var map = MetaMap.Load(mapPath);
-                //    SimpleMapImageExporter.Export(map, MapPalette.CarveOutRooms, mapPath + ".png");
-                //}
-
-                //MapToImage("test.metamap");
-                //MapToImage("roundtripped.metamap");
-
 
                 //LoadMapInEcWolf(CAGenerator.Generate(), projectPath: Path.GetFullPath("Cave"));
 
@@ -174,11 +178,37 @@ namespace TestRunner
             catch (Exception e)
             {
                 Console.WriteLine(e);
+            }
+            finally
+            {
+                Console.WriteLine("Press Enter to continue...");
                 Console.ReadLine();
             }
         }
 
-        private static void MergeMetaMaps(string metaMapsInputPath, string outputPath)
+        private static void ConvertMetaMapsToImages(IEnumerable<string> inputFiles, string outputPath)
+        {
+            var allFiles = inputFiles.ToArray();
+
+            if (Directory.Exists(outputPath))
+            {
+                Directory.Delete(outputPath, recursive:true);
+            }
+            Directory.CreateDirectory(outputPath);
+
+            using (var progress = new ProgressBar(allFiles.Length, "Converting images..."))
+            {
+                Parallel.ForEach(allFiles, mapPath =>
+                {
+                    var imagePath = Path.Combine(outputPath, Path.GetFileNameWithoutExtension(mapPath) + ".png");
+                    var metaMap = MetaMap.Load(mapPath);
+                    SimpleMapImageExporter.Export(metaMap, MapPalette.CarveOutRooms, imagePath, scale: 4);
+                    progress.Tick();
+                });
+            }
+        }
+
+        private static void MergeMetaMaps(string metaMapsInputPath, string outputPath, ImmutableHashSet<string> goodMaps, bool condenseSolidRows = false)
         {
             int TypeToIndex(TileType type)
             {
@@ -196,29 +226,73 @@ namespace TestRunner
                 }
             }
 
+            var endings = new[] {" m", " r1", " r1m", " r2", " r2m", " r3", " r3m"};
+            
+            string GetRawMapName(string path)
+            {
+                var filename = Path.GetFileNameWithoutExtension(path);
+
+                foreach (var ending in endings)
+                {
+                    if (filename.EndsWith(ending))
+                    {
+                        filename = filename.RemoveLast(ending.Length);
+                        break;
+                    }
+                }
+
+                return filename;
+            }
+
             Console.WriteLine("Loading maps...");
-            var maps = Directory.GetFiles(metaMapsInputPath).AsParallel().Select(MetaMap.Load).ToList();
+            var maps = 
+                Directory.EnumerateFiles(metaMapsInputPath).
+                Where(path=>goodMaps.Contains(GetRawMapName(path))).
+                AsParallel().
+                Select(MetaMap.Load).
+                ToList();
+
+            int rowsSkipped = 0;
 
             using (var fw = File.Open(outputPath, FileMode.Create))
             using (var writer = new BinaryWriter(fw))
-            using (var progress = new ProgressBar(maps.Count, "Condensing maps..."))
             {
                 foreach (var map in maps)
                 {
+                    int solidRowStreak = 0;
                     foreach (var rowIndex in Enumerable.Range(0, 64))
                     {
+                        bool rowIsAllWall = true;
                         var row = new byte[64 * 3];
                         foreach (var colIndex in Enumerable.Range(0, 64))
                         {
-                            var actualIndex = 3 * colIndex + TypeToIndex(map[colIndex, rowIndex]);
+                            var oneHotIndex = TypeToIndex(map[colIndex, rowIndex]);
+                            rowIsAllWall &= oneHotIndex == 1;
+                            var actualIndex = 3 * colIndex + oneHotIndex;
                             row[actualIndex] = 1;
                         }
 
-                        writer.Write(row);
+                        if (condenseSolidRows && rowIsAllWall)
+                        {
+                            solidRowStreak++;
+                        }
+                        else
+                        {
+                            solidRowStreak = 0;
+                        }
+
+                        if (solidRowStreak < 2)
+                        {
+                            writer.Write(row);
+                        }
+                        else
+                        {
+                            rowsSkipped++;
+                        }
                     }
                 }
-                progress.Tick();
             }
+            Console.Out.WriteLine($"Rows skipped: {rowsSkipped}");
         }
 
         private static void RotateMaps(string inputPath)
