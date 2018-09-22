@@ -39,6 +39,7 @@ using Tiledriver.Core.LevelGeometry.Lighting;
 using Tiledriver.Core.MapTranslators;
 using Tiledriver.Core.Settings;
 using Tiledriver.Core.Tests;
+using Tiledriver.Core.Utils;
 using Tiledriver.Core.Wolf3D;
 
 namespace TestRunner
@@ -54,6 +55,79 @@ namespace TestRunner
             {
                 var desktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 
+                //Parallel.ForEach(Directory.EnumerateFiles(@"C:\Users\david\Desktop\Wolf3D Maps\tiledriver_ltsm"),
+                //    file =>
+                //    {
+                //        var outputFile = Path.Combine(
+                //            @"C:\Users\david\Desktop\Wolf3D Maps\tiledriver_ltsm_images", 
+                //            Path.GetFileNameWithoutExtension(file) + ".png");
+
+                //        var mapImage = new ScaledFastImage(64,64,2);
+
+                //        Color ToColor(char c)
+                //        {
+                //            switch (c)
+                //            {
+                //                case ' ': return Color.White;
+                //                case '+': return Color.Red;
+                //                default: return Color.Black;
+                //            }
+                //        }
+
+                //        int y = 0;
+                //        foreach (var line in File.ReadLines(file))
+                //        {
+                //            int x = 0;
+                //            foreach (var c in line)
+                //            {
+                //                mapImage.SetPixel(x,y,ToColor(c));
+                //                x++;
+                //                if (x == 64)
+                //                    break;
+                //            }
+
+                //            y++;
+                //            if (y == 64)
+                //                break;
+                //        }
+
+                //        mapImage.Save(outputFile);
+                //    });
+
+
+                //var fileNames = new[]
+                //{
+                ////    "10levels 01 - Wolf1 Map1.uwmf",
+                //    "Wolf3D 01 - Wolf1 Map1.uwmf",
+                //  //  "Wolf3D-PacMan&Clowns 09 - Wolf1 Boss.uwmf",
+                //    //"Wolf3D 01 - Wolf1 Map1 r1.uwmf",
+                //    //"Wolf3D 01 - Wolf1 Map1 r2.uwmf",
+                //    //"Wolf3D 01 - Wolf1 Map1 r3.uwmf",
+                //    //"Wolf3D 01 - Wolf1 Map1 m.uwmf",
+                //    //"Wolf3D 01 - Wolf1 Map1 r1m.uwmf",
+                //    //"Wolf3D 01 - Wolf1 Map1 r2m.uwmf",
+                //    //"Wolf3D 01 - Wolf1 Map1 r3m.uwmf",
+                //};
+                //var metamapsPath = @"C:\Users\david\Desktop\Wolf3D Maps\metamaps";
+                //var outputPath = @"C:\Users\david\Downloads\Tiledriver ML";
+                //foreach (var filename in fileNames.Select(Path.GetFileNameWithoutExtension))
+                //{
+                //    var meta = MetaMap.Load(Path.Combine(metamapsPath, filename + ".metamap"));
+                //    SimpleMapImageExporter.Export(meta, MapPalette.Full, Path.Combine(outputPath, $"simplify-before.png"), scale: 5);
+                //    SimpleMapImageExporter.Export(meta, MapPalette.CarveOutRooms, Path.Combine(outputPath, $"simplify-after.png"), scale: 5);
+
+                //}
+
+                //ConvertGarbageMetaMapsToImages(
+                //    pathForGoodImages: @"C:\Users\david\Desktop\Wolf3D Maps\Images",
+                //    metaMapPath: @"C:\Users\david\Desktop\Wolf3D Maps\metamaps",
+                //    outputPath: @"C:\Users\david\Desktop\Wolf3D Maps\Images - Junk Maps");
+
+                //ReexportGoodMetaMapsToImages(
+                //    pathForGoodImages: @"C:\Users\david\Desktop\Wolf3D Maps\Images",
+                //    metaMapPath: @"C:\Users\david\Desktop\Wolf3D Maps\metamaps",
+                //    outputPath: @"C:\Users\david\Desktop\Wolf3D Maps\Images - Good Maps");
+
                 //var badEndings = new[] {"m", "r1", "r1m", "r2", "r2m", "r3", "r3m"}.
                 //    Select(s => " " + s + ".metamap").
                 //    ToImmutableArray();
@@ -61,18 +135,18 @@ namespace TestRunner
                 //    Directory.EnumerateFiles(@"C:\Users\david\Desktop\Wolf3D Maps\metamaps").Where(name=>!badEndings.Any(name.EndsWith)), 
                 //    outputPath:@"C:\Users\david\Desktop\Wolf3D Maps\Images");
 
-                var goodMaps = 
-                    Directory.EnumerateFiles(@"C:\Users\david\Desktop\Wolf3D Maps\Images").
-                    Select(Path.GetFileNameWithoutExtension).
-                    ToImmutableHashSet();
+                //var goodMaps = 
+                //    Directory.EnumerateFiles(@"C:\Users\david\Desktop\Wolf3D Maps\Images").
+                //    Select(Path.GetFileNameWithoutExtension).
+                //    ToImmutableHashSet();
 
-                MergeMetaMaps(
-                    @"C:\git\tiledriver-ml\metamaps_user",
-                    @"C:\git\tiledriver-ml\MegaMetaMapTrimmed", 
-                    goodMaps: goodMaps,
-                    condenseSolidRows: true);
+                //MergeMetaMaps(
+                //    @"C:\git\tiledriver-ml\metamaps_user",
+                //    @"C:\git\tiledriver-ml\MegaMetaMapTrimmed", 
+                //    goodMaps: goodMaps,
+                //    condenseSolidRows: true);
 
-                return;
+                //return;
 
                 //BatchConvertGameMaps(
                 //    baseInputPath: @"C:\Users\david\Desktop\Wolf3D Maps\Wolf3D User Maps\oldschoolspear",
@@ -92,15 +166,16 @@ namespace TestRunner
 
                 //LoadMapInEcWolf(CAGenerator.Generate(), projectPath: Path.GetFullPath("Cave"));
 
-                //// Visualize multiple generations
-                //foreach (var generation in Enumerable.Range(0, 7))
-                //{
-                //    var genMap = CAGenerator.Generate(width: 128, height: 128, generations: generation);
+                const int imageScale = 4;
+                // Visualize multiple generations                
+                foreach (var generation in Enumerable.Range(0, 7))
+                {
+                    var genMap = CAGenerator.Generate(width: 128, height: 128, generations: generation, seed:0, borderOffset:0);
 
-                //    var genMetaMap = MetaMapAnalyzer.Analyze(genMap, includeAllEmptyAreas: true);
+                    var genMetaMap = MetaMapAnalyzer.Analyze(genMap, includeAllEmptyAreas: true);
 
-                //    SimpleMapImageExporter.Export(genMetaMap, MapPalette.CarveOutRooms, $"{generation:00} - CA Gen {generation}.png", scale: 10);
-                //}
+                    SimpleMapImageExporter.Export(genMetaMap, MapPalette.CarveOutRooms, $"ca-gen{generation+1}.png", scale: imageScale);
+                }
 
 
                 var caMap = CAGenerator.Generate(width: 128, height: 128, stalagmiteProb: 0.02, stalactiteProb: 0.04, generations: 6, seed: 0);
@@ -110,11 +185,9 @@ namespace TestRunner
                     new[] { roomGraph.OrderBy(r => r.Area).Last() });
 
 
-                //SimpleMapImageExporter.Export(metaMap, MapPalette.CarveOutRooms, $"caMap.png", scale: 10);
-                //Process.Start("caMap.png");
-                //SimpleMapImageExporter.Export(roomGraph, "07 - Enclosed playable spaces.png", scale: 10);
+                SimpleMapImageExporter.Export(roomGraph, "ca-gen7-playable-spaces.png", scale: imageScale);
                 //Process.Start("graph.png");
-                //SimpleMapImageExporter.Export(trimmedRoomGraph, "08 - Only largest room.png", scale: 10);
+                SimpleMapImageExporter.Export(trimmedRoomGraph, "ca-gen7-only-largest-room.png", scale: imageScale);
                 //Process.Start("trimmed-graph.png");
 
                 // ************************************
@@ -147,7 +220,7 @@ namespace TestRunner
 
                 LightTracer.AddRandomLightsToMap(clonedMap, largeRoom, lightRadius: 15, percentAreaToCoverWithLights: 0.005);
 
-                LoadMapInEcWolf(clonedMap, "Cave");
+                //LoadMapInEcWolf(clonedMap, "Cave");
 
                 //TranslateGameMapsFormat();
                 //Flatten();
@@ -192,7 +265,7 @@ namespace TestRunner
 
             if (Directory.Exists(outputPath))
             {
-                Directory.Delete(outputPath, recursive:true);
+                Directory.Delete(outputPath, recursive: true);
             }
             Directory.CreateDirectory(outputPath);
 
@@ -202,10 +275,56 @@ namespace TestRunner
                 {
                     var imagePath = Path.Combine(outputPath, Path.GetFileNameWithoutExtension(mapPath) + ".png");
                     var metaMap = MetaMap.Load(mapPath);
-                    SimpleMapImageExporter.Export(metaMap, MapPalette.CarveOutRooms, imagePath, scale: 4);
+                    SimpleMapImageExporter.Export(metaMap, MapPalette.Full, imagePath, scale: 4);
                     progress.Tick();
                 });
             }
+        }
+
+        private static void ReexportGoodMetaMapsToImages(
+            string pathForGoodImages, 
+            string metaMapPath,
+            string outputPath)
+        {
+            ConvertMetaMapsToImages(
+                Directory.EnumerateFiles(pathForGoodImages).
+                    Select(Path.GetFileNameWithoutExtension).
+                    Select(f => Path.Combine(metaMapPath, f + ".metamap")), 
+                outputPath);
+        }
+
+        private static void ConvertGarbageMetaMapsToImages(string pathForGoodImages, string metaMapPath, string outputPath)
+        {
+            var goodFiles =
+                Directory.GetFiles(pathForGoodImages).
+                Select(Path.GetFileNameWithoutExtension).
+                ToImmutableHashSet();
+
+            var endings = new[] { " m", " r1", " r1m", " r2", " r2m", " r3", " r3m" };
+
+            string GetRawMapName(string filename)
+            {
+                foreach (var ending in endings)
+                {
+                    if (filename.EndsWith(ending))
+                    {
+                        filename = filename.RemoveLast(ending.Length);
+                        break;
+                    }
+                }
+
+                return filename;
+            }
+
+            var allFiles =
+                Directory.GetFiles(metaMapPath).
+                Select(Path.GetFileNameWithoutExtension).
+                Select(GetRawMapName).
+                ToImmutableHashSet();
+
+            var badFiles = allFiles.Except(goodFiles);
+
+            ConvertMetaMapsToImages(badFiles.Select(f => Path.Combine(metaMapPath, f + ".metamap")), outputPath);
         }
 
         private static void MergeMetaMaps(string metaMapsInputPath, string outputPath, ImmutableHashSet<string> goodMaps, bool condenseSolidRows = false)
@@ -226,8 +345,8 @@ namespace TestRunner
                 }
             }
 
-            var endings = new[] {" m", " r1", " r1m", " r2", " r2m", " r3", " r3m"};
-            
+            var endings = new[] { " m", " r1", " r1m", " r2", " r2m", " r3", " r3m" };
+
             string GetRawMapName(string path)
             {
                 var filename = Path.GetFileNameWithoutExtension(path);
@@ -245,9 +364,9 @@ namespace TestRunner
             }
 
             Console.WriteLine("Loading maps...");
-            var maps = 
+            var maps =
                 Directory.EnumerateFiles(metaMapsInputPath).
-                Where(path=>goodMaps.Contains(GetRawMapName(path))).
+                Where(path => goodMaps.Contains(GetRawMapName(path))).
                 AsParallel().
                 Select(MetaMap.Load).
                 ToList();
