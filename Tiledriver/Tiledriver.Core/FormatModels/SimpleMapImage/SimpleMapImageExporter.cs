@@ -3,7 +3,7 @@
 
 using System.Drawing;
 using System.Linq;
-using ColorMine.ColorSpaces;
+using static HsluvS.Hsluv;
 using Tiledriver.Core.FormatModels.MapMetadata;
 using Tiledriver.Core.Utils;
 
@@ -35,9 +35,8 @@ namespace Tiledriver.Core.FormatModels.SimpleMapImage
             foreach (var (room, index) in graph.Select((room, index) => (room, index)))
             {
                 var hue = index * increment;
-                var hsvColor = new Hsv(hue, 1, 1);
-                var rgb = hsvColor.ToRgb();
-                var color = Color.FromArgb((int)rgb.R, (int)rgb.G, (int)rgb.B);
+                var (r,g,b) = HslToRgb((hue,100,50));
+                var color = Color.FromArgb((int)(255*r),(int)(255*g),(int)(255*b));
 
                 foreach (var spot in room)
                 {

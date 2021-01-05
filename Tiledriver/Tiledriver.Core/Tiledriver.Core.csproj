@@ -32,8 +32,8 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.2.2" />
-    <PackageReference Include="ColorMine" Version="1.2.0" />
     <PackageReference Include="Functional.Maybe" Version="1.1.1" />
+    <PackageReference Include="HsluvS" Version="1.0.1" />
     <PackageReference Include="JetBrains.Annotations" Version="11.1.0" />
     <PackageReference Include="Piglet" Version="1.4.0" />
     <PackageReference Include="SharpCompress" Version="0.19.2" />
