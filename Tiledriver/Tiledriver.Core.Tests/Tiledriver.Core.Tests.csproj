@@ -9,9 +9,10 @@
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="Castle.Core" Version="4.4.1" />
     <PackageReference Include="Functional.Maybe" Version="2.0.20" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
-    <PackageReference Include="Moq" Version="4.15.2" />
-    <PackageReference Include="NUnit" Version="3.13.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
+    <PackageReference Include="Moq" Version="4.16.1" />
+    <PackageReference Include="NUnit" Version="3.13.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
     <PackageReference Include="Piglet" Version="1.5.0" />
     <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
