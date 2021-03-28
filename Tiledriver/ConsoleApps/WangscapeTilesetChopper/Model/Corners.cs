@@ -7,7 +7,7 @@ using System;
 namespace WangscapeTilesetChopper.Model
 {
     [Flags]
-    public enum Corners : byte
+    enum Corners : byte
     {
         None = 0,
         BottomLeft = 0b0001,

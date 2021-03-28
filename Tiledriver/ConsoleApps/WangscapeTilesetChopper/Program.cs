@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using WangscapeTilesetChopper.Model;
 
@@ -8,17 +10,34 @@ namespace WangscapeTilesetChopper
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main(string inputDirectory, string outputDirectory)
         {
-            var serializedDefinitions = File.ReadAllText(args[0]);
+            if (!Directory.Exists(inputDirectory))
+            {
+                throw new ArgumentException($"Could not find {inputDirectory}");
+            }
+
+            var tilesJsonFile = Path.Combine(inputDirectory, "tiles.json");
+            var tileSheetFile = Directory.EnumerateFiles(inputDirectory, "*.png").Single();
+
+            // TODO: Is there seriously no better way to read from a file?
+            var serializedDefinitions = File.ReadAllText(tilesJsonFile);
             
             var definitions = JsonSerializer.Deserialize<List<TileDefinition>>(
                 serializedDefinitions, 
                 new JsonSerializerOptions{PropertyNameCaseInsensitive = true});
-            
+
+            if (!Directory.Exists(outputDirectory))
+            {
+                Directory.CreateDirectory(outputDirectory);
+            }
+
+            using var tileSheet = new Bitmap(tileSheetFile);
+
             foreach (var definition in definitions)
             {
-                Console.Out.WriteLine(definition);
+                using var tile = tileSheet.Clone(definition.GetCropArea(), tileSheet.PixelFormat);
+                tile.Save(Path.Combine(outputDirectory, definition.GetFileName()));
             }
         }
     }
