@@ -28,7 +28,7 @@ namespace WangscapeTilesetChopper
             
             var definitions = JsonSerializer.Deserialize<List<TileDefinition>>(
                 serializedDefinitions, 
-                new JsonSerializerOptions{PropertyNameCaseInsensitive = true});
+                new JsonSerializerOptions{PropertyNameCaseInsensitive = true}) ?? throw new ArgumentException("Bad format for tiles.json");
 
             if (!Directory.Exists(outputDirectory))
             {
