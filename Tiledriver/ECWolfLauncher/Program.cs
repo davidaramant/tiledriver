@@ -17,6 +17,7 @@ using AutoMapper;
 using Functional.Maybe;
 using Moq;
 using ShellProgressBar;
+using Tiledriver.Core.ECWolfUtils;
 using Tiledriver.Core.Extensions.Strings;
 using Tiledriver.Core.FormatModels;
 using Tiledriver.Core.FormatModels.Common;
@@ -170,19 +171,19 @@ namespace TestRunner
                 // Visualize multiple generations                
                 foreach (var generation in Enumerable.Range(0, 7))
                 {
-                    var genMap = CAGenerator.Generate(width: 128, height: 128, generations: generation, seed:0, borderOffset:0);
+                    var genMap = CAGenerator.Generate(width: 128, height: 128, generations: generation, seed: 0, borderOffset: 0);
 
                     var genMetaMap = MetaMapAnalyzer.Analyze(genMap, includeAllEmptyAreas: true);
 
-                    SimpleMapImageExporter.Export(genMetaMap, MapPalette.CarveOutRooms, $"ca-gen{generation+1}.png", scale: imageScale);
+                    SimpleMapImageExporter.Export(genMetaMap, MapPalette.CarveOutRooms, $"ca-gen{generation + 1}.png", scale: imageScale);
                 }
 
 
                 var caMap = CAGenerator.Generate(
-                    width: 128, height: 128, 
-                    stalagmiteProb: 0.02, 
-                    stalactiteProb: 0.04, 
-                    generations: 6, 
+                    width: 128, height: 128,
+                    stalagmiteProb: 0.02,
+                    stalactiteProb: 0.04,
+                    generations: 6,
                     seed: 0);
                 var metaMap = MetaMapAnalyzer.Analyze(caMap, includeAllEmptyAreas: true);
                 var roomGraph = RoomAnalyzer.Analyze(metaMap);
@@ -288,14 +289,14 @@ namespace TestRunner
         }
 
         private static void ReexportGoodMetaMapsToImages(
-            string pathForGoodImages, 
+            string pathForGoodImages,
             string metaMapPath,
             string outputPath)
         {
             ConvertMetaMapsToImages(
                 Directory.EnumerateFiles(pathForGoodImages).
                     Select(Path.GetFileNameWithoutExtension).
-                    Select(f => Path.Combine(metaMapPath, f + ".metamap")), 
+                    Select(f => Path.Combine(metaMapPath, f + ".metamap")),
                 outputPath);
         }
 
@@ -683,7 +684,7 @@ namespace TestRunner
 
         private static void ExportMapsFromPk3(string pk3Path, string outputBasePath = ".")
         {
-            var ecWolfPk3Path = Path.ChangeExtension(GetECWolfExePath(), "pk3");
+            var ecWolfPk3Path = Path.ChangeExtension(ExeFinder.GetECWolfExePath(), "pk3");
 
             var levelSetName = Path.GetFileNameWithoutExtension(pk3Path);
 
@@ -927,7 +928,7 @@ namespace TestRunner
             string name)> levelSets,
             string outputPath)
         {
-            var ecWolfPk3Path = Path.ChangeExtension(GetECWolfExePath(), "pk3");
+            var ecWolfPk3Path = Path.ChangeExtension(ExeFinder.GetECWolfExePath(), "pk3");
 
             var autoMapperConfig = new MapperConfiguration(cfg =>
             {
@@ -988,7 +989,7 @@ namespace TestRunner
             string outputPath,
             string levelSetName)
         {
-            var ecWolfPk3Path = Path.ChangeExtension(GetECWolfExePath(), "pk3");
+            var ecWolfPk3Path = Path.ChangeExtension(ExeFinder.GetECWolfExePath(), "pk3");
 
             var autoMapperConfig = new MapperConfiguration(cfg =>
             {
@@ -1031,56 +1032,22 @@ namespace TestRunner
             }
         }
 
-        private static void LoadMapInEcWolf(MapData uwmfMap, string projectPath = "")
+        private static void LoadMapInEcWolf(MapData uwmfMap, string projectPath)
         {
-            string wadFilePath = "demo.wad";
-            string pathToLoad = Path.GetFullPath(wadFilePath);
+            var mapsSubDir = Path.Combine(projectPath, "maps");
 
-            if (!string.IsNullOrWhiteSpace(projectPath))
+            if (!Directory.Exists(mapsSubDir))
             {
-                var mapsSubDir = Path.Combine(projectPath, "maps");
-
-                if (!Directory.Exists(mapsSubDir))
-                {
-                    Directory.CreateDirectory(mapsSubDir);
-                }
-
-                wadFilePath = Path.Combine(mapsSubDir, "Map01.wad");
-                pathToLoad = Path.GetFullPath(projectPath);
+                Directory.CreateDirectory(mapsSubDir);
             }
 
-            var ecWolfPath = GetECWolfExePath();
+            var wadFilePath = Path.Combine(mapsSubDir, "Map01.wad");
 
-            var wad = new WadFile();
-            wad.Append(new Marker("MAP01"));
-            wad.Append(new UwmfLump("TEXTMAP", uwmfMap));
-            wad.Append(new Marker("ENDMAP"));
-            wad.SaveTo(wadFilePath);
-
-            Process.Start(
-                ecWolfPath,
-                $"--file \"{pathToLoad}\" --data wl6 --hard --nowait --tedlevel map01");
+            ExeFinder.CreateLauncher().LoadMapInEcWolf(uwmfMap, wadFilePath: wadFilePath);
         }
 
-        private static string GetECWolfExePath()
-        {
-            const string inputFile = "ECWolfPath.txt";
-
-            if (!File.Exists(inputFile))
-            {
-                throw new Exception(
-                    $"Could not find {inputFile}.  " +
-                    "Create this file in the output directory containing a single line with the full path to ECWolf.exe.  " +
-                    "Do not quote the path.");
-            }
-
-            var ecWolfPath = File.ReadAllLines(inputFile).Single();
-
-            if (Path.GetFileName(ecWolfPath).ToLowerInvariant() != "ecwolf.exe")
-            {
-                ecWolfPath = Path.Combine(ecWolfPath, "ecwolf.exe");
-            }
-            return ecWolfPath;
-        }
+        private static void LoadMapInEcWolf(MapData uwmfMap) => ExeFinder.CreateLauncher().LoadMapInEcWolf(uwmfMap);
     }
+
 }
+
