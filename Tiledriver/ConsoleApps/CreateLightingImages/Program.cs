@@ -2,6 +2,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System;
+using System.Drawing;
 using System.IO;
 
 namespace CreateLightingImages
@@ -26,6 +27,10 @@ namespace CreateLightingImages
             }
 
             // Load palette
+            var paletteImage = new Bitmap(paletteFile);
+            
+
+
             // Create palette translations
             // Loop over all files
             // * Get relative path to inputDirectory
