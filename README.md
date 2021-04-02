@@ -1,5 +1,7 @@
 # Tiledriver
 
+[![.NET](https://github.com/davidaramant/tiledriver/actions/workflows/dotnet.yml/badge.svg)](https://github.com/davidaramant/tiledriver/actions/workflows/dotnet.yml)
+
 Tiledriver is a .NET toolkit for Unified Wolfenstein Mapping Format (UWMF) levels, supported by the [ECWolf](http://maniacsvault.net/ecwolf/) engine.
 
 Features:
@@ -31,6 +33,7 @@ Tiledriver is licensed with the BSD 3-clause license.  See the file LICENSE for 
   - [ ] XLAT
   - [ ] MapInfo
 - [ ] There is way too much "temporary" code hanging out in `ECWolfLaucher`
+- [ ] There is a `SteamGameSearcher` class that deals with the Windows Registry. Where is this supposed to live? Can you make a truly cross-platform console app in .NET 5?
 
 ### Level Generation
 
