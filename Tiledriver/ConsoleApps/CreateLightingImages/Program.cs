@@ -4,6 +4,11 @@
 using System;
 using System.Drawing;
 using System.IO;
+using System.Linq;
+using HsluvS;
+using Tiledriver.Core.Extensions.Colors;
+using Tiledriver.Core.Extensions.Enumerable;
+using Tiledriver.Core.Utils;
 
 namespace CreateLightingImages
 {
@@ -28,7 +33,18 @@ namespace CreateLightingImages
 
             // Load palette
             var paletteImage = new Bitmap(paletteFile);
-            
+
+            var hslPalette =
+                paletteImage.Palette.Entries
+                    .AsParallel()
+                    .Select(c => HslColor.FromTuple(c.ToHsl()))
+                    .ToArray();
+
+            const double minLPercentage = 0.2;
+
+            var translatedColors = hslPalette.Select(hsl => hsl with { L = hsl.L * minLPercentage }).ToArray();
+
+            var indexTranslations = translatedColors.Select((color, index) => hslPalette.MinIndex(color.DistanceTo)).ToArray();
 
 
             // Create palette translations
@@ -38,5 +54,7 @@ namespace CreateLightingImages
             // ** Shift colors
             // ** Save to equivalent relative path in outputDirectory
         }
+
+        private static double Lerp(double v0, double v1, double t) => (1 - t) * v0 + t * v1;
     }
 }
