@@ -8,6 +8,7 @@ using Tiledriver.Core.Extensions.MaybeFileSystem;
 
 namespace Tiledriver.Core.Settings
 {
+    // TODO: Where on earth is this supposed to live???
     public static class SteamGameSearcher
     {
         private static Maybe<string> GetBaseSteamPath()
