@@ -1,0 +1,100 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiledriver.Core", "Tiledriver.Core\Tiledriver.Core.csproj", "{A32B1E60-62EE-4EF9-892B-1B8A3BB2396C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECWolfLauncher", "ConsoleApps.Windows\ECWolfLauncher\ECWolfLauncher.csproj", "{335AB7A0-117F-44DC-BDA0-665D850DF7B9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiledriver.Core.Tests", "Tiledriver.Core.Tests\Tiledriver.Core.Tests.csproj", "{7770AD96-CE49-4191-98B1-A983E4F59ABA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AE6AE45D-0570-4E00-882D-99671BD1CA47}"
+	ProjectSection(SolutionItems) = preProject
+		..\LICENSE = ..\LICENSE
+		..\README.md = ..\README.md
+		..\TODO.md = ..\TODO.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiledriver.Gui", "Tiledriver.Gui\Tiledriver.Gui.csproj", "{CD23D39F-F30D-4FC9-BB4E-9A56061B6450}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConsoleApps", "ConsoleApps", "{A5D856F1-E321-431E-8CD2-9D5513737F9F}"
+	ProjectSection(SolutionItems) = preProject
+		ConsoleApps\readme.md = ConsoleApps\readme.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mm", "ConsoleApps\mm\mm.csproj", "{5F5982B5-8AE5-4E77-BF47-9A736B45B122}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiledriver.Metadata", "Tiledriver.Metadata\Tiledriver.Metadata.csproj", "{72389D48-9DC6-4341-8154-3427087F5837}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WangscapeTilesetChopper", "ConsoleApps\WangscapeTilesetChopper\WangscapeTilesetChopper.csproj", "{E52E1DBB-6077-4C09-A635-2DC3C09828FF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CreateLightingImages", "ConsoleApps\CreateLightingImages\CreateLightingImages.csproj", "{D4C7AE43-60E5-428B-82DA-BF3AEAEE7BD9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataModelGenerator", "ConsoleApps\DataModelGenerator\DataModelGenerator.csproj", "{8C6D4E9C-BCB8-417A-8208-467EFBD0070A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tiledriver.Core.Windows", "Tiledriver.Core.Windows\Tiledriver.Core.Windows.csproj", "{C9F9B1CF-38F8-4307-9904-58F9BA76D65D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConsoleApps.Windows", "ConsoleApps.Windows", "{01517B0C-6299-45E8-88B3-3E4E4BAB03E7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A32B1E60-62EE-4EF9-892B-1B8A3BB2396C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A32B1E60-62EE-4EF9-892B-1B8A3BB2396C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A32B1E60-62EE-4EF9-892B-1B8A3BB2396C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A32B1E60-62EE-4EF9-892B-1B8A3BB2396C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{335AB7A0-117F-44DC-BDA0-665D850DF7B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{335AB7A0-117F-44DC-BDA0-665D850DF7B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{335AB7A0-117F-44DC-BDA0-665D850DF7B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{335AB7A0-117F-44DC-BDA0-665D850DF7B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7770AD96-CE49-4191-98B1-A983E4F59ABA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7770AD96-CE49-4191-98B1-A983E4F59ABA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7770AD96-CE49-4191-98B1-A983E4F59ABA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7770AD96-CE49-4191-98B1-A983E4F59ABA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD23D39F-F30D-4FC9-BB4E-9A56061B6450}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD23D39F-F30D-4FC9-BB4E-9A56061B6450}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD23D39F-F30D-4FC9-BB4E-9A56061B6450}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD23D39F-F30D-4FC9-BB4E-9A56061B6450}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F5982B5-8AE5-4E77-BF47-9A736B45B122}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F5982B5-8AE5-4E77-BF47-9A736B45B122}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F5982B5-8AE5-4E77-BF47-9A736B45B122}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F5982B5-8AE5-4E77-BF47-9A736B45B122}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72389D48-9DC6-4341-8154-3427087F5837}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72389D48-9DC6-4341-8154-3427087F5837}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72389D48-9DC6-4341-8154-3427087F5837}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72389D48-9DC6-4341-8154-3427087F5837}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E52E1DBB-6077-4C09-A635-2DC3C09828FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E52E1DBB-6077-4C09-A635-2DC3C09828FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E52E1DBB-6077-4C09-A635-2DC3C09828FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E52E1DBB-6077-4C09-A635-2DC3C09828FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4C7AE43-60E5-428B-82DA-BF3AEAEE7BD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4C7AE43-60E5-428B-82DA-BF3AEAEE7BD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4C7AE43-60E5-428B-82DA-BF3AEAEE7BD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4C7AE43-60E5-428B-82DA-BF3AEAEE7BD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C6D4E9C-BCB8-417A-8208-467EFBD0070A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C6D4E9C-BCB8-417A-8208-467EFBD0070A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C6D4E9C-BCB8-417A-8208-467EFBD0070A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C6D4E9C-BCB8-417A-8208-467EFBD0070A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9F9B1CF-38F8-4307-9904-58F9BA76D65D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9F9B1CF-38F8-4307-9904-58F9BA76D65D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9F9B1CF-38F8-4307-9904-58F9BA76D65D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9F9B1CF-38F8-4307-9904-58F9BA76D65D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{335AB7A0-117F-44DC-BDA0-665D850DF7B9} = {01517B0C-6299-45E8-88B3-3E4E4BAB03E7}
+		{5F5982B5-8AE5-4E77-BF47-9A736B45B122} = {A5D856F1-E321-431E-8CD2-9D5513737F9F}
+		{E52E1DBB-6077-4C09-A635-2DC3C09828FF} = {A5D856F1-E321-431E-8CD2-9D5513737F9F}
+		{D4C7AE43-60E5-428B-82DA-BF3AEAEE7BD9} = {A5D856F1-E321-431E-8CD2-9D5513737F9F}
+		{8C6D4E9C-BCB8-417A-8208-467EFBD0070A} = {A5D856F1-E321-431E-8CD2-9D5513737F9F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {88D7BF2B-84C0-4D6E-B20C-2859FC94DEF2}
+	EndGlobalSection
+EndGlobal
