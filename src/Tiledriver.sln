@@ -31,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WangscapeTilesetChopper", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CreateLightingImages", "ConsoleApps\CreateLightingImages\CreateLightingImages.csproj", "{D4C7AE43-60E5-428B-82DA-BF3AEAEE7BD9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataModelGenerator", "ConsoleApps\Tiledriver.DataModelGenerator\DataModelGenerator.csproj", "{8C6D4E9C-BCB8-417A-8208-467EFBD0070A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataModelGenerator", "ConsoleApps\DataModelGenerator\DataModelGenerator.csproj", "{8C6D4E9C-BCB8-417A-8208-467EFBD0070A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
