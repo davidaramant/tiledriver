@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiledriver.Core", "Tiledriver.Core\Tiledriver.Core.csproj", "{A32B1E60-62EE-4EF9-892B-1B8A3BB2396C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECWolfLauncher", "ConsoleApps\ECWolfLauncher\ECWolfLauncher.csproj", "{335AB7A0-117F-44DC-BDA0-665D850DF7B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECWolfLauncher", "ConsoleApps.Windows\ECWolfLauncher\ECWolfLauncher.csproj", "{335AB7A0-117F-44DC-BDA0-665D850DF7B9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiledriver.Core.Tests", "Tiledriver.Core.Tests\Tiledriver.Core.Tests.csproj", "{7770AD96-CE49-4191-98B1-A983E4F59ABA}"
 EndProject
@@ -34,6 +34,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataModelGenerator", "ConsoleApps\DataModelGenerator\DataModelGenerator.csproj", "{8C6D4E9C-BCB8-417A-8208-467EFBD0070A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tiledriver.Core.Windows", "Tiledriver.Core.Windows\Tiledriver.Core.Windows.csproj", "{C9F9B1CF-38F8-4307-9904-58F9BA76D65D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConsoleApps.Windows", "ConsoleApps.Windows", "{01517B0C-6299-45E8-88B3-3E4E4BAB03E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -86,7 +88,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{335AB7A0-117F-44DC-BDA0-665D850DF7B9} = {A5D856F1-E321-431E-8CD2-9D5513737F9F}
+		{335AB7A0-117F-44DC-BDA0-665D850DF7B9} = {01517B0C-6299-45E8-88B3-3E4E4BAB03E7}
 		{5F5982B5-8AE5-4E77-BF47-9A736B45B122} = {A5D856F1-E321-431E-8CD2-9D5513737F9F}
 		{E52E1DBB-6077-4C09-A635-2DC3C09828FF} = {A5D856F1-E321-431E-8CD2-9D5513737F9F}
 		{D4C7AE43-60E5-428B-82DA-BF3AEAEE7BD9} = {A5D856F1-E321-431E-8CD2-9D5513737F9F}
