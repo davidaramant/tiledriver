@@ -4,7 +4,7 @@
 using System;
 using System.Reflection;
 
-namespace SectorDirector.DataModelGenerator.Utilities
+namespace Tiledriver.DataModelGenerator.Utilities
 {
     public static class CurrentLibraryInfo
     {
