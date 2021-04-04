@@ -159,7 +159,7 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
         [Test]
         public void ShouldTokenizeMapInfoWithoutInclude()
         {
-            using (var stream = File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "MapInfos", "Parsing", "wolfcommon.txt")))
+            using (var stream = TestFile.MapInfo.wolfcommon)
             using (var textReader = new StreamReader(stream, Encoding.ASCII))
             {
                 var lexer = new MapInfoLexer(Mock.Of<IResourceProvider>());
@@ -172,11 +172,9 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
         {
             var mockProvider = new Mock<IResourceProvider>();
             mockProvider.Setup(_ => _.Lookup("mapinfo/wolfcommon.txt"))
-                .Returns(File.OpenRead(
-                        Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "MapInfos",
-                        "Parsing", "wolfcommon.txt")));
+                .Returns(TestFile.MapInfo.wolfcommon);
 
-            using (var stream = File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "MapInfos", "Parsing", "wolf3d.txt")))
+            using (var stream = TestFile.MapInfo.wolf3d)
             using (var textReader = new StreamReader(stream, Encoding.ASCII))
             {
                 var lexer = new MapInfoLexer(mockProvider.Object);
@@ -189,11 +187,9 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
         {
             var mockProvider = new Mock<IResourceProvider>();
             mockProvider.Setup(_ => _.Lookup("mapinfo/wolfcommon.txt"))
-                .Returns(File.OpenRead(
-                    Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "MapInfos",
-                        "Parsing", "wolfcommon.txt")));
+                .Returns(TestFile.MapInfo.wolfcommon);
 
-            using (var stream = File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "MapInfos", "Parsing", "spear.txt")))
+            using (var stream = TestFile.MapInfo.spear)
             using (var textReader = new StreamReader(stream, Encoding.ASCII))
             {
                 var lexer = new MapInfoLexer(mockProvider.Object);

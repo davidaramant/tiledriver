@@ -17,7 +17,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
         [Test]
         public void ShouldLexRealXlat()
         {
-            using (var stream = File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "Xlat", "Parsing", "wolf3d.txt")))
+            using (var stream = TestFile.Xlat.wolf3d)
             using (var textReader = new StreamReader(stream, Encoding.ASCII))
             {
                 var lexer = new XlatLexer(textReader);

@@ -261,7 +261,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
         [Test]
         public void ShouldAnalyzeRealXlat()
         {
-            using (var stream = File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "Xlat", "Parsing", "wolf3d.txt")))
+            using (var stream = TestFile.Xlat.wolf3d)
             using (var textReader = new StreamReader(stream, Encoding.ASCII))
             {
                 var lexer = new XlatLexer(textReader);
@@ -276,9 +276,9 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
             var mockProvider = new Mock<IResourceProvider>();
             mockProvider.
                 Setup(_ => _.Lookup(It.IsAny<string>()))
-                .Returns( File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "Xlat", "Parsing", "wolf3d.txt")));
+                .Returns(TestFile.Xlat.wolf3d);
 
-            using (var stream = File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "Xlat", "Parsing", "spear.txt")))
+            using (var stream = TestFile.Xlat.spear)
             using (var textReader = new StreamReader(stream, Encoding.ASCII))
             {
                 var lexer = new XlatLexer(textReader);

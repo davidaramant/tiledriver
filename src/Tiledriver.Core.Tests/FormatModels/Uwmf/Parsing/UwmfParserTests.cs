@@ -63,7 +63,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
         [Test]
         public void ShouldParseOldDemoMap()
         {
-            using (var stream = File.OpenRead(Path.Combine(TestContext.CurrentContext.TestDirectory, "FormatModels", "Uwmf", "Parsing", "TEXTMAP.txt")))
+            using (var stream =TestFile.Uwmf.TEXTMAP)
             using (var textReader = new StreamReader(stream, Encoding.ASCII))
             {
                 var sa = new UwmfSyntaxAnalyzer();

@@ -18,29 +18,22 @@
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="FormatModels\MapInfos\Parsing\spear.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="FormatModels\MapInfos\Parsing\wolf3d.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="FormatModels\MapInfos\Parsing\wolfcommon.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="FormatModels\Uwmf\Parsing\TEXTMAP.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="FormatModels\Xlat\Parsing\spear.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="FormatModels\Xlat\Parsing\wolf3d.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="LegacyMaps\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="FormatModels\MapInfos\Parsing\spear.txt">
+    <None Remove="TestFiles\MapInfo\spear.txt" />
+    <None Remove="TestFiles\MapInfo\wolf3d.txt" />
+    <None Remove="TestFiles\MapInfo\wolfcommon.txt" />
+    <None Remove="TestFiles\Uwmf\TEXTMAP.txt" />
+    <None Remove="TestFiles\Xlat\spear.txt" />
+    <None Remove="TestFiles\Xlat\wolf3d.txt" />
+    <EmbeddedResource Include="TestFiles\MapInfo\spear.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TestFiles\MapInfo\wolf3d.txt" />
+    <EmbeddedResource Include="TestFiles\MapInfo\wolfcommon.txt" />
+    <EmbeddedResource Include="TestFiles\Uwmf\TEXTMAP.txt" />
+    <EmbeddedResource Include="TestFiles\Xlat\spear.txt" />
+    <EmbeddedResource Include="TestFiles\Xlat\wolf3d.txt" />
   </ItemGroup>
 </Project>
