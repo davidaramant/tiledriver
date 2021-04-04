@@ -3,7 +3,6 @@
 
 using System;
 using System.IO;
-using CommandLine;
 using Tiledriver.Core.FormatModels.MapMetadata;
 using Tiledriver.Core.FormatModels.SimpleMapImage;
 
@@ -14,20 +13,8 @@ namespace mm
     /// </summary>
     class Program
     {
-        sealed class Options
-        {
-            [Value(0, Required = true, HelpText = "Input path of metamap")]
-            public string InputMapPath { get; set; }
 
-            [Option(Default = ImagePalette.CarveOutRooms, HelpText = "Theme to use for the image.")]
-            public ImagePalette Theme { get; set; }
-
-            [Option("imagename", HelpText = "Name of the image file (by default, use the map name)")]
-            public string ImageName { get; set; }
-
-            [Option('s', "scale", Default = 1, Required = false, HelpText = "How much to scale the output image.")]
-            public uint Scale { get; set; }
-        }
+        record Options(string InputMapPath, ImagePalette Theme, string ImageName, uint Scale);
 
         public enum ImagePalette
         {
@@ -36,10 +23,20 @@ namespace mm
             Full
         }
 
-        static void Main(string[] args)
+        /// <summary>
+        /// Entry point
+        /// </summary>
+        /// <param name="inputMapPath">Input path of metamap</param>
+        /// <param name="theme">Theme to use for the image.</param>
+        /// <param name="imageName">Name of the image file (by default, use the map name)</param>
+        /// <param name="scale">How much to scale the output image.</param>
+        static void Main(
+            string inputMapPath,
+            ImagePalette theme,
+            string imageName = null,
+            uint scale = 1)
         {
-            CommandLine.Parser.Default.ParseArguments<Options>(args)
-                .WithParsed<Options>(RunOptionsAndReturnExitCode);
+            RunOptionsAndReturnExitCode(new Options(inputMapPath, theme, imageName, scale));
         }
 
         private static void RunOptionsAndReturnExitCode(Options opts)
@@ -73,7 +70,7 @@ namespace mm
             }
 
             var imagePath = Path.Combine(Path.GetDirectoryName(opts.InputMapPath), imageName);
-            SimpleMapImageExporter.Export(map, PickPalette(opts.Theme), imagePath, scale:opts.Scale);
+            SimpleMapImageExporter.Export(map, PickPalette(opts.Theme), imagePath, scale: opts.Scale);
 
             Console.WriteLine($"Wrote {imagePath} with color theme {opts.Theme} at scale {opts.Scale}x.");
         }
