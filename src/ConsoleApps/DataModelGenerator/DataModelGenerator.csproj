@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Uwmf\" />
+    <Folder Include="MetadataModel\" />
   </ItemGroup>
 
 </Project>

@@ -2,6 +2,8 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Tiledriver.DataModelGenerator.Utilities
@@ -40,6 +42,31 @@ namespace Tiledriver.DataModelGenerator.Utilities
         public IndentedWriter Line()
         {
             _writer.WriteLine();
+            return this;
+        }
+
+        public IndentedWriter JoinLines(string linePostfix, IEnumerable<string> lines)
+        {
+            using var enumerator = lines.GetEnumerator();
+
+            string? actualLine = null;
+
+            if (enumerator.MoveNext())
+            {
+                actualLine = enumerator.Current;
+            }
+
+            while (enumerator.MoveNext())
+            {
+                Line(actualLine + linePostfix);
+                actualLine = enumerator.Current;
+            }
+
+            if (actualLine != null)
+            {
+                Line(actualLine);
+            }
+
             return this;
         }
 

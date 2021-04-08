@@ -1,5 +1,8 @@
-﻿using System;
+﻿// Copyright (c) 2021, David Aramant
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
+
 using System.IO;
+using Tiledriver.DataModelGenerator.Uwmf;
 
 namespace Tiledriver.DataModelGenerator
 {
@@ -7,7 +10,13 @@ namespace Tiledriver.DataModelGenerator
     {
         static void Main(string[] args)
         {
-            Console.WriteLine($"SLN path: {FindSolutionPath()}");
+            var basePath = FindSolutionPath();
+
+            var corePath = Path.Combine(basePath, "Tiledriver.Core2"); // HACK: Point to Core 2 for now
+            var formatModelsPath = Path.Combine(corePath, "FormatModels");
+            var uwmfPath = Path.Combine(formatModelsPath, "Uwmf");
+
+            UwmfModelGenerator.WriteToPath(uwmfPath);
         }
 
         private static string FindSolutionPath()
