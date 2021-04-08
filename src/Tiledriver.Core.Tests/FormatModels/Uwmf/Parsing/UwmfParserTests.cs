@@ -3,16 +3,16 @@
 
 using System.IO;
 using System.Text;
-using NUnit.Framework;
+using Xunit;
+using FluentAssertions;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Uwmf.Parsing;
 
 namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
 {
-    [TestFixture]
     public sealed class UwmfParserTests
     {
-        [Test]
+        [Fact]
         public void ShouldRoundTripMinimalMap()
         {
             var map = new MapData
@@ -39,7 +39,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
             }
         }
 
-        [Test]
+        [Fact]
         public void ShouldRoundTripDemoMap()
         {
             var map = DemoMap.Create();
@@ -60,7 +60,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
             }
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseOldDemoMap()
         {
             using (var stream =TestFile.Uwmf.TEXTMAP)

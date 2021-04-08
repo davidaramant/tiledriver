@@ -4,24 +4,25 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
+using FluentAssertions;
 using Tiledriver.Core.Extensions.Directions;
 using Tiledriver.Core.FormatModels.Common;
 
 namespace Tiledriver.Core.Tests.Extensions
 {
-    [TestFixture]
     public sealed class DirectionExtensionTests
     {
-        [TestCase(0, 0, 3, 3, 2, TestName = "Top Left")]
-        [TestCase(1, 0, 3, 3, 3, TestName = "Top Middle")]
-        [TestCase(2, 0, 3, 3, 2, TestName = "Top Right")]
-        [TestCase(0, 1, 3, 3, 3, TestName = "Middle Left")]
-        [TestCase(1, 1, 3, 3, 4, TestName = "Middle Middle")]
-        [TestCase(2, 1, 3, 3, 3, TestName = "Middle Right")]
-        [TestCase(0, 2, 3, 3, 2, TestName = "Bottom Left")]
-        [TestCase(1, 2, 3, 3, 3, TestName = "Bottom Middle")]
-        [TestCase(2, 2, 3, 3, 2, TestName = "Bottom Right")]
+        [Theory]
+        [InlineData(0, 0, 3, 3, 2)] // Top Left
+        [InlineData(1, 0, 3, 3, 3)] // Top Middle
+        [InlineData(2, 0, 3, 3, 2)] // Top Right
+        [InlineData(0, 1, 3, 3, 3)] // Middle Left
+        [InlineData(1, 1, 3, 3, 4)] // Middle Middle
+        [InlineData(2, 1, 3, 3, 3)] // Middle Right
+        [InlineData(0, 2, 3, 3, 2)] // Bottom Left
+        [InlineData(1, 2, 3, 3, 3)] // Bottom Middle
+        [InlineData(2, 2, 3, 3, 2)] // Bottom Right
         public void ShouldReturnValidAdjacentPoints(
             int x, int y,
             int width, int height,
@@ -30,10 +31,10 @@ namespace Tiledriver.Core.Tests.Extensions
             var location = new Point(x, y);
             var bounds = new Size(width, height);
 
-            Assert.That(location.GetAdjacentPoints(bounds, clockWise: false, start: Direction.East).ToArray(), Has.Length.EqualTo(expectedAdjacent));
+            location.GetAdjacentPoints(bounds, clockWise: false, start: Direction.East).Should().HaveCount(expectedAdjacent);
         }
 
-        [Test]
+        [Fact]
         public void ShouldReturnPointsInDefaultOrder()
         {
             VerifyDirections(
@@ -42,7 +43,7 @@ namespace Tiledriver.Core.Tests.Extensions
                 expectedDirections: new[] { Direction.East, Direction.North, Direction.West, Direction.South, });
         }
 
-        [Test]
+        [Fact]
         public void ShouldReturnPointsInReversedOrder()
         {
             VerifyDirections(
@@ -51,22 +52,22 @@ namespace Tiledriver.Core.Tests.Extensions
                 expectedDirections: new[] { Direction.West, Direction.North, Direction.East, Direction.South, });
         }
 
-        [Test]
+        [Fact]
         public void ShouldGetDirectionsInCounterClockwiseOrder()
         {
             var actual = DirectionExtensions.GetDirections(start: Direction.North, clockWise: false).ToArray();
             var expected = new[] { Direction.North, Direction.West, Direction.South, Direction.East, };
 
-            Assert.That(actual, Is.EqualTo(expected));
+            actual.Should().BeEquivalentTo(expected);
         }
 
-        [Test]
+        [Fact]
         public void ShouldGetDirectionsInClockwiseOrder()
         {
             var actual = DirectionExtensions.GetDirections(start: Direction.North, clockWise: true).ToArray();
             var expected = new[] { Direction.North, Direction.East, Direction.South, Direction.West, };
 
-            Assert.That(actual, Is.EqualTo(expected));
+            actual.Should().BeEquivalentTo(expected);
         }
 
         private static void VerifyDirections(bool clockWise, Direction start, IEnumerable<Direction> expectedDirections)
@@ -77,10 +78,7 @@ namespace Tiledriver.Core.Tests.Extensions
                     Select(tuple => tuple.direction).
                     ToArray();
 
-            Assert.That(
-                directions,
-                Is.EqualTo(expectedDirections.ToArray()),
-                "Did not return correct directions.");
+            directions.Should().BeEquivalentTo(expectedDirections);
         }
     }
 }

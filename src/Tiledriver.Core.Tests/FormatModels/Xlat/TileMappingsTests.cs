@@ -4,16 +4,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
+using FluentAssertions;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Xlat;
 
 namespace Tiledriver.Core.Tests.FormatModels.Xlat
 {
-    [TestFixture]
     public sealed class TileMappingsTests
     {
-        [Test]
+        [Fact]
         public void ShouldAppendAmbushModzoneMappings()
         {
             var tm1 = Create(
@@ -32,10 +32,10 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
 
             tm1.Add(tm2);
 
-            Assert.That(tm1.AmbushModzones, Has.Count.EqualTo(4));
+            tm1.AmbushModzones.Should().HaveCount(4);
         }
 
-        [Test]
+        [Fact]
         public void ShouldAppendChangeTriggerModzoneMappings()
         {
             var tm1 = Create(
@@ -54,21 +54,21 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
 
             tm1.Add(tm2);
 
-            Assert.That(tm1.ChangeTriggerModzones, Has.Count.EqualTo(4));
+            tm1.ChangeTriggerModzones.Should().HaveCount(4);
         }
 
-        [Test]
+        [Fact]
         public void ShouldMergeTileMappings()
         {
             var tm1 = Create(
-                tileTemplates: new []
+                tileTemplates: new[]
                 {
                     new TileTemplate(oldNum:1,textureEast:"T1",textureNorth:"whatever",textureSouth:"whatever",textureWest:"whatever"),
                     new TileTemplate(oldNum:2,textureEast:"T2",textureNorth:"whatever",textureSouth:"whatever",textureWest:"whatever"),
                 });
 
             var tm2 = Create(
-                tileTemplates: new []
+                tileTemplates: new[]
                 {
                     new TileTemplate(oldNum:2,textureEast:"T2new",textureNorth:"whatever",textureSouth:"whatever",textureWest:"whatever"),
                     new TileTemplate(oldNum:3,textureEast:"T3",textureNorth:"whatever",textureSouth:"whatever",textureWest:"whatever"),
@@ -76,10 +76,10 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
 
             tm1.Add(tm2);
 
-            Assert.That(tm1.TileTemplates,Has.Count.EqualTo(4));
+            tm1.TileTemplates.Should().HaveCount(4);
         }
 
-        [Test]
+        [Fact]
         public void ShouldMergeTriggerTemplateMappings()
         {
             var tm1 = Create(
@@ -98,10 +98,10 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
 
             tm1.Add(tm2);
 
-            Assert.That(tm1.TriggerTemplates, Has.Count.EqualTo(4));
+            tm1.TriggerTemplates.Should().HaveCount(4);
         }
 
-        [Test]
+        [Fact]
         public void ShouldMergeZoneMappings()
         {
             var tm1 = Create(
@@ -120,7 +120,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
 
             tm1.Add(tm2);
 
-            Assert.That(tm1.ZoneTemplates, Has.Count.EqualTo(4));
+            tm1.ZoneTemplates.Should().HaveCount(4);
         }
 
         private static void CheckMerge<T, TCompare>(
@@ -128,20 +128,11 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
             Func<T, TCompare> compareSelector,
             IEnumerable<TCompare> expected)
         {
-            Assert.That(
-                dict,
-                Has.Count.EqualTo(3),
-                "Unexpected number of entries.");
+            dict.Should().HaveCount(3);
 
-            Assert.That(
-                dict.Keys,
-                Is.EquivalentTo(new ushort[] { 1, 2, 3 }),
-                "Unexpected keys.");
+            dict.Keys.Should().BeEquivalentTo(new ushort[] { 1, 2, 3 });
 
-            Assert.That(
-                dict.Values.Select(compareSelector),
-                Is.EquivalentTo(expected),
-                "Unexpected values.");
+            dict.Values.Select(compareSelector).Should().BeEquivalentTo(expected);
         }
 
         private static TileMappings Create(

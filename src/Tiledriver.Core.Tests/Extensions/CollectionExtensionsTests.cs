@@ -1,15 +1,15 @@
 // Copyright (c) 2016, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using NUnit.Framework;
+using Xunit;
+using FluentAssertions;
 using Tiledriver.Core.Extensions.Collections;
 
 namespace Tiledriver.Core.Tests.Extensions
 {
-    [TestFixture]
     public sealed class CollectionExtensionsTests
     {
-        [Test]
+        [Fact]
         public void ShouldCondenseSequenceToDictionary()
         {
             var list = new (int,string)[]
@@ -21,9 +21,9 @@ namespace Tiledriver.Core.Tests.Extensions
 
             var d = list.CondenseToDictionary(t => t.Item1, t => t.Item2);
 
-            Assert.That(d, Has.Count.EqualTo(2), "Did not condense list");
-            Assert.That(d[1],Is.EqualTo("one again"),"Did not use latest value for key.");
-            Assert.That(d[2], Is.EqualTo("two"), "Did not include value.");
+            d.Should().HaveCount(2, "list should have been condensed.");
+            d[1].Should().Be("one again", "latest value for key should have been used.");
+            d[2].Should().Be("two", "value should have been included.");
         }
     }
 }

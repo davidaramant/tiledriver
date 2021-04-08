@@ -3,7 +3,7 @@
 
 using System.IO;
 using System.Text;
-using NUnit.Framework;
+using Xunit;
 using Piglet.Lexer;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Xlat.Parsing;
@@ -11,10 +11,9 @@ using Tiledriver.Core.Tests.FormatModels.Common;
 
 namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
 {
-    [TestFixture]
     public sealed class XlatLexerTests : BaseLexerTests
     {
-        [Test]
+        [Fact]
         public void ShouldLexRealXlat()
         {
             using (var stream = TestFile.Xlat.wolf3d)

@@ -5,16 +5,16 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Moq;
-using NUnit.Framework;
+using Xunit;
+using FluentAssertions;
 using Tiledriver.Core.FormatModels;
 using Tiledriver.Core.FormatModels.MapInfos.Parsing;
 
 namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
 {
-    [TestFixture]
     public sealed class MapInfoParserTests
     {
-        [Test]
+        [Fact]
         public void ShouldParseMapInfoWithoutInclude()
         {
             using (var stream = TestFile.MapInfo.wolfcommon)
@@ -26,7 +26,7 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
             }
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseMapInfoWithInclude()
         {
             var mockProvider = new Mock<IResourceProvider>();
@@ -42,7 +42,7 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
             }
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseSpearMapInfo()
         {
             var mockProvider = new Mock<IResourceProvider>();

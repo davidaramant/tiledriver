@@ -6,31 +6,31 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Moq;
-using NUnit.Framework;
+using Xunit;
+using FluentAssertions;
 using Tiledriver.Core.FormatModels;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.MapInfos.Parsing;
 
 namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
 {
-    [TestFixture]
     public sealed class MapInfoLexerTests
     {
-        [Test]
+        [Fact]
         public void ShouldHandlePropertyWithValue()
         {
             VerifyLexing("a = 3",
                 new MapInfoProperty(new Identifier("a"), new[] { "3" }));
         }
 
-        [Test]
+        [Fact]
         public void ShouldHandlePropertyWithoutValue()
         {
             VerifyLexing("a",
                 new MapInfoProperty(new Identifier("a")));
         }
 
-        [Test]
+        [Fact]
         public void ShouldHandleMultiplePropertiesWithoutValues()
         {
             VerifyLexing("a\nb",
@@ -38,16 +38,16 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
                 new MapInfoProperty(new Identifier("b")));
         }
 
-        [Test]
+        [Fact]
         public void ShouldHandlePropertyWithValues()
         {
             VerifyLexing("a = 1, 2, 3",
                 new MapInfoProperty(new Identifier("a"), new[] { "1", "2", "3" }));
         }
 
-        [TestCase("NoWhiteSpace")]
-        [TestCase("White Space")]
-        [TestCase("With,Comma")]
+        [InlineData("NoWhiteSpace")]
+        [InlineData("White Space")]
+        [InlineData("With,Comma")]
         public void ShouldHandlePropertyWithStringValues(string s)
         {
             VerifyLexing($"a = \"{s}\"",
@@ -56,18 +56,18 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
 
         #region Paramter parsing
 
-        [TestCase("\"\"\"", "\"\"\"")]
-        [TestCase("1", "1")]
-        [TestCase("\"string\"", "\"string\"")]
-        [TestCase("\"string with whitespace\"", "\"string with whitespace\"")]
-        [TestCase("\"string,with,commas\"", "\"string,with,commas\"")]
-        [TestCase("   \"string needing trimming\"     ", "\"string needing trimming\"")]
+        [InlineData("\"\"\"", "\"\"\"")]
+        [InlineData("1", "1")]
+        [InlineData("\"string\"", "\"string\"")]
+        [InlineData("\"string with whitespace\"", "\"string with whitespace\"")]
+        [InlineData("\"string,with,commas\"", "\"string,with,commas\"")]
+        [InlineData("   \"string needing trimming\"     ", "\"string needing trimming\"")]
         public void ShouldParseSingleParameters(string input, string expected)
         {
             AssertParsing(input, expected);
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseMultipleParameters()
         {
             AssertParsing(
@@ -80,12 +80,12 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
         private static void AssertParsing(string input, params string[] expectedResults)
         {
             var actualResults = MapInfoLexer.ParseCommaSeparatedParameters(input);
-            Assert.That(actualResults.ToArray(), Is.EqualTo(expectedResults.ToArray()), "Did not parse parameters correctly.");
+            actualResults.Should().BeEquivalentTo(expectedResults, "parameters should have been parsed correctly.");
         }
 
         #endregion
 
-        [Test]
+        [Fact]
         public void ShouldHandleBlock()
         {
             VerifyLexing(
@@ -104,7 +104,7 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
                     }));
         }
 
-        [Test]
+        [Fact]
         public void ShouldHandleNestedBlocks()
         {
             VerifyLexing(
@@ -128,7 +128,7 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
                     }));
         }
 
-        [Test]
+        [Fact]
         public void ShouldHandleBlockContainingPropertyWithNoAssignment()
         {
             VerifyLexing(
@@ -145,7 +145,7 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
                     }));
         }
 
-        [Test]
+        [Fact]
         public void ShouldHandleEmptyBlock()
         {
             VerifyLexing(
@@ -156,7 +156,7 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
                     Enumerable.Empty<IMapInfoElement>()));
         }
 
-        [Test]
+        [Fact]
         public void ShouldTokenizeMapInfoWithoutInclude()
         {
             using (var stream = TestFile.MapInfo.wolfcommon)
@@ -167,7 +167,7 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
             }
         }
 
-        [Test]
+        [Fact]
         public void ShouldTokenizeMapInfoWithInclude()
         {
             var mockProvider = new Mock<IResourceProvider>();
@@ -182,7 +182,7 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
             }
         }
 
-        [Test]
+        [Fact]
         public void ShouldTokenizeSpearMapInfo()
         {
             var mockProvider = new Mock<IResourceProvider>();
@@ -214,11 +214,12 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
             IEnumerable<IMapInfoElement> actual,
             IEnumerable<IMapInfoElement> expected)
         {
-            Assert.That(actual.Count(), Is.EqualTo(expected.Count()), "Did not lex correct number of elements.");
+            actual.Should().HaveSameCount(expected, "correct number of elements should have been lexed");
 
             foreach (var pair in actual.Zip(expected, (a, e) => new { Actual = a, Expected = e }))
             {
-                Assert.That(pair.Actual.IsBlock, Is.EqualTo(pair.Actual.IsBlock), "Lexed wrong type of element.");
+                pair.Actual.IsBlock.Should()
+                    .Be(pair.Expected.IsBlock, "correct type of element should have been lexed.");
 
                 if (pair.Actual.IsBlock)
                 {
@@ -237,14 +238,14 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
 
         private static void VerifyPropertiesAreIdentical(MapInfoProperty actual, MapInfoProperty expected)
         {
-            Assert.That(actual.Name, Is.EqualTo(expected.Name), "Property name did not match.");
-            Assert.That(actual.Values, Is.EquivalentTo(expected.Values), "Property values did not match.");
+            actual.Name.Should().Be(expected.Name, "property name should match.");
+            actual.Values.Should().BeEquivalentTo(expected.Values, "property values should match.");
         }
 
         private static void VerifyBlocksAreIdentical(MapInfoBlock actual, MapInfoBlock expected)
         {
-            Assert.That(actual.Name, Is.EqualTo(expected.Name), "Block name did not match.");
-            Assert.That(actual.Metadata, Is.EquivalentTo(expected.Metadata), "Block metadata did not match.");
+            actual.Name.Should().Be(expected.Name, "block name should match.");
+            actual.Metadata.Should().BeEquivalentTo(expected.Metadata, "block metadata should match.");
         }
     }
 }

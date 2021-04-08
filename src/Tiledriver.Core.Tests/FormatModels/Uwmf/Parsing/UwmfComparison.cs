@@ -4,7 +4,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
+using FluentAssertions;
 using Tiledriver.Core.FormatModels.Uwmf;
 
 namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
@@ -15,28 +16,19 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
         {
             Func<UnknownProperty, string> toString =
                 up => $"{(string)up.Name} = {up.Value}";
-            Assert.That(
-                toString(actual),
-                Is.EqualTo(toString(expected)),
-                "Different unknown properties");
+            toString(actual).Should().Be(toString(expected));
         }
 
         public static void AssertEqual(IEnumerable<UnknownProperty> actual, IEnumerable<UnknownProperty> expected)
         {
             Func<IEnumerable<UnknownProperty>, string> toString =
                 list => string.Join("\n", list.Select(up => $"{(string)up.Name} = {up.Value}"));
-            Assert.That(
-                toString(actual),
-                Is.EqualTo(toString(expected)),
-                "Different unknown properties");
+            toString(actual).Should().Be(toString(expected));
         }
 
         public static void AssertEqual(UnknownBlock actual, UnknownBlock expected)
         {
-            Assert.That(
-                actual.Name,
-                Is.EqualTo(expected.Name),
-                "Different name on unknown block.");
+            actual.Name.Should().Be(expected.Name, "unknown block name should match");
 
             AssertEqual(actual.Properties, expected.Properties);
         }

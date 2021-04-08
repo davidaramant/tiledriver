@@ -1,15 +1,15 @@
 ﻿// Copyright (c) 2017, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using NUnit.Framework;
+using Xunit;
+using FluentAssertions;
 using Tiledriver.Core.FormatModels.Xlat;
 
 namespace Tiledriver.Core.Tests.FormatModels.Xlat
 {
-    [TestFixture]
     public sealed class FlatMappingsTests
     {
-        [Test]
+        [Fact]
         public void ShouldMergeMappings()
         {
             var fm1 = new FlatMappings(
@@ -22,8 +22,8 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
 
             fm1.Add(fm2);
 
-            Assert.That(fm1.Ceilings, Is.EquivalentTo(new[] { "c10", "c20", "c3" }), "Did not merge ceilings.");
-            Assert.That(fm1.Floors, Is.EquivalentTo(new[] { "f10", "f20", "f30" }), "Did not merge floors.");
+            fm1.Ceilings.Should().BeEquivalentTo(new[] { "c10", "c20", "c3" });
+            fm1.Floors.Should().BeEquivalentTo(new[] { "f10", "f20", "f30" });
         }
     }
 }

@@ -3,16 +3,16 @@
 
 using System.IO;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
+using FluentAssertions;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Uwmf.Parsing;
 
 namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
 {
-    [TestFixture]
     public sealed class UwmfSyntaxAnalyzerTests
     {
-        [Test]
+        [Fact]
         public void ShouldParseGlobalAssignment()
         {
             var input = @"prop = 1;";
@@ -20,13 +20,11 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
             var syntaxAnalzer = new UwmfSyntaxAnalyzer();
             var result = syntaxAnalzer.Analyze(new UwmfLexer(new StringReader(input)));
 
-            Assert.That(
-                result.GetGlobalAssignments().ToArray(),
-                Is.EqualTo(new[] { new Assignment(new Identifier("prop"), Token.Integer(1)) }),
-                "Did not parse the assignment.");
+            result.GetGlobalAssignments().Should()
+                .BeEquivalentTo(new[] { new Assignment(new Identifier("prop"), Token.Integer(1)) });
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseMultipleGlobalAssignments()
         {
             var input = @"prop = 1;prop2 = ""string"";";
@@ -34,17 +32,15 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
             var syntaxAnalzer = new UwmfSyntaxAnalyzer();
             var result = syntaxAnalzer.Analyze(new UwmfLexer(new StringReader(input)));
 
-            Assert.That(
-                result.GetGlobalAssignments().ToArray(),
-                Is.EqualTo(new[]
-                {
-                    new Assignment(new Identifier("prop"), Token.Integer(1)),
-                    new Assignment(new Identifier("prop2"), Token.String("string"))
-                }),
-                "Did not parse the assignments.");
+
+            result.GetGlobalAssignments().Should().BeEquivalentTo(new[]
+            {
+                new Assignment(new Identifier("prop"), Token.Integer(1)),
+                new Assignment(new Identifier("prop2"), Token.String("string"))
+            });
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseEmptyBlock()
         {
             var input = @"block {}";
@@ -52,14 +48,14 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
             var syntaxAnalzer = new UwmfSyntaxAnalyzer();
             var result = syntaxAnalzer.Analyze(new UwmfLexer(new StringReader(input)));
 
-            Assert.That(result.Blocks, Has.Count.EqualTo(1), "Did not parse out a block");
+            result.Blocks.Should().HaveCount(1, "a block should have been parsed out.");
 
             var block = result.Blocks.First();
 
-            Assert.That(block.Name, Is.EqualTo(new Identifier("block")), "Did not get correct name.");
+            block.Name.Should().Be(new Identifier("block"));
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseFullBlock()
         {
             var input = @"block {prop = 1;prop2 = ""string"";}";
@@ -67,19 +63,19 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
             var syntaxAnalzer = new UwmfSyntaxAnalyzer();
             var result = syntaxAnalzer.Analyze(new UwmfLexer(new StringReader(input)));
 
-            Assert.That(result.Blocks, Has.Count.EqualTo(1), "Did not parse out a block");
+            result.Blocks.Should().HaveCount(1, "a block should have been parsed out.");
 
             var block = result.Blocks.First();
 
-            Assert.That(block.Name, Is.EqualTo(new Identifier("block")), "Did not get correct name.");
-            Assert.That(block.ToArray(), Is.EqualTo(new[]
+            block.Name.Should().Be(new Identifier("block"));
+            block.Should().BeEquivalentTo(new[]
             {
                 new Assignment(new Identifier("prop"), Token.Integer(1)),
                 new Assignment(new Identifier("prop2"), Token.String("string"))
-            }), "Did not parse assignments.");
+            });
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseFullBlockMixedWithGlobalAssignments()
         {
             var input = @"gProp =1;block {prop = 1;prop2 = ""string"";}gProp2 = 5;";
@@ -87,28 +83,25 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
             var syntaxAnalzer = new UwmfSyntaxAnalyzer();
             var result = syntaxAnalzer.Analyze(new UwmfLexer(new StringReader(input)));
 
-            Assert.That(result.Blocks, Has.Count.EqualTo(1), "Did not parse out a block");
+            result.Blocks.Should().HaveCount(1, "a block should have been parsed out.");
 
             var block = result.Blocks.First();
 
-            Assert.That(block.Name, Is.EqualTo(new Identifier("block")), "Did not get correct name.");
-            Assert.That(block.ToArray(), Is.EqualTo(new[]
+            block.Name.Should().Be(new Identifier("block"));
+            block.Should().BeEquivalentTo(new[]
                 {
                     new Assignment(new Identifier("prop"), Token.Integer(1)),
                     new Assignment(new Identifier("prop2"), Token.String("string"))
-                }), "Did not parse assignments.");
+                });
 
-            Assert.That(
-                result.GetGlobalAssignments().ToArray(),
-                Is.EqualTo(new[]
+            result.GetGlobalAssignments().Should().BeEquivalentTo(new[]
                 {
                     new Assignment(new Identifier("gProp"), Token.Integer(1)),
                     new Assignment(new Identifier("gProp2"), Token.Integer(5))
-                }),
-                "Did not parse the assignments.");
+                });
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseArrayBlockWithOneTuple()
         {
             var input = @"block {{1,2,3}}";
@@ -116,16 +109,15 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
             var syntaxAnalzer = new UwmfSyntaxAnalyzer();
             var result = syntaxAnalzer.Analyze(new UwmfLexer(new StringReader(input)));
 
-            Assert.That(result.ArrayBlocks, Has.Count.EqualTo(1), "Did not parse out a block");
+            result.ArrayBlocks.Should().HaveCount(1, "an array block should have been parsed out.");
 
             var block = result.ArrayBlocks.First();
 
-            Assert.That(block.Name, Is.EqualTo(new Identifier("block")), "Did not get correct name.");
-            Assert.That(block.First(), Is.EqualTo(new[] { 1, 2, 3 }),
-                "Did not parse block.");
+            block.Name.Should().Be(new Identifier("block"));
+            block.First().Should().BeEquivalentTo(new[] { 1, 2, 3 });
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseArrayBlockWitMultipleTuples()
         {
             var input = @"block {{1,2,3},{4,5,6},{7,8,9,10}}";
@@ -133,14 +125,14 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
             var syntaxAnalzer = new UwmfSyntaxAnalyzer();
             var result = syntaxAnalzer.Analyze(new UwmfLexer(new StringReader(input)));
 
-            Assert.That(result.ArrayBlocks, Has.Count.EqualTo(1), "Did not parse out a block");
+            result.ArrayBlocks.Should().HaveCount(1, "an array block should have been parsed out.");
 
             var block = result.ArrayBlocks.First();
 
-            Assert.That(block.Name, Is.EqualTo(new Identifier("block")), "Did not get correct name.");
-            Assert.That(block[0], Is.EqualTo(new[] { 1, 2, 3 }));
-            Assert.That(block[1], Is.EqualTo(new[] { 4, 5, 6 }));
-            Assert.That(block[2], Is.EqualTo(new[] { 7, 8, 9, 10 }));
+            block.Name.Should().Be(new Identifier("block"));
+            block[0].Should().BeEquivalentTo(new[] { 1, 2, 3 });
+            block[1].Should().BeEquivalentTo(new[] { 4, 5, 6 });
+            block[2].Should().BeEquivalentTo(new[] { 7, 8, 9, 10 });
         }
     }
 }

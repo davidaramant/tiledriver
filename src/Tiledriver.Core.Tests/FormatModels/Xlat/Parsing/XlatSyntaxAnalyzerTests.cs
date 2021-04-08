@@ -7,22 +7,22 @@ using System.Linq;
 using System.Text;
 using Functional.Maybe;
 using Moq;
-using NUnit.Framework;
+using Xunit;
+using FluentAssertions;
 using Tiledriver.Core.FormatModels;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Xlat.Parsing;
 
 namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
 {
-    [TestFixture]
     public sealed class XlatSyntaxAnalyzerTests
     {
-        [Test]
+        [Fact]
         public void ShouldParseGlobalExpression()
         {
             var result = Analyze(@"enable lightlevels;");
 
-            Assert.That(result, Has.Length.EqualTo(1));
+            result.Should().HaveCount(1);
             var expression = result.First();
 
             AssertExpression(expression,
@@ -30,12 +30,12 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 qualifiers: new[] { Token.Identifier("lightlevels") });
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseEmptyBlock()
         {
             var result = Analyze(@"block { }");
 
-            Assert.That(result, Has.Length.EqualTo(1));
+            result.Should().HaveCount(1);
             var expression = result.First();
 
             AssertExpression(expression,
@@ -43,12 +43,12 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 numberOfSubExpressions: 0);
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseBlockWithSimpleExpression()
         {
             var result = Analyze(@"block { thing with stuff; }");
 
-            Assert.That(result, Has.Length.EqualTo(1));
+            result.Should().HaveCount(1);
             var expression = result.First();
 
             AssertExpression(expression,
@@ -61,12 +61,12 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 qualifiers: new[] { Token.Identifier("with"), Token.Identifier("stuff") });
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseBlockWithSimpleExpressionWithOldNum()
         {
             var result = Analyze(@"block { thing 44 with stuff; }");
 
-            Assert.That(result, Has.Length.EqualTo(1));
+            result.Should().HaveCount(1);
             var expression = result.First();
 
             AssertExpression(expression,
@@ -80,12 +80,12 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 qualifiers: new[] { Token.Identifier("with"), Token.Identifier("stuff") });
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseBlockWithExpressionWithEmptyList()
         {
             var result = Analyze(@"block { thing 44 {} }");
 
-            Assert.That(result, Has.Length.EqualTo(1));
+            result.Should().HaveCount(1);
             var expression = result.First();
 
             AssertExpression(expression,
@@ -98,12 +98,12 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 oldnum: 44);
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseBlockWithExpressionWithStringListOfSingleValue()
         {
             var result = Analyze("block { thing { \"string\" } }");
 
-            Assert.That(result, Has.Length.EqualTo(1));
+            result.Should().HaveCount(1);
             var expression = result.First();
 
             AssertExpression(expression,
@@ -116,12 +116,12 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 values: new[] { Token.String("string") });
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseBlockWithExpressionWithStringListOfMultipleValues()
         {
             var result = Analyze("block { thing { \"string\", \"string2\" } }");
 
-            Assert.That(result, Has.Length.EqualTo(1));
+            result.Should().HaveCount(1);
             var expression = result.First();
 
             AssertExpression(expression,
@@ -134,7 +134,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 values: new[] { Token.String("string"), Token.String("string2") });
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseBlockWithComplicatedExpression()
         {
             var result = Analyze("block { modzone 107 changetrigger \"Exit_Normal\"" +
@@ -145,7 +145,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                                 "		activatesouth = false;" +
                                 "	} }");
 
-            Assert.That(result, Has.Length.EqualTo(1));
+            result.Should().HaveCount(1);
             var expression = result.First();
 
             AssertExpression(expression,
@@ -166,7 +166,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 });
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseBlockWithValueLists()
         {
             var result = Analyze(
@@ -176,7 +176,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 "	{112, Guard,             4, PATHING|HOLOWALL, 1}" +
                 "}");
 
-            Assert.That(result, Has.Length.EqualTo(1));
+            result.Should().HaveCount(1);
             var expression = result.First();
 
             AssertExpression(expression,
@@ -214,12 +214,12 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 });
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseBlockWithAssignment()
         {
             var result = Analyze("block { thing { dog = 1; } }");
 
-            Assert.That(result, Has.Length.EqualTo(1));
+            result.Should().HaveCount(1);
             var expression = result.First();
 
             AssertExpression(expression,
@@ -235,12 +235,12 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 });
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseBlockWithAssignments()
         {
             var result = Analyze("block { thing { dog = 1; cat = \"meow\"; cow = false; } }");
 
-            Assert.That(result, Has.Length.EqualTo(1));
+            result.Should().HaveCount(1);
             var expression = result.First();
 
             AssertExpression(expression,
@@ -258,7 +258,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 });
         }
 
-        [Test]
+        [Fact]
         public void ShouldAnalyzeRealXlat()
         {
             using (var stream = TestFile.Xlat.wolf3d)
@@ -270,7 +270,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
             }
         }
 
-        [Test]
+        [Fact]
         public void ShouldAnalyzeRealXlatWithInclude()
         {
             var mockProvider = new Mock<IResourceProvider>();
@@ -304,42 +304,41 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
         {
             if (name != null)
             {
-                Assert.That(expression.Name.HasValue, Is.True, "Should have included a name.");
-                Assert.That(expression.Name.Value, Is.EqualTo(new Identifier(name)), "Wrong name.");
+                expression.Name.HasValue.Should().BeTrue();
+                expression.Name.Value.Should().Be(new Identifier(name));
             }
             else
             {
-                Assert.That(expression.Name.HasValue, Is.False, "Not expecting a name.");
+                expression.Name.HasValue.Should().BeFalse();
             }
 
             if (oldnum != null)
             {
-                Assert.That(expression.Oldnum.HasValue, Is.True, "Should have included an old num.");
-                Assert.That(expression.Oldnum.Value, Is.EqualTo(oldnum.Value), "Wrong old num.");
+                expression.Oldnum.HasValue.Should().BeTrue();
+                expression.Oldnum.Value.Should().Be((ushort)oldnum.Value);
             }
             else
             {
-                Assert.That(expression.Oldnum.HasValue, Is.False, "Not expecting an old num.");
+                expression.Oldnum.HasValue.Should().BeFalse();
             }
 
             var expectedQualifiers =
                 (qualifiers ?? Enumerable.Empty<Token>()).ToArray();
-            Assert.That(expression.Qualifiers.ToArray(), Is.EquivalentTo(expectedQualifiers), "Qualifers were not as expected.");
+            expression.Qualifiers.ToArray().Should().BeEquivalentTo(expectedQualifiers);
 
             var expectedProperties =
                 (properties ?? Enumerable.Empty<Assignment>()).ToArray();
-            Assert.That(expression.GetAssignments().Count(), Is.EqualTo(expectedProperties.Length), "Incorrect number of assignments.");
+            expression.GetAssignments().Count().Should().Be(expectedProperties.Length);
 
             foreach (var expectedProperty in expectedProperties)
             {
-                Assert.That(expression.GetValueFor(expectedProperty.Name), Is.EqualTo(expectedProperty.Value.ToMaybe()),
-                    $"Incorrect value for {expectedProperty.Name}");
+                expression.GetValueFor(expectedProperty.Name).Should().Be(expectedProperty.Value.ToMaybe());
             }
 
             var expectedValues = (values ?? Enumerable.Empty<Token>()).ToArray();
-            Assert.That(expression.Values.ToArray(), Is.EquivalentTo(expectedValues), "Values were not as expected.");
+            expression.Values.ToArray().Should().BeEquivalentTo(expectedValues);
 
-            Assert.That(expression.SubExpressions.Count(), Is.EqualTo(numberOfSubExpressions), "Incorrect number of sub expressions.");
+            expression.SubExpressions.Count().Should().Be(numberOfSubExpressions);
         }
     }
 }

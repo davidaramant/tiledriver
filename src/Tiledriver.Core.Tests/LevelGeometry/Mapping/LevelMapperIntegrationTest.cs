@@ -6,7 +6,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using NUnit.Framework;
+using Xunit;
+using FluentAssertions;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Uwmf.Parsing;
 using Tiledriver.Core.LevelGeometry.Mapping;
@@ -15,30 +16,27 @@ using Tiledriver.Core.Utils;
 
 namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
 {
-    [TestFixture]
-    public class LevelMapperIntegrationTest
+    public class LevelMapperIntegrationTest : IDisposable
     {
         private bool _writeMapDetails = false;
         private bool _writeGraphVizFiles = false;
 
         private StreamWriter _mapDetailsWriter;
 
-        [OneTimeSetUp]
-        public void Start()
+        public LevelMapperIntegrationTest()
         {
             if (_writeMapDetails)
                 _mapDetailsWriter = new StreamWriter("C:\\temp\\rooms.txt");
         }
 
-        [OneTimeTearDown]
-        public void Stop()
+        public void Dispose()
         {
             if (_writeMapDetails)
                 _mapDetailsWriter.Dispose();
         }
 
-        [Test]
-        [TestCaseSource(nameof(TestDefinitions))]
+        [Theory(Skip = "This is a weird pseudo test; should it be a console app?")]
+        [MemberData(nameof(TestDefinitions))]
         public void Test(string path)
         {
             using (var stream = File.OpenRead(path))
@@ -51,8 +49,8 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
                 var levelMap = mapper.Map(map);
                 var room = levelMap.StartingRoom;
 
-                Assert.That(room, Is.Not.Null);
-                Assert.That(room.Locations, Is.Not.Empty);
+                room.Should().NotBeNull();
+                room.Locations.Should().NotBeEmpty();
 
                 Console.WriteLine($"Found {room.Locations.Count} locations in the start room");
                 Console.WriteLine($"Found {levelMap.AllRooms.Count()} rooms in the level");
@@ -82,22 +80,19 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             var name = $"{map.Name}.gv";
 
             var content = GraphVizRenderer.BuildGraphDefinition(map, levelMap);
-
-            var currentDirectory = TestContext.CurrentContext.TestDirectory;
-            var outputPath = Path.Combine(currentDirectory, name);
-
-            using (var writer = new StreamWriter(outputPath))
+            
+            using (var writer = new StreamWriter(name))
             {
                 writer.Write(content);
             }
         }
 
-        public static IEnumerable<string> TestDefinitions()
+        public static IEnumerable<object[]> TestDefinitions()
         {
-            var mapDirectory = new DirectoryInfo(Path.Combine(TestContext.CurrentContext.TestDirectory, "LegacyMaps"));
+            var mapDirectory = new DirectoryInfo("LegacyMaps");
             foreach (var file in mapDirectory.GetFiles("*.uwmf"))
             {
-                yield return file.FullName;
+                yield return new []{file.FullName};
             }
         }
     }

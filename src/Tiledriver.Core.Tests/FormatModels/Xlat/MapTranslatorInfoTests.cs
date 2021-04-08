@@ -3,15 +3,15 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
+using FluentAssertions;
 using Tiledriver.Core.FormatModels.Xlat;
 
 namespace Tiledriver.Core.Tests.FormatModels.Xlat
 {
-    [TestFixture]
     public sealed class MapTranslatorInfoTests
     {
-        [Test]
+        [Fact]
         public void ShouldOverrideSimpleEntries()
         {
             var info = CreateInfo(
@@ -21,13 +21,10 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
                     CreateThingTemplate(oldNum:1),
                 });
 
-            Assert.That(
-                info.LookupThingMapping(1),
-                Is.InstanceOf<ThingTemplate>(),
-                "Did not overwrite type.");
+            info.LookupThingMapping(1).Should().BeOfType<ThingTemplate>();
         }
 
-        [Test]
+        [Fact]
         public void ShouldExpandThingsWithAngles()
         {
             var info = CreateInfo(
@@ -38,11 +35,11 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
 
             foreach (var oldNum in Enumerable.Range(1, 8).Select(i => (ushort)i))
             {
-                Assert.That(info.LookupThingMapping(oldNum), Is.TypeOf<ThingTemplate>(), $"Did not map to oldnum: {oldNum}");
+                info.LookupThingMapping(oldNum).Should().BeOfType<ThingTemplate>();
             }
         }
 
-        [Test]
+        [Fact]
         public void ShouldOverwriteExpandedThing()
         {
             var info = CreateInfo(
@@ -52,10 +49,10 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat
                     new Elevator(1),
                 });
 
-            Assert.That(info.LookupThingMapping(1), Is.TypeOf<Elevator>(), "Did not overwrite mapping.");
+            info.LookupThingMapping(1).Should().BeOfType<Elevator>();
             foreach (var oldNum in Enumerable.Range(2, 7).Select(i => (ushort)i))
             {
-                Assert.That(info.LookupThingMapping(oldNum), Is.TypeOf<ThingTemplate>(), $"Did not map to oldnum: {oldNum}");
+                info.LookupThingMapping(oldNum).Should().BeOfType<ThingTemplate>();
             }
         }
 

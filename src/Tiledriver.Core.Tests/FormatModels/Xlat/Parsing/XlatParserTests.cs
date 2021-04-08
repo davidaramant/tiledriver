@@ -6,7 +6,8 @@ using System.Linq;
 using System.Text;
 using Functional.Maybe;
 using Moq;
-using NUnit.Framework;
+using Xunit;
+using FluentAssertions;
 using Tiledriver.Core.FormatModels;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Xlat;
@@ -14,10 +15,9 @@ using Tiledriver.Core.FormatModels.Xlat.Parsing;
 
 namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
 {
-    [TestFixture]
     public sealed class XlatParserTests
     {
-        [Test]
+        [Fact]
         public void ShouldParseWolf3DXlat()
         {
             using (var stream = TestFile.Xlat.wolf3d)
@@ -30,7 +30,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
             }
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseSpearXlat()
         {
             var mockProvider = new Mock<IResourceProvider>();
@@ -49,7 +49,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
 
         #region Global Expressions
 
-        [Test]
+        [Fact]
         public void ShouldEnableLightLevels()
         {
             var translator = XlatParser.Parse(new[]
@@ -60,14 +60,14 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                     qualifiers:new [] { Token.Identifier("lightlevels"), })
             });
 
-            Assert.That(translator.EnableLightLevels, Is.True, "Did not parse 'enable lightlevels'");
+            translator.EnableLightLevels.Should().BeTrue();
         }
 
         #endregion Global Expressions
 
         #region Tiles section
 
-        [Test]
+        [Fact]
         public void ShouldParseAmbushModzoneInTiles()
         {
             var translator = XlatParser.Parse(new[]
@@ -86,13 +86,13 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
             });
 
             var mz1 = translator.TileMappings.AmbushModzones.Single(amz => amz.OldNum == 1);
-            Assert.That(mz1.Fillzone, Is.False, "Did not parse modzone without ambush flag.");
+            mz1.Fillzone.Should().BeFalse("modzone without ambush flag should be parsed.");
 
             var mz2 = translator.TileMappings.AmbushModzones.Single(amz => amz.OldNum == 2);
-            Assert.That(mz2.Fillzone, Is.True, "Did not parse modzone with ambush flag.");
+            mz2.Fillzone.Should().BeTrue("modzone with ambush flag should be parsed.");
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseChangeTriggerModzoneInTiles()
         {
             var translator = XlatParser.Parse(new[]
@@ -113,14 +113,14 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
 
             var trigger = translator.TileMappings.ChangeTriggerModzones.Single();
 
-            Assert.That(trigger.OldNum, Is.EqualTo(123), "Did not parse Old Num");
-            Assert.That(trigger.Fillzone, Is.True, "Did not parse Fillzone");
-            Assert.That(trigger.Action, Is.EqualTo("someoriginalaction"), "Did not parse action.");
-            Assert.That(trigger.TriggerTemplate.Action, Is.EqualTo("someaction"), "Did not parse trigger action.");
-            Assert.That(trigger.TriggerTemplate.ActivateEast, Is.False, "Did not parse trigger activateeast.");
+            trigger.OldNum.Should().Be(123);
+            trigger.Fillzone.Should().BeTrue();
+            trigger.Action.Should().Be("someoriginalaction");
+            trigger.TriggerTemplate.Action.Should().Be("someaction");
+            trigger.TriggerTemplate.ActivateEast.Should().BeFalse();
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseTileInTiles()
         {
             var translator = XlatParser.Parse(new[]
@@ -143,14 +143,14 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
 
             var tile = translator.TileMappings.TileTemplates.Single();
 
-            Assert.That(tile.OldNum, Is.EqualTo(123), "Did not set Old Num.");
-            Assert.That(tile.TextureEast, Is.EqualTo("tex1"), "Did not set Texture East");
-            Assert.That(tile.TextureNorth, Is.EqualTo("tex2"), "Did not set Texture North");
-            Assert.That(tile.TextureSouth, Is.EqualTo("tex3"), "Did not set Texture South");
-            Assert.That(tile.TextureWest, Is.EqualTo("tex4"), "Did not set Texture West");
+            tile.OldNum.Should().Be(123);
+            tile.TextureEast.Should().Be("tex1");
+            tile.TextureNorth.Should().Be("tex2");
+            tile.TextureSouth.Should().Be("tex3");
+            tile.TextureWest.Should().Be("tex4");
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseTriggerInTiles()
         {
             var translator = XlatParser.Parse(new[]
@@ -171,12 +171,12 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
 
             var trigger = translator.TileMappings.TriggerTemplates.Single();
 
-            Assert.That(trigger.OldNum, Is.EqualTo(123), "Did not set Old Num");
-            Assert.That(trigger.Action, Is.EqualTo("someaction"), "Did not set action");
-            Assert.That(trigger.ActivateEast, Is.False, "Did not set Activate East");
+            trigger.OldNum.Should().Be(123);
+            trigger.Action.Should().Be("someaction");
+            trigger.ActivateEast.Should().BeFalse();
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseZoneInTiles()
         {
             var translator = XlatParser.Parse(new[]
@@ -191,14 +191,14 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 })
             });
 
-            Assert.That(translator.TileMappings.ZoneTemplates.Single().OldNum, Is.EqualTo(123), "Did not parse sound zone.");
+            translator.TileMappings.ZoneTemplates.Single().OldNum.Should().Be(123);
         }
 
         #endregion Tiles section
 
         #region Things section
 
-        [Test]
+        [Fact]
         public void ShouldParseElevatorInThings()
         {
             var translator = XlatParser.Parse(new[]
@@ -213,10 +213,10 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 })
             });
 
-            Assert.That(translator.LookupThingMapping(123), Is.TypeOf<Elevator>(), "Did not parse elevator");
+            translator.LookupThingMapping(123).Should().BeOfType<Elevator>();
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseTriggerInThings()
         {
             var translator = XlatParser.Parse(new[]
@@ -235,18 +235,17 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                         })
                     });
 
-            IThingMapping mapping = null;
-            Assert.DoesNotThrow(() => mapping = translator.LookupThingMapping(123), "Did not have mapping.");
-            Assert.That(mapping, Is.TypeOf<TriggerTemplate>(), "Wrong type parsed.");
+            IThingMapping mapping = translator.LookupThingMapping(123);
+            mapping.Should().BeOfType<TriggerTemplate>();
 
             var trigger = (TriggerTemplate)mapping;
 
-            Assert.That(trigger.OldNum, Is.EqualTo(123), "Did not set oldNum");
-            Assert.That(trigger.Action, Is.EqualTo("someaction"), "Did not set action");
-            Assert.That(trigger.ActivateEast, Is.False, "Did not set Activate East");
+            trigger.OldNum.Should().Be(123);
+            trigger.Action.Should().Be("someaction");
+            trigger.ActivateEast.Should().BeFalse();
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseSimpleThingDefinitionInThings()
         {
             // 	{23,  Puddle,            4, 0, 2}
@@ -269,21 +268,20 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                         })
                     });
 
-            IThingMapping mapping = null;
-            Assert.DoesNotThrow(() => mapping = translator.LookupThingMapping(23), "Did not have mapping.");
-            Assert.That(mapping, Is.TypeOf<ThingTemplate>(), "Wrong type parsed.");
+            IThingMapping mapping = translator.LookupThingMapping(23);
+            mapping.Should().BeOfType<ThingTemplate>();
 
             var thingTemplate = (ThingTemplate)mapping;
 
-            Assert.That(thingTemplate.OldNum, Is.EqualTo(23), "Did not part OldNum");
-            Assert.That(thingTemplate.Type, Is.EqualTo("Puddle"), "Did not parse actor.");
-            Assert.That(thingTemplate.Angles, Is.EqualTo(4), "Did not parse angles.");
-            Assert.That(thingTemplate.Pathing, Is.False, "Did not parse pathing.");
-            Assert.That(thingTemplate.Holowall, Is.False, "Did not parse holowall.");
-            Assert.That(thingTemplate.Minskill, Is.EqualTo(2), "Did not parse minskill.");
+            thingTemplate.OldNum.Should().Be(23);
+            thingTemplate.Type.Should().Be("Puddle");
+            thingTemplate.Angles.Should().Be(4);
+            thingTemplate.Pathing.Should().BeFalse();
+            thingTemplate.Holowall.Should().BeFalse();
+            thingTemplate.Minskill.Should().Be(2);
         }
 
-        [Test]
+        [Fact]
         public void ShouldParseThingDefinitionWithMetaInThings()
         {
             // 	{23,  $Puddle,            4, 0, 2}
@@ -306,22 +304,21 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                         })
                     });
 
-            IThingMapping mapping = null;
-            Assert.DoesNotThrow(() => mapping = translator.LookupThingMapping(23), "Did not have mapping.");
-            Assert.That(mapping, Is.TypeOf<ThingTemplate>(), "Wrong type parsed.");
+            IThingMapping mapping = translator.LookupThingMapping(23);
+            mapping.Should().BeOfType<ThingTemplate>();
 
             var thingTemplate = (ThingTemplate)mapping;
 
-            Assert.That(thingTemplate.OldNum, Is.EqualTo(23), "Did not part OldNum");
-            Assert.That(thingTemplate.Type, Is.EqualTo("$Puddle"), "Did not parse actor.");
-            Assert.That(thingTemplate.Angles, Is.EqualTo(4), "Did not parse angles.");
-            Assert.That(thingTemplate.Pathing, Is.False, "Did not parse pathing.");
-            Assert.That(thingTemplate.Holowall, Is.False, "Did not parse holowall.");
-            Assert.That(thingTemplate.Minskill, Is.EqualTo(2), "Did not parse minskill.");
+            thingTemplate.OldNum.Should().Be(23);
+            thingTemplate.Type.Should().Be("$Puddle");
+            thingTemplate.Angles.Should().Be(4);
+            thingTemplate.Pathing.Should().BeFalse();
+            thingTemplate.Holowall.Should().BeFalse();
+            thingTemplate.Minskill.Should().Be(2);
         }
 
 
-        [Test]
+        [Fact]
         public void ShouldParseThingDefinitionWitFlagsInThings()
         {
             // 	{23,  Puddle,            4, HOLOWALL, 2}
@@ -370,49 +367,48 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                         })
                     });
 
-            IThingMapping mapping = null;
-            Assert.DoesNotThrow(() => mapping = translator.LookupThingMapping(23), "Did not have mapping.");
-            Assert.That(mapping, Is.TypeOf<ThingTemplate>(), "Wrong type parsed.");
+            IThingMapping mapping = translator.LookupThingMapping(23);            
+            mapping.Should().BeOfType<ThingTemplate>();
 
             var thingTemplate = (ThingTemplate)mapping;
 
-            Assert.That(thingTemplate.Type, Is.EqualTo("Puddle"), "Did not parse actor.");
-            Assert.That(thingTemplate.Angles, Is.EqualTo(4), "Did not parse angles.");
-            Assert.That(thingTemplate.Pathing, Is.False, "Did not parse pathing.");
-            Assert.That(thingTemplate.Holowall, Is.True, "Did not parse holowall.");
-            Assert.That(thingTemplate.Ambush, Is.False, "Did not parse ambush.");
-            Assert.That(thingTemplate.Minskill, Is.EqualTo(2), "Did not parse minskill.");
+            thingTemplate.Type.Should().Be("Puddle");
+            thingTemplate.Angles.Should().Be(4);
+            thingTemplate.Pathing.Should().BeFalse();
+            thingTemplate.Holowall.Should().BeTrue();
+            thingTemplate.Ambush.Should().BeFalse();
+            thingTemplate.Minskill.Should().Be(2);
 
-            Assert.DoesNotThrow(() => mapping = translator.LookupThingMapping(124), "Did not have mapping.");
-            Assert.That(mapping, Is.TypeOf<ThingTemplate>(), "Wrong type parsed.");
-
-            thingTemplate = (ThingTemplate)mapping;
-
-            Assert.That(thingTemplate.Type, Is.EqualTo("Puddle"), "Did not parse actor.");
-            Assert.That(thingTemplate.Angles, Is.EqualTo(5), "Did not parse angles.");
-            Assert.That(thingTemplate.Pathing, Is.True, "Did not parse pathing.");
-            Assert.That(thingTemplate.Holowall, Is.True, "Did not parse holowall.");
-            Assert.That(thingTemplate.Ambush, Is.False, "Did not parse ambush.");
-            Assert.That(thingTemplate.Minskill, Is.EqualTo(3), "Did not parse minskill.");
-
-            Assert.DoesNotThrow(() => mapping = translator.LookupThingMapping(225), "Did not have mapping.");
-            Assert.That(mapping, Is.TypeOf<ThingTemplate>(), "Wrong type parsed.");
+            mapping = translator.LookupThingMapping(124);     
+            mapping.Should().BeOfType<ThingTemplate>();
 
             thingTemplate = (ThingTemplate)mapping;
 
-            Assert.That(thingTemplate.Type, Is.EqualTo("Puddle"), "Did not parse actor.");
-            Assert.That(thingTemplate.Angles, Is.EqualTo(6), "Did not parse angles.");
-            Assert.That(thingTemplate.Pathing, Is.True, "Did not parse pathing.");
-            Assert.That(thingTemplate.Holowall, Is.False, "Did not parse holowall.");
-            Assert.That(thingTemplate.Ambush, Is.True, "Did not parse ambush.");
-            Assert.That(thingTemplate.Minskill, Is.EqualTo(4), "Did not parse minskill.");
+            thingTemplate.Type.Should().Be("Puddle");
+            thingTemplate.Angles.Should().Be(5);
+            thingTemplate.Pathing.Should().BeTrue();
+            thingTemplate.Holowall.Should().BeTrue();
+            thingTemplate.Ambush.Should().BeFalse();
+            thingTemplate.Minskill.Should().Be(3);
+
+            mapping = translator.LookupThingMapping(225);     
+            mapping.Should().BeOfType<ThingTemplate>();
+
+            thingTemplate = (ThingTemplate)mapping;
+
+            thingTemplate.Type.Should().Be("Puddle");
+            thingTemplate.Angles.Should().Be(6);
+            thingTemplate.Pathing.Should().BeTrue();
+            thingTemplate.Holowall.Should().BeFalse();
+            thingTemplate.Ambush.Should().BeTrue();
+            thingTemplate.Minskill.Should().Be(4);
         }
 
         #endregion Things section
 
         #region Flats section
 
-        [Test]
+        [Fact]
         public void ShouldParseFlatsSection()
         {
             var translator = XlatParser.Parse(new[]
@@ -442,8 +438,8 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Parsing
                 })
             });
 
-            Assert.That(translator.FlatMappings.Ceilings, Is.EquivalentTo(new[] { "flat1", "flat2" }), "Did not parse ceiling.");
-            Assert.That(translator.FlatMappings.Floors, Is.EquivalentTo(new[] { "flat3", "flat4" }), "Did not parse floor.");
+            translator.FlatMappings.Ceilings.Should().BeEquivalentTo(new[] { "flat1", "flat2" });
+            translator.FlatMappings.Floors.Should().BeEquivalentTo(new[] { "flat3", "flat4" });
         }
 
         #endregion Flats section

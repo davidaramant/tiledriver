@@ -1,19 +1,20 @@
 ﻿// Copyright (c) 2017, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
+using Xunit;
+using FluentAssertions;
 using Tiledriver.Core.FormatModels.MapMetadata;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.Tests.FormatModels.MapMetadata
 {
-    [TestFixture]
     public sealed class MetaMapAnalyzerTests
     {
-        [Test]
+        [Fact]
         public void ShouldAnalyzeSimpleRoom()
         {
             //    0   1   2   3   4   5   6   7   8   9   0
@@ -36,7 +37,7 @@ namespace Tiledriver.Core.Tests.FormatModels.MapMetadata
             AssertMapAnalyzedCorrectly(level, expectedOutput);
         }
 
-        [Test]
+        [Fact]
         public void ShouldHandleStackedDoors()
         {
             //    0   1   2   3   4   5   6   7   8   9   0
@@ -71,7 +72,7 @@ namespace Tiledriver.Core.Tests.FormatModels.MapMetadata
             AssertMapAnalyzedCorrectly(level, expectedOutput);
         }
 
-        [Test]
+        [Fact]
         public void ShouldHandleStackedPushwalls()
         {
             //    0   1   2   3   4   5   6   7   8   9   0
@@ -107,7 +108,7 @@ namespace Tiledriver.Core.Tests.FormatModels.MapMetadata
             AssertMapAnalyzedCorrectly(level, expectedOutput);
         }
 
-        [Test]
+        [Fact]
         public void ShouldHandlePushwallsAfterDoors()
         {
             //    0   1   2   3   4   5   6   7   8   9   0
@@ -143,7 +144,7 @@ namespace Tiledriver.Core.Tests.FormatModels.MapMetadata
             AssertMapAnalyzedCorrectly(level, expectedOutput);
         }
 
-        [Test]
+        [Fact]
         public void ShouldHandleFreeStandingPushwalls()
         {
             //    0   1   2   3   4   5   6
@@ -191,11 +192,7 @@ namespace Tiledriver.Core.Tests.FormatModels.MapMetadata
                 }
             }
 
-            if (failures.Any())
-            {
-                Assert.Fail(
-                    string.Join("\n", failures));
-            }
+            failures.Should().BeEmpty();
         }
 
         private static TileType ExpandTile(char shortHandType)
@@ -208,7 +205,7 @@ namespace Tiledriver.Core.Tests.FormatModels.MapMetadata
                 case 'P': return TileType.PushWall;
                 case '~': return TileType.Unreachable;
                 default:
-                    throw new AssertionException("Unknown character in shorthand meta map");
+                    throw new Exception("Unknown character in shorthand meta map");
             }
         }
 
@@ -264,7 +261,7 @@ namespace Tiledriver.Core.Tests.FormatModels.MapMetadata
                             mapData.Triggers.Add(new Trigger { X = x, Y = y, Action = ActionSpecial.PushwallMove });
                             break;
                         default:
-                            throw new AssertionException("Unknown character in shorthand map");
+                            throw new Exception("Unknown character in shorthand map");
                     }
                 }
             }
