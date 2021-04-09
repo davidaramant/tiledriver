@@ -8,9 +8,17 @@ using Tiledriver.DataModelGenerator.Utilities;
 
 namespace Tiledriver.DataModelGenerator.Uwmf.MetadataModel
 {
+    enum SerializationType
+    {
+        Normal,
+        Custom,
+        TopLevel
+    }
+
     record Block(
         string Name,
-        ImmutableArray<Property> Properties)
+        ImmutableArray<Property> Properties,
+        SerializationType Serialization = SerializationType.Normal)
     {
         public string ClassName => Name.ToPascalCase();
 

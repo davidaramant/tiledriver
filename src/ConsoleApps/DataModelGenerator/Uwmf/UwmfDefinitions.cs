@@ -56,12 +56,14 @@ namespace Tiledriver.DataModelGenerator.Uwmf
                     new IntegerProperty("tile"),
                     new IntegerProperty("sector"),
                     new IntegerProperty("zone"),
-                    new IntegerProperty("tag", defaultValue: 0))
+                    new IntegerProperty("tag", defaultValue: 0)),
+                Serialization: SerializationType.Custom
                 ),
 
             new Block("planeMap",
                 Properties: ImmutableArray.Create<Property>(
-                    new ListProperty("tileSpace"))
+                    new ListProperty("tileSpace")),
+                Serialization: SerializationType.Custom
                 ),
 
             new Block("thing",
@@ -121,7 +123,8 @@ namespace Tiledriver.DataModelGenerator.Uwmf
                     new ListProperty("thing"),
                     new ListProperty("trigger"),
                     new UnknownProperties(),
-                    new UnknownBlocks())
+                    new UnknownBlocks()),
+                SerializationType.TopLevel
                 )
         );
     }

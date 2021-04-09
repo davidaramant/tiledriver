@@ -19,7 +19,7 @@ namespace Tiledriver.DataModelGenerator
             var uwmfReadingPath = Path.Combine(uwmfPath, "Reading");
 
             UwmfModelGenerator.WriteToPath(uwmfPath);
-            UwmfModelGenerator.WriteToPath(uwmfWritingPath);
+            UwmfWriterGenerator.WriteToPath(uwmfWritingPath);
         }
 
         private static string FindSolutionPath()
