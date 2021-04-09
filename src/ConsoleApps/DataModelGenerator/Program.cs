@@ -15,8 +15,11 @@ namespace Tiledriver.DataModelGenerator
             var corePath = Path.Combine(basePath, "Tiledriver.Core2"); // HACK: Point to Core 2 for now
             var formatModelsPath = Path.Combine(corePath, "FormatModels");
             var uwmfPath = Path.Combine(formatModelsPath, "Uwmf");
+            var uwmfWritingPath = Path.Combine(uwmfPath, "Writing");
+            var uwmfReadingPath = Path.Combine(uwmfPath, "Reading");
 
             UwmfModelGenerator.WriteToPath(uwmfPath);
+            UwmfModelGenerator.WriteToPath(uwmfWritingPath);
         }
 
         private static string FindSolutionPath()
