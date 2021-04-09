@@ -20,8 +20,6 @@ namespace Tiledriver.Core.FormatModels.Uwmf
         ImmutableList<PlaneMap> PlaneMaps,
         ImmutableList<Thing> Things,
         ImmutableList<Trigger> Triggers,
-        ImmutableList<UnknownProperty> UnknownProperties,
-        ImmutableList<UnknownBlock> UnknownBlocks,
         string Comment = ""
     );
 }

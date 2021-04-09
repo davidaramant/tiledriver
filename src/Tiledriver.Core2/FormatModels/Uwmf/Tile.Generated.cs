@@ -12,7 +12,6 @@ namespace Tiledriver.Core.FormatModels.Uwmf
         string TextureNorth,
         string TextureWest,
         string TextureSouth,
-        ImmutableList<UnknownProperty> UnknownProperties,
         bool BlockingEast = true,
         bool BlockingNorth = true,
         bool BlockingWest = true,

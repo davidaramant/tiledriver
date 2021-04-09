@@ -72,14 +72,6 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Writing")
                         .Line($"writer.Write(block);")
                         .CloseParen();
                 }
-                else if(p is UnknownBlocks ub)
-                {
-                    // TODO
-                }
-                else if (p is UnknownProperties up)
-                {
-                    // TODO:
-                }
             }
 
             if (block.Serialization == SerializationType.Normal)

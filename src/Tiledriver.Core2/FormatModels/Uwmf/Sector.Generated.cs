@@ -10,7 +10,6 @@ namespace Tiledriver.Core.FormatModels.Uwmf
     public sealed partial record Sector(
         string TextureCeiling,
         string TextureFloor,
-        ImmutableList<UnknownProperty> UnknownProperties,
         string Comment = ""
     );
 }

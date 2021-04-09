@@ -8,7 +8,6 @@ namespace Tiledriver.Core.FormatModels.Uwmf
 {
     [GeneratedCode("DataModelGenerator", "1.0.0.0")]
     public sealed partial record Zone(
-        ImmutableList<UnknownProperty> UnknownProperties,
         string Comment = ""
     );
 }

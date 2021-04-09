@@ -13,7 +13,6 @@ namespace Tiledriver.Core.FormatModels.Uwmf
         double Y,
         double Z,
         int Angle,
-        ImmutableList<UnknownProperty> UnknownProperties,
         bool Ambush = false,
         bool Patrol = false,
         bool Skill1 = false,

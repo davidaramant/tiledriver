@@ -26,30 +26,26 @@ namespace Tiledriver.DataModelGenerator.Uwmf
                     new IntegerProperty("mapped", defaultValue: 0),
                     new StringProperty("soundSequence", defaultValue: string.Empty),
                     new StringProperty("textureOverhead", defaultValue: string.Empty),
-                    new StringProperty("comment", defaultValue: string.Empty),
-                    new UnknownProperties())
-                ),
+                    new StringProperty("comment", defaultValue: string.Empty)
+                )),
 
             new Block("sector",
                 Properties: ImmutableArray.Create<Property>(
                     new StringProperty("textureCeiling"),
                     new StringProperty("textureFloor"),
-                    new StringProperty("comment", defaultValue: string.Empty),
-                    new UnknownProperties())
-                ),
+                    new StringProperty("comment", defaultValue: string.Empty)
+                )),
 
             new Block("zone",
                 Properties: ImmutableArray.Create<Property>(
-                    new StringProperty("comment", defaultValue: string.Empty),
-                    new UnknownProperties())
-                ),
+                    new StringProperty("comment", defaultValue: string.Empty)
+                )),
 
             new Block("plane",
                 Properties: ImmutableArray.Create<Property>(
                     new IntegerProperty("depth"),
-                    new StringProperty("comment", defaultValue: string.Empty),
-                    new UnknownProperties())
-                ),
+                    new StringProperty("comment", defaultValue: string.Empty)
+                )),
 
             new Block("tileSpace",
                 Properties: ImmutableArray.Create<Property>(
@@ -79,9 +75,8 @@ namespace Tiledriver.DataModelGenerator.Uwmf
                     new BooleanProperty("skill2", defaultValue: false),
                     new BooleanProperty("skill3", defaultValue: false),
                     new BooleanProperty("skill4", defaultValue: false),
-                    new StringProperty("comment", defaultValue: string.Empty),
-                    new UnknownProperties())
-                ),
+                    new StringProperty("comment", defaultValue: string.Empty)
+                )),
 
             new Block("trigger",
                 Properties: ImmutableArray.Create<Property>(
@@ -103,9 +98,8 @@ namespace Tiledriver.DataModelGenerator.Uwmf
                     new BooleanProperty("monsterUse", defaultValue: false),
                     new BooleanProperty("repeatable", defaultValue: false),
                     new BooleanProperty("secret", defaultValue: false),
-                    new StringProperty("comment", defaultValue: string.Empty),
-                    new UnknownProperties())
-                ),
+                    new StringProperty("comment", defaultValue: string.Empty)
+                )),
 
             new Block("mapData",
                 Properties: ImmutableArray.Create<Property>(
@@ -121,10 +115,8 @@ namespace Tiledriver.DataModelGenerator.Uwmf
                     new ListProperty("plane"),
                     new ListProperty("planeMap"),
                     new ListProperty("thing"),
-                    new ListProperty("trigger"),
-                    new UnknownProperties(),
-                    new UnknownBlocks()),
-                SerializationType.TopLevel
+                    new ListProperty("trigger")),
+                Serialization:SerializationType.TopLevel
                 )
         );
     }

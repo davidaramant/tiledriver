@@ -12,7 +12,6 @@ namespace Tiledriver.Core.FormatModels.Uwmf
         int Y,
         int Z,
         string Action,
-        ImmutableList<UnknownProperty> UnknownProperties,
         int Arg0 = 0,
         int Arg1 = 0,
         int Arg2 = 0,
