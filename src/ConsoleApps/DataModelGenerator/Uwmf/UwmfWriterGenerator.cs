@@ -45,7 +45,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Writing")
         private static void CreateBlockWriter(IndentedWriter output, Block block)
         {
             output
-                .Line($"private static void Write(this StreamWriter writer, {block.ClassName} {block.Name})")
+                .Line($"private static void Write(StreamWriter writer, {block.ClassName} {block.Name})")
                 .OpenParen();
 
             if (block.Serialization == SerializationType.Normal)
@@ -62,14 +62,15 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Writing")
                     var defaultValue = sp.DefaultString;
 
                     string optionalDefault = defaultValue != null ? ", " + defaultValue : string.Empty;
+                    string indent = block.Serialization == SerializationType.Normal ? string.Empty : ", indent:false";
 
-                    output.Line($"WriteProperty(writer, \"{sp.FormatName}\", {block.Name}.{sp.CodeName}{optionalDefault});");
+                    output.Line($"WriteProperty(writer, \"{sp.FormatName}\", {block.Name}.{sp.CodeName}{optionalDefault}{indent});");
                 }
                 else if (p is ListProperty lp)
                 {
                     output.Line($"foreach(var block in {block.Name}.{lp.CodeName})")
                         .OpenParen()
-                        .Line($"writer.Write(block);")
+                        .Line($"Write(writer, block);")
                         .CloseParen();
                 }
             }

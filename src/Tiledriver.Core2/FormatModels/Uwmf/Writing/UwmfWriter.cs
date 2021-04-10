@@ -13,7 +13,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Writing
         {
             using var writer = new StreamWriter(stream, Encoding.ASCII, leaveOpen: true);
 
-            writer.Write(map);
+            Write(writer, map);
         }
 
         private static void Write(this StreamWriter writer, PlaneMap planeMap)
@@ -34,34 +34,54 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Writing
             writer.WriteLine("}");
         }
 
-        private static void WriteProperty(StreamWriter writer, string name, string value, string? defaultValue = null)
+        private static void WriteProperty(StreamWriter writer, string name, string value, string? defaultValue = null, bool indent = true)
         {
+            if (indent)
+            {
+                writer.Write('\t');
+            }
+
             if (value != defaultValue)
             {
-                writer.WriteLine($"\t{name} = \"{value}\";");
+                writer.WriteLine($"{name} = \"{value}\";");
             }
         }
 
-        private static void WriteProperty(StreamWriter writer, string name, bool value, bool? defaultValue = null)
+        private static void WriteProperty(StreamWriter writer, string name, bool value, bool? defaultValue = null, bool indent = true)
         {
+            if (indent)
+            {
+                writer.Write('\t');
+            }
+
             if (value != defaultValue)
             {
-                writer.WriteLine($"\t{name} = {value.ToString().ToLowerInvariant()};");
+                writer.WriteLine($"{name} = {value.ToString().ToLowerInvariant()};");
             }
         }
 
-        private static void WriteProperty(StreamWriter writer, string name, int value, int? defaultValue = null)
+        private static void WriteProperty(StreamWriter writer, string name, int value, int? defaultValue = null, bool indent = true)
         {
+            if (indent)
+            {
+                writer.Write('\t');
+            }
+            
             if (value != defaultValue)
             {
-                writer.WriteLine($"\t{name} = {value};");
+                writer.WriteLine($"{name} = {value};");
             }
         }
 
-        private static void WriteProperty(StreamWriter writer, string name, double value)
+        private static void WriteProperty(StreamWriter writer, string name, double value, bool indent = true)
         {
+            if (indent)
+            {
+                writer.Write('\t');
+            }
+
             // There are no double properties with default values, so we avoid having to compare them
-            writer.WriteLine($"\t{name} = {value};");
+            writer.WriteLine($"{name} = {value};");
         }
     }
 }

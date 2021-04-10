@@ -9,7 +9,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Writing
     [GeneratedCode("DataModelGenerator", "1.0.0.0")]
     public static partial class UwmfWriter
     {
-        private static void Write(this StreamWriter writer, Tile tile)
+        private static void Write(StreamWriter writer, Tile tile)
         {
             writer.WriteLine("tile");
             writer.WriteLine("{");
@@ -30,7 +30,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Writing
             WriteProperty(writer, "comment", tile.Comment, "");
             writer.WriteLine("}");
         }
-        private static void Write(this StreamWriter writer, Sector sector)
+        private static void Write(StreamWriter writer, Sector sector)
         {
             writer.WriteLine("sector");
             writer.WriteLine("{");
@@ -39,14 +39,14 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Writing
             WriteProperty(writer, "comment", sector.Comment, "");
             writer.WriteLine("}");
         }
-        private static void Write(this StreamWriter writer, Zone zone)
+        private static void Write(StreamWriter writer, Zone zone)
         {
             writer.WriteLine("zone");
             writer.WriteLine("{");
             WriteProperty(writer, "comment", zone.Comment, "");
             writer.WriteLine("}");
         }
-        private static void Write(this StreamWriter writer, Plane plane)
+        private static void Write(StreamWriter writer, Plane plane)
         {
             writer.WriteLine("plane");
             writer.WriteLine("{");
@@ -54,7 +54,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Writing
             WriteProperty(writer, "comment", plane.Comment, "");
             writer.WriteLine("}");
         }
-        private static void Write(this StreamWriter writer, Thing thing)
+        private static void Write(StreamWriter writer, Thing thing)
         {
             writer.WriteLine("thing");
             writer.WriteLine("{");
@@ -72,7 +72,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Writing
             WriteProperty(writer, "comment", thing.Comment, "");
             writer.WriteLine("}");
         }
-        private static void Write(this StreamWriter writer, Trigger trigger)
+        private static void Write(StreamWriter writer, Trigger trigger)
         {
             writer.WriteLine("trigger");
             writer.WriteLine("{");
@@ -97,41 +97,41 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Writing
             WriteProperty(writer, "comment", trigger.Comment, "");
             writer.WriteLine("}");
         }
-        private static void Write(this StreamWriter writer, MapData mapData)
+        private static void Write(StreamWriter writer, MapData mapData)
         {
-            WriteProperty(writer, "namespace", mapData.NameSpace);
-            WriteProperty(writer, "tileSize", mapData.TileSize);
-            WriteProperty(writer, "name", mapData.Name);
-            WriteProperty(writer, "width", mapData.Width);
-            WriteProperty(writer, "height", mapData.Height);
-            WriteProperty(writer, "comment", mapData.Comment, "");
+            WriteProperty(writer, "namespace", mapData.NameSpace, indent:false);
+            WriteProperty(writer, "tileSize", mapData.TileSize, indent:false);
+            WriteProperty(writer, "name", mapData.Name, indent:false);
+            WriteProperty(writer, "width", mapData.Width, indent:false);
+            WriteProperty(writer, "height", mapData.Height, indent:false);
+            WriteProperty(writer, "comment", mapData.Comment, "", indent:false);
             foreach(var block in mapData.Tiles)
             {
-                writer.Write(block);
+                Write(writer, block);
             }
             foreach(var block in mapData.Sectors)
             {
-                writer.Write(block);
+                Write(writer, block);
             }
             foreach(var block in mapData.Zones)
             {
-                writer.Write(block);
+                Write(writer, block);
             }
             foreach(var block in mapData.Planes)
             {
-                writer.Write(block);
+                Write(writer, block);
             }
             foreach(var block in mapData.PlaneMaps)
             {
-                writer.Write(block);
+                Write(writer, block);
             }
             foreach(var block in mapData.Things)
             {
-                writer.Write(block);
+                Write(writer, block);
             }
             foreach(var block in mapData.Triggers)
             {
-                writer.Write(block);
+                Write(writer, block);
             }
         }
     }
