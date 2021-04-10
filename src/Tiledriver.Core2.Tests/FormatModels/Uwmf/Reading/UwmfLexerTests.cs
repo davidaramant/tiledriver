@@ -129,7 +129,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Reading
         [Fact]
         public void ShouldLexTestFile()
         {
-            using var stream = TestFile.Uwmf.TEXTMAP;
+            using var stream = TestFile.Xlat.spear;
             using var textReader = new StreamReader(stream, Encoding.ASCII);
             var lexer = new UwmfLexer(textReader);
             var result = lexer.Scan().ToArray();

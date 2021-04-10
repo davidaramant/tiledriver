@@ -45,6 +45,7 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
                 new MapInfoProperty(new Identifier("a"), new[] { "1", "2", "3" }));
         }
 
+        [Theory]
         [InlineData("NoWhiteSpace")]
         [InlineData("White Space")]
         [InlineData("With,Comma")]
@@ -56,6 +57,7 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Parsing
 
         #region Paramter parsing
 
+        [Theory]
         [InlineData("\"\"\"", "\"\"\"")]
         [InlineData("1", "1")]
         [InlineData("\"string\"", "\"string\"")]

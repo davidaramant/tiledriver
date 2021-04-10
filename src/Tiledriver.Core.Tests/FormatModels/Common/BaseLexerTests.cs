@@ -129,6 +129,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Common
                 Token.CloseParen);
         }
 
+        [Theory]
         [InlineData("// Comment\r\nsomeProperty = 10;")]
         [InlineData("// Comment\nsomeProperty = 10;")]
         [InlineData("someProperty = 10; // Comment")]

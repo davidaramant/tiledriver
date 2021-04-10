@@ -20,35 +20,29 @@ namespace Tiledriver.Core.FormatModels.Wad
 
             if (Regex.IsMatch(name, @"[^A-Z0-9\[\]\-_]", RegexOptions.Compiled))
             {
-                throw new ArgumentException($"'{name}' has invalid characters.",nameof(name));
+                throw new ArgumentException($"'{name}' has invalid characters.", nameof(name));
             }
 
             if (name.Length > MaxLength)
             {
-                throw new ArgumentException($"'{name}' is too long.",nameof(name));
+                throw new ArgumentException($"'{name}' is too long.", nameof(name));
             }
             _name = name;
         }
 
-        public override string ToString()
-        {
-            return _name;
-        }
+        public override string ToString() => _name;
 
-        public static implicit operator LumpName(string name)
-        {
-            return new LumpName(name);
-        }
+        public static implicit operator LumpName(string name) => new(name);
 
         #region Equality stuff
-        public bool Equals(LumpName other)
+        public bool Equals(LumpName? other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
             return string.Equals(_name, other._name);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
