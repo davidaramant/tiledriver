@@ -4,6 +4,7 @@ using Xunit;
 using FluentAssertions;
 using System.Linq;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Uwmf.Reading;
@@ -102,6 +103,20 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Reading
             tokens[0].Should().BeOfType<IdentifierToken>();
             tokens[1].Should().BeOfType<OpenBraceToken>();
             tokens[2].Should().BeOfType<CloseBraceToken>();
+        }
+
+        [Fact]
+        public void ShouldLexTuple()
+        {
+            var tokens = Scan("{1,2,-3}");
+            tokens.Should().HaveCount(7);
+            tokens[0].Should().BeOfType<OpenBraceToken>();
+            tokens[1].Should().BeOfType<IntegerToken>().Which.Value.Should().Be(1);
+            tokens[2].Should().BeOfType<CommaToken>();
+            tokens[3].Should().BeOfType<IntegerToken>().Which.Value.Should().Be(2);
+            tokens[4].Should().BeOfType<CommaToken>();
+            tokens[5].Should().BeOfType<IntegerToken>().Which.Value.Should().Be(-3);
+            tokens[6].Should().BeOfType<CloseBraceToken>();
         }
 
         private static Token[] Scan(string input)

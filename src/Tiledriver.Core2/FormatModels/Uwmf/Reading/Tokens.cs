@@ -23,4 +23,5 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
     public sealed record SemicolonToken(FilePosition Location) : Token(Location);
     public sealed record OpenBraceToken(FilePosition Location) : Token(Location);
     public sealed record CloseBraceToken(FilePosition Location) : Token(Location);
+    public sealed record CommaToken(FilePosition Location) : Token(Location);
 }

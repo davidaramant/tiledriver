@@ -40,6 +40,10 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
                         yield return new CloseBraceToken(_currentPosition);
                         SkipChar();
                         break;
+                    case ',':
+                        yield return new CommaToken(_currentPosition);
+                        SkipChar();
+                        break;
 
                     case char digit when char.IsDigit(next):
                         yield return LexNumber(digit);
