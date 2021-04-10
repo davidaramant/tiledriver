@@ -1,7 +1,6 @@
 ﻿// Copyright (c) 2016, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -12,7 +11,7 @@ namespace Tiledriver.Core.Tests
 {
     public static class DemoMap
     {
-        public static MapData Create()
+        public static MapData CreateThingDemoMap()
         {
             const int width = 128;
             const int height = 128;
@@ -23,7 +22,7 @@ namespace Tiledriver.Core.Tests
             (
                 NameSpace: "Wolf3D",
                 TileSize: 64,
-                Name: "Test Output",
+                Name: "Thing Demo",
                 Width: width,
                 Height: height,
                 Tiles: new[]

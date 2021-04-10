@@ -7,6 +7,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="TestFiles\MapInfo\spear.txt" />
+    <None Remove="TestFiles\MapInfo\wolf3d.txt" />
+    <None Remove="TestFiles\MapInfo\wolfcommon.txt" />
+    <None Remove="TestFiles\Uwmf\TEXTMAP.txt" />
+    <None Remove="TestFiles\Xlat\spear.txt" />
+    <None Remove="TestFiles\Xlat\wolf3d.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="TestFiles\MapInfo\spear.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TestFiles\MapInfo\wolf3d.txt" />
+    <EmbeddedResource Include="TestFiles\MapInfo\wolfcommon.txt" />
+    <EmbeddedResource Include="TestFiles\Uwmf\TEXTMAP.txt" />
+    <EmbeddedResource Include="TestFiles\Xlat\spear.txt" />
+    <EmbeddedResource Include="TestFiles\Xlat\wolf3d.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
     <PackageReference Include="xunit" Version="2.4.1" />
