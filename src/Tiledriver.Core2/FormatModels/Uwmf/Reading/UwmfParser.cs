@@ -1,13 +1,10 @@
 // Copyright (c) 2019, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Data;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Uwmf.Reading.AbstractSyntaxTree;
-using Tiledriver.Core2.FormatModels.Uwmf.Reading.AbstractSyntaxTree;
 
 namespace Tiledriver.Core.FormatModels.Uwmf.Reading
 {
@@ -23,10 +20,10 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
                     switch (GetNext(tokenStream))
                     {
                         case OpenBraceToken _:
-                            yield return ParseBlockOrTupleList(i.Id, tokenStream);
+                            yield return ParseBlockOrTupleList(i, tokenStream);
                             break;
                         case EqualsToken _:
-                            yield return ParseAssignment(i.Id, tokenStream);
+                            yield return ParseAssignment(i, tokenStream);
                             break;
                         default:
                             throw CreateError(tokenStream.Current, "open brace or equals");
@@ -52,16 +49,13 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
 
         static Token? GetNext(IEnumerator<Token> enumerator) => enumerator.MoveNext() ? enumerator.Current : null;
 
-        static void ExpectNext<TExpected>(IEnumerator<Token> tokenStream)
+        static TExpected ExpectNext<TExpected>(IEnumerator<Token> tokenStream) where TExpected : Token
         {
             var nextToken = GetNext(tokenStream);
-            if (!(nextToken is TExpected))
-            {
-                throw CreateError<TExpected>(nextToken);
-            }
+            return nextToken is TExpected token ? token : throw CreateError<TExpected>(nextToken);
         }
 
-        private static Assignment ParseAssignment(Identifier id, IEnumerator<Token> tokenStream)
+        private static Assignment ParseAssignment(IdentifierToken id, IEnumerator<Token> tokenStream)
         {
             var valueToken = GetNext(tokenStream);
             switch (valueToken)
@@ -79,13 +73,13 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
             return new Assignment(id, valueToken);
         }
 
-        private static IGlobalExpression ParseBlockOrTupleList(Identifier name, IEnumerator<Token> tokenStream)
+        private static IGlobalExpression ParseBlockOrTupleList(IdentifierToken name, IEnumerator<Token> tokenStream)
         {
             var token = GetNext(tokenStream);
             switch (token)
             {
-                case OpenBraceToken _:
-                    return ParseIntTupleList(name, tokenStream);
+                case OpenBraceToken ob:
+                    return ParseIntTupleList(name, ob.Location, tokenStream);
 
                 case CloseBraceToken _:
                     return new Block(name, ImmutableArray<Assignment>.Empty);
@@ -97,12 +91,12 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
             }
         }
 
-        private static Block ParseBlock(Identifier name, IdentifierToken fieldName, IEnumerator<Token> tokenStream)
+        private static Block ParseBlock(IdentifierToken name, IdentifierToken fieldName, IEnumerator<Token> tokenStream)
         {
             var assignments = new List<Assignment>();
 
             ExpectNext<EqualsToken>(tokenStream);
-            assignments.Add(ParseAssignment(fieldName.Id, tokenStream));
+            assignments.Add(ParseAssignment(fieldName, tokenStream));
 
             while (true)
             {
@@ -111,7 +105,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
                 {
                     case IdentifierToken i:
                         ExpectNext<EqualsToken>(tokenStream);
-                        assignments.Add(ParseAssignment(i.Id, tokenStream));
+                        assignments.Add(ParseAssignment(i, tokenStream));
                         break;
                     case CloseBraceToken cb:
                         return new Block(name, assignments.ToImmutableArray());
@@ -121,10 +115,10 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
             }
         }
 
-        private static IntTupleBlock ParseIntTupleList(Identifier name, IEnumerator<Token> tokenStream)
+        private static IntTupleBlock ParseIntTupleList(IdentifierToken name, FilePosition startLocation, IEnumerator<Token> tokenStream)
         {
             var tuples = ImmutableArray.CreateBuilder<IntTuple>();
-            tuples.Add(ParseIntTuple(tokenStream));
+            tuples.Add(ParseIntTuple(startLocation, tokenStream));
 
             while (true)
             {
@@ -132,8 +126,8 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
                 switch (token)
                 {
                     case CommaToken _:
-                        ExpectNext<OpenBraceToken>(tokenStream);
-                        tuples.Add(ParseIntTuple(tokenStream));
+                        var openBrace = ExpectNext<OpenBraceToken>(tokenStream);
+                        tuples.Add(ParseIntTuple(openBrace.Location, tokenStream));
                         break;
 
                     case CloseBraceToken _:
@@ -146,7 +140,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
 
         }
 
-        private static IntTuple ParseIntTuple(IEnumerator<Token> tokenStream)
+        private static IntTuple ParseIntTuple(FilePosition startLocation, IEnumerator<Token> tokenStream)
         {
             var ints = ImmutableList.CreateBuilder<IntegerToken>();
 
@@ -154,7 +148,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
             switch (token)
             {
                 case CloseBraceToken _:
-                    return new IntTuple(ints.ToImmutable());
+                    return new IntTuple(startLocation,ints.ToImmutable());
                 case IntegerToken i:
                     ints.Add(i);
                     break;
@@ -168,7 +162,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
                 switch (token)
                 {
                     case CloseBraceToken _:
-                        return new IntTuple(ints.ToImmutable());
+                        return new IntTuple(startLocation, ints.ToImmutable());
 
                     case CommaToken _:
                         token = GetNext(tokenStream);

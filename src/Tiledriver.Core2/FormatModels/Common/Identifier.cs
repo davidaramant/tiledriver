@@ -19,6 +19,7 @@ namespace Tiledriver.Core.FormatModels.Common
         public string ToLower() => _name.ToLowerInvariant();
         public override string ToString() => _name;
         public static explicit operator string(Identifier id) => id._name;
+        public static implicit operator Identifier(string name) => new(name);
 
         #region Equality members
 

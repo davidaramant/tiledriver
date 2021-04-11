@@ -5,6 +5,5 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading.AbstractSyntaxTree
 {
     public interface IGlobalExpression
     {
-
     }
 }

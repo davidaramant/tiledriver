@@ -9,7 +9,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Tiledriver.Core.FormatModels.Uwmf.Writing;
-using Tiledriver.Core2.FormatModels.Uwmf.Reading.AbstractSyntaxTree;
 
 namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
 {

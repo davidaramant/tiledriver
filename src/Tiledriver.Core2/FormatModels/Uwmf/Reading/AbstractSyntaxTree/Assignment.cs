@@ -7,7 +7,7 @@ using System.Diagnostics;
 namespace Tiledriver.Core.FormatModels.Uwmf.Reading.AbstractSyntaxTree
 {
     [DebuggerDisplay("{ToString()}")]
-    public sealed record Assignment(Identifier Name, Token Value) : IGlobalExpression
+    public sealed record Assignment(IdentifierToken Name, Token Value) : IGlobalExpression
     {
         public string ValueAsString() => Value switch
         {
@@ -18,7 +18,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading.AbstractSyntaxTree
             _ => Value.ToString()
         };
 
-        public override string ToString() => $"{Name}: {ValueAsString()} ({Value.GetType()})";
+        public override string ToString() => $"{Name.Id}: {ValueAsString()} ({Value.GetType()})";
 
         private static string ToStringWithDecimal(double source) => (source % 1) == 0 ? source.ToString("f1") : source.ToString();
     }
