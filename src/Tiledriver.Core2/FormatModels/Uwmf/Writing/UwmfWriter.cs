@@ -1,6 +1,7 @@
 // Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
+using System;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -30,45 +31,43 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Writing
 
             writer.WriteLine("planeMap");
             writer.WriteLine("{");
-            writer.WriteLine(string.Join("\n,", planeMap.TileSpaces.Select(Convert)));
+            writer.WriteLine(string.Join("," + Environment.NewLine, planeMap.TileSpaces.Select(Convert)));
             writer.WriteLine("}");
         }
 
         private static void WriteProperty(StreamWriter writer, string name, string value, string? defaultValue = null, bool indent = true)
         {
-            if (indent)
-            {
-                writer.Write('\t');
-            }
-
             if (value != defaultValue)
             {
+                if (indent)
+                {
+                    writer.Write('\t');
+                }
                 writer.WriteLine($"{name} = \"{value}\";");
             }
         }
 
         private static void WriteProperty(StreamWriter writer, string name, bool value, bool? defaultValue = null, bool indent = true)
         {
-            if (indent)
-            {
-                writer.Write('\t');
-            }
-
             if (value != defaultValue)
             {
+                if (indent)
+                {
+                    writer.Write('\t');
+                }
                 writer.WriteLine($"{name} = {value.ToString().ToLowerInvariant()};");
             }
         }
 
         private static void WriteProperty(StreamWriter writer, string name, int value, int? defaultValue = null, bool indent = true)
         {
-            if (indent)
-            {
-                writer.Write('\t');
-            }
-            
             if (value != defaultValue)
             {
+                if (indent)
+                {
+                    writer.Write('\t');
+                }
+            
                 writer.WriteLine($"{name} = {value};");
             }
         }
