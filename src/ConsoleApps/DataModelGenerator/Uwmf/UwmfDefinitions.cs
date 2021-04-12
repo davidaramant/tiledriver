@@ -58,7 +58,7 @@ namespace Tiledriver.DataModelGenerator.Uwmf
 
             new Block("planeMap",
                 Properties: ImmutableArray.Create<Property>(
-                    new ListProperty("tileSpace")),
+                    new ArrayProperty("tileSpace")),
                 Serialization: SerializationType.Custom
                 ),
 
@@ -116,7 +116,7 @@ namespace Tiledriver.DataModelGenerator.Uwmf
                     new ListProperty("planeMap"),
                     new ListProperty("thing"),
                     new ListProperty("trigger")),
-                Serialization:SerializationType.TopLevel
+                Serialization: SerializationType.TopLevel
                 )
         );
     }

@@ -31,9 +31,10 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Writing
                 Zones: ImmutableList<Zone>.Empty,
                 Planes: ImmutableList<Plane>.Empty,
                 PlaneMaps: ImmutableList.Create<PlaneMap>().Add(new PlaneMap(
-                    ImmutableList.Create<TileSpace>()
-                        .Add(new TileSpace(1, 2, 3))
-                        .Add(new TileSpace(4, 5, 6, 7)))),
+                    new[] {
+                        new TileSpace(1, 2, 3),
+                        new TileSpace(4, 5, 6, 7)
+                        }.ToImmutableArray())),
                 Things: ImmutableList<Thing>.Empty,
                 Triggers: ImmutableList<Trigger>.Empty);
 

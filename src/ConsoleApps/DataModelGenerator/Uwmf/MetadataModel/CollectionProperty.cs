@@ -5,11 +5,11 @@ using Tiledriver.DataModelGenerator.Utilities;
 
 namespace Tiledriver.DataModelGenerator.Uwmf.MetadataModel
 {
-    sealed class ListProperty : CollectionProperty
+    abstract class CollectionProperty : Property
     {
-        public override string CodeType => $"ImmutableList<{Name.ToPascalCase()}>";
+        public override string CodeName => Name.ToPluralPascalCase();
 
-        public ListProperty(string name) : base(name)
+        protected CollectionProperty(string name) : base(name)
         {
         }
     }

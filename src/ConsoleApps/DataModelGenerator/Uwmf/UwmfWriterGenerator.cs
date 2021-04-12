@@ -66,9 +66,9 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Writing")
 
                     output.Line($"WriteProperty(writer, \"{sp.FormatName}\", {block.Name}.{sp.CodeName}{optionalDefault}{indent});");
                 }
-                else if (p is ListProperty lp)
+                else if (p is CollectionProperty cp)
                 {
-                    output.Line($"foreach(var block in {block.Name}.{lp.CodeName})")
+                    output.Line($"foreach(var block in {block.Name}.{cp.CodeName})")
                         .OpenParen()
                         .Line($"Write(writer, block);")
                         .CloseParen();

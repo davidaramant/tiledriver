@@ -41,7 +41,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
             };
         }
 
-        private static PlaneMap ReadPlaneMap(IntTupleBlock block) => new(block.Tuples.Select(ReadTileSpace).ToImmutableList());
+        private static PlaneMap ReadPlaneMap(IntTupleBlock block) => new(block.Tuples.Select(ReadTileSpace).ToImmutableArray());
 
         private static Token GetRequiredToken(
             IReadOnlyDictionary<Identifier, Token> fields,

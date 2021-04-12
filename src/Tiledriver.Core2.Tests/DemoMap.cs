@@ -78,7 +78,7 @@ namespace Tiledriver.Core.Tests
                 }.ToImmutableList(),
                 PlaneMaps: new[]
                 {
-                    new PlaneMap(CreateGeometry(width: width, height: height, things).ToImmutableList())
+                    new PlaneMap(CreateGeometry(width: width, height: height, things).ToImmutableArray())
                 }.ToImmutableList(),
                 Things: things.Concat(new[] { new Thing
                 (
