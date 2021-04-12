@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.IO;
@@ -55,14 +55,14 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading")
         private static string CreateParameterAssignment(ScalarProperty property)
         {
             var getValue = property.DefaultString == null
-                ? $"GetRequiredFieldValue<{property.CodeType}>(assignments, block.Name, \"{property.FormatName}\")"
-                : $"GetOptionalFieldValue<{property.CodeType}>(assignments, \"{property.FormatName}\")";
+                ? $"GetRequiredFieldValue<{property.CodeType}>(fields, block.Name, \"{property.FormatName}\")"
+                : $"GetOptionalFieldValue<{property.CodeType}>(fields, \"{property.FormatName}\")";
 
             if (property is DoubleProperty)
             {
                 getValue = property.DefaultString == null
-                    ? $"GetRequiredDoubleFieldValue(assignments, block.Name, \"{property.FormatName}\")"
-                    : $"GetOptionalDoubleFieldValue(assignments, \"{property.FormatName}\")";
+                    ? $"GetRequiredDoubleFieldValue(fields, block.Name, \"{property.FormatName}\")"
+                    : $"GetOptionalDoubleFieldValue(fields, \"{property.FormatName}\")";
             }
 
             return $"{property.CodeName}: {getValue}";
@@ -78,7 +78,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading")
             output
                 .Line($"private static {block.ClassName} Read{block.ClassName}(Block block)")
                 .OpenParen()
-                .Line("var assignments = block.GetFieldAssignments();")
+                .Line("var fields = block.GetFieldAssignments();")
                 .Line()
                 .Line($"return new {block.ClassName}(")
                 .IncreaseIndent()
@@ -93,7 +93,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading")
             output
                 .Line($"private static {block.ClassName} Read{block.ClassName}(IEnumerable<IGlobalExpression> ast)")
                 .OpenParen()
-                .Line("var assignments = block.GetFieldAssignments();")
+                .Line("Dictionary<Identifier, Token> fields = new();")
                 .Line()
                 .Line($"return new {block.ClassName}(")
                 .IncreaseIndent()
