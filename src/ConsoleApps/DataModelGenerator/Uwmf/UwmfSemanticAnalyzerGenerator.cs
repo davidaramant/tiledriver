@@ -94,7 +94,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading")
         private static void CreateGlobalBlockReader(IndentedWriter output, Block block)
         {
             output
-                .Line($"private static {block.ClassName} Read{block.ClassName}(IEnumerable<IGlobalExpression> ast)")
+                .Line($"public static {block.ClassName} Read{block.ClassName}(IEnumerable<IGlobalExpression> ast)")
                 .OpenParen()
                 .Line("Dictionary<Identifier, Token> fields = new();")
                 .Line("var block = new IdentifierToken(FilePosition.StartOfFile, \"MapData\");")
@@ -110,9 +110,28 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading")
                 .Line("break;").DecreaseIndent()
                 .Line()
                 .Line("case Block b:").IncreaseIndent()
+                .Line("switch (b.Name.Id.ToLower())")
+                .OpenParen();
+
+            foreach (var cp in block.Properties.OfType<CollectionProperty>().Where(p => p.Name != "planeMap"))
+            {
+                output.Line($"case \"{cp.FormatName}\":").IncreaseIndent()
+                    .Line($"{cp.Name}Builder.Add(Read{cp.GenericTypeName}(b));")
+                    .Line("break;").DecreaseIndent();
+            }
+
+            output
+                .Line("default:").IncreaseIndent()
+                .Line("throw new ParsingException($\"Unknown block: {b.Name}\");").DecreaseIndent()
+                .CloseParen()
                 .Line("break;").DecreaseIndent()
                 .Line()
                 .Line("case IntTupleBlock itb:").IncreaseIndent()
+                .Line("if (itb.Name.Id.ToLower() != \"planemap\")")
+                .OpenParen()
+                .Line("throw new ParsingException(\"Unknown int tuple block\");")
+                .CloseParen()
+                .Line("planeMapBuilder.Add(ReadPlaneMap(itb));")
                 .Line("break;").DecreaseIndent()
                 .Line()
                 .Line("default:").IncreaseIndent()

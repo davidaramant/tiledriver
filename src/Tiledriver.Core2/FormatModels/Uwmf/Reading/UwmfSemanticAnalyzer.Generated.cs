@@ -106,7 +106,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
                 Comment: GetOptionalFieldValue<string>(fields, "comment")
             );
         }
-        private static MapData ReadMapData(IEnumerable<IGlobalExpression> ast)
+        public static MapData ReadMapData(IEnumerable<IGlobalExpression> ast)
         {
             Dictionary<Identifier, Token> fields = new();
             var block = new IdentifierToken(FilePosition.StartOfFile, "MapData");
@@ -127,9 +127,37 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
                         break;
 
                     case Block b:
+                        switch (b.Name.Id.ToLower())
+                        {
+                            case "tile":
+                                tileBuilder.Add(ReadTile(b));
+                                break;
+                            case "sector":
+                                sectorBuilder.Add(ReadSector(b));
+                                break;
+                            case "zone":
+                                zoneBuilder.Add(ReadZone(b));
+                                break;
+                            case "plane":
+                                planeBuilder.Add(ReadPlane(b));
+                                break;
+                            case "thing":
+                                thingBuilder.Add(ReadThing(b));
+                                break;
+                            case "trigger":
+                                triggerBuilder.Add(ReadTrigger(b));
+                                break;
+                            default:
+                                throw new ParsingException($"Unknown block: {b.Name}");
+                        }
                         break;
 
                     case IntTupleBlock itb:
+                        if (itb.Name.Id.ToLower() != "planemap")
+                        {
+                            throw new ParsingException("Unknown int tuple block");
+                        }
+                        planeMapBuilder.Add(ReadPlaneMap(itb));
                         break;
 
                     default:

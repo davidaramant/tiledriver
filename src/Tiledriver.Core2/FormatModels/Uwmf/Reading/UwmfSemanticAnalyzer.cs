@@ -12,18 +12,6 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
 {
     public static partial class UwmfSemanticAnalyzer
     {
-        public static MapData Process(IEnumerable<IGlobalExpression> ast)
-        {
-            throw new NotImplementedException();
-
-            // TODO: This method should be generated too:
-            // - builder variables for all blocks
-            // - variables for all top level fields
-            // - loop over all global expressions
-            // - depending on type & name, call the right read method
-            // - return new MapData
-        }
-
         private static TileSpace ReadTileSpace(IntTuple tuple)
         {
             return tuple.Values.Count switch
