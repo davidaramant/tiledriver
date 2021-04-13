@@ -118,6 +118,25 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
             var thingBuilder = ImmutableList.CreateBuilder<Thing>();
             var triggerBuilder = ImmutableList.CreateBuilder<Trigger>();
 
+            foreach(var expression in ast)
+            {
+                switch (expression)
+                {
+                    case Assignment a:
+                        fields.Add(a.Name.Id, a.Value);
+                        break;
+
+                    case Block b:
+                        break;
+
+                    case IntTupleBlock itb:
+                        break;
+
+                    default:
+                        throw new ParsingException("Unknown expression type");
+                }
+            }
+
             return new MapData(
                 NameSpace: GetRequiredFieldValue<string>(fields, block, "namespace"),
                 TileSize: GetRequiredFieldValue<int>(fields, block, "tileSize"),

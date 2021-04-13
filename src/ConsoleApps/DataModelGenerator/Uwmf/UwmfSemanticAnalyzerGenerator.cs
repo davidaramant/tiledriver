@@ -4,6 +4,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using Tiledriver.DataModelGenerator.Utilities;
 using Tiledriver.DataModelGenerator.Uwmf.MetadataModel;
 
@@ -97,7 +98,27 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading")
                 .OpenParen()
                 .Line("Dictionary<Identifier, Token> fields = new();")
                 .Line("var block = new IdentifierToken(FilePosition.StartOfFile, \"MapData\");")
-                .Lines(block.Properties.OfType<CollectionProperty>().Select(cp => $"var {cp.Name}Builder = ImmutableList.CreateBuilder<{cp.GenericTypeName}>();"))
+                .Lines(block.Properties.OfType<CollectionProperty>().Select(cp =>
+                    $"var {cp.Name}Builder = ImmutableList.CreateBuilder<{cp.GenericTypeName}>();"))
+                .Line()
+                .Line("foreach(var expression in ast)")
+                .OpenParen()
+                .Line("switch (expression)")
+                .OpenParen()
+                .Line("case Assignment a:").IncreaseIndent()
+                .Line("fields.Add(a.Name.Id, a.Value);")
+                .Line("break;").DecreaseIndent()
+                .Line()
+                .Line("case Block b:").IncreaseIndent()
+                .Line("break;").DecreaseIndent()
+                .Line()
+                .Line("case IntTupleBlock itb:").IncreaseIndent()
+                .Line("break;").DecreaseIndent()
+                .Line()
+                .Line("default:").IncreaseIndent()
+                .Line("throw new ParsingException(\"Unknown expression type\");").DecreaseIndent()
+                .CloseParen()
+                .CloseParen()
                 .Line()
                 .Line($"return new {block.ClassName}(")
                 .IncreaseIndent()
