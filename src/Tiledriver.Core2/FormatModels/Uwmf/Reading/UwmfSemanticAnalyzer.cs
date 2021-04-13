@@ -45,13 +45,13 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
 
         private static Token GetRequiredToken(
             IReadOnlyDictionary<Identifier, Token> fields,
-            IdentifierToken blockName,
+            IdentifierToken contextName,
             Identifier fieldName)
         {
             if (!fields.ContainsKey(fieldName))
             {
                 throw new ParsingException(
-                    $"Missing required field {fieldName} in {blockName.Id} defined on {blockName.Location}");
+                    $"Missing required field {fieldName} in {contextName.Id} defined on {contextName.Location}");
             }
 
             return fields[fieldName];
@@ -66,10 +66,10 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
 
         private static T GetRequiredFieldValue<T>(
             IReadOnlyDictionary<Identifier, Token> fields,
-            IdentifierToken blockName,
+            IdentifierToken contextName,
             Identifier fieldName)
         {
-            Token token = GetRequiredToken(fields, blockName, fieldName);
+            Token token = GetRequiredToken(fields, contextName, fieldName);
             return GetTokenValue<T>(fieldName, token);
         }
 

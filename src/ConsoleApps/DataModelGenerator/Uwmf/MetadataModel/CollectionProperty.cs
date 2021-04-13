@@ -7,6 +7,7 @@ namespace Tiledriver.DataModelGenerator.Uwmf.MetadataModel
 {
     abstract class CollectionProperty : Property
     {
+        public string GenericTypeName => Name.ToPascalCase();
         public override string CodeName => Name.ToPluralPascalCase();
 
         protected CollectionProperty(string name) : base(name)

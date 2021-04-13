@@ -3,6 +3,8 @@
 
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Uwmf.Reading.AbstractSyntaxTree;
 
 namespace Tiledriver.Core.FormatModels.Uwmf.Reading
@@ -12,96 +14,124 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
     {
         private static Tile ReadTile(Block block)
         {
-            var assignments = block.GetFieldAssignments();
+            var fields = block.GetFieldAssignments();
 
             return new Tile(
-                TextureEast: GetRequiredFieldValue<string>(assignments, block.Name, "textureEast"),
-                TextureNorth: GetRequiredFieldValue<string>(assignments, block.Name, "textureNorth"),
-                TextureWest: GetRequiredFieldValue<string>(assignments, block.Name, "textureWest"),
-                TextureSouth: GetRequiredFieldValue<string>(assignments, block.Name, "textureSouth"),
-                BlockingEast: GetOptionalFieldValue<bool>(assignments, "blockingEast"),
-                BlockingNorth: GetOptionalFieldValue<bool>(assignments, "blockingNorth"),
-                BlockingWest: GetOptionalFieldValue<bool>(assignments, "blockingWest"),
-                BlockingSouth: GetOptionalFieldValue<bool>(assignments, "blockingSouth"),
-                OffsetVertical: GetOptionalFieldValue<bool>(assignments, "offsetVertical"),
-                OffsetHorizontal: GetOptionalFieldValue<bool>(assignments, "offsetHorizontal"),
-                DontOverlay: GetOptionalFieldValue<bool>(assignments, "dontOverlay"),
-                Mapped: GetOptionalFieldValue<int>(assignments, "mapped"),
-                SoundSequence: GetOptionalFieldValue<string>(assignments, "soundSequence"),
-                TextureOverhead: GetOptionalFieldValue<string>(assignments, "textureOverhead"),
-                Comment: GetOptionalFieldValue<string>(assignments, "comment")
+                TextureEast: GetRequiredFieldValue<string>(fields, block.Name, "textureEast"),
+                TextureNorth: GetRequiredFieldValue<string>(fields, block.Name, "textureNorth"),
+                TextureWest: GetRequiredFieldValue<string>(fields, block.Name, "textureWest"),
+                TextureSouth: GetRequiredFieldValue<string>(fields, block.Name, "textureSouth"),
+                BlockingEast: GetOptionalFieldValue<bool>(fields, "blockingEast"),
+                BlockingNorth: GetOptionalFieldValue<bool>(fields, "blockingNorth"),
+                BlockingWest: GetOptionalFieldValue<bool>(fields, "blockingWest"),
+                BlockingSouth: GetOptionalFieldValue<bool>(fields, "blockingSouth"),
+                OffsetVertical: GetOptionalFieldValue<bool>(fields, "offsetVertical"),
+                OffsetHorizontal: GetOptionalFieldValue<bool>(fields, "offsetHorizontal"),
+                DontOverlay: GetOptionalFieldValue<bool>(fields, "dontOverlay"),
+                Mapped: GetOptionalFieldValue<int>(fields, "mapped"),
+                SoundSequence: GetOptionalFieldValue<string>(fields, "soundSequence"),
+                TextureOverhead: GetOptionalFieldValue<string>(fields, "textureOverhead"),
+                Comment: GetOptionalFieldValue<string>(fields, "comment")
             );
         }
         private static Sector ReadSector(Block block)
         {
-            var assignments = block.GetFieldAssignments();
+            var fields = block.GetFieldAssignments();
 
             return new Sector(
-                TextureCeiling: GetRequiredFieldValue<string>(assignments, block.Name, "textureCeiling"),
-                TextureFloor: GetRequiredFieldValue<string>(assignments, block.Name, "textureFloor"),
-                Comment: GetOptionalFieldValue<string>(assignments, "comment")
+                TextureCeiling: GetRequiredFieldValue<string>(fields, block.Name, "textureCeiling"),
+                TextureFloor: GetRequiredFieldValue<string>(fields, block.Name, "textureFloor"),
+                Comment: GetOptionalFieldValue<string>(fields, "comment")
             );
         }
         private static Zone ReadZone(Block block)
         {
-            var assignments = block.GetFieldAssignments();
+            var fields = block.GetFieldAssignments();
 
             return new Zone(
-                Comment: GetOptionalFieldValue<string>(assignments, "comment")
+                Comment: GetOptionalFieldValue<string>(fields, "comment")
             );
         }
         private static Plane ReadPlane(Block block)
         {
-            var assignments = block.GetFieldAssignments();
+            var fields = block.GetFieldAssignments();
 
             return new Plane(
-                Depth: GetRequiredFieldValue<int>(assignments, block.Name, "depth"),
-                Comment: GetOptionalFieldValue<string>(assignments, "comment")
+                Depth: GetRequiredFieldValue<int>(fields, block.Name, "depth"),
+                Comment: GetOptionalFieldValue<string>(fields, "comment")
             );
         }
         private static Thing ReadThing(Block block)
         {
-            var assignments = block.GetFieldAssignments();
+            var fields = block.GetFieldAssignments();
 
             return new Thing(
-                Type: GetRequiredFieldValue<string>(assignments, block.Name, "type"),
-                X: GetRequiredDoubleFieldValue(assignments, block.Name, "x"),
-                Y: GetRequiredDoubleFieldValue(assignments, block.Name, "y"),
-                Z: GetRequiredDoubleFieldValue(assignments, block.Name, "z"),
-                Angle: GetRequiredFieldValue<int>(assignments, block.Name, "angle"),
-                Ambush: GetOptionalFieldValue<bool>(assignments, "ambush"),
-                Patrol: GetOptionalFieldValue<bool>(assignments, "patrol"),
-                Skill1: GetOptionalFieldValue<bool>(assignments, "skill1"),
-                Skill2: GetOptionalFieldValue<bool>(assignments, "skill2"),
-                Skill3: GetOptionalFieldValue<bool>(assignments, "skill3"),
-                Skill4: GetOptionalFieldValue<bool>(assignments, "skill4"),
-                Comment: GetOptionalFieldValue<string>(assignments, "comment")
+                Type: GetRequiredFieldValue<string>(fields, block.Name, "type"),
+                X: GetRequiredDoubleFieldValue(fields, block.Name, "x"),
+                Y: GetRequiredDoubleFieldValue(fields, block.Name, "y"),
+                Z: GetRequiredDoubleFieldValue(fields, block.Name, "z"),
+                Angle: GetRequiredFieldValue<int>(fields, block.Name, "angle"),
+                Ambush: GetOptionalFieldValue<bool>(fields, "ambush"),
+                Patrol: GetOptionalFieldValue<bool>(fields, "patrol"),
+                Skill1: GetOptionalFieldValue<bool>(fields, "skill1"),
+                Skill2: GetOptionalFieldValue<bool>(fields, "skill2"),
+                Skill3: GetOptionalFieldValue<bool>(fields, "skill3"),
+                Skill4: GetOptionalFieldValue<bool>(fields, "skill4"),
+                Comment: GetOptionalFieldValue<string>(fields, "comment")
             );
         }
         private static Trigger ReadTrigger(Block block)
         {
-            var assignments = block.GetFieldAssignments();
+            var fields = block.GetFieldAssignments();
 
             return new Trigger(
-                X: GetRequiredFieldValue<int>(assignments, block.Name, "x"),
-                Y: GetRequiredFieldValue<int>(assignments, block.Name, "y"),
-                Z: GetRequiredFieldValue<int>(assignments, block.Name, "z"),
-                Action: GetRequiredFieldValue<string>(assignments, block.Name, "action"),
-                Arg0: GetOptionalFieldValue<int>(assignments, "arg0"),
-                Arg1: GetOptionalFieldValue<int>(assignments, "arg1"),
-                Arg2: GetOptionalFieldValue<int>(assignments, "arg2"),
-                Arg3: GetOptionalFieldValue<int>(assignments, "arg3"),
-                Arg4: GetOptionalFieldValue<int>(assignments, "arg4"),
-                ActivateEast: GetOptionalFieldValue<bool>(assignments, "activateEast"),
-                ActivateNorth: GetOptionalFieldValue<bool>(assignments, "activateNorth"),
-                ActivateWest: GetOptionalFieldValue<bool>(assignments, "activateWest"),
-                ActivateSouth: GetOptionalFieldValue<bool>(assignments, "activateSouth"),
-                PlayerCross: GetOptionalFieldValue<bool>(assignments, "playerCross"),
-                PlayerUse: GetOptionalFieldValue<bool>(assignments, "playerUse"),
-                MonsterUse: GetOptionalFieldValue<bool>(assignments, "monsterUse"),
-                Repeatable: GetOptionalFieldValue<bool>(assignments, "repeatable"),
-                Secret: GetOptionalFieldValue<bool>(assignments, "secret"),
-                Comment: GetOptionalFieldValue<string>(assignments, "comment")
+                X: GetRequiredFieldValue<int>(fields, block.Name, "x"),
+                Y: GetRequiredFieldValue<int>(fields, block.Name, "y"),
+                Z: GetRequiredFieldValue<int>(fields, block.Name, "z"),
+                Action: GetRequiredFieldValue<string>(fields, block.Name, "action"),
+                Arg0: GetOptionalFieldValue<int>(fields, "arg0"),
+                Arg1: GetOptionalFieldValue<int>(fields, "arg1"),
+                Arg2: GetOptionalFieldValue<int>(fields, "arg2"),
+                Arg3: GetOptionalFieldValue<int>(fields, "arg3"),
+                Arg4: GetOptionalFieldValue<int>(fields, "arg4"),
+                ActivateEast: GetOptionalFieldValue<bool>(fields, "activateEast"),
+                ActivateNorth: GetOptionalFieldValue<bool>(fields, "activateNorth"),
+                ActivateWest: GetOptionalFieldValue<bool>(fields, "activateWest"),
+                ActivateSouth: GetOptionalFieldValue<bool>(fields, "activateSouth"),
+                PlayerCross: GetOptionalFieldValue<bool>(fields, "playerCross"),
+                PlayerUse: GetOptionalFieldValue<bool>(fields, "playerUse"),
+                MonsterUse: GetOptionalFieldValue<bool>(fields, "monsterUse"),
+                Repeatable: GetOptionalFieldValue<bool>(fields, "repeatable"),
+                Secret: GetOptionalFieldValue<bool>(fields, "secret"),
+                Comment: GetOptionalFieldValue<string>(fields, "comment")
+            );
+        }
+        private static MapData ReadMapData(IEnumerable<IGlobalExpression> ast)
+        {
+            Dictionary<Identifier, Token> fields = new();
+            var block = new IdentifierToken(FilePosition.StartOfFile, "MapData");
+            var tileBuilder = ImmutableList.CreateBuilder<Tile>();
+            var sectorBuilder = ImmutableList.CreateBuilder<Sector>();
+            var zoneBuilder = ImmutableList.CreateBuilder<Zone>();
+            var planeBuilder = ImmutableList.CreateBuilder<Plane>();
+            var planeMapBuilder = ImmutableList.CreateBuilder<PlaneMap>();
+            var thingBuilder = ImmutableList.CreateBuilder<Thing>();
+            var triggerBuilder = ImmutableList.CreateBuilder<Trigger>();
+
+            return new MapData(
+                NameSpace: GetRequiredFieldValue<string>(fields, block, "namespace"),
+                TileSize: GetRequiredFieldValue<int>(fields, block, "tileSize"),
+                Name: GetRequiredFieldValue<string>(fields, block, "name"),
+                Width: GetRequiredFieldValue<int>(fields, block, "width"),
+                Height: GetRequiredFieldValue<int>(fields, block, "height"),
+                Tiles: tileBuilder.ToImmutable(),
+                Sectors: sectorBuilder.ToImmutable(),
+                Zones: zoneBuilder.ToImmutable(),
+                Planes: planeBuilder.ToImmutable(),
+                PlaneMaps: planeMapBuilder.ToImmutable(),
+                Things: thingBuilder.ToImmutable(),
+                Triggers: triggerBuilder.ToImmutable(),
+                Comment: GetOptionalFieldValue<string>(fields, "comment")
             );
         }
     }

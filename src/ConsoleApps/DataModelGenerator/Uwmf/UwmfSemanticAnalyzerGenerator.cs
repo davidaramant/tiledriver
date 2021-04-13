@@ -27,6 +27,8 @@ namespace Tiledriver.DataModelGenerator.Uwmf
 
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Uwmf.Reading.AbstractSyntaxTree;
 
 namespace Tiledriver.Core.FormatModels.Uwmf.Reading")
@@ -40,35 +42,35 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading")
                 CreateBlockReader(output, block);
             }
 
-            CreateGlobalBlockReader(output, UwmfDefinitions.Blocks.Single(b=>b.Serialization == SerializationType.TopLevel));
+            CreateGlobalBlockReader(output, UwmfDefinitions.Blocks.Single(b => b.Serialization == SerializationType.TopLevel));
 
             output.CloseParen().CloseParen();
         }
 
-        private static string CreateParameterAssignment(Property property) => property switch
+        private static string CreateParameterAssignment(Property property, string context = "block.Name") => property switch
         {
-            ScalarProperty sp => CreateParameterAssignment(sp),
-            ListProperty lp => CreateParameterAssignment(lp),
+            ScalarProperty sp => CreateParameterAssignment(sp, context),
+            CollectionProperty cp => CreateParameterAssignment(cp),
             _ => throw new Exception("Unknown property type"),
         };
 
-        private static string CreateParameterAssignment(ScalarProperty property)
+        private static string CreateParameterAssignment(ScalarProperty property, string context = "block.Name")
         {
             var getValue = property.DefaultString == null
-                ? $"GetRequiredFieldValue<{property.CodeType}>(fields, block.Name, \"{property.FormatName}\")"
+                ? $"GetRequiredFieldValue<{property.CodeType}>(fields, {context}, \"{property.FormatName}\")"
                 : $"GetOptionalFieldValue<{property.CodeType}>(fields, \"{property.FormatName}\")";
 
             if (property is DoubleProperty)
             {
                 getValue = property.DefaultString == null
-                    ? $"GetRequiredDoubleFieldValue(fields, block.Name, \"{property.FormatName}\")"
+                    ? $"GetRequiredDoubleFieldValue(fields, {context}, \"{property.FormatName}\")"
                     : $"GetOptionalDoubleFieldValue(fields, \"{property.FormatName}\")";
             }
 
             return $"{property.CodeName}: {getValue}";
         }
 
-        private static string CreateParameterAssignment(ListProperty property)
+        private static string CreateParameterAssignment(CollectionProperty property)
         {
             return $"{property.CodeName}: {property.Name}Builder.ToImmutable()";
         }
@@ -82,7 +84,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading")
                 .Line()
                 .Line($"return new {block.ClassName}(")
                 .IncreaseIndent()
-                .JoinLines(",", block.OrderedProperties.Select(CreateParameterAssignment))
+                .JoinLines(",", block.OrderedProperties.Select(p => CreateParameterAssignment(p)))
                 .DecreaseIndent()
                 .Line(");")
                 .CloseParen();
@@ -94,10 +96,12 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading")
                 .Line($"private static {block.ClassName} Read{block.ClassName}(IEnumerable<IGlobalExpression> ast)")
                 .OpenParen()
                 .Line("Dictionary<Identifier, Token> fields = new();")
+                .Line("var block = new IdentifierToken(FilePosition.StartOfFile, \"MapData\");")
+                .Lines(block.Properties.OfType<CollectionProperty>().Select(cp => $"var {cp.Name}Builder = ImmutableList.CreateBuilder<{cp.GenericTypeName}>();"))
                 .Line()
                 .Line($"return new {block.ClassName}(")
                 .IncreaseIndent()
-                .JoinLines(",", block.OrderedProperties.Select(CreateParameterAssignment))
+                .JoinLines(",", block.OrderedProperties.Select(p => CreateParameterAssignment(p, context: "block")))
                 .DecreaseIndent()
                 .Line(");")
                 .CloseParen();

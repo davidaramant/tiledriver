@@ -45,6 +45,16 @@ namespace Tiledriver.DataModelGenerator.Utilities
             return this;
         }
 
+        public IndentedWriter Lines(IEnumerable<string> lines)
+        {
+            foreach (var line in lines)
+            {
+                Line(line);
+            }
+
+            return this;
+        }
+
         public IndentedWriter JoinLines(string linePostfix, IEnumerable<string> lines)
         {
             using var enumerator = lines.GetEnumerator();
