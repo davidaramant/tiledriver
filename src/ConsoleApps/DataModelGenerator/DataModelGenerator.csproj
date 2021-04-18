@@ -7,8 +7,4 @@
     <RootNamespace>Tiledriver.DataModelGenerator</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="MetadataModel\" />
-  </ItemGroup>
-
 </Project>
