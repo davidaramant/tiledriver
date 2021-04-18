@@ -3,6 +3,7 @@
 
 using System.IO;
 using Tiledriver.DataModelGenerator.Uwmf;
+using Tiledriver.DataModelGenerator.Xlat;
 
 namespace Tiledriver.DataModelGenerator
 {
@@ -17,10 +18,14 @@ namespace Tiledriver.DataModelGenerator
             var uwmfPath = Path.Combine(formatModelsPath, "Uwmf");
             var uwmfWritingPath = Path.Combine(uwmfPath, "Writing");
             var uwmfReadingPath = Path.Combine(uwmfPath, "Reading");
+            var xlatPath = Path.Combine(formatModelsPath, "Xlat");
+            var xlatReadingPath = Path.Combine(xlatPath, "Reading");
 
             UwmfModelGenerator.WriteToPath(uwmfPath);
             UwmfWriterGenerator.WriteToPath(uwmfWritingPath);
             UwmfSemanticAnalyzerGenerator.WriteToPath(uwmfReadingPath);
+
+            XlatModelGenerator.WriteToPath(xlatPath);
         }
 
         private static string FindSolutionPath()

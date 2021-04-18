@@ -1,0 +1,51 @@
+﻿// Copyright (c) 2021, David Aramant
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+
+using System;
+using System.IO;
+using Tiledriver.DataModelGenerator.Utilities;
+using Tiledriver.DataModelGenerator.Xlat.MetadataModel;
+
+namespace Tiledriver.DataModelGenerator.Xlat
+{
+    public static class XlatModelGenerator
+    {
+        public static void WriteToPath(string basePath)
+        {
+            if (!Directory.Exists(basePath))
+            {
+                Directory.CreateDirectory(basePath);
+            }
+
+            foreach (var block in XlatDefinitions.Blocks)
+            {
+                WriteRecord(basePath, block);
+            }
+        }
+
+        static void WriteRecord(string basePath, Block block)
+        {
+            using var blockStream =
+                File.CreateText(Path.Combine(basePath, block.ClassName + ".Generated.cs"));
+            using var output = new IndentedWriter(blockStream);
+
+            output.Line(
+                $@"// Copyright (c) {DateTime.Today.Year}, David Aramant
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+
+using System.CodeDom.Compiler;
+using System.Collections.Immutable;
+
+namespace Tiledriver.Core.FormatModels.Xlat");
+
+            output
+                .OpenParen()
+                .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
+                .Line($"public sealed partial record {block.ClassName}(")
+                .IncreaseIndent()
+                .DecreaseIndent()
+                .Line(");")
+                .CloseParen();
+        }
+    }
+}
