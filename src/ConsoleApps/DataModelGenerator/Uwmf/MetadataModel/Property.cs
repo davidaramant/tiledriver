@@ -7,8 +7,8 @@ namespace Tiledriver.DataModelGenerator.Uwmf.MetadataModel
     {
         public string Name { get; }
         public virtual string FormatName => Name;
-        public abstract string CodeName { get; }
-        public abstract string CodeType { get; }
+        public abstract string PropertyName { get; }
+        public abstract string PropertyType { get; }
         public virtual string? DefaultString => null;
         protected Property(string name) => Name = name;
     }

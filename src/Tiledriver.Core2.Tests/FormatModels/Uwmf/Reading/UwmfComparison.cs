@@ -30,8 +30,8 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Reading
 
             for (int index = 0; index < actual.PlaneMaps.Count; index++)
             {
-                actual.PlaneMaps[index].TileSpaces.Should().BeEquivalentTo(
-                    expected.PlaneMaps[index].TileSpaces,options => options.ComparingByMembers<TileSpace>() );
+                actual.PlaneMaps[index].Should().BeEquivalentTo(
+                    expected.PlaneMaps[index],options => options.ComparingByMembers<TileSpace>() );
             }
         }
 

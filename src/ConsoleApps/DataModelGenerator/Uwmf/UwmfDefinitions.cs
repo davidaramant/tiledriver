@@ -1,7 +1,6 @@
 ﻿// Copyright (c) 2016, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using System;
 using System.Collections.Immutable;
 using Tiledriver.DataModelGenerator.Uwmf.MetadataModel;
 
@@ -56,12 +55,6 @@ namespace Tiledriver.DataModelGenerator.Uwmf
                 Serialization: SerializationType.Custom
                 ),
 
-            new Block("planeMap",
-                Properties: ImmutableArray.Create<Property>(
-                    new ArrayProperty("tileSpace")),
-                Serialization: SerializationType.Custom
-                ),
-
             new Block("thing",
                 Properties: ImmutableArray.Create<Property>(
                     new StringProperty("type"),
@@ -113,7 +106,7 @@ namespace Tiledriver.DataModelGenerator.Uwmf
                     new ListProperty("sector"),
                     new ListProperty("zone"),
                     new ListProperty("plane"),
-                    new ListProperty("planeMap"),
+                    new PlaneMapsProperty(),
                     new ListProperty("thing"),
                     new ListProperty("trigger")),
                 Serialization: SerializationType.TopLevel

@@ -52,7 +52,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf");
 
         static string GetPropertyDefinition(Property property)
         {
-            var definition = $"{property.CodeType} {property.CodeName}";
+            var definition = $"{property.PropertyType} {property.PropertyName}";
 
             var defaultString = property.DefaultString;
             if (defaultString!=null)

@@ -2,6 +2,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -17,7 +18,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Writing
             Write(writer, map);
         }
 
-        private static void Write(this StreamWriter writer, PlaneMap planeMap)
+        private static void Write(this StreamWriter writer, ImmutableArray<TileSpace> planeMap)
         {
             string Convert(TileSpace ts)
             {
@@ -31,7 +32,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Writing
 
             writer.WriteLine("planeMap");
             writer.WriteLine("{");
-            writer.WriteLine(string.Join("," + Environment.NewLine, planeMap.TileSpaces.Select(Convert)));
+            writer.WriteLine(string.Join("," + Environment.NewLine, planeMap.Select(Convert)));
             writer.WriteLine("}");
         }
 

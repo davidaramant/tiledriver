@@ -9,7 +9,7 @@ namespace Tiledriver.DataModelGenerator.Uwmf.MetadataModel
 
         public override string FormatName => _formatName ?? Name;
         public string? Default { get; }
-        public override string CodeType => "string";
+        public override string PropertyType => "string";
         public override string? DefaultString => Default == null ? null : $"\"{Default}\"";
 
         public StringProperty(string name, string? defaultValue = null, string? formatName = null) : base(name)

@@ -29,7 +29,8 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
             };
         }
 
-        private static PlaneMap ReadPlaneMap(IntTupleBlock block) => new(block.Tuples.Select(ReadTileSpace).ToImmutableArray());
+        // TODO: This can reuse stuff
+        private static ImmutableArray<TileSpace> ReadPlaneMap(IntTupleBlock block) => block.Tuples.Select(ReadTileSpace).ToImmutableArray();
 
         private static Token GetRequiredToken(
             IReadOnlyDictionary<Identifier, Token> fields,

@@ -7,7 +7,7 @@ namespace Tiledriver.DataModelGenerator.Uwmf.MetadataModel
 {
     sealed class ArrayProperty : CollectionProperty
     {
-        public override string CodeType => $"ImmutableArray<{Name.ToPascalCase()}>";
+        public override string PropertyType => $"ImmutableArray<{Name.ToPascalCase()}>";
 
         public ArrayProperty(string name) : base(name)
         {

@@ -6,7 +6,7 @@ namespace Tiledriver.DataModelGenerator.Uwmf.MetadataModel
     sealed class DoubleProperty : ScalarProperty
     {
         public double? Default { get; }
-        public override string CodeType => "double";
+        public override string PropertyType => "double";
         public override string? DefaultString => Default?.ToString();
 
         public DoubleProperty(string name, int? defaultValue = null) : base(name) => Default = defaultValue;

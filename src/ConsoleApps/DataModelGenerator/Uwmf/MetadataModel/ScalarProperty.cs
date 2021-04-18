@@ -7,7 +7,7 @@ namespace Tiledriver.DataModelGenerator.Uwmf.MetadataModel
 {
     abstract class ScalarProperty : Property
     {
-        public override string CodeName => Name.ToPascalCase();
+        public override string PropertyName => Name.ToPascalCase();
 
         protected ScalarProperty(string name) : base(name)
         {

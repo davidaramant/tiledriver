@@ -28,11 +28,11 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                     .Select(t => new Point(t.X, t.Y))
                     .ToImmutableHashSet();
 
-            TileSpace GetSpace(int x, int y) => mapData.PlaneMaps[0].TileSpaces[y * mapData.Width + x];
+            TileSpace GetSpace(int x, int y) => mapData.PlaneMaps[0][y * mapData.Width + x];
 
             TileType GetTileType(Point p)
             {
-                var tileSpace = mapData.PlaneMaps[0].TileSpaces[p.Y * mapData.Width + p.X];
+                var tileSpace = mapData.PlaneMaps[0][p.Y * mapData.Width + p.X];
                 if (!tileSpace.HasTile)
                     return TileType.Empty;
 

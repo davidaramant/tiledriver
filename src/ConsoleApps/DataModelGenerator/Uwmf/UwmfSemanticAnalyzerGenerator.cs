@@ -58,8 +58,8 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading")
         private static string CreateParameterAssignment(ScalarProperty property, string context = "block.Name")
         {
             var getValue = property.DefaultString == null
-                ? $"GetRequiredFieldValue<{property.CodeType}>(fields, {context}, \"{property.FormatName}\")"
-                : $"GetOptionalFieldValue<{property.CodeType}>(fields, \"{property.FormatName}\", {property.DefaultString})";
+                ? $"GetRequiredFieldValue<{property.PropertyType}>(fields, {context}, \"{property.FormatName}\")"
+                : $"GetOptionalFieldValue<{property.PropertyType}>(fields, \"{property.FormatName}\", {property.DefaultString})";
 
             if (property is DoubleProperty)
             {
@@ -68,12 +68,12 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading")
                     : $"GetOptionalDoubleFieldValue(fields, \"{property.FormatName}\")";
             }
 
-            return $"{property.CodeName}: {getValue}";
+            return $"{property.PropertyName}: {getValue}";
         }
 
         private static string CreateParameterAssignment(CollectionProperty property)
         {
-            return $"{property.CodeName}: {property.Name}Builder.ToImmutable()";
+            return $"{property.PropertyName}: {property.Name}Builder.ToImmutable()";
         }
 
         private static void CreateBlockReader(IndentedWriter output, Block block)
@@ -99,7 +99,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading")
                 .Line("Dictionary<Identifier, Token> fields = new();")
                 .Line("var block = new IdentifierToken(FilePosition.StartOfFile, \"MapData\");")
                 .Lines(block.Properties.OfType<CollectionProperty>().Select(cp =>
-                    $"var {cp.Name}Builder = ImmutableList.CreateBuilder<{cp.GenericTypeName}>();"))
+                    $"var {cp.Name}Builder = ImmutableList.CreateBuilder<{cp.ElementTypeName}>();"))
                 .Line()
                 .Line("foreach(var expression in ast)")
                 .OpenParen()
@@ -116,7 +116,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading")
             foreach (var cp in block.Properties.OfType<CollectionProperty>().Where(p => p.Name != "planeMap"))
             {
                 output.Line($"case \"{cp.FormatName}\":").IncreaseIndent()
-                    .Line($"{cp.Name}Builder.Add(Read{cp.GenericTypeName}(b));")
+                    .Line($"{cp.Name}Builder.Add(Read{cp.ElementTypeName}(b));")
                     .Line("break;").DecreaseIndent();
             }
 

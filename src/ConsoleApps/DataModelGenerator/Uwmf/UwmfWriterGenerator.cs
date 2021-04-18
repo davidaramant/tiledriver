@@ -64,11 +64,11 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Writing")
                     string optionalDefault = defaultValue != null ? ", " + defaultValue : string.Empty;
                     string indent = block.Serialization == SerializationType.Normal ? string.Empty : ", indent:false";
 
-                    output.Line($"WriteProperty(writer, \"{sp.FormatName}\", {block.Name}.{sp.CodeName}{optionalDefault}{indent});");
+                    output.Line($"WriteProperty(writer, \"{sp.FormatName}\", {block.Name}.{sp.PropertyName}{optionalDefault}{indent});");
                 }
                 else if (p is CollectionProperty cp)
                 {
-                    output.Line($"foreach(var block in {block.Name}.{cp.CodeName})")
+                    output.Line($"foreach(var block in {block.Name}.{cp.PropertyName})")
                         .OpenParen()
                         .Line($"Write(writer, block);")
                         .CloseParen();

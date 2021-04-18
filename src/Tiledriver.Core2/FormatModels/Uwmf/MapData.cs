@@ -7,6 +7,6 @@ namespace Tiledriver.Core.FormatModels.Uwmf
 {
     public sealed partial record MapData
     {
-        public TileSpace TileSpaceAt(Point p) => PlaneMaps[0].TileSpaces[p.Y * Width + p.X];
+        public TileSpace TileSpaceAt(Point p) => PlaneMaps[0][p.Y * Width + p.X];
     }
 }
