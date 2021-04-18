@@ -6,10 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Tiledriver.Core.FormatModels.Uwmf;
-using Tiledriver.Core.LevelGeometry.Mapping;
 using Tiledriver.Core.Wolf3D;
 
-namespace Tiledriver.Core.Utils
+namespace Tiledriver.Core.LevelGeometry.Mapping
 {
     public static class GraphVizRenderer
     {

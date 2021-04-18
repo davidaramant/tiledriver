@@ -14,10 +14,12 @@ using System.Windows.Input;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Uwmf.Parsing;
 using Tiledriver.Core.FormatModels.Wad;
+using Tiledriver.Core.LevelGeometry.Mapping;
 using Tiledriver.Core.MapRanker;
 using Tiledriver.Core.Utils;
 using Tiledriver.Gui.Utilities;
 using Tiledriver.Gui.ViewModels;
+using Key = System.Windows.Input.Key;
 
 namespace Tiledriver.Gui
 {
