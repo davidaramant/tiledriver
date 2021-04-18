@@ -3,6 +3,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using Tiledriver.DataModelGenerator.Utilities;
 using Tiledriver.DataModelGenerator.Xlat.MetadataModel;
 
@@ -43,9 +44,23 @@ namespace Tiledriver.Core.FormatModels.Xlat");
                 .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
                 .Line($"public sealed partial record {block.ClassName}(")
                 .IncreaseIndent()
+                .JoinLines(",", block.OrderedProperties.Select(GetPropertyDefinition))
                 .DecreaseIndent()
                 .Line(");")
                 .CloseParen();
+        }
+
+        static string GetPropertyDefinition(Property property)
+        {
+            var definition = $"{property.PropertyType} {property.PropertyName}";
+
+            var defaultString = property.DefaultString;
+            if (defaultString!=null)
+            {
+                definition += $" = {defaultString}";
+            }
+
+            return definition;
         }
     }
 }

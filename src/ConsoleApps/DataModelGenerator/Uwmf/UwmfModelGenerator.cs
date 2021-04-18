@@ -62,6 +62,5 @@ namespace Tiledriver.Core.FormatModels.Uwmf");
 
             return definition;
         }
-
     }
 }
