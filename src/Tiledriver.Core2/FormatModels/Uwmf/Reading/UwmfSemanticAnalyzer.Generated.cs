@@ -21,17 +21,17 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
                 TextureNorth: GetRequiredFieldValue<string>(fields, block.Name, "textureNorth"),
                 TextureWest: GetRequiredFieldValue<string>(fields, block.Name, "textureWest"),
                 TextureSouth: GetRequiredFieldValue<string>(fields, block.Name, "textureSouth"),
-                BlockingEast: GetOptionalFieldValue<bool>(fields, "blockingEast"),
-                BlockingNorth: GetOptionalFieldValue<bool>(fields, "blockingNorth"),
-                BlockingWest: GetOptionalFieldValue<bool>(fields, "blockingWest"),
-                BlockingSouth: GetOptionalFieldValue<bool>(fields, "blockingSouth"),
-                OffsetVertical: GetOptionalFieldValue<bool>(fields, "offsetVertical"),
-                OffsetHorizontal: GetOptionalFieldValue<bool>(fields, "offsetHorizontal"),
-                DontOverlay: GetOptionalFieldValue<bool>(fields, "dontOverlay"),
-                Mapped: GetOptionalFieldValue<int>(fields, "mapped"),
-                SoundSequence: GetOptionalFieldValue<string>(fields, "soundSequence"),
-                TextureOverhead: GetOptionalFieldValue<string>(fields, "textureOverhead"),
-                Comment: GetOptionalFieldValue<string>(fields, "comment")
+                BlockingEast: GetOptionalFieldValue<bool>(fields, "blockingEast", true),
+                BlockingNorth: GetOptionalFieldValue<bool>(fields, "blockingNorth", true),
+                BlockingWest: GetOptionalFieldValue<bool>(fields, "blockingWest", true),
+                BlockingSouth: GetOptionalFieldValue<bool>(fields, "blockingSouth", true),
+                OffsetVertical: GetOptionalFieldValue<bool>(fields, "offsetVertical", false),
+                OffsetHorizontal: GetOptionalFieldValue<bool>(fields, "offsetHorizontal", false),
+                DontOverlay: GetOptionalFieldValue<bool>(fields, "dontOverlay", false),
+                Mapped: GetOptionalFieldValue<int>(fields, "mapped", 0),
+                SoundSequence: GetOptionalFieldValue<string>(fields, "soundSequence", ""),
+                TextureOverhead: GetOptionalFieldValue<string>(fields, "textureOverhead", ""),
+                Comment: GetOptionalFieldValue<string>(fields, "comment", "")
             );
         }
         private static Sector ReadSector(Block block)
@@ -41,7 +41,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
             return new Sector(
                 TextureCeiling: GetRequiredFieldValue<string>(fields, block.Name, "textureCeiling"),
                 TextureFloor: GetRequiredFieldValue<string>(fields, block.Name, "textureFloor"),
-                Comment: GetOptionalFieldValue<string>(fields, "comment")
+                Comment: GetOptionalFieldValue<string>(fields, "comment", "")
             );
         }
         private static Zone ReadZone(Block block)
@@ -49,7 +49,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
             var fields = block.GetFieldAssignments();
 
             return new Zone(
-                Comment: GetOptionalFieldValue<string>(fields, "comment")
+                Comment: GetOptionalFieldValue<string>(fields, "comment", "")
             );
         }
         private static Plane ReadPlane(Block block)
@@ -58,7 +58,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
 
             return new Plane(
                 Depth: GetRequiredFieldValue<int>(fields, block.Name, "depth"),
-                Comment: GetOptionalFieldValue<string>(fields, "comment")
+                Comment: GetOptionalFieldValue<string>(fields, "comment", "")
             );
         }
         private static Thing ReadThing(Block block)
@@ -71,13 +71,13 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
                 Y: GetRequiredDoubleFieldValue(fields, block.Name, "y"),
                 Z: GetRequiredDoubleFieldValue(fields, block.Name, "z"),
                 Angle: GetRequiredFieldValue<int>(fields, block.Name, "angle"),
-                Ambush: GetOptionalFieldValue<bool>(fields, "ambush"),
-                Patrol: GetOptionalFieldValue<bool>(fields, "patrol"),
-                Skill1: GetOptionalFieldValue<bool>(fields, "skill1"),
-                Skill2: GetOptionalFieldValue<bool>(fields, "skill2"),
-                Skill3: GetOptionalFieldValue<bool>(fields, "skill3"),
-                Skill4: GetOptionalFieldValue<bool>(fields, "skill4"),
-                Comment: GetOptionalFieldValue<string>(fields, "comment")
+                Ambush: GetOptionalFieldValue<bool>(fields, "ambush", false),
+                Patrol: GetOptionalFieldValue<bool>(fields, "patrol", false),
+                Skill1: GetOptionalFieldValue<bool>(fields, "skill1", false),
+                Skill2: GetOptionalFieldValue<bool>(fields, "skill2", false),
+                Skill3: GetOptionalFieldValue<bool>(fields, "skill3", false),
+                Skill4: GetOptionalFieldValue<bool>(fields, "skill4", false),
+                Comment: GetOptionalFieldValue<string>(fields, "comment", "")
             );
         }
         private static Trigger ReadTrigger(Block block)
@@ -89,21 +89,21 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
                 Y: GetRequiredFieldValue<int>(fields, block.Name, "y"),
                 Z: GetRequiredFieldValue<int>(fields, block.Name, "z"),
                 Action: GetRequiredFieldValue<string>(fields, block.Name, "action"),
-                Arg0: GetOptionalFieldValue<int>(fields, "arg0"),
-                Arg1: GetOptionalFieldValue<int>(fields, "arg1"),
-                Arg2: GetOptionalFieldValue<int>(fields, "arg2"),
-                Arg3: GetOptionalFieldValue<int>(fields, "arg3"),
-                Arg4: GetOptionalFieldValue<int>(fields, "arg4"),
-                ActivateEast: GetOptionalFieldValue<bool>(fields, "activateEast"),
-                ActivateNorth: GetOptionalFieldValue<bool>(fields, "activateNorth"),
-                ActivateWest: GetOptionalFieldValue<bool>(fields, "activateWest"),
-                ActivateSouth: GetOptionalFieldValue<bool>(fields, "activateSouth"),
-                PlayerCross: GetOptionalFieldValue<bool>(fields, "playerCross"),
-                PlayerUse: GetOptionalFieldValue<bool>(fields, "playerUse"),
-                MonsterUse: GetOptionalFieldValue<bool>(fields, "monsterUse"),
-                Repeatable: GetOptionalFieldValue<bool>(fields, "repeatable"),
-                Secret: GetOptionalFieldValue<bool>(fields, "secret"),
-                Comment: GetOptionalFieldValue<string>(fields, "comment")
+                Arg0: GetOptionalFieldValue<int>(fields, "arg0", 0),
+                Arg1: GetOptionalFieldValue<int>(fields, "arg1", 0),
+                Arg2: GetOptionalFieldValue<int>(fields, "arg2", 0),
+                Arg3: GetOptionalFieldValue<int>(fields, "arg3", 0),
+                Arg4: GetOptionalFieldValue<int>(fields, "arg4", 0),
+                ActivateEast: GetOptionalFieldValue<bool>(fields, "activateEast", true),
+                ActivateNorth: GetOptionalFieldValue<bool>(fields, "activateNorth", true),
+                ActivateWest: GetOptionalFieldValue<bool>(fields, "activateWest", true),
+                ActivateSouth: GetOptionalFieldValue<bool>(fields, "activateSouth", true),
+                PlayerCross: GetOptionalFieldValue<bool>(fields, "playerCross", false),
+                PlayerUse: GetOptionalFieldValue<bool>(fields, "playerUse", false),
+                MonsterUse: GetOptionalFieldValue<bool>(fields, "monsterUse", false),
+                Repeatable: GetOptionalFieldValue<bool>(fields, "repeatable", false),
+                Secret: GetOptionalFieldValue<bool>(fields, "secret", false),
+                Comment: GetOptionalFieldValue<string>(fields, "comment", "")
             );
         }
         public static MapData ReadMapData(IEnumerable<IGlobalExpression> ast)
@@ -178,7 +178,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
                 PlaneMaps: planeMapBuilder.ToImmutable(),
                 Things: thingBuilder.ToImmutable(),
                 Triggers: triggerBuilder.ToImmutable(),
-                Comment: GetOptionalFieldValue<string>(fields, "comment")
+                Comment: GetOptionalFieldValue<string>(fields, "comment", "")
             );
         }
     }

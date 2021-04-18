@@ -1,11 +1,8 @@
 ﻿// Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using System.Collections.Immutable;
-using FluentAssertions;
 using System.IO;
 using System.Text;
-using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Uwmf.Reading;
 using Tiledriver.Core.FormatModels.Uwmf.Writing;
 using Xunit;
@@ -27,13 +24,13 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Reading
             using var textReader = new StreamReader(stream, Encoding.ASCII);
             var roundTripped = UwmfSemanticAnalyzer.ReadMapData(UwmfParser.Parse(new UwmfLexer(textReader).Scan()));
 
-            // TODO: FluentAssertions can't compare these sanely
-        }
+            UwmfComparison.AssertEqual(roundTripped, map);
+        }        
 
         [Fact]
         public void ShouldParseOldDemoMap()
         {
-            using var stream =TestFile.Uwmf.TEXTMAP;
+            using var stream = TestFile.Uwmf.TEXTMAP;
             using var textReader = new StreamReader(stream, Encoding.ASCII);
             UwmfSemanticAnalyzer.ReadMapData(UwmfParser.Parse(new UwmfLexer(textReader).Scan()));
         }

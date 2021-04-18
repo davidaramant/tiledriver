@@ -59,7 +59,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading")
         {
             var getValue = property.DefaultString == null
                 ? $"GetRequiredFieldValue<{property.CodeType}>(fields, {context}, \"{property.FormatName}\")"
-                : $"GetOptionalFieldValue<{property.CodeType}>(fields, \"{property.FormatName}\")";
+                : $"GetOptionalFieldValue<{property.CodeType}>(fields, \"{property.FormatName}\", {property.DefaultString})";
 
             if (property is DoubleProperty)
             {

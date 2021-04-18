@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using Tiledriver.Core.FormatModels.Uwmf.Writing;
 
-namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Parsing
+namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Reading
 {
     public sealed class UwmfParserTests
     {

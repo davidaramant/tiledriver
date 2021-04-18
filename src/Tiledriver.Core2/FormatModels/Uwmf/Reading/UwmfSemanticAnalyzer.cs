@@ -63,10 +63,11 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
 
         private static T? GetOptionalFieldValue<T>(
             IReadOnlyDictionary<Identifier, Token> fields,
-            Identifier fieldName) =>
+            Identifier fieldName,
+            T defaultValue) =>
             fields.TryGetValue(fieldName, out var token)
                 ? GetTokenValue<T>(fieldName, token)
-                : default;
+                : defaultValue;
 
         private static double GetDoubleTokenValue(Identifier fieldName, Token token) =>
             token switch
