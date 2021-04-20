@@ -2,6 +2,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Tiledriver.DataModelGenerator.Utilities;
@@ -30,8 +31,16 @@ namespace Tiledriver.DataModelGenerator.Uwmf
                 File.CreateText(Path.Combine(basePath, block.ClassName + ".Generated.cs"));
             using var output = new IndentedWriter(blockStream);
 
+            var containsCollection = block.Properties.Any(p => p is CollectionProperty);
+
+            IEnumerable<string> includes = new[] {"System.CodeDom.Compiler"};
+            if (containsCollection)
+            {
+                includes = includes.Concat(new[] {"System.Collections.Immutable"});
+            }
+
             output
-                .WriteHeader("Tiledriver.Core.FormatModels.Uwmf", new[] { "System.CodeDom.Compiler", "System.Collections.Immutable" })
+                .WriteHeader("Tiledriver.Core.FormatModels.Uwmf", includes)
                 .OpenParen()
                 .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
                 .Line($"public sealed partial record {block.ClassName}(")
