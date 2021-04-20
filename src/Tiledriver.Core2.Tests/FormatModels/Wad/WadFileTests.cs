@@ -21,7 +21,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Wad
             {
                 var wad = new WadFile();
                 wad.Append(new Marker("MAP01"));
-                wad.Append(new UwmfLump("TEXTMAP", DemoMap.CreateThingDemoMap()));
+                wad.Append(new UwmfLump("TEXTMAP", ThingDemoMap.Create()));
                 wad.Append(new Marker("ENDMAP"));
                 wad.SaveTo(fileInfo.FullName);
             }
@@ -40,7 +40,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Wad
             var fileInfo = new FileInfo(Path.GetTempFileName());
             try
             {
-                var map = DemoMap.CreateThingDemoMap();
+                var map = ThingDemoMap.Create();
 
                 var wad = new WadFile();
                 wad.Append(new Marker("MAP01"));

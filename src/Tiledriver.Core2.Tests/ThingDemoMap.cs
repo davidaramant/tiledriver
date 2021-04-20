@@ -9,9 +9,9 @@ using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.Tests
 {
-    public static class DemoMap
+    public static class ThingDemoMap
     {
-        public static MapData CreateThingDemoMap()
+        public static MapData Create()
         {
             const int width = 128;
             const int height = 128;

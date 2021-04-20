@@ -14,7 +14,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Reading
         [Fact]
         public void ShouldRoundTripDemoMap()
         {
-            var map = DemoMap.CreateThingDemoMap();
+            var map = ThingDemoMap.Create();
 
             using var stream = new MemoryStream();
             map.WriteTo(stream);
