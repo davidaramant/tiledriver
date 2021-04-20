@@ -19,7 +19,7 @@ namespace Tiledriver.Core.Extensions.Directions
         /// <returns>The direction relative to <paramref name="origin"/> and the adjacent location.</returns>
         public static IEnumerable<(Direction direction, MapPosition point)> GetAdjacentPoints(
             this MapPosition origin,
-            Size bounds,
+            MapSize bounds,
             bool clockWise = true,
             Direction start = Direction.North)
         {

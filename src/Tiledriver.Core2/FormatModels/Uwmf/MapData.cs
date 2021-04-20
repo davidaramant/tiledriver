@@ -12,16 +12,16 @@ namespace Tiledriver.Core.FormatModels.Uwmf
         {
             private readonly ImmutableArray<TileSpace> _planeMap;
 
-            public Size Dimensions { get; }
+            public MapSize Dimensions { get; }
             public TileSpace this[MapPosition pos] => _planeMap[pos.Y * Dimensions.Width + pos.X];
 
-            public ImmutableMapBoard(Size dimensions, ImmutableArray<TileSpace> planeMap)
+            public ImmutableMapBoard(MapSize dimensions, ImmutableArray<TileSpace> planeMap)
             {
                 Dimensions = dimensions;
                 _planeMap = planeMap;
             }
         }
 
-        public IMapBoard GetMapBoard() => new ImmutableMapBoard(new Size(Width, Height), PlaneMaps[0]);
+        public IMapBoard GetMapBoard() => new ImmutableMapBoard(new MapSize(Width, Height), PlaneMaps[0]);
     }
 }

@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2016, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -18,7 +18,7 @@ namespace Tiledriver.Core.Tests
 
             var things = GenerateThings().ToArray();
 
-            var map = new MapData
+            return new MapData
             (
                 NameSpace: "Wolf3D",
                 TileSize: 64,
@@ -117,8 +117,6 @@ namespace Tiledriver.Core.Tests
                     ),
                 }.ToImmutableList()
             );
-
-            return map;
         }
 
         private static IEnumerable<Thing> GenerateThings()

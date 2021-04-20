@@ -28,7 +28,7 @@ namespace Tiledriver.Core.Tests.Extensions
             int expectedAdjacent)
         {
             var location = new MapPosition(x, y);
-            var bounds = new Size(width, height);
+            var bounds = new MapSize(width, height);
 
             location.GetAdjacentPoints(bounds, clockWise: false, start: Direction.East).Should().HaveCount(expectedAdjacent);
         }
@@ -73,7 +73,7 @@ namespace Tiledriver.Core.Tests.Extensions
         {
             var directions =
                 new MapPosition(1, 1).
-                    GetAdjacentPoints(new Size(3, 3), clockWise: clockWise, start: start).
+                    GetAdjacentPoints(new MapSize(3, 3), clockWise: clockWise, start: start).
                     Select(tuple => tuple.direction).
                     ToArray();
 

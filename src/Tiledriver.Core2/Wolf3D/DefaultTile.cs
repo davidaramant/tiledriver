@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2017, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -376,7 +376,7 @@ namespace Tiledriver.Core.Wolf3D
             OffsetHorizontal: true
         );
 
-        public static readonly IReadOnlyDictionary<int, Tile> Tiles = new Dictionary<int, Tile>
+        public static readonly IReadOnlyDictionary<int, Tile> Lookup = new Dictionary<int, Tile>
         {
             {1, GrayStone1},
             {2, GrayStone2},

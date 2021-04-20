@@ -7,7 +7,7 @@ namespace Tiledriver.Core.LevelGeometry
 {
     public interface IMapBoard
     {
-        Size Dimensions { get; }
+        MapSize Dimensions { get; }
         TileSpace this[MapPosition pos] { get; }
     }
 }

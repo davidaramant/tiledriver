@@ -13,7 +13,7 @@ namespace Tiledriver.Core.LevelGeometry
         private readonly int[] _zones;
         private readonly int[] _tags;
 
-        public Size Dimensions { get; }
+        public MapSize Dimensions { get; }
 
         public TileSpace this[MapPosition pos]
         {
@@ -32,7 +32,7 @@ namespace Tiledriver.Core.LevelGeometry
             }
         }
 
-        public MutableMapBoard(Size dimensions, IEnumerable<TileSpace> tileSpaces)
+        public MutableMapBoard(MapSize dimensions, IEnumerable<TileSpace> tileSpaces)
         {
             Dimensions = dimensions;
 
