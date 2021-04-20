@@ -2,12 +2,11 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using Xunit;
 using FluentAssertions;
 using Tiledriver.Core.Extensions.Directions;
-using Tiledriver.Core.FormatModels.Common;
+using Tiledriver.Core.LevelGeometry;
 
 namespace Tiledriver.Core.Tests.Extensions
 {
@@ -28,7 +27,7 @@ namespace Tiledriver.Core.Tests.Extensions
             int width, int height,
             int expectedAdjacent)
         {
-            var location = new Point(x, y);
+            var location = new MapPosition(x, y);
             var bounds = new Size(width, height);
 
             location.GetAdjacentPoints(bounds, clockWise: false, start: Direction.East).Should().HaveCount(expectedAdjacent);
@@ -73,7 +72,7 @@ namespace Tiledriver.Core.Tests.Extensions
         private static void VerifyDirections(bool clockWise, Direction start, IEnumerable<Direction> expectedDirections)
         {
             var directions =
-                new Point(1, 1).
+                new MapPosition(1, 1).
                     GetAdjacentPoints(new Size(3, 3), clockWise: clockWise, start: start).
                     Select(tuple => tuple.direction).
                     ToArray();
