@@ -30,16 +30,8 @@ namespace Tiledriver.DataModelGenerator.Xlat
                 File.CreateText(Path.Combine(basePath, block.ClassName + ".Generated.cs"));
             using var output = new IndentedWriter(blockStream);
 
-            output.Line(
-                $@"// Copyright (c) {DateTime.Today.Year}, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
-
-using System.CodeDom.Compiler;
-using System.Collections.Immutable;
-
-namespace Tiledriver.Core.FormatModels.Xlat");
-
             output
+                .WriteHeader("Tiledriver.Core.FormatModels.Xlat", new[] { "System.CodeDom.Compiler", "System.Collections.Immutable" })
                 .OpenParen()
                 .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
                 .Line($"public sealed partial record {block.ClassName}(")

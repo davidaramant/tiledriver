@@ -21,14 +21,8 @@ namespace Tiledriver.DataModelGenerator.Uwmf
             using var stream = File.CreateText(Path.Combine(basePath, "UwmfWriter.Generated.cs"));
             using var output = new IndentedWriter(stream);
 
-            output.Line(
-                    $@"// Copyright (c) {DateTime.Today.Year}, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
-
-using System.CodeDom.Compiler;
-using System.IO;
-
-namespace Tiledriver.Core.FormatModels.Uwmf.Writing")
+            output
+                .WriteHeader("Tiledriver.Core.FormatModels.Uwmf.Writing", new[] { "System.CodeDom.Compiler", "System.IO" })
                 .OpenParen()
                 .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
                 .Line($"public static partial class UwmfWriter")

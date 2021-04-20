@@ -2,7 +2,6 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
@@ -15,6 +14,23 @@ namespace Tiledriver.DataModelGenerator.Utilities
 
         public int IndentionLevel { get; private set; }
         public string CurrentIndent => new string(' ', IndentionLevel*4);
+
+        public IndentedWriter WriteHeader(string nameSpace, IEnumerable<string> usingNamespaces)
+        {
+            Line($@"// Copyright (c) {DateTime.Today.Year}, David Aramant
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.");
+            Line();
+
+            foreach (var usingNamespace in usingNamespaces)
+            {
+                Line($"using {usingNamespace};");
+            }
+
+            Line();
+            Line($"namespace {nameSpace}");
+
+            return this;
+        }
 
         public IndentedWriter IncreaseIndent()
         {

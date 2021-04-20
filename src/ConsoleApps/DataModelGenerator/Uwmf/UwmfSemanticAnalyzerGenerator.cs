@@ -4,7 +4,6 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using Tiledriver.DataModelGenerator.Utilities;
 using Tiledriver.DataModelGenerator.Uwmf.MetadataModel;
 
@@ -22,17 +21,17 @@ namespace Tiledriver.DataModelGenerator.Uwmf
             using var stream = File.CreateText(Path.Combine(basePath, "UwmfSemanticAnalyzer.Generated.cs"));
             using var output = new IndentedWriter(stream);
 
-            output.Line(
-                    $@"// Copyright (c) {DateTime.Today.Year}, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+            var includes = new[]
+            {
+                "System.CodeDom.Compiler",
+                "System.Collections.Generic",
+                "System.Collections.Immutable",
+                "Tiledriver.Core.FormatModels.Common",
+                "Tiledriver.Core.FormatModels.Uwmf.Reading.AbstractSyntaxTree",
+            };
 
-using System.CodeDom.Compiler;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using Tiledriver.Core.FormatModels.Common;
-using Tiledriver.Core.FormatModels.Uwmf.Reading.AbstractSyntaxTree;
-
-namespace Tiledriver.Core.FormatModels.Uwmf.Reading")
+            output
+                .WriteHeader("Tiledriver.Core.FormatModels.Uwmf.Reading", includes)
                 .OpenParen()
                 .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
                 .Line($"public static partial class UwmfSemanticAnalyzer")
