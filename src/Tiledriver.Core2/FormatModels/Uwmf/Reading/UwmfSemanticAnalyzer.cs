@@ -1,10 +1,8 @@
 ﻿// Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Uwmf.Reading.AbstractSyntaxTree;
 
@@ -12,9 +10,8 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
 {
     public static partial class UwmfSemanticAnalyzer
     {
-        private static TileSpace ReadTileSpace(IntTuple tuple)
-        {
-            return tuple.Values.Count switch
+        private static TileSpace ReadTileSpace(IntTuple tuple) =>
+            tuple.Values.Count switch
             {
                 3 => new TileSpace(
                     Tile: tuple.Values[0].Value,
@@ -27,10 +24,27 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
                     Tag: tuple.Values[3].Value),
                 _ => throw new ParsingException($"Unexpected number of integers in TileSpace at {tuple.StartLocation} - expected 3 or 4.")
             };
-        }
 
-        // TODO: This can reuse stuff
-        private static ImmutableArray<TileSpace> ReadPlaneMap(IntTupleBlock block) => block.Tuples.Select(ReadTileSpace).ToImmutableArray();
+        private static ImmutableArray<TileSpace> ReadPlaneMap(IntTupleBlock block)
+        {
+            // Since these things are immutable, there's no problem reusing references.
+            var tsCache = new Dictionary<TileSpace, TileSpace>();
+            var tileSpaces = new List<TileSpace>(block.Tuples.Length);
+
+            foreach (var tuple in block.Tuples)
+            {
+                var ts = ReadTileSpace(tuple);
+
+                if (!tsCache.ContainsKey(ts))
+                {
+                    tsCache.Add(ts, ts);
+                }
+
+                tileSpaces.Add(tsCache[ts]);
+            }
+
+            return tileSpaces.ToImmutableArray();
+        }
 
         private static Token GetRequiredToken(
             IReadOnlyDictionary<Identifier, Token> fields,
@@ -46,12 +60,10 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
             return fields[fieldName];
         }
 
-        private static T GetTokenValue<T>(Identifier fieldName, Token token)
-        {
-            return token is ValueToken<T> valueToken
+        private static T GetTokenValue<T>(Identifier fieldName, Token token) =>
+            token is ValueToken<T> valueToken
                 ? valueToken.Value
                 : throw new ParsingException($"Expected {typeof(T).Name} for {fieldName} on {token.Location}");
-        }
 
         private static T GetRequiredFieldValue<T>(
             IReadOnlyDictionary<Identifier, Token> fields,
