@@ -9,16 +9,16 @@ using Tiledriver.Core.FormatModels.Uwmf;
 
 namespace Tiledriver.Core.LevelGeometry
 {
-    public sealed class MutableMapBoard : IMapBoard
+    public sealed class Canvas : IBoard
     {
         private readonly int[] _tiles;
         private readonly int[] _sectors;
         private readonly int[] _zones;
         private readonly int[] _tags;
 
-        public MapSize Dimensions { get; }
+        public Size Dimensions { get; }
 
-        public TileSpace this[MapPosition pos]
+        public TileSpace this[Position pos]
         {
             get
             {
@@ -35,7 +35,7 @@ namespace Tiledriver.Core.LevelGeometry
             }
         }
 
-        public MutableMapBoard(MapSize dimensions)
+        public Canvas(Size dimensions)
         {
             Dimensions = dimensions;
 
@@ -50,7 +50,7 @@ namespace Tiledriver.Core.LevelGeometry
             Array.Fill(_tags, -1);
         }
 
-        public MutableMapBoard Fill(IEnumerable<TileSpace> tileSpaces)
+        public Canvas Fill(IEnumerable<TileSpace> tileSpaces)
         {
             int index = 0;
             foreach (var ts in tileSpaces)
@@ -66,10 +66,10 @@ namespace Tiledriver.Core.LevelGeometry
             return this;
         }
 
-        public MutableMapBoard Fill(int? tile = null, int? sector = null, int? zone = null, int? tag = null) =>
-            Fill(new MapArea(new MapPosition(0, 0), Dimensions), tile, sector, zone, tag);
+        public Canvas Fill(int? tile = null, int? sector = null, int? zone = null, int? tag = null) =>
+            Fill(new Rectangle(new Position(0, 0), Dimensions), tile, sector, zone, tag);
 
-        public MutableMapBoard Fill(MapArea area, int? tile = null, int? sector = null, int? zone = null, int? tag = null)
+        public Canvas Fill(Rectangle area, int? tile = null, int? sector = null, int? zone = null, int? tag = null)
         {
             foreach (var row in Enumerable.Range(area.TopLeft.Y, area.Size.Height))
             {
@@ -96,7 +96,7 @@ namespace Tiledriver.Core.LevelGeometry
             return this;
         }
 
-        public MutableMapBoard Set(MapPosition pos, int? tile = null, int? sector = null, int? zone = null, int? tag = null)
+        public Canvas Set(Position pos, int? tile = null, int? sector = null, int? zone = null, int? tag = null)
         {
             var startIndex = GetIndex(pos);
 
@@ -132,9 +132,9 @@ namespace Tiledriver.Core.LevelGeometry
             return tileSpaces.ToImmutableArray();
         }
 
-        public MutableMapBoard ToMutable() => new MutableMapBoard(Dimensions).Fill(ToPlaneMap());
+        public Canvas ToCanvas() => new Canvas(Dimensions).Fill(ToPlaneMap());
 
-        private int GetIndex(MapPosition pos) => GetIndex(pos.X, pos.Y);
+        private int GetIndex(Position pos) => GetIndex(pos.X, pos.Y);
         private int GetIndex(int x, int y) => y * Dimensions.Width + x;
     }
 }

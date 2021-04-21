@@ -22,7 +22,7 @@ namespace Tiledriver.Core.Tests
 
             var rows = (int)Math.Ceiling((double)originalTiles.Count / Columns);
 
-            var mapSize = new MapSize(
+            var mapSize = new Size(
                 2 + (SpaceBetween + 1) * Columns + SpaceBetween,
                 2 + (SpaceBetween + 1) * rows + SpaceBetween);
 
@@ -60,14 +60,14 @@ namespace Tiledriver.Core.Tests
             );
         }
 
-        private static ImmutableArray<TileSpace> CreateGeometry(List<Tile> tiles, MapSize mapSize, int rows)
+        private static ImmutableArray<TileSpace> CreateGeometry(List<Tile> tiles, Size size, int rows)
         {
             var boundaryTileIndex = tiles.IndexOf(DefaultTile.GrayStone1);
 
             var board =
-                new MutableMapBoard(mapSize)
-                    .Fill(new MapArea(new MapPosition(0, 0), mapSize), tile: boundaryTileIndex)
-                    .Fill(new MapArea(new MapPosition(1, 1), new MapSize(mapSize.Width - 2, mapSize.Height - 2)), tile: -1);
+                new Canvas(size)
+                    .Fill(new Rectangle(new Position(0, 0), size), tile: boundaryTileIndex)
+                    .Fill(new Rectangle(new Position(1, 1), new Size(size.Width - 2, size.Height - 2)), tile: -1);
 
 
             foreach (var row in Enumerable.Range(0, rows))
@@ -79,7 +79,7 @@ namespace Tiledriver.Core.Tests
 
                     var tile = row * Columns + col;
 
-                    board.Set(new MapPosition(x, y), tile: tile);
+                    board.Set(new Position(x, y), tile: tile);
                 }
             }
 

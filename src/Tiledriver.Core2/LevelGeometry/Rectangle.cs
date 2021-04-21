@@ -3,5 +3,5 @@
 
 namespace Tiledriver.Core.LevelGeometry
 {
-    public sealed record MapSize(int Width, int Height);
+    public sealed record Rectangle(Position TopLeft, Size Size);
 }

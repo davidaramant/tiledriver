@@ -6,11 +6,11 @@ using Tiledriver.Core.FormatModels.Uwmf;
 
 namespace Tiledriver.Core.LevelGeometry
 {
-    public interface IMapBoard
+    public interface IBoard
     {
-        MapSize Dimensions { get; }
-        TileSpace this[MapPosition pos] { get; }
+        Size Dimensions { get; }
+        TileSpace this[Position pos] { get; }
         ImmutableArray<TileSpace> ToPlaneMap();
-        MutableMapBoard ToMutable();
+        Canvas ToCanvas();
     }
 }

@@ -17,9 +17,9 @@ namespace Tiledriver.Core.Extensions.Directions
         /// <param name="clockWise">The direction to return the points in.</param>
         /// <param name="start">Which direction to start with.</param>
         /// <returns>The direction relative to <paramref name="origin"/> and the adjacent location.</returns>
-        public static IEnumerable<(Direction direction, MapPosition point)> GetAdjacentPoints(
-            this MapPosition origin,
-            MapSize bounds,
+        public static IEnumerable<(Direction direction, Position point)> GetAdjacentPoints(
+            this Position origin,
+            Size bounds,
             bool clockWise = true,
             Direction start = Direction.North)
         {
@@ -29,22 +29,22 @@ namespace Tiledriver.Core.Extensions.Directions
                 {
                     case Direction.East:
                         if (origin.X < bounds.Width - 1)
-                            yield return (Direction.East, new MapPosition(origin.X + 1, origin.Y));
+                            yield return (Direction.East, new Position(origin.X + 1, origin.Y));
                         break;
 
                     case Direction.North:
                         if (origin.Y > 0)
-                            yield return (Direction.North, new MapPosition(origin.X, origin.Y - 1));
+                            yield return (Direction.North, new Position(origin.X, origin.Y - 1));
                         break;
 
                     case Direction.West:
                         if (origin.X > 0)
-                            yield return (Direction.West, new MapPosition(origin.X - 1, origin.Y));
+                            yield return (Direction.West, new Position(origin.X - 1, origin.Y));
                         break;
 
                     case Direction.South:
                         if (origin.Y < bounds.Height - 1)
-                            yield return (Direction.South, new MapPosition(origin.X, origin.Y + 1));
+                            yield return (Direction.South, new Position(origin.X, origin.Y + 1));
                         break;
 
                     default:
