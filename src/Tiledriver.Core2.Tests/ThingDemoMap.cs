@@ -11,6 +11,8 @@ namespace Tiledriver.Core.Tests
 {
     public static class ThingDemoMap
     {
+        // TODO: Add arguments for which types of things to include
+        // TODO: Make geometry more dynamic like TileDemoMap
         public static MapData Create()
         {
             const int width = 128;
