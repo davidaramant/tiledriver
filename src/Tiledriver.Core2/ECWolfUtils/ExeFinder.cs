@@ -32,7 +32,7 @@ namespace Tiledriver.Core.ECWolfUtils
 
             if (!ecWolfPath.EndsWith("ecwolf.exe", StringComparison.InvariantCultureIgnoreCase))
             {
-                ecWolfPath += "ecwolf.exe";
+                ecWolfPath = Path.Combine(ecWolfPath, "ecwolf.exe");
             }
 
             return ecWolfPath;

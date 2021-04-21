@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Tiledriver.Core2.Tests\Tiledriver.Core2.Tests.csproj" />
+    <ProjectReference Include="..\..\Tiledriver.Core2\Tiledriver.Core2.csproj" />
+  </ItemGroup>
+
+</Project>

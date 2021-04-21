@@ -8,6 +8,8 @@ namespace Tiledriver.Core.FormatModels.Uwmf
 {
     public sealed partial record MapData
     {
+        public MapSize Dimensions => new(Width, Height);
+
         private sealed class ImmutableMapBoard : IMapBoard
         {
             private readonly ImmutableArray<TileSpace> _planeMap;
@@ -20,8 +22,11 @@ namespace Tiledriver.Core.FormatModels.Uwmf
                 Dimensions = dimensions;
                 _planeMap = planeMap;
             }
+
+            public ImmutableArray<TileSpace> ToPlaneMap() => _planeMap;        
+            public MutableMapBoard ToMutable() => new MutableMapBoard(Dimensions).Fill(_planeMap);
         }
 
-        public IMapBoard GetMapBoard() => new ImmutableMapBoard(new MapSize(Width, Height), PlaneMaps[0]);
+        public IMapBoard GetMapBoard() => new ImmutableMapBoard(Dimensions, PlaneMaps[0]);
     }
 }

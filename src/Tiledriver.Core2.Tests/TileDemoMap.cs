@@ -14,20 +14,17 @@ namespace Tiledriver.Core.Tests
     public static class TileDemoMap
     {
         private const int Columns = 10;
+        const int SpaceBetween = 2;
 
         public static MapData Create()
         {
             var originalTiles = DefaultTile.Lookup.Values.ToList();
 
-            var rows = (int) Math.Ceiling((double) originalTiles.Count / Columns);
-
-            const int spaceBetween = 2;
+            var rows = (int)Math.Ceiling((double)originalTiles.Count / Columns);
 
             var mapSize = new MapSize(
-                2 + (spaceBetween + 1) * Columns + spaceBetween,
-                2 + (spaceBetween + 1) * rows + spaceBetween);
-
-            var boundaryTileIndex = originalTiles.IndexOf(DefaultTile.GrayStone1);
+                2 + (SpaceBetween + 1) * Columns + SpaceBetween,
+                2 + (SpaceBetween + 1) * rows + SpaceBetween);
 
             return new MapData
             (
@@ -65,7 +62,28 @@ namespace Tiledriver.Core.Tests
 
         private static ImmutableArray<TileSpace> CreateGeometry(List<Tile> tiles, MapSize mapSize, int rows)
         {
-            throw new NotImplementedException();
+            var boundaryTileIndex = tiles.IndexOf(DefaultTile.GrayStone1);
+
+            var board =
+                new MutableMapBoard(mapSize)
+                    .Fill(new MapArea(new MapPosition(0, 0), mapSize), tile: boundaryTileIndex)
+                    .Fill(new MapArea(new MapPosition(1, 1), new MapSize(mapSize.Width - 2, mapSize.Height - 2)), tile: -1);
+
+
+            foreach (var row in Enumerable.Range(0, rows))
+            {
+                int y = ((SpaceBetween + 1) * row) + (SpaceBetween + 1);
+                foreach (var col in Enumerable.Range(0, Columns))
+                {
+                    int x = ((SpaceBetween + 1) * col) + (SpaceBetween + 1);
+
+                    var tile = row * Columns + col;
+
+                    board.Set(new MapPosition(x, y), tile: tile);
+                }
+            }
+
+            return board.ToPlaneMap();
         }
     }
 }

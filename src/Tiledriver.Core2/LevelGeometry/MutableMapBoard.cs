@@ -1,7 +1,10 @@
 ﻿// Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
+using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using Tiledriver.Core.FormatModels.Uwmf;
 
 namespace Tiledriver.Core.LevelGeometry
@@ -32,7 +35,7 @@ namespace Tiledriver.Core.LevelGeometry
             }
         }
 
-        public MutableMapBoard(MapSize dimensions, IEnumerable<TileSpace> tileSpaces)
+        public MutableMapBoard(MapSize dimensions)
         {
             Dimensions = dimensions;
 
@@ -43,6 +46,12 @@ namespace Tiledriver.Core.LevelGeometry
             _zones = new int[size];
             _tags = new int[size];
 
+            Array.Fill(_tiles, -1);
+            Array.Fill(_tags, -1);
+        }
+
+        public MutableMapBoard Fill(IEnumerable<TileSpace> tileSpaces)
+        {
             int index = 0;
             foreach (var ts in tileSpaces)
             {
@@ -53,8 +62,79 @@ namespace Tiledriver.Core.LevelGeometry
 
                 index++;
             }
+
+            return this;
         }
 
-        private int GetIndex(MapPosition pos) => pos.Y * Dimensions.Width + pos.X;
+        public MutableMapBoard Fill(int? tile = null, int? sector = null, int? zone = null, int? tag = null) =>
+            Fill(new MapArea(new MapPosition(0, 0), Dimensions), tile, sector, zone, tag);
+
+        public MutableMapBoard Fill(MapArea area, int? tile = null, int? sector = null, int? zone = null, int? tag = null)
+        {
+            foreach (var row in Enumerable.Range(area.TopLeft.Y, area.Size.Height))
+            {
+                var startIndex = GetIndex(area.TopLeft.X, row);
+
+                if (tile != null)
+                {
+                    Array.Fill(_tiles, (int)tile, startIndex, area.Size.Width);
+                }
+                if (sector != null)
+                {
+                    Array.Fill(_sectors, (int)sector, startIndex, area.Size.Width);
+                }
+                if (zone != null)
+                {
+                    Array.Fill(_zones, (int)zone, startIndex, area.Size.Width);
+                }
+                if (tag != null)
+                {
+                    Array.Fill(_tags, (int)tag, startIndex, area.Size.Width);
+                }
+            }
+
+            return this;
+        }
+
+        public MutableMapBoard Set(MapPosition pos, int? tile = null, int? sector = null, int? zone = null, int? tag = null)
+        {
+            var startIndex = GetIndex(pos);
+
+            if (tile != null)
+            {
+                _tiles[startIndex] = (int)tile;
+            }
+            if (sector != null)
+            {
+                _sectors[startIndex] = (int)sector;
+            }
+            if (zone != null)
+            {
+                _zones[startIndex] = (int)zone;
+            }
+            if (tag != null)
+            {
+                _tags[startIndex] = (int)tag;
+            }
+
+            return this;
+        }
+
+        public ImmutableArray<TileSpace> ToPlaneMap()
+        {
+            var tileSpaces = new TileSpace[_tiles.Length];
+
+            for (int i = 0; i < _tiles.Length; i++)
+            {
+                tileSpaces[i] = new TileSpace(_tiles[i], _sectors[i], _zones[i], _tags[i]);
+            }
+
+            return tileSpaces.ToImmutableArray();
+        }
+
+        public MutableMapBoard ToMutable() => new MutableMapBoard(Dimensions).Fill(ToPlaneMap());
+
+        private int GetIndex(MapPosition pos) => GetIndex(pos.X, pos.Y);
+        private int GetIndex(int x, int y) => y * Dimensions.Width + x;
     }
 }
