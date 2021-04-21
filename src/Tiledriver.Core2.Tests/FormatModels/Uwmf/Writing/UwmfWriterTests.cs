@@ -30,10 +30,10 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Writing
                 Sectors: ImmutableList<Sector>.Empty,
                 Zones: ImmutableList<Zone>.Empty,
                 Planes: ImmutableList<Plane>.Empty,
-                PlaneMaps: ImmutableList.Create<ImmutableArray<TileSpace>>().Add(
+                PlaneMaps: ImmutableList.Create<ImmutableArray<MapSquare>>().Add(
                     new[] {
-                        new TileSpace(1, 2, 3),
-                        new TileSpace(4, 5, 6, 7)
+                        new MapSquare(1, 2, 3),
+                        new MapSquare(4, 5, 6, 7)
                         }.ToImmutableArray()),
                 Things: ImmutableList<Thing>.Empty,
                 Triggers: ImmutableList<Trigger>.Empty);

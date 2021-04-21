@@ -42,7 +42,7 @@ namespace Tiledriver.Core.Tests
                     )),
                 Zones: ImmutableList.Create<Zone>().Add(new Zone()),
                 Planes: ImmutableList.Create<Plane>().Add(new Plane(Depth: 64)),
-                PlaneMaps: ImmutableList.Create<ImmutableArray<TileSpace>>()
+                PlaneMaps: ImmutableList.Create<ImmutableArray<MapSquare>>()
                     .Add(CreateGeometry(originalTiles, mapSize, rows)),
                 Things: ImmutableList.Create<Thing>().Add(new Thing
                 (
@@ -60,7 +60,7 @@ namespace Tiledriver.Core.Tests
             );
         }
 
-        private static ImmutableArray<TileSpace> CreateGeometry(List<Tile> tiles, Size size, int rows)
+        private static ImmutableArray<MapSquare> CreateGeometry(List<Tile> tiles, Size size, int rows)
         {
             var boundaryTileIndex = tiles.IndexOf(DefaultTile.GrayStone1);
 

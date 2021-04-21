@@ -9,8 +9,8 @@ namespace Tiledriver.Core.LevelGeometry
     public interface IBoard
     {
         Size Dimensions { get; }
-        TileSpace this[Position pos] { get; }
-        ImmutableArray<TileSpace> ToPlaneMap();
+        MapSquare this[Position pos] { get; }
+        ImmutableArray<MapSquare> ToPlaneMap();
         Canvas ToCanvas();
     }
 }

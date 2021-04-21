@@ -17,7 +17,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf
         ImmutableList<Sector> Sectors,
         ImmutableList<Zone> Zones,
         ImmutableList<Plane> Planes,
-        ImmutableList<ImmutableArray<TileSpace>> PlaneMaps,
+        ImmutableList<ImmutableArray<MapSquare>> PlaneMaps,
         ImmutableList<Thing> Things,
         ImmutableList<Trigger> Triggers,
         string Comment = ""

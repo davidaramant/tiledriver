@@ -18,12 +18,12 @@ namespace Tiledriver.Core.LevelGeometry
 
         public Size Dimensions { get; }
 
-        public TileSpace this[Position pos]
+        public MapSquare this[Position pos]
         {
             get
             {
                 var index = GetIndex(pos);
-                return new TileSpace(_tiles[index], _sectors[index], _zones[index], _tags[index]);
+                return new MapSquare(_tiles[index], _sectors[index], _zones[index], _tags[index]);
             }
             set
             {
@@ -50,7 +50,7 @@ namespace Tiledriver.Core.LevelGeometry
             Array.Fill(_tags, -1);
         }
 
-        public Canvas Fill(IEnumerable<TileSpace> tileSpaces)
+        public Canvas Fill(IEnumerable<MapSquare> tileSpaces)
         {
             int index = 0;
             foreach (var ts in tileSpaces)
@@ -120,13 +120,13 @@ namespace Tiledriver.Core.LevelGeometry
             return this;
         }
 
-        public ImmutableArray<TileSpace> ToPlaneMap()
+        public ImmutableArray<MapSquare> ToPlaneMap()
         {
-            var tileSpaces = new TileSpace[_tiles.Length];
+            var tileSpaces = new MapSquare[_tiles.Length];
 
             for (int i = 0; i < _tiles.Length; i++)
             {
-                tileSpaces[i] = new TileSpace(_tiles[i], _sectors[i], _zones[i], _tags[i]);
+                tileSpaces[i] = new MapSquare(_tiles[i], _sectors[i], _zones[i], _tags[i]);
             }
 
             return tileSpaces.ToImmutableArray();

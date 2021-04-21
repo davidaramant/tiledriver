@@ -46,7 +46,7 @@ namespace Tiledriver.DataModelGenerator.Uwmf
                     new StringProperty("comment", defaultValue: string.Empty)
                 )),
 
-            new Block("tileSpace",
+            new Block("mapSquare",
                 Properties: ImmutableArray.Create<Property>(
                     new IntegerProperty("tile"),
                     new IntegerProperty("sector"),

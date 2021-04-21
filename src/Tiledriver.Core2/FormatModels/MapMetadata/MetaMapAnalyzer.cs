@@ -28,7 +28,7 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                     .Select(t => new Point(t.X, t.Y))
                     .ToImmutableHashSet();
 
-            TileSpace GetSpace(int x, int y) => mapData.PlaneMaps[0][y * mapData.Width + x];
+            MapSquare GetSpace(int x, int y) => mapData.PlaneMaps[0][y * mapData.Width + x];
 
             TileType GetTileType(Point p)
             {

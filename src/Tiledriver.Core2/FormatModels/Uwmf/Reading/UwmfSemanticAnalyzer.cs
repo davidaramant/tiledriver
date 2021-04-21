@@ -10,37 +10,37 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
 {
     public static partial class UwmfSemanticAnalyzer
     {
-        private static TileSpace ReadTileSpace(IntTuple tuple) =>
+        private static MapSquare ReadMapSquare(IntTuple tuple) =>
             tuple.Values.Count switch
             {
-                3 => new TileSpace(
+                3 => new MapSquare(
                     Tile: tuple.Values[0].Value,
                     Sector: tuple.Values[1].Value,
                     Zone: tuple.Values[2].Value),
-                4 => new TileSpace(
+                4 => new MapSquare(
                     Tile: tuple.Values[0].Value,
                     Sector: tuple.Values[1].Value,
                     Zone: tuple.Values[2].Value,
                     Tag: tuple.Values[3].Value),
-                _ => throw new ParsingException($"Unexpected number of integers in TileSpace at {tuple.StartLocation} - expected 3 or 4.")
+                _ => throw new ParsingException($"Unexpected number of integers in MapSquare at {tuple.StartLocation} - expected 3 or 4.")
             };
 
-        private static ImmutableArray<TileSpace> ReadPlaneMap(IntTupleBlock block)
+        private static ImmutableArray<MapSquare> ReadPlaneMap(IntTupleBlock block)
         {
             // Since these things are immutable, there's no problem reusing references.
-            var tsCache = new Dictionary<TileSpace, TileSpace>();
-            var tileSpaces = new List<TileSpace>(block.Tuples.Length);
+            var cache = new Dictionary<MapSquare, MapSquare>();
+            var tileSpaces = new List<MapSquare>(block.Tuples.Length);
 
             foreach (var tuple in block.Tuples)
             {
-                var ts = ReadTileSpace(tuple);
+                var ts = ReadMapSquare(tuple);
 
-                if (!tsCache.ContainsKey(ts))
+                if (!cache.ContainsKey(ts))
                 {
-                    tsCache.Add(ts, ts);
+                    cache.Add(ts, ts);
                 }
 
-                tileSpaces.Add(tsCache[ts]);
+                tileSpaces.Add(cache[ts]);
             }
 
             return tileSpaces.ToImmutableArray();

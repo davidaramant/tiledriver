@@ -6,7 +6,7 @@ using System.CodeDom.Compiler;
 namespace Tiledriver.Core.FormatModels.Uwmf
 {
     [GeneratedCode("DataModelGenerator", "1.0.0.0")]
-    public sealed partial record TileSpace(
+    public sealed partial record MapSquare(
         int Tile,
         int Sector,
         int Zone,

@@ -154,12 +154,12 @@ namespace Tiledriver.Core.Tests
             });
         }
 
-        private static IEnumerable<TileSpace> CreateGeometry(int width, int height, IEnumerable<Thing> things)
+        private static IEnumerable<MapSquare> CreateGeometry(int width, int height, IEnumerable<Thing> things)
         {
-            var entries = new TileSpace[height, width];
+            var entries = new MapSquare[height, width];
 
-            TileSpace solidTile = new(Tile: 0, Sector: 0, Zone: -1);
-            TileSpace emptyTile = new(Tile: -1, Sector: 0, Zone: 0);
+            MapSquare solidTile = new(Tile: 0, Sector: 0, Zone: -1);
+            MapSquare emptyTile = new(Tile: -1, Sector: 0, Zone: 0);
 
             // ### Build a big empty square
 
@@ -186,7 +186,7 @@ namespace Tiledriver.Core.Tests
             }
 
             // Make the starting nook
-            entries[1, 2] = new TileSpace(Tile: 1, Sector: 0, Zone: 0, Tag: 1);
+            entries[1, 2] = new MapSquare(Tile: 1, Sector: 0, Zone: 0, Tag: 1);
             entries[2, 1] = solidTile;
             entries[2, 2] = solidTile;
 

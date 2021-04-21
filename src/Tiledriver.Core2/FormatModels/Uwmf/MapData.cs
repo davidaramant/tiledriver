@@ -12,18 +12,18 @@ namespace Tiledriver.Core.FormatModels.Uwmf
 
         private sealed class ImmutableBoard : IBoard
         {
-            private readonly ImmutableArray<TileSpace> _planeMap;
+            private readonly ImmutableArray<MapSquare> _planeMap;
 
             public Size Dimensions { get; }
-            public TileSpace this[Position pos] => _planeMap[pos.Y * Dimensions.Width + pos.X];
+            public MapSquare this[Position pos] => _planeMap[pos.Y * Dimensions.Width + pos.X];
 
-            public ImmutableBoard(Size dimensions, ImmutableArray<TileSpace> planeMap)
+            public ImmutableBoard(Size dimensions, ImmutableArray<MapSquare> planeMap)
             {
                 Dimensions = dimensions;
                 _planeMap = planeMap;
             }
 
-            public ImmutableArray<TileSpace> ToPlaneMap() => _planeMap;        
+            public ImmutableArray<MapSquare> ToPlaneMap() => _planeMap;        
             public Canvas ToCanvas() => new Canvas(Dimensions).Fill(_planeMap);
         }
 

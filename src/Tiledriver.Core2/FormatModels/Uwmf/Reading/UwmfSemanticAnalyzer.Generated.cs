@@ -114,7 +114,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
             var sectorBuilder = ImmutableList.CreateBuilder<Sector>();
             var zoneBuilder = ImmutableList.CreateBuilder<Zone>();
             var planeBuilder = ImmutableList.CreateBuilder<Plane>();
-            var planeMapBuilder = ImmutableList.CreateBuilder<ImmutableArray<TileSpace>>();
+            var planeMapBuilder = ImmutableList.CreateBuilder<ImmutableArray<MapSquare>>();
             var thingBuilder = ImmutableList.CreateBuilder<Thing>();
             var triggerBuilder = ImmutableList.CreateBuilder<Trigger>();
 
