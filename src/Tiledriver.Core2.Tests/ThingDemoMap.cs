@@ -123,8 +123,8 @@ namespace Tiledriver.Core.Tests
         {
             var indexedActorGroups =
                 Actor.GetAll()
-                .Where(a => a.Category != "Special")
-                .GroupBy(a => a.Category)
+                .Where(a => a.ActorCategory != ActorCategory.Special)
+                .GroupBy(a => a.ActorCategory)
                 .Select((group, index) => new { group, index });
 
             return indexedActorGroups.SelectMany(iag => GenerateThings(iag.group, iag.index));
