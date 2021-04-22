@@ -107,7 +107,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
                 Comment: GetOptionalFieldValue<string>(fields, "comment", "")
             );
         }
-        public static MapData ReadMapData(IEnumerable<IGlobalExpression> ast)
+        public static MapData ReadMapData(IEnumerable<IExpression> ast)
         {
             Dictionary<Identifier, Token> fields = new();
             var block = new IdentifierToken(FilePosition.StartOfFile, "MapData");

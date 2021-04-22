@@ -6,5 +6,5 @@ using Tiledriver.Core.FormatModels.Common.UnifiedLexing;
 
 namespace Tiledriver.Core.FormatModels.Uwmf.Reading.AbstractSyntaxTree
 {
-    public sealed record IntTupleBlock(IdentifierToken Name, ImmutableArray<IntTuple> Tuples) : IGlobalExpression;
+    public sealed record IntTupleBlock(IdentifierToken Name, ImmutableArray<IntTuple> Tuples) : IExpression;
 }

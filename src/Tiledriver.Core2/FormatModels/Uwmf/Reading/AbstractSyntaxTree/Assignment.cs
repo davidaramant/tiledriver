@@ -7,7 +7,7 @@ using Tiledriver.Core.FormatModels.Common.UnifiedLexing;
 namespace Tiledriver.Core.FormatModels.Uwmf.Reading.AbstractSyntaxTree
 {
     [DebuggerDisplay("{ToString()}")]
-    public sealed record Assignment(IdentifierToken Name, Token Value) : IGlobalExpression
+    public sealed record Assignment(IdentifierToken Name, Token Value) : IExpression
     {
         public string ValueAsString() => Value switch
         {

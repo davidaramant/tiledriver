@@ -11,7 +11,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
 {
     public static class UwmfParser
     {
-        public static IEnumerable<IGlobalExpression> Parse(IEnumerable<Token> tokens)
+        public static IEnumerable<IExpression> Parse(IEnumerable<Token> tokens)
         {
             using var tokenStream = tokens.GetEnumerator();
             while (tokenStream.MoveNext())
@@ -74,7 +74,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
             return new Assignment(id, valueToken);
         }
 
-        private static IGlobalExpression ParseBlockOrTupleList(IdentifierToken name, IEnumerator<Token> tokenStream)
+        private static IExpression ParseBlockOrTupleList(IdentifierToken name, IEnumerator<Token> tokenStream)
         {
             var token = GetNext(tokenStream);
             switch (token)

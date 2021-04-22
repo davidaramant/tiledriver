@@ -8,7 +8,7 @@ using Tiledriver.Core.FormatModels.Common.UnifiedLexing;
 
 namespace Tiledriver.Core.FormatModels.Uwmf.Reading.AbstractSyntaxTree
 {
-    public sealed record Block(IdentifierToken Name, ImmutableArray<Assignment> Fields) : IGlobalExpression
+    public sealed record Block(IdentifierToken Name, ImmutableArray<Assignment> Fields) : IExpression
     {
         public IReadOnlyDictionary<Identifier, Token> GetFieldAssignments()
         {
