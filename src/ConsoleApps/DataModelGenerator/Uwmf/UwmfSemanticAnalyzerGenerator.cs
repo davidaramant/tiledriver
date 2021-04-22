@@ -27,6 +27,7 @@ namespace Tiledriver.DataModelGenerator.Uwmf
                 "System.Collections.Generic",
                 "System.Collections.Immutable",
                 "Tiledriver.Core.FormatModels.Common",
+                "Tiledriver.Core.FormatModels.Common.UnifiedLexing",
                 "Tiledriver.Core.FormatModels.Uwmf.Reading.AbstractSyntaxTree",
             };
 

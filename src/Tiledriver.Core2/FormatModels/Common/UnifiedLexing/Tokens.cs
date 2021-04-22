@@ -1,9 +1,7 @@
 ﻿// Copyright (c) 2019, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using Tiledriver.Core.FormatModels.Common;
-
-namespace Tiledriver.Core.FormatModels.Uwmf.Reading
+namespace Tiledriver.Core.FormatModels.Common.UnifiedLexing
 {
     public abstract record Token(FilePosition Location);
 

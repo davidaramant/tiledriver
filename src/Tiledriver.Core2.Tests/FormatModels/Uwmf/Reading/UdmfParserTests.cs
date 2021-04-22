@@ -1,14 +1,16 @@
 ﻿// Copyright (c) 2019, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
-using Xunit;
+
 using FluentAssertions;
-using Tiledriver.Core.FormatModels.Common;
-using Tiledriver.Core.FormatModels.Uwmf.Reading;
-using Tiledriver.Core.FormatModels.Uwmf.Reading.AbstractSyntaxTree;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Tiledriver.Core.FormatModels.Common;
+using Tiledriver.Core.FormatModels.Common.UnifiedLexing;
+using Tiledriver.Core.FormatModels.Uwmf.Reading;
+using Tiledriver.Core.FormatModels.Uwmf.Reading.AbstractSyntaxTree;
 using Tiledriver.Core.FormatModels.Uwmf.Writing;
+using Xunit;
 
 namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Reading
 {

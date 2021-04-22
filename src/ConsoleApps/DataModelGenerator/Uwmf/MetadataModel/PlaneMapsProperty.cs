@@ -5,8 +5,8 @@ namespace Tiledriver.DataModelGenerator.Uwmf.MetadataModel
 {
     sealed class PlaneMapsProperty : CollectionProperty
     {
-        public override string PropertyType => "ImmutableList<ImmutableArray<TileSpace>>";
-        public override string ElementTypeName => "ImmutableArray<TileSpace>";
+        public override string PropertyType => "ImmutableList<ImmutableArray<MapSquare>>";
+        public override string ElementTypeName => "ImmutableArray<MapSquare>";
 
         public PlaneMapsProperty() : base("planeMap")
         {
