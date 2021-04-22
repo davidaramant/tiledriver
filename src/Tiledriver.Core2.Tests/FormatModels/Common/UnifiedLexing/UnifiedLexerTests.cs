@@ -10,9 +10,9 @@ using Tiledriver.Core.FormatModels.Common.UnifiedLexing;
 using Tiledriver.Core.FormatModels.Uwmf.Writing;
 using Xunit;
 
-namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Reading
+namespace Tiledriver.Core.Tests.FormatModels.Common.UnifiedLexing
 {
-    public sealed class UwmfLexerTests
+    public sealed class UnifiedLexerTests
     {
         [Theory]
         [InlineData("0", 0)]
@@ -122,12 +122,12 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Reading
         private static Token[] Scan(string input)
         {
             using var stringReader = new StringReader(input);
-            var lexer = new UwmfLexer(stringReader);
+            var lexer = new UnifiedLexer(stringReader);
             return lexer.Scan().ToArray();
         }
 
         [Fact]
-        public void ShouldHandleLexingDemoMap()
+        public void ShouldHandleLexingThingDemoMap()
         {
             var map = ThingDemoMap.Create();
 
@@ -137,16 +137,25 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Reading
             stream.Position = 0;
 
             using var textReader = new StreamReader(stream, Encoding.ASCII);
-            var lexer = new UwmfLexer(textReader);
+            var lexer = new UnifiedLexer(textReader);
             var result = lexer.Scan().ToArray();
         }
 
         [Fact]
-        public void ShouldLexTestFile()
+        public void ShouldLexUwmfTestFile()
+        {
+            using var stream = TestFile.Uwmf.TEXTMAP;
+            using var textReader = new StreamReader(stream, Encoding.ASCII);
+            var lexer = new UnifiedLexer(textReader);
+            var result = lexer.Scan().ToArray();
+        }
+
+        [Fact]
+        public void ShouldLexXlatTestFile()
         {
             using var stream = TestFile.Xlat.spear;
             using var textReader = new StreamReader(stream, Encoding.ASCII);
-            var lexer = new UwmfLexer(textReader);
+            var lexer = new UnifiedLexer(textReader);
             var result = lexer.Scan().ToArray();
         }
     }

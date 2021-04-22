@@ -109,7 +109,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Reading
             stream.Position = 0;
 
             using var textReader = new StreamReader(stream, Encoding.ASCII);
-            var lexer = new UwmfLexer(textReader);
+            var lexer = new UnifiedLexer(textReader);
             var result = UwmfParser.Parse(lexer.Scan()).ToArray();
         }
 
@@ -119,7 +119,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Reading
             using var stream = TestFile.Uwmf.TEXTMAP;
 
             using var textReader = new StreamReader(stream, Encoding.ASCII);
-            var lexer = new UwmfLexer(textReader);
+            var lexer = new UnifiedLexer(textReader);
             var result = UwmfParser.Parse(lexer.Scan()).ToArray();
         }
     }

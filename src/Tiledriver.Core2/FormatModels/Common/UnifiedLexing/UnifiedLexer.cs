@@ -7,14 +7,17 @@ using System.Text;
 
 namespace Tiledriver.Core.FormatModels.Common.UnifiedLexing
 {
-    public sealed class UwmfLexer
+    /// <summary>
+    /// Lexer for both UWMF and XLAT formats.
+    /// </summary>
+    public sealed class UnifiedLexer
     {
         private readonly TextReader _reader;
         private FilePosition _currentPosition = FilePosition.StartOfFile;
         private const char Null = '\0';
         private readonly StringBuilder _tokenBuffer = new();
 
-        public UwmfLexer(TextReader reader) => _reader = reader;
+        public UnifiedLexer(TextReader reader) => _reader = reader;
 
         public IEnumerable<Token> Scan()
         {

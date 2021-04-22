@@ -23,7 +23,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Reading
             stream.Position = 0;
 
             using var textReader = new StreamReader(stream, Encoding.ASCII);
-            var roundTripped = UwmfSemanticAnalyzer.ReadMapData(UwmfParser.Parse(new UwmfLexer(textReader).Scan()));
+            var roundTripped = UwmfSemanticAnalyzer.ReadMapData(UwmfParser.Parse(new UnifiedLexer(textReader).Scan()));
 
             UwmfComparison.AssertEqual(roundTripped, map);
         }        
@@ -33,7 +33,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Reading
         {
             using var stream = TestFile.Uwmf.TEXTMAP;
             using var textReader = new StreamReader(stream, Encoding.ASCII);
-            UwmfSemanticAnalyzer.ReadMapData(UwmfParser.Parse(new UwmfLexer(textReader).Scan()));
+            UwmfSemanticAnalyzer.ReadMapData(UwmfParser.Parse(new UnifiedLexer(textReader).Scan()));
         }
     }
 }
