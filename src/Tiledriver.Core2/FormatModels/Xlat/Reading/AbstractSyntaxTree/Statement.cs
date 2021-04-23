@@ -5,7 +5,7 @@ using System.Collections.Immutable;
 using Tiledriver.Core.FormatModels.Common.UnifiedReading;
 using Tiledriver.Core.FormatModels.Common.UnifiedReading.AbstractSyntaxTree;
 
-namespace Tiledriver.Core.FormatModels.Uwmf.Reading.AbstractSyntaxTree
+namespace Tiledriver.Core.FormatModels.Xlat.Reading.AbstractSyntaxTree
 {
-    public sealed record IntTupleBlock(IdentifierToken Name, ImmutableArray<IntTuple> Tuples) : IExpression;
+    public sealed record Statement(ImmutableArray<IdentifierToken> Components) : IExpression;
 }

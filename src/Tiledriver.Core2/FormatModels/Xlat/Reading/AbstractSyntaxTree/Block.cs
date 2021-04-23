@@ -7,9 +7,13 @@ using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Common.UnifiedReading;
 using Tiledriver.Core.FormatModels.Common.UnifiedReading.AbstractSyntaxTree;
 
-namespace Tiledriver.Core.FormatModels.Uwmf.Reading.AbstractSyntaxTree
+namespace Tiledriver.Core.FormatModels.Xlat.Reading.AbstractSyntaxTree
 {
-    public sealed record Block(IdentifierToken Name, ImmutableArray<Assignment> Fields) : IExpression
+    public sealed record Block(
+        IdentifierToken Name, 
+        ushort OldName, 
+        ImmutableArray<IdentifierToken> Attributes,
+        ImmutableArray<Assignment> Fields) : IExpression
     {
         public IReadOnlyDictionary<Identifier, Token> GetFieldAssignments()
         {

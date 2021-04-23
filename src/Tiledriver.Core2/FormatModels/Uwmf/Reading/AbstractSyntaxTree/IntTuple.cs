@@ -3,7 +3,7 @@
 
 using System.Collections.Immutable;
 using Tiledriver.Core.FormatModels.Common;
-using Tiledriver.Core.FormatModels.Common.UnifiedLexing;
+using Tiledriver.Core.FormatModels.Common.UnifiedReading;
 
 namespace Tiledriver.Core.FormatModels.Uwmf.Reading.AbstractSyntaxTree
 {

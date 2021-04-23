@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Tiledriver.Core.FormatModels.Common.UnifiedLexing
+namespace Tiledriver.Core.FormatModels.Common.UnifiedReading
 {
     /// <summary>
     /// Lexer for both UWMF and XLAT formats.

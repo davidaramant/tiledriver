@@ -27,7 +27,8 @@ namespace Tiledriver.DataModelGenerator.Uwmf
                 "System.Collections.Generic",
                 "System.Collections.Immutable",
                 "Tiledriver.Core.FormatModels.Common",
-                "Tiledriver.Core.FormatModels.Common.UnifiedLexing",
+                "Tiledriver.Core.FormatModels.Common.UnifiedReading",
+                "Tiledriver.Core.FormatModels.Common.UnifiedReading.AbstractSyntaxTree",
                 "Tiledriver.Core.FormatModels.Uwmf.Reading.AbstractSyntaxTree",
             };
 
@@ -94,7 +95,7 @@ namespace Tiledriver.DataModelGenerator.Uwmf
         private static void CreateGlobalBlockReader(IndentedWriter output, Block block)
         {
             output
-                .Line($"public static {block.ClassName} Read{block.ClassName}(IEnumerable<IGlobalExpression> ast)")
+                .Line($"public static {block.ClassName} Read{block.ClassName}(IEnumerable<IExpression> ast)")
                 .OpenParen()
                 .Line("Dictionary<Identifier, Token> fields = new();")
                 .Line("var block = new IdentifierToken(FilePosition.StartOfFile, \"MapData\");")

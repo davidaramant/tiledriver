@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="FormatModels\Xlat\Reading\" />
     <Folder Include="Utils\" />
   </ItemGroup>
   <ItemGroup>

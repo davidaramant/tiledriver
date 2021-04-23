@@ -6,11 +6,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Tiledriver.Core.FormatModels.Common;
-using Tiledriver.Core.FormatModels.Common.UnifiedLexing;
+using Tiledriver.Core.FormatModels.Common.UnifiedReading;
 using Tiledriver.Core.FormatModels.Uwmf.Writing;
 using Xunit;
 
-namespace Tiledriver.Core.Tests.FormatModels.Common.UnifiedLexing
+namespace Tiledriver.Core.Tests.FormatModels.Common.UnifiedReading
 {
     public sealed class UnifiedLexerTests
     {

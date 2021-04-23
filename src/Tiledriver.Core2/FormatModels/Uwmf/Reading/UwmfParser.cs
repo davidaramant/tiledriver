@@ -5,7 +5,8 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Tiledriver.Core.FormatModels.Common;
-using Tiledriver.Core.FormatModels.Common.UnifiedLexing;
+using Tiledriver.Core.FormatModels.Common.UnifiedReading;
+using Tiledriver.Core.FormatModels.Common.UnifiedReading.AbstractSyntaxTree;
 using Tiledriver.Core.FormatModels.Uwmf.Reading.AbstractSyntaxTree;
 
 namespace Tiledriver.Core.FormatModels.Uwmf.Reading

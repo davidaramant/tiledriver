@@ -2,9 +2,8 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System.Diagnostics;
-using Tiledriver.Core.FormatModels.Common.UnifiedLexing;
 
-namespace Tiledriver.Core.FormatModels.Uwmf.Reading.AbstractSyntaxTree
+namespace Tiledriver.Core.FormatModels.Common.UnifiedReading.AbstractSyntaxTree
 {
     [DebuggerDisplay("{ToString()}")]
     public sealed record Assignment(IdentifierToken Name, Token Value) : IExpression
