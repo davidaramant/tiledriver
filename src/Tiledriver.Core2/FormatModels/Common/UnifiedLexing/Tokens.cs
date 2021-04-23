@@ -17,6 +17,7 @@ namespace Tiledriver.Core.FormatModels.Common.UnifiedLexing
 
     public sealed record IdentifierToken(FilePosition Location, Identifier Id) : Token(Location);
 
+    public sealed record NewLineToken(FilePosition Location) : Token(Location);
     public sealed record EqualsToken(FilePosition Location) : Token(Location);
     public sealed record SemicolonToken(FilePosition Location) : Token(Location);
     public sealed record OpenBraceToken(FilePosition Location) : Token(Location);

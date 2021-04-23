@@ -69,6 +69,7 @@ namespace Tiledriver.Core.FormatModels.Common.UnifiedLexing
                         break;
 
                     case '\n':
+                        yield return new NewLineToken(_currentPosition);
                         SkipChar();
                         _currentPosition = _currentPosition.NextLine();
                         break;
@@ -177,6 +178,13 @@ namespace Tiledriver.Core.FormatModels.Common.UnifiedLexing
                     {
                         SkipChar();
                     }
+
+                    if (PeekChar() == '\n')
+                    {
+                        SkipChar();
+                        _currentPosition = _currentPosition.NextLine();
+                    }
+
                     break;
                 case '*':
                     SkipChar();

@@ -93,16 +93,26 @@ namespace Tiledriver.Core.Tests.FormatModels.Common.UnifiedLexing
             tokens[3].Should().BeOfType<SemicolonToken>();
         }
 
-        [Theory]
-        [InlineData("blockName{}")]
-        [InlineData("blockName\n{\n}\n")]
-        public void ShouldLexBlock(string input)
+        [Fact]
+        public void ShouldLexBlock()
         {
-            var tokens = Scan(input);
+            var tokens = Scan("blockName{}");
             tokens.Should().HaveCount(3);
             tokens[0].Should().BeOfType<IdentifierToken>();
             tokens[1].Should().BeOfType<OpenBraceToken>();
             tokens[2].Should().BeOfType<CloseBraceToken>();
+        }
+
+        [Fact]
+        public void ShouldLexNewLines()
+        {
+            var tokens = Scan("blockName\n{\n}\n");
+            tokens.Should().HaveCount(6);
+            tokens[0].Should().BeOfType<IdentifierToken>();
+            tokens[1].Should().BeOfType<NewLineToken>();
+            tokens[2].Should().BeOfType<OpenBraceToken>();
+            tokens[3].Should().BeOfType<NewLineToken>();
+            tokens[4].Should().BeOfType<CloseBraceToken>();
         }
 
         [Fact]
