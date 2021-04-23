@@ -4,12 +4,11 @@
 using System.Drawing;
 using System.Linq;
 using static HsluvS.Hsluv;
-using Tiledriver.Core.FormatModels.MapMetadata;
 using Tiledriver.Core.Utils;
 
-namespace Tiledriver.Core.FormatModels.SimpleMapImage
+namespace Tiledriver.Core.FormatModels.MapMetadata.Writing
 {
-    public sealed class SimpleMapImageExporter
+    public sealed class MetaMapImageExporter
     {
         public static void Export(MetaMap map, MapPalette palette, string outputFilePath, uint scale = 1)
         {

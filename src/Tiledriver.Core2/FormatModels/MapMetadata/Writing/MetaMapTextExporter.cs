@@ -2,11 +2,10 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System.IO;
-using Tiledriver.Core.FormatModels.MapMetadata;
 
-namespace Tiledriver.Core.FormatModels.SimpleMapText
+namespace Tiledriver.Core.FormatModels.MapMetadata.Writing
 {
-    public static class SimpleMapTextExporter
+    public static class MetaMapTextExporter
     {
         public static void Export(MetaMap map, string outputFilePath, bool unreachableIsSolid = true)
         {

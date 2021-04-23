@@ -2,9 +2,8 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System.Drawing;
-using Tiledriver.Core.FormatModels.MapMetadata;
 
-namespace Tiledriver.Core.FormatModels.SimpleMapImage
+namespace Tiledriver.Core.FormatModels.MapMetadata.Writing
 {
     public sealed record MapPalette(
             Color Empty,
