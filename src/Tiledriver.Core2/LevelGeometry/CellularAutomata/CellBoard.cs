@@ -2,6 +2,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System;
+using System.Linq;
 
 namespace Tiledriver.Core.LevelGeometry.CellularAutomata
 {
@@ -14,10 +15,11 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
         public int Width => Dimensions.Width;
         public int Height => Dimensions.Height;
         public int Generation { get; private set; }
+        public CellType this[Position p] => CurrentBoard[p.Y, p.X];
 
         private CellType[,] CurrentBoard => Generation % 2 == 0 ? _even : _odd;
         private CellType[,] PreviousBoard => Generation % 2 == 0 ? _odd : _even;
-
+        
         public CellBoard(Size dimensions)
         {
             Dimensions = dimensions;
@@ -58,17 +60,21 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
             return this;
         }
 
-        public CellBoard RunGeneration(int minAliveNeighborsToLive)
+        public CellBoard RunGenerations(int generations, int minAliveNeighborsToLive)
         {
-            Generation++;
-
-            for (int row = 0; row < Height; row++)
+            foreach (var g in Enumerable.Range(1, generations))
             {
-                for (int col = 0; col < Width; col++)
-                {
-                    var aliveNeighbors = CountAliveNeighbors(PreviousBoard, row: row, col: col);
+                Generation++;
 
-                    CurrentBoard[row, col] = aliveNeighbors >= minAliveNeighborsToLive ? CellType.Alive : CellType.Dead;
+                for (int row = 0; row < Height; row++)
+                {
+                    for (int col = 0; col < Width; col++)
+                    {
+                        var aliveNeighbors = CountAliveNeighbors(PreviousBoard, row: row, col: col);
+
+                        CurrentBoard[row, col] =
+                            aliveNeighbors >= minAliveNeighborsToLive ? CellType.Alive : CellType.Dead;
+                    }
                 }
             }
 
