@@ -1,14 +1,11 @@
 ﻿// Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
-using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Common.Reading;
-using Tiledriver.Core.FormatModels.Common.Reading.AbstractSyntaxTree;
 
 namespace Tiledriver.Core.FormatModels.Xlat.Reading
 {
@@ -22,15 +19,15 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
             List<IThingMapping> thingMappings = new();
             List<FlatMappings> flatMappings = new();
 
-            var tokenSteam = new TokenStream(tokens, resourceProvider, XlatLexer.Create);
-            using var enumerator = tokenSteam.GetEnumerator();
+            var tokenSource = new TokenSource(tokens, resourceProvider, XlatLexer.Create);
+            using var tokenStream = tokenSource.GetEnumerator();
 
-            while (enumerator.MoveNext())
+            while (tokenStream.MoveNext())
             {
-                var id = enumerator.Current as IdentifierToken;
+                var id = tokenStream.Current as IdentifierToken;
                 if (id == null)
                 {
-                    throw new ParsingException($"Unexpected token: {enumerator.Current}");
+                    throw new ParsingException($"Unexpected token: {tokenStream.Current}");
                 }
 
                 switch (id.Id.ToLower())
@@ -38,23 +35,23 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
                     case "enable":
                     case "disable":
                         // global flag, ignore
-                        ExpectNext<IdentifierToken>(enumerator);
-                        ExpectNext<SemicolonToken>(enumerator);
+                        tokenStream.ExpectNext<IdentifierToken>();
+                        tokenStream.ExpectNext<SemicolonToken>();
                         break;
 
                     case "music":
                         throw new ParsingException("This should be ignored");
 
                     case "tiles":
-                        tileMappings.Add(ParseTileMappings(enumerator));
+                        tileMappings.Add(ParseTileMappings(tokenStream));
                         break;
 
                     case "things":
-                        thingMappings.AddRange(ParseThingMappings(enumerator));
+                        thingMappings.AddRange(ParseThingMappings(tokenStream));
                         break;
 
                     case "flats":
-                        flatMappings.Add(ParseFlatMappings(enumerator));
+                        flatMappings.Add(ParseFlatMappings(tokenStream));
                         break;
 
                     default:
@@ -71,6 +68,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
 
         private static TileMappings Merge(IEnumerable<TileMappings> tileMappings)
         {
+            throw new NotImplementedException();
             return new TileMappings(
                 ImmutableList<AmbushModzone>.Empty,
                 ImmutableList<ChangeTriggerModzone>.Empty,
@@ -81,33 +79,15 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
 
         private static FlatMappings Merge(IEnumerable<FlatMappings> flatMappings)
         {
+            throw new NotImplementedException();
             return new FlatMappings(
                 ImmutableList<string>.Empty,
                 ImmutableList<string>.Empty);
         }
 
-        static ParsingException CreateError(Token? token, string expected)
+        private static TileMappings ParseTileMappings(IEnumerator<Token> tokenStream)
         {
-            if (token == null)
-            {
-                return new ParsingException("Unexpected end of file");
-            }
-            return new ParsingException($"Unexpected token {token.GetType().Name} (expected {expected}) on {token.Location}");
-        }
-
-        static ParsingException CreateError<TExpected>(Token? token) => CreateError(token, typeof(TExpected).Name);
-
-        static Token? GetNext(IEnumerator<Token> enumerator) => enumerator.MoveNext() ? enumerator.Current : null;
-
-        static TExpected ExpectNext<TExpected>(IEnumerator<Token> tokenStream) where TExpected : Token
-        {
-            var nextToken = GetNext(tokenStream);
-            return nextToken is TExpected token ? token : throw CreateError<TExpected>(nextToken);
-        }
-
-        private static TileMappings ParseTileMappings(IEnumerator<Token> enumerator)
-        {
-            ExpectNext<OpenBraceToken>(enumerator);
+            tokenStream.ExpectNext<OpenBraceToken>();
 
             var ambushModzones = new List<AmbushModzone>();
             var changeTriggerModzones = new List<ChangeTriggerModzone>();
@@ -117,7 +97,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
 
             while (true)
             {
-                var token = GetNext(enumerator);
+                var token = tokenStream.GetNext();
                 switch (token)
                 {
                     case IdentifierToken id:
@@ -133,11 +113,11 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
                                 break;
 
                             case "zone":
-                                zoneTemplates.Add(ParseZone(id, enumerator));
+                                zoneTemplates.Add(ParseZone(id, tokenStream));
                                 break;
 
                             default:
-                                throw CreateError(id, "unknown identifier");
+                                throw ParsingException.CreateError(id, "unknown identifier");
                         }
                         break;
 
@@ -150,20 +130,20 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
                             zoneTemplates.ToImmutableList());
 
                     default:
-                        throw CreateError(token, "identifier or end of block");
+                        throw ParsingException.CreateError(token, "identifier or end of block");
                 }
             }
         }
 
         private static ZoneTemplate ParseZone(IdentifierToken id, IEnumerator<Token> tokenStream)
         {
-            var oldNumToken = ExpectNext<IntegerToken>(tokenStream);
+            var oldNumToken = tokenStream.ExpectNext<IntegerToken>();
 
-            var block = ParseBlock(id, tokenStream);
+            var block = tokenStream.ParseBlock(id);
             var fields = block.GetFieldAssignments();
 
             return new ZoneTemplate(
-                oldNumToken.ValueAsUshort(() => CreateError(oldNumToken, "UShort value")),
+                oldNumToken.ValueAsUshort(() => ParsingException.CreateError(oldNumToken, "UShort value")),
                 Comment: fields.GetOptionalFieldValue("comment", ""));
         }
 
@@ -172,11 +152,11 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
             var ceilings = new List<string>();
             var floors = new List<string>();
 
-            ExpectNext<OpenBraceToken>(tokenStream);
+            tokenStream.ExpectNext<OpenBraceToken>();
 
             while (true)
             {
-                var token = GetNext(tokenStream);
+                var token = tokenStream.GetNext();
                 switch (token)
                 {
                     case IdentifierToken id:
@@ -191,7 +171,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
                                 break;
 
                             default:
-                                throw CreateError(id, "unknown identifier");
+                                throw ParsingException.CreateError(id, "unknown identifier");
                         }
                         break;
 
@@ -201,7 +181,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
                             floors.ToImmutableList());
 
                     default:
-                        throw CreateError(token, "identifier or end of block");
+                        throw ParsingException.CreateError(token, "identifier or end of block");
                 }
             }
         }
@@ -210,11 +190,11 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
         {
             var strings = new List<string>();
 
-            ExpectNext<OpenBraceToken>(tokenStream);
+            tokenStream.ExpectNext<OpenBraceToken>();
 
             while (true)
             {
-                var token = GetNext(tokenStream);
+                var token = tokenStream.GetNext();
                 switch (token)
                 {
                     case CommaToken:
@@ -228,53 +208,14 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
                         return strings;
 
                     default:
-                        throw CreateError(token, "identifier or end of block");
+                        throw ParsingException.CreateError(token, "identifier or end of block");
                 }
             }
         }
 
-        private static IEnumerable<IThingMapping> ParseThingMappings(IEnumerator<Token> enumerator)
+        private static IEnumerable<IThingMapping> ParseThingMappings(IEnumerator<Token> tokenStream)
         {
-            return Enumerable.Empty<IThingMapping>();
-        }
-
-        private static Block ParseBlock(IdentifierToken name, IEnumerator<Token> tokenStream)
-        {
-            var assignments = new List<Assignment>();
-
-            while (true)
-            {
-                var token = GetNext(tokenStream);
-                switch (token)
-                {
-                    case IdentifierToken i:
-                        ExpectNext<EqualsToken>(tokenStream);
-                        assignments.Add(ParseAssignment(i, tokenStream));
-                        break;
-                    case CloseBraceToken cb:
-                        return new Block(name, assignments.ToImmutableArray());
-                    default:
-                        throw CreateError(token, "identifier or end of block");
-                }
-            }
-        }
-
-        private static Assignment ParseAssignment(IdentifierToken id, IEnumerator<Token> tokenStream)
-        {
-            var valueToken = GetNext(tokenStream);
-            switch (valueToken)
-            {
-                case IntegerToken i: break;
-                case FloatToken f: break;
-                case BooleanToken b: break;
-                case StringToken s: break;
-                default:
-                    throw CreateError(valueToken, "value");
-            }
-
-            ExpectNext<SemicolonToken>(tokenStream);
-
-            return new Assignment(id, valueToken);
+            throw new NotImplementedException();
         }
     }
 }

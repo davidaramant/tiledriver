@@ -19,65 +19,28 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
             {
                 if (tokenStream.Current is IdentifierToken i)
                 {
-                    switch (GetNext(tokenStream))
+                    switch (tokenStream.GetNext())
                     {
                         case OpenBraceToken _:
                             yield return ParseBlockOrTupleList(i, tokenStream);
                             break;
                         case EqualsToken _:
-                            yield return ParseAssignment(i, tokenStream);
+                            yield return tokenStream.ParseAssignment(i);
                             break;
                         default:
-                            throw CreateError(tokenStream.Current, "open brace or equals");
+                            throw ParsingException.CreateError(tokenStream.Current, "open brace or equals");
                     }
                 }
                 else
                 {
-                    throw CreateError<IdentifierToken>(tokenStream.Current);
+                    throw ParsingException.CreateError<IdentifierToken>(tokenStream.Current);
                 }
             }
         }
 
-        static ParsingException CreateError(Token? token, string expected)
-        {
-            if (token == null)
-            {
-                return new ParsingException("Unexpected end of file");
-            }
-            return new ParsingException($"Unexpected token {token.GetType().Name} (expected {expected}) on {token.Location}");
-        }
-
-        static ParsingException CreateError<TExpected>(Token? token) => CreateError(token, typeof(TExpected).Name);
-
-        static Token? GetNext(IEnumerator<Token> enumerator) => enumerator.MoveNext() ? enumerator.Current : null;
-
-        static TExpected ExpectNext<TExpected>(IEnumerator<Token> tokenStream) where TExpected : Token
-        {
-            var nextToken = GetNext(tokenStream);
-            return nextToken is TExpected token ? token : throw CreateError<TExpected>(nextToken);
-        }
-
-        private static Assignment ParseAssignment(IdentifierToken id, IEnumerator<Token> tokenStream)
-        {
-            var valueToken = GetNext(tokenStream);
-            switch (valueToken)
-            {
-                case IntegerToken i: break;
-                case FloatToken f: break;
-                case BooleanToken b: break;
-                case StringToken s: break;
-                default:
-                    throw CreateError(valueToken, "value");
-            }
-
-            ExpectNext<SemicolonToken>(tokenStream);
-
-            return new Assignment(id, valueToken);
-        }
-
         private static IExpression ParseBlockOrTupleList(IdentifierToken name, IEnumerator<Token> tokenStream)
         {
-            var token = GetNext(tokenStream);
+            var token = tokenStream.GetNext();
             switch (token)
             {
                 case OpenBraceToken ob:
@@ -89,7 +52,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
                 case IdentifierToken i:
                     return ParseBlock(name, i, tokenStream);
                 default:
-                    throw CreateError(token, "identifier, end of block, or start of tuple");
+                    throw ParsingException.CreateError(token, "identifier, end of block, or start of tuple");
             }
         }
 
@@ -97,22 +60,22 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
         {
             var assignments = new List<Assignment>();
 
-            ExpectNext<EqualsToken>(tokenStream);
-            assignments.Add(ParseAssignment(fieldName, tokenStream));
+            tokenStream.ExpectNext<EqualsToken>();
+            assignments.Add(tokenStream.ParseAssignment(fieldName));
 
             while (true)
             {
-                var token = GetNext(tokenStream);
+                var token = tokenStream.GetNext();
                 switch (token)
                 {
                     case IdentifierToken i:
-                        ExpectNext<EqualsToken>(tokenStream);
-                        assignments.Add(ParseAssignment(i, tokenStream));
+                        tokenStream.ExpectNext<EqualsToken>();
+                        assignments.Add(tokenStream.ParseAssignment(i));
                         break;
                     case CloseBraceToken cb:
                         return new Block(name, assignments.ToImmutableArray());
                     default:
-                        throw CreateError(token, "identifier or end of block");
+                        throw ParsingException.CreateError(token, "identifier or end of block");
                 }
             }
         }
@@ -124,11 +87,11 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
 
             while (true)
             {
-                var token = GetNext(tokenStream);
+                var token = tokenStream.GetNext();
                 switch (token)
                 {
                     case CommaToken _:
-                        var openBrace = ExpectNext<OpenBraceToken>(tokenStream);
+                        var openBrace = tokenStream.ExpectNext<OpenBraceToken>();
                         tuples.Add(ParseIntTuple(openBrace.Location, tokenStream));
                         break;
 
@@ -136,7 +99,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
                         return new IntTupleBlock(name, tuples.ToImmutable());
 
                     default:
-                        throw CreateError(token, "comma or end of block");
+                        throw ParsingException.CreateError(token, "comma or end of block");
                 }
             }
 
@@ -146,7 +109,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
         {
             var ints = ImmutableList.CreateBuilder<IntegerToken>();
 
-            var token = GetNext(tokenStream);
+            var token = tokenStream.GetNext();
             switch (token)
             {
                 case CloseBraceToken _:
@@ -155,32 +118,32 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
                     ints.Add(i);
                     break;
                 default:
-                    throw CreateError(token, "integer or end of tuple");
+                    throw ParsingException.CreateError(token, "integer or end of tuple");
             }
 
             while (true)
             {
-                token = GetNext(tokenStream);
+                token = tokenStream.GetNext();
                 switch (token)
                 {
                     case CloseBraceToken _:
                         return new IntTuple(startLocation, ints.ToImmutable());
 
                     case CommaToken _:
-                        token = GetNext(tokenStream);
+                        token = tokenStream.GetNext();
                         if (token is IntegerToken i)
                         {
                             ints.Add(i);
                         }
                         else
                         {
-                            throw CreateError(token, "integer");
+                            throw ParsingException.CreateError(token, "integer");
                         }
 
                         break;
 
                     default:
-                        throw CreateError(token, "Comma or end of tuple");
+                        throw ParsingException.CreateError(token, "Comma or end of tuple");
                 }
             }
         }

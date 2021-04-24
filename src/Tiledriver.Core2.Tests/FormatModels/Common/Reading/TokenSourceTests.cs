@@ -13,7 +13,7 @@ using Xunit;
 
 namespace Tiledriver.Core.Tests.FormatModels.Common.Reading
 {
-    public sealed class TokenStreamTests
+    public sealed class TokenSourceTests
     {
         [Fact]
         public void ShouldReturnAllTokensInNormalFile()
@@ -24,7 +24,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Common.Reading
                 new IdentifierToken(FilePosition.StartOfFile, "id2")
             };
 
-            var stream = new TokenStream(
+            var stream = new TokenSource(
                 tokens, 
                 Mock.Of<IResourceProvider>(),
                 reader => throw new Exception("Shouldn't be called"));
@@ -55,7 +55,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Common.Reading
             var mockProvider = new Mock<IResourceProvider>();
             mockProvider.Setup(_ => _.Lookup("otherFile")).Returns(otherFileStream);
 
-            var stream = new TokenStream(
+            var stream = new TokenSource(
                 firstFileTokens, 
                 mockProvider.Object,
                 reader => new UnifiedLexer(reader));

@@ -17,13 +17,13 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
     /// ever used as a top-level construct to pull in another file. Perhaps it should be made a
     /// bit more explicit, but this works for all the formats Tiledriver currently parses.
     /// </remarks>
-    public sealed class TokenStream : IEnumerable<Token>
+    public sealed class TokenSource : IEnumerable<Token>
     {
         private readonly IEnumerable<Token> _tokens;
         private readonly IResourceProvider _provider;
         private readonly Func<TextReader, UnifiedLexer> _createLexer;
 
-        public TokenStream(
+        public TokenSource(
             IEnumerable<Token> tokens,
             IResourceProvider provider,
             Func<TextReader, UnifiedLexer> createLexer)
@@ -53,7 +53,7 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
                     using var includeStream = _provider.Lookup(path);
                     using var reader = new StreamReader(includeStream, Encoding.ASCII, leaveOpen: true);
                     var lexer = _createLexer(reader);
-                    var nestedTokenStream = new TokenStream(lexer.Scan(), _provider, _createLexer);
+                    var nestedTokenStream = new TokenSource(lexer.Scan(), _provider, _createLexer);
                     foreach (var token in nestedTokenStream)
                     {
                         yield return token;
