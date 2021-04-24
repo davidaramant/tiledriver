@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Metadata.Ecma335;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Common.Reading;
 using Tiledriver.Core.FormatModels.Common.Reading.AbstractSyntaxTree;
@@ -166,11 +167,70 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
                 Comment: fields.GetOptionalFieldValue("comment", ""));
         }
 
-        private static FlatMappings ParseFlatMappings(IEnumerator<Token> enumerator)
+        private static FlatMappings ParseFlatMappings(IEnumerator<Token> tokenStream)
         {
-            return new FlatMappings(
-                ImmutableList<string>.Empty,
-                ImmutableList<string>.Empty);
+            var ceilings = new List<string>();
+            var floors = new List<string>();
+
+            ExpectNext<OpenBraceToken>(tokenStream);
+
+            while (true)
+            {
+                var token = GetNext(tokenStream);
+                switch (token)
+                {
+                    case IdentifierToken id:
+                        switch (id.Id.ToLower())
+                        {
+                            case "ceiling":
+                                ceilings.AddRange(ParseStringList(tokenStream));
+                                break;
+
+                            case "floor":
+                                floors.AddRange(ParseStringList(tokenStream));
+                                break;
+
+                            default:
+                                throw CreateError(id, "unknown identifier");
+                        }
+                        break;
+
+                    case CloseBraceToken:
+                        return new FlatMappings(
+                            ceilings.ToImmutableList(),
+                            floors.ToImmutableList());
+
+                    default:
+                        throw CreateError(token, "identifier or end of block");
+                }
+            }
+        }
+
+        private static List<string> ParseStringList(IEnumerator<Token> tokenStream)
+        {
+            var strings = new List<string>();
+
+            ExpectNext<OpenBraceToken>(tokenStream);
+
+            while (true)
+            {
+                var token = GetNext(tokenStream);
+                switch (token)
+                {
+                    case CommaToken:
+                        break;
+
+                    case StringToken s:
+                        strings.Add(s.Value);
+                        break;
+
+                    case CloseBraceToken:
+                        return strings;
+
+                    default:
+                        throw CreateError(token, "identifier or end of block");
+                }
+            }
         }
 
         private static IEnumerable<IThingMapping> ParseThingMappings(IEnumerator<Token> enumerator)
