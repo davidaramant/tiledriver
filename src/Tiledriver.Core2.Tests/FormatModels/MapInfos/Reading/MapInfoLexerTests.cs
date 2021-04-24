@@ -1,0 +1,44 @@
+﻿// Copyright (c) 2021, David Aramant
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+
+
+using System.IO;
+using System.Linq;
+using System.Text;
+using Tiledriver.Core.FormatModels.Common.Reading;
+using Tiledriver.Core.FormatModels.MapInfos.Reading;
+using Xunit;
+
+namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Reading
+{
+    public sealed class MapInfoLexerTests
+    {
+        [Fact]
+        public void ShouldLexWolfCommonMapInfoTestFile()
+        {
+            using var stream = TestFile.MapInfo.wolfcommon;
+            using var textReader = new StreamReader(stream, Encoding.ASCII);
+            var lexer = MapInfoLexer.Create(textReader);
+            var result = lexer.Scan().ToArray();
+        }
+
+        [Fact]
+        public void ShouldLexWolf3DMapInfoTestFile()
+        {
+            using var stream = TestFile.MapInfo.wolf3d;
+            using var textReader = new StreamReader(stream, Encoding.ASCII);
+            var lexer = new UnifiedLexer(textReader, reportNewlines: true);
+            var result = lexer.Scan().ToArray();
+        }
+
+        [Fact]
+        public void ShouldLexSpearMapInfoTestFile()
+        {
+            using var stream = TestFile.MapInfo.spear;
+            using var textReader = new StreamReader(stream, Encoding.ASCII);
+            var lexer = new UnifiedLexer(textReader, reportNewlines: true);
+            var result = lexer.Scan().ToArray();
+        }
+
+    }
+}
