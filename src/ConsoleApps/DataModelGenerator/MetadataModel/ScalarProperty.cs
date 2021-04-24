@@ -3,7 +3,7 @@
 
 using Tiledriver.DataModelGenerator.Utilities;
 
-namespace Tiledriver.DataModelGenerator.Xlat.MetadataModel
+namespace Tiledriver.DataModelGenerator.MetadataModel
 {
     abstract class ScalarProperty : Property
     {

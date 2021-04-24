@@ -4,6 +4,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using Tiledriver.DataModelGenerator.MetadataModel;
 using Tiledriver.DataModelGenerator.Utilities;
 using Tiledriver.DataModelGenerator.Uwmf.MetadataModel;
 

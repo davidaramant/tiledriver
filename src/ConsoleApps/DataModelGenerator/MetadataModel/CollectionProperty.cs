@@ -3,7 +3,7 @@
 
 using Tiledriver.DataModelGenerator.Utilities;
 
-namespace Tiledriver.DataModelGenerator.Uwmf.MetadataModel
+namespace Tiledriver.DataModelGenerator.MetadataModel
 {
     abstract class CollectionProperty : Property
     {
