@@ -19,7 +19,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
             List<IThingMapping> thingMappings = new();
             List<FlatMappings> flatMappings = new();
 
-            var tokenSteam = new TokenStream(tokens, resourceProvider);
+            var tokenSteam = new TokenStream(tokens, resourceProvider, XlatLexer.Create);
             using var enumerator = tokenSteam.GetEnumerator();
 
             while (enumerator.MoveNext())
@@ -85,7 +85,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
 
         private static void Skip<TTOken>(IEnumerator<Token> enumerator) where TTOken : Token
         {
-            if (!enumerator.MoveNext() || enumerator.Current is TTOken)
+            if (!enumerator.MoveNext() || enumerator.Current is not TTOken)
             {
                 throw new ParsingException($"Unexpected token: {enumerator.Current}");
             }

@@ -3,17 +3,8 @@
 
 namespace Tiledriver.Core.FormatModels.Common
 {
-    public readonly struct FilePosition
+    public sealed record FilePosition(int Line, int Column)
     {
-        public int Line { get; }
-        public int Column { get; }
-
-        private FilePosition(int line, int column)
-        {
-            Line = line;
-            Column = column;
-        }
-
         public static readonly FilePosition StartOfFile = new (1, 1);
         public FilePosition NextChar() => new (Line, Column + 1);
         public FilePosition NextLine() => new (Line + 1, 1);
