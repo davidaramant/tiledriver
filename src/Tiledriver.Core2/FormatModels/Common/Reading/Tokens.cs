@@ -1,6 +1,8 @@
 ﻿// Copyright (c) 2019, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
+using System;
+
 namespace Tiledriver.Core.FormatModels.Common.Reading
 {
     public abstract record Token(FilePosition Location);
@@ -10,7 +12,18 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
         public override string ToString() => $"{GetType().Name}: {Value}";
     }
 
-    public sealed record IntegerToken(FilePosition Location, int Value) : ValueToken<int>(Location, Value);
+    public sealed record IntegerToken(FilePosition Location, int Value) : ValueToken<int>(Location, Value)
+    {
+        public ushort ValueAsUshort(Func<Exception> failure)
+        {
+            if (Value is >= 0 and <= ushort.MaxValue)
+            {
+                return (ushort) Value;
+            }
+
+            throw failure();
+        }
+    }
     public sealed record FloatToken(FilePosition Location, double Value) : ValueToken<double>(Location, Value);
     public sealed record BooleanToken(FilePosition Location, bool Value) : ValueToken<bool>(Location, Value);
     public sealed record StringToken(FilePosition Location, string Value) : ValueToken<string>(Location, Value);
