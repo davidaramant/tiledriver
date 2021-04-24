@@ -3,7 +3,7 @@
 
 using System.Diagnostics;
 
-namespace Tiledriver.Core.FormatModels.Common.UnifiedReading.AbstractSyntaxTree
+namespace Tiledriver.Core.FormatModels.Common.Reading.AbstractSyntaxTree
 {
     [DebuggerDisplay("{ToString()}")]
     public sealed record Assignment(IdentifierToken Name, Token Value) : IExpression

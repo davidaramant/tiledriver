@@ -3,7 +3,7 @@
 
 using System.IO;
 using System.Text;
-using Tiledriver.Core.FormatModels.Common.UnifiedReading;
+using Tiledriver.Core.FormatModels.Common.Reading;
 
 namespace Tiledriver.Core.FormatModels.Uwmf.Reading
 {
