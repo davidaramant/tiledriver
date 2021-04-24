@@ -154,18 +154,16 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
             }
         }
 
-        // TODO: Move a lot of the stuff in UwmfSemanticAnalyzer to a common place
-
         private static ZoneTemplate ParseZone(IdentifierToken id, IEnumerator<Token> tokenStream)
         {
             var oldNumToken = ExpectNext<IntegerToken>(tokenStream);
 
             var block = ParseBlock(id, tokenStream);
-            var lookup = block.GetFieldAssignments();
+            var fields = block.GetFieldAssignments();
 
             return new ZoneTemplate(
                 oldNumToken.ValueAsUshort(() => CreateError(oldNumToken, "UShort value")),
-                Comment: "");
+                Comment: fields.GetOptionalFieldValue("comment", ""));
         }
 
         private static FlatMappings ParseFlatMappings(IEnumerator<Token> enumerator)
