@@ -30,12 +30,12 @@ Tiledriver is licensed with the BSD 3-clause license.  See the file LICENSE for 
 - [ ] The GUI project is broken under .NET 5
 - [ ] The parsing system is old and ugly; Sector Director has a much nicer one
   - [ ] Get rid of T4 templates
-  - [ ] UWMF
+  - [X] UWMF
   - [ ] XLAT
   - [ ] MapInfo
 - [ ] There is way too much "temporary" code hanging out in `ECWolfLaucher`
 - [X] There is a `SteamGameSearcher` class that deals with the Windows Registry. Where is this supposed to live? Can you make a truly cross-platform console app in .NET 5?
-- [ ] Transition to XUnit/FluentAssertions. Maybe NUnit is causing that weird test failure on Ubuntu
+- [X] Transition to XUnit/FluentAssertions. Maybe NUnit is causing that weird test failure on Ubuntu
 
 ### Level Generation
 
