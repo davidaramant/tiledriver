@@ -3,7 +3,6 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Common.Reading;
 using Tiledriver.Core.FormatModels.Common.Reading.AbstractSyntaxTree;
@@ -15,9 +14,6 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
     {
         public static IEnumerable<IExpression> Parse(IEnumerable<Token> tokens)
         {
-            // UWMF does not care about newlines
-            tokens = tokens.Where(t => t is not NewLineToken);
-
             using var tokenStream = tokens.GetEnumerator();
             while (tokenStream.MoveNext())
             {

@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Tiledriver.Core.FormatModels.Common.Reading
@@ -13,13 +14,36 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
     public sealed class UnifiedLexer
     {
         private readonly TextReader _reader;
+        private readonly bool _reportNewlines;
+        private readonly bool _allowDollarIdentifiers;
+        private readonly bool _allowPipes;
         private FilePosition _currentPosition = FilePosition.StartOfFile;
         private const char Null = '\0';
         private readonly StringBuilder _tokenBuffer = new();
 
-        public UnifiedLexer(TextReader reader) => _reader = reader;
+        public UnifiedLexer(
+            TextReader reader, 
+            bool reportNewlines = false, 
+            bool allowDollarIdentifiers = false,
+            bool allowPipes = false)
+        {
+            _reader = reader;
+            _reportNewlines = reportNewlines;
+            _allowDollarIdentifiers = allowDollarIdentifiers;
+            _allowPipes = allowPipes;
+        }
 
         public IEnumerable<Token> Scan()
+        {
+            if (_reportNewlines)
+            {
+                return ScanInternal();
+            }
+
+            return ScanInternal().Where(t => t is not NewLineToken);
+        }
+
+        private IEnumerable<Token> ScanInternal()
         {
             char next = PeekChar();
             while (next != Null)
@@ -59,7 +83,7 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
                         yield return LexString();
                         break;
 
-                    case char idStart when char.IsLetter(next):
+                    case char when char.IsLetter(next):
                     case '_':
                         yield return LexIdentifier();
                         break;
@@ -74,13 +98,24 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
                         _currentPosition = _currentPosition.NextLine();
                         break;
 
-                    case char ws when char.IsWhiteSpace(next):
+                    case char when char.IsWhiteSpace(next):
+                        SkipChar();
+                        break;
+
+                    case '$' when _allowDollarIdentifiers:
+                        yield return LexIdentifier();
+                        break;
+
+                    case '|' when _allowPipes:
+                        yield return new PipeToken(_currentPosition);
                         SkipChar();
                         break;
 
                     case Null:
-                    default:
                         yield break;
+                    
+                    default:
+                        throw new ParsingException($"Unexpected character {next} at {_currentPosition}");
                 }
 
                 next = PeekChar();

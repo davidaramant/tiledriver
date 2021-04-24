@@ -23,4 +23,5 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
     public sealed record OpenBraceToken(FilePosition Location) : Token(Location);
     public sealed record CloseBraceToken(FilePosition Location) : Token(Location);
     public sealed record CommaToken(FilePosition Location) : Token(Location);
+    public sealed record PipeToken(FilePosition Location) : Token(Location);
 }

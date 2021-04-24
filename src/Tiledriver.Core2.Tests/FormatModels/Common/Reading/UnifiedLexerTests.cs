@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2019, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
+using System;
 using FluentAssertions;
 using System.IO;
 using System.Linq;
@@ -10,7 +11,7 @@ using Tiledriver.Core.FormatModels.Common.Reading;
 using Tiledriver.Core.FormatModels.Uwmf.Writing;
 using Xunit;
 
-namespace Tiledriver.Core.Tests.FormatModels.Common.UnifiedReading
+namespace Tiledriver.Core.Tests.FormatModels.Common.Reading
 {
     public sealed class UnifiedLexerTests
     {
@@ -106,7 +107,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Common.UnifiedReading
         [Fact]
         public void ShouldLexNewLines()
         {
-            var tokens = Scan("blockName\n{\n}\n");
+            var tokens = Scan("blockName\n{\n}\n", createLexer: reader => new UnifiedLexer(reader, reportNewlines: true));
             tokens.Should().HaveCount(6);
             tokens[0].Should().BeOfType<IdentifierToken>();
             tokens[1].Should().BeOfType<NewLineToken>();
@@ -129,10 +130,40 @@ namespace Tiledriver.Core.Tests.FormatModels.Common.UnifiedReading
             tokens[6].Should().BeOfType<CloseBraceToken>();
         }
 
-        private static Token[] Scan(string input)
+        [Fact]
+        public void ShouldThrowIfNotExpectingDollarSign()
         {
+            Assert.Throws<ParsingException>(() => Scan("$id"));
+        }
+
+        [Fact]
+        public void ShouldNotThrowIfExpectingDollarSign()
+        {
+            var tokens = Scan("$id", r => new UnifiedLexer(r, allowDollarIdentifiers: true));
+            tokens.Should().HaveCount(1);
+            tokens[0].Should().BeOfType<IdentifierToken>().Which.Id.ToLower().Should().Be("$id");
+        }
+
+        [Fact]
+        public void ShouldThrowIfNotExpectingPipe()
+        {
+            Assert.Throws<ParsingException>(() => Scan("|"));
+        }
+
+        [Fact]
+        public void ShouldNotThrowIfExpectingPipe()
+        {
+            var tokens = Scan("|", r => new UnifiedLexer(r, allowPipes: true));
+            tokens.Should().HaveCount(1);
+            tokens[0].Should().BeOfType<PipeToken>();
+        }
+
+        private static Token[] Scan(string input, Func<StringReader, UnifiedLexer>? createLexer = null)
+        {
+            createLexer ??= reader => new UnifiedLexer(reader);
+
             using var stringReader = new StringReader(input);
-            var lexer = new UnifiedLexer(stringReader);
+            var lexer = createLexer(stringReader);
             return lexer.Scan().ToArray();
         }
 
