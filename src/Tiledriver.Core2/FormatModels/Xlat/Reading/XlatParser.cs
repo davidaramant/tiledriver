@@ -37,8 +37,8 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
                     case "enable":
                     case "disable":
                         // global flag, ignore
-                        Skip<IdentifierToken>(enumerator);
-                        Skip<SemicolonToken>(enumerator);
+                        ExpectNext<IdentifierToken>(enumerator);
+                        ExpectNext<SemicolonToken>(enumerator);
                         break;
 
                     case "music":

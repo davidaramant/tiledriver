@@ -27,8 +27,8 @@ namespace Tiledriver.DataModelGenerator.Uwmf
                 "System.Collections.Generic",
                 "System.Collections.Immutable",
                 "Tiledriver.Core.FormatModels.Common",
-                "Tiledriver.Core.FormatModels.Common.UnifiedReading",
-                "Tiledriver.Core.FormatModels.Common.UnifiedReading.AbstractSyntaxTree",
+                "Tiledriver.Core.FormatModels.Common.Reading",
+                "Tiledriver.Core.FormatModels.Common.Reading.AbstractSyntaxTree",
                 "Tiledriver.Core.FormatModels.Uwmf.Reading.AbstractSyntaxTree",
             };
 
@@ -59,14 +59,14 @@ namespace Tiledriver.DataModelGenerator.Uwmf
         private static string CreateParameterAssignment(ScalarProperty property, string context = "block.Name")
         {
             var getValue = property.DefaultString == null
-                ? $"GetRequiredFieldValue<{property.PropertyType}>(fields, {context}, \"{property.FormatName}\")"
-                : $"GetOptionalFieldValue<{property.PropertyType}>(fields, \"{property.FormatName}\", {property.DefaultString})";
+                ? $"fields.GetRequiredFieldValue<{property.PropertyType}>({context}, \"{property.FormatName}\")"
+                : $"fields.GetOptionalFieldValue<{property.PropertyType}>(\"{property.FormatName}\", {property.DefaultString})";
 
             if (property is DoubleProperty)
             {
                 getValue = property.DefaultString == null
-                    ? $"GetRequiredDoubleFieldValue(fields, {context}, \"{property.FormatName}\")"
-                    : $"GetOptionalDoubleFieldValue(fields, \"{property.FormatName}\")";
+                    ? $"fields.GetRequiredDoubleFieldValue({context}, \"{property.FormatName}\")"
+                    : $"fields.GetOptionalDoubleFieldValue(\"{property.FormatName}\")";
             }
 
             return $"{property.PropertyName}: {getValue}";
