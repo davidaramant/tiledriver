@@ -11,6 +11,7 @@ namespace Tiledriver.DataModelGenerator.Xlat
     {
         public static readonly ImmutableArray<Block> Blocks = ImmutableArray.Create(
             new Block("elevator",
+                Serialization: SerializationType.Custom,
                 Properties: ImmutableArray.Create<Property>(
                     new UShortProperty("oldNum")
                 )),
@@ -85,6 +86,7 @@ namespace Tiledriver.DataModelGenerator.Xlat
             )),
 
         new Block("zoneTemplate",
+            Serialization: SerializationType.Custom,
             Properties: ImmutableArray.Create<Property>(
                 new UShortProperty("oldNum"),
                 new StringProperty("comment", defaultValue: string.Empty)
