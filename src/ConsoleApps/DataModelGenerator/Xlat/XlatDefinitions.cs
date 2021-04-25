@@ -92,16 +92,6 @@ namespace Tiledriver.DataModelGenerator.Xlat
                 new StringProperty("comment", defaultValue: string.Empty)
             )),
 
-        new Block("tiles", ClassName: "TileMappings",
-            Serialization: SerializationType.TopLevel,
-            Properties: ImmutableArray.Create<Property>(
-                new ListProperty("ambushModzone"),
-                new ListProperty("changeTriggerModzone"),
-                new ListProperty("tileTemplate"),
-                new ListProperty("triggerTemplate"),
-                new ListProperty("zoneTemplate")
-            )),
-
         new Block("flats", ClassName: "FlatMappings",
             Serialization: SerializationType.TopLevel,
             Properties: ImmutableArray.Create<Property>(

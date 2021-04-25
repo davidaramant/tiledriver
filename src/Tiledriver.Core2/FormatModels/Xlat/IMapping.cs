@@ -3,7 +3,7 @@
 
 namespace Tiledriver.Core.FormatModels.Xlat
 {
-    public interface IThingMapping
+    public interface IMapping
     {
         ushort OldNum { get; }
     }

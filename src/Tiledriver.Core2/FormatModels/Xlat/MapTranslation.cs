@@ -7,18 +7,19 @@ namespace Tiledriver.Core.FormatModels.Xlat
 {
     public sealed class MapTranslation
     {
-        private readonly Dictionary<ushort, IThingMapping> _thingMappingLookup = new();
-
+        public IReadOnlyDictionary<ushort, IMapping> ThingMappingLookup { get; }
         public TileMappings TileMappings { get; }
         public FlatMappings? FlatMappings { get; }
 
         public MapTranslation(
             TileMappings tileMappings,
-            IEnumerable<IThingMapping> thingMappings,
+            IEnumerable<IMapping> thingMappings,
             FlatMappings? flatMappings)
         {
             TileMappings = tileMappings;
             FlatMappings = flatMappings;
+
+            var thingMappingLookup = new Dictionary<ushort, IMapping>();
 
             foreach (var mapping in thingMappings)
             {
@@ -27,18 +28,17 @@ namespace Tiledriver.Core.FormatModels.Xlat
                     case ThingTemplate { Angles: > 0 } thing:
                         for (var i = thing.OldNum; i < thing.OldNum + thing.Angles; i++)
                         {
-                            _thingMappingLookup[i] = thing;
+                            thingMappingLookup[i] = thing;
                         }
                         break;
 
                     default:
-                        _thingMappingLookup[mapping.OldNum] = mapping;
+                        thingMappingLookup[mapping.OldNum] = mapping;
                         break;
                 }
             }
-        }
 
-        public IThingMapping LookupThingMapping(ushort oldNum) => _thingMappingLookup[oldNum];
-        public IThingMapping? TryLookupThingMapping(ushort oldNum) => _thingMappingLookup.TryGetValue(oldNum, out var value) ? value : null;
+            ThingMappingLookup = thingMappingLookup;
+        }
     }
 }

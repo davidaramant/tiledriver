@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using Tiledriver.Core.Extensions.Collections;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Common.Reading;
 
@@ -17,7 +18,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
             IResourceProvider resourceProvider)
         {
             List<TileMappings> tileMappings = new();
-            List<IThingMapping> thingMappings = new();
+            List<IMapping> thingMappings = new();
             List<FlatMappings> flatMappings = new();
 
             var tokenSource = new TokenSource(tokens, resourceProvider, XlatLexer.Create);
@@ -69,13 +70,27 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
 
         private static TileMappings Merge(IEnumerable<TileMappings> tileMappings)
         {
-            throw new NotImplementedException();
+            var ambushModzones = new List<AmbushModzone>();
+            var changeTriggerModzones = new List<ChangeTriggerModzone>();
+            var tileTemplates = new List<TileTemplate>();
+            var triggerTemplates = new List<TriggerTemplate>();
+            var zoneTemplates = new List<ZoneTemplate>();
+
+            foreach (var mapping in tileMappings)
+            {
+                ambushModzones.AddRange(mapping.AmbushModzones.Values);
+                changeTriggerModzones.AddRange(mapping.ChangeTriggerModzones.Values);
+                tileTemplates.AddRange(mapping.TileTemplates.Values);
+                triggerTemplates.AddRange(mapping.TriggerTemplates.Values);
+                zoneTemplates.AddRange(mapping.ZoneTemplates.Values);
+            }
+
             return new TileMappings(
-                ImmutableList<AmbushModzone>.Empty,
-                ImmutableList<ChangeTriggerModzone>.Empty,
-                ImmutableList<TileTemplate>.Empty,
-                ImmutableList<TriggerTemplate>.Empty,
-                ImmutableList<ZoneTemplate>.Empty);
+                CondenseToDictionary(ambushModzones),
+                CondenseToDictionary(changeTriggerModzones),
+                CondenseToDictionary(tileTemplates),
+                CondenseToDictionary(triggerTemplates),
+                CondenseToDictionary(zoneTemplates));
         }
 
         private static TileMappings ParseTileMappings(IEnumerator<Token> tokenStream)
@@ -119,11 +134,11 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
 
                     case CloseBraceToken:
                         return new TileMappings(
-                            ambushModzones.ToImmutableList(),
-                            changeTriggerModzones.ToImmutableList(),
-                            tileTemplates.ToImmutableList(),
-                            triggerTemplates.ToImmutableList(),
-                            zoneTemplates.ToImmutableList());
+                            CondenseToDictionary(ambushModzones),
+                            CondenseToDictionary(changeTriggerModzones),
+                            CondenseToDictionary(tileTemplates),
+                                CondenseToDictionary(triggerTemplates),
+                                    CondenseToDictionary(zoneTemplates));
 
                     default:
                         throw ParsingException.CreateError(token, "identifier or end of block");
@@ -279,11 +294,11 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
             }
         }
 
-        private static IEnumerable<IThingMapping> ParseThingMappings(IEnumerator<Token> tokenStream)
+        private static IEnumerable<IMapping> ParseThingMappings(IEnumerator<Token> tokenStream)
         {
             tokenStream.ExpectNext<OpenBraceToken>();
 
-            var thingMappings = new List<IThingMapping>();
+            var thingMappings = new List<IMapping>();
 
             while (true)
             {
@@ -360,7 +375,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
 
                 tokenStream.ExpectNext<CommaToken>();
             }
-            else if(next is IdentifierToken flagToken)
+            else if (next is IdentifierToken flagToken)
             {
                 flags.Add(flagToken.Id.ToLower());
 
@@ -391,13 +406,27 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
             tokenStream.ExpectNext<CloseBraceToken>();
 
             return new ThingTemplate(
-                oldNum, 
-                actor, 
-                angles, 
-                Holowall: flags.Contains("holowall"), 
-                Pathing: flags.Contains("pathing"), 
+                oldNum,
+                actor,
+                angles,
+                Holowall: flags.Contains("holowall"),
+                Pathing: flags.Contains("pathing"),
                 Ambush: flags.Contains("ambush"),
                 Minskill: minSkill);
+        }
+
+        private static Dictionary<ushort, TValue> CondenseToDictionary<TValue>(
+            IEnumerable<TValue> sequence) 
+            where TValue : IMapping
+        {
+            var d = new Dictionary<ushort, TValue>();
+
+            foreach (var e in sequence)
+            {
+                d[e.OldNum] = e;
+            }
+
+            return d;
         }
     }
 }
