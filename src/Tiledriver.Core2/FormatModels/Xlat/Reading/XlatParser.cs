@@ -282,7 +282,51 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
 
         private static IEnumerable<IThingMapping> ParseThingMappings(IEnumerator<Token> tokenStream)
         {
-            throw new NotImplementedException();
+            tokenStream.ExpectNext<OpenBraceToken>();
+
+            var thingMappings = new List<IThingMapping>();
+
+            while (true)
+            {
+                var token = tokenStream.GetNext();
+                switch (token)
+                {
+                    case IdentifierToken id:
+                        switch (id.Id.ToLower())
+                        {
+                            case "elevator":
+                                thingMappings.Add(ParseElevator(tokenStream, id));
+                                break;
+
+                            case "trigger":
+                                break;
+
+                            default:
+                                throw ParsingException.CreateError(id, "unknown identifier");
+                        }
+                        break;
+
+                    case OpenBraceToken:
+                        break;
+
+                    case CloseBraceToken:
+                        return thingMappings;
+
+                    default:
+                        throw ParsingException.CreateError(token, "identifier or end of block");
+                }
+            }
+        }
+
+        private static Elevator ParseElevator(IEnumerator<Token> tokenStream, IdentifierToken id)
+        {
+            var oldNum =
+                tokenStream
+                    .ExpectNext<IntegerToken>()
+                    .ValueAsUshort(token => ParsingException.CreateError(token, "UShort value"));
+            tokenStream.ExpectNext<SemicolonToken>();
+
+            return new Elevator(oldNum);
         }
     }
 }
