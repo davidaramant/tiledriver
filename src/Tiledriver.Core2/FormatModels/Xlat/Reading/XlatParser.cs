@@ -98,6 +98,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
                         switch (id.Id.ToLower())
                         {
                             case "modzone":
+                                ParseModzone(tokenStream, id, ambushModzones, changeTriggerModzones);
                                 break;
 
                             case "tile":
@@ -131,9 +132,52 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
             }
         }
 
+        private static void ParseModzone(
+            IEnumerator<Token> tokenStream,
+            IdentifierToken id,
+            List<AmbushModzone> ambushModzones,
+            List<ChangeTriggerModzone> changeTriggerModzones)
+        {
+            var oldNum =
+                tokenStream
+                    .ExpectNext<IntegerToken>()
+                    .ValueAsUshort(token => ParsingException.CreateError(token, "UShort value"));
+
+            bool fillZone = false;
+
+            var next = tokenStream.ExpectNext<IdentifierToken>();
+
+            if (next.Id.ToLower() == "fillzone")
+            {
+                fillZone = true;
+                next = tokenStream.ExpectNext<IdentifierToken>();
+            }
+
+            if (next.Id.ToLower() == "ambush")
+            {
+                tokenStream.ExpectNext<SemicolonToken>();
+
+                ambushModzones.Add(new AmbushModzone(oldNum, fillZone));
+            }
+            else if (next.Id.ToLower() == "changetrigger")
+            {
+                var action = tokenStream.ExpectNext<StringToken>().Value;
+
+                var block = tokenStream.ParseBlock(id);
+
+                var triggerTemplate = ReadTriggerTemplate(oldNum, block);
+
+                changeTriggerModzones.Add(new ChangeTriggerModzone(oldNum, action, triggerTemplate, fillZone));
+            }
+            else
+            {
+                throw ParsingException.CreateError(next, "ambush or changetrigger");
+            }
+        }
+
         private static TileTemplate ParseTileTemplate(IEnumerator<Token> tokenStream, IdentifierToken id)
         {
-            var oldNum = 
+            var oldNum =
                 tokenStream
                     .ExpectNext<IntegerToken>()
                     .ValueAsUshort(token => ParsingException.CreateError(token, "UShort value"));
@@ -145,7 +189,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
 
         private static TriggerTemplate ParseTriggerTemplate(IEnumerator<Token> tokenStream, IdentifierToken id)
         {
-            var oldNum = 
+            var oldNum =
                 tokenStream
                     .ExpectNext<IntegerToken>()
                     .ValueAsUshort(token => ParsingException.CreateError(token, "UShort value"));
@@ -157,7 +201,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
 
         private static ZoneTemplate ParseZone(IEnumerator<Token> tokenStream, IdentifierToken id)
         {
-            var oldNum = 
+            var oldNum =
                 tokenStream
                     .ExpectNext<IntegerToken>()
                     .ValueAsUshort(token => ParsingException.CreateError(token, "UShort value"));
