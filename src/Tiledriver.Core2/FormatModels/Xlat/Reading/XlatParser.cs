@@ -7,7 +7,6 @@ using System.Collections.Immutable;
 using System.Linq;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Common.Reading;
-using Tiledriver.Core.FormatModels.Uwmf;
 
 namespace Tiledriver.Core.FormatModels.Xlat.Reading
 {
@@ -308,6 +307,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
                         break;
 
                     case OpenBraceToken:
+                        thingMappings.Add(ParseThingTemplate(tokenStream));
                         break;
 
                     case CloseBraceToken:
@@ -328,6 +328,76 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
             tokenStream.ExpectNext<SemicolonToken>();
 
             return new Elevator(oldNum);
+        }
+
+        private static ThingTemplate ParseThingTemplate(IEnumerator<Token> tokenStream)
+        {
+            var oldNum =
+                tokenStream
+                    .ExpectNext<IntegerToken>()
+                    .ValueAsUshort(token => ParsingException.CreateError(token, "UShort value"));
+
+            tokenStream.ExpectNext<CommaToken>();
+
+            var actor = tokenStream.ExpectNext<IdentifierToken>().Id.ToString();
+
+            tokenStream.ExpectNext<CommaToken>();
+
+            var angles = tokenStream.ExpectNext<IntegerToken>().Value;
+
+            tokenStream.ExpectNext<CommaToken>();
+
+            var flags = new HashSet<string>();
+
+            var next = tokenStream.GetNext();
+
+            if (next is IntegerToken i)
+            {
+                if (i.Value != 0)
+                {
+                    throw ParsingException.CreateError(i, "Expected 0 value for flags");
+                }
+
+                tokenStream.ExpectNext<CommaToken>();
+            }
+            else if(next is IdentifierToken flagToken)
+            {
+                flags.Add(flagToken.Id.ToLower());
+
+                while (true)
+                {
+                    next = tokenStream.GetNext();
+
+                    if (next is CommaToken)
+                    {
+                        break;
+                    }
+                    else if (next is PipeToken)
+                    {
+                        flags.Add(tokenStream.ExpectNext<IdentifierToken>().Id.ToLower());
+                    }
+                    else
+                    {
+                        throw ParsingException.CreateError(next, "Comma or pipe");
+                    }
+                }
+            }
+            else
+            {
+                throw ParsingException.CreateError(next, "Expected number or flags");
+            }
+
+            var minSkill = tokenStream.ExpectNext<IntegerToken>().Value;
+            tokenStream.ExpectNext<CloseBraceToken>();
+
+            return new ThingTemplate(
+                oldNum, 
+                actor, 
+                angles, 
+                Holowall: flags.Contains("holowall"), 
+                Pathing: flags.Contains("pathing"), 
+                Ambush: flags.Contains("ambush"),
+                Minskill: minSkill);
         }
     }
 }
