@@ -299,6 +299,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
                                 break;
 
                             case "trigger":
+                                thingMappings.Add(ParseTriggerTemplate(tokenStream, id));
                                 break;
 
                             default:
