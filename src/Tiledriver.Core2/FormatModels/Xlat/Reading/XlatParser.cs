@@ -4,8 +4,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Common.Reading;
+using Tiledriver.Core.FormatModels.Uwmf;
 
 namespace Tiledriver.Core.FormatModels.Xlat.Reading
 {
@@ -63,7 +65,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
             return new MapTranslation(
                 Merge(tileMappings),
                 thingMappings,
-                Merge(flatMappings));
+                flatMappings.LastOrDefault());
         }
 
         private static TileMappings Merge(IEnumerable<TileMappings> tileMappings)
@@ -75,14 +77,6 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
                 ImmutableList<TileTemplate>.Empty,
                 ImmutableList<TriggerTemplate>.Empty,
                 ImmutableList<ZoneTemplate>.Empty);
-        }
-
-        private static FlatMappings Merge(IEnumerable<FlatMappings> flatMappings)
-        {
-            throw new NotImplementedException();
-            return new FlatMappings(
-                ImmutableList<string>.Empty,
-                ImmutableList<string>.Empty);
         }
 
         private static TileMappings ParseTileMappings(IEnumerator<Token> tokenStream)
@@ -110,10 +104,11 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
                                 break;
 
                             case "trigger":
+                                triggerTemplates.Add(ParseTriggerTemplate(tokenStream, id));
                                 break;
 
                             case "zone":
-                                zoneTemplates.Add(ParseZone(id, tokenStream));
+                                zoneTemplates.Add(ParseZone(tokenStream, id));
                                 break;
 
                             default:
@@ -135,15 +130,30 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
             }
         }
 
-        private static ZoneTemplate ParseZone(IdentifierToken id, IEnumerator<Token> tokenStream)
+        private static TriggerTemplate ParseTriggerTemplate(IEnumerator<Token> tokenStream, IdentifierToken id)
         {
-            var oldNumToken = tokenStream.ExpectNext<IntegerToken>();
+            var oldNum = 
+                tokenStream
+                    .ExpectNext<IntegerToken>()
+                    .ValueAsUshort(token => ParsingException.CreateError(token, "UShort value"));
+
+            var block = tokenStream.ParseBlock(id);
+
+            return ReadTriggerTemplate(oldNum, block);
+        }
+
+        private static ZoneTemplate ParseZone(IEnumerator<Token> tokenStream, IdentifierToken id)
+        {
+            var oldNum = 
+                tokenStream
+                    .ExpectNext<IntegerToken>()
+                    .ValueAsUshort(token => ParsingException.CreateError(token, "UShort value"));
 
             var block = tokenStream.ParseBlock(id);
             var fields = block.GetFieldAssignments();
 
             return new ZoneTemplate(
-                oldNumToken.ValueAsUshort(() => ParsingException.CreateError(oldNumToken, "UShort value")),
+                oldNum,
                 Comment: fields.GetOptionalFieldValue("comment", ""));
         }
 

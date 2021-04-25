@@ -26,6 +26,7 @@ namespace Tiledriver.DataModelGenerator
             UwmfSemanticAnalyzerGenerator.WriteToPath(uwmfReadingPath);
 
             XlatModelGenerator.WriteToPath(xlatPath);
+            XlatParserGenerator.WriteToPath(xlatReadingPath);
         }
 
         private static string FindSolutionPath()

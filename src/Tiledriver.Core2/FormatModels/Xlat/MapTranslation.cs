@@ -10,12 +10,12 @@ namespace Tiledriver.Core.FormatModels.Xlat
         private readonly Dictionary<ushort, IThingMapping> _thingMappingLookup = new();
 
         public TileMappings TileMappings { get; }
-        public FlatMappings FlatMappings { get; }
+        public FlatMappings? FlatMappings { get; }
 
         public MapTranslation(
             TileMappings tileMappings,
             IEnumerable<IThingMapping> thingMappings,
-            FlatMappings flatMappings)
+            FlatMappings? flatMappings)
         {
             TileMappings = tileMappings;
             FlatMappings = flatMappings;

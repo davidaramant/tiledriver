@@ -14,14 +14,14 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
 
     public sealed record IntegerToken(FilePosition Location, int Value) : ValueToken<int>(Location, Value)
     {
-        public ushort ValueAsUshort(Func<Exception> failure)
+        public ushort ValueAsUshort(Func<Token,Exception> failure)
         {
             if (Value is >= 0 and <= ushort.MaxValue)
             {
                 return (ushort) Value;
             }
 
-            throw failure();
+            throw failure(this);
         }
     }
     public sealed record FloatToken(FilePosition Location, double Value) : ValueToken<double>(Location, Value);
