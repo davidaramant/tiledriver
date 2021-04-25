@@ -101,6 +101,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
                                 break;
 
                             case "tile":
+                                tileTemplates.Add(ParseTileTemplate(tokenStream, id));
                                 break;
 
                             case "trigger":
@@ -128,6 +129,18 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
                         throw ParsingException.CreateError(token, "identifier or end of block");
                 }
             }
+        }
+
+        private static TileTemplate ParseTileTemplate(IEnumerator<Token> tokenStream, IdentifierToken id)
+        {
+            var oldNum = 
+                tokenStream
+                    .ExpectNext<IntegerToken>()
+                    .ValueAsUshort(token => ParsingException.CreateError(token, "UShort value"));
+
+            var block = tokenStream.ParseBlock(id);
+
+            return ReadTileTemplate(oldNum, block);
         }
 
         private static TriggerTemplate ParseTriggerTemplate(IEnumerator<Token> tokenStream, IdentifierToken id)
