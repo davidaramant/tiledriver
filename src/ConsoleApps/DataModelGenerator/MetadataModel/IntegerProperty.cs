@@ -3,7 +3,7 @@
 
 namespace Tiledriver.DataModelGenerator.MetadataModel
 {
-    sealed class IntegerProperty : ScalarProperty
+    class IntegerProperty : ScalarProperty
     {
         public int? Default { get; }
         public override string PropertyType => "int";
