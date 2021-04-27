@@ -4,10 +4,9 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using Tiledriver.DataModelGenerator.MetadataModel;
 using Tiledriver.DataModelGenerator.Utilities;
 
-namespace Tiledriver.DataModelGenerator.Uwmf.MetadataModel
+namespace Tiledriver.DataModelGenerator.MetadataModel
 {
     enum SerializationType
     {
@@ -16,12 +15,25 @@ namespace Tiledriver.DataModelGenerator.Uwmf.MetadataModel
         TopLevel
     }
 
-    record Block(
-        string Name,
+    sealed record Block(
+        string FormatName,
+        string ClassName,
         ImmutableArray<Property> Properties,
         SerializationType Serialization = SerializationType.Normal)
     {
-        public string ClassName => Name.ToPascalCase();
+        public string Name => FormatName;
+
+        public Block(
+            string FormatName,
+            ImmutableArray<Property> Properties,
+            SerializationType Serialization = SerializationType.Normal) 
+            : this(
+                FormatName, 
+                FormatName.ToPascalCase(), 
+                Properties, 
+                Serialization)
+        {
+        }
 
         public IEnumerable<Property> OrderedProperties => 
             Properties.Where(p => p.DefaultString == null)
