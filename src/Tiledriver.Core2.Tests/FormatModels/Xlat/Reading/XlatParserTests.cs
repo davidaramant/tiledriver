@@ -12,7 +12,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Reading
 {
     public sealed class XlatParserTests
     {
-        [Fact(Skip = "Doesn't work quite yet")]
+        [Fact]
         public void ShouldParseWolf3DXlat()
         {
             using var stream = TestFile.Xlat.wolf3d;
@@ -21,7 +21,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Xlat.Reading
             var translator = XlatParser.Parse(lexer.Scan(),Mock.Of<IResourceProvider>());
         }
 
-        [Fact(Skip = "Doesn't work quite yet")]
+        [Fact]
         public void ShouldParseSpearXlat()
         {
             var mockProvider = new Mock<IResourceProvider>();

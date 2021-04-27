@@ -177,6 +177,8 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
             {
                 var action = tokenStream.ExpectNext<StringToken>().Value;
 
+                tokenStream.ExpectNext<OpenBraceToken>();
+
                 var block = tokenStream.ParseBlock(id);
 
                 var triggerTemplate = ReadTriggerTemplate(oldNum, block);
@@ -196,6 +198,8 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
                     .ExpectNext<IntegerToken>()
                     .ValueAsUshort(token => ParsingException.CreateError(token, "UShort value"));
 
+            tokenStream.ExpectNext<OpenBraceToken>();
+
             var block = tokenStream.ParseBlock(id);
 
             return ReadTileTemplate(oldNum, block);
@@ -208,6 +212,8 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
                     .ExpectNext<IntegerToken>()
                     .ValueAsUshort(token => ParsingException.CreateError(token, "UShort value"));
 
+            tokenStream.ExpectNext<OpenBraceToken>();
+
             var block = tokenStream.ParseBlock(id);
 
             return ReadTriggerTemplate(oldNum, block);
@@ -219,6 +225,8 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
                 tokenStream
                     .ExpectNext<IntegerToken>()
                     .ValueAsUshort(token => ParsingException.CreateError(token, "UShort value"));
+
+            tokenStream.ExpectNext<OpenBraceToken>();
 
             var block = tokenStream.ParseBlock(id);
             var fields = block.GetFieldAssignments();
