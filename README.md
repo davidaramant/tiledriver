@@ -29,7 +29,7 @@ Once upon a time this project had a GUI application written in WPF for viewing U
 ### Format Models
 
 |Format|Reading?|Writing?|
-|---|---|---|
+|---|:---:|:---:|
 |[UWMF](https://maniacsvault.net/ecwolf/wiki/Universal_Wolfenstein_Map_Format)|Yes|Yes|
 |[XLAT](https://maniacsvault.net/ecwolf/wiki/Map_translator)|Yes||
 |[MapInfo](https://maniacsvault.net/ecwolf/wiki/MAPINFO)|WIP||
