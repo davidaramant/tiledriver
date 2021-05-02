@@ -40,20 +40,20 @@ namespace Tiledriver.Metadata
                         new BooleanProperty("lookup"),
                     }.ToImmutableArray());
 
-            //yield return new Block("episode",
-            //        IsSubBlock: false,
-            //        Properties: new[]
-            //        {
-            //            new Property("map", type: PropertyType.String, isMetaData: true),
-            //            new Property("key", type: PropertyType.Char),
-            //            new StringProperty("lookup"),
-            //            new StringProperty("name"),
-            //            new Property(formatName: "noskillmenu", name: "noSkillMenu", type: PropertyType.Flag,
-            //                defaultValue: false),
-            //            new Property("optional", type: PropertyType.Flag, defaultValue: false),
-            //            new StringProperty(formatName: "picname", name: "picName"),
-            //            new Property("remove", type: PropertyType.Flag, defaultValue: false),
-            //        });
+            yield return new Block("episode",
+                    Properties: new Property[]
+                    {
+                        new MetadataStringProperty("map"),
+                        new CharProperty("key"),
+                        new StringProperty("lookup"),
+                        new StringProperty("name"),
+                        new FlagProperty("noSkillMenu"),
+                        new FlagProperty("optional"),
+                        new StringProperty("picName"),
+                        new FlagProperty("remove"),
+                    }.ToImmutableArray());
+
+            // TODO: clearepisodes
 
             //yield return new Block("gameinfo", className: "GameInfo",
             //        IsSubBlock: false,

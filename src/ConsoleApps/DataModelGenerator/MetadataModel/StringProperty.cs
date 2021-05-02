@@ -3,7 +3,7 @@
 
 namespace Tiledriver.DataModelGenerator.MetadataModel
 {
-    sealed class StringProperty : ScalarProperty
+    class StringProperty : ScalarProperty
     {
         private readonly string? _formatName;
 
