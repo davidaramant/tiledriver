@@ -55,136 +55,122 @@ namespace Tiledriver.Metadata
 
             // TODO: clearepisodes
 
-            //yield return new Block("gameinfo", className: "GameInfo",
-            //        IsSubBlock: false,
-            //        canSetPropertiesFrom: new[] { "GameInfo" },
-            //        Properties: new[]
-            //        {
-            //            new StringProperty(formatName: "advisorycolor", name: "advisoryColor"),
-            //            new StringProperty(formatName: "advisorypic", name: "advisoryPic"),
-            //            new Property(formatName: "border", name: "border", type: PropertyType.Block,
-            //                collectionType: "GameBorder"),
-            //            new StringProperty(formatName: "borderflat", name: "borderFlat"),
-            //            new StringProperty(formatName: "deathtransition", name: "deathTransition"),
-            //            new StringProperty(formatName: "dialogcolor", name: "dialogColor"),
-            //            new StringProperty(formatName: "doorsoundsequence", name: "doorSoundSequence"),
-            //            new BooleanProperty(formatName: "drawreadthis", name: "drawReadThis"),
-            //            new StringProperty(formatName: "finaleflat", name: "finaleFlat"),
-            //            new StringProperty(formatName: "finalemusic", name: "finaleMusic"),
-            //            new StringProperty(formatName: "gamecolormap", name: "gameColorMap"),
-            //            new StringProperty(formatName: "gameoverpic", name: "gameOverPic"),
-            //            new StringProperty(formatName: "gamepalette", name: "gamePalette"),
-            //            new DoubleProperty(formatName: "gibfactor", name: "gibFactor"),
-            //            new StringProperty(formatName: "highscoresfont", name: "highScoresFont"),
-            //            new StringProperty(formatName: "highscoresfontcolor", name: "highScoresFontColor"),
-            //            new StringProperty(formatName: "intermissionmusic", name: "intermissionMusic"),
-            //            new Property(formatName: "menucolors", name: "MenuColors", type: PropertyType.Block),
-            //            new StringProperty(formatName: "menufade", name: "menuFade"),
-            //            new StringProperty(formatName: "menufontcolor_disabled", name: "menuFontColorDisabled"),
-            //            new StringProperty(formatName: "menufontcolor_highlight", name: "menuFontColorHighlight"),
-            //            new StringProperty(formatName: "menufontcolor_highlightselection",
-            //                name: "menuFontColorHighlightSelection"),
-            //            new StringProperty(formatName: "menufontcolor_invalid", name: "menuFontColorInvalid"),
-            //            new StringProperty(formatName: "menufontcolor_invalidselection", name: "menuFontColorInvalidSelection"),
-            //            new StringProperty(formatName: "menufontcolor_label", name: "menuFontColorLabel"),
-            //            new StringProperty(formatName: "menufontcolor_selection", name: "menuFontColorSelection"),
-            //            new StringProperty(formatName: "menufontcolor_title", name: "menuFontColorTitle"),
-            //            new StringProperty(formatName: "menumusic", name: "menuMusic"),
-            //            new Property(formatName: "menuwindowcolors", name: "menuWindowColors", type: PropertyType.Block),
-            //            new Property(formatName: "messagecolors", name: "messageColors", type: PropertyType.Block),
-            //            new StringProperty(formatName: "messagefontcolor", name: "messageFontColor"),
-            //            new StringProperty(formatName: "pageindexfontcolor", name: "pageIndexFontColor"),
-            //            new Property(formatName: "playerclasses", name: "PlayerClasses", singularName: "PlayerClass",
-            //                type: PropertyType.ImmutableList, collectionType: "string"),
-            //            new Property(formatName: "psyched", name: "psyched", type: PropertyType.Block),
-            //            new StringProperty(formatName: "pushwallsoundsequence", name: "pushwallSoundSequence"),
-            //            new Property(formatName: "quitmessages", name: "QuitMessages", singularName: "QuitMessage",
-            //                type: PropertyType.ImmutableList, collectionType: "string"),
-            //            new StringProperty(formatName: "scoresmusic", name: "scoresMusic"),
-            //            new StringProperty(formatName: "signon", name: "signOn"),
-            //            new StringProperty(formatName: "titlemusic", name: "titleMusic"),
-            //            new StringProperty(formatName: "titlepage", name: "titlePage"),
-            //            new StringProperty(formatName: "titlepalette", name: "titlePalette"),
-            //            new IntegerProperty(formatName: "titletime", name: "titleTime"),
-            //            new BooleanProperty(formatName: "trackhighscores", name: "trackHighScores"),
-            //            new StringProperty(formatName: "translator", name: "translator"),
-            //            new StringProperty(formatName: "victorymusic", name: "victoryMusic"),
-            //            new StringProperty(formatName: "victorypic", name: "victoryPic"),
-            //        });
+            yield return new Block("gameInfo",
+                    Properties: new Property[]
+                    {
+                        new StringProperty("advisoryColor"),
+                        new StringProperty("advisoryPic"),
+                        new BlockProperty("border", propertyType:"IGameBorder"),
+                        new StringProperty("borderFlat"),
+                        new StringProperty("deathTransition"),
+                        new StringProperty("dialogColor"),
+                        new StringProperty("doorSoundSequence"),
+                        new BooleanProperty("drawReadThis"),
+                        new StringProperty("finaleFlat"),
+                        new StringProperty("finaleMusic"),
+                        new StringProperty("gameColorMap"),
+                        new StringProperty("gameOverPic"),
+                        new StringProperty("gamePalette"),
+                        new DoubleProperty("gibFactor"),
+                        new StringProperty("highScoresFont"),
+                        new StringProperty("highScoresFontColor"),
+                        new StringProperty("intermissionMusic"),
+                        new BlockProperty("menuColors"),
+                        new StringProperty("menuFade"),
+                        new StringProperty(formatName: "menufontcolor_disabled", name: "menuFontColorDisabled"),
+                        new StringProperty(formatName: "menufontcolor_highlight", name: "menuFontColorHighlight"),
+                        new StringProperty(formatName: "menufontcolor_highlightselection", name: "menuFontColorHighlightSelection"),
+                        new StringProperty(formatName: "menufontcolor_invalid", name: "menuFontColorInvalid"),
+                        new StringProperty(formatName: "menufontcolor_invalidselection", name: "menuFontColorInvalidSelection"),
+                        new StringProperty(formatName: "menufontcolor_label", name: "menuFontColorLabel"),
+                        new StringProperty(formatName: "menufontcolor_selection", name: "menuFontColorSelection"),
+                        new StringProperty(formatName: "menufontcolor_title", name: "menuFontColorTitle"),
+                        new StringProperty(formatName: "menumusic", name: "menuMusic"),
+                        new BlockProperty("menuWindowColors"),
+                        new BlockProperty("messageColors"),
+                        new StringProperty("messageFontColor"),
+                        new StringProperty("pageIndexFontColor"),
+                        new ListProperty("playerClasses", elementType: "string"),
+                        new BlockProperty("psyched"),
+                        new StringProperty("pushwallSoundSequence"),
+                        new ListProperty("quitMessages", elementType: "string"),
+                        new StringProperty("scoresMusic"),
+                        new StringProperty("signOn"),
+                        new StringProperty("titleMusic"),
+                        new StringProperty("titlePage"),
+                        new StringProperty("titlePalette"),
+                        new IntegerProperty("titleTime"),
+                        new BooleanProperty("trackHighScores"),
+                        new StringProperty("translator"),
+                        new StringProperty("victoryMusic"),
+                        new StringProperty("victoryPic"),
+                    }.ToImmutableArray());
 
-            //yield return new Block("GameBorder",
-            //        parsing: Parsing.Manual,
-            //        Properties: new[]
-            //        {
-            //            new Property("Colors", type: PropertyType.Block, collectionType: "GameBorderColors"),
-            //            new Property("Graphics", type: PropertyType.Block, collectionType: "GameBorderGraphics"),
-            //        });
+            yield return new Block("GameBorderColors",
+                    Serialization: SerializationType.Custom,
+                    Properties: new Property[]
+                    {
+                        new StringProperty("topColor"),
+                        new StringProperty("bottomColor"),
+                        new StringProperty("highlightColor"),
+                    }.ToImmutableArray());
 
-            //yield return new Block("GameBorderColors",
-            //        parsing: Parsing.Manual,
-            //        Properties: new[]
-            //        {
-            //            new StringProperty("topColor"),
-            //            new StringProperty("bottomColor"),
-            //            new StringProperty("highlightColor"),
-            //        });
+            yield return new Block("GameBorderGraphics",
+                    Serialization: SerializationType.Custom,
+                    Properties: new Property[]
+                    {
+                        new IntegerProperty("offset"),
+                        new StringProperty("topLeft"),
+                        new StringProperty("top"),
+                        new StringProperty("topRight"),
+                        new StringProperty("left"),
+                        new StringProperty("right"),
+                        new StringProperty("bottomLeft"),
+                        new StringProperty("bottom"),
+                        new StringProperty("bottomRight"),
+                    }.ToImmutableArray());
 
-            //yield return new Block("GameBorderGraphics",
-            //        parsing: Parsing.Manual,
-            //        Properties: new[]
-            //        {
-            //            new IntegerProperty("offset"),
-            //            new StringProperty("topLeft"),
-            //            new StringProperty("top"),
-            //            new StringProperty("topRight"),
-            //            new StringProperty("left"),
-            //            new StringProperty("right"),
-            //            new StringProperty("bottomLeft"),
-            //            new StringProperty("bottom"),
-            //            new StringProperty("bottomRight"),
-            //        });
+            yield return new Block("MenuColors",
+                    Serialization: SerializationType.OrderedProperties,
+                    Properties: new Property[]
+                    {
+                        new StringProperty("border1"),
+                        new StringProperty("border2"),
+                        new StringProperty("border3"),
+                        new StringProperty("background"),
+                        new StringProperty("stripe"),
+                        new StringProperty("stripeBg"),
+                    }.ToImmutableArray());
 
-            //yield return new Block("MenuColors",
-            //        parsing: Parsing.OrderedProperties,
-            //        Properties: new[]
-            //        {
-            //            new StringProperty("border1"),
-            //            new StringProperty("border2"),
-            //            new StringProperty("border3"),
-            //            new StringProperty("background"),
-            //            new StringProperty("stripe"),
-            //            new StringProperty("stripeBg"),
-            //        });
+            yield return new Block("MenuWindowColors",
+                    Serialization: SerializationType.OrderedProperties,
+                    Properties: new Property[]
+                    {
+                        new StringProperty("background"),
+                        new StringProperty("top"),
+                        new StringProperty("bottom"),
+                        new StringProperty("indexBackground"),
+                        new StringProperty("indexTop"),
+                        new StringProperty("indexBottom"),
+                    }.ToImmutableArray());
 
-            //yield return new Block("MenuWindowColors",
-            //        parsing: Parsing.OrderedProperties,
-            //        Properties: new[]
-            //        {
-            //            new StringProperty("background"),
-            //            new StringProperty("top"),
-            //            new StringProperty("bottom"),
-            //            new StringProperty("indexBackground"),
-            //            new StringProperty("indexTop"),
-            //            new StringProperty("indexBottom"),
-            //        });
+            yield return new Block("MessageColors",
+                    Serialization: SerializationType.OrderedProperties,
+                    Properties: new Property[]
+                    {
+                        new StringProperty("background"),
+                        new StringProperty("top"),
+                        new StringProperty("bottom"),
+                    }.ToImmutableArray());
 
-            //yield return new Block("MessageColors",
-            //        parsing: Parsing.OrderedProperties,
-            //        Properties: new[]
-            //        {
-            //            new StringProperty("background"),
-            //            new StringProperty("top"),
-            //            new StringProperty("bottom"),
-            //        });
-
-            //yield return new Block("Psyched",
-            //        parsing: Parsing.Manual,
-            //        Properties: new[]
-            //        {
-            //            new StringProperty("color1"),
-            //            new StringProperty("color2"),
-            //            new Property("offset", type: PropertyType.Integer, defaultValue: 0),
-            //        });
+            yield return new Block("Psyched",
+                    Serialization: SerializationType.Custom,
+                    Properties: new Property[]
+                    {
+                        new StringProperty("color1"),
+                        new StringProperty("color2"),
+                        new IntegerProperty("offset", defaultValue: 0),
+                    }.ToImmutableArray());
 
             //yield return new Block("intermission",
             //        IsSubBlock: false,

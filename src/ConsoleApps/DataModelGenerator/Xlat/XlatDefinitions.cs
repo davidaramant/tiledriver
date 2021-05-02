@@ -95,8 +95,8 @@ namespace Tiledriver.DataModelGenerator.Xlat
         new Block("flats", ClassName: "FlatMappings",
             Serialization: SerializationType.TopLevel,
             Properties: ImmutableArray.Create<Property>(
-                new StringListProperty("ceiling"),
-                new StringListProperty("floor")
+                new ListProperty("ceiling", elementType:"string"),
+                new ListProperty("floor", elementType:"string")
             ))
         );
     }

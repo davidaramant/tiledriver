@@ -103,13 +103,13 @@ namespace Tiledriver.DataModelGenerator.Uwmf
                     new IntegerProperty("width"),
                     new IntegerProperty("height"),
                     new StringProperty("comment", defaultValue: string.Empty),
-                    new ListProperty("tile"),
-                    new ListProperty("sector"),
-                    new ListProperty("zone"),
-                    new ListProperty("plane"),
+                    new BlockListProperty("tile"),
+                    new BlockListProperty("sector"),
+                    new BlockListProperty("zone"),
+                    new BlockListProperty("plane"),
                     new PlaneMapsProperty(),
-                    new ListProperty("thing"),
-                    new ListProperty("trigger")),
+                    new BlockListProperty("thing"),
+                    new BlockListProperty("trigger")),
                 Serialization: SerializationType.TopLevel
                 )
         );

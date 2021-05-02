@@ -12,7 +12,8 @@ namespace Tiledriver.DataModelGenerator.MetadataModel
     {
         Normal,
         Custom,
-        TopLevel
+        TopLevel,
+        OrderedProperties
     }
 
     sealed record Block(
