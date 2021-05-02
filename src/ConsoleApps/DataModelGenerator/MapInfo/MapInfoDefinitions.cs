@@ -12,6 +12,8 @@ namespace Tiledriver.Metadata
     {
         public static IEnumerable<Block> Blocks()
         {
+            // AUTOMAP
+
             yield return new Block(FormatName: "automap", ClassName: "AutoMap",
                 Properties: new Property[]
                 {
@@ -22,6 +24,8 @@ namespace Tiledriver.Metadata
                     new StringProperty(formatName:"wallColor",name:"WallColor"),
                     new StringProperty(formatName:"yourColor",name:"YourColor"),
                 }.ToImmutableArray());
+
+            // CLUSTER
 
             yield return new Block("cluster",
                      Properties: new Property[]
@@ -40,6 +44,8 @@ namespace Tiledriver.Metadata
                         new BooleanProperty("lookup"),
                     }.ToImmutableArray());
 
+            // EPISODE
+
             yield return new Block("episode",
                     Properties: new Property[]
                     {
@@ -54,6 +60,8 @@ namespace Tiledriver.Metadata
                     }.ToImmutableArray());
 
             // TODO: clearepisodes
+
+            // GAMEINFO
 
             yield return new Block("gameInfo",
                     Properties: new Property[]
@@ -172,98 +180,109 @@ namespace Tiledriver.Metadata
                         new IntegerProperty("offset", defaultValue: 0),
                     }.ToImmutableArray());
 
-            //yield return new Block("intermission",
-            //        IsSubBlock: false,
-            //        parsing: Parsing.Manual,
-            //        Properties: new[]
-            //        {
-            //            new Property("name", type: PropertyType.String, isMetaData: true),
-            //            new Property(formatName: "intermissionaction", name: "IntermissionActions",
-            //                singularName: "IntermissionAction", type: PropertyType.ImmutableList,
-            //                collectionType: "IIntermissionAction"),
-            //        });
+            // INTERMISSION
 
-            //yield return new Block("IntermissionAction",
-            //        isAbstract: true,
-            //        parsing: Parsing.Manual,
-            //        Properties: new[]
-            //        {
-            //            new Property("background", type: PropertyType.Block, collectionType: "IntermissionBackground"),
-            //            new Property("draw", type: PropertyType.Block, collectionType: "IntermissionDraw"),
-            //            new StringProperty("music"),
-            //            new Property("time", type: PropertyType.Block, collectionType:"IntermissionTime"),
-            //        });
+            yield return new Block("intermission",
+                    Serialization: SerializationType.Custom,
+                    Properties: new Property[]
+                    {
+                        new MetadataStringProperty("name"),
+                        new ListProperty("intermissionActions",elementType:"IIntermissionAction"),
+                    }.ToImmutableArray());
 
-            //yield return new Block("IntermissionTime",
-            //        parsing: Parsing.Manual,
-            //        Properties: new[]
-            //        {
-            //            new DoubleProperty("time"),
-            //            new Property("TitleTime",type:PropertyType.Boolean),
-            //        });
+            yield return new Block("IntermissionBackground",
+                    Serialization: SerializationType.Custom,
+                    Properties: new Property[]
+                    {
+                        new StringProperty("texture"),
+                        new BooleanProperty("tiled"),
+                        new StringProperty("palette"),
+                    }.ToImmutableArray());
 
-            //yield return new Block("IntermissionBackground",
-            //        parsing: Parsing.Manual,
-            //        Properties: new[]
-            //        {
-            //            new StringProperty("texture"),
-            //            new BooleanProperty("tiled"),
-            //            new StringProperty("palette"),
-            //        });
+            yield return new Block("IntermissionDraw",
+                    Serialization: SerializationType.Custom,
+                    Properties: new Property[]
+                    {
+                        new StringProperty("texture"),
+                        new IntegerProperty("x"),
+                        new IntegerProperty("y"),
+                    }.ToImmutableArray());
 
-            //yield return new Block("IntermissionDraw",
-            //        parsing: Parsing.OrderedProperties,
-            //        Properties: new[]
-            //        {
-            //            new StringProperty("texture"),
-            //            new IntegerProperty("x"),
-            //            new IntegerProperty("y"),
-            //        });
+            yield return new Block("Fader",
+                    Serialization: SerializationType.Normal,
+                    Properties: new Property[]
+                    {
+                        new BlockProperty("background", propertyType: "IntermissionBackground"),
+                        new BlockProperty("draw", propertyType: "IntermissionDraw"),
+                        new StringProperty("music"),
+                        new DoubleProperty("time"),
+                        new IdentifierProperty("fadeType"),
+                    }.ToImmutableArray());
 
-            //yield return new Block("Fader",
-            //        inheritsFrom: "IntermissionAction",
-            //        implements: new[] { "IIntermissionAction" },
-            //        Properties: new[]
-            //        {
-            //            new Property(formatName: "fadetype", name: "fadeType", type: PropertyType.Identifier),
-            //        });
+            yield return new Block("GoToTitile",
+                Serialization: SerializationType.Normal,
+                Properties: ImmutableArray<Property>.Empty);
 
-            //yield return new Block(formatName: "GotoTitle", className: "GoToTitle",
-            //        implements: new[] { "IIntermissionAction" },
-            //        Properties: Enumerable.Empty<Property>());
+            yield return new Block("Image",
+                Serialization: SerializationType.Normal,
+                Properties: new Property[]
+                {
+                    new BlockProperty("background", propertyType: "IntermissionBackground"),
+                    new BlockProperty("draw", propertyType: "IntermissionDraw"),
+                    new StringProperty("music"),
+                    new DoubleProperty("time"),
+                }.ToImmutableArray());
+            
+            yield return new Block("TextScreen",
+                Serialization: SerializationType.Normal,
+                Properties: new Property[]
+                {
+                    new BlockProperty("background", propertyType: "IntermissionBackground"),
+                    new BlockProperty("draw", propertyType: "IntermissionDraw"),
+                    new StringProperty("music"),
+                    new DoubleProperty("time"),
+                }.ToImmutableArray());
+            
+            yield return new Block("TextScreen",
+                    Serialization: SerializationType.Normal,
+                    Properties: new Property[]
+                    {
+                        new BlockProperty("background", propertyType: "IntermissionBackground"),
+                        new BlockProperty("draw", propertyType: "IntermissionDraw"),
+                        new StringProperty("music"),
+                        new DoubleProperty("time"),
+                        new ListProperty("text", elementType: "string"),
+                        new IdentifierProperty("textAlignment"),
+                        new IdentifierProperty("textAnchor"),
+                        new StringProperty("textColor"),
+                        new DoubleProperty("textDelay"),
+                        new IntegerProperty("textSpeed"),
+                        new BlockProperty("position", propertyType: "TextScreenPosition"),
+                    }.ToImmutableArray());
 
-            //yield return new Block("Image",
-            //        inheritsFrom: "IntermissionAction",
-            //        implements: new[] { "IIntermissionAction" },
-            //        Properties: Enumerable.Empty<Property>());
+            yield return new Block("TextScreenPosition",
+                    Serialization: SerializationType.OrderedProperties,
+                    Properties: new Property[]
+                    {
+                        new IntegerProperty("x"),
+                        new IntegerProperty("y"),
+                    }.ToImmutableArray());
 
-            //yield return new Block("TextScreen",
-            //        inheritsFrom: "IntermissionAction",
-            //        implements: new[] { "IIntermissionAction" },
-            //        Properties: new[]
-            //        {
-            //            new Property(formatName: "text", name: "Texts", singularName: "Text",
-            //                type: PropertyType.ImmutableList, collectionType: "string"),
-            //            new Property(formatName: "textalignment", name: "textAlignment", type: PropertyType.Identifier),
-            //            new Property(formatName: "textanchor", name: "textAnchor", type: PropertyType.Identifier),
-            //            new StringProperty(formatName: "textcolor", name: "textColor"),
-            //            new DoubleProperty(formatName: "textdelay", name: "textDelay"),
-            //            new IntegerProperty(formatName: "textspeed", name: "textSpeed"),
-            //            new Property("position", type: PropertyType.Block, collectionType: "TextScreenPosition"),
-            //        });
+            yield return new Block("VictoryStats",
+                Serialization: SerializationType.Normal,
+                Properties: new Property[]
+                {
+                    new BlockProperty("background", propertyType: "IntermissionBackground"),
+                    new BlockProperty("draw", propertyType: "IntermissionDraw"),
+                    new StringProperty("music"),
+                    new DoubleProperty("time"),
+                }.ToImmutableArray());
 
-            //yield return new Block("TextScreenPosition",
-            //        parsing: Parsing.OrderedProperties,
-            //        Properties: new[]
-            //        {
-            //            new IntegerProperty("x"),
-            //            new IntegerProperty("y"),
-            //        });
+            // MAP
 
-            //yield return new Block("VictoryStats",
-            //        inheritsFrom: "IntermissionAction",
-            //        implements: new[] { "IIntermissionAction" },
-            //        Properties: Enumerable.Empty<Property>());
+
+
+
 
             //yield return new Block("defaultmap", className: "DefaultMap",
             //        IsSubBlock: false,
