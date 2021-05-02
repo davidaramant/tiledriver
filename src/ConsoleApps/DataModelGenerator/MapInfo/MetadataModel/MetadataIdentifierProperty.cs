@@ -1,16 +1,12 @@
 ﻿// Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using Tiledriver.DataModelGenerator.MetadataModel;
-
 namespace Tiledriver.DataModelGenerator.MapInfo.MetadataModel
 {
-    class IdentifierProperty : ScalarProperty
+    sealed class MetadataIdentifierProperty : IdentifierProperty
     {
-        public IdentifierProperty(string name) : base(name)
+        public MetadataIdentifierProperty(string name) : base(name)
         {
         }
-
-        public override string PropertyType => "Identifier";
     }
 }

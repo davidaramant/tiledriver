@@ -372,22 +372,27 @@ namespace Tiledriver.Metadata
             //            new Property("arg4", PropertyType.Integer),
             //        });
 
-            //yield return new Block("skill",
-            //    Properties: new[]
-            //    {
-            //        new Property("id", type:PropertyType.Identifier, isMetaData:true),
-            //        new Property(formatName:"damagefactor",name:"DamageFactor", type:PropertyType.Double),
-            //        new Property(formatName:"fastmonsters",name:"FastMontsters", type:PropertyType.Flag),
-            //        new Property(formatName:"lives",name:"Lives", type:PropertyType.Integer),
-            //        new Property(formatName:"mapfilter",name:"MapFilter", type:PropertyType.Integer),
-            //        new Property(formatName:"mustconfirm",name:"MustConfirm", type:PropertyType.String),
-            //        new Property(formatName:"name",name:"Name", type:PropertyType.String),
-            //        new Property(formatName:"picname",name:"PicName", type:PropertyType.String),
-            //        new Property(formatName:"playerdamagefactor",name:"PlayerDamageFactor", type:PropertyType.Double),
-            //        new Property(formatName:"quizhints",name:"QuizHints", type:PropertyType.Boolean),
-            //        new Property(formatName:"scoremultiplier",name:"ScoreMultiplier", type:PropertyType.Double),
-            //        new Property(formatName:"spawnfilter",name:"SpawnFilter", type:PropertyType.Integer),
-            //    });
+            // SKILL
+
+            yield return new Block("skill",
+                Serialization:SerializationType.Normal,
+                Properties: new Property[]
+                {
+                    new MetadataIdentifierProperty("id"),
+                    new DoubleProperty("damageFactor"),
+                    new FlagProperty("fastMontsters"),
+                    new IntegerProperty("lives"),
+                    new IntegerProperty("mapFilter"),
+                    new StringProperty("mustConfirm"),
+                    new StringProperty("name"),
+                    new StringProperty("picName"),
+                    new DoubleProperty("playerDamageFactor"),
+                    new BooleanProperty("quizHints"),
+                    new DoubleProperty("scoreMultiplier"),
+                    new IntegerProperty("spawnFilter"),
+                }.ToImmutableArray());
+
+            // TOP-LEVEL
 
             //yield return new Block("mapInfo",
             //        parsing: Parsing.Manual,
