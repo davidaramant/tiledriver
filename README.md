@@ -5,23 +5,37 @@
 
 Tiledriver is a .NET toolkit for Unified Wolfenstein Mapping Format (UWMF) levels, supported by the [ECWolf](http://maniacsvault.net/ecwolf/) engine.
 
-Features:
-
-* UWMF viewer written in WPF (currently broken after updating to .NET 5 😒)
-* Full support for reading and writing UWMF
-* Parse and apply XLAT transforms to turn binary Wolf 3D maps into UWMF
-* Parsing support for MapInfo format
-* Support for various ECWolf formats like WAD, PK3, etc.
+"Toolkit" is deliberatly vague. See the [capabilities](#capabilities) below for more detail about what Tiledriver can actually do.
 
 ## Table of Contents
 
 * [License](#licensing)
+* [Capcilities](#capabilities)
 * [TODO](#todo)
 * [Contributors](#contributors)
 
 ## Licensing
 
 Tiledriver is licensed with the BSD 3-clause license.  See the file LICENSE for details.
+
+This project basically ports some code from ECWolf in the map translation stuff, so I thought it was safest to just use its license.
+
+## Capabilities
+
+Tiledriver does a bunch of random stuff since the goal of the project has shifted over time. It started as an attempt to procedurally make levels, shifted to a failed attempt at using machine learning to make levels, and is currently back to procedural level generation.
+
+Once upon a time this project had a GUI application written in WPF for viewing UWMF levels. However, this got broken during the migration to .NET 5.
+
+### Format Models
+
+|Format|Reading?|Writing?|
+|---|---|---|
+|[UWMF](https://maniacsvault.net/ecwolf/wiki/Universal_Wolfenstein_Map_Format)|Yes|Yes|
+|[XLAT](https://maniacsvault.net/ecwolf/wiki/Map_translator)|Yes||
+|[MapInfo](https://maniacsvault.net/ecwolf/wiki/MAPINFO)|WIP||
+|[Textures](https://maniacsvault.net/ecwolf/wiki/TEXTURES) (TODO)||TODO|
+|WAD|Yes|Yes|
+|PK3|Yes|Yes|
 
 ## TODO
 
@@ -31,7 +45,7 @@ Tiledriver is licensed with the BSD 3-clause license.  See the file LICENSE for 
 - [ ] The parsing system is old and ugly; Sector Director has a much nicer one
   - [ ] Get rid of T4 templates
   - [X] UWMF
-  - [ ] XLAT
+  - [X] XLAT
   - [ ] MapInfo
 - [ ] There is way too much "temporary" code hanging out in `ECWolfLaucher`
 - [X] There is a `SteamGameSearcher` class that deals with the Windows Registry. Where is this supposed to live? Can you make a truly cross-platform console app in .NET 5?
