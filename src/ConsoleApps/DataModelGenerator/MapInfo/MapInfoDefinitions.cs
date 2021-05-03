@@ -1,7 +1,6 @@
 // Copyright (c) 2016, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using Tiledriver.DataModelGenerator.MapInfo.MetadataModel;
 using Tiledriver.DataModelGenerator.MetadataModel;
@@ -10,375 +9,299 @@ namespace Tiledriver.Metadata
 {
     static class MapInfoDefinitions
     {
-        public static IEnumerable<Block> Blocks()
+        public static readonly ImmutableArray<IBlock> Blocks = new IBlock[]
         {
             // AUTOMAP
 
-            yield return new Block(FormatName: "automap", ClassName: "AutoMap",
+            new NormalBlock("autoMap",
+                Metadata: ImmutableArray<Property>.Empty,
                 Properties: new Property[]
                 {
-                    new StringProperty(formatName:"background",name:"Background"),
-                    new StringProperty(formatName:"doorColor",name:"DoorColor"),
-                    new StringProperty(formatName:"floorColor",name:"FloorColor"),
-                    new StringProperty(formatName:"fontColor",name:"FontColor"),
-                    new StringProperty(formatName:"wallColor",name:"WallColor"),
-                    new StringProperty(formatName:"yourColor",name:"YourColor"),
-                }.ToImmutableArray());
+                    new StringProperty(formatName: "background", name: "Background"),
+                    new StringProperty(formatName: "doorColor", name: "DoorColor"),
+                    new StringProperty(formatName: "floorColor", name: "FloorColor"),
+                    new StringProperty(formatName: "fontColor", name: "FontColor"),
+                    new StringProperty(formatName: "wallColor", name: "WallColor"),
+                    new StringProperty(formatName: "yourColor", name: "YourColor"),
+                }.ToImmutableArray()),
 
             // CLUSTER
 
-            yield return new Block("cluster",
-                     Properties: new Property[]
-                     {
-                        new MetadataIntegerProperty("id"),
-                        new BlockProperty("exitText", propertyType: "ClusterExitText"),
-                        new FlagProperty("exitTextIsLump"),
-                        new FlagProperty("exitTextIsMessage"),
-                     }.ToImmutableArray());
-
-            yield return new Block("ClusterExitText",
-                    Serialization: SerializationType.Custom,
-                    Properties: new Property[]
-                    {
-                        new StringProperty("text"),
-                        new BooleanProperty("lookup"),
-                    }.ToImmutableArray());
+            new NormalBlock("cluster",
+                Metadata: ImmutableArray<Property>.Empty.Add(new IntegerProperty("id")),
+                Properties: new Property[]
+                {
+                    new BlockProperty("exitText", propertyType: "ClusterExitText"),
+                    new FlagProperty("exitTextIsLump"),
+                    new FlagProperty("exitTextIsMessage"),
+                }.ToImmutableArray()),
 
             // EPISODE
 
-            yield return new Block("episode",
-                    Properties: new Property[]
-                    {
-                        new MetadataStringProperty("map"),
-                        new CharProperty("key"),
-                        new StringProperty("lookup"),
-                        new StringProperty("name"),
-                        new FlagProperty("noSkillMenu"),
-                        new FlagProperty("optional"),
-                        new StringProperty("picName"),
-                        new FlagProperty("remove"),
-                    }.ToImmutableArray());
-
-            // TODO: clearepisodes
+            new NormalBlock("episode",
+                Metadata: ImmutableArray.Create<Property>().Add(new StringProperty("map")),
+                Properties: new Property[]
+                {
+                    new CharProperty("key"),
+                    new StringProperty("lookup"),
+                    new StringProperty("name"),
+                    new FlagProperty("noSkillMenu"),
+                    new FlagProperty("optional"),
+                    new StringProperty("picName"),
+                    new FlagProperty("remove"),
+                }.ToImmutableArray()),
 
             // GAMEINFO
 
-            yield return new Block("gameInfo",
-                    Properties: new Property[]
-                    {
-                        new StringProperty("advisoryColor"),
-                        new StringProperty("advisoryPic"),
-                        new BlockProperty("border", propertyType:"IGameBorder"),
-                        new StringProperty("borderFlat"),
-                        new StringProperty("deathTransition"),
-                        new StringProperty("dialogColor"),
-                        new StringProperty("doorSoundSequence"),
-                        new BooleanProperty("drawReadThis"),
-                        new StringProperty("finaleFlat"),
-                        new StringProperty("finaleMusic"),
-                        new StringProperty("gameColorMap"),
-                        new StringProperty("gameOverPic"),
-                        new StringProperty("gamePalette"),
-                        new DoubleProperty("gibFactor"),
-                        new StringProperty("highScoresFont"),
-                        new StringProperty("highScoresFontColor"),
-                        new StringProperty("intermissionMusic"),
-                        new BlockProperty("menuColors"),
-                        new StringProperty("menuFade"),
-                        new StringProperty(formatName: "menufontcolor_disabled", name: "menuFontColorDisabled"),
-                        new StringProperty(formatName: "menufontcolor_highlight", name: "menuFontColorHighlight"),
-                        new StringProperty(formatName: "menufontcolor_highlightselection", name: "menuFontColorHighlightSelection"),
-                        new StringProperty(formatName: "menufontcolor_invalid", name: "menuFontColorInvalid"),
-                        new StringProperty(formatName: "menufontcolor_invalidselection", name: "menuFontColorInvalidSelection"),
-                        new StringProperty(formatName: "menufontcolor_label", name: "menuFontColorLabel"),
-                        new StringProperty(formatName: "menufontcolor_selection", name: "menuFontColorSelection"),
-                        new StringProperty(formatName: "menufontcolor_title", name: "menuFontColorTitle"),
-                        new StringProperty(formatName: "menumusic", name: "menuMusic"),
-                        new BlockProperty("menuWindowColors"),
-                        new BlockProperty("messageColors"),
-                        new StringProperty("messageFontColor"),
-                        new StringProperty("pageIndexFontColor"),
-                        new ListProperty("playerClasses", elementType: "string"),
-                        new BlockProperty("psyched"),
-                        new StringProperty("pushwallSoundSequence"),
-                        new ListProperty("quitMessages", elementType: "string"),
-                        new StringProperty("scoresMusic"),
-                        new StringProperty("signOn"),
-                        new StringProperty("titleMusic"),
-                        new StringProperty("titlePage"),
-                        new StringProperty("titlePalette"),
-                        new IntegerProperty("titleTime"),
-                        new BooleanProperty("trackHighScores"),
-                        new StringProperty("translator"),
-                        new StringProperty("victoryMusic"),
-                        new StringProperty("victoryPic"),
-                    }.ToImmutableArray());
+            new NormalBlock("gameInfo",
+                Metadata: ImmutableArray<Property>.Empty,
+                Properties: new Property[]
+                {
+                    new StringProperty("advisoryColor"),
+                    new StringProperty("advisoryPic"),
+                    new BlockProperty("border", propertyType: "IGameBorder"),
+                    new StringProperty("borderFlat"),
+                    new StringProperty("deathTransition"),
+                    new StringProperty("dialogColor"),
+                    new StringProperty("doorSoundSequence"),
+                    new BooleanProperty("drawReadThis"),
+                    new StringProperty("finaleFlat"),
+                    new StringProperty("finaleMusic"),
+                    new StringProperty("gameColorMap"),
+                    new StringProperty("gameOverPic"),
+                    new StringProperty("gamePalette"),
+                    new DoubleProperty("gibFactor"),
+                    new StringProperty("highScoresFont"),
+                    new StringProperty("highScoresFontColor"),
+                    new StringProperty("intermissionMusic"),
+                    new BlockProperty("menuColors"),
+                    new StringProperty("menuFade"),
+                    new StringProperty(formatName: "menufontcolor_disabled", name: "menuFontColorDisabled"),
+                    new StringProperty(formatName: "menufontcolor_highlight", name: "menuFontColorHighlight"),
+                    new StringProperty(formatName: "menufontcolor_highlightselection",
+                        name: "menuFontColorHighlightSelection"),
+                    new StringProperty(formatName: "menufontcolor_invalid", name: "menuFontColorInvalid"),
+                    new StringProperty(formatName: "menufontcolor_invalidselection",
+                        name: "menuFontColorInvalidSelection"),
+                    new StringProperty(formatName: "menufontcolor_label", name: "menuFontColorLabel"),
+                    new StringProperty(formatName: "menufontcolor_selection", name: "menuFontColorSelection"),
+                    new StringProperty(formatName: "menufontcolor_title", name: "menuFontColorTitle"),
+                    new StringProperty(formatName: "menumusic", name: "menuMusic"),
+                    new BlockProperty("menuWindowColors"),
+                    new BlockProperty("messageColors"),
+                    new StringProperty("messageFontColor"),
+                    new StringProperty("pageIndexFontColor"),
+                    new ListProperty("playerClasses", elementType: "string"),
+                    new BlockProperty("psyched"),
+                    new StringProperty("pushwallSoundSequence"),
+                    new ListProperty("quitMessages", elementType: "string"),
+                    new StringProperty("scoresMusic"),
+                    new StringProperty("signOn"),
+                    new StringProperty("titleMusic"),
+                    new StringProperty("titlePage"),
+                    new StringProperty("titlePalette"),
+                    new IntegerProperty("titleTime"),
+                    new BooleanProperty("trackHighScores"),
+                    new StringProperty("translator"),
+                    new StringProperty("victoryMusic"),
+                    new StringProperty("victoryPic"),
+                }.ToImmutableArray()),
 
-            yield return new Block("GameBorderColors",
-                    Serialization: SerializationType.Custom,
-                    Properties: new Property[]
-                    {
-                        new StringProperty("topColor"),
-                        new StringProperty("bottomColor"),
-                        new StringProperty("highlightColor"),
-                    }.ToImmutableArray());
+            new NormalBlock("MenuColors",
+                Metadata: ImmutableArray<Property>.Empty,
+                Serialization: SerializationType.OrderedProperties,
+                Properties: new Property[]
+                {
+                    new StringProperty("border1"),
+                    new StringProperty("border2"),
+                    new StringProperty("border3"),
+                    new StringProperty("background"),
+                    new StringProperty("stripe"),
+                    new StringProperty("stripeBg"),
+                }.ToImmutableArray()),
 
-            yield return new Block("GameBorderGraphics",
-                    Serialization: SerializationType.Custom,
-                    Properties: new Property[]
-                    {
-                        new IntegerProperty("offset"),
-                        new StringProperty("topLeft"),
-                        new StringProperty("top"),
-                        new StringProperty("topRight"),
-                        new StringProperty("left"),
-                        new StringProperty("right"),
-                        new StringProperty("bottomLeft"),
-                        new StringProperty("bottom"),
-                        new StringProperty("bottomRight"),
-                    }.ToImmutableArray());
+            new NormalBlock("MenuWindowColors",
+                Metadata: ImmutableArray<Property>.Empty,
+                Serialization: SerializationType.OrderedProperties,
+                Properties: new Property[]
+                {
+                    new StringProperty("background"),
+                    new StringProperty("top"),
+                    new StringProperty("bottom"),
+                    new StringProperty("indexBackground"),
+                    new StringProperty("indexTop"),
+                    new StringProperty("indexBottom"),
+                }.ToImmutableArray()),
 
-            yield return new Block("MenuColors",
-                    Serialization: SerializationType.OrderedProperties,
-                    Properties: new Property[]
-                    {
-                        new StringProperty("border1"),
-                        new StringProperty("border2"),
-                        new StringProperty("border3"),
-                        new StringProperty("background"),
-                        new StringProperty("stripe"),
-                        new StringProperty("stripeBg"),
-                    }.ToImmutableArray());
-
-            yield return new Block("MenuWindowColors",
-                    Serialization: SerializationType.OrderedProperties,
-                    Properties: new Property[]
-                    {
-                        new StringProperty("background"),
-                        new StringProperty("top"),
-                        new StringProperty("bottom"),
-                        new StringProperty("indexBackground"),
-                        new StringProperty("indexTop"),
-                        new StringProperty("indexBottom"),
-                    }.ToImmutableArray());
-
-            yield return new Block("MessageColors",
-                    Serialization: SerializationType.OrderedProperties,
-                    Properties: new Property[]
-                    {
-                        new StringProperty("background"),
-                        new StringProperty("top"),
-                        new StringProperty("bottom"),
-                    }.ToImmutableArray());
-
-            yield return new Block("Psyched",
-                    Serialization: SerializationType.Custom,
-                    Properties: new Property[]
-                    {
-                        new StringProperty("color1"),
-                        new StringProperty("color2"),
-                        new IntegerProperty("offset", defaultValue: 0),
-                    }.ToImmutableArray());
+            new NormalBlock("MessageColors",
+                Serialization: SerializationType.OrderedProperties,
+                Metadata: ImmutableArray<Property>.Empty,
+                Properties: new Property[]
+                {
+                    new StringProperty("background"),
+                    new StringProperty("top"),
+                    new StringProperty("bottom"),
+                }.ToImmutableArray()),
 
             // INTERMISSION
 
-            yield return new Block("intermission",
-                    Serialization: SerializationType.Custom,
-                    Properties: new Property[]
-                    {
-                        new MetadataStringProperty("name"),
-                        new ListProperty("intermissionActions",elementType:"IIntermissionAction"),
-                    }.ToImmutableArray());
+            new NormalBlock("intermission",
+                Serialization: SerializationType.Custom,
+                Metadata: ImmutableArray<Property>.Empty.Add(new StringProperty("name")),
+                Properties: new Property[]
+                {
+                    new ListProperty("intermissionActions", elementType: "IIntermissionAction"),
+                }.ToImmutableArray()),
 
-            yield return new Block("IntermissionBackground",
-                    Serialization: SerializationType.Custom,
-                    Properties: new Property[]
-                    {
-                        new StringProperty("texture"),
-                        new BooleanProperty("tiled"),
-                        new StringProperty("palette"),
-                    }.ToImmutableArray());
+            new NormalBlock("IntermissionDraw",
+                Serialization: SerializationType.OrderedProperties,
+                Metadata: ImmutableArray<Property>.Empty,
+                Properties: new Property[]
+                {
+                    new StringProperty("texture"),
+                    new IntegerProperty("x"),
+                    new IntegerProperty("y"),
+                }.ToImmutableArray()),
 
-            yield return new Block("IntermissionDraw",
-                    Serialization: SerializationType.Custom,
-                    Properties: new Property[]
-                    {
-                        new StringProperty("texture"),
-                        new IntegerProperty("x"),
-                        new IntegerProperty("y"),
-                    }.ToImmutableArray());
-
-            yield return new Block("Fader",
-                    Serialization: SerializationType.Normal,
-                    Properties: new Property[]
-                    {
-                        new BlockProperty("background", propertyType: "IntermissionBackground"),
-                        new BlockProperty("draw", propertyType: "IntermissionDraw"),
-                        new StringProperty("music"),
-                        new DoubleProperty("time"),
-                        new IdentifierProperty("fadeType"),
-                    }.ToImmutableArray());
-
-            yield return new Block("GoToTitile",
-                Serialization: SerializationType.Normal,
-                Properties: ImmutableArray<Property>.Empty);
-
-            yield return new Block("Image",
-                Serialization: SerializationType.Normal,
+            new AbstractBlock("BaseIntermissionAction",
+                Metadata: ImmutableArray<Property>.Empty,
                 Properties: new Property[]
                 {
                     new BlockProperty("background", propertyType: "IntermissionBackground"),
                     new BlockProperty("draw", propertyType: "IntermissionDraw"),
                     new StringProperty("music"),
                     new DoubleProperty("time"),
-                }.ToImmutableArray());
-            
-            yield return new Block("TextScreen",
+                }.ToImmutableArray()),
+
+            new InheritedBlock("Fader",
+                BaseClass: "BaseIntermissionAction",
+                Metadata: ImmutableArray<Property>.Empty,
+                Properties: new Property[]
+                {
+                    new IdentifierProperty("fadeType"),
+                }.ToImmutableArray()),
+
+            new NormalBlock("GoToTitile",
                 Serialization: SerializationType.Normal,
+                Metadata: ImmutableArray<Property>.Empty,
+                Properties: ImmutableArray<Property>.Empty),
+
+            new InheritedBlock("Image",
+                BaseClass: "BaseIntermissionAction",
+                Metadata: ImmutableArray<Property>.Empty,
+                Properties: ImmutableArray<Property>.Empty),
+
+            new InheritedBlock("TextScreen",
+                BaseClass: "BaseIntermissionAction",
+                Metadata: ImmutableArray<Property>.Empty,
+                Properties: ImmutableArray<Property>.Empty),
+
+            new InheritedBlock("TextScreen",
+                BaseClass: "BaseIntermissionAction",
+                Metadata: ImmutableArray<Property>.Empty,
+                Properties: new Property[]
+                {
+                    new ListProperty("text", elementType: "string"),
+                    new IdentifierProperty("textAlignment"),
+                    new IdentifierProperty("textAnchor"),
+                    new StringProperty("textColor"),
+                    new DoubleProperty("textDelay"),
+                    new IntegerProperty("textSpeed"),
+                    new BlockProperty("position", propertyType: "TextScreenPosition"),
+                }.ToImmutableArray()),
+
+            new NormalBlock("TextScreenPosition",
+                Serialization: SerializationType.OrderedProperties,
+                Metadata: ImmutableArray<Property>.Empty,
+                Properties: new Property[]
+                {
+                    new IntegerProperty("x"),
+                    new IntegerProperty("y"),
+                }.ToImmutableArray()),
+
+            new NormalBlock("VictoryStats",
+                Serialization: SerializationType.Normal,
+                Metadata: ImmutableArray<Property>.Empty,
                 Properties: new Property[]
                 {
                     new BlockProperty("background", propertyType: "IntermissionBackground"),
                     new BlockProperty("draw", propertyType: "IntermissionDraw"),
                     new StringProperty("music"),
                     new DoubleProperty("time"),
-                }.ToImmutableArray());
-            
-            yield return new Block("TextScreen",
-                    Serialization: SerializationType.Normal,
-                    Properties: new Property[]
-                    {
-                        new BlockProperty("background", propertyType: "IntermissionBackground"),
-                        new BlockProperty("draw", propertyType: "IntermissionDraw"),
-                        new StringProperty("music"),
-                        new DoubleProperty("time"),
-                        new ListProperty("text", elementType: "string"),
-                        new IdentifierProperty("textAlignment"),
-                        new IdentifierProperty("textAnchor"),
-                        new StringProperty("textColor"),
-                        new DoubleProperty("textDelay"),
-                        new IntegerProperty("textSpeed"),
-                        new BlockProperty("position", propertyType: "TextScreenPosition"),
-                    }.ToImmutableArray());
-
-            yield return new Block("TextScreenPosition",
-                    Serialization: SerializationType.OrderedProperties,
-                    Properties: new Property[]
-                    {
-                        new IntegerProperty("x"),
-                        new IntegerProperty("y"),
-                    }.ToImmutableArray());
-
-            yield return new Block("VictoryStats",
-                Serialization: SerializationType.Normal,
-                Properties: new Property[]
-                {
-                    new BlockProperty("background", propertyType: "IntermissionBackground"),
-                    new BlockProperty("draw", propertyType: "IntermissionDraw"),
-                    new StringProperty("music"),
-                    new DoubleProperty("time"),
-                }.ToImmutableArray());
+                }.ToImmutableArray()),
 
             // MAP
 
+            new AbstractBlock("BaseMap",
+                Metadata: ImmutableArray<Property>.Empty,
+                Properties: new Property[]
+                {
+                    new StringProperty("borderTexture"),
+                    new IntegerProperty("cluster"),
+                    new StringProperty("completionString"),
+                    new BooleanProperty("deathCam", defaultValue: false),
+                    new StringProperty("defaultCeiling"),
+                    new StringProperty("defaultFloor"),
+                    new ListProperty("ensureInventory", elementType: "string"),
+                    new BlockProperty("exitFade", propertyType: "ExitFadeInfo"),
+                    new IntegerProperty("floorNumber"),
+                    new StringProperty("highScoresGraphic"),
+                    new IntegerProperty("levelBonus"),
+                    new IntegerProperty("levelNum"),
+                    new StringProperty("music"),
+                    new FlagProperty("spawnWithWeaponRaised"),
+                    new BooleanProperty("secretDeathSounds", defaultValue: false),
+                    new BlockProperty("next", propertyType: "NextMapInfo"),
+                    new BlockProperty("secretNext", "NextMapInfo"),
+                    new BlockProperty("victoryNext", propertyType: "NextMapInfo"),
+                    new BlockProperty("SpecialActions", propertyType: "ImmutableList<SpecialAction>"),
+                    new FlagProperty("noIntermission"),
+                    new IntegerProperty("par"),
+                    new StringProperty("translator"),
+                }.ToImmutableArray()),
+
+            new InheritedBlock("defaultMap",
+                BaseClass: "BaseMap",
+                Metadata: ImmutableArray<Property>.Empty,
+                Properties: ImmutableArray<Property>.Empty),
+
+            new InheritedBlock("addDefaultMap",
+                BaseClass: "BaseMap",
+                Metadata: ImmutableArray<Property>.Empty,
+                Properties: ImmutableArray<Property>.Empty),
+
+            new InheritedBlock("map",
+                BaseClass: "BaseMap",
+                Metadata: new Property[]
+                {
+                    new StringProperty("mapLump"),
+                    new StringProperty("mapName"),
+                    new StringProperty("mapNameLookup"),
+                }.ToImmutableArray(),
+                Properties: ImmutableArray<Property>.Empty),
 
 
-
-
-            //yield return new Block("defaultmap", className: "DefaultMap",
-            //        IsSubBlock: false,
-            //        inheritsFrom: "BaseMap",
-            //        canSetPropertiesFrom: new[] { "AddDefaultMap" },
-            //        Properties: Enumerable.Empty<Property>());
-
-            //yield return new Block("adddefaultmap", className: "AddDefaultMap",
-            //        IsSubBlock: false,
-            //        inheritsFrom: "BaseMap",
-            //        Properties: Enumerable.Empty<Property>());
-
-            //yield return new Block("BaseMap",
-            //        isAbstract: true,
-            //        parsing: Parsing.Manual,
-            //        Properties: new[]
-            //        {
-            //            new StringProperty(formatName: "bordertexture", name: "borderTexture"),
-            //            new IntegerProperty("cluster"),
-            //            new StringProperty(formatName: "completionstring", name: "completionString"),
-            //            new Property(formatName: "deathcam", name: "deathCam", type: PropertyType.Boolean,
-            //                defaultValue: false),
-            //            new StringProperty(formatName: "defaultceiling", name: "defaultCeiling"),
-            //            new StringProperty(formatName: "defaultfloor", name: "defaultFloor"),
-            //            new Property(formatName: "ensureinventory", name: "EnsureInventories",
-            //                singularName: "EnsureInventory", type: PropertyType.ImmutableList, collectionType: "string"),
-            //            new Property(formatName: "exitfade", name: "exitFade", type: PropertyType.Block, collectionType:"ExitFadeInfo"),
-            //            new IntegerProperty(formatName: "floornumber", name: "floorNumber"),
-            //            new StringProperty(formatName: "highscoresgraphic", name: "highScoresGraphic"),
-            //            new IntegerProperty(formatName: "levelbonus", name: "levelBonus"),
-            //            new IntegerProperty(formatName: "levelnum", name: "levelNum"),
-            //            new StringProperty("music"),
-            //            new Property(formatName: "spawnwithweaponraised", name: "spawnWithWeaponRaised",
-            //                type: PropertyType.Flag, defaultValue: false),
-            //            new Property(formatName: "secretdeathsounds", name: "secretDeathSounds",
-            //                type: PropertyType.Boolean, defaultValue: false),
-            //            new Property("next", type: PropertyType.Block, collectionType: "NextMapInfo"),
-            //            new Property(formatName: "secretnext", name: "secretNext", type: PropertyType.Block,
-            //                collectionType: "NextMapInfo"),
-            //            new Property(formatName: "victorynext", name: "victoryNext", type: PropertyType.Block,
-            //                collectionType: "NextMapInfo"),
-            //            new Property(formatName: "specialaction", name: "SpecialActions", singularName: "SpecialAction",
-            //                type: PropertyType.ImmutableList, allowMultiple: true),
-            //            new Property(formatName: "nointermission", name: "nointermission", type: PropertyType.Flag,
-            //                defaultValue: false),
-            //            new IntegerProperty("par"),
-            //            new StringProperty("translator"),
-            //        });
-
-            //yield return new Block("map",
-            //        IsSubBlock: false,
-            //        inheritsFrom: "BaseMap",
-            //        propertyFallbacksFrom: new[] { "DefaultMap", "GameInfo" },
-            //        Properties: new[]
-            //        {
-            //            new Property("mapLump", type: PropertyType.String, isMetaData: true),
-            //            new Property("mapName", type: PropertyType.String, isMetaData: true),
-            //            new Property("mapNameLookup", type: PropertyType.String, isMetaData: true),
-            //        });
-
-            //yield return new Block("NextMapInfo",
-            //        parsing: Parsing.Manual,
-            //        Properties: new[]
-            //        {
-            //            new Property("Name", PropertyType.String),
-            //            new Property("EndSequence", PropertyType.Boolean, defaultValue: false),
-            //        });
-
-            //yield return new Block("ExitFadeInfo",
-            //    parsing: Parsing.Manual,
-            //    Properties: new[]
-            //    {
-            //        new Property("Color", PropertyType.String),
-            //        new Property("Time", PropertyType.Double),
-            //    });
-
-            //yield return new Block("specialaction", className: "SpecialAction",
-            //        parsing: Parsing.Manual,
-            //        Properties: new[]
-            //        {
-            //            new StringProperty(formatName: "actorclass", name: "actorClass"),
-            //            new Property("special", PropertyType.String),
-            //            new Property("arg0", PropertyType.Integer),
-            //            new Property("arg1", PropertyType.Integer),
-            //            new Property("arg2", PropertyType.Integer),
-            //            new Property("arg3", PropertyType.Integer),
-            //            new Property("arg4", PropertyType.Integer),
-            //        });
+            new NormalBlock("specialAction",
+                Serialization: SerializationType.Custom,
+                Metadata: ImmutableArray<Property>.Empty,
+                Properties: new Property[]
+                {
+                    new StringProperty(formatName: "actorclass", name: "actorClass"),
+                    new StringProperty("special"),
+                    new IntegerProperty("arg0"),
+                    new IntegerProperty("arg1"),
+                    new IntegerProperty("arg2"),
+                    new IntegerProperty("arg3"),
+                    new IntegerProperty("arg4"),
+                }.ToImmutableArray()),
 
             // SKILL
 
-            yield return new Block("skill",
-                Serialization:SerializationType.Normal,
+            new NormalBlock("skill",
+                Serialization: SerializationType.Normal,
+                Metadata: ImmutableArray<Property>.Empty.Add(new IdentifierProperty("id")),
                 Properties: new Property[]
                 {
-                    new MetadataIdentifierProperty("id"),
                     new DoubleProperty("damageFactor"),
                     new FlagProperty("fastMontsters"),
                     new IntegerProperty("lives"),
@@ -390,11 +313,11 @@ namespace Tiledriver.Metadata
                     new BooleanProperty("quizHints"),
                     new DoubleProperty("scoreMultiplier"),
                     new IntegerProperty("spawnFilter"),
-                }.ToImmutableArray());
+                }.ToImmutableArray()),
 
             // TOP-LEVEL
 
-            //yield return new Block("mapInfo",
+            //new NormalBlock("mapInfo",
             //        parsing: Parsing.Manual,
             //        Properties: new[]
             //        {
@@ -406,6 +329,6 @@ namespace Tiledriver.Metadata
             //            new Property(formatName: "map", name: "Maps", singularName: "Map",type: PropertyType.ImmutableList),
             //            new Property(formatName: "skill", name: "Skills", singularName: "Skill",type: PropertyType.ImmutableList),
             //        });
-        }
+        }.ToImmutableArray();
     }
 }

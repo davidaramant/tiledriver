@@ -1,43 +1,34 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using System.Collections.Generic;
+
 using System.Collections.Immutable;
-using System.Linq;
+using Tiledriver.DataModelGenerator.MetadataModel;
 using Tiledriver.DataModelGenerator.Utilities;
 
-namespace Tiledriver.DataModelGenerator.MetadataModel
+namespace Tiledriver.DataModelGenerator.MapInfo.MetadataModel
 {
-    enum SerializationType
-    {
-        Normal,
-        Custom,
-        TopLevel,
-        OrderedProperties
-    }
-
-    sealed record Block(
+    sealed record NormalBlock(
         string FormatName,
         string ClassName,
+        ImmutableArray<Property> Metadata,
         ImmutableArray<Property> Properties,
-        SerializationType Serialization = SerializationType.Normal)
+        SerializationType Serialization = SerializationType.Normal) : IBlock
     {
         public string Name => FormatName;
 
-        public Block(
+        public NormalBlock(
             string FormatName,
+            ImmutableArray<Property> Metadata,
             ImmutableArray<Property> Properties,
             SerializationType Serialization = SerializationType.Normal) 
             : this(
                 FormatName, 
                 FormatName.ToPascalCase(), 
+                Metadata,
                 Properties, 
                 Serialization)
         {
         }
-
-        public IEnumerable<Property> OrderedProperties => 
-            Properties.Where(p => !p.HasDefault)
-            .Concat(Properties.Where(p => p.HasDefault));
     }
 }
