@@ -2,6 +2,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.IO;
+using Tiledriver.DataModelGenerator.MapInfo;
 using Tiledriver.DataModelGenerator.Uwmf;
 using Tiledriver.DataModelGenerator.Xlat;
 
@@ -15,11 +16,15 @@ namespace Tiledriver.DataModelGenerator
 
             var corePath = Path.Combine(basePath, "Tiledriver.Core2"); // HACK: Point to Core 2 for now
             var formatModelsPath = Path.Combine(corePath, "FormatModels");
+            
             var uwmfPath = Path.Combine(formatModelsPath, "Uwmf");
             var uwmfWritingPath = Path.Combine(uwmfPath, "Writing");
             var uwmfReadingPath = Path.Combine(uwmfPath, "Reading");
+            
             var xlatPath = Path.Combine(formatModelsPath, "Xlat");
             var xlatReadingPath = Path.Combine(xlatPath, "Reading");
+
+            var mapInfoPath = Path.Combine(formatModelsPath, "MapInfo");
 
             UwmfModelGenerator.WriteToPath(uwmfPath);
             UwmfWriterGenerator.WriteToPath(uwmfWritingPath);
@@ -27,6 +32,8 @@ namespace Tiledriver.DataModelGenerator
 
             XlatModelGenerator.WriteToPath(xlatPath);
             XlatParserGenerator.WriteToPath(xlatReadingPath);
+
+            MapInfoModelGenerator.WriteToPath(mapInfoPath);
         }
 
         private static string FindSolutionPath()

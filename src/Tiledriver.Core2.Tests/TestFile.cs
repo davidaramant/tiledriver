@@ -1,7 +1,6 @@
 ﻿// Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-
 using System;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -38,7 +37,7 @@ namespace Tiledriver.Core.Tests
         }
 #pragma warning restore IDE1006 // Naming Styles
 
-        private static Stream Open(string area, [CallerMemberName] string fileName = null)
+        private static Stream Open(string area, [CallerMemberName] string? fileName = null)
         {
             if (fileName == null)
             {
@@ -47,7 +46,8 @@ namespace Tiledriver.Core.Tests
 
             string resourcePath = $"Tiledriver.Core2.Tests.TestFiles.{area}.{fileName}.txt";
 
-            return System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(resourcePath);
+            return System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(resourcePath) 
+                   ?? throw new Exception("Could not find test file");
         }
     }
 }

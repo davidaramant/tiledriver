@@ -5,7 +5,7 @@ using System.Collections.Immutable;
 using Tiledriver.DataModelGenerator.MapInfo.MetadataModel;
 using Tiledriver.DataModelGenerator.MetadataModel;
 
-namespace Tiledriver.Metadata
+namespace Tiledriver.DataModelGenerator.MapInfo
 {
     static class MapInfoDefinitions
     {
@@ -315,20 +315,6 @@ namespace Tiledriver.Metadata
                     new IntegerProperty("spawnFilter"),
                 }.ToImmutableArray()),
 
-            // TOP-LEVEL
-
-            //new NormalBlock("mapInfo",
-            //        parsing: Parsing.Manual,
-            //        Properties: new[]
-            //        {
-            //            new Property("autoMap", formatName: "automap", type: PropertyType.Block),
-            //            new Property(formatName: "cluster", name: "Clusters", singularName: "Cluster",type: PropertyType.ImmutableList),
-            //            new Property(formatName: "episode", name: "Episodes", singularName: "Episode",type: PropertyType.ImmutableList),
-            //            new Property("gameInfo", formatName: "gameinfo", type: PropertyType.Block),
-            //            new Property(formatName: "intermission", name: "Intermissions", singularName: "Intermission",type: PropertyType.ImmutableList),
-            //            new Property(formatName: "map", name: "Maps", singularName: "Map",type: PropertyType.ImmutableList),
-            //            new Property(formatName: "skill", name: "Skills", singularName: "Skill",type: PropertyType.ImmutableList),
-            //        });
         }.ToImmutableArray();
     }
 }

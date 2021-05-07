@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Tiledriver.DataModelGenerator.Utilities
 {
@@ -13,7 +14,7 @@ namespace Tiledriver.DataModelGenerator.Utilities
         public IndentedWriter(StreamWriter writer) => _writer = writer;
 
         public int IndentionLevel { get; private set; }
-        public string CurrentIndent => new string(' ', IndentionLevel*4);
+        public string CurrentIndent => new string(' ', IndentionLevel * 4);
 
         public IndentedWriter WriteHeader(string nameSpace, IEnumerable<string> usingNamespaces)
         {
@@ -21,7 +22,7 @@ namespace Tiledriver.DataModelGenerator.Utilities
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.");
             Line();
 
-            foreach (var usingNamespace in usingNamespaces)
+            foreach (var usingNamespace in usingNamespaces.OrderBy(text => text))
             {
                 Line($"using {usingNamespace};");
             }
@@ -47,7 +48,7 @@ namespace Tiledriver.DataModelGenerator.Utilities
         }
 
         public IndentedWriter OpenParen() => Line("{").IncreaseIndent();
-        public IndentedWriter CloseParen()=> DecreaseIndent().Line("}");
+        public IndentedWriter CloseParen() => DecreaseIndent().Line("}");
 
         public IndentedWriter Line(string line)
         {

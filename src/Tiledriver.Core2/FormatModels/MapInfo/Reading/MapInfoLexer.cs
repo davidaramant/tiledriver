@@ -4,7 +4,7 @@
 using System.IO;
 using Tiledriver.Core.FormatModels.Common.Reading;
 
-namespace Tiledriver.Core.FormatModels.MapInfos.Reading
+namespace Tiledriver.Core.FormatModels.MapInfo.Reading
 {
     public static class MapInfoLexer
     {

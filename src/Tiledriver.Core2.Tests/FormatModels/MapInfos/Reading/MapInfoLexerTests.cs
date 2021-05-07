@@ -1,12 +1,11 @@
 ﻿// Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-
 using System.IO;
 using System.Linq;
 using System.Text;
 using Tiledriver.Core.FormatModels.Common.Reading;
-using Tiledriver.Core.FormatModels.MapInfos.Reading;
+using Tiledriver.Core.FormatModels.MapInfo.Reading;
 using Xunit;
 
 namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Reading
