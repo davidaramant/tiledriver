@@ -1,17 +1,15 @@
 ﻿// Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
+using Tiledriver.DataModelGenerator.Utilities;
+
 namespace Tiledriver.DataModelGenerator.MetadataModel
 {
     sealed class BlockProperty : ScalarProperty
     {
-        public override string PropertyType { get; }
-        public override string? DefaultString { get; }
-
-        public BlockProperty(string name, string? propertyType = null, bool nullable = false) : base(name)
+        public BlockProperty(string name, string? propertyType = null, bool isNullable = false)
+            : base(name, propertyType ?? name.ToPascalCase(), isNullable: isNullable, defaultString: null)
         {
-            PropertyType = (propertyType ?? PropertyName) + (nullable ? "?" : string.Empty);
-            DefaultString = nullable ? "null" : null;
         }
     }
 }

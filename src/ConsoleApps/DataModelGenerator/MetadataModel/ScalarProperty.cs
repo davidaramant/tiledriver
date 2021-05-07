@@ -8,9 +8,15 @@ namespace Tiledriver.DataModelGenerator.MetadataModel
     abstract class ScalarProperty : Property
     {
         public override string PropertyName => Name.ToPascalCase();
+        public override string PropertyType { get; }
+        public override string? DefaultString { get; }
+        public bool IsNullable { get; }
 
-        protected ScalarProperty(string name) : base(name)
+        protected ScalarProperty(string name, string type, bool isNullable, string? defaultString) : base(name)
         {
+            PropertyType = type + (isNullable ? "?" : string.Empty);
+            IsNullable = isNullable;
+            DefaultString = isNullable ? "null" : defaultString;
         }
     }
 }

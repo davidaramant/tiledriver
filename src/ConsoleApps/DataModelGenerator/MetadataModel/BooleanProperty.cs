@@ -6,9 +6,8 @@ namespace Tiledriver.DataModelGenerator.MetadataModel
     sealed class BooleanProperty : ScalarProperty
     {
         public bool? Default { get; }
-        public override string PropertyType => "bool";
-        public override string? DefaultString => Default?.ToString()?.ToLowerInvariant();
 
-        public BooleanProperty(string name, bool? defaultValue = null) : base(name) => Default = defaultValue;
+        public BooleanProperty(string name, bool? defaultValue = null, bool isNullable = false)
+            : base(name, "bool", isNullable: isNullable, defaultValue?.ToString()?.ToLowerInvariant()) => Default = defaultValue;
     }
 }

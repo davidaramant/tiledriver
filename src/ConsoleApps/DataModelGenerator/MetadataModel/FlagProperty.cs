@@ -6,10 +6,9 @@ namespace Tiledriver.DataModelGenerator.MetadataModel
     sealed class FlagProperty : ScalarProperty
     {
         public bool Default => true;
-        public override string PropertyType => "bool";
-        public override string? DefaultString => Default.ToString().ToLowerInvariant();
 
-        public FlagProperty(string name) : base(name)
+        public FlagProperty(string name, bool isNullable = false) 
+            : base(name, "bool", isNullable: isNullable, defaultString: "true")
         {
         }
     }

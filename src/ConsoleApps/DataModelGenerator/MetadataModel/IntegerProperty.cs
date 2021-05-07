@@ -3,13 +3,12 @@
 
 namespace Tiledriver.DataModelGenerator.MetadataModel
 {
-    class IntegerProperty : ScalarProperty
+    sealed class IntegerProperty : ScalarProperty
     {
         public int? Default { get; }
-        public override string PropertyType => "int";
-        public override string? DefaultString => Default?.ToString();
 
-        public IntegerProperty(string name, int? defaultValue = null) : base(name)
+        public IntegerProperty(string name, int? defaultValue = null, bool isNullable = false)
+            : base(name, "int", isNullable: isNullable, defaultString: defaultValue?.ToString())
         {
             Default = defaultValue;
         }

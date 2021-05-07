@@ -3,12 +3,11 @@
 
 namespace Tiledriver.DataModelGenerator.MetadataModel
 {
-    class IdentifierProperty : ScalarProperty
+    sealed class IdentifierProperty : ScalarProperty
     {
-        public IdentifierProperty(string name) : base(name)
+        public IdentifierProperty(string name) 
+            : base(name, "Identifier", isNullable: false, defaultString: null)
         {
         }
-
-        public override string PropertyType => "Identifier";
     }
 }
