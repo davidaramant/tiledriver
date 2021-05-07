@@ -46,11 +46,13 @@ namespace Tiledriver.DataModelGenerator.MapInfo
                 includes.Add("Tiledriver.Core.FormatModels.Common");
             }
 
+            var qualifier = block is AbstractBlock ? "abstract" : "sealed";
+
             output
                 .WriteHeader("Tiledriver.Core.FormatModels.MapInfo", includes)
                 .OpenParen()
                 .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
-                .Line($"public sealed partial record {block.ClassName}(")
+                .Line($"public {qualifier} partial record {block.ClassName}(")
                 .IncreaseIndent()
                 .JoinLines(",", block.OrderedProperties.Select(GetPropertyDefinition))
                 .DecreaseIndent()
