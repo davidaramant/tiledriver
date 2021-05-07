@@ -47,6 +47,12 @@ namespace Tiledriver.DataModelGenerator.MapInfo
             }
 
             var qualifier = block is AbstractBlock ? "abstract" : "sealed";
+            var includesNullables = block.OrderedProperties.OfType<ScalarProperty>().Any(sp => sp.IsNullable);
+
+            if (includesNullables)
+            {
+                output.Line("#nullable enable");
+            }
 
             output
                 .WriteHeader("Tiledriver.Core.FormatModels.MapInfo", includes)
