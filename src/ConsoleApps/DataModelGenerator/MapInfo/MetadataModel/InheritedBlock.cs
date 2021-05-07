@@ -2,8 +2,8 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System.Collections.Immutable;
+using Humanizer;
 using Tiledriver.DataModelGenerator.MetadataModel;
-using Tiledriver.DataModelGenerator.Utilities;
 
 namespace Tiledriver.DataModelGenerator.MapInfo.MetadataModel
 {
@@ -13,6 +13,6 @@ namespace Tiledriver.DataModelGenerator.MapInfo.MetadataModel
         ImmutableArray<Property> Metadata,
         ImmutableArray<Property> Properties) : IBlock
     {
-        public string ClassName => FormatName.ToPascalCase();
+        public string ClassName => FormatName.Pascalize();
     }
 }

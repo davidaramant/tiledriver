@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using Tiledriver.DataModelGenerator.Utilities;
+using Humanizer;
 
 namespace Tiledriver.DataModelGenerator.MetadataModel
 {
@@ -27,16 +27,16 @@ namespace Tiledriver.DataModelGenerator.MetadataModel
         public Block(
             string FormatName,
             ImmutableArray<Property> Properties,
-            SerializationType Serialization = SerializationType.Normal) 
+            SerializationType Serialization = SerializationType.Normal)
             : this(
-                FormatName, 
-                FormatName.ToPascalCase(), 
-                Properties, 
+                FormatName,
+                FormatName.Pascalize(),
+                Properties,
                 Serialization)
         {
         }
 
-        public IEnumerable<Property> OrderedProperties => 
+        public IEnumerable<Property> OrderedProperties =>
             Properties.Where(p => !p.HasDefault)
             .Concat(Properties.Where(p => p.HasDefault));
     }
