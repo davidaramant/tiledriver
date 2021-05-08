@@ -34,5 +34,28 @@ namespace Tiledriver.Core.FormatModels.MapInfo
         bool? NoIntermission = null,
         int? Par = null,
         string? Translator = null
+    ) : BaseMap(
+        EnsureInventories,
+        SpecialActions,
+        BorderTexture,
+        Cluster,
+        CompletionString,
+        DeathCam,
+        DefaultCeiling,
+        DefaultFloor,
+        ExitFade,
+        FloorNumber,
+        HighScoresGraphic,
+        LevelBonus,
+        LevelNum,
+        Music,
+        SpawnWithWeaponRaised,
+        SecretDeathSounds,
+        Next,
+        SecretNext,
+        VictoryNext,
+        NoIntermission,
+        Par,
+        Translator
     );
 }

@@ -61,7 +61,18 @@ namespace Tiledriver.DataModelGenerator.MapInfo
                 .Line($"public {qualifier} partial record {block.ClassName}(")
                 .IncreaseIndent()
                 .JoinLines(",", block.OrderedProperties.Select(GetPropertyDefinition))
-                .DecreaseIndent()
+                .DecreaseIndent();
+
+            if (block is InheritedBlock ib)
+            {
+                output
+                    .Line($") : {ib.BaseClass.ClassName}(")
+                    .IncreaseIndent()
+                    .JoinLines(",", ib.BaseClass.OrderedProperties.Select(p => p.PropertyName))
+                    .DecreaseIndent();
+            }
+
+            output
                 .Line(");")
                 .CloseParen();
         }

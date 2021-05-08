@@ -20,5 +20,10 @@ namespace Tiledriver.Core.FormatModels.MapInfo
         IntermissionDraw Draw,
         string Music,
         double Time
+    ) : BaseIntermissionAction(
+        Background,
+        Draw,
+        Music,
+        Time
     );
 }

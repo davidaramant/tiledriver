@@ -16,11 +16,9 @@ namespace Tiledriver.DataModelGenerator.MapInfo.MetadataModel
         private readonly IReadOnlyList<Property> _metadata;
         private readonly IReadOnlyList<Property> _properties;
 
-        private AbstractBlock BaseClass => _baseClass.Value;
-
+        public IBlock BaseClass => _baseClass.Value;
         public string FormatName { get; }
         public string ClassName => FormatName.Pascalize();
-        public string BaseClassName => BaseClass.ClassName;
         public ImmutableArray<Property> Metadata => _metadata.Concat(BaseClass.Metadata).ToImmutableArray();
         public ImmutableArray<Property> Properties => _properties.Concat(BaseClass.Properties).ToImmutableArray();
 
