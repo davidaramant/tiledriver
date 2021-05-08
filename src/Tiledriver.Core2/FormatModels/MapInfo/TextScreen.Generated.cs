@@ -15,6 +15,10 @@ namespace Tiledriver.Core.FormatModels.MapInfo
         string TextColor,
         double TextDelay,
         int TextSpeed,
-        TextScreenPosition Position
+        TextScreenPosition Position,
+        IntermissionBackground Background,
+        IntermissionDraw Draw,
+        string Music,
+        double Time
     );
 }

@@ -2,6 +2,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System.Collections.Immutable;
+using System.Linq;
 using Tiledriver.DataModelGenerator.MapInfo.MetadataModel;
 using Tiledriver.DataModelGenerator.MetadataModel;
 
@@ -174,12 +175,12 @@ namespace Tiledriver.DataModelGenerator.MapInfo
                 }.ToImmutableArray()),
 
             new InheritedBlock("Fader",
-                BaseClass: "BaseIntermissionAction",
-                Metadata: ImmutableArray<Property>.Empty,
-                Properties: new Property[]
+                getBaseClass: ()=>Blocks.OfType<AbstractBlock>().Single(b=>b.ClassName == "BaseIntermissionAction"),
+                metadata: ImmutableArray<Property>.Empty,
+                properties: new Property[]
                 {
                     new IdentifierProperty("fadeType"),
-                }.ToImmutableArray()),
+                }),
 
             new NormalBlock("GoToTitile",
                 Serialization: SerializationType.Normal,
@@ -187,19 +188,19 @@ namespace Tiledriver.DataModelGenerator.MapInfo
                 Properties: ImmutableArray<Property>.Empty),
 
             new InheritedBlock("Image",
-                BaseClass: "BaseIntermissionAction",
-                Metadata: ImmutableArray<Property>.Empty,
-                Properties: ImmutableArray<Property>.Empty),
+                getBaseClass: ()=>Blocks.OfType<AbstractBlock>().Single(b=>b.ClassName == "BaseIntermissionAction"),
+                metadata: ImmutableArray<Property>.Empty,
+                properties: ImmutableArray<Property>.Empty),
 
             new InheritedBlock("TextScreen",
-                BaseClass: "BaseIntermissionAction",
-                Metadata: ImmutableArray<Property>.Empty,
-                Properties: ImmutableArray<Property>.Empty),
+                getBaseClass: ()=>Blocks.OfType<AbstractBlock>().Single(b=>b.ClassName == "BaseIntermissionAction"),
+                metadata: ImmutableArray<Property>.Empty,
+                properties: ImmutableArray<Property>.Empty),
 
             new InheritedBlock("TextScreen",
-                BaseClass: "BaseIntermissionAction",
-                Metadata: ImmutableArray<Property>.Empty,
-                Properties: new Property[]
+                getBaseClass: ()=>Blocks.OfType<AbstractBlock>().Single(b=>b.ClassName == "BaseIntermissionAction"),
+                metadata: ImmutableArray<Property>.Empty,
+                properties: new Property[]
                 {
                     new ListProperty("text", elementType: "string"),
                     new IdentifierProperty("textAlignment"),
@@ -261,24 +262,24 @@ namespace Tiledriver.DataModelGenerator.MapInfo
                 }.ToImmutableArray()),
 
             new InheritedBlock("defaultMap",
-                BaseClass: "BaseMap",
-                Metadata: ImmutableArray<Property>.Empty,
-                Properties: ImmutableArray<Property>.Empty),
+                getBaseClass: ()=>Blocks.OfType<AbstractBlock>().Single(b=>b.ClassName == "BaseMap"),
+                metadata: ImmutableArray<Property>.Empty,
+                properties: ImmutableArray<Property>.Empty),
 
             new InheritedBlock("addDefaultMap",
-                BaseClass: "BaseMap",
-                Metadata: ImmutableArray<Property>.Empty,
-                Properties: ImmutableArray<Property>.Empty),
+                getBaseClass: ()=>Blocks.OfType<AbstractBlock>().Single(b=>b.ClassName == "BaseMap"),
+                metadata: ImmutableArray<Property>.Empty,
+                properties: ImmutableArray<Property>.Empty),
 
             new InheritedBlock("map",
-                BaseClass: "BaseMap",
-                Metadata: new Property[]
+                getBaseClass: ()=>Blocks.OfType<AbstractBlock>().Single(b=>b.ClassName == "BaseMap"),
+                metadata: new Property[]
                 {
                     new StringProperty("mapLump"),
                     new StringProperty("mapName"),
                     new StringProperty("mapNameLookup"),
                 }.ToImmutableArray(),
-                Properties: ImmutableArray<Property>.Empty),
+                properties: ImmutableArray<Property>.Empty),
 
 
             new NormalBlock("specialAction",
