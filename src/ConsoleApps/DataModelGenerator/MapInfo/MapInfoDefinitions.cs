@@ -276,8 +276,8 @@ namespace Tiledriver.DataModelGenerator.MapInfo
                 metadata: new Property[]
                 {
                     new StringProperty("mapLump"),
-                    new StringProperty("mapName"),
-                    new StringProperty("mapNameLookup"),
+                    new StringProperty("mapName", isNullable:true),
+                    new BooleanProperty("isMapNameLookup", defaultValue:false),
                 }.ToImmutableArray(),
                 properties: ImmutableArray<Property>.Empty),
 
