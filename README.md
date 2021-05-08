@@ -32,7 +32,7 @@ Once upon a time this project had a GUI application written in WPF for viewing U
 |---|:---:|:---:|
 |[UWMF](https://maniacsvault.net/ecwolf/wiki/Universal_Wolfenstein_Map_Format)|Yes|Yes|
 |[XLAT](https://maniacsvault.net/ecwolf/wiki/Map_translator)|Yes||
-|[MapInfo](https://maniacsvault.net/ecwolf/wiki/MAPINFO)|WIP||
+|[MapInfo](https://maniacsvault.net/ecwolf/wiki/MAPINFO) (WIP)|WIP||
 |[Textures](https://maniacsvault.net/ecwolf/wiki/TEXTURES) (TODO)||TODO|
 |WAD|Yes|Yes|
 |PK3|Yes|Yes|
