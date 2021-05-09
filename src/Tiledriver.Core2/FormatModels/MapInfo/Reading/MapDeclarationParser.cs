@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Net;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Common.Reading;
 using Tiledriver.Core.FormatModels.MapInfo.Reading.AbstractSyntaxTree;
@@ -25,11 +24,20 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
                 {
                     case IdentifierToken mapId when mapId.Id == "map":
                         break;
+
                     case IdentifierToken defaultMapId when defaultMapId.Id == "defaultMap":
-                        var assignmentLookup = GetAssignmentLookup(tokenStream);
-                        defaultMap = ParseDefaultMap(assignmentLookup);
+                        {
+                            var assignmentLookup = GetAssignmentLookup(tokenStream);
+                            defaultMap = ParseDefaultMap(assignmentLookup);
+                        }
                         break;
+
                     case IdentifierToken addDefaultMapId when addDefaultMapId.Id == "addDefaultMap":
+                        {
+                            var assignmentLookup = GetAssignmentLookup(tokenStream);
+                            var addDefaultMap = ParseAddDefaultMap(assignmentLookup);
+                            defaultMap = UpdateDefaultMap(defaultMap, addDefaultMap);
+                        }
                         break;
                 }
             }
@@ -39,6 +47,7 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
 
         private static partial DefaultMap ParseDefaultMap(ILookup<Identifier, VariableAssignment> assignmentLookup);
         private static partial AddDefaultMap ParseAddDefaultMap(ILookup<Identifier, VariableAssignment> assignmentLookup);
+        private static partial DefaultMap UpdateDefaultMap(DefaultMap defaultMap, AddDefaultMap addDefaultMap);
 
         private static ILookup<Identifier, VariableAssignment> GetAssignmentLookup(IEnumerator<Token> tokenStream)
         {

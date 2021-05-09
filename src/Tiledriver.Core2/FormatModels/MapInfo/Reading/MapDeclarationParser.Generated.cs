@@ -62,5 +62,31 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
                 Par: ReadIntAssignment(assignmentLookup, "par"),
                 Translator: ReadStringAssignment(assignmentLookup, "translator")
             );
+
+        private static partial DefaultMap UpdateDefaultMap(DefaultMap defaultMap, AddDefaultMap addDefaultMap) =>
+            new DefaultMap(
+                EnsureInventories: defaultMap.EnsureInventories.AddRange(addDefaultMap.EnsureInventories),
+                SpecialActions: defaultMap.SpecialActions.AddRange(addDefaultMap.SpecialActions),
+                BorderTexture: addDefaultMap.BorderTexture ?? defaultMap.BorderTexture,
+                Cluster: addDefaultMap.Cluster ?? defaultMap.Cluster,
+                CompletionString: addDefaultMap.CompletionString ?? defaultMap.CompletionString,
+                DeathCam: addDefaultMap.DeathCam ?? defaultMap.DeathCam,
+                DefaultCeiling: addDefaultMap.DefaultCeiling ?? defaultMap.DefaultCeiling,
+                DefaultFloor: addDefaultMap.DefaultFloor ?? defaultMap.DefaultFloor,
+                ExitFade: addDefaultMap.ExitFade ?? defaultMap.ExitFade,
+                FloorNumber: addDefaultMap.FloorNumber ?? defaultMap.FloorNumber,
+                HighScoresGraphic: addDefaultMap.HighScoresGraphic ?? defaultMap.HighScoresGraphic,
+                LevelBonus: addDefaultMap.LevelBonus ?? defaultMap.LevelBonus,
+                LevelNum: addDefaultMap.LevelNum ?? defaultMap.LevelNum,
+                Music: addDefaultMap.Music ?? defaultMap.Music,
+                SpawnWithWeaponRaised: addDefaultMap.SpawnWithWeaponRaised ?? defaultMap.SpawnWithWeaponRaised,
+                SecretDeathSounds: addDefaultMap.SecretDeathSounds ?? defaultMap.SecretDeathSounds,
+                Next: addDefaultMap.Next ?? defaultMap.Next,
+                SecretNext: addDefaultMap.SecretNext ?? defaultMap.SecretNext,
+                VictoryNext: addDefaultMap.VictoryNext ?? defaultMap.VictoryNext,
+                NoIntermission: addDefaultMap.NoIntermission ?? defaultMap.NoIntermission,
+                Par: addDefaultMap.Par ?? defaultMap.Par,
+                Translator: addDefaultMap.Translator ?? defaultMap.Translator
+            );
     }
 }

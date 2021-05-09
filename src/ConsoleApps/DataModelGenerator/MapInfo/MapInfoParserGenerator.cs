@@ -41,6 +41,8 @@ namespace Tiledriver.DataModelGenerator.MapInfo
             WriteParser(output, MapInfoDefinitions.Blocks.Single(b => b.ClassName == "DefaultMap"));
             output.Line();
             WriteParser(output, MapInfoDefinitions.Blocks.Single(b => b.ClassName == "AddDefaultMap"));
+            output.Line();
+            WriteDefaultMapUpdater(output, MapInfoDefinitions.Blocks.Single(b => b.ClassName == "DefaultMap"));
 
             output.CloseParen().CloseParen();
         }
@@ -65,6 +67,27 @@ namespace Tiledriver.DataModelGenerator.MapInfo
                 ScalarProperty sp => $"Read{sp.BasePropertyType.Pascalize()}Assignment(assignmentLookup, \"{property.FormatName}\")",
                 CollectionProperty { PropertyName: "SpecialActions" } => "ReadSpecialActionAssignments(assignmentLookup)",
                 CollectionProperty => $"ReadListAssignment(assignmentLookup, \"{property.FormatName}\")",
+                _ => throw new Exception("What type of property is this??")
+            };
+
+        private static void WriteDefaultMapUpdater(IndentedWriter output, IBlock block)
+        {
+            output
+                .Line($"private static partial DefaultMap UpdateDefaultMap(DefaultMap defaultMap, AddDefaultMap addDefaultMap) =>")
+                .IncreaseIndent()
+                .Line("new DefaultMap(")
+                .IncreaseIndent()
+                .JoinLines(",", block.OrderedProperties.Select(GetPropertyCondenser))
+                .DecreaseIndent()
+                .Line(");")
+                .DecreaseIndent();
+        }
+
+        private static string GetPropertyCondenser(Property property) =>
+            $"{property.PropertyName}: " + property switch
+            {
+                ScalarProperty sp => $"addDefaultMap.{sp.PropertyName} ?? defaultMap.{sp.PropertyName}",
+                CollectionProperty cp => $"defaultMap.{cp.PropertyName}.AddRange(addDefaultMap.{cp.PropertyName})",
                 _ => throw new Exception("What type of property is this??")
             };
     }
