@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Net;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Common.Reading;
 using Tiledriver.Core.FormatModels.MapInfo.Reading.AbstractSyntaxTree;
@@ -36,13 +37,13 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
             throw new NotImplementedException();
         }
 
-        private static partial DefaultMap ParseDefaultMap(ILookup<IdentifierToken, VariableAssignment> assignmentLookup);
-        private static partial AddDefaultMap ParseAddDefaultMap(ILookup<IdentifierToken, VariableAssignment> assignmentLookup);
+        private static partial DefaultMap ParseDefaultMap(ILookup<Identifier, VariableAssignment> assignmentLookup);
+        private static partial AddDefaultMap ParseAddDefaultMap(ILookup<Identifier, VariableAssignment> assignmentLookup);
 
-        private static ILookup<IdentifierToken, VariableAssignment> GetAssignmentLookup(IEnumerator<Token> tokenStream)
+        private static ILookup<Identifier, VariableAssignment> GetAssignmentLookup(IEnumerator<Token> tokenStream)
         {
             var assignments = ParseBlock(tokenStream);
-            return assignments.ToLookup(a => a.Id, a => a);
+            return assignments.ToLookup(a => a.Id.Id, a => a);
         }
 
         private static IEnumerable<VariableAssignment> ParseBlock(IEnumerator<Token> tokenStream)
@@ -62,7 +63,7 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
                             case NewLineToken:
                                 yield return new VariableAssignment(id, valueBuilder.ToImmutable());
                                 break;
-                            
+
                             case EqualsToken:
                                 next = tokenStream.GetNext();
                                 if (next == null || next is NewLineToken)
@@ -89,7 +90,7 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
                                 }
 
                                 break;
-                            
+
                             default:
                                 throw new ParsingException($"Messed up line starting with {id}");
                         }
@@ -104,43 +105,131 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
             }
         }
 
+        private static VariableAssignment[] GetAssignments(
+            ILookup<Identifier, VariableAssignment> assignmentLookup,
+            string formatName)
+        {
+            var id = new Identifier(formatName);
+            return assignmentLookup.Contains(id) ? assignmentLookup[id].ToArray() : new VariableAssignment[0];
+        }
+
+        private static VariableAssignment? GetSingleAssignment(
+            ILookup<Identifier, VariableAssignment> assignmentLookup,
+            string formatName)
+        {
+            var assignments = GetAssignments(assignmentLookup, formatName);
+
+            return assignments.Length switch
+            {
+                0 => null,
+                1 => assignments[0],
+                _ => throw new ParsingException($"Multiple assignments to {formatName}")
+            };
+        }
+
         private static ImmutableList<string> ReadListAssignment(
-            ILookup<IdentifierToken, VariableAssignment> assignmentLookup, string formatName)
+            ILookup<Identifier, VariableAssignment> assignmentLookup, string formatName)
+        {
+            var assignment = GetSingleAssignment(assignmentLookup, formatName);
+            if (assignment == null)
+            {
+                return ImmutableList<string>.Empty;
+            }
+
+            var valueQueue = new Queue<Token>(assignment.Values);
+
+            var strings = ImmutableList.CreateBuilder<string>();
+
+            if (valueQueue.Any())
+            {
+                var token = valueQueue.Dequeue();
+                if (token is not StringToken st)
+                {
+                    throw new ParsingException("Expected string token, got " + token);
+                }
+
+                strings.Add(st.Value);
+
+                while (valueQueue.Any())
+                {
+                    token = valueQueue.Dequeue();
+                    if (token is not CommaToken)
+                    {
+                        throw ParsingException.CreateError(token, "comma");
+                    }
+
+                    token = valueQueue.Dequeue();
+                    if (token is not StringToken stringToken)
+                    {
+                        throw ParsingException.CreateError(token, "string");
+                    }
+
+                    strings.Add(stringToken.Value);
+                }
+            }
+
+            return strings.ToImmutable();
+        }
+
+        private static ImmutableList<SpecialAction> ReadSpecialActionAssignments(ILookup<Identifier, VariableAssignment> assignmentLookup)
         {
             throw new NotImplementedException();
         }
 
-        private static ImmutableList<SpecialAction> ReadSpecialActionAssignments(ILookup<IdentifierToken, VariableAssignment> assignmentLookup)
+        private static TToken? GetSingleToken<TToken>(ILookup<Identifier, VariableAssignment> assignmentLookup,
+            string formatName) where TToken : Token
+        {
+            var assignment = GetSingleAssignment(assignmentLookup, formatName);
+            if (assignment == null)
+            {
+                return null;
+            }
+
+            if (assignment.Values.Count != 1)
+            {
+                throw new ParsingException($"Messed up assignment: {assignment.Id}");
+            }
+
+            var token = assignment.Values[0];
+            if (token is not TToken t)
+            {
+                throw ParsingException.CreateError(token, "string");
+            }
+
+            return t;
+        }
+
+        private static string? ReadStringAssignment(ILookup<Identifier, VariableAssignment> assignmentLookup, string formatName) => 
+            GetSingleToken<StringToken>(assignmentLookup, formatName)?.Value;
+
+        private static int? ReadIntAssignment(ILookup<Identifier, VariableAssignment> assignmentLookup, string formatName) => 
+            GetSingleToken<IntegerToken>(assignmentLookup, formatName)?.Value;
+
+        private static bool? ReadBoolAssignment(ILookup<Identifier, VariableAssignment> assignmentLookup, string formatName) => 
+            GetSingleToken<BooleanToken>(assignmentLookup, formatName)?.Value;
+
+        private static bool? ReadFlag(ILookup<Identifier, VariableAssignment> assignmentLookup, string formatName)
+        {
+            var assignment = GetSingleAssignment(assignmentLookup, formatName);
+            if (assignment == null)
+            {
+                return null;
+            }
+
+            if (assignment.Values.Count != 0)
+            {
+                throw new ParsingException($"Messed up flag: {assignment.Id}");
+            }
+
+            return true;
+        }
+
+        private static ExitFadeInfo? ReadExitFadeInfoAssignment(ILookup<Identifier, VariableAssignment> assignmentLookup, string formatName)
         {
             throw new NotImplementedException();
         }
 
-        private static string? ReadStringAssignment(ILookup<IdentifierToken, VariableAssignment> assignmentLookup, string formatName)
-        {
-            throw new NotImplementedException();
-        }
-
-        private static int? ReadIntAssignment(ILookup<IdentifierToken, VariableAssignment> assignmentLookup, string formatName)
-        {
-            throw new NotImplementedException();
-        }
-        
-        private static bool? ReadBoolAssignment(ILookup<IdentifierToken, VariableAssignment> assignmentLookup, string formatName)
-        {
-            throw new NotImplementedException();
-        }
-
-        private static bool? ReadFlag(ILookup<IdentifierToken, VariableAssignment> assignmentLookup, string formatName)
-        {
-            throw new NotImplementedException();
-        }
-
-        private static ExitFadeInfo? ReadExitFadeInfoAssignment(ILookup<IdentifierToken, VariableAssignment> assignmentLookup, string formatName)
-        {
-            throw new NotImplementedException();
-        }
-        
-        private static NextMapInfo? ReadNextMapInfoAssignment(ILookup<IdentifierToken, VariableAssignment> assignmentLookup, string formatName)
+        private static NextMapInfo? ReadNextMapInfoAssignment(ILookup<Identifier, VariableAssignment> assignmentLookup, string formatName)
         {
             throw new NotImplementedException();
         }

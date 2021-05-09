@@ -27,7 +27,7 @@ namespace Tiledriver.DataModelGenerator.MapInfo
             {
                 "System.CodeDom.Compiler",
                 "System.Linq",
-                "Tiledriver.Core.FormatModels.Common.Reading",
+                "Tiledriver.Core.FormatModels.Common",
                 "Tiledriver.Core.FormatModels.MapInfo.Reading.AbstractSyntaxTree",
             };
 
@@ -48,7 +48,7 @@ namespace Tiledriver.DataModelGenerator.MapInfo
         private static void WriteParser(IndentedWriter output, IBlock block)
         {
             output
-                .Line($"private static partial {block.ClassName} Parse{block.ClassName}(ILookup<IdentifierToken, VariableAssignment> assignmentLookup)")
+                .Line($"private static partial {block.ClassName} Parse{block.ClassName}(ILookup<Identifier, VariableAssignment> assignmentLookup)")
                 .IncreaseIndent()
                 .Line($"=> new {block.ClassName}(")
                 .IncreaseIndent()

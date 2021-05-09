@@ -3,7 +3,7 @@
 
 using System.CodeDom.Compiler;
 using System.Linq;
-using Tiledriver.Core.FormatModels.Common.Reading;
+using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.MapInfo.Reading.AbstractSyntaxTree;
 
 namespace Tiledriver.Core.FormatModels.MapInfo.Reading
@@ -11,7 +11,7 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
     [GeneratedCode("DataModelGenerator", "1.0.0.0")]
     public static partial class MapDeclarationParser
     {
-        private static partial DefaultMap ParseDefaultMap(ILookup<IdentifierToken, VariableAssignment> assignmentLookup)
+        private static partial DefaultMap ParseDefaultMap(ILookup<Identifier, VariableAssignment> assignmentLookup)
             => new DefaultMap(
                 EnsureInventories: ReadListAssignment(assignmentLookup, "ensureInventory"),
                 SpecialActions: ReadSpecialActionAssignments(assignmentLookup),
@@ -37,7 +37,7 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
                 Translator: ReadStringAssignment(assignmentLookup, "translator")
             );
 
-        private static partial AddDefaultMap ParseAddDefaultMap(ILookup<IdentifierToken, VariableAssignment> assignmentLookup)
+        private static partial AddDefaultMap ParseAddDefaultMap(ILookup<Identifier, VariableAssignment> assignmentLookup)
             => new AddDefaultMap(
                 EnsureInventories: ReadListAssignment(assignmentLookup, "ensureInventory"),
                 SpecialActions: ReadSpecialActionAssignments(assignmentLookup),
