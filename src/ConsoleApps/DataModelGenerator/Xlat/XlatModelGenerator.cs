@@ -1,13 +1,11 @@
 ﻿// Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Tiledriver.DataModelGenerator.MetadataModel;
 using Tiledriver.DataModelGenerator.Utilities;
-using Tiledriver.DataModelGenerator.Xlat.MetadataModel;
 
 namespace Tiledriver.DataModelGenerator.Xlat
 {
@@ -33,11 +31,17 @@ namespace Tiledriver.DataModelGenerator.Xlat
             using var output = new IndentedWriter(blockStream);
 
             var containsCollection = block.Properties.Any(p => p is CollectionProperty);
+            bool includeConverter = block.ClassName == "TileTemplate";
 
-            IEnumerable<string> includes = new[] { "System.CodeDom.Compiler" };
+            var includes = new List<string> { "System.CodeDom.Compiler" };
             if (containsCollection)
             {
-                includes = includes.Concat(new[] { "System.Collections.Immutable" });
+                includes.Add("System.Collections.Immutable");
+            }
+
+            if (includeConverter)
+            {
+                includes.Add("Tiledriver.Core.FormatModels.Uwmf");
             }
 
             output
@@ -47,9 +51,34 @@ namespace Tiledriver.DataModelGenerator.Xlat
                 .Line($"public sealed partial record {block.ClassName}(")
                 .IncreaseIndent()
                 .JoinLines(",", block.OrderedProperties.Select(GetPropertyDefinition))
-                .DecreaseIndent()
-                .Line(");")
-                .CloseParen();
+                .DecreaseIndent();
+
+            if (includeConverter)
+            {
+                output
+                    .Line(")")
+                    .OpenParen()
+                    .Line("public Tile ToTile() =>")
+                    .IncreaseIndent()
+                    .Line("new Tile(")
+                    .IncreaseIndent()
+                    .JoinLines(",",
+                        block
+                        .OrderedProperties
+                        .Where(p =>p.PropertyName!="OldNum")
+                        .Select(p=>$"{p.PropertyName}: {p.PropertyName}"))
+                    .DecreaseIndent()
+                    .Line(");")
+                    .DecreaseIndent()
+                    .CloseParen();
+            }
+            else
+            {
+                output.Line(");");
+
+            }
+
+            output.CloseParen();
         }
 
         static string GetPropertyDefinition(Property property)

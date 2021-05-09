@@ -2,6 +2,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.CodeDom.Compiler;
+using Tiledriver.Core.FormatModels.Uwmf;
 
 namespace Tiledriver.Core.FormatModels.Xlat
 {
@@ -23,5 +24,25 @@ namespace Tiledriver.Core.FormatModels.Xlat
         string SoundSequence = "",
         string TextureOverhead = "",
         string Comment = ""
-    );
+    )
+    {
+        public Tile ToTile() =>
+            new Tile(
+                TextureEast: TextureEast,
+                TextureNorth: TextureNorth,
+                TextureWest: TextureWest,
+                TextureSouth: TextureSouth,
+                BlockingEast: BlockingEast,
+                BlockingNorth: BlockingNorth,
+                BlockingWest: BlockingWest,
+                BlockingSouth: BlockingSouth,
+                OffsetVertical: OffsetVertical,
+                OffsetHorizontal: OffsetHorizontal,
+                DontOverlay: DontOverlay,
+                Mapped: Mapped,
+                SoundSequence: SoundSequence,
+                TextureOverhead: TextureOverhead,
+                Comment: Comment
+            );
+    }
 }
