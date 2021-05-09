@@ -25,6 +25,7 @@ namespace Tiledriver.DataModelGenerator
             var xlatReadingPath = Path.Combine(xlatPath, "Reading");
 
             var mapInfoPath = Path.Combine(formatModelsPath, "MapInfo");
+            var mapInfoReadingPath = Path.Combine(mapInfoPath, "Reading");
 
             UwmfModelGenerator.WriteToPath(uwmfPath);
             UwmfWriterGenerator.WriteToPath(uwmfWritingPath);
@@ -34,6 +35,7 @@ namespace Tiledriver.DataModelGenerator
             XlatParserGenerator.WriteToPath(xlatReadingPath);
 
             MapInfoModelGenerator.WriteToPath(mapInfoPath);
+            MapInfoParserGenerator.WriteToPath(mapInfoReadingPath);
         }
 
         private static string FindSolutionPath()

@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using Tiledriver.DataModelGenerator.MetadataModel;
 using Tiledriver.DataModelGenerator.Utilities;
-using Tiledriver.DataModelGenerator.Xlat.MetadataModel;
 
 namespace Tiledriver.DataModelGenerator.Xlat
 {

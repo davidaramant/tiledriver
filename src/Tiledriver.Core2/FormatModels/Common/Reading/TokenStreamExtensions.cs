@@ -17,6 +17,19 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
             return nextToken is TExpected token ? token : throw ParsingException.CreateError<TExpected>(nextToken);
         }
 
+        public static Token? GetNextAndSkipNewlines(this IEnumerator<Token> enumerator)
+        {
+            while (enumerator.MoveNext())
+            {
+                if (enumerator.Current is not NewLineToken)
+                {
+                    return enumerator.Current;
+                }
+            }
+
+            return null;
+        }
+
         public static Block ParseBlock(this IEnumerator<Token> tokenStream, IdentifierToken name)
         {
             var assignments = new List<Assignment>();
