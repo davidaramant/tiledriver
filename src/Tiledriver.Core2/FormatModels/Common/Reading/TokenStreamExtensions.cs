@@ -11,13 +11,7 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
     {
         public static Token? GetNext(this IEnumerator<Token> enumerator) => enumerator.MoveNext() ? enumerator.Current : null;
 
-        public static TExpected ExpectNext<TExpected>(this IEnumerator<Token> tokenStream) where TExpected : Token
-        {
-            var nextToken = GetNext(tokenStream);
-            return nextToken is TExpected token ? token : throw ParsingException.CreateError<TExpected>(nextToken);
-        }
-
-        public static Token? GetNextAndSkipNewlines(this IEnumerator<Token> enumerator)
+        public static Token? GetNextSkippingNewlines(this IEnumerator<Token> enumerator)
         {
             while (enumerator.MoveNext())
             {
@@ -28,6 +22,18 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
             }
 
             return null;
+        }
+
+        public static TExpected ExpectNext<TExpected>(this IEnumerator<Token> tokenStream) where TExpected : Token
+        {
+            var nextToken = GetNext(tokenStream);
+            return nextToken is TExpected token ? token : throw ParsingException.CreateError<TExpected>(nextToken);
+        }
+
+        public static TExpected ExpectNextSkippingNewlines<TExpected>(this IEnumerator<Token> tokenStream) where TExpected : Token
+        {
+            var nextToken = GetNextSkippingNewlines(tokenStream);
+            return nextToken is TExpected token ? token : throw ParsingException.CreateError<TExpected>(nextToken);
         }
 
         public static Block ParseBlock(this IEnumerator<Token> tokenStream, IdentifierToken name)

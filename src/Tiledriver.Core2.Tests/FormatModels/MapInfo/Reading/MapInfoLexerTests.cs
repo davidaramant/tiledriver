@@ -4,11 +4,10 @@
 using System.IO;
 using System.Linq;
 using System.Text;
-using Tiledriver.Core.FormatModels.Common.Reading;
 using Tiledriver.Core.FormatModels.MapInfo.Reading;
 using Xunit;
 
-namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Reading
+namespace Tiledriver.Core.Tests.FormatModels.MapInfo.Reading
 {
     public sealed class MapInfoLexerTests
     {
@@ -26,7 +25,7 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Reading
         {
             using var stream = TestFile.MapInfo.wolf3d;
             using var textReader = new StreamReader(stream, Encoding.ASCII);
-            var lexer = new UnifiedLexer(textReader, reportNewlines: true);
+            var lexer = MapInfoLexer.Create(textReader);
             var result = lexer.Scan().ToArray();
         }
 
@@ -35,7 +34,7 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfos.Reading
         {
             using var stream = TestFile.MapInfo.spear;
             using var textReader = new StreamReader(stream, Encoding.ASCII);
-            var lexer = new UnifiedLexer(textReader, reportNewlines: true);
+            var lexer = MapInfoLexer.Create(textReader);
             var result = lexer.Scan().ToArray();
         }
 

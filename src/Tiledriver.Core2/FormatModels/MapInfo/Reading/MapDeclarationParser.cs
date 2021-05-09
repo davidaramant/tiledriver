@@ -24,7 +24,7 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
                     case IdentifierToken mapId when mapId.Id == "map":
                         {
                             var header = ParseMapHeader(mapId, tokenStream);
-                            var assignmentLookup = GetAssignmentLookup(tokenStream);
+                            var assignmentLookup = GetAssignmentLookup(tokenStream, alreadyOpened: true);
                             var map = ParseMap(assignmentLookup, header.mapLump, header.mapName, header.isMapNameLookup, defaultMap);
                             lumpToMap.Add(
                                 header.mapLump.ToUpperInvariant(), 
@@ -60,11 +60,12 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
             string? mapName = null;
             bool isMapNameLookup = false;
 
-            var next = tokenStream.GetNext();
+            var next = tokenStream.GetNextSkippingNewlines();
 
             if (next is StringToken nameToken)
             {
                 mapName = nameToken.Value;
+                tokenStream.ExpectNextSkippingNewlines<OpenBraceToken>();
             }
             else if (next is IdentifierToken lookupToken)
             {
@@ -75,6 +76,11 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
 
                 isMapNameLookup = true;
                 mapName = tokenStream.ExpectNext<StringToken>().Value;
+                tokenStream.ExpectNextSkippingNewlines<OpenBraceToken>();
+            }
+            else if (next is OpenBraceToken)
+            {
+                // expected, do nothing
             }
             else
             {
@@ -94,19 +100,23 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
         private static partial AddDefaultMap ParseAddDefaultMap(ILookup<Identifier, VariableAssignment> assignmentLookup);
         private static partial DefaultMap UpdateDefaultMap(DefaultMap defaultMap, AddDefaultMap addDefaultMap);
 
-        private static ILookup<Identifier, VariableAssignment> GetAssignmentLookup(IEnumerator<Token> tokenStream)
+        private static ILookup<Identifier, VariableAssignment> GetAssignmentLookup(IEnumerator<Token> tokenStream, bool alreadyOpened = false)
         {
-            var assignments = ParseBlock(tokenStream);
+            var assignments = ParseBlock(tokenStream, alreadyOpened);
             return assignments.ToLookup(a => a.Id.Id, a => a);
         }
 
-        private static IEnumerable<VariableAssignment> ParseBlock(IEnumerator<Token> tokenStream)
+        private static IEnumerable<VariableAssignment> ParseBlock(IEnumerator<Token> tokenStream, bool alreadyOpened)
         {
-            tokenStream.ExpectNext<OpenBraceToken>();
+            if (!alreadyOpened)
+            {
+                tokenStream.ExpectNextSkippingNewlines<OpenBraceToken>();
+            }
 
             while (true)
             {
-                switch (tokenStream.GetNextAndSkipNewlines())
+                var token = tokenStream.GetNextSkippingNewlines();
+                switch (token)
                 {
                     case IdentifierToken id:
                         var next = tokenStream.GetNext();
@@ -126,12 +136,15 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
                                 }
                                 valueBuilder.Add(next);
 
-                                while (next == tokenStream.GetNext())
+                                bool continueLoop = true;
+                                while (continueLoop)
                                 {
+                                    next = tokenStream.GetNext();
                                     switch (next)
                                     {
                                         case NewLineToken:
                                             yield return new VariableAssignment(id, valueBuilder.ToImmutable());
+                                            continueLoop = false;
                                             break;
 
                                         case null:
@@ -150,11 +163,11 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
                         }
 
                         break;
-                    case CloseBraceToken cbt:
+                    case CloseBraceToken:
                         yield break;
 
                     default:
-                        throw new ParsingException("Error parsing MapInfo");
+                        throw ParsingException.CreateError(token, "identifier or close brace");
                 }
             }
         }
