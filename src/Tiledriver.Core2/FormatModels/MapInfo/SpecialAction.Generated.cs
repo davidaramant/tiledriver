@@ -9,10 +9,10 @@ namespace Tiledriver.Core.FormatModels.MapInfo
     public sealed partial record SpecialAction(
         string ActorClass,
         string Special,
-        int Arg0,
-        int Arg1,
-        int Arg2,
-        int Arg3,
-        int Arg4
+        int Arg0 = 0,
+        int Arg1 = 0,
+        int Arg2 = 0,
+        int Arg3 = 0,
+        int Arg4 = 0
     );
 }

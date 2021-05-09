@@ -289,11 +289,11 @@ namespace Tiledriver.DataModelGenerator.MapInfo
                 {
                     new StringProperty(formatName: "actorclass", name: "actorClass"),
                     new StringProperty("special"),
-                    new IntegerProperty("arg0"),
-                    new IntegerProperty("arg1"),
-                    new IntegerProperty("arg2"),
-                    new IntegerProperty("arg3"),
-                    new IntegerProperty("arg4"),
+                    new IntegerProperty("arg0", defaultValue:0),
+                    new IntegerProperty("arg1", defaultValue:0),
+                    new IntegerProperty("arg2", defaultValue:0),
+                    new IntegerProperty("arg3", defaultValue:0),
+                    new IntegerProperty("arg4", defaultValue:0),
                 }.ToImmutableArray()),
 
             // SKILL

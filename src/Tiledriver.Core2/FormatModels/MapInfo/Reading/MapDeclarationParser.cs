@@ -173,7 +173,61 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
 
         private static ImmutableList<SpecialAction> ReadSpecialActionAssignments(ILookup<Identifier, VariableAssignment> assignmentLookup)
         {
-            throw new NotImplementedException();
+            var id = new Identifier("SpecialAction");
+            var assignments = assignmentLookup.Contains(id)
+                ? assignmentLookup[id]
+                : Enumerable.Empty<VariableAssignment>();
+
+            TToken MustGet<TToken>(IdentifierToken id, Queue<Token> valueQueue) where TToken : Token
+            {
+                if (!valueQueue.Any())
+                {
+                    throw new ParsingException("Messed up SpecialAction: " + id);
+                }
+
+                var token = valueQueue.Dequeue();
+                if (token is not TToken t)
+                {
+                    throw ParsingException.CreateError(token, typeof(TToken).Name);
+                }
+
+                return t;
+            }
+
+            return assignments.Select(
+                va =>
+                {
+                    var valueQueue = new Queue<Token>(va.Values);
+                    var actorClassToken = MustGet<StringToken>(va.Id, valueQueue);
+                    MustGet<CommaToken>(va.Id, valueQueue);
+                    var specialToken = MustGet<StringToken>(va.Id, valueQueue);
+
+                    var args = new int[5];
+                    int i = 0;
+                    while (valueQueue.Any())
+                    {
+                        MustGet<CommaToken>(va.Id, valueQueue);
+                        var argToken = MustGet<IntegerToken>(va.Id, valueQueue);
+                        args[i] = argToken.Value;
+
+                        i++;
+
+                        if (i == 5)
+                        {
+                            throw new ParsingException("Too many arguments to SpecialAction: " + id);
+                        }
+                    }
+
+                    return new SpecialAction(
+                        actorClassToken.Value,
+                        specialToken.Value,
+                        args[0],
+                        args[1],
+                        args[2],
+                        args[3],
+                        args[4]);
+
+                }).ToImmutableList();
         }
 
         private static TToken? GetSingleToken<TToken>(ILookup<Identifier, VariableAssignment> assignmentLookup,
@@ -199,13 +253,13 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
             return t;
         }
 
-        private static string? ReadStringAssignment(ILookup<Identifier, VariableAssignment> assignmentLookup, string formatName) => 
+        private static string? ReadStringAssignment(ILookup<Identifier, VariableAssignment> assignmentLookup, string formatName) =>
             GetSingleToken<StringToken>(assignmentLookup, formatName)?.Value;
 
-        private static int? ReadIntAssignment(ILookup<Identifier, VariableAssignment> assignmentLookup, string formatName) => 
+        private static int? ReadIntAssignment(ILookup<Identifier, VariableAssignment> assignmentLookup, string formatName) =>
             GetSingleToken<IntegerToken>(assignmentLookup, formatName)?.Value;
 
-        private static bool? ReadBoolAssignment(ILookup<Identifier, VariableAssignment> assignmentLookup, string formatName) => 
+        private static bool? ReadBoolAssignment(ILookup<Identifier, VariableAssignment> assignmentLookup, string formatName) =>
             GetSingleToken<BooleanToken>(assignmentLookup, formatName)?.Value;
 
         private static bool? ReadFlag(ILookup<Identifier, VariableAssignment> assignmentLookup, string formatName)
