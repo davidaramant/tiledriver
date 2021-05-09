@@ -226,12 +226,75 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
 
         private static ExitFadeInfo? ReadExitFadeInfoAssignment(ILookup<Identifier, VariableAssignment> assignmentLookup, string formatName)
         {
-            throw new NotImplementedException();
+            var assignment = GetSingleAssignment(assignmentLookup, formatName);
+            if (assignment == null)
+            {
+                return null;
+            }
+
+            if (assignment.Values.Count != 3)
+            {
+                throw new ParsingException($"Messed up ExitFade definition: {assignment.Id}");
+            }
+
+            if (assignment.Values[0] is not StringToken colorToken)
+            {
+                throw ParsingException.CreateError(assignment.Values[0], "string");
+            }
+            if (assignment.Values[1] is not CommaToken)
+            {
+                throw ParsingException.CreateError(assignment.Values[1], "comma");
+            }
+            if (assignment.Values[2] is not IntegerToken durationToken)
+            {
+                throw ParsingException.CreateError(assignment.Values[2], "integer");
+            }
+
+            return new ExitFadeInfo(colorToken.Value, durationToken.Value);
         }
 
         private static NextMapInfo? ReadNextMapInfoAssignment(ILookup<Identifier, VariableAssignment> assignmentLookup, string formatName)
         {
-            throw new NotImplementedException();
+            var assignment = GetSingleAssignment(assignmentLookup, formatName);
+            if (assignment == null)
+            {
+                return null;
+            }
+
+            switch (assignment.Values.Count)
+            {
+                case 1:
+                    if (assignment.Values[0] is not StringToken mapNameToken)
+                    {
+                        throw ParsingException.CreateError(assignment.Values[0], "string");
+                    }
+
+                    return NextMapInfo.Map(mapNameToken.Value);
+
+                case 3:
+                    if (assignment.Values[0] is not IdentifierToken idToken)
+                    {
+                        throw ParsingException.CreateError(assignment.Values[0], "identifier");
+                    }
+
+                    if (idToken.Id.ToLower() != "endsequence")
+                    {
+                        throw new ParsingException($"Expected EndSequence, but got something else: {idToken}");
+                    }
+                    if (assignment.Values[1] is not CommaToken)
+                    {
+                        throw ParsingException.CreateError(assignment.Values[1], "comma");
+                    }
+                    if (assignment.Values[2] is not StringToken sequenceNameToken)
+                    {
+                        throw ParsingException.CreateError(assignment.Values[2], "string");
+                    }
+
+                    return NextMapInfo.EndSequence(sequenceNameToken.Value);
+
+                default:
+                    throw new ParsingException($"Messed up NewMapInfo: {assignment.Id}");
+            }
         }
     }
 }
