@@ -1,7 +1,6 @@
 ﻿// Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -23,6 +22,14 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
                 switch (tokenStream.Current)
                 {
                     case IdentifierToken mapId when mapId.Id == "map":
+                        {
+                            var header = ParseMapHeader(mapId, tokenStream);
+                            var assignmentLookup = GetAssignmentLookup(tokenStream);
+                            var map = ParseMap(assignmentLookup, header.mapLump, header.mapName, header.isMapNameLookup, defaultMap);
+                            lumpToMap.Add(
+                                header.mapLump.ToUpperInvariant(), 
+                                map);
+                        }
                         break;
 
                     case IdentifierToken defaultMapId when defaultMapId.Id == "defaultMap":
@@ -42,9 +49,47 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
                 }
             }
 
-            throw new NotImplementedException();
+            return lumpToMap;
         }
 
+        private static (string mapLump, string? mapName, bool isMapNameLookup) ParseMapHeader(
+            IdentifierToken context,
+            IEnumerator<Token> tokenStream)
+        {
+            var mapLump = tokenStream.ExpectNext<StringToken>().Value;
+            string? mapName = null;
+            bool isMapNameLookup = false;
+
+            var next = tokenStream.GetNext();
+
+            if (next is StringToken nameToken)
+            {
+                mapName = nameToken.Value;
+            }
+            else if (next is IdentifierToken lookupToken)
+            {
+                if (lookupToken.Id.ToLower() != "lookup")
+                {
+                    throw ParsingException.CreateError(lookupToken, "lookup");
+                }
+
+                isMapNameLookup = true;
+                mapName = tokenStream.ExpectNext<StringToken>().Value;
+            }
+            else
+            {
+                throw new ParsingException("Messed up map definition: " + context);
+            }
+
+            return (mapLump, mapName, isMapNameLookup);
+        }
+
+        private static partial Map ParseMap(
+            ILookup<Identifier, VariableAssignment> assignmentLookup,
+            string mapLump,
+            string? mapName,
+            bool isMapNameLookup,
+            DefaultMap defaultMap);
         private static partial DefaultMap ParseDefaultMap(ILookup<Identifier, VariableAssignment> assignmentLookup);
         private static partial AddDefaultMap ParseAddDefaultMap(ILookup<Identifier, VariableAssignment> assignmentLookup);
         private static partial DefaultMap UpdateDefaultMap(DefaultMap defaultMap, AddDefaultMap addDefaultMap);

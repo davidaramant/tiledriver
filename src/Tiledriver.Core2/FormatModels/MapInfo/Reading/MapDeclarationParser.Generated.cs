@@ -1,3 +1,4 @@
+#nullable enable
 // Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
@@ -61,6 +62,40 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
                 NoIntermission: ReadFlag(assignmentLookup, "noIntermission"),
                 Par: ReadIntAssignment(assignmentLookup, "par"),
                 Translator: ReadStringAssignment(assignmentLookup, "translator")
+            );
+
+        private static partial Map ParseMap(
+            ILookup<Identifier, VariableAssignment> assignmentLookup,
+            string mapLump,
+            string? mapName,
+            bool isMapNameLookup,
+            DefaultMap defaultMap) =>
+            new Map(
+                MapLump: mapLump,
+                EnsureInventories: ReadListAssignment(assignmentLookup, "ensureInventory").AddRange(defaultMap.EnsureInventories),
+                SpecialActions: ReadSpecialActionAssignments(assignmentLookup).AddRange(defaultMap.SpecialActions),
+                MapName: mapName,
+                IsMapNameLookup: isMapNameLookup,
+                BorderTexture: ReadStringAssignment(assignmentLookup, "borderTexture") ?? defaultMap.BorderTexture,
+                Cluster: ReadIntAssignment(assignmentLookup, "cluster") ?? defaultMap.Cluster,
+                CompletionString: ReadStringAssignment(assignmentLookup, "completionString") ?? defaultMap.CompletionString,
+                DeathCam: ReadBoolAssignment(assignmentLookup, "deathCam") ?? defaultMap.DeathCam,
+                DefaultCeiling: ReadStringAssignment(assignmentLookup, "defaultCeiling") ?? defaultMap.DefaultCeiling,
+                DefaultFloor: ReadStringAssignment(assignmentLookup, "defaultFloor") ?? defaultMap.DefaultFloor,
+                ExitFade: ReadExitFadeInfoAssignment(assignmentLookup, "exitFade") ?? defaultMap.ExitFade,
+                FloorNumber: ReadIntAssignment(assignmentLookup, "floorNumber") ?? defaultMap.FloorNumber,
+                HighScoresGraphic: ReadStringAssignment(assignmentLookup, "highScoresGraphic") ?? defaultMap.HighScoresGraphic,
+                LevelBonus: ReadIntAssignment(assignmentLookup, "levelBonus") ?? defaultMap.LevelBonus,
+                LevelNum: ReadIntAssignment(assignmentLookup, "levelNum") ?? defaultMap.LevelNum,
+                Music: ReadStringAssignment(assignmentLookup, "music") ?? defaultMap.Music,
+                SpawnWithWeaponRaised: ReadFlag(assignmentLookup, "spawnWithWeaponRaised") ?? defaultMap.SpawnWithWeaponRaised,
+                SecretDeathSounds: ReadBoolAssignment(assignmentLookup, "secretDeathSounds") ?? defaultMap.SecretDeathSounds,
+                Next: ReadNextMapInfoAssignment(assignmentLookup, "next") ?? defaultMap.Next,
+                SecretNext: ReadNextMapInfoAssignment(assignmentLookup, "secretNext") ?? defaultMap.SecretNext,
+                VictoryNext: ReadNextMapInfoAssignment(assignmentLookup, "victoryNext") ?? defaultMap.VictoryNext,
+                NoIntermission: ReadFlag(assignmentLookup, "noIntermission") ?? defaultMap.NoIntermission,
+                Par: ReadIntAssignment(assignmentLookup, "par") ?? defaultMap.Par,
+                Translator: ReadStringAssignment(assignmentLookup, "translator") ?? defaultMap.Translator
             );
 
         private static partial DefaultMap UpdateDefaultMap(DefaultMap defaultMap, AddDefaultMap addDefaultMap) =>

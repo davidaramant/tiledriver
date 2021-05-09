@@ -2,6 +2,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using Humanizer;
@@ -32,6 +33,7 @@ namespace Tiledriver.DataModelGenerator.MapInfo
             };
 
             output
+                .Line("#nullable enable")
                 .WriteHeader("Tiledriver.Core.FormatModels.MapInfo.Reading", includes)
                 .OpenParen()
                 .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
@@ -41,6 +43,8 @@ namespace Tiledriver.DataModelGenerator.MapInfo
             WriteParser(output, MapInfoDefinitions.Blocks.Single(b => b.ClassName == "DefaultMap"));
             output.Line();
             WriteParser(output, MapInfoDefinitions.Blocks.Single(b => b.ClassName == "AddDefaultMap"));
+            output.Line();
+            WriteMapParser(output, MapInfoDefinitions.Blocks.Single(b => b.ClassName == "Map"));
             output.Line();
             WriteDefaultMapUpdater(output, MapInfoDefinitions.Blocks.Single(b => b.ClassName == "DefaultMap"));
 
@@ -59,6 +63,36 @@ namespace Tiledriver.DataModelGenerator.MapInfo
                 .Line(");")
                 .DecreaseIndent();
         }
+
+        private static void WriteMapParser(IndentedWriter output, IBlock block)
+        {
+            output.Line("private static partial Map ParseMap(")
+                .IncreaseIndent()
+                .Line("ILookup<Identifier, VariableAssignment> assignmentLookup,")
+                .Line("string mapLump,")
+                .Line("string? mapName,")
+                .Line("bool isMapNameLookup,")
+                .Line("DefaultMap defaultMap) =>")
+                .Line("new Map(")
+                .IncreaseIndent()
+                .JoinLines(",", block.OrderedProperties.Select(GetMapPropertyReader))
+                .DecreaseIndent()
+                .Line(");")
+                .DecreaseIndent();
+        }
+
+        private static string GetMapPropertyReader(Property property) =>
+            $"{property.PropertyName}: " + property switch
+            {
+                ScalarProperty { PropertyName: "MapName" } => "mapName",
+                ScalarProperty { PropertyName: "MapLump" } => "mapLump",
+                ScalarProperty { PropertyName: "IsMapNameLookup" } => "isMapNameLookup",
+                FlagProperty => $"ReadFlag(assignmentLookup, \"{property.FormatName}\") ?? defaultMap.{property.PropertyName}",
+                ScalarProperty sp => $"Read{sp.BasePropertyType.Pascalize()}Assignment(assignmentLookup, \"{property.FormatName}\") ?? defaultMap.{property.PropertyName}",
+                CollectionProperty { PropertyName: "SpecialActions" } => "ReadSpecialActionAssignments(assignmentLookup).AddRange(defaultMap.SpecialActions)",
+                CollectionProperty => $"ReadListAssignment(assignmentLookup, \"{property.FormatName}\").AddRange(defaultMap.{property.PropertyName})",
+                _ => throw new Exception("What type of property is this??")
+            };
 
         private static string GetPropertyReader(Property property) =>
             $"{property.PropertyName}: " + property switch
