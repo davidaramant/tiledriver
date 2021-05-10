@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tiledriver.Core2", "Tiledri
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tiledriver.Core2.Tests", "Tiledriver.Core2.Tests\Tiledriver.Core2.Tests.csproj", "{22A44CB5-A9EE-4052-B7B2-F914D3402B52}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoMapLauncher", "ConsoleApps\DemoMapLauncher\DemoMapLauncher.csproj", "{2DA0039E-611C-41EA-924F-B03E34B03A6C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{22A44CB5-A9EE-4052-B7B2-F914D3402B52}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22A44CB5-A9EE-4052-B7B2-F914D3402B52}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22A44CB5-A9EE-4052-B7B2-F914D3402B52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DA0039E-611C-41EA-924F-B03E34B03A6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DA0039E-611C-41EA-924F-B03E34B03A6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DA0039E-611C-41EA-924F-B03E34B03A6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DA0039E-611C-41EA-924F-B03E34B03A6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -84,6 +90,7 @@ Global
 		{E52E1DBB-6077-4C09-A635-2DC3C09828FF} = {A5D856F1-E321-431E-8CD2-9D5513737F9F}
 		{D4C7AE43-60E5-428B-82DA-BF3AEAEE7BD9} = {A5D856F1-E321-431E-8CD2-9D5513737F9F}
 		{8C6D4E9C-BCB8-417A-8208-467EFBD0070A} = {A5D856F1-E321-431E-8CD2-9D5513737F9F}
+		{2DA0039E-611C-41EA-924F-B03E34B03A6C} = {A5D856F1-E321-431E-8CD2-9D5513737F9F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {88D7BF2B-84C0-4D6E-B20C-2859FC94DEF2}

@@ -9,7 +9,7 @@ using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.Wolf3D;
 
-namespace Tiledriver.Core.Tests
+namespace Tiledriver.Core.DemoMaps
 {
     public static class TileDemoMap
     {
@@ -35,8 +35,7 @@ namespace Tiledriver.Core.Tests
                 Height: mapSize.Height,
                 Tiles: originalTiles.ToImmutableList(),
                 Sectors: ImmutableList.Create<Sector>().Add(
-                    new Sector
-                    (
+                    new Sector(
                         TextureCeiling: "#C0C0C0",
                         TextureFloor: "#A0A0A0"
                     )),
@@ -44,8 +43,7 @@ namespace Tiledriver.Core.Tests
                 Planes: ImmutableList.Create<Plane>().Add(new Plane(Depth: 64)),
                 PlaneMaps: ImmutableList.Create<ImmutableArray<MapSquare>>()
                     .Add(CreateGeometry(originalTiles, mapSize, rows)),
-                Things: ImmutableList.Create<Thing>().Add(new Thing
-                (
+                Things: ImmutableList.Create<Thing>().Add(new Thing(
                     Type: Actor.Player1Start.ClassName,
                     X: 1.5,
                     Y: 1.5,
@@ -68,7 +66,6 @@ namespace Tiledriver.Core.Tests
                 new Canvas(size)
                     .Fill(new Rectangle(new Position(0, 0), size), tile: boundaryTileIndex)
                     .Fill(new Rectangle(new Position(1, 1), new Size(size.Width - 2, size.Height - 2)), tile: -1);
-
 
             foreach (var row in Enumerable.Range(0, rows))
             {

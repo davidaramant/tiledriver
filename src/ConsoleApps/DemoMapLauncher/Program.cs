@@ -1,5 +1,5 @@
-﻿using Tiledriver.Core.ECWolfUtils;
-using Tiledriver.Core.Tests;
+﻿using Tiledriver.Core.DemoMaps;
+using Tiledriver.Core.ECWolfUtils;
 
 ExeFinder
     .CreateLauncher()

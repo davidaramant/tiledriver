@@ -1,8 +1,9 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.IO;
 using System.Text;
+using Tiledriver.Core.DemoMaps;
 using Tiledriver.Core.FormatModels.Common.Reading;
 using Tiledriver.Core.FormatModels.Uwmf.Reading;
 using Tiledriver.Core.FormatModels.Uwmf.Writing;
@@ -26,7 +27,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Reading
             var roundTripped = UwmfSemanticAnalyzer.ReadMapData(UwmfParser.Parse(new UnifiedLexer(textReader).Scan()));
 
             UwmfComparison.AssertEqual(roundTripped, map);
-        }        
+        }
 
         [Fact]
         public void ShouldParseOldDemoMap()

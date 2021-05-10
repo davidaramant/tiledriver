@@ -7,37 +7,35 @@ using System.Linq;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.Wolf3D;
 
-namespace Tiledriver.Core.Tests
+namespace Tiledriver.Core.DemoMaps
 {
     public static class ThingDemoMap
     {
+        private const int HorizontalBuffer = 4;
+        private const int VerticalBuffer = 2;
+
         // TODO: Add arguments for which types of things to include
-        // TODO: Make geometry more dynamic like TileDemoMap
         public static MapData Create()
         {
-            const int width = 128;
-            const int height = 128;
+            var things = GenerateThings().ToImmutableList();
 
-            var things = GenerateThings().ToArray();
+            int width = things.Max(t=>(int)t.X) + HorizontalBuffer;
+            int height = things.Max(t=>(int)t.Y) + VerticalBuffer;
 
-            return new MapData
-            (
+            return new MapData(
                 NameSpace: "Wolf3D",
                 TileSize: 64,
                 Name: "Thing Demo",
                 Width: width,
                 Height: height,
-                Tiles: new[]
-                {
-                    new Tile
-                    (
+                Tiles: ImmutableList.Create(
+                    new Tile(
                         TextureNorth: "GSTONEA1",
                         TextureSouth: "GSTONEA1",
                         TextureEast: "GSTONEA2",
                         TextureWest: "GSTONEA2"
                     ),
-                    new Tile
-                    (
+                    new Tile(
                         TextureNorth: "SLOT1_2",
                         TextureSouth: "SLOT1_2",
                         TextureWest: "DOOR1_2",
@@ -48,56 +46,38 @@ namespace Tiledriver.Core.Tests
                         BlockingSouth: true,
                         BlockingWest: true,
                         BlockingEast: true
-                    ),
-                }.ToImmutableList(),
-                Sectors: new[]
-                {
-                    new Sector
-                    (
+                    )),
+                Sectors: ImmutableList.Create(
+                    new Sector(
                         TextureCeiling: "#C0C0C0",
                         TextureFloor: "#A0A0A0"
                     ),
-                    new Sector
-                    (
+                    new Sector(
                         TextureCeiling: "#00FF00",
                         TextureFloor: "#00FF00",
                         Comment:"Good thing"
                     ),
-                    new Sector
-                    (
+                    new Sector(
                         TextureCeiling: "#FF0000",
                         TextureFloor: "#FF0000",
                         Comment:"Invalid thing"
-                    ),
-                }.ToImmutableList(),
-                Zones: new[]
-                {
-                    new Zone(),
-                }.ToImmutableList(),
-                Planes: new[]
-                {
-                    new Plane(Depth: 64)
-                }.ToImmutableList(),
-                PlaneMaps: new[]
-                {
-                    CreateGeometry(width: width, height: height, things).ToImmutableArray()
-                }.ToImmutableList(),
-                Things: things.Concat(new[] { new Thing
-                (
-                    Type: Actor.Player1Start.ClassName,
-                    X: 1.5,
-                    Y: 1.5,
-                    Z: 0,
-                    Angle: 0,
-                    Skill1: true,
-                    Skill2: true,
-                    Skill3: true,
-                    Skill4: true
-                )}).ToImmutableList(),
-                Triggers: new[]
-                {
-                    new Trigger
-                    (
+                    )),
+                Zones: ImmutableList.Create(new Zone()),
+                Planes: ImmutableList.Create(new Plane(Depth: 64)),
+                PlaneMaps: ImmutableList.Create(CreateGeometry(width: width, height: height, things).ToImmutableArray()),
+                Things: things.Add(
+                    new Thing(
+                        Type: Actor.Player1Start.ClassName,
+                        X: 1.5,
+                        Y: 1.5,
+                        Z: 0,
+                        Angle: 0,
+                        Skill1: true,
+                        Skill2: true,
+                        Skill3: true,
+                        Skill4: true)),
+                Triggers: ImmutableList.Create(
+                    new Trigger(
                         X: 2,
                         Y: 1,
                         Z: 0,
@@ -116,8 +96,7 @@ namespace Tiledriver.Core.Tests
                         PlayerCross: false,
                         Repeatable: true,
                         Secret: false
-                    ),
-                }.ToImmutableList()
+                    ))
             );
         }
 
@@ -130,15 +109,12 @@ namespace Tiledriver.Core.Tests
                 .Select((group, index) => new { group, index });
 
             return indexedActorGroups.SelectMany(iag => GenerateThings(iag.group, iag.index));
-
         }
 
-        private static IEnumerable<Thing> GenerateThings(IEnumerable<Actor> actors, int xOffset)
-        {
-            return actors.Select((actor, actorIndex) =>
-            {
-                var x = 4 + xOffset;
-                var y = 2 + actorIndex;
+        private static IEnumerable<Thing> GenerateThings(IEnumerable<Actor> actors, int thingColumn) =>
+            actors.Select((actor, actorIndex) => {
+                var x = HorizontalBuffer + (2*thingColumn);
+                var y = VerticalBuffer + actorIndex;
 
                 return new Thing(
                     Type: actor.ClassName,
@@ -152,7 +128,6 @@ namespace Tiledriver.Core.Tests
                     Skill4: true,
                     Ambush: true);
             });
-        }
 
         private static IEnumerable<MapSquare> CreateGeometry(int width, int height, IEnumerable<Thing> things)
         {

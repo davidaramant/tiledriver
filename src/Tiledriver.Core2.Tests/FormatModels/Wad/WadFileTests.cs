@@ -1,9 +1,10 @@
 // Copyright (c) 2016, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using FluentAssertions;
 using System.IO;
 using System.Linq;
+using Tiledriver.Core.DemoMaps;
 using Tiledriver.Core.FormatModels.Uwmf.Reading;
 using Tiledriver.Core.FormatModels.Wad;
 using Tiledriver.Core.Tests.FormatModels.Uwmf.Reading;
@@ -50,7 +51,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Wad
 
                 wad = WadFile.Read(fileInfo.FullName);
                 wad.Should().HaveCount(3);
-                
+
                 wad.Select(l=>l.Name).Should().BeEquivalentTo(
                     new[] { new LumpName("MAP01"), new LumpName("TEXTMAP"), new LumpName("ENDMAP"), },
                     "correct lump names should have been read.");
