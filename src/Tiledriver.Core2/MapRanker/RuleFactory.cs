@@ -14,12 +14,13 @@ namespace Tiledriver.Core.MapRanker
         {
             get
             {
-                return Assembly
-                    .GetAssembly(typeof(RuleFactory))
+                Assembly currentAssembly = Assembly.GetAssembly(typeof(RuleFactory))!;
+
+                return currentAssembly
                     .GetTypes()
                     .Where(type => typeof(IRankingRule).IsAssignableFrom(type))
                     .Where(type => !type.IsInterface)
-                    .Select(type => (IRankingRule) Activator.CreateInstance(type));
+                    .Select(type => (IRankingRule)Activator.CreateInstance(type));
             }
         }
     }

@@ -82,12 +82,12 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
         {
             switch (e.Action)
             {
-                    case NotifyCollectionChangedAction.Add:
-                        AdjustCounters((list, thing) => list.Add(thing), 1, e.NewItems.Cast<MapLocation>());
-                        break;
-                    case NotifyCollectionChangedAction.Remove:
-                        AdjustCounters((list, thing) => list.Remove(thing), -1, e.NewItems.Cast<MapLocation>());
-                        break;
+                case NotifyCollectionChangedAction.Add:
+                    AdjustCounters((list, thing) => list.Add(thing), 1, e.NewItems!.Cast<MapLocation>());
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    AdjustCounters((list, thing) => list.Remove(thing), -1, e.NewItems!.Cast<MapLocation>());
+                    break;
             }
         }
 
@@ -97,7 +97,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             {
                 foreach (var mapLocationThing in mapLocation.Things)
                 {
-                    if(bossTypes.Contains(mapLocationThing.Type))
+                    if (bossTypes.Contains(mapLocationThing.Type))
                         change(Bosses, mapLocationThing);
                     if (enemyTypes.Contains(mapLocationThing.Type))
                         change(Enemies, mapLocationThing);
@@ -107,14 +107,14 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                         Ammo += increment;
                     if (TreasureTypes.Contains(mapLocationThing.Type))
                         change(Treasure, mapLocationThing);
-                    if(HealthTypes.Contains(mapLocationThing.Type))
+                    if (HealthTypes.Contains(mapLocationThing.Type))
                         change(Health, mapLocationThing);
                     if (mapLocationThing.Type == Actor.OneUp.ClassName)
                         Lives += increment;
                     if (mapLocationThing.Type == Actor.GoldKey.ClassName || mapLocationThing.Type == Actor.Hans.ClassName || mapLocationThing.Type == Actor.Gretel.ClassName)
                         goldKeys += increment;
                     if (mapLocationThing.Type == Actor.SilverKey.ClassName)
-                        silverKeys+=increment;
+                        silverKeys += increment;
                 }
 
                 if (mapLocation.Tile == null && mapLocation.Things.Count() == 0)

@@ -12,7 +12,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
     {
         public MapLocation Location { get; }
 
-        public Trigger Door => Location.Triggers.SingleOrDefault(t=>t.Action == "Door_Open");
+        public Trigger? Door => Location.Triggers.SingleOrDefault(t => t.Action == "Door_Open");
 
         public LockLevel LockLevel
         {
@@ -26,14 +26,14 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             }
         }
 
-        public Trigger Pushwall => Location.Triggers.SingleOrDefault(t=>t.Action == "Pushwall_Move");
+        public Trigger? Pushwall => Location.Triggers.SingleOrDefault(t => t.Action == "Pushwall_Move");
 
         public Passage(MapLocation loc)
         {
             Location = loc;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return Equals(obj as Passage);
         }
@@ -43,7 +43,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             return (Location != null ? Location.GetHashCode() : 0);
         }
 
-        public bool Equals(Passage other)
+        public bool Equals(Passage? other)
         {
             if (null == other)
                 return false;
