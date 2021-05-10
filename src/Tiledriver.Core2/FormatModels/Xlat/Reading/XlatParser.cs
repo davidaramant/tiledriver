@@ -78,19 +78,19 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
 
             foreach (var mapping in tileMappings)
             {
-                ambushModzones.AddRange(mapping.AmbushModzones.Values);
-                changeTriggerModzones.AddRange(mapping.ChangeTriggerModzones.Values);
-                tileTemplates.AddRange(mapping.TileTemplates.Values);
-                triggerTemplates.AddRange(mapping.TriggerTemplates.Values);
-                zoneTemplates.AddRange(mapping.ZoneTemplates.Values);
+                ambushModzones.AddRange(mapping.AmbushModzones);
+                changeTriggerModzones.AddRange(mapping.ChangeTriggerModzones);
+                tileTemplates.AddRange(mapping.TileTemplates);
+                triggerTemplates.AddRange(mapping.TriggerTemplates);
+                zoneTemplates.AddRange(mapping.ZoneTemplates);
             }
 
             return new TileMappings(
-                CondenseToDictionary(ambushModzones),
-                CondenseToDictionary(changeTriggerModzones),
-                CondenseToDictionary(tileTemplates),
-                CondenseToDictionary(triggerTemplates),
-                CondenseToDictionary(zoneTemplates));
+                ambushModzones.ToImmutableList(),
+                changeTriggerModzones.ToImmutableList(),
+                tileTemplates.ToImmutableList(),
+                triggerTemplates.ToImmutableList(),
+                zoneTemplates.ToImmutableList());
         }
 
         private static TileMappings ParseTileMappings(IEnumerator<Token> tokenStream)
@@ -134,11 +134,11 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
 
                     case CloseBraceToken:
                         return new TileMappings(
-                            CondenseToDictionary(ambushModzones),
-                            CondenseToDictionary(changeTriggerModzones),
-                            CondenseToDictionary(tileTemplates),
-                                CondenseToDictionary(triggerTemplates),
-                                    CondenseToDictionary(zoneTemplates));
+                            ambushModzones.ToImmutableList(),
+                            changeTriggerModzones.ToImmutableList(),
+                            tileTemplates.ToImmutableList(),
+                            triggerTemplates.ToImmutableList(),
+                            zoneTemplates.ToImmutableList());
 
                     default:
                         throw ParsingException.CreateError(token, "identifier or end of block");
@@ -421,20 +421,6 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
                 Pathing: flags.Contains("pathing"),
                 Ambush: flags.Contains("ambush"),
                 Minskill: minSkill);
-        }
-
-        private static Dictionary<ushort, TValue> CondenseToDictionary<TValue>(
-            IEnumerable<TValue> sequence) 
-            where TValue : IMapping
-        {
-            var d = new Dictionary<ushort, TValue>();
-
-            foreach (var e in sequence)
-            {
-                d[e.OldNum] = e;
-            }
-
-            return d;
         }
     }
 }
