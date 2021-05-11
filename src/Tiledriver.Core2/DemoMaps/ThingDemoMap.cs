@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Tiledriver.Core.FormatModels.Uwmf;
+using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.DemoMaps
@@ -12,15 +13,15 @@ namespace Tiledriver.Core.DemoMaps
     public static class ThingDemoMap
     {
         private const int HorizontalBuffer = 4;
-        private const int VerticalBuffer = 2;
+        private const int VerticalBuffer = 3;
 
         // TODO: Add arguments for which types of things to include
         public static MapData Create()
         {
             var things = GenerateThings().ToImmutableList();
 
-            int width = things.Max(t=>(int)t.X) + HorizontalBuffer;
-            int height = things.Max(t=>(int)t.Y) + VerticalBuffer;
+            int width = things.Max(t => (int)(t.X+0.5)) + HorizontalBuffer;
+            int height = things.Max(t => (int)(t.Y+0.5)) + VerticalBuffer;
 
             return new MapData(
                 NameSpace: "Wolf3D",
@@ -55,12 +56,12 @@ namespace Tiledriver.Core.DemoMaps
                     new Sector(
                         TextureCeiling: "#00FF00",
                         TextureFloor: "#00FF00",
-                        Comment:"Good thing"
+                        Comment: "Good thing"
                     ),
                     new Sector(
                         TextureCeiling: "#FF0000",
                         TextureFloor: "#FF0000",
-                        Comment:"Invalid thing"
+                        Comment: "Invalid thing"
                     )),
                 Zones: ImmutableList.Create(new Zone()),
                 Planes: ImmutableList.Create(new Plane(Depth: 64)),
@@ -72,6 +73,7 @@ namespace Tiledriver.Core.DemoMaps
                         Y: 1.5,
                         Z: 0,
                         Angle: 0,
+                        Ambush:true,
                         Skill1: true,
                         Skill2: true,
                         Skill3: true,
@@ -112,8 +114,9 @@ namespace Tiledriver.Core.DemoMaps
         }
 
         private static IEnumerable<Thing> GenerateThings(IEnumerable<Actor> actors, int thingColumn) =>
-            actors.Select((actor, actorIndex) => {
-                var x = HorizontalBuffer + (2*thingColumn);
+            actors.Select((actor, actorIndex) =>
+            {
+                var x = HorizontalBuffer + (2 * thingColumn);
                 var y = VerticalBuffer + actorIndex;
 
                 return new Thing(
@@ -131,39 +134,19 @@ namespace Tiledriver.Core.DemoMaps
 
         private static IEnumerable<MapSquare> CreateGeometry(int width, int height, IEnumerable<Thing> things)
         {
-            var entries = new MapSquare[height, width];
-
             MapSquare solidTile = new(Tile: 0, Sector: 0, Zone: -1);
-            MapSquare emptyTile = new(Tile: -1, Sector: 0, Zone: 0);
 
-            // ### Build a big empty square
+            var size = new Size(width, height);
 
-            // Top wall
-            for (var col = 0; col < width; col++)
-            {
-                entries[0, col] = solidTile;
-            }
-
-            for (var row = 1; row < height - 1; row++)
-            {
-                entries[row, 0] = solidTile;
-                for (var col = 1; col < width - 1; col++)
-                {
-                    entries[row, col] = emptyTile;
-                }
-                entries[row, width - 1] = solidTile;
-            }
-
-            // bottom wall
-            for (var col = 0; col < width; col++)
-            {
-                entries[height - 1, col] = solidTile;
-            }
+            var board =
+                new Canvas(new Size(width, height))
+                    .Fill(new Rectangle(new Position(0, 0), size), tile: 0)
+                    .Fill(new Rectangle(new Position(1, 1), new Size(size.Width - 2, size.Height - 2)), tile: -1);
 
             // Make the starting nook
-            entries[1, 2] = new MapSquare(Tile: 1, Sector: 0, Zone: 0, Tag: 1);
-            entries[2, 1] = solidTile;
-            entries[2, 2] = solidTile;
+            board[new Position(2, 1)] = new MapSquare(Tile: 1, Sector: 0, Zone: 0, Tag: 1);
+            board[new Position(1, 2)] = solidTile;
+            board[new Position(2, 2)] = solidTile;
 
             // Mark out the things
             foreach (var thing in things)
@@ -171,17 +154,11 @@ namespace Tiledriver.Core.DemoMaps
                 int x = (int)thing.X;
                 int y = (int)thing.Y;
 
-                var ts = entries[y, x] with { Sector = 1 };
-                entries[y, x] = ts;
+                var ts = board[new Position(x, y)] with { Sector = 1 };
+                board[new Position(x, y)] = ts;
             }
 
-            for (int row = 0; row < height; row++)
-            {
-                for (int col = 0; col < width; col++)
-                {
-                    yield return entries[row, col];
-                }
-            }
+            return board.ToPlaneMap();
         }
     }
 }
