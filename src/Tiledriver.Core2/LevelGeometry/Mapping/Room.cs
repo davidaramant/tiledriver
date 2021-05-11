@@ -78,7 +78,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
         public bool HasGoldKey => goldKeys > 0;
         public bool HasSilverKey => silverKeys > 0;
 
-        private void _locations_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void _locations_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
             {

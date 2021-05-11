@@ -11,8 +11,8 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 {
     public sealed class LevelMapper
     {
-        private List<Thing> _silverLocations;
-        private List<Thing> _goldLocations;
+        private List<Thing> _silverLocations = new();
+        private List<Thing> _goldLocations = new();
         private bool _hasSilver;
         private bool _hasGold;
         private readonly IList<IRoom> _discoveredRooms = new List<IRoom>();
@@ -98,11 +98,16 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             _hasSilver |= room.Locations.Any(loc => _silverLocations.Any(key => (int)key.X == loc.X && (int)key.Y == loc.Y));
         }
 
-        private bool TryExpand(Func<MapLocation, bool> moveCheck, Func<MapLocation, MapLocation> targetTile, IRoom room, MapLocation fromLocation, List<MapLocation> locationsToProcess)
+        private bool TryExpand(
+            Func<MapLocation, bool> moveCheck, 
+            Func<MapLocation, MapLocation?> targetTile, 
+            IRoom room, 
+            MapLocation fromLocation, 
+            List<MapLocation> locationsToProcess)
         {
             if (moveCheck(fromLocation))
             {
-                var targetSpace = targetTile(fromLocation);
+                var targetSpace = targetTile(fromLocation)!;
                 if (!room.Locations.Contains(targetSpace))
                 {
                     room.Locations.Add(targetSpace);
@@ -137,7 +142,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
         }
 
         private void TryPassage(
-            Func<MapLocation, MapLocation> getNext,
+            Func<MapLocation, MapLocation?> getNext,
             Func<Trigger, bool> hasProperFormattedPassage,
             Func<MapLocation, bool> moveBackCheck,
             MapLocation fromLocation,
@@ -268,13 +273,13 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
         private class LockedWay
         {
             public LockLevel LockLevel { get; }
-            public Func<MapLocation, MapLocation> GetNext { get; }
+            public Func<MapLocation, MapLocation?> GetNext { get; }
             public Func<Trigger, bool> HasProperFormattedPassage { get; }
             public Func<MapLocation, bool> MoveBackCheck { get; }
             public MapLocation FromLocation { get; }
             public IRoom FromRoom { get; }
 
-            public LockedWay(LockLevel lockLevel, Func<MapLocation, MapLocation> getNext, Func<Trigger, bool> hasProperFormattedPassage, Func<MapLocation, bool> moveBackCheck, MapLocation fromLocation, IRoom fromRoom)
+            public LockedWay(LockLevel lockLevel, Func<MapLocation, MapLocation?> getNext, Func<Trigger, bool> hasProperFormattedPassage, Func<MapLocation, bool> moveBackCheck, MapLocation fromLocation, IRoom fromRoom)
             {
                 LockLevel = lockLevel;
                 GetNext = getNext;

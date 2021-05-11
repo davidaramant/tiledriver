@@ -10,18 +10,12 @@ namespace Tiledriver.Core.MapRanker
 {
     public class RuleFactory : IRuleFactory
     {
-        public IEnumerable<IRankingRule> Rules
-        {
-            get
-            {
-                Assembly currentAssembly = Assembly.GetAssembly(typeof(RuleFactory))!;
-
-                return currentAssembly
-                    .GetTypes()
-                    .Where(type => typeof(IRankingRule).IsAssignableFrom(type))
-                    .Where(type => !type.IsInterface)
-                    .Select(type => (IRankingRule)Activator.CreateInstance(type));
-            }
-        }
+        public IEnumerable<IRankingRule> Rules => 
+            Assembly
+                .GetAssembly(typeof(RuleFactory))!
+                .GetTypes()
+                .Where(type => typeof(IRankingRule).IsAssignableFrom(type))
+                .Where(type => !type.IsInterface)
+                .Select(type => (IRankingRule)Activator.CreateInstance(type)!);
     }
 }
