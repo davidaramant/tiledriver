@@ -6,5 +6,7 @@ namespace Tiledriver.Core.LevelGeometry
     public sealed record Size(int Width, int Height)
     {
         public int Area => Width * Height;
+
+        public Rectangle ToRectangle() => new(new Position(0, 0), this);
     }
 }

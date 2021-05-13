@@ -10,7 +10,8 @@ namespace Tiledriver.Core.LevelGeometry
     {
         Size Dimensions { get; }
         MapSquare this[Position pos] { get; }
+        MapSquare this[int x, int y] { get; }
         ImmutableArray<MapSquare> ToPlaneMap();
-        Canvas ToCanvas();
+        ICanvas ToCanvas();
     }
 }

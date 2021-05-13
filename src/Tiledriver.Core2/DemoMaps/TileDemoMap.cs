@@ -7,6 +7,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.LevelGeometry;
+using Tiledriver.Core.LevelGeometry.CanvasDrawingExtensions;
 using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.DemoMaps
@@ -64,8 +65,8 @@ namespace Tiledriver.Core.DemoMaps
 
             var board =
                 new Canvas(size)
-                    .Fill(new Rectangle(new Position(0, 0), size), tile: boundaryTileIndex)
-                    .Fill(new Rectangle(new Position(1, 1), new Size(size.Width - 2, size.Height - 2)), tile: -1);
+                    .FillRectangle(size.ToRectangle(), tile: -1)
+                    .OutlineRectangle(size.ToRectangle(), tile: boundaryTileIndex);
 
             foreach (var row in Enumerable.Range(0, rows))
             {

@@ -15,7 +15,8 @@ namespace Tiledriver.Core.FormatModels.Uwmf
             private readonly ImmutableArray<MapSquare> _planeMap;
 
             public Size Dimensions { get; }
-            public MapSquare this[Position pos] => _planeMap[pos.Y * Dimensions.Width + pos.X];
+            public MapSquare this[Position pos] => this[pos.X, pos.Y];
+            public MapSquare this[int x, int y] => _planeMap[y * Dimensions.Width + x];
 
             public ImmutableBoard(Size dimensions, ImmutableArray<MapSquare> planeMap)
             {
@@ -23,8 +24,8 @@ namespace Tiledriver.Core.FormatModels.Uwmf
                 _planeMap = planeMap;
             }
 
-            public ImmutableArray<MapSquare> ToPlaneMap() => _planeMap;        
-            public Canvas ToCanvas() => new Canvas(Dimensions).Fill(_planeMap);
+            public ImmutableArray<MapSquare> ToPlaneMap() => _planeMap;
+            public ICanvas ToCanvas() => new Canvas(Dimensions).Fill(_planeMap);
         }
 
         public IBoard GetBoard() => new ImmutableBoard(Dimensions, PlaneMaps[0]);

@@ -9,7 +9,7 @@ using Tiledriver.Core.FormatModels.Uwmf;
 
 namespace Tiledriver.Core.LevelGeometry
 {
-    public sealed class Canvas : IBoard
+    public sealed class Canvas : ICanvas
     {
         private readonly int[] _tiles;
         private readonly int[] _sectors;
@@ -20,14 +20,20 @@ namespace Tiledriver.Core.LevelGeometry
 
         public MapSquare this[Position pos]
         {
+            get => this[pos.X, pos.Y];
+            set => this[pos.X, pos.Y] = value;
+        }
+
+        public MapSquare this[int x, int y]
+        {
             get
             {
-                var index = GetIndex(pos);
+                var index = GetIndex(x, y);
                 return new MapSquare(_tiles[index], _sectors[index], _zones[index], _tags[index]);
             }
             set
             {
-                var index = GetIndex(pos);
+                var index = GetIndex(x, y);
                 _tiles[index] = value.Tile;
                 _sectors[index] = value.Sector;
                 _zones[index] = value.Zone;
@@ -66,39 +72,12 @@ namespace Tiledriver.Core.LevelGeometry
             return this;
         }
 
-        public Canvas Fill(int? tile = null, int? sector = null, int? zone = null, int? tag = null) =>
-            Fill(new Rectangle(new Position(0, 0), Dimensions), tile, sector, zone, tag);
+        public ICanvas Set(Position pos, int? tile = null, int? sector = null, int? zone = null, int? tag = null) =>
+            Set(pos.X, pos.Y, tile, sector, zone, tag);
 
-        public Canvas Fill(Rectangle area, int? tile = null, int? sector = null, int? zone = null, int? tag = null)
+        public ICanvas Set(int x, int y, int? tile = null, int? sector = null, int? zone = null, int? tag = null)
         {
-            foreach (var row in Enumerable.Range(area.TopLeft.Y, area.Size.Height))
-            {
-                var startIndex = GetIndex(area.TopLeft.X, row);
-
-                if (tile != null)
-                {
-                    Array.Fill(_tiles, (int)tile, startIndex, area.Size.Width);
-                }
-                if (sector != null)
-                {
-                    Array.Fill(_sectors, (int)sector, startIndex, area.Size.Width);
-                }
-                if (zone != null)
-                {
-                    Array.Fill(_zones, (int)zone, startIndex, area.Size.Width);
-                }
-                if (tag != null)
-                {
-                    Array.Fill(_tags, (int)tag, startIndex, area.Size.Width);
-                }
-            }
-
-            return this;
-        }
-
-        public Canvas Set(Position pos, int? tile = null, int? sector = null, int? zone = null, int? tag = null)
-        {
-            var startIndex = GetIndex(pos);
+            var startIndex = GetIndex(x,y);
 
             if (tile != null)
             {
@@ -132,9 +111,8 @@ namespace Tiledriver.Core.LevelGeometry
             return tileSpaces.ToImmutableArray();
         }
 
-        public Canvas ToCanvas() => new Canvas(Dimensions).Fill(ToPlaneMap());
+        public ICanvas ToCanvas() => new Canvas(Dimensions).Fill(ToPlaneMap());
 
-        private int GetIndex(Position pos) => GetIndex(pos.X, pos.Y);
         private int GetIndex(int x, int y) => y * Dimensions.Width + x;
     }
 }

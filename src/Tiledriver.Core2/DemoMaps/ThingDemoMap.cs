@@ -6,6 +6,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.LevelGeometry;
+using Tiledriver.Core.LevelGeometry.CanvasDrawingExtensions;
 using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.DemoMaps
@@ -20,8 +21,8 @@ namespace Tiledriver.Core.DemoMaps
         {
             var things = GenerateThings().ToImmutableList();
 
-            int width = things.Max(t => (int)(t.X+0.5)) + HorizontalBuffer;
-            int height = things.Max(t => (int)(t.Y+0.5)) + VerticalBuffer;
+            int width = things.Max(t => (int)(t.X + 0.5)) + HorizontalBuffer;
+            int height = things.Max(t => (int)(t.Y + 0.5)) + VerticalBuffer;
 
             return new MapData(
                 NameSpace: "Wolf3D",
@@ -73,7 +74,7 @@ namespace Tiledriver.Core.DemoMaps
                         Y: 1.5,
                         Z: 0,
                         Angle: 0,
-                        Ambush:true,
+                        Ambush: true,
                         Skill1: true,
                         Skill2: true,
                         Skill3: true,
@@ -139,9 +140,9 @@ namespace Tiledriver.Core.DemoMaps
             var size = new Size(width, height);
 
             var board =
-                new Canvas(new Size(width, height))
-                    .Fill(new Rectangle(new Position(0, 0), size), tile: 0)
-                    .Fill(new Rectangle(new Position(1, 1), new Size(size.Width - 2, size.Height - 2)), tile: -1);
+                new Canvas(size)
+                    .FillRectangle(size.ToRectangle(), tile: -1)
+                    .OutlineRectangle(size.ToRectangle(), tile: 0);
 
             // Make the starting nook
             board[new Position(2, 1)] = new MapSquare(Tile: 1, Sector: 0, Zone: 0, Tag: 1);
