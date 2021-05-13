@@ -15,21 +15,21 @@ namespace Tiledriver.Core.DemoMaps
     public static class TexturesDemoMap
     {
         private const int NumGradients = 5;
-        private const int NumLevels = NumGradients + 1 + NumGradients;
+        private const int TotalNumLevels = NumGradients + 1 + NumGradients;
         private const int HorizontalBuffer = 3;
         private const int Height = 9;
 
-        public static MapData Create()
-        {
-            var originalTiles = DefaultTile.Lookup.Values.ToList();
+        public static MapData Create() => CreateMapAndTextures().Map;
 
+        public static (MapData Map, IReadOnlyList<Texture> Textures) CreateMapAndTextures()
+        {
             var mapSize = new Size(
-                HorizontalBuffer + NumLevels + HorizontalBuffer,
+                HorizontalBuffer + TotalNumLevels + HorizontalBuffer,
                 Height);
 
             var (planeMap, tiles, textures) = CreateGeometry(mapSize);
 
-            return new MapData
+            return (new MapData
             (
                 NameSpace: "Wolf3D",
                 TileSize: 64,
@@ -58,12 +58,16 @@ namespace Tiledriver.Core.DemoMaps
                     Skill4: true
                 )),
                 Triggers: ImmutableList<Trigger>.Empty
-            );
+            ), textures);
         }
 
         private static (ImmutableArray<MapSquare>, ImmutableList<Tile>, IReadOnlyList<Texture>) CreateGeometry(Size size)
         {
-            var tiles = new List<Tile> { DefaultTile.GrayStone1 };
+            var baseTile = DefaultTile.GrayStone1;
+            var nsTexture = baseTile.TextureNorth;
+            var ewTexture = baseTile.TextureEast;
+
+            var tiles = new List<Tile> { baseTile };
             var textures = new List<Texture>();
 
             var board =
@@ -71,12 +75,56 @@ namespace Tiledriver.Core.DemoMaps
                     .FillRectangle(size.ToRectangle(), tile: -1)
                     .OutlineRectangle(size.ToRectangle(), tile: 0);
 
+            var middleX = HorizontalBuffer + NumGradients;
             var middleY = Height / 2;
 
-            board.Set(HorizontalBuffer + NumGradients, middleY, tile: 0);
+            board.Set(middleX, middleY, tile: 0);
 
+            foreach (var darkLevel in Enumerable.Range(1, NumGradients))
+            {
+                board.Set(middleX - darkLevel, middleY, tile: tiles.Count);
 
-            return (board.ToPlaneMap(), tiles.ToImmutableList(),textures);
+                var newNS = nsTexture + "Dark" + darkLevel;
+                var newEW = ewTexture + "Dark" + darkLevel;
+
+                tiles.Add(baseTile with
+                {
+                    TextureNorth = newNS,
+                    TextureSouth = newNS,
+                    TextureEast = newEW,
+                    TextureWest = newEW,
+                });
+
+                textures.Add(new Texture(newNS, 64, 64, ImmutableList.Create(
+                    new Patch(nsTexture, 0, 0, Translation: new Translation.Red()))));
+                textures.Add(new Texture(newEW, 64, 64, ImmutableList.Create(
+                    new Patch(ewTexture, 0, 0, Translation: new Translation.Gold()))));
+            }
+
+            foreach (var lightLevel in Enumerable.Range(1, NumGradients))
+            {
+                board.Set(middleX + lightLevel, middleY, tile: tiles.Count);
+
+                var newNS = nsTexture + "Light" + lightLevel;
+                var newEW = ewTexture + "Light" + lightLevel;
+
+                tiles.Add(baseTile with
+                {
+                    TextureNorth = newNS,
+                    TextureSouth = newNS,
+                    TextureEast = newEW,
+                    TextureWest = newEW,
+                });
+
+                textures.Add(new Texture(newNS, 64, 64, ImmutableList.Create(
+                    new Patch(nsTexture, 0, 0, Alpha: 0.1, Style: RenderStyle.Add),
+                    new Patch(nsTexture, 0, 0))));
+                textures.Add(new Texture(newEW, 64, 64, ImmutableList.Create(
+                    new Patch(ewTexture, 0, 0, Alpha: 0.1, Style: RenderStyle.Add),
+                    new Patch(ewTexture, 0, 0))));
+            }
+
+            return (board.ToPlaneMap(), tiles.ToImmutableList(), textures);
         }
     }
 }

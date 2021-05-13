@@ -25,7 +25,7 @@ namespace Tiledriver.Core.ECWolfUtils
         }
 
         /// <summary>
-        /// Create a WAD with the given 
+        /// Create a WAD with the given map
         /// </summary>
         /// <param name="uwmfMap">The map to save</param>
         /// <param name="wadFilePath">
@@ -35,19 +35,38 @@ namespace Tiledriver.Core.ECWolfUtils
             MapData uwmfMap, 
             string? wadFilePath = null)
         {
-            wadFilePath ??= Path.Combine(Path.GetTempPath(), "demo.wad");
-
-            var pathToLoad = Path.GetFullPath(wadFilePath);
-
             var wad = new WadFile();
             wad.Append(new Marker("MAP01"));
             wad.Append(new UwmfLump("TEXTMAP", uwmfMap));
             wad.Append(new Marker("ENDMAP"));
-            wad.SaveTo(wadFilePath);
 
+            LoadWadInEcWolf(wad, wadFilePath);
+        }
+
+        /// <summary>
+        /// Create a WAD with the given map
+        /// </summary>
+        /// <param name="wad">The WAD to load</param>
+        /// <param name="wadFilePath">
+        /// (Optional) The path to the WAD to create. If not specified, something will be created in the temporary directory.
+        /// </param>
+        public void LoadWadInEcWolf(
+            WadFile wad, 
+            string? wadFilePath = null)
+        {
+            wadFilePath ??= Path.Combine(Path.GetTempPath(), "demo.wad");
+            var pathToLoad = Path.GetFullPath(wadFilePath);
+
+            wad.SaveTo(pathToLoad);
+
+            LoadWadInEcWolf(pathToLoad);
+        }
+
+        public void LoadWadInEcWolf(string wadPath)
+        {
             Process.Start(
                 _ecWolfExePath,
-                $"--file \"{pathToLoad}\" --data wl6 --hard --nowait --tedlevel map01");
+                $"--file \"{wadPath}\" --data wl6 --hard --nowait --tedlevel map01");
         }
     }
 }
