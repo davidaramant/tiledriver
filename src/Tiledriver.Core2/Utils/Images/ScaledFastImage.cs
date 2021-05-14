@@ -3,7 +3,7 @@
 
 using System.Drawing;
 
-namespace Tiledriver.Core.Utils
+namespace Tiledriver.Core.Utils.Images
 {
     public sealed class ScaledFastImage : IFastImage
     {

@@ -9,7 +9,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
-namespace Tiledriver.Core.Utils
+namespace Tiledriver.Core.Utils.Images
 {
     public sealed class FastImage : IFastImage
     {

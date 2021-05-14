@@ -4,7 +4,7 @@
 using System.Drawing;
 using System.Linq;
 using static HsluvS.Hsluv;
-using Tiledriver.Core.Utils;
+using Tiledriver.Core.Utils.Images;
 
 namespace Tiledriver.Core.FormatModels.MapMetadata.Writing
 {
