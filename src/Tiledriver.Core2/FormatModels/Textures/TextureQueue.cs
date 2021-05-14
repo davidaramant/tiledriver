@@ -39,7 +39,7 @@ namespace Tiledriver.Core.FormatModels.Textures
                         256,
                         XScale: 4,
                         YScale: 4,
-                        Patches: ImmutableList.Create(new Patch(tex.Name, 0, 0))));
+                        Patches: ImmutableList.Create(new Patch(tex.Name, 0, 0, Rotate: renderedTexture.Rotation))));
                 _renderNameLookup.Add(renderedTexture, compositeName);
                 return compositeName;
             }

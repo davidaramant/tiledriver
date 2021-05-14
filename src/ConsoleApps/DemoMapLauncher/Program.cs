@@ -7,7 +7,7 @@ using Tiledriver.Core.FormatModels.Wad;
 
 // TODO: Clean this up somehow
 var textureQueue = new TextureQueue();
-var map = TexturesDemoMap.CreateMapAndTextures(textureQueue);
+var map = TileDemoMap.CreateMapAndTextures(textureQueue);
 
 var ms = new MemoryStream();
 TexturesWriter.Write(textureQueue.Definitions, ms);

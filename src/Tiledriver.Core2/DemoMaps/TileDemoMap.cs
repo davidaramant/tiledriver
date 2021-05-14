@@ -4,20 +4,27 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Drawing;
 using System.Linq;
+using Tiledriver.Core.FormatModels.Common;
+using Tiledriver.Core.FormatModels.Textures;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.LevelGeometry.CanvasDrawingExtensions;
 using Tiledriver.Core.Wolf3D;
+using Size = Tiledriver.Core.LevelGeometry.Size;
 
 namespace Tiledriver.Core.DemoMaps
 {
     public static class TileDemoMap
     {
         private const int Columns = 10;
-        const int SpaceBetween = 2;
+        const int SpaceBetween = 3;
+        private static readonly Color CeilingColor = Color.FromArgb(0xc0, 0xc0, 0xc0);
+        private static readonly Color FloorColor = Color.FromArgb(0xa0, 0xa0, 0xa0);
+        public static MapData Create() => CreateMapAndTextures(new TextureQueue());
 
-        public static MapData Create()
+        public static MapData CreateMapAndTextures(TextureQueue textureQueue)
         {
             var originalTiles = DefaultTile.Lookup.Values.ToList();
 
@@ -27,6 +34,8 @@ namespace Tiledriver.Core.DemoMaps
                 2 + (SpaceBetween + 1) * Columns + SpaceBetween,
                 2 + (SpaceBetween + 1) * rows + SpaceBetween);
 
+            var (planeMap, sectors) = CreateGeometry(originalTiles, mapSize, rows, textureQueue);
+
             return new MapData
             (
                 NameSpace: "Wolf3D",
@@ -35,15 +44,11 @@ namespace Tiledriver.Core.DemoMaps
                 Width: mapSize.Width,
                 Height: mapSize.Height,
                 Tiles: originalTiles.ToImmutableList(),
-                Sectors: ImmutableList.Create<Sector>().Add(
-                    new Sector(
-                        TextureCeiling: "#C0C0C0",
-                        TextureFloor: "#A0A0A0"
-                    )),
+                Sectors: sectors,
                 Zones: ImmutableList.Create<Zone>().Add(new Zone()),
                 Planes: ImmutableList.Create<Plane>().Add(new Plane(Depth: 64)),
                 PlaneMaps: ImmutableList.Create<ImmutableArray<MapSquare>>()
-                    .Add(CreateGeometry(originalTiles, mapSize, rows)),
+                    .Add(planeMap),
                 Things: ImmutableList.Create<Thing>().Add(new Thing(
                     Type: Actor.Player1Start.ClassName,
                     X: 1.5,
@@ -59,9 +64,15 @@ namespace Tiledriver.Core.DemoMaps
             );
         }
 
-        private static ImmutableArray<MapSquare> CreateGeometry(List<Tile> tiles, Size size, int rows)
+        private static (ImmutableArray<MapSquare>, ImmutableList<Sector>) CreateGeometry(List<Tile> tiles, Size size, int rows, TextureQueue textureQueue)
         {
             var boundaryTileIndex = tiles.IndexOf(DefaultTile.GrayStone1);
+            var sectors = ImmutableList.CreateBuilder<Sector>();
+
+            var defaultSector = new Sector(
+                TextureCeiling: Texture.SolidColor(CeilingColor),
+                TextureFloor: Texture.SolidColor(FloorColor));
+            sectors.Add(defaultSector);
 
             var board =
                 new Canvas(size)
@@ -75,13 +86,36 @@ namespace Tiledriver.Core.DemoMaps
                 {
                     int x = ((SpaceBetween + 1) * col) + (SpaceBetween + 1);
 
-                    var tile = row * Columns + col;
+                    var tileId = row * Columns + col;
 
-                    board.Set(new Position(x, y), tile: tile);
+                    if (tileId < tiles.Count)
+                    {
+                        var tile = tiles[tileId];
+
+                        void AddTexture(string name, PatchRotation rotate, int xDelta, int yDelta)
+                        {
+                            var textTexture = textureQueue.Add(
+                                new RenderedTexture(
+                                    FloorColor,
+                                    TextColor: Color.Black,
+                                    Text: name,
+                                    Rotation: rotate));
+
+                            sectors.Add(defaultSector with { TextureFloor = textTexture });
+                            board.Set(x + xDelta, y + yDelta, sector: sectors.Count - 1);
+                        }
+
+                        AddTexture(tile.TextureNorth.Name, PatchRotation.Rotate180, 0, -1);
+                        AddTexture(tile.TextureEast.Name, PatchRotation.Rotate270, 1, 0);
+                        AddTexture(tile.TextureSouth.Name, PatchRotation.None, 0, 1);
+                        AddTexture(tile.TextureWest.Name, PatchRotation.Rotate90, -1, 0);
+
+                        board.Set(new Position(x, y), tile: tileId);
+                    }
                 }
             }
 
-            return board.ToPlaneMap();
+            return (board.ToPlaneMap(), sectors.ToImmutable());
         }
     }
 }

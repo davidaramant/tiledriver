@@ -18,7 +18,8 @@ namespace Tiledriver.Core.FormatModels.Textures
     public sealed record RenderedTexture(
         Color BackgroundColor,
         Color TextColor = new(),
-        string Text = "")
+        string Text = "",
+        PatchRotation Rotation = PatchRotation.None)
     {
         public bool HasText => !string.IsNullOrWhiteSpace(Text);
 
