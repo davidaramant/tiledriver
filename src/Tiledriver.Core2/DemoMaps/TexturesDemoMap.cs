@@ -21,7 +21,7 @@ namespace Tiledriver.Core.DemoMaps
 
         public static MapData Create() => CreateMapAndTextures().Map;
 
-        public static (MapData Map, IReadOnlyList<Texture> Textures) CreateMapAndTextures()
+        public static (MapData Map, IReadOnlyList<CompositeTexture> Textures) CreateMapAndTextures()
         {
             var mapSize = new Size(
                 HorizontalBuffer + TotalNumLevels + HorizontalBuffer,
@@ -61,14 +61,14 @@ namespace Tiledriver.Core.DemoMaps
             ), textures);
         }
 
-        private static (ImmutableArray<MapSquare>, ImmutableList<Tile>, IReadOnlyList<Texture>) CreateGeometry(Size size)
+        private static (ImmutableArray<MapSquare>, ImmutableList<Tile>, IReadOnlyList<CompositeTexture>) CreateGeometry(Size size)
         {
             var baseTile = DefaultTile.GrayStone1;
             var nsTexture = baseTile.TextureNorth;
             var ewTexture = baseTile.TextureEast;
 
             var tiles = new List<Tile> { baseTile };
-            var textures = new List<Texture>();
+            var textures = new List<CompositeTexture>();
 
             var board =
                 new Canvas(size)
@@ -95,9 +95,9 @@ namespace Tiledriver.Core.DemoMaps
                     TextureWest = newEW,
                 });
 
-                textures.Add(new Texture(newNS, 64, 64, ImmutableList.Create(
+                textures.Add(new CompositeTexture(newNS, 64, 64, ImmutableList.Create(
                     new Patch(nsTexture, 0, 0, Translation: new Translation.Red()))));
-                textures.Add(new Texture(newEW, 64, 64, ImmutableList.Create(
+                textures.Add(new CompositeTexture(newEW, 64, 64, ImmutableList.Create(
                     new Patch(ewTexture, 0, 0, Translation: new Translation.Gold()))));
             }
 
@@ -116,10 +116,10 @@ namespace Tiledriver.Core.DemoMaps
                     TextureWest = newEW,
                 });
 
-                textures.Add(new Texture(newNS, 64, 64, ImmutableList.Create(
+                textures.Add(new CompositeTexture(newNS, 64, 64, ImmutableList.Create(
                     new Patch(nsTexture, 0, 0, Alpha: 0.1, Style: RenderStyle.Add),
                     new Patch(nsTexture, 0, 0))));
-                textures.Add(new Texture(newEW, 64, 64, ImmutableList.Create(
+                textures.Add(new CompositeTexture(newEW, 64, 64, ImmutableList.Create(
                     new Patch(ewTexture, 0, 0, Alpha: 0.1, Style: RenderStyle.Add),
                     new Patch(ewTexture, 0, 0))));
             }

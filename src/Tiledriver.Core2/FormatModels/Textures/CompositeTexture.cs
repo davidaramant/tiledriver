@@ -5,7 +5,7 @@ using System.Collections.Immutable;
 
 namespace Tiledriver.Core.FormatModels.Textures
 {
-    public sealed record Texture(
+    public sealed record CompositeTexture(
         string Name,
         int Width,
         int Height,

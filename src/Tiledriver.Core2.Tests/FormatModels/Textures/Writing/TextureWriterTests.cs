@@ -17,7 +17,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures.Writing
         [Fact]
         public void ShouldWriteLadderTexture()
         {
-            var texture = new Texture(
+            var texture = new CompositeTexture(
                 "ALADDER2",
                 72,
                 256,
@@ -56,7 +56,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures.Writing
         [Fact]
         public void ShouldWriteExampleTexture2()
         {
-            var texture = new Texture(
+            var texture = new CompositeTexture(
                 "SWEXPLUP",
                 512,
                 512,
@@ -95,7 +95,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures.Writing
         [Fact]
         public void ShouldWriteTextureOffset()
         {
-            var texture = new Texture(
+            var texture = new CompositeTexture(
                 "Name",
                 10,
                 10,
@@ -116,7 +116,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures.Writing
         [Fact]
         public void ShouldWritePredefinedTranslation()
         {
-            var texture = new Texture(
+            var texture = new CompositeTexture(
                 "Name",
                 10,
                 10,
@@ -144,7 +144,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures.Writing
         [Fact]
         public void ShouldWriteCustomTranslation()
         {
-            var texture = new Texture(
+            var texture = new CompositeTexture(
                 "Name",
                 10,
                 10,
@@ -172,7 +172,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures.Writing
         [Fact]
         public void ShouldWriteDesaturateTranslation()
         {
-            var texture = new Texture(
+            var texture = new CompositeTexture(
                 "Name",
                 10,
                 10,
@@ -197,12 +197,12 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures.Writing
             actual.Should().Be(expected);
         }
 
-        private static string GetText(Texture texture)
+        private static string GetText(CompositeTexture compositeTexture)
         {
             using var ms = new MemoryStream();
             using (var writer = new StreamWriter(ms, Encoding.ASCII, leaveOpen: true))
             {
-                TexturesWriter.Write(texture, writer);
+                TexturesWriter.Write(compositeTexture, writer);
             }
 
             ms.Position = 0;

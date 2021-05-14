@@ -10,7 +10,7 @@ namespace Tiledriver.Core.FormatModels.Textures.Writing
 {
     public static class TexturesWriter
     {
-        public static void Write(IEnumerable<Texture> textures, Stream outputStream)
+        public static void Write(IEnumerable<CompositeTexture> textures, Stream outputStream)
         {
             using var writer = new StreamWriter(outputStream, Encoding.ASCII, leaveOpen: true);
 
@@ -20,7 +20,7 @@ namespace Tiledriver.Core.FormatModels.Textures.Writing
             }
         }
 
-        public static void Write(Texture texture, StreamWriter writer)
+        public static void Write(CompositeTexture texture, StreamWriter writer)
         {
             var output = new WriterUtil(writer);
 
