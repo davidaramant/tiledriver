@@ -64,8 +64,8 @@ namespace Tiledriver.Core.DemoMaps
         private static (ImmutableArray<MapSquare>, ImmutableList<Tile>, IReadOnlyList<CompositeTexture>) CreateGeometry(Size size)
         {
             var baseTile = DefaultTile.GrayStone1;
-            var nsTexture = baseTile.TextureNorth;
-            var ewTexture = baseTile.TextureEast;
+            var nsTexture = baseTile.TextureNorth.Name;
+            var ewTexture = baseTile.TextureEast.Name;
 
             var tiles = new List<Tile> { baseTile };
             var textures = new List<CompositeTexture>();

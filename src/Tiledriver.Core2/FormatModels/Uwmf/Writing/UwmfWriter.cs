@@ -6,6 +6,7 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Tiledriver.Core.FormatModels.Common;
 
 namespace Tiledriver.Core.FormatModels.Uwmf.Writing
 {
@@ -35,6 +36,9 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Writing
             writer.WriteLine(string.Join("," + Environment.NewLine, planeMap.Select(Convert)));
             writer.WriteLine("}");
         }
+
+        private static void WriteProperty(StreamWriter writer, string name, Texture value, bool indent = true) => 
+            WriteProperty(writer, name, value.Name, indent: indent);
 
         private static void WriteProperty(StreamWriter writer, string name, string value, string? defaultValue = null, bool indent = true)
         {

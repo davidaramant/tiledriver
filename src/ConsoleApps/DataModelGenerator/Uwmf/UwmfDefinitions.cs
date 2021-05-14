@@ -12,10 +12,10 @@ namespace Tiledriver.DataModelGenerator.Uwmf
         public static readonly ImmutableArray<Block> Blocks = ImmutableArray.Create(
             new Block("tile",
                 Properties: ImmutableArray.Create<Property>(
-                    new StringProperty("textureEast"),
-                    new StringProperty("textureNorth"),
-                    new StringProperty("textureWest"),
-                    new StringProperty("textureSouth"),
+                    new TextureProperty("textureEast"),
+                    new TextureProperty("textureNorth"),
+                    new TextureProperty("textureWest"),
+                    new TextureProperty("textureSouth"),
                     new BooleanProperty("blockingEast", defaultValue: true),
                     new BooleanProperty("blockingNorth", defaultValue: true),
                     new BooleanProperty("blockingWest", defaultValue: true),
@@ -31,8 +31,8 @@ namespace Tiledriver.DataModelGenerator.Uwmf
 
             new Block("sector",
                 Properties: ImmutableArray.Create<Property>(
-                    new StringProperty("textureCeiling"),
-                    new StringProperty("textureFloor"),
+                    new TextureProperty("textureCeiling"),
+                    new TextureProperty("textureFloor"),
                     new StringProperty("comment", defaultValue: string.Empty)
                 )),
 

@@ -19,10 +19,10 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
             var fields = block.GetFieldAssignments();
 
             return new Tile(
-                TextureEast: fields.GetRequiredFieldValue<string>(block.Name, "textureEast"),
-                TextureNorth: fields.GetRequiredFieldValue<string>(block.Name, "textureNorth"),
-                TextureWest: fields.GetRequiredFieldValue<string>(block.Name, "textureWest"),
-                TextureSouth: fields.GetRequiredFieldValue<string>(block.Name, "textureSouth"),
+                TextureEast: fields.GetRequiredTextureFieldValue(block.Name, "textureEast"),
+                TextureNorth: fields.GetRequiredTextureFieldValue(block.Name, "textureNorth"),
+                TextureWest: fields.GetRequiredTextureFieldValue(block.Name, "textureWest"),
+                TextureSouth: fields.GetRequiredTextureFieldValue(block.Name, "textureSouth"),
                 BlockingEast: fields.GetOptionalFieldValue<bool>("blockingEast", true),
                 BlockingNorth: fields.GetOptionalFieldValue<bool>("blockingNorth", true),
                 BlockingWest: fields.GetOptionalFieldValue<bool>("blockingWest", true),
@@ -41,8 +41,8 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
             var fields = block.GetFieldAssignments();
 
             return new Sector(
-                TextureCeiling: fields.GetRequiredFieldValue<string>(block.Name, "textureCeiling"),
-                TextureFloor: fields.GetRequiredFieldValue<string>(block.Name, "textureFloor"),
+                TextureCeiling: fields.GetRequiredTextureFieldValue(block.Name, "textureCeiling"),
+                TextureFloor: fields.GetRequiredTextureFieldValue(block.Name, "textureFloor"),
                 Comment: fields.GetOptionalFieldValue<string>("comment", "")
             );
         }

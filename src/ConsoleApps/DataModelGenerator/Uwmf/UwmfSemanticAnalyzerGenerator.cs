@@ -2,6 +2,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Tiledriver.DataModelGenerator.MetadataModel;
@@ -59,16 +60,14 @@ namespace Tiledriver.DataModelGenerator.Uwmf
 
         private static string CreateParameterAssignment(ScalarProperty property, string context = "block.Name")
         {
-            var getValue = property.DefaultString == null
-                ? $"fields.GetRequiredFieldValue<{property.PropertyType}>({context}, \"{property.FormatName}\")"
-                : $"fields.GetOptionalFieldValue<{property.PropertyType}>(\"{property.FormatName}\", {property.DefaultString})";
-
-            if (property is DoubleProperty)
+            var getValue = property switch
             {
-                getValue = property.DefaultString == null
-                    ? $"fields.GetRequiredDoubleFieldValue({context}, \"{property.FormatName}\")"
-                    : $"fields.GetOptionalDoubleFieldValue(\"{property.FormatName}\")";
-            }
+                DoubleProperty => $"fields.GetRequiredDoubleFieldValue({context}, \"{property.FormatName}\")",
+                TextureProperty => $"fields.GetRequiredTextureFieldValue({context}, \"{property.FormatName}\")",
+                _ => property.DefaultString == null
+                    ? $"fields.GetRequiredFieldValue<{property.PropertyType}>({context}, \"{property.FormatName}\")"
+                    : $"fields.GetOptionalFieldValue<{property.PropertyType}>(\"{property.FormatName}\", {property.DefaultString})"
+            };
 
             return $"{property.PropertyName}: {getValue}";
         }

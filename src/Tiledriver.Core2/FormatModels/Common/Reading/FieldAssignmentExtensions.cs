@@ -43,6 +43,15 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
                 ? GetTokenValue<T>(fieldName, token)
                 : defaultValue;
 
+        public static Texture GetRequiredTextureFieldValue(
+            this IReadOnlyDictionary<Identifier, Token> fields,
+            IdentifierToken contextName,
+            Identifier fieldName)
+        {
+            var name = GetRequiredFieldValue<string>(fields, contextName, fieldName);
+            return new Texture(name);
+        }
+
         private static double GetDoubleTokenValue(Identifier fieldName, Token token) =>
             token switch
             {

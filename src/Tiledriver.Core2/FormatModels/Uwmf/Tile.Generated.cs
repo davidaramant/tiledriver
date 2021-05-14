@@ -2,15 +2,16 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.CodeDom.Compiler;
+using Tiledriver.Core.FormatModels.Common;
 
 namespace Tiledriver.Core.FormatModels.Uwmf
 {
     [GeneratedCode("DataModelGenerator", "1.0.0.0")]
     public sealed partial record Tile(
-        string TextureEast,
-        string TextureNorth,
-        string TextureWest,
-        string TextureSouth,
+        Texture TextureEast,
+        Texture TextureNorth,
+        Texture TextureWest,
+        Texture TextureSouth,
         bool BlockingEast = true,
         bool BlockingNorth = true,
         bool BlockingWest = true,
