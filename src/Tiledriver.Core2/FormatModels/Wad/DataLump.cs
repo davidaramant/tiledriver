@@ -1,6 +1,7 @@
 // Copyright (c) 2016, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
+using System;
 using System.IO;
 
 namespace Tiledriver.Core.FormatModels.Wad
@@ -15,6 +16,20 @@ namespace Tiledriver.Core.FormatModels.Wad
         {
             Name = name;
             _data = data;
+        }
+
+        public static DataLump FromStream(LumpName name, Stream stream)
+        {
+            using var tempStream = new MemoryStream();
+            stream.CopyTo(tempStream);
+            return new DataLump(name, tempStream.GetBuffer());
+        }
+
+        public static DataLump ReadFromStream(LumpName name, Action<Stream> getData)
+        {
+            using var stream = new MemoryStream();
+            getData(stream);
+            return new DataLump(name, stream.GetBuffer());
         }
 
         public void WriteTo(Stream stream)

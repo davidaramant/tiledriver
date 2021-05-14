@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using Tiledriver.Core.FormatModels.Uwmf;
@@ -32,32 +33,34 @@ namespace Tiledriver.Core.ECWolfUtils
         /// (Optional) The path to the WAD to create. If not specified, something will be created in the temporary directory.
         /// </param>
         public void LoadMapInEcWolf(
-            MapData uwmfMap, 
+            MapData uwmfMap,
             string? wadFilePath = null)
         {
-            var wad = new WadFile();
-            wad.Append(new Marker("MAP01"));
-            wad.Append(new UwmfLump("TEXTMAP", uwmfMap));
-            wad.Append(new Marker("ENDMAP"));
+            var wad = new List<ILump>
+            {
+                new Marker("MAP01"),
+                new UwmfLump("TEXTMAP", uwmfMap),
+                new Marker("ENDMAP")
+            };
 
-            LoadWadInEcWolf(wad, wadFilePath);
+            CreateAndLoadWadInEcWolf(wad, wadFilePath);
         }
 
         /// <summary>
         /// Create a WAD with the given map
         /// </summary>
-        /// <param name="wad">The WAD to load</param>
+        /// <param name="lumps">The lumps of the WAD to load</param>
         /// <param name="wadFilePath">
         /// (Optional) The path to the WAD to create. If not specified, something will be created in the temporary directory.
         /// </param>
-        public void LoadWadInEcWolf(
-            WadFile wad, 
+        public void CreateAndLoadWadInEcWolf(
+            IEnumerable<ILump> lumps,
             string? wadFilePath = null)
         {
-            wadFilePath ??= Path.Combine(Path.GetTempPath(), "demo.wad");
+            wadFilePath ??= Path.Combine(Path.GetTempPath(), "demo.lumps");
             var pathToLoad = Path.GetFullPath(wadFilePath);
 
-            wad.SaveTo(pathToLoad);
+            WadWriter.SaveTo(lumps,pathToLoad);
 
             LoadWadInEcWolf(pathToLoad);
         }

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Tiledriver.Core.DemoMaps;
 using Tiledriver.Core.ECWolfUtils;
 using Tiledriver.Core.FormatModels.Textures;
@@ -9,26 +10,19 @@ using Tiledriver.Core.FormatModels.Wad;
 var textureQueue = new TextureQueue();
 var map = TileDemoMap.CreateMapAndTextures(textureQueue);
 
-var ms = new MemoryStream();
-TexturesWriter.Write(textureQueue.Definitions, ms);
-
-var wad = new WadFile();
-wad.Append(new DataLump("TEXTURES", ms.ToArray()));
-
-foreach (var rendered in textureQueue.RenderQueue)
+var lumps = new List<ILump>
 {
-    var tempStream = new MemoryStream();
-    rendered.Item1.RenderTo(tempStream);
-    wad.Append(new DataLump(rendered.Item2.Name, tempStream.ToArray()));
-}
+    DataLump.ReadFromStream("TEXTURES", stream => TexturesWriter.Write(textureQueue.Definitions, stream)),
+};
 
-wad.Append(new Marker("MAP01"));
-wad.Append(new UwmfLump("TEXTMAP", map));
-wad.Append(new Marker("ENDMAP"));
+lumps.AddRange(textureQueue.RenderQueue.Select(r=>DataLump.ReadFromStream(r.Item2.Name, r.Item1.RenderTo)));
+lumps.Add(new Marker("MAP01"));
+lumps.Add(new UwmfLump("TEXTMAP", map));
+lumps.Add(new Marker("ENDMAP"));
 
 
 ExeFinder
     .CreateLauncher()
-    .LoadWadInEcWolf(wad, "demo.wad");
+    .CreateAndLoadWadInEcWolf(lumps, "demo.wad");
 //    .LoadMapInEcWolf(ThingDemoMap.Create());
 //    .LoadMapInEcWolf(TileDemoMap.Create());

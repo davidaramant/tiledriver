@@ -1,6 +1,7 @@
 // Copyright (c) 2016, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
+using System.Collections.Generic;
 using FluentAssertions;
 using System.IO;
 using System.Linq;
@@ -15,27 +16,6 @@ namespace Tiledriver.Core.Tests.FormatModels.Wad
     public sealed class WadFileTests
     {
         [Fact]
-        public void ShouldCreateWadFile()
-        {
-            var fileInfo = new FileInfo(Path.GetTempFileName());
-            try
-            {
-                var wad = new WadFile();
-                wad.Append(new Marker("MAP01"));
-                wad.Append(new UwmfLump("TEXTMAP", ThingDemoMap.Create()));
-                wad.Append(new Marker("ENDMAP"));
-                wad.SaveTo(fileInfo.FullName);
-            }
-            finally
-            {
-                if (fileInfo.Exists)
-                {
-                    fileInfo.Delete();
-                }
-            }
-        }
-
-        [Fact]
         public void ShouldReadCreatedWadFile()
         {
             var fileInfo = new FileInfo(Path.GetTempFileName());
@@ -43,13 +23,15 @@ namespace Tiledriver.Core.Tests.FormatModels.Wad
             {
                 var map = ThingDemoMap.Create();
 
-                var wad = new WadFile();
-                wad.Append(new Marker("MAP01"));
-                wad.Append(new UwmfLump("TEXTMAP", map));
-                wad.Append(new Marker("ENDMAP"));
-                wad.SaveTo(fileInfo.FullName);
+                var lumps = new List<ILump>
+                {
+                    new Marker("MAP01"),
+                    new UwmfLump("TEXTMAP", ThingDemoMap.Create()),
+                    new Marker("ENDMAP")
+                };
+                WadWriter.SaveTo(lumps,fileInfo.FullName);
 
-                wad = WadFile.Read(fileInfo.FullName);
+                var wad = WadFile.Read(fileInfo.FullName);
                 wad.Should().HaveCount(3);
 
                 wad.Select(l=>l.Name).Should().BeEquivalentTo(
