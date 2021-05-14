@@ -3,12 +3,14 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Drawing;
 using System.Linq;
 using Tiledriver.Core.FormatModels.Textures;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.LevelGeometry.CanvasDrawingExtensions;
 using Tiledriver.Core.Wolf3D;
+using Size = Tiledriver.Core.LevelGeometry.Size;
 
 namespace Tiledriver.Core.DemoMaps
 {
@@ -19,17 +21,17 @@ namespace Tiledriver.Core.DemoMaps
         private const int HorizontalBuffer = 3;
         private const int Height = 9;
 
-        public static MapData Create() => CreateMapAndTextures().Map;
+        public static MapData Create() => CreateMapAndTextures(new TextureQueue());
 
-        public static (MapData Map, IReadOnlyList<CompositeTexture> Textures) CreateMapAndTextures()
+        public static MapData CreateMapAndTextures(TextureQueue textureQueue)
         {
             var mapSize = new Size(
                 HorizontalBuffer + TotalNumLevels + HorizontalBuffer,
                 Height);
 
-            var (planeMap, tiles, textures) = CreateGeometry(mapSize);
+            var (planeMap, tiles) = CreateGeometry(mapSize, textureQueue);
 
-            return (new MapData
+            return new MapData
             (
                 NameSpace: "Wolf3D",
                 TileSize: 64,
@@ -58,17 +60,16 @@ namespace Tiledriver.Core.DemoMaps
                     Skill4: true
                 )),
                 Triggers: ImmutableList<Trigger>.Empty
-            ), textures);
+            );
         }
 
-        private static (ImmutableArray<MapSquare>, ImmutableList<Tile>, IReadOnlyList<CompositeTexture>) CreateGeometry(Size size)
+        private static (ImmutableArray<MapSquare>, ImmutableList<Tile>) CreateGeometry(Size size, TextureQueue textureQueue)
         {
             var baseTile = DefaultTile.GrayStone1;
             var nsTexture = baseTile.TextureNorth.Name;
             var ewTexture = baseTile.TextureEast.Name;
 
             var tiles = new List<Tile> { baseTile };
-            var textures = new List<CompositeTexture>();
 
             var board =
                 new Canvas(size)
@@ -78,7 +79,7 @@ namespace Tiledriver.Core.DemoMaps
             var middleX = HorizontalBuffer + NumGradients;
             var middleY = Height / 2;
 
-            board.Set(middleX, middleY, tile: 0);
+            board.Set(middleX, middleY, tile: 1);
 
             foreach (var darkLevel in Enumerable.Range(1, NumGradients))
             {
@@ -95,9 +96,9 @@ namespace Tiledriver.Core.DemoMaps
                     TextureWest = newEW,
                 });
 
-                textures.Add(new CompositeTexture(newNS, 64, 64, ImmutableList.Create(
+                textureQueue.Add(new CompositeTexture(newNS, 64, 64, ImmutableList.Create(
                     new Patch(nsTexture, 0, 0, Translation: new Translation.Red()))));
-                textures.Add(new CompositeTexture(newEW, 64, 64, ImmutableList.Create(
+                textureQueue.Add(new CompositeTexture(newEW, 64, 64, ImmutableList.Create(
                     new Patch(ewTexture, 0, 0, Translation: new Translation.Gold()))));
             }
 
@@ -116,15 +117,15 @@ namespace Tiledriver.Core.DemoMaps
                     TextureWest = newEW,
                 });
 
-                textures.Add(new CompositeTexture(newNS, 64, 64, ImmutableList.Create(
+                textureQueue.Add(new CompositeTexture(newNS, 64, 64, ImmutableList.Create(
                     new Patch(nsTexture, 0, 0, Alpha: 0.1, Style: RenderStyle.Add),
                     new Patch(nsTexture, 0, 0))));
-                textures.Add(new CompositeTexture(newEW, 64, 64, ImmutableList.Create(
+                textureQueue.Add(new CompositeTexture(newEW, 64, 64, ImmutableList.Create(
                     new Patch(ewTexture, 0, 0, Alpha: 0.1, Style: RenderStyle.Add),
                     new Patch(ewTexture, 0, 0))));
             }
 
-            return (board.ToPlaneMap(), tiles.ToImmutableList(), textures);
+            return (board.ToPlaneMap(), tiles.ToImmutableList());
         }
     }
 }
