@@ -1,7 +1,8 @@
 ﻿// Copyright (c) 2016, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Tiledriver.Core.Extensions.Collections
 {
@@ -21,6 +22,18 @@ namespace Tiledriver.Core.Extensions.Collections
             {
                 collection.Add(item);
             }
+        }
+
+        public static IList<T> AddAndContinue<T>(this IList<T> list, params T[] items)
+        {
+            list.AddRange(items);
+            return list;
+        }
+
+        public static IList<T> AddRangeAndContinue<T>(this IList<T> list, IEnumerable<T> items)
+        {
+            list.AddRange(items);
+            return list;
         }
     }
 }

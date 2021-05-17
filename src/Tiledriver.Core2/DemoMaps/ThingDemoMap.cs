@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using Tiledriver.Core.FormatModels.Textures;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.LevelGeometry.CanvasDrawingExtensions;
@@ -16,8 +17,10 @@ namespace Tiledriver.Core.DemoMaps
         private const int HorizontalBuffer = 4;
         private const int VerticalBuffer = 3;
 
+        public static MapData Create() => CreateMapAndTextures(new TextureQueue());
+
         // TODO: Add arguments for which types of things to include
-        public static MapData Create()
+        public static MapData CreateMapAndTextures(TextureQueue textureQueue)
         {
             var things = GenerateThings().ToImmutableList();
 
