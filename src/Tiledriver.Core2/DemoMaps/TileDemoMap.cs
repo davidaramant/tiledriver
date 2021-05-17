@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Drawing;
 using System.Linq;
+using Tiledriver.Core.Extensions.Collections;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Textures;
 using Tiledriver.Core.FormatModels.Uwmf;
@@ -26,7 +27,7 @@ namespace Tiledriver.Core.DemoMaps
 
         public static MapData CreateMapAndTextures(TextureQueue textureQueue)
         {
-            var originalTiles = DefaultTile.Lookup.Values.ToList();
+            var originalTiles = DefaultTile.NamedTiles;
 
             var rows = (int)Math.Ceiling((double)originalTiles.Count / Columns);
 
@@ -43,7 +44,7 @@ namespace Tiledriver.Core.DemoMaps
                 Name: "Tile Demo",
                 Width: mapSize.Width,
                 Height: mapSize.Height,
-                Tiles: originalTiles.ToImmutableList(),
+                Tiles: originalTiles.Select(ot=>ot.Tile).ToImmutableList(),
                 Sectors: sectors,
                 Zones: ImmutableList.Create<Zone>().Add(new Zone()),
                 Planes: ImmutableList.Create<Plane>().Add(new Plane(Depth: 64)),
@@ -64,9 +65,13 @@ namespace Tiledriver.Core.DemoMaps
             );
         }
 
-        private static (ImmutableArray<MapSquare>, ImmutableList<Sector>) CreateGeometry(List<Tile> tiles, Size size, int rows, TextureQueue textureQueue)
+        private static (ImmutableArray<MapSquare>, ImmutableList<Sector>) CreateGeometry(
+            IReadOnlyList<(string Name, Tile Tile)> tiles,
+            Size size,
+            int rows,
+            TextureQueue textureQueue)
         {
-            var boundaryTileIndex = tiles.IndexOf(DefaultTile.GrayStone1);
+            var boundaryTileIndex = tiles.FindIndex(namedTile => namedTile.Tile == DefaultTile.GrayStone1);
             var sectors = ImmutableList.CreateBuilder<Sector>();
 
             var defaultSector = new Sector(
@@ -90,7 +95,8 @@ namespace Tiledriver.Core.DemoMaps
 
                     if (tileId < tiles.Count)
                     {
-                        var tile = tiles[tileId];
+                        var namedTile = tiles[tileId];
+                        var tile = namedTile.Tile;
 
                         void AddTexture(string name, PatchRotation rotate, int xDelta, int yDelta)
                         {
@@ -98,7 +104,7 @@ namespace Tiledriver.Core.DemoMaps
                                 new RenderedTexture(
                                     FloorColor,
                                     TextColor: Color.Black,
-                                    Text: name,
+                                    Text: name + "\n" + namedTile.Name,
                                     Rotation: rotate));
 
                             sectors.Add(defaultSector with { TextureFloor = textTexture });

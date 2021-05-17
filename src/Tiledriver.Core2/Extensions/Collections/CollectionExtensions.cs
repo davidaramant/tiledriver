@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2016, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -35,5 +36,9 @@ namespace Tiledriver.Core.Extensions.Collections
             list.AddRange(items);
             return list;
         }
+
+        // Cheat because it's absurd that interface doesn't have this
+        public static int FindIndex<T>(this IReadOnlyList<T> list, Predicate<T> predicate) =>
+            ((List<T>) list).FindIndex(predicate);
     }
 }
