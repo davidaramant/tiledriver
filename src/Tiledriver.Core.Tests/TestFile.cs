@@ -44,7 +44,7 @@ namespace Tiledriver.Core.Tests
                 throw new ArgumentNullException(nameof(fileName));
             }
 
-            string resourcePath = $"Tiledriver.Core2.Tests.TestFiles.{area}.{fileName}.txt";
+            string resourcePath = $"Tiledriver.Core.Tests.TestFiles.{area}.{fileName}.txt";
 
             return System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(resourcePath) 
                    ?? throw new Exception("Could not find test file");

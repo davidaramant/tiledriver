@@ -9,4 +9,8 @@
     <PackageReference Include="System.CommandLine.DragonFruit" Version="0.3.0-alpha.19317.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Tiledriver.Core\Tiledriver.Core.csproj" />
+  </ItemGroup>
+
 </Project>

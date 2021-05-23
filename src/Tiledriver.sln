@@ -21,9 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WangscapeTilesetChopper", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataModelGenerator", "ConsoleApps\DataModelGenerator\DataModelGenerator.csproj", "{8C6D4E9C-BCB8-417A-8208-467EFBD0070A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiledriver.Core2", "Tiledriver.Core2\Tiledriver.Core2.csproj", "{0C216ABD-DEC6-4E6F-ABB3-7A875E631FA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiledriver.Core", "Tiledriver.Core\Tiledriver.Core.csproj", "{0C216ABD-DEC6-4E6F-ABB3-7A875E631FA4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiledriver.Core2.Tests", "Tiledriver.Core2.Tests\Tiledriver.Core2.Tests.csproj", "{22A44CB5-A9EE-4052-B7B2-F914D3402B52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiledriver.Core.Tests", "Tiledriver.Core.Tests\Tiledriver.Core.Tests.csproj", "{22A44CB5-A9EE-4052-B7B2-F914D3402B52}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoMapLauncher", "ConsoleApps\DemoMapLauncher\DemoMapLauncher.csproj", "{2DA0039E-611C-41EA-924F-B03E34B03A6C}"
 EndProject

@@ -42,7 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Tiledriver.Core2\Tiledriver.Core2.csproj" />
+    <ProjectReference Include="..\Tiledriver.Core\Tiledriver.Core.csproj" />
   </ItemGroup>
 
 </Project>

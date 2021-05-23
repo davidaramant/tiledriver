@@ -4,7 +4,7 @@
 using System;
 using System.IO;
 using Tiledriver.Core.FormatModels.MapMetadata;
-using Tiledriver.Core.FormatModels.SimpleMapImage;
+using Tiledriver.Core.FormatModels.MapMetadata.Writing;
 
 namespace mm
 {
@@ -13,7 +13,6 @@ namespace mm
     /// </summary>
     class Program
     {
-
         record Options(string InputMapPath, ImagePalette Theme, string ImageName, uint Scale);
 
         public enum ImagePalette
@@ -70,7 +69,7 @@ namespace mm
             }
 
             var imagePath = Path.Combine(Path.GetDirectoryName(opts.InputMapPath), imageName);
-            SimpleMapImageExporter.Export(map, PickPalette(opts.Theme), imagePath, scale: opts.Scale);
+            MetaMapImageExporter.Export(map, PickPalette(opts.Theme), imagePath, scale: opts.Scale);
 
             Console.WriteLine($"Wrote {imagePath} with color theme {opts.Theme} at scale {opts.Scale}x.");
         }
