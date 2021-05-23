@@ -1,0 +1,25 @@
+name: .NET macOS
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore src/Tiledriver.sln
+    - name: Build
+      run: dotnet build --no-restore --configuration Release src/Tiledriver.sln
+    - name: Test
+      run: dotnet test --no-build --configuration Release --verbosity normal src/Tiledriver.sln
