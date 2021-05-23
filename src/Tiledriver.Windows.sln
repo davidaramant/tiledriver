@@ -27,8 +27,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WangscapeTilesetChopper", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataModelGenerator", "ConsoleApps\DataModelGenerator\DataModelGenerator.csproj", "{8C6D4E9C-BCB8-417A-8208-467EFBD0070A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiledriver.Core.Windows", "Tiledriver.Core.Windows\Tiledriver.Core.Windows.csproj", "{C9F9B1CF-38F8-4307-9904-58F9BA76D65D}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConsoleApps.Windows", "ConsoleApps.Windows", "{01517B0C-6299-45E8-88B3-3E4E4BAB03E7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiledriver.Core2", "Tiledriver.Core2\Tiledriver.Core2.csproj", "{DE055329-DBBA-43E5-AFFC-3B25392FED48}"
@@ -67,10 +65,6 @@ Global
 		{8C6D4E9C-BCB8-417A-8208-467EFBD0070A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C6D4E9C-BCB8-417A-8208-467EFBD0070A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C6D4E9C-BCB8-417A-8208-467EFBD0070A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C9F9B1CF-38F8-4307-9904-58F9BA76D65D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C9F9B1CF-38F8-4307-9904-58F9BA76D65D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C9F9B1CF-38F8-4307-9904-58F9BA76D65D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C9F9B1CF-38F8-4307-9904-58F9BA76D65D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DE055329-DBBA-43E5-AFFC-3B25392FED48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DE055329-DBBA-43E5-AFFC-3B25392FED48}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE055329-DBBA-43E5-AFFC-3B25392FED48}.Release|Any CPU.ActiveCfg = Release|Any CPU
