@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Tiledriver.Core.Tests\Tiledriver.Core.Tests.csproj" />
     <ProjectReference Include="..\..\Tiledriver.Core\Tiledriver.Core.csproj" />
   </ItemGroup>
   <ItemGroup>

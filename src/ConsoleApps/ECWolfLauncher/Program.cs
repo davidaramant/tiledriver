@@ -39,7 +39,6 @@ using Tiledriver.Core.LevelGeometry.CellularAutomata;
 using Tiledriver.Core.LevelGeometry.Lighting;
 using Tiledriver.Core.MapTranslators;
 using Tiledriver.Core.Settings;
-using Tiledriver.Core.Tests;
 using Tiledriver.Core.Utils;
 using Tiledriver.Core.Wolf3D;
 

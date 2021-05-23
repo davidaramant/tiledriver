@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiledriver.Core", "Tiledriver.Core\Tiledriver.Core.csproj", "{A32B1E60-62EE-4EF9-892B-1B8A3BB2396C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiledriver.Core.Tests", "Tiledriver.Core.Tests\Tiledriver.Core.Tests.csproj", "{7770AD96-CE49-4191-98B1-A983E4F59ABA}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AE6AE45D-0570-4E00-882D-99671BD1CA47}"
 	ProjectSection(SolutionItems) = preProject
 		..\LICENSE = ..\LICENSE
@@ -43,10 +41,6 @@ Global
 		{A32B1E60-62EE-4EF9-892B-1B8A3BB2396C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A32B1E60-62EE-4EF9-892B-1B8A3BB2396C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A32B1E60-62EE-4EF9-892B-1B8A3BB2396C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7770AD96-CE49-4191-98B1-A983E4F59ABA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7770AD96-CE49-4191-98B1-A983E4F59ABA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7770AD96-CE49-4191-98B1-A983E4F59ABA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7770AD96-CE49-4191-98B1-A983E4F59ABA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5F5982B5-8AE5-4E77-BF47-9A736B45B122}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5F5982B5-8AE5-4E77-BF47-9A736B45B122}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F5982B5-8AE5-4E77-BF47-9A736B45B122}.Release|Any CPU.ActiveCfg = Release|Any CPU
