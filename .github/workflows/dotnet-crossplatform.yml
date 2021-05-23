@@ -1,4 +1,4 @@
-name: .NET Crossplatform
+name: .NET Linux
 
 on:
   push:
