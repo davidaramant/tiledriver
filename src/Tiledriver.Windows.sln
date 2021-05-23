@@ -29,8 +29,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiledriver.Metadata", "Tile
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WangscapeTilesetChopper", "ConsoleApps\WangscapeTilesetChopper\WangscapeTilesetChopper.csproj", "{E52E1DBB-6077-4C09-A635-2DC3C09828FF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CreateLightingImages", "ConsoleApps\CreateLightingImages\CreateLightingImages.csproj", "{D4C7AE43-60E5-428B-82DA-BF3AEAEE7BD9}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataModelGenerator", "ConsoleApps\DataModelGenerator\DataModelGenerator.csproj", "{8C6D4E9C-BCB8-417A-8208-467EFBD0070A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiledriver.Core.Windows", "Tiledriver.Core.Windows\Tiledriver.Core.Windows.csproj", "{C9F9B1CF-38F8-4307-9904-58F9BA76D65D}"
@@ -41,7 +39,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiledriver.Core2", "Tiledri
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiledriver.Core2.Tests", "Tiledriver.Core2.Tests\Tiledriver.Core2.Tests.csproj", "{E7090CFB-E95B-4D18-B95C-8EC7C7DC4648}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoMapLauncher", "ConsoleApps\DemoMapLauncher\DemoMapLauncher.csproj", "{7FE29AF3-5965-4DC3-BF54-C17D12133F5D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoMapLauncher", "ConsoleApps\DemoMapLauncher\DemoMapLauncher.csproj", "{7FE29AF3-5965-4DC3-BF54-C17D12133F5D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,10 +75,6 @@ Global
 		{E52E1DBB-6077-4C09-A635-2DC3C09828FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E52E1DBB-6077-4C09-A635-2DC3C09828FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E52E1DBB-6077-4C09-A635-2DC3C09828FF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D4C7AE43-60E5-428B-82DA-BF3AEAEE7BD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D4C7AE43-60E5-428B-82DA-BF3AEAEE7BD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D4C7AE43-60E5-428B-82DA-BF3AEAEE7BD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D4C7AE43-60E5-428B-82DA-BF3AEAEE7BD9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8C6D4E9C-BCB8-417A-8208-467EFBD0070A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8C6D4E9C-BCB8-417A-8208-467EFBD0070A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C6D4E9C-BCB8-417A-8208-467EFBD0070A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -109,7 +103,6 @@ Global
 		{335AB7A0-117F-44DC-BDA0-665D850DF7B9} = {01517B0C-6299-45E8-88B3-3E4E4BAB03E7}
 		{5F5982B5-8AE5-4E77-BF47-9A736B45B122} = {A5D856F1-E321-431E-8CD2-9D5513737F9F}
 		{E52E1DBB-6077-4C09-A635-2DC3C09828FF} = {A5D856F1-E321-431E-8CD2-9D5513737F9F}
-		{D4C7AE43-60E5-428B-82DA-BF3AEAEE7BD9} = {A5D856F1-E321-431E-8CD2-9D5513737F9F}
 		{8C6D4E9C-BCB8-417A-8208-467EFBD0070A} = {A5D856F1-E321-431E-8CD2-9D5513737F9F}
 		{7FE29AF3-5965-4DC3-BF54-C17D12133F5D} = {A5D856F1-E321-431E-8CD2-9D5513737F9F}
 	EndGlobalSection
