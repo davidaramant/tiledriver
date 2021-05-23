@@ -1,0 +1,75 @@
+{
+  "MetaOutput": {
+    "TileData": "tiles.json",
+    "TileGroups": "tile_groups.json",
+    "TilesetData": "tilesets.json",
+    "TerrainHypergraph": "terrain_hypergraph.json"
+  },
+  "TileFormat": {
+    "Resolution": [256,256],
+    "FileType": "png"
+  },
+  "OutputDirectory": "output",
+  "Terrains": {
+    "base": {
+      "FullName": "base",
+      "FileName": "floor_base.png",
+      "OffsetX": 0,
+      "OffsetY": 0
+    },
+    "variant": {
+      "FullName": "variant",
+      "FileName": "floor_variant.png",
+      "OffsetX": 0,
+      "OffsetY": 0
+    }
+  },
+  "Cliques": [
+    [
+      "base",
+      "variant"
+    ]
+  ],
+  "AlphaCalculatorMode":"Max",
+  "DefaultModuleGroup": "default_module_group.json",
+  "LeftBorderModuleGroups": [
+    {
+      "Terrains":["base","base"],
+      "Filename":"default_module_group.json"
+    },
+    {
+      "Terrains":["variant","variant"],
+      "Filename":"default_module_group.json"
+    },
+    {
+      "Terrains":["base","variant"],
+      "Filename":"default_module_group.json"
+    },
+    {
+      "Terrains":["variant","base"],
+      "Filename":"default_module_group.json"
+    }
+  ],
+  "TopBorderModuleGroups": [
+    {
+      "Terrains":["base","variant"],
+      "Filename":"default_module_group.json"
+    },
+    {
+      "Terrains":["variant","base"],
+      "Filename":"default_module_group.json"
+    }
+  ],
+  "CentralModuleGroups":[
+    {
+      "Terrain":"base",
+      "Filename":"default_module_group.json"
+    },
+    {
+      "Terrain":"variant",
+      "Filename":"default_module_group.json"
+    }
+  ],
+  "CombinerModuleGroup":"combiner_module_group.json",
+  "DebugOutput":false
+}

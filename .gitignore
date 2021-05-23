@@ -241,3 +241,6 @@ _Pvt_Extensions
 /ml/*.png
 /ml/*.metamap
 /src/.idea
+
+WangscapeTilesets/Cave/output/
+WangscapeTilesets/Cave/tiles/
