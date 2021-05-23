@@ -7,8 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.CommandLine.DragonFruit" Version="0.3.0-alpha.20574.7" />
-    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
+    <PackageReference Include="SkiaSharp" Version="2.80.2" />
   </ItemGroup>
 
 </Project>

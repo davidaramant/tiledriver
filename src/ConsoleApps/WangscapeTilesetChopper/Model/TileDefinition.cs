@@ -2,16 +2,15 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System.Collections.Immutable;
-using System.Drawing;
 using System.Text.Json.Serialization;
 
 namespace WangscapeTilesetChopper.Model
 {
     internal record TileDefinition(
         [property: JsonPropertyName("corners")]
-        ImmutableArray<string> CornerTextures, 
-        string Filename, 
-        int X, 
+        ImmutableArray<string> CornerTextures,
+        string Filename,
+        int X,
         int Y)
     {
         internal Corners ParseCorners()
@@ -37,8 +36,6 @@ namespace WangscapeTilesetChopper.Model
 
             return corners;
         }
-
-        internal Rectangle GetCropArea() => new Rectangle(X, Y, 64, 64);
 
         internal string GetFileName() => $"tile{(int)ParseCorners():D2}.png";
     }
