@@ -32,8 +32,8 @@ Once upon a time this project had a GUI application written in WPF for viewing U
 |---|:---:|:---:|
 |[UWMF](https://maniacsvault.net/ecwolf/wiki/Universal_Wolfenstein_Map_Format)|Yes|Yes|
 |[XLAT](https://maniacsvault.net/ecwolf/wiki/Map_translator)|Yes||
-|[MapInfo](https://maniacsvault.net/ecwolf/wiki/MAPINFO) (WIP)|WIP||
-|[Textures](https://maniacsvault.net/ecwolf/wiki/TEXTURES) (TODO)||TODO|
+|[MapInfo](https://maniacsvault.net/ecwolf/wiki/MAPINFO)|Partial||
+|[Textures](https://maniacsvault.net/ecwolf/wiki/TEXTURES)||Yes|
 |WAD|Yes|Yes|
 |PK3|Yes|Yes|
 
@@ -41,21 +41,21 @@ Once upon a time this project had a GUI application written in WPF for viewing U
 
 ### Technical Debt
 
-- [ ] The GUI project is broken under .NET 5
-- [ ] The parsing system is old and ugly; Sector Director has a much nicer one
-  - [ ] Get rid of T4 templates
+- [X] The GUI project is broken under .NET 5 - deleted!
+- [X] The parsing system is old and ugly; Sector Director has a much nicer one
+  - [X] Get rid of T4 templates
   - [X] UWMF
   - [X] XLAT
-  - [ ] MapInfo
+  - [X] MapInfo
 - [ ] There is way too much "temporary" code hanging out in `ECWolfLaucher`
 - [X] There is a `SteamGameSearcher` class that deals with the Windows Registry. Where is this supposed to live? Can you make a truly cross-platform console app in .NET 5?
 - [X] Transition to XUnit/FluentAssertions. Maybe NUnit is causing that weird test failure on Ubuntu
+- [ ] Use Skia or something instead of `System.Drawing` since it's broke on macOS
 
 ### Level Generation
 
 - [ ] Move any and all cellular automata stuff out of the launcher project
 - [X] Create generator for Wang tiles
-- [ ] Create generator for lighting variants
 
 ## Contributors
 
