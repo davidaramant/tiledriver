@@ -1,11 +1,8 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.Drawing.Text;
 using System.IO;
+using SkiaSharp;
 
 namespace Tiledriver.Core.FormatModels.Textures
 {
@@ -16,42 +13,56 @@ namespace Tiledriver.Core.FormatModels.Textures
     /// This has nothing to do with the TEXTURES lump, but it is frequently used together.
     /// </remarks>
     public sealed record RenderedTexture(
-        Color BackgroundColor,
-        Color TextColor = new(),
+        SKColor BackgroundColor,
+        SKColor TextColor,
         string Text = "",
         PatchRotation Rotation = PatchRotation.None)
     {
+        public RenderedTexture(
+            SKColor BackgroundColor,
+            string Text = "",
+            PatchRotation Rotation = PatchRotation.None)
+            : this(BackgroundColor, SKColors.Black, Text, Rotation)
+        {
+        }
+
+        public RenderedTexture(
+            System.Drawing.Color BackgroundColor,
+            System.Drawing.Color TextColor = new(),
+            string Text = "",
+            PatchRotation Rotation = PatchRotation.None) : this(SKColor.Empty, SKColor.Empty)
+        {
+        }
+
         public bool HasText => !string.IsNullOrWhiteSpace(Text);
 
         public void RenderTo(Stream output)
         {
-            using Bitmap canvas = new(256, 256);
+            const int size = 256;
 
-            RectangleF area = new RectangleF(0, 0, canvas.Width, canvas.Height);
-
-            using Graphics g = Graphics.FromImage(canvas);
-
-            using var backgroundBrush = new SolidBrush(BackgroundColor);
-            g.FillRectangle(backgroundBrush, area);
-            if (HasText)
+            using var bitmap = new SKBitmap(size, size);
+            using (var canvas = new SKCanvas(bitmap))
             {
-                g.SmoothingMode = SmoothingMode.HighQuality;
-                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+                var entireArea = new SKRect(0, 0, size, size);
 
-                StringFormat format = new()
+                using var backgroundPaint = new SKPaint {Color = BackgroundColor};
+                canvas.DrawRect(entireArea, backgroundPaint);
+
+                if (HasText)
                 {
-                    Alignment = StringAlignment.Center,
-                    LineAlignment = StringAlignment.Center
-                };
-
-                using var textBrush = new SolidBrush(TextColor);
-                g.DrawString(Text, new Font("Impact", 32), textBrush, area, format);
+                    using var font = new SKFont();
+                    using var textPaint = new SKPaint
+                    {
+                        Color = TextColor,
+                        IsAntialias = true,
+                        TextAlign = SKTextAlign.Center,
+                        TextSize = size / 5f,
+                    };
+                    canvas.DrawText(Text, size / 2f, size / 2f, font, textPaint);
+                }
             }
 
-            g.Flush();
-            canvas.Save(output, ImageFormat.Png);
+            bitmap.Encode(output, SKEncodedImageFormat.Png, 100);
         }
     }
 }
