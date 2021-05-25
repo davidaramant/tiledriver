@@ -4,8 +4,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Drawing;
 using System.Linq;
+using SkiaSharp;
 using Tiledriver.Core.Extensions.Collections;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Textures;
@@ -21,8 +21,8 @@ namespace Tiledriver.Core.DemoMaps
     {
         private const int Columns = 10;
         const int SpaceBetween = 3;
-        private static readonly Color CeilingColor = Color.FromArgb(0xc0, 0xc0, 0xc0);
-        private static readonly Color FloorColor = Color.FromArgb(0xa0, 0xa0, 0xa0);
+        private static readonly SKColor CeilingColor = new (0xc0, 0xc0, 0xc0);
+        private static readonly SKColor FloorColor = new (0xa0, 0xa0, 0xa0);
         public static MapData Create() => CreateMapAndTextures(new TextureQueue());
 
         public static MapData CreateMapAndTextures(TextureQueue textureQueue)
@@ -103,7 +103,7 @@ namespace Tiledriver.Core.DemoMaps
                             var textTexture = textureQueue.Add(
                                 new RenderedTexture(
                                     FloorColor,
-                                    TextColor: Color.Black,
+                                    TextColor: SKColors.Black,
                                     Text: name + "\n" + namedTile.Name,
                                     Rotation: rotate));
 

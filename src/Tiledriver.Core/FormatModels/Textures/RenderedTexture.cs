@@ -26,14 +26,6 @@ namespace Tiledriver.Core.FormatModels.Textures
         {
         }
 
-        public RenderedTexture(
-            System.Drawing.Color BackgroundColor,
-            System.Drawing.Color TextColor = new(),
-            string Text = "",
-            PatchRotation Rotation = PatchRotation.None) : this(SKColor.Empty, SKColor.Empty)
-        {
-        }
-
         public bool HasText => !string.IsNullOrWhiteSpace(Text);
 
         public void RenderTo(Stream output)
