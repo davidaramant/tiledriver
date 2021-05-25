@@ -50,15 +50,28 @@ namespace Tiledriver.Core.FormatModels.Textures
 
                 if (HasText)
                 {
-                    using var font = new SKFont();
+                    var lines = Text.Split('\n');
+
+                    using var typeFace = SKTypeface.FromFamilyName("Impact");
+                    using var font = new SKFont(typeFace, size: 32);
                     using var textPaint = new SKPaint
                     {
                         Color = TextColor,
                         IsAntialias = true,
                         TextAlign = SKTextAlign.Center,
-                        TextSize = size / 5f,
                     };
-                    canvas.DrawText(Text, size / 2f, size / 2f, font, textPaint);
+
+                    var lineHeight = size / lines.Length;
+                    var halfLineHeight = lineHeight / 2;
+                    for (int i = 0; i < lines.Length; i++)
+                    {
+                        canvas.DrawText(
+                            lines[i],
+                            size / 2f,
+                            halfLineHeight + (i*lineHeight),
+                            font,
+                            textPaint);
+                    }
                 }
             }
 

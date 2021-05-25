@@ -22,26 +22,17 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures
             stream.Length.Should().BeGreaterThan(0);
         }
 
-        [Fact(Skip="WIP")]
+        [Fact]
         public void ShouldRenderTextureAndShowIt()
         {
             const string fileName = nameof(RenderedTextureTests) + "_" + nameof(ShouldRenderTextureAndShowIt) + ".png";
-            try
-            {
-                using var stream = File.Open(fileName, FileMode.Create);
-                var texture = new RenderedTexture(BackgroundColor: SKColors.White, Text: "Test");
-                texture.RenderTo(stream);
 
-                Process.Start("open",fileName);
-                Debugger.Break();
-            }
-            finally
-            {
-                if (File.Exists(fileName))
-                {
-                    File.Delete(fileName);
-                }
-            }
+            using var stream = File.Open(fileName, FileMode.Create);
+            var texture = new RenderedTexture(BackgroundColor: SKColors.White,
+                Text: "Line 1\nLine 2\nLINE THREE\nLine Four");
+            texture.RenderTo(stream);
+
+            Process.Start("open", fileName);
         }
     }
 }
