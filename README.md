@@ -57,7 +57,7 @@ Format Notes:
 - [ ] There is way too much "temporary" code hanging out in `ECWolfLaucher`
 - [X] There is a `SteamGameSearcher` class that deals with the Windows Registry. Where is this supposed to live? Can you make a truly cross-platform console app in .NET 5?
 - [X] Transition to XUnit/FluentAssertions. Maybe NUnit is causing that weird test failure on Ubuntu
-- [ ] Use Skia or something instead of `System.Drawing` since it's broke on macOS
+- [X] Use Skia or something instead of `System.Drawing` since it's broke on macOS
 
 ### Level Generation
 
