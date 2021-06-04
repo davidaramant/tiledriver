@@ -1,20 +1,20 @@
 ﻿// Copyright (c) 2017, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using System.Drawing;
+using SkiaSharp;
 
 namespace Tiledriver.Core.FormatModels.MapMetadata.Writing
 {
     public sealed record MapPalette(
-            Color Empty,
-            Color Wall,
-            Color Door,
-            Color PushWall,
-            Color Unreachable,
-            Color Unknown)
+            SKColor Empty,
+            SKColor Wall,
+            SKColor Door,
+            SKColor PushWall,
+            SKColor Unreachable,
+            SKColor Unknown)
         {
 
-        public Color PickColor(TileType type) =>
+        public SKColor PickColor(TileType type) =>
             type switch
             {
                 TileType.Empty => Empty,
@@ -26,27 +26,27 @@ namespace Tiledriver.Core.FormatModels.MapMetadata.Writing
             };
 
         public static readonly MapPalette HighlightWalls = new MapPalette(
-            Empty: Color.Black, 
-            Wall: Color.White, 
-            Door: Color.Red, 
-            PushWall: Color.Red,
-            Unreachable: Color.Black, 
-            Unknown: Color.Fuchsia);
+            Empty: SKColors.Black,
+            Wall: SKColors.White,
+            Door: SKColors.Red,
+            PushWall: SKColors.Red,
+            Unreachable: SKColors.Black,
+            Unknown: SKColors.Fuchsia);
 
         public static readonly MapPalette CarveOutRooms = new MapPalette(
-            Empty: Color.White,
-            Wall: Color.Black,
-            Door: Color.Red,
-            PushWall: Color.Red,
-            Unreachable: Color.Black,
-            Unknown: Color.Fuchsia);
+            Empty: SKColors.White,
+            Wall: SKColors.Black,
+            Door: SKColors.Red,
+            PushWall: SKColors.Red,
+            Unreachable: SKColors.Black,
+            Unknown: SKColors.Fuchsia);
 
         public static readonly MapPalette Full = new MapPalette(
-            Empty: Color.DarkCyan,
-            Wall: Color.Black,
-            Door: Color.Red,
-            PushWall: Color.Orange,
-            Unreachable: Color.Gray,
-            Unknown: Color.Fuchsia);
+            Empty: SKColors.DarkCyan,
+            Wall: SKColors.Black,
+            Door: SKColors.Red,
+            PushWall: SKColors.Orange,
+            Unreachable: SKColors.Gray,
+            Unknown: SKColors.Fuchsia);
     }
 }

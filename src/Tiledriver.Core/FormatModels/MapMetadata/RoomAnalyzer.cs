@@ -1,12 +1,11 @@
 ﻿// Copyright (c) 2018, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.MapMetadata.Extensions;
+using Tiledriver.Core.LevelGeometry;
 
 namespace Tiledriver.Core.FormatModels.MapMetadata
 {
@@ -43,7 +42,7 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
             {
                 var currentRoomId = roomMap[spot.Y, spot.X];
 
-                int JoinSpots(Point p1, Point p2)
+                int JoinSpots(Position p1, Position p2)
                 {
                     var id1 = roomMap[p1.Y, p1.X];
                     var id2 = roomMap[p2.Y, p2.X];
@@ -94,7 +93,7 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                 roomIds.Select(id => new Room(GetAllSpacesWithId(roomMap, id))));
         }
 
-        private static IEnumerable<Point> GetAllPlayableSpaces(MetaMap metaMap)
+        private static IEnumerable<Position> GetAllPlayableSpaces(MetaMap metaMap)
         {
             for (int row = 0; row < metaMap.Height; row++)
             {
@@ -102,13 +101,13 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                 {
                     if (metaMap[col, row] == TileType.Empty)
                     {
-                        yield return new Point(col, row);
+                        yield return new Position(col, row);
                     }
                 }
             }
         }
 
-        private static IEnumerable<Point> GetAllSpacesWithId(int[,] roomMap, int id)
+        private static IEnumerable<Position> GetAllSpacesWithId(int[,] roomMap, int id)
         {
             for (int row = 0; row < roomMap.GetLength(0); row++)
             {
@@ -116,7 +115,7 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                 {
                     if (roomMap[row, col] == id)
                     {
-                        yield return new Point(col, row);
+                        yield return new Position(col, row);
                     }
                 }
             }

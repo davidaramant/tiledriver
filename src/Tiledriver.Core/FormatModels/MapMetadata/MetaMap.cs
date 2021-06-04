@@ -1,9 +1,9 @@
 ﻿// Copyright (c) 2017, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using System.Drawing;
 using System.IO;
 using Tiledriver.Core.FormatModels.Common;
+using Tiledriver.Core.LevelGeometry;
 
 namespace Tiledriver.Core.FormatModels.MapMetadata
 {
@@ -23,7 +23,7 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
             get => _tiles[y * Width + x];
             set => _tiles[y * Width + x] = value;
         }
-        public TileType this[Point p]
+        public TileType this[Position p]
         {
             get => this[p.X, p.Y];
             set => this[p.X, p.Y] = value;

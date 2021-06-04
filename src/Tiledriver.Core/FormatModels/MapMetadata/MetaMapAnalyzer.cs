@@ -1,14 +1,14 @@
 ﻿// Copyright (c) 2017, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Drawing;
 using System.Linq;
 using Tiledriver.Core.Extensions.Collections;
 using Tiledriver.Core.FormatModels.MapMetadata.Extensions;
 using Tiledriver.Core.FormatModels.Uwmf;
+using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.FormatModels.MapMetadata
@@ -20,17 +20,17 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
             var doorLocations =
                 mapData.Triggers
                     .Where(t => t.Action == ActionSpecial.DoorOpen)
-                    .Select(t => new Point(t.X, t.Y))
+                    .Select(t => new Position(t.X, t.Y))
                     .ToImmutableHashSet();
             var pushWallLocations =
                 mapData.Triggers
                     .Where(t => t.Action == ActionSpecial.PushwallMove)
-                    .Select(t => new Point(t.X, t.Y))
+                    .Select(t => new Position(t.X, t.Y))
                     .ToImmutableHashSet();
 
             MapSquare GetSpace(int x, int y) => mapData.PlaneMaps[0][y * mapData.Width + x];
 
-            TileType GetTileType(Point p)
+            TileType GetTileType(Position p)
             {
                 var tileSpace = mapData.PlaneMaps[0][p.Y * mapData.Width + p.X];
                 if (!tileSpace.HasTile)
@@ -50,7 +50,7 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
             var bounds = new Size(mapData.Width, mapData.Height);
             var metaMap = new MetaMap(mapData.Width, mapData.Height);
 
-            var spotsToCheck = new Queue<Point>();
+            var spotsToCheck = new Queue<Position>();
 
             // Do we start with the player position, or check every single empty spot in the map?
             if (!includeAllEmptyAreas)
@@ -61,7 +61,7 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
             {
                 spotsToCheck.AddRange(
                     Enumerable.Range(0, mapData.Width * mapData.Height).
-                    Select(i => new Point(i % mapData.Width, i / mapData.Width)).
+                    Select(i => new Position(i % mapData.Width, i / mapData.Width)).
                     Where(p => GetTileType(p) == TileType.Empty));
             }
 
@@ -79,7 +79,7 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                 }
                 if (x >= 0)
                 {
-                    var leftSide = new Point(x, spot.Y);
+                    var leftSide = new Position(x, spot.Y);
                     var type = GetTileType(leftSide);
                     metaMap[leftSide] = type;
                     switch (type)
@@ -119,7 +119,7 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
 
                 while (x < mapData.Width)
                 {
-                    var currentSpot = new Point(x, spot.Y);
+                    var currentSpot = new Position(x, spot.Y);
                     var type = GetTileType(currentSpot);
                     metaMap[currentSpot] = type;
 

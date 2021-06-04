@@ -1,10 +1,9 @@
 ﻿// Copyright (c) 2018, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Drawing;
 using System.Linq;
 using Tiledriver.Core.FormatModels.MapMetadata;
 using Tiledriver.Core.FormatModels.Uwmf;
@@ -22,8 +21,8 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
             private readonly int[,] _map;
             public LightMap(int width, int height) => _map = new int[width, height];
             public int this[int row, int col] => _map[row, col];
-            public int this[Point p] => _map[p.Y, p.X];
-            public void Lighten(Point point, int amount)
+            public int this[Position p] => _map[p.Y, p.X];
+            public void Lighten(Position point, int amount)
             {
                 var current = _map[point.Y, point.X];
                 _map[point.Y, point.X] = Math.Min(current + amount, LightLevels - 1);
@@ -78,7 +77,7 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
                 {
                     for (int x = 0; x < diameter; x++)
                     {
-                        var tileSpot = new Point(
+                        var tileSpot = new Position(
                             lightSpot.X - lightRadius + x,
                             lightSpot.Y - lightRadius + y);
 
@@ -115,7 +114,7 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
                 //ts.Sector = level;
             }
 
-            int GetNeighborLevel(Point point)
+            int GetNeighborLevel(Position point)
             {
                 throw new NotImplementedException();
                 //if (!bounds.Contains(point))
@@ -128,7 +127,7 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
             {
                 for (var col = 0; col < map.Width; col++)
                 {
-                    var tileSpot = new Point(col, row);
+                    var tileSpot = new Position(col, row);
                     throw new NotImplementedException();
                     //var ts = map.TileSpaceAt(tileSpot);
                     //if (!ts.HasTile)
@@ -199,12 +198,12 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
             b = c;
         }
 
-        // Returns the list of points from origin to destination 
-        private static IEnumerable<Point> BresenhamLine(Point origin, Point destination) =>
+        // Returns the list of points from origin to destination
+        private static IEnumerable<Position> BresenhamLine(Position origin, Position destination) =>
             BresenhamLine(origin.X, origin.Y, destination.X, destination.Y);
 
         // Returns the list of points from (x0, y0) to (x1, y1)
-        private static IEnumerable<Point> BresenhamLine(int x0, int y0, int x1, int y1)
+        private static IEnumerable<Position> BresenhamLine(int x0, int y0, int x1, int y1)
         {
             bool steep = Math.Abs(y1 - y0) > Math.Abs(x1 - x0);
             if (steep)
@@ -227,9 +226,9 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
             for (int x = x0; x <= x1; x++)
             {
                 if (steep)
-                    yield return new Point(y, x);
+                    yield return new Position(y, x);
                 else
-                    yield return new Point(x, y);
+                    yield return new Position(x, y);
 
                 error += deltay;
                 if (2 * error >= deltax)
@@ -241,7 +240,7 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
         }
 
 
-        private static double GetDistanceSquared(Point p1, Point p2) =>
+        private static double GetDistanceSquared(Position p1, Position p2) =>
             (p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y);
 
         private static int PickLightLevelIncrement(int radius, double distanceSquared)
@@ -260,16 +259,16 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
             return NormalLightLevels;
         }
 
-        public static HashSet<Point> FindValidSpotsForLights(
+        public static HashSet<Position> FindValidSpotsForLights(
             MapData map,
             Room room,
             double percentageAreaToCover = 0.015)
         {
             var lightsToPlace = (int)(room.Area * percentageAreaToCover);
 
-            var existingThingSpots = map.Things.Select(t => new Point((int)t.X, (int)t.Y)).ToImmutableHashSet();
+            var existingThingSpots = map.Things.Select(t => new Position((int)t.X, (int)t.Y)).ToImmutableHashSet();
 
-            var spots = new HashSet<Point>();
+            var spots = new HashSet<Position>();
             var random = new Random(0);
 
             while (spots.Count < lightsToPlace)

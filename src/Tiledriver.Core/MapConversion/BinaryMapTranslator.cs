@@ -1,9 +1,8 @@
 ﻿// Copyright (c) 2017, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using Tiledriver.Core.Extensions.Collections;
 using Tiledriver.Core.Extensions.Directions;

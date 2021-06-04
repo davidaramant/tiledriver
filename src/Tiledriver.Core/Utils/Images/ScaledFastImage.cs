@@ -1,7 +1,8 @@
 ﻿// Copyright (c) 2018, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using System.Drawing;
+using System;
+using SkiaSharp;
 
 namespace Tiledriver.Core.Utils.Images
 {
@@ -10,7 +11,7 @@ namespace Tiledriver.Core.Utils.Images
         private readonly uint _scale;
         private readonly FastImage _image;
 
-        public ScaledFastImage(Size resolution, uint scale) : this(resolution.Width, resolution.Height, scale) { }
+        public ScaledFastImage(SKSizeI resolution, uint scale) : this(resolution.Width, resolution.Height, scale) { }
         public ScaledFastImage(int width, int height, uint scale)
         {
             Width = width;
@@ -22,17 +23,19 @@ namespace Tiledriver.Core.Utils.Images
         public int Height { get; }
         public int PixelCount => Height * Width;
         public int Width { get; }
-        public void Fill(Color color) => _image.Fill(color);
+        public void Fill(SKColor color) => throw new NotImplementedException(); // _image.Fill(color);
         public void Save(string filePath) => _image.Save(filePath);
-        public void SetPixel(int pixelIndex, Color color) => SetPixel(pixelIndex % Width, pixelIndex / Height, color);
-        public void SetPixel(Point p, Color color) => SetPixel(p.X, p.Y, color);
-        public void SetPixel(int x, int y, Color color)
+        public void SetPixel(int pixelIndex, SKColor color) => SetPixel(pixelIndex % Width, pixelIndex / Height, color);
+        public void SetPixel(SKPointI p, SKColor color) => SetPixel(p.X, p.Y, color);
+        public void SetPixel(int x, int y, SKColor color)
         {
             for (int pixelY = y * (int)_scale; pixelY < (y + 1) * _scale; pixelY++)
             {
                 for (int pixelX = x * (int)_scale; pixelX < (x + 1) * _scale; pixelX++)
                 {
-                    _image.SetPixel(pixelX, pixelY, color);
+                    throw new NotImplementedException();
+                    // TODO: Use color here
+                    //_image.SetPixel(pixelX, pixelY, Color.BlanchedAlmond);
                 }
             }
         }
