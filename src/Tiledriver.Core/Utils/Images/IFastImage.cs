@@ -1,11 +1,12 @@
 ﻿// Copyright (c) 2017, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
+using System;
 using SkiaSharp;
 
 namespace Tiledriver.Core.Utils.Images
 {
-    public interface IFastImage
+    public interface IFastImage : IDisposable
     {
         int Height { get; }
         int PixelCount { get; }

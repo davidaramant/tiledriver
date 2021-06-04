@@ -1,7 +1,6 @@
 ﻿// Copyright (c) 2018, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using System;
 using SkiaSharp;
 
 namespace Tiledriver.Core.Utils.Images
@@ -23,7 +22,7 @@ namespace Tiledriver.Core.Utils.Images
         public int Height { get; }
         public int PixelCount => Height * Width;
         public int Width { get; }
-        public void Fill(SKColor color) => throw new NotImplementedException(); // _image.Fill(color);
+        public void Fill(SKColor color) => _image.Fill(color);
         public void Save(string filePath) => _image.Save(filePath);
         public void SetPixel(int pixelIndex, SKColor color) => SetPixel(pixelIndex % Width, pixelIndex / Height, color);
         public void SetPixel(SKPointI p, SKColor color) => SetPixel(p.X, p.Y, color);
@@ -33,12 +32,10 @@ namespace Tiledriver.Core.Utils.Images
             {
                 for (int pixelX = x * (int)_scale; pixelX < (x + 1) * _scale; pixelX++)
                 {
-                    throw new NotImplementedException();
-                    // TODO: Use color here
-                    //_image.SetPixel(pixelX, pixelY, Color.BlanchedAlmond);
+                    _image.SetPixel(pixelX, pixelY, color);
                 }
             }
         }
-
+        public void Dispose() => _image.Dispose();
     }
 }

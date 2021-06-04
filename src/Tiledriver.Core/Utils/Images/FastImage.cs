@@ -2,18 +2,14 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
+using System.IO;
 using SkiaSharp;
 
 namespace Tiledriver.Core.Utils.Images
 {
     public sealed class FastImage : IFastImage
     {
-        public const int JpgQuality = 85;
-
-        // const PixelFormat Format = PixelFormat.Format24bppRgb;
-        private readonly int _pixelSizeInBytes = 999; // Image.GetPixelFormatSize(Format) / 8;
-        readonly int _stride;
-        readonly byte[] _pixelBuffer;
+        private readonly SKBitmap _bitmap;
 
         public int Width { get; }
         public int Height { get; }
@@ -31,38 +27,28 @@ namespace Tiledriver.Core.Utils.Images
         {
             Width = width;
             Height = height;
-            _stride = width * _pixelSizeInBytes;
-            _pixelBuffer = new byte[_stride * height];
+            _bitmap = new SKBitmap(width, height);
         }
 
         public void Fill(SKColor color)
         {
-            throw new NotImplementedException();
-            // Parallel.For(
-            //     0,
-            //     PixelCount,
-            //     pixelIndex => SetPixel(pixelIndex, color));
+            using var canvas = new SKCanvas(_bitmap);
+            canvas.Clear(color);
         }
 
         public void SetPixel(SKPointI p, SKColor color) => SetPixel(p.X, p.Y, color);
 
         public void SetPixel(int x, int y, SKColor color)
         {
-            var index = y * _stride + x * _pixelSizeInBytes;
-            SetPixelFromIndex(index, color);
+            _bitmap.SetPixel(x, y, color);
         }
 
         public void SetPixel(int pixelIndex, SKColor color)
         {
-            var index = pixelIndex * _pixelSizeInBytes;
-            SetPixelFromIndex(index, color);
-        }
+            var x = pixelIndex % Width;
+            var y = pixelIndex / Width;
 
-        private void SetPixelFromIndex(int index, SKColor color)
-        {
-            _pixelBuffer[index] = color.Blue;
-            _pixelBuffer[index + 1] = color.Green;
-            _pixelBuffer[index + 2] = color.Red;
+            SetPixel(x, y, color);
         }
 
         /// <summary>
@@ -71,51 +57,22 @@ namespace Tiledriver.Core.Utils.Images
         /// <param name="filePath">The file path.</param>
         public void Save(string filePath)
         {
-            throw new NotImplementedException();
-            // using (var bmp = new Bitmap(Width, Height, Format))
-            // {
-            //     var bmpData = bmp.LockBits(
-            //         new Rectangle(0, 0, Width, Height),
-            //         ImageLockMode.WriteOnly,
-            //         bmp.PixelFormat);
-            //
-            //     // Get the address of the first line.
-            //     IntPtr ptr = bmpData.Scan0;
-            //
-            //     // Copy the RGB values back to the bitmap
-            //     Marshal.Copy(_pixelBuffer, 0, ptr, _pixelBuffer.Length);
-            //
-            //     bmp.UnlockBits(bmpData);
-            //
-            //     switch (Path.GetExtension(filePath))
-            //     {
-            //         case ".jpg":
-            //         case ".jpeg":
-            //             bmp.Save(filePath, JgpEncoder, QualitySetting);
-            //             break;
-            //         case ".png":
-            //             bmp.Save(filePath);
-            //             break;
-            //         default:
-            //             throw new ArgumentException("Unsupported file format.");
-            //     }
-            // }
+            using var stream = File.Open(filePath, FileMode.Create);
+
+            switch (Path.GetExtension(filePath))
+            {
+                case ".jpg":
+                case ".jpeg":
+                    _bitmap.Encode(stream, SKEncodedImageFormat.Jpeg, quality: 85);
+                    break;
+                case ".png":
+                    _bitmap.Encode(stream, SKEncodedImageFormat.Png, quality: 100);
+                    break;
+                default:
+                    throw new ArgumentException("Unsupported file format.");
+            }
         }
 
-        // private static readonly ImageCodecInfo JgpEncoder = GetEncoder(ImageFormat.Jpeg);
-        // private static readonly EncoderParameters QualitySetting = CreateQualityParameter();
-        //
-        // private static ImageCodecInfo GetEncoder(ImageFormat format) =>
-        //     ImageCodecInfo.GetImageDecoders().FirstOrDefault(codec => codec.FormatID == format.Guid)
-        //     ?? throw new Exception($"Cannot find encoder for {format}");
-        //
-        // private static EncoderParameters CreateQualityParameter()
-        // {
-        //     var encoderParams = new EncoderParameters(1);
-        //     var encoderParam = new EncoderParameter(Encoder.Quality, (long)JpgQuality);
-        //     encoderParams.Param[0] = encoderParam;
-        //
-        //     return encoderParams;
-        // }
+        public void Dispose() => _bitmap.Dispose();
     }
 }
