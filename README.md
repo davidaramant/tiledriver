@@ -1,12 +1,13 @@
 # Tiledriver
 
-[![.NET Linux](https://github.com/davidaramant/tiledriver/actions/workflows/dotnet-linux.yml/badge.svg)](https://github.com/davidaramant/tiledriver/actions/workflows/dotnet-linux.yml)
 [![.NET Windows](https://github.com/davidaramant/tiledriver/actions/workflows/dotnet-windows.yml/badge.svg)](https://github.com/davidaramant/tiledriver/actions/workflows/dotnet-windows.yml)
 [![.NET macOS](https://github.com/davidaramant/tiledriver/actions/workflows/dotnet-macos.yml/badge.svg)](https://github.com/davidaramant/tiledriver/actions/workflows/dotnet-macos.yml)
 
 Tiledriver is a .NET toolkit for Unified Wolfenstein Mapping Format (UWMF) levels, supported by the [ECWolf](http://maniacsvault.net/ecwolf/) engine.
 
 "Toolkit" is deliberatly vague. See the [capabilities](#capabilities) below for more detail about what Tiledriver can actually do.
+
+Tiledriver supports Windows and macOS. There is nothing intentionally broken about Linux, but I think it needs more Skia packages or something. Support for that platform is not a priority for me so the issue is ignored for now.
 
 ## Table of Contents
 
