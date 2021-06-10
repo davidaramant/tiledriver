@@ -17,30 +17,6 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
         public const int Overbrights = 15;
         public const int NormalLightLevels = LightLevels - Overbrights;
 
-        private sealed class LightMap
-        {
-            private readonly int[,] _map;
-            public LightMap(int width, int height) => _map = new int[width, height];
-            public int this[int row, int col] => _map[row, col];
-            public int this[Position p] => _map[p.Y, p.X];
-            public void Lighten(Position point, int amount)
-            {
-                var current = _map[point.Y, point.X];
-                _map[point.Y, point.X] = Math.Min(current + amount, LightLevels - 1);
-            }
-
-            public IEnumerable<int> GetLightLevels()
-            {
-                for (int y = 0; y < _map.GetLength(0); y++)
-                {
-                    for (int x = 0; x < _map.GetLength(1); x++)
-                    {
-                        yield return _map[y, x];
-                    }
-                }
-            }
-        }
-
         public static void AddRandomLightsToMap(
             MapData map,
             Room room,
@@ -56,7 +32,7 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
 
             int diameter = 2 * lightRadius + 1;
 
-            var lightMap = new LightMap(map.Height, map.Width);
+            var lightMap = new LightMap(new LightRange(15,15), map.Dimensions);
             var lightSpots = FindValidSpotsForLights(map, room, percentageAreaToCover: percentAreaToCoverWithLights);
 
             var bounds = new Size(map.Width, map.Height);
