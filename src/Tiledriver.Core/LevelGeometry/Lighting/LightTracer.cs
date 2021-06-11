@@ -13,9 +13,57 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
 {
     public static class LightTracer
     {
+        public static (LightMap FloorLight, LightMap CeilingLight) Trace(
+            MapData map,
+            LightRange lightRange,
+            IEnumerable<LightDefinition> lights)
+        {
+            var floorLight = new LightMap(lightRange, map.Dimensions).Blackout();
+            var ceilingLight = new LightMap(lightRange, map.Dimensions).Blackout();
+
+            var board = map.GetBoard();
+
+            foreach (var light in lights)
+            {
+                // Check a big square around the light. This is very brute force but it doesn't appear to cause any
+                // problems.
+                for (int y = 0; y < light.LengthAffected; y++)
+                {
+                    for (int x = 0; x < light.LengthAffected; x++)
+                    {
+                        var location = new Position(
+                            light.Location.X - light.Radius + x,
+                            light.Location.Y - light.Radius + y);
+
+                        if (!map.Dimensions.Contains(location))
+                            continue;
+
+                        // check for line of sight
+                        var obscured =
+                            DrawingUtil.BresenhamLine(
+                                    position1: light.Location,
+                                    position2: location)
+                                .Any(p => board[p].HasTile);
+
+                        if (!obscured)
+                        {
+                            var d2 = GetDistanceSquared(light.Location, location);
+                            var lightIncrement = PickLightLevelIncrement(light.Radius, d2);
+                            floorLight.Lighten(location, lightIncrement);
+                            ceilingLight.Lighten(location, lightIncrement);
+                        }
+                    }
+                }
+            }
+
+            return (floorLight, ceilingLight);
+        }
+
+
         public const int LightLevels = 30;
         public const int Overbrights = 15;
         public const int NormalLightLevels = LightLevels - Overbrights;
+
 
         public static void AddRandomLightsToMap(
             MapData map,
@@ -32,7 +80,7 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
 
             int diameter = 2 * lightRadius + 1;
 
-            var lightMap = new LightMap(new LightRange(15,15), map.Dimensions);
+            var lightMap = new LightMap(new LightRange(15, 15), map.Dimensions);
             var lightSpots = FindValidSpotsForLights(map, room, percentageAreaToCover: percentAreaToCoverWithLights);
 
             var bounds = new Size(map.Width, map.Height);
@@ -64,7 +112,8 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
 
                         // check for line of sight
                         var obscured = false;
-                        foreach (var pointInBetween in DrawingUtil.BresenhamLine(position1: lightSpot, position2: tileSpot))
+                        foreach (var pointInBetween in DrawingUtil.BresenhamLine(position1: lightSpot,
+                            position2: tileSpot))
                         {
                             throw new NotImplementedException();
 
@@ -123,7 +172,6 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
 
             map.Tiles.Clear();
             map.Tiles.AddRange(tileSequence.GetTileDefinitions());
-
         }
 
         struct NeighborLevels
@@ -160,11 +208,11 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
 
             public IEnumerable<Tile> GetTileDefinitions() =>
                 _levelComboToIndex.OrderBy(pair => pair.Value).Select(pair =>
-                new Tile(
-                    TextureNorth: $"bwa{pair.Key.North}",
-                    TextureSouth: $"bwa{pair.Key.South}",
-                    TextureEast: $"bwb{pair.Key.East}",
-                    TextureWest: $"bwb{pair.Key.West}"));
+                    new Tile(
+                        TextureNorth: $"bwa{pair.Key.North}",
+                        TextureSouth: $"bwa{pair.Key.South}",
+                        TextureEast: $"bwb{pair.Key.East}",
+                        TextureWest: $"bwb{pair.Key.West}"));
         }
 
         private static double GetDistanceSquared(Position p1, Position p2) =>
@@ -172,7 +220,7 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
 
         private static int PickLightLevelIncrement(int radius, double distanceSquared)
         {
-            var distanceStep = (double)radius / NormalLightLevels;
+            var distanceStep = (double) radius / NormalLightLevels;
             for (int level = 0; level < NormalLightLevels; level++)
             {
                 var minDistance = radius - level * distanceStep;
@@ -191,9 +239,9 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
             Room room,
             double percentageAreaToCover = 0.015)
         {
-            var lightsToPlace = (int)(room.Area * percentageAreaToCover);
+            var lightsToPlace = (int) (room.Area * percentageAreaToCover);
 
-            var existingThingSpots = map.Things.Select(t => new Position((int)t.X, (int)t.Y)).ToImmutableHashSet();
+            var existingThingSpots = map.Things.Select(t => new Position((int) t.X, (int) t.Y)).ToImmutableHashSet();
 
             var spots = new HashSet<Position>();
             var random = new Random(0);
