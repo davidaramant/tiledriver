@@ -11,21 +11,15 @@ namespace Tiledriver.Core.Utils
     public static class DrawingUtil
     {
         /// <summary>
-        /// Returns the sequence of points between <paramref name="position1"/> and <paramref name="position2"/>
+        /// Returns the sequence of points between <paramref name="start"/> and <paramref name="end"/>
         /// </summary>
-        /// <remarks>
-        /// The points are not returned in any particular order.
-        /// </remarks>
-        public static IEnumerable<Position> BresenhamLine(Position position1, Position position2)
-            => BresenhamLine(position1.X, position1.Y, position2.X, position2.Y)
+        public static IEnumerable<Position> BresenhamLine(Position start, Position end)
+            => BresenhamLine(start.X, start.Y, end.X, end.Y)
                 .Select(p => new Position(p.X, p.Y));
 
         /// <summary>
         /// Returns the sequence of points between (x0, y0) to (x1, y1)
         /// </summary>
-        /// <remarks>
-        /// The points are not returned in any particular order.
-        /// </remarks>
         public static IEnumerable<(int X, int Y)> BresenhamLine(int x0, int y0, int x1, int y1)
         {
             static void Swap(ref int a, ref int b)

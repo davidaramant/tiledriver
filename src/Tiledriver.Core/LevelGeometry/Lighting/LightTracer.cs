@@ -31,9 +31,9 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
                 {
                     for (int x = 0; x < light.LengthAffected; x++)
                     {
-                        var location = new Position(
-                            light.Location.X - light.Radius + x,
-                            light.Location.Y - light.Radius + y);
+                        var delta = new PositionDelta(x, y) - light.Radius;
+
+                        var location = light.Location + delta;
 
                         if (!map.Dimensions.Contains(location))
                             continue;
@@ -41,8 +41,8 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
                         // check for line of sight
                         var obscured =
                             DrawingUtil.BresenhamLine(
-                                    position1: light.Location,
-                                    position2: location)
+                                    start: light.Location,
+                                    end: location)
                                 .Any(p => board[p].HasTile);
 
                         if (!obscured)
@@ -112,8 +112,8 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
 
                         // check for line of sight
                         var obscured = false;
-                        foreach (var pointInBetween in DrawingUtil.BresenhamLine(position1: lightSpot,
-                            position2: tileSpot))
+                        foreach (var pointInBetween in DrawingUtil.BresenhamLine(start: lightSpot,
+                            end: tileSpot))
                         {
                             throw new NotImplementedException();
 
