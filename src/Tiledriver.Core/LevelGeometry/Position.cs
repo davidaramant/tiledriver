@@ -11,5 +11,7 @@ namespace Tiledriver.Core.LevelGeometry
 
         public static Position operator +(Position p, int scalar) => new(p.X + scalar, p.Y + scalar);
         public static Position operator -(Position p, int scalar) => new(p.X - scalar, p.Y - scalar);
+
+        public int DistanceSquared(Position other) => (this - other).MagnitudeSquared();
     }
 }
