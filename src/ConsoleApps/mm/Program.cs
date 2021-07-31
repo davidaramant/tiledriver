@@ -13,7 +13,7 @@ namespace mm
     /// </summary>
     class Program
     {
-        record Options(string InputMapPath, ImagePalette Theme, string ImageName, uint Scale);
+        record Options(string InputMapPath, ImagePalette Theme, string ImageName, int Scale);
 
         public enum ImagePalette
         {
@@ -33,7 +33,7 @@ namespace mm
             string inputMapPath,
             ImagePalette theme,
             string imageName = null,
-            uint scale = 1)
+            int scale = 1)
         {
             RunOptionsAndReturnExitCode(new Options(inputMapPath, theme, imageName, scale));
         }

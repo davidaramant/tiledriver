@@ -28,7 +28,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry.CellularAutomata
         public void ShouldVisualizeBoards()
         {
             var stopwatch = Stopwatch.StartNew();
-            const int Generations = 3;
+            const int Generations = 7;
 
             var random = new Random(0);
             var board =

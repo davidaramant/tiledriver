@@ -10,9 +10,9 @@ namespace Tiledriver.Core.FormatModels.MapMetadata.Writing
 {
     public sealed class MetaMapImageExporter
     {
-        public static void Export(MetaMap map, MapPalette palette, string outputFilePath, uint scale = 1)
+        public static void Export(MetaMap map, MapPalette palette, string outputFilePath, int scale = 1)
         {
-            using var image = new ScaledFastImage(map.Width, map.Height, scale);
+            using var image = new FastImage(map.Width, map.Height, scale);
             for (var tileY = 0; tileY < map.Height; tileY++)
             {
                 for (var tileX = 0; tileX < map.Width; tileX++)
@@ -25,9 +25,9 @@ namespace Tiledriver.Core.FormatModels.MapMetadata.Writing
             image.Save(outputFilePath);
         }
 
-        public static void Export(RoomGraph graph, string outputFilePath, uint scale = 1)
+        public static void Export(RoomGraph graph, string outputFilePath, int scale = 1)
         {
-            using var image = new ScaledFastImage(graph.Width, graph.Height, scale);
+            using var image = new FastImage(graph.Width, graph.Height, scale);
             image.Fill(SKColors.Black);
 
             var increment = 360.0 / graph.RoomCount;

@@ -9,9 +9,9 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
 {
     public static class LightMapVisualizer
     {
-        public static IFastImage Render(LightMap lightMap, uint scale = 4)
+        public static IFastImage Render(LightMap lightMap, int scale = 10)
         {
-            var image = new ScaledFastImage(lightMap.Size.Width, lightMap.Size.Height, scale);
+            var image = new FastImage(lightMap.Size.Width, lightMap.Size.Height, scale);
 
             var darkIncrement = 128 / lightMap.Range.DarkLevels;
             var lightIncrement = 128 / lightMap.Range.LightLevels;

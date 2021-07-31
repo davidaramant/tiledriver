@@ -9,9 +9,9 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
 {
     public static class CellBoardVisualizer
     {
-        public static IFastImage Render(CellBoard board, uint scale = 10)
+        public static IFastImage Render(CellBoard board, int scale = 10)
         {
-            var image = new ScaledFastImage(board.Width, board.Height, scale);
+            var image = new FastImage(board.Width, board.Height, scale);
 
             Parallel.For(0, board.Height, y =>
             {

@@ -9,22 +9,20 @@ namespace Tiledriver.Core.Utils.Images
 {
     public sealed class FastImage : IFastImage
     {
+        private readonly int _scale;
         private readonly SKBitmap _bitmap;
 
         public int Width { get; }
         public int Height { get; }
         public int PixelCount => Width * Height;
 
-        public FastImage(int tileSize) : this(tileSize, tileSize)
+        public FastImage(SKSizeI resolution, int scale = 1) : this(resolution.Width, resolution.Height, scale)
         {
         }
 
-        public FastImage(SKSizeI resolution) : this(resolution.Width, resolution.Height)
+        public FastImage(int width, int height, int scale = 1)
         {
-        }
-
-        public FastImage(int width, int height)
-        {
+            _scale = scale;
             Width = width;
             Height = height;
             _bitmap = new SKBitmap(width, height);
@@ -59,17 +57,52 @@ namespace Tiledriver.Core.Utils.Images
         {
             using var stream = File.Open(filePath, FileMode.Create);
 
-            switch (Path.GetExtension(filePath))
+            if (_scale != 1)
             {
-                case ".jpg":
-                case ".jpeg":
-                    _bitmap.Encode(stream, SKEncodedImageFormat.Jpeg, quality: 85);
-                    break;
-                case ".png":
-                    _bitmap.Encode(stream, SKEncodedImageFormat.Png, quality: 100);
-                    break;
-                default:
-                    throw new ArgumentException("Unsupported file format.");
+                var resizedWidth = _scale * Width;
+                var resizedHeight = _scale * Height;
+
+                using var surface = SKSurface.Create(
+                    new SKImageInfo
+                    {
+                        Width = resizedWidth,
+                        Height = resizedHeight,
+                        ColorType = SKImageInfo.PlatformColorType,
+                        AlphaType = SKAlphaType.Premul
+                    });
+                using var paint = new SKPaint { IsAntialias = false, FilterQuality = SKFilterQuality.None };
+
+                using var img = SKImage.FromBitmap(_bitmap);
+
+                surface.Canvas.DrawImage(
+                    img,
+                    new SKRectI(0, 0, resizedWidth, resizedHeight),
+                    paint);
+                surface.Canvas.Flush();
+
+                using var newImg = surface.Snapshot();
+                using var data = Path.GetExtension(filePath).ToLowerInvariant() switch
+                {
+                    ".jpg" => newImg.Encode(SKEncodedImageFormat.Jpeg, quality: 85),
+                    ".png" => newImg.Encode(SKEncodedImageFormat.Png, quality: 100),
+                    _ => throw new ArgumentException("Unsupported file format.")
+                };
+
+                data.SaveTo(stream);
+            }
+            else
+            {
+                switch (Path.GetExtension(filePath))
+                {
+                    case ".jpg":
+                        _bitmap.Encode(stream, SKEncodedImageFormat.Jpeg, quality: 85);
+                        break;
+                    case ".png":
+                        _bitmap.Encode(stream, SKEncodedImageFormat.Png, quality: 100);
+                        break;
+                    default:
+                        throw new ArgumentException("Unsupported file format.");
+                }
             }
         }
 
