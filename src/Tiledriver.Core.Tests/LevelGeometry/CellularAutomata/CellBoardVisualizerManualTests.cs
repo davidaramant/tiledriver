@@ -2,12 +2,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.LevelGeometry.CellularAutomata;
 using Xunit;
@@ -25,36 +20,32 @@ namespace Tiledriver.Core.Tests.LevelGeometry.CellularAutomata
         }
 
         [Fact]
-        public void ShouldVisualizeBoards()
+        public void VisualizeGenerations()
         {
-            var stopwatch = Stopwatch.StartNew();
-            const int Generations = 7;
+            const int Generations = 10;
 
             var random = new Random(0);
             var board =
                 new CellBoard(new Size(128, 128))
-                    .Fill(random, probabilityAlive: 0.5)
-                    .MakeBorderAlive(thickness: 2);
-
-            _output.WriteLine($"Created board: {stopwatch.ElapsedMilliseconds}");
+                    .Fill(random, probabilityAlive: 0.6)
+                    .MakeBorderAlive(thickness: 3);
 
             var dirInfo = Directory.CreateDirectory(
                 Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                "Cellular Automata Generation Visualizations"));
+                    "Cellular Automata Generation Visualizations"));
 
-            _output.WriteLine($"Started rendering board: {stopwatch.ElapsedMilliseconds}");
-            using var img = CellBoardVisualizer.Render(board);
-            _output.WriteLine($"Saving image: {stopwatch.ElapsedMilliseconds}");
-            img.Save(Path.Combine(dirInfo.FullName, "Generation 0.png"));
+            void SaveBoard(CellBoard boardToSave, string prefix = "Generation")
+            {
+                using var img = CellBoardVisualizer.Render(boardToSave);
+                img.Save(Path.Combine(dirInfo.FullName, $"{prefix} {boardToSave.Generation:00}.png"));
+            }
+
+            SaveBoard(board);
 
             for (int i = 0; i < Generations; i++)
             {
-                _output.WriteLine($"Running generation {i+1}: {stopwatch.ElapsedMilliseconds}");
                 board = board.RunGenerations(1, minAliveNeighborsToLive: 5);
-                _output.WriteLine($"Rendering generation {i+1}: {stopwatch.ElapsedMilliseconds}");
-                using var genImg = CellBoardVisualizer.Render(board);
-                _output.WriteLine($"Saving generation {i+1}: {stopwatch.ElapsedMilliseconds}");
-                img.Save(Path.Combine(dirInfo.FullName, $"Generation {i + 1}.png"));
+                SaveBoard(board);
             }
         }
     }
