@@ -16,13 +16,15 @@ namespace Tiledriver.Core.FormatModels.Textures
         SKColor BackgroundColor,
         SKColor TextColor,
         string Text = "",
+        string Name = "",
         PatchRotation Rotation = PatchRotation.None)
     {
         public RenderedTexture(
             SKColor BackgroundColor,
             string Text = "",
+            string Name = "",
             PatchRotation Rotation = PatchRotation.None)
-            : this(BackgroundColor, SKColors.Black, Text, Rotation)
+            : this(BackgroundColor, SKColors.Black, Text, Name, Rotation)
         {
         }
 

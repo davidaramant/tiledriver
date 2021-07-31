@@ -26,7 +26,7 @@ namespace Tiledriver.Core.FormatModels.Textures
             }
 
             var number = _renderQueue.Count;
-            var tex = new Texture($"RNDR{number:D3}");
+            var tex = new Texture(string.IsNullOrWhiteSpace(renderedTexture.Name) ? $"RNDR{number:D3}" : renderedTexture.Name);
             _renderQueue.Add((renderedTexture, tex));
 
             if (renderedTexture.HasText)
