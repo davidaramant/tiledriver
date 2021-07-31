@@ -15,13 +15,13 @@ using Tiledriver.Core.LevelGeometry.Lighting;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Tiledriver.Core.Tests.LevelGeometry.CellularAutomata
+namespace Tiledriver.Core.Tests.LevelGeometry
 {
-    public sealed class CellBoardVisualizerManualTests
+    public sealed class CaveGenerationManualVisualizationTests
     {
         private readonly ITestOutputHelper _output;
 
-        public CellBoardVisualizerManualTests(ITestOutputHelper output) => _output = output;
+        public CaveGenerationManualVisualizationTests(ITestOutputHelper output) => _output = output;
 
         [Fact]
         public void VisualizeGenerations()
