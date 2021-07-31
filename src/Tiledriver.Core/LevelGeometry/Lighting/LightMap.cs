@@ -31,7 +31,7 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
         public void Lighten(Position point, int amount)
         {
             ref int current = ref _lightLevels[point.Y * Size.Width + point.X];
-            current = Math.Min(current + amount, Range.Total);
+            current = Math.Min(current + amount, Range.LightLevels);
         }
 
         public IEnumerable<int> GetLightLevels() => _lightLevels;
