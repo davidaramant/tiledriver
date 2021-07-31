@@ -28,7 +28,7 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
                     }
                     else
                     {
-                        intensity -= (byte)(light * darkIncrement);
+                        intensity += (byte)(light * darkIncrement);
 
                     }
                     image.SetPixel(x,y,new SKColor(intensity,intensity,intensity));
