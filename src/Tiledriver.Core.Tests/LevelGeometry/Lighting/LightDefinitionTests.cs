@@ -17,12 +17,12 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Lighting
                 // These are not really "tests"
                 // It's really checking how the light falls off
 
-                Add(new Position(3, 3), LightHeight.Middle, (5, 5));
-                Add(new Position(3, 3), LightHeight.Floor, (5, 3));
-                Add(new Position(3, 3), LightHeight.Ceiling, (3, 5));
+                Add(new Position(3, 3), LightHeight.Middle, (6, 6));
+                Add(new Position(3, 3), LightHeight.Floor, (6, 4));
+                Add(new Position(3, 3), LightHeight.Ceiling, (4, 6));
 
                 Add(new Position(2, 3), LightHeight.Middle, (3, 3));
-                Add(new Position(2, 2), LightHeight.Middle, (2, 2));
+                Add(new Position(2, 2), LightHeight.Middle, (1, 1));
             }
         }
 
@@ -32,7 +32,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Lighting
         {
             var light = new LightDefinition(
                 Center: new Position(3, 3),
-                Brightness: 5,
+                Brightness: 6,
                 Radius: 2,
                 Height: height);
 

@@ -44,7 +44,9 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
             if (d2 > r2)
                 return (0, 0);
 
-            var fraction = 1 - (double) d2 / r2;
+            var d = Math.Sqrt(d2);
+
+            var fraction = 1 - d / Radius;
 
             return TakeIntoAccountHeight((int)(Brightness * fraction));
         }
