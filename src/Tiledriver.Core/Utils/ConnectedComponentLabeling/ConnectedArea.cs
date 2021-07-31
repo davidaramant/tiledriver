@@ -3,16 +3,16 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using Tiledriver.Core.Extensions.Collections;
+using System.Linq;
 using Tiledriver.Core.LevelGeometry;
 
 namespace Tiledriver.Core.Utils.ConnectedComponentLabeling
 {
     public sealed class ConnectedArea : IEnumerable<Position>
     {
-        private readonly HashSet<Position> _tiles = new();
+        private readonly HashSet<Position> _tiles;
 
-        public ConnectedArea(IEnumerable<Position> tiles) => _tiles.AddRange(tiles);
+        public ConnectedArea(IEnumerable<Position> tiles) => _tiles = tiles.ToHashSet();
         public int Area => _tiles.Count;
         public bool Contains(Position p) => _tiles.Contains(p);
         public IEnumerator<Position> GetEnumerator() => _tiles.GetEnumerator();

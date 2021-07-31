@@ -11,6 +11,7 @@ using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.LevelGeometry.CellularAutomata;
 using Tiledriver.Core.Utils.ConnectedComponentLabeling;
 using Tiledriver.Core.Utils.Images;
+using Tiledriver.Core.LevelGeometry.Lighting;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -27,10 +28,11 @@ namespace Tiledriver.Core.Tests.LevelGeometry.CellularAutomata
         {
             const int generations = 6;
             const int seed = 3;
+            Size dimensions = new(128, 128);
 
             var random = new Random(seed);
             var board =
-                new CellBoard(new Size(128, 128))
+                new CellBoard(dimensions)
                     .Fill(random, probabilityAlive: 0.6)
                     .MakeBorderAlive(thickness: 3);
 
@@ -59,6 +61,8 @@ namespace Tiledriver.Core.Tests.LevelGeometry.CellularAutomata
                     .FindEmptyAreas(board.Dimensions, p => board[p] == CellType.Dead)
                     .ToArray();
 
+            _output.WriteLine($"{components.Length} connected areas found");
+
             using var componentsImg = new FastImage(board.Width, board.Height, scale: 10);
             componentsImg.Fill(SKColors.Black);
 
@@ -82,6 +86,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry.CellularAutomata
             // Show just the largest component
 
             var largestComponent = components.MaxElement(c => c.Area) ?? throw new Exception("No components??");
+            _output.WriteLine($"Area of largest component: {largestComponent.Area}");
 
             componentsImg.Fill(SKColors.Black);
             foreach (var p in largestComponent)
@@ -90,6 +95,34 @@ namespace Tiledriver.Core.Tests.LevelGeometry.CellularAutomata
             }
 
             componentsImg.Save(Path.Combine(dirInfo.FullName, $"Step {board.Generation + 2:00} - Largest Components.png"));
+
+            // Place some lights
+            var lightRange = new LightRange(DarkLevels: 15, LightLevels: 15);
+
+            const double percentAreaToCoverWithLights = 0.008;
+
+            var numLights = (int)(largestComponent.Area * percentAreaToCoverWithLights);
+            _output.WriteLine($"Number of lights: {numLights}");
+
+            var lights =
+                Enumerable
+                    .Range(0, numLights)
+                    .Select(_ =>
+                    {
+                        var posIndex = random.Next(0, largestComponent.Area);
+                        var position = largestComponent.ElementAt(posIndex);
+                        return new LightDefinition(
+                            position,
+                            Brightness: (int)(lightRange.LightLevels * 1.25),
+                            Radius: 15);
+                    })
+                    .ToArray();
+
+            var (floorLighting, _) = LightTracer.Trace(dimensions, p => board[p] == CellType.Alive, lightRange, lights);
+
+            var lightImg = LightMapVisualizer.Render(floorLighting, lights);
+
+            lightImg.Save(Path.Combine(dirInfo.FullName, $"Step {board.Generation + 3:00} - Lighting.png"));
         }
     }
 }

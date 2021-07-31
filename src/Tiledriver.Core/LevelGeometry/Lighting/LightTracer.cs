@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2018, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tiledriver.Core.FormatModels.Uwmf;
@@ -15,10 +16,18 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
             LightRange lightRange,
             IEnumerable<LightDefinition> lights)
         {
-            var floorLight = new LightMap(lightRange, map.Dimensions).Blackout();
-            var ceilingLight = new LightMap(lightRange, map.Dimensions).Blackout();
-
             var board = map.GetBoard();
+            return Trace(map.Dimensions, p => board[p].HasTile, lightRange, lights);
+        }
+
+        public static (LightMap FloorLight, LightMap CeilingLight) Trace(
+            Size dimensions,
+            Func<Position,bool> isPositionObscured,
+            LightRange lightRange,
+            IEnumerable<LightDefinition> lights)
+        {
+            var floorLight = new LightMap(lightRange, dimensions).Blackout();
+            var ceilingLight = new LightMap(lightRange, dimensions).Blackout();
 
             foreach (var light in lights)
             {
@@ -32,7 +41,7 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
 
                         var location = light.Center + delta;
 
-                        if (!map.Dimensions.Contains(location))
+                        if (!dimensions.Contains(location))
                             continue;
 
                         // check for line of sight
@@ -40,7 +49,7 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
                             DrawingUtil.BresenhamLine(
                                     start: light.Center,
                                     end: location)
-                                .Any(p => board[p].HasTile);
+                                .Any(isPositionObscured);
 
                         if (!obscured)
                         {

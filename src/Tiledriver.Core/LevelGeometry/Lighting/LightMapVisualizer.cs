@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using SkiaSharp;
 using Tiledriver.Core.Utils.Images;
@@ -31,9 +32,20 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
                         intensity += (byte)(light * darkIncrement);
 
                     }
-                    image.SetPixel(x,y,new SKColor(intensity,intensity,intensity));
+                    image.SetPixel(x, y, new SKColor(intensity, intensity, intensity));
                 }
             });
+
+            return image;
+        }
+
+        public static IFastImage Render(LightMap lightMap, IEnumerable<LightDefinition> lights, int scale = 10)
+        {
+            var image = Render(lightMap, scale);
+            foreach (var light in lights)
+            {
+                image.SetPixel(light.Center.X, light.Center.Y, SKColors.Red);
+            }
 
             return image;
         }
