@@ -22,7 +22,8 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures
             stream.Length.Should().BeGreaterThan(0);
         }
 
-        [Fact]
+        // Manual test
+        //[Fact]
         public void ShouldRenderTextureAndShowIt()
         {
             const string fileName = nameof(RenderedTextureTests) + "_" + nameof(ShouldRenderTextureAndShowIt) + ".png";
