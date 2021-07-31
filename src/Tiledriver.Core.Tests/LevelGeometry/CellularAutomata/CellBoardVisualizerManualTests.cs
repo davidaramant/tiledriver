@@ -36,14 +36,17 @@ namespace Tiledriver.Core.Tests.LevelGeometry.CellularAutomata
                     .Fill(random, probabilityAlive: 0.6)
                     .MakeBorderAlive(thickness: 3);
 
-            var dirInfo = Directory.CreateDirectory(
+            DirectoryInfo dirInfo = Directory.CreateDirectory(
                 Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                    "Cellular Automata Generation Visualizations"));
+                    "Cellular Automata Generation Visualizations")) ?? throw new Exception("Could not create directory");
 
-            void SaveBoard(CellBoard boardToSave, string prefix = "Step")
+            void SaveImage(IFastImage image, int step, string description) =>
+                image.Save(Path.Combine(dirInfo.FullName, $"Step {step:00} - {description}.png"));
+
+            void SaveBoard(CellBoard boardToSave)
             {
                 using var img = CellBoardVisualizer.Render(boardToSave);
-                img.Save(Path.Combine(dirInfo.FullName, $"{prefix} {boardToSave.Generation:00}.png"));
+                SaveImage(img, boardToSave.Generation, $"Cellular Generation {boardToSave.Generation}");
             }
 
             SaveBoard(board);
@@ -81,7 +84,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry.CellularAutomata
                 hue += hueShift;
             }
 
-            componentsImg.Save(Path.Combine(dirInfo.FullName, $"Step {board.Generation + 1:00} - All Components.png"));
+            SaveImage(componentsImg, generations + 1, "All Components");
 
             // Show just the largest component
 
@@ -94,7 +97,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry.CellularAutomata
                 componentsImg.SetPixel(p.X, p.Y, SKColors.White);
             }
 
-            componentsImg.Save(Path.Combine(dirInfo.FullName, $"Step {board.Generation + 2:00} - Largest Components.png"));
+            SaveImage(componentsImg, generations + 2, "Largest Component");
 
             // Place some lights
             var lightRange = new LightRange(DarkLevels: 15, LightLevels: 15);
@@ -122,7 +125,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry.CellularAutomata
 
             var lightImg = LightMapVisualizer.Render(floorLighting, lights);
 
-            lightImg.Save(Path.Combine(dirInfo.FullName, $"Step {board.Generation + 3:00} - Lighting.png"));
+            SaveImage(lightImg, generations + 3, $"Lighting");
         }
     }
 }
