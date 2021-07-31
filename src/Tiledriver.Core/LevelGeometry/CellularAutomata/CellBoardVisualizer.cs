@@ -17,7 +17,7 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
             {
                 for (int x = 0; x < board.Width; x++)
                 {
-                    image.SetPixel(x, y, board[new Position(x, y)] == CellType.Alive ? SKColors.White : SKColors.Black);
+                    image.SetPixel(x, y, board[new Position(x, y)] == CellType.Alive ? SKColors.Black : SKColors.White);
                 }
             });
 

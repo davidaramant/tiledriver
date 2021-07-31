@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.LevelGeometry;
+using Tiledriver.Core.LevelGeometry.Extensions;
 
 namespace Tiledriver.Core.FormatModels.MapMetadata.Extensions
 {
@@ -27,10 +28,6 @@ namespace Tiledriver.Core.FormatModels.MapMetadata.Extensions
                 position.Y >= 0 &&
                 position.Y < bounds.Height;
         }
-
-        public static Position Right(this Position p) => new(p.X + 1, p.Y);
-        public static Position Left(this Position p) => new(p.X - 1, p.Y);
-        public static Position Below(this Position p) => new(p.X, p.Y + 1);
-        public static Position Above(this Position p) => new(p.X, p.Y - 1);
+        
     }
 }

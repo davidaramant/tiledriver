@@ -6,9 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using Tiledriver.Core.FormatModels.MapMetadata;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.Utils;
+using Tiledriver.Core.Utils.ConnectedComponentLabeling;
 
 namespace Tiledriver.Core.LevelGeometry.Lighting
 {
@@ -24,7 +24,7 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
 
         public static void AddRandomLightsToMap(
             MapData map,
-            Room room,
+            ConnectedArea room,
             int lightRadius = 4,
             double percentAreaToCoverWithLights = 0.015)
         {
@@ -190,7 +190,7 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
 
         public static HashSet<Position> FindValidSpotsForLights(
             MapData map,
-            Room room,
+            ConnectedArea room,
             double percentageAreaToCover = 0.015)
         {
             var lightsToPlace = (int)(room.Area * percentageAreaToCover);
