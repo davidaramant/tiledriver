@@ -3,7 +3,6 @@
 
 using SkiaSharp;
 using System;
-using System.Threading.Tasks;
 using Tiledriver.Core.LevelGeometry;
 
 namespace Tiledriver.Core.Utils.Images
@@ -15,7 +14,7 @@ namespace Tiledriver.Core.Utils.Images
                 Func<Position, bool> isTrue,
                 SKColor trueColor,
                 SKColor falseColor,
-                int scale = 10) => 
+                int scale = 10) =>
             RenderPalette(dimensions, getColor: p => isTrue(p) ? trueColor : falseColor, scale);
 
         public static IFastImage RenderPalette(
@@ -25,13 +24,13 @@ namespace Tiledriver.Core.Utils.Images
         {
             var image = new FastImage(dimensions.Width, dimensions.Height, scale);
 
-            Parallel.For(0, dimensions.Height, y =>
+            for (int y = 0; y < dimensions.Height; y++)
             {
                 for (int x = 0; x < dimensions.Width; x++)
                 {
-                    image.SetPixel(x, y, getColor(new Position(x,y)));
+                    image.SetPixel(x, y, getColor(new Position(x, y)));
                 }
-            });
+            }
 
             return image;
         }

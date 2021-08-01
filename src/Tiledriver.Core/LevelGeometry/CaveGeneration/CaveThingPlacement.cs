@@ -4,9 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using Tiledriver.Core.LevelGeometry.Extensions;
 using Tiledriver.Core.LevelGeometry.Lighting;
 using Tiledriver.Core.Utils.ConnectedComponentLabeling;
@@ -52,6 +49,7 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
 
         public static IEnumerable<(Position Location, TreasureType Type)> RandomlyPlaceTreasure(
             ConnectedArea area,
+            HashSet<Position> edge,
             LightMap floorLighting,
             LightRange lightRange,
             Random random)
@@ -59,7 +57,7 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
             var maxScore = 3 * lightRange.DarkLevels;
             var cutOff = (int)(0.5 * maxScore);
 
-            var scoredLocations = area
+            var scoredLocations = edge
                     .Select(p => new { Location = p, Score = area.CountAdjacentWalls(p) * -floorLighting[p] })
                     .OrderBy(scoredLocation => scoredLocation.Score)
                     .Where(scoredLocation => scoredLocation.Score >= cutOff)

@@ -25,15 +25,9 @@ namespace Tiledriver.Core.Utils.ConnectedComponentLabeling
 
             void ReplaceAll(int oldId, int newId)
             {
-                for (int row = 0; row < dimensions.Height; row++)
+                foreach (var p in GetAllSpacesWithId(dimensions, map, oldId))
                 {
-                    for (int col = 0; col < dimensions.Width; col++)
-                    {
-                        if (map[row, col] == oldId)
-                        {
-                            map[row, col] = newId;
-                        }
-                    }
+                    map[p.Y, p.X] = newId;
                 }
             }
 
@@ -73,7 +67,7 @@ namespace Tiledriver.Core.Utils.ConnectedComponentLabeling
                 }
             }
 
-            var componentIds = 
+            var componentIds =
                 dimensions
                     .GetAllPositions()
                     .Select(p => map[p.Y, p.X])
@@ -83,10 +77,10 @@ namespace Tiledriver.Core.Utils.ConnectedComponentLabeling
             return componentIds.Select(id => new ConnectedArea(GetAllSpacesWithId(dimensions, map, id)));
         }
 
-        private static IEnumerable<Position> GetAllEmptySpaces(Size dimensions, Func<Position, bool> isEmpty) => 
+        private static IEnumerable<Position> GetAllEmptySpaces(Size dimensions, Func<Position, bool> isEmpty) =>
             dimensions.GetAllPositions().Where(isEmpty);
 
-        private static IEnumerable<Position> GetAllSpacesWithId(Size dimensions, int[,] roomMap, int id) => 
-            dimensions.GetAllPositions().Where(p => roomMap[p.Y, p.X] == id);
+        private static IEnumerable<Position> GetAllSpacesWithId(Size dimensions, int[,] map, int id) =>
+            dimensions.GetAllPositions().Where(p => map[p.Y, p.X] == id);
     }
 }

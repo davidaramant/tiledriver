@@ -3,7 +3,6 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using SkiaSharp;
 using Tiledriver.Core.LevelGeometry.Extensions;
 using Tiledriver.Core.Utils.ConnectedComponentLabeling;
@@ -20,7 +19,7 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
             var darkIncrement = 128 / lightMap.Range.DarkLevels;
             var lightIncrement = 128 / lightMap.Range.LightLevels;
 
-            Parallel.For(0, lightMap.Size.Height, y =>
+            for (int y = 0; y < lightMap.Size.Height; y++)
             {
                 for (int x = 0; x < lightMap.Size.Width; x++)
                 {
@@ -35,9 +34,10 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
                         intensity += (byte)(light * darkIncrement);
 
                     }
+
                     image.SetPixel(x, y, new SKColor(intensity, intensity, intensity));
                 }
-            });
+            }
 
             return image;
         }
