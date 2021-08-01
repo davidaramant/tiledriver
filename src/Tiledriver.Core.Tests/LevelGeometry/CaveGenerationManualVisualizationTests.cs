@@ -45,7 +45,11 @@ namespace Tiledriver.Core.Tests.LevelGeometry
 
             void SaveBoard(CellBoard boardToSave)
             {
-                using var img = CellBoardVisualizer.Render(boardToSave);
+                using var img = BinaryVisualizer.Render(
+                    dimensions,
+                    isTrue: p => boardToSave[p] == CellType.Alive,
+                    trueColor: SKColors.DarkSlateBlue, 
+                    falseColor: SKColors.White);
                 SaveImage(img, boardToSave.Generation, $"Cellular Generation {boardToSave.Generation}");
             }
 
@@ -91,13 +95,13 @@ namespace Tiledriver.Core.Tests.LevelGeometry
             var largestComponent = components.MaxElement(c => c.Area) ?? throw new Exception("No components??");
             _output.WriteLine($"Area of largest component: {largestComponent.Area}");
 
-            componentsImg.Fill(SKColors.DarkSlateBlue);
-            foreach (var p in largestComponent)
-            {
-                componentsImg.SetPixel(p.X, p.Y, SKColors.White);
-            }
+            using var largestComponentImg = BinaryVisualizer.Render(
+                dimensions,
+                isTrue: largestComponent.Contains,
+                trueColor: SKColors.White, 
+                falseColor: SKColors.DarkSlateBlue);
 
-            SaveImage(componentsImg, generations + 2, "Largest Component");
+            SaveImage(largestComponentImg, generations + 2, "Largest Component");
 
             // Place some lights
             var lightRange = new LightRange(DarkLevels: 15, LightLevels: 15);
