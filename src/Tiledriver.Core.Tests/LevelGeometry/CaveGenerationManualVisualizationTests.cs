@@ -10,9 +10,11 @@ using Tiledriver.Core.Extensions.Enumerable;
 using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.LevelGeometry.CaveGeneration;
 using Tiledriver.Core.LevelGeometry.CellularAutomata;
-using Tiledriver.Core.Utils.ConnectedComponentLabeling;
-using Tiledriver.Core.Utils.Images;
+using Tiledriver.Core.LevelGeometry.Extensions;
 using Tiledriver.Core.LevelGeometry.Lighting;
+using Tiledriver.Core.Utils.ConnectedComponentLabeling;
+using Tiledriver.Core.Utils.ConnectedComponentLabeling.Extensions;
+using Tiledriver.Core.Utils.Images;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -46,7 +48,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry
 
             void SaveBoard(CellBoard boardToSave)
             {
-                using var img = BinaryVisualizer.Render(
+                using var img = GenericVisualizer.RenderBinary(
                     dimensions,
                     isTrue: p => boardToSave[p] == CellType.Alive,
                     trueColor: SKColors.DarkSlateBlue,
@@ -98,7 +100,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry
             var largestComponent = components.MaxElement(c => c.Area) ?? throw new Exception("No components??");
             _output.WriteLine($"Area of largest component: {largestComponent.Area}");
 
-            using var largestComponentImg = BinaryVisualizer.Render(
+            using var largestComponentImg = GenericVisualizer.RenderBinary(
                 dimensions,
                 isTrue: largestComponent.Contains,
                 trueColor: SKColors.White,
@@ -119,7 +121,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry
 
             var (floorLighting, _) = LightTracer.Trace(dimensions, p => board[p] == CellType.Alive, lightRange, lights);
 
-            var lightImg = LightMapVisualizer.Render(floorLighting, lights, largestComponent);
+            using var lightImg = LightMapVisualizer.Render(floorLighting, lights, largestComponent);
 
             SaveImage(lightImg, ++step, "Lighting");
 
@@ -132,6 +134,24 @@ namespace Tiledriver.Core.Tests.LevelGeometry
             }
 
             SaveImage(lightImg, ++step, "Treasure");
+
+            // Find interior
+
+            var edge = largestComponent.Where(p => largestComponent.CountAdjacentWalls(p) > 0).ToHashSet();
+            var edge2 = largestComponent.Where(p => p.GetMooreNeighbors().Any(edge.Contains)).ToHashSet();
+
+            using var interiorImg = GenericVisualizer.RenderPalette(
+                dimensions,
+                getColor: p =>
+                {
+                    if (!largestComponent.Contains(p))
+                        return SKColors.DarkSlateBlue;
+                    if (edge2.Contains(p))
+                        return SKColors.Gray;
+                    return SKColors.White;
+                });
+
+            SaveImage(interiorImg, ++step, "Interior");
         }
     }
 }
