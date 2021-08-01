@@ -91,7 +91,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry
             var largestComponent = components.MaxElement(c => c.Area) ?? throw new Exception("No components??");
             _output.WriteLine($"Area of largest component: {largestComponent.Area}");
 
-            componentsImg.Fill(SKColors.Black);
+            componentsImg.Fill(SKColors.DarkSlateBlue);
             foreach (var p in largestComponent)
             {
                 componentsImg.SetPixel(p.X, p.Y, SKColors.White);
@@ -111,7 +111,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry
 
             var (floorLighting, _) = LightTracer.Trace(dimensions, p => board[p] == CellType.Alive, lightRange, lights);
 
-            var lightImg = LightMapVisualizer.Render(floorLighting, lights);
+            var lightImg = LightMapVisualizer.Render(floorLighting, lights, largestComponent);
 
             SaveImage(lightImg, generations + 3, $"Lighting");
         }

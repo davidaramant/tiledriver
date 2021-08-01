@@ -2,8 +2,11 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using SkiaSharp;
+using Tiledriver.Core.LevelGeometry.Extensions;
+using Tiledriver.Core.Utils.ConnectedComponentLabeling;
 using Tiledriver.Core.Utils.Images;
 
 namespace Tiledriver.Core.LevelGeometry.Lighting
@@ -45,6 +48,18 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
             foreach (var light in lights)
             {
                 image.SetPixel(light.Center.X, light.Center.Y, SKColors.Red);
+            }
+
+            return image;
+        }
+
+        public static IFastImage Render(LightMap lightMap, IEnumerable<LightDefinition> lights, ConnectedArea area, int scale = 10)
+        {
+            var image = Render(lightMap, lights, scale);
+
+            foreach (var position in lightMap.Size.GetAllPositions().Where(p => !area.Contains(p)))
+            {
+                image.SetPixel(position.X, position.Y, SKColors.DarkSlateBlue);
             }
 
             return image;
