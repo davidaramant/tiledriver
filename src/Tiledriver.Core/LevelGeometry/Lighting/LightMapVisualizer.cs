@@ -47,7 +47,7 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
             var image = Render(lightMap, scale);
             foreach (var light in lights)
             {
-                image.SetPixel(light.Center.X, light.Center.Y, SKColors.Red);
+                image.SetPixel(light.Center.X, light.Center.Y, SKColors.HotPink);
             }
 
             return image;

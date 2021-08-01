@@ -8,6 +8,7 @@ using System.Linq;
 using Tiledriver.Core.Extensions.Colors;
 using Tiledriver.Core.Extensions.Enumerable;
 using Tiledriver.Core.LevelGeometry;
+using Tiledriver.Core.LevelGeometry.CaveGeneration;
 using Tiledriver.Core.LevelGeometry.CellularAutomata;
 using Tiledriver.Core.Utils.ConnectedComponentLabeling;
 using Tiledriver.Core.Utils.Images;
@@ -48,7 +49,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry
                 using var img = BinaryVisualizer.Render(
                     dimensions,
                     isTrue: p => boardToSave[p] == CellType.Alive,
-                    trueColor: SKColors.DarkSlateBlue, 
+                    trueColor: SKColors.DarkSlateBlue,
                     falseColor: SKColors.White);
                 SaveImage(img, boardToSave.Generation, $"Cellular Generation {boardToSave.Generation}");
             }
@@ -62,6 +63,8 @@ namespace Tiledriver.Core.Tests.LevelGeometry
             }
 
             // Find all components, render picture of all of them
+
+            var step = generations;
 
             var components =
                 ConnectedComponentAnalyzer
@@ -88,7 +91,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry
                 hue += hueShift;
             }
 
-            SaveImage(componentsImg, generations + 1, "All Components");
+            SaveImage(componentsImg, ++step, "All Components");
 
             // Show just the largest component
 
@@ -98,18 +101,19 @@ namespace Tiledriver.Core.Tests.LevelGeometry
             using var largestComponentImg = BinaryVisualizer.Render(
                 dimensions,
                 isTrue: largestComponent.Contains,
-                trueColor: SKColors.White, 
+                trueColor: SKColors.White,
                 falseColor: SKColors.DarkSlateBlue);
 
-            SaveImage(largestComponentImg, generations + 2, "Largest Component");
+            SaveImage(largestComponentImg, ++step, "Largest Component");
 
             // Place some lights
             var lightRange = new LightRange(DarkLevels: 15, LightLevels: 15);
-            var lights = LightInserter.RandomlyPlaceLights(
-                lightRange,
-                percentAreaToCover: 0.008,
+            var lights = CaveThingPlacement.RandomlyPlaceLights(
                 largestComponent,
-                random).ToArray();
+                random,
+                lightRange,
+                percentAreaToCover: 0.008)
+                .ToArray();
 
             _output.WriteLine($"Number of lights: {lights.Length}");
 
@@ -117,7 +121,17 @@ namespace Tiledriver.Core.Tests.LevelGeometry
 
             var lightImg = LightMapVisualizer.Render(floorLighting, lights, largestComponent);
 
-            SaveImage(lightImg, generations + 3, $"Lighting");
+            SaveImage(lightImg, ++step, "Lighting");
+
+            // Place treasure
+            var treasures = CaveThingPlacement.RandomlyPlaceTreasure(largestComponent, floorLighting, lightRange, random);
+
+            foreach (var t in treasures)
+            {
+                lightImg.SetPixel(t.Location.X, t.Location.Y, SKColors.Gold);
+            }
+
+            SaveImage(lightImg, ++step, "Treasure");
         }
     }
 }
