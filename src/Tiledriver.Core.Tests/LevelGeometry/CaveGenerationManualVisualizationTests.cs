@@ -101,25 +101,13 @@ namespace Tiledriver.Core.Tests.LevelGeometry
 
             // Place some lights
             var lightRange = new LightRange(DarkLevels: 15, LightLevels: 15);
+            var lights = LightInserter.RandomlyPlaceLights(
+                lightRange,
+                percentAreaToCover: 0.008,
+                largestComponent,
+                random).ToArray();
 
-            const double percentAreaToCoverWithLights = 0.008;
-
-            var numLights = (int)(largestComponent.Area * percentAreaToCoverWithLights);
-            _output.WriteLine($"Number of lights: {numLights}");
-
-            var lights =
-                Enumerable
-                    .Range(0, numLights)
-                    .Select(_ =>
-                    {
-                        var posIndex = random.Next(0, largestComponent.Area);
-                        var position = largestComponent.ElementAt(posIndex);
-                        return new LightDefinition(
-                            position,
-                            Brightness: (int)(lightRange.LightLevels * 1.25),
-                            Radius: 15);
-                    })
-                    .ToArray();
+            _output.WriteLine($"Number of lights: {lights.Length}");
 
             var (floorLighting, _) = LightTracer.Trace(dimensions, p => board[p] == CellType.Alive, lightRange, lights);
 
