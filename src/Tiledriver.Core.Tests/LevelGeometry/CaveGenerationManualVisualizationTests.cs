@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2021, David Aramant
+// Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using SkiaSharp;
@@ -31,7 +31,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry
         {
             const int generations = 6;
 
-            Parallel.ForEach(Enumerable.Range(3, 20), seed =>
+            Parallel.ForEach(Enumerable.Range(0, 30), seed =>
             {
                 var stopWatch = Stopwatch.StartNew();
                 _output.WriteLine($"Seed {seed} - Start");
@@ -151,8 +151,6 @@ namespace Tiledriver.Core.Tests.LevelGeometry
 
                 using var lightImg = LightMapVisualizer.Render(floorLighting, lights, largestComponent);
 
-                SaveImage(lightImg, ++step, "Lighting");
-
                 // Place treasure
                 var treasures =
                     CaveThingPlacement.RandomlyPlaceTreasure(largestComponent, edge, floorLighting, lightRange, random);
@@ -162,7 +160,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry
                     lightImg.SetPixel(t.Location.X, t.Location.Y, SKColors.Gold);
                 }
 
-                SaveImage(lightImg, ++step, "Treasure");
+                SaveImage(lightImg, ++step, "Lighting & Treasure");
 
                 _output.WriteLine($"Seed {seed} - Took {stopWatch.Elapsed}");
             });
