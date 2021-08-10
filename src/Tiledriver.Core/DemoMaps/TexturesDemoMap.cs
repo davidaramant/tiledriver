@@ -9,16 +9,15 @@ using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.LevelGeometry.CanvasDrawingExtensions;
 using Tiledriver.Core.Wolf3D;
-using Size = Tiledriver.Core.LevelGeometry.Size;
 
 namespace Tiledriver.Core.DemoMaps
 {
     public static class TexturesDemoMap
     {
-        private const int NumGradients = 5;
+        private const int NumGradients = 10;
         private const int TotalNumLevels = NumGradients + 1 + NumGradients;
-        private const int HorizontalBuffer = 3;
-        private const int Height = 9;
+        private const int HorizontalBuffer = 5;
+        private const int Height = 13;
 
         public static MapData Create() => CreateMapAndTextures(new TextureQueue());
 
@@ -96,9 +95,11 @@ namespace Tiledriver.Core.DemoMaps
                 });
 
                 textureQueue.Add(new CompositeTexture(newNS, 64, 64, ImmutableList.Create(
-                    new Patch(nsTexture, 0, 0, Translation: new Translation.Red()))));
+                    new Patch(nsTexture, 0, 0),
+                    new Patch(nsTexture, 0, 0, Blend: new ColorBlend("000000", Alpha: 0.1 * darkLevel)))));
                 textureQueue.Add(new CompositeTexture(newEW, 64, 64, ImmutableList.Create(
-                    new Patch(ewTexture, 0, 0, Translation: new Translation.Gold()))));
+                    new Patch(ewTexture, 0, 0),
+                    new Patch(ewTexture, 0, 0, Blend: new ColorBlend("000000", Alpha: 0.1 * darkLevel)))));
             }
 
             foreach (var lightLevel in Enumerable.Range(1, NumGradients))
@@ -117,11 +118,11 @@ namespace Tiledriver.Core.DemoMaps
                 });
 
                 textureQueue.Add(new CompositeTexture(newNS, 64, 64, ImmutableList.Create(
-                    new Patch(nsTexture, 0, 0, Alpha: 0.1, Style: RenderStyle.Add),
-                    new Patch(nsTexture, 0, 0))));
+                    new Patch(nsTexture, 0, 0),
+                    new Patch(nsTexture, 0, 0, Blend: new ColorBlend("FFFFFF", Alpha: 0.1 * lightLevel)))));
                 textureQueue.Add(new CompositeTexture(newEW, 64, 64, ImmutableList.Create(
-                    new Patch(ewTexture, 0, 0, Alpha: 0.1, Style: RenderStyle.Add),
-                    new Patch(ewTexture, 0, 0))));
+                    new Patch(ewTexture, 0, 0),
+                    new Patch(ewTexture, 0, 0, Blend: new ColorBlend("FFFFFF", Alpha: 0.1 * lightLevel)))));
             }
 
             return (board.ToPlaneMap(), tiles.ToImmutableList());

@@ -57,7 +57,7 @@ namespace Tiledriver.Core.FormatModels.Textures.Writing
                     .OptionalLine(nameof(patch.Rotate), patch.Rotate, PatchRotation.None, rotation => ((int)rotation).ToString())
                     .OptionalLine(nameof(patch.Translation), patch.Translation, null, FormatTranslation)
                     .OptionalLine(nameof(patch.Blend), patch.Blend, null,
-                        blend => throw new NotImplementedException("ECWolf has this commented out"))
+                        blend => "\"" + blend.Color + "\"" + (blend.Alpha.HasValue ? $", {blend.Alpha}" : string.Empty))
                     .OptionalLine(nameof(patch.Alpha), patch.Alpha, 1)
                     .OptionalLine(nameof(patch.Style), patch.Style, RenderStyle.Copy, style => style.ToString())
                     .CloseBrace();

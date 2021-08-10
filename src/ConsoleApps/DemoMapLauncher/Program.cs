@@ -10,8 +10,8 @@ using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Wad;
 
 var lumps = CreateWadContents(new Func<TextureQueue,MapData>[]{
-    TileDemoMap.CreateMapAndTextures,
     TexturesDemoMap.CreateMapAndTextures,
+    TileDemoMap.CreateMapAndTextures,
     ThingDemoMap.CreateMapAndTextures,
 });
 
