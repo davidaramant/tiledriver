@@ -7,7 +7,7 @@ using System.IO;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Wad;
 
-namespace Tiledriver.Core.ECWolfUtils
+namespace Tiledriver.Core.Utils.ECWolf
 {
     /// <summary>
     /// Launches ECWolf

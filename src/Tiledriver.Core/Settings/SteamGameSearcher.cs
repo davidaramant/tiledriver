@@ -1,8 +1,6 @@
 ﻿// Copyright (c) 2017, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using System;
-using System.IO;
 using Tiledriver.Utils;
 
 namespace Tiledriver.Core.Settings
@@ -11,7 +9,8 @@ namespace Tiledriver.Core.Settings
     {
         private static string? GetBaseSteamPath()
         {
-            throw new NotImplementedException("Will .NET 6 allow this to live in the same project?");
+            return "C:\\Program Files (x86)\\Steam";
+            // TODO: "Will .NET 6 allow this to live in the same project?");
             //var steamCommonRegPath = Path.Combine("Software", "Valve", "Steam");
 
             //var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(steamCommonRegPath);

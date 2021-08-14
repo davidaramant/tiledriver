@@ -14,7 +14,6 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using Tiledriver.Core.ECWolfUtils;
 using Tiledriver.Core.FormatModels;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.GameMaps;
@@ -682,7 +681,8 @@ namespace TestRunner
 
         private static void ExportMapsFromPk3(string pk3Path, string outputBasePath = ".")
         {
-            var ecWolfPk3Path = Path.ChangeExtension(ExeFinder.GetECWolfExePath(), "pk3");
+            var config = ConfigLoader.Load();
+            var ecWolfPk3Path = Path.ChangeExtension(config.ECWolfPath, "pk3");
 
             var levelSetName = Path.GetFileNameWithoutExtension(pk3Path);
 
@@ -897,7 +897,8 @@ namespace TestRunner
             string name)> levelSets,
             string outputPath)
         {
-            var ecWolfPk3Path = Path.ChangeExtension(ExeFinder.GetECWolfExePath(), "pk3");
+            var config = ConfigLoader.Load();
+            var ecWolfPk3Path = Path.ChangeExtension(config.ECWolfPath, "pk3");
 
             var autoMapperConfig = new MapperConfiguration(cfg =>
             {
@@ -961,7 +962,8 @@ namespace TestRunner
             string outputPath,
             string levelSetName)
         {
-            var ecWolfPk3Path = Path.ChangeExtension(ExeFinder.GetECWolfExePath(), "pk3");
+            var config = ConfigLoader.Load();
+            var ecWolfPk3Path = Path.ChangeExtension(config.ECWolfPath, "pk3");
 
             var autoMapperConfig = new MapperConfiguration(cfg =>
             {
@@ -1015,11 +1017,10 @@ namespace TestRunner
             }
 
             var wadFilePath = Path.Combine(mapsSubDir, "Map01.wad");
-
-            ExeFinder.CreateLauncher().LoadMapInEcWolf(uwmfMap, wadFilePath: wadFilePath);
+            ConfigLoader.Load().CreateECWolfLauncher().LoadMapInEcWolf(uwmfMap, wadFilePath: wadFilePath);
         }
 
-        private static void LoadMapInEcWolf(MapData uwmfMap) => ExeFinder.CreateLauncher().LoadMapInEcWolf(uwmfMap);
+        private static void LoadMapInEcWolf(MapData uwmfMap) => ConfigLoader.Load().CreateECWolfLauncher().LoadMapInEcWolf(uwmfMap);
     }
 
 }

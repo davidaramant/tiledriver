@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Tiledriver.Core.DemoMaps;
-using Tiledriver.Core.ECWolfUtils;
 using Tiledriver.Core.Extensions.Collections;
 using Tiledriver.Core.FormatModels.Textures;
 using Tiledriver.Core.FormatModels.Textures.Writing;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Wad;
+using Tiledriver.Core.Settings;
 
 var lumps = CreateWadContents(new Func<TextureQueue,MapData>[]{
     TexturesDemoMap.CreateMapAndTextures,
@@ -15,8 +15,9 @@ var lumps = CreateWadContents(new Func<TextureQueue,MapData>[]{
     ThingDemoMap.CreateMapAndTextures,
 });
 
-ExeFinder
-    .CreateLauncher()
+ConfigLoader
+    .Load()
+    .CreateECWolfLauncher()
     .CreateAndLoadWadInEcWolf(lumps, "demo.wad");
 
 static IEnumerable<ILump> CreateWadContents(IEnumerable<Func<TextureQueue, MapData>> mapCreators)
