@@ -3,6 +3,7 @@
 
 using System.IO;
 using Tiledriver.DataModelGenerator.MapInfo;
+using Tiledriver.DataModelGenerator.Udmf;
 using Tiledriver.DataModelGenerator.Uwmf;
 using Tiledriver.DataModelGenerator.Xlat;
 
@@ -17,6 +18,10 @@ namespace Tiledriver.DataModelGenerator
             var corePath = Path.Combine(basePath, "Tiledriver.Core");
             var formatModelsPath = Path.Combine(corePath, "FormatModels");
             
+            var udmfPath = Path.Combine(formatModelsPath, "Udmf");
+            var udmfWritingPath = Path.Combine(udmfPath, "Writing");
+            var udmfReadingPath = Path.Combine(udmfPath, "Reading");
+
             var uwmfPath = Path.Combine(formatModelsPath, "Uwmf");
             var uwmfWritingPath = Path.Combine(uwmfPath, "Writing");
             var uwmfReadingPath = Path.Combine(uwmfPath, "Reading");
@@ -30,6 +35,10 @@ namespace Tiledriver.DataModelGenerator
             UwmfModelGenerator.WriteToPath(uwmfPath);
             UwmfWriterGenerator.WriteToPath(uwmfWritingPath);
             UwmfSemanticAnalyzerGenerator.WriteToPath(uwmfReadingPath);
+
+            UdmfModelGenerator.WriteToPath(udmfPath);
+            //UdmfWriterGenerator.WriteToPath(udmfWritingPath);
+            //UdmfSemanticAnalyzerGenerator.WriteToPath(udmfReadingPath);
 
             XlatModelGenerator.WriteToPath(xlatPath);
             XlatParserGenerator.WriteToPath(xlatReadingPath);
