@@ -6,6 +6,7 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using Tiledriver.Core.FormatModels.Common;
+using Tiledriver.Core.FormatModels.Common.BinaryMaps;
 
 namespace Tiledriver.Core.FormatModels.GameMaps
 {

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Tiledriver.Core.LevelGeometry;
 
-namespace Tiledriver.Core.FormatModels.Common
+namespace Tiledriver.Core.FormatModels.Common.BinaryMaps
 {
     public enum BinaryMapPlaneId
     {

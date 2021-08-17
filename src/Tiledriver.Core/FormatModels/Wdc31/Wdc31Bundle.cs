@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Tiledriver.Core.FormatModels.Common;
+using Tiledriver.Core.FormatModels.Common.BinaryMaps;
 
 namespace Tiledriver.Core.FormatModels.Wdc31
 {

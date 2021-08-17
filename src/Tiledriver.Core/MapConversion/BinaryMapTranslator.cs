@@ -7,6 +7,7 @@ using System.Linq;
 using Tiledriver.Core.Extensions.Collections;
 using Tiledriver.Core.Extensions.Directions;
 using Tiledriver.Core.FormatModels.Common;
+using Tiledriver.Core.FormatModels.Common.BinaryMaps;
 using Tiledriver.Core.FormatModels.MapInfo;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Xlat;
