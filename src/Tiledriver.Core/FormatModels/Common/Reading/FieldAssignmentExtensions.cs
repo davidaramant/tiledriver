@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Generic;
 
@@ -50,6 +50,14 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
         {
             var name = GetRequiredFieldValue<string>(fields, contextName, fieldName);
             return new Texture(name);
+        }
+
+        public static Texture GetOptionalTextureFieldValue(
+            this IReadOnlyDictionary<Identifier, Token> fields,
+            Identifier fieldName)
+        {
+            var name = GetOptionalFieldValue(fields, fieldName, "-");
+            return name is null or "-" ? Texture.None : new Texture(name);
         }
 
         private static double GetDoubleTokenValue(Identifier fieldName, Token token) =>

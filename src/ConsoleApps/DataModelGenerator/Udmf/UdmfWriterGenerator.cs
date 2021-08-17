@@ -1,5 +1,5 @@
 // Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.IO;
 using System.Linq;
@@ -21,7 +21,13 @@ namespace Tiledriver.DataModelGenerator.Udmf
             using var output = new IndentedWriter(stream);
 
             output
-                .WriteHeader("Tiledriver.Core.FormatModels.Udmf.Writing", new[] { "System.CodeDom.Compiler", "System.IO" })
+                .WriteHeader("Tiledriver.Core.FormatModels.Udmf.Writing",
+                    new[]
+                    {
+                        "System.CodeDom.Compiler",
+                        "System.IO",
+                        "Tiledriver.Core.FormatModels.Common"
+                    })
                 .OpenParen()
                 .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
                 .Line($"public static partial class UdmfWriter")
@@ -53,6 +59,10 @@ namespace Tiledriver.DataModelGenerator.Udmf
                 if (p is ScalarProperty sp)
                 {
                     var defaultValue = sp.DefaultString;
+                    if (sp is TextureProperty tp && tp.IsOptional)
+                    {
+                        defaultValue = "Texture.None";
+                    }
 
                     string optionalDefault = defaultValue != null ? ", " + defaultValue : string.Empty;
                     string indent = block.Serialization == SerializationType.Normal ? string.Empty : ", indent:false";

@@ -1,5 +1,5 @@
 // Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Collections.Immutable;
@@ -19,8 +19,8 @@ namespace Tiledriver.Core.FormatModels.Udmf.Writing
             Write(writer, map);
         }
 
-        private static void WriteProperty(StreamWriter writer, string name, Texture value, bool indent = true) =>
-            WriteProperty(writer, name, value.Name, indent: indent);
+        private static void WriteProperty(StreamWriter writer, string name, Texture value, Texture? defaultValue = null, bool indent = true) =>
+            WriteProperty(writer, name, value.Name, defaultValue: defaultValue?.ToString(), indent: indent);
 
         private static void WriteProperty(StreamWriter writer, string name, string value, string? defaultValue = null, bool indent = true)
         {

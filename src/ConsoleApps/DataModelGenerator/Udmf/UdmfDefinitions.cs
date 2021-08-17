@@ -48,9 +48,9 @@ namespace Tiledriver.DataModelGenerator.Udmf
                     new IntegerProperty("offsetX", defaultValue: 0),
                     new IntegerProperty("offsetY", defaultValue: 0),
 
-                    new StringProperty("textureTop", defaultValue: "-"),
-                    new StringProperty("textureBottom", defaultValue: "-"),
-                    new StringProperty("textureMiddle", defaultValue: "-"),
+                    new TextureProperty("textureTop", optional: true),
+                    new TextureProperty("textureBottom", optional: true),
+                    new TextureProperty("textureMiddle", optional: true),
 
                     new IntegerProperty("sector"),
 
@@ -72,8 +72,8 @@ namespace Tiledriver.DataModelGenerator.Udmf
                     new IntegerProperty("heightFloor", defaultValue: 0),
                     new IntegerProperty("heightCeiling", defaultValue: 0),
 
-                    new StringProperty("textureFloor"),
-                    new StringProperty("textureCeiling"),
+                    new TextureProperty("textureFloor"),
+                    new TextureProperty("textureCeiling"),
 
                     new IntegerProperty("lightLevel", defaultValue: 160),
 

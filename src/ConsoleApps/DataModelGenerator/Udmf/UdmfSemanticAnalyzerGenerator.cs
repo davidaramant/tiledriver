@@ -61,8 +61,12 @@ namespace Tiledriver.DataModelGenerator.Udmf
             var getValue = property switch
             {
                 DoubleProperty => $"fields.GetRequiredDoubleFieldValue({context}, \"{property.FormatName}\")",
-                TextureProperty => $"fields.GetRequiredTextureFieldValue({context}, \"{property.FormatName}\")",
-                _ => property.DefaultString == null
+                TextureProperty tp =>
+                    !tp.IsOptional
+                    ? $"fields.GetRequiredTextureFieldValue({context}, \"{property.FormatName}\")"
+                    : $"fields.GetOptionalTextureFieldValue(\"{property.FormatName}\")",
+                _ =>
+                    property.DefaultString == null
                     ? $"fields.GetRequiredFieldValue<{property.PropertyType}>({context}, \"{property.FormatName}\")"
                     : $"fields.GetOptionalFieldValue<{property.PropertyType}>(\"{property.FormatName}\", {property.DefaultString})"
             };

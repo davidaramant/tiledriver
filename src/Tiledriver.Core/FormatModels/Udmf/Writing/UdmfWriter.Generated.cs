@@ -3,6 +3,7 @@
 
 using System.CodeDom.Compiler;
 using System.IO;
+using Tiledriver.Core.FormatModels.Common;
 
 namespace Tiledriver.Core.FormatModels.Udmf.Writing
 {
@@ -42,9 +43,9 @@ namespace Tiledriver.Core.FormatModels.Udmf.Writing
             writer.WriteLine("{");
             WriteProperty(writer, "offsetX", sidedef.OffsetX, 0);
             WriteProperty(writer, "offsetY", sidedef.OffsetY, 0);
-            WriteProperty(writer, "textureTop", sidedef.TextureTop, "-");
-            WriteProperty(writer, "textureBottom", sidedef.TextureBottom, "-");
-            WriteProperty(writer, "textureMiddle", sidedef.TextureMiddle, "-");
+            WriteProperty(writer, "textureTop", sidedef.TextureTop, Texture.None);
+            WriteProperty(writer, "textureBottom", sidedef.TextureBottom, Texture.None);
+            WriteProperty(writer, "textureMiddle", sidedef.TextureMiddle, Texture.None);
             WriteProperty(writer, "sector", sidedef.Sector);
             WriteProperty(writer, "comment", sidedef.Comment, "");
             writer.WriteLine("}");

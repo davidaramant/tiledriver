@@ -46,12 +46,12 @@ namespace Tiledriver.Core.FormatModels.Udmf.Reading
             var fields = block.GetFieldAssignments();
 
             return new SideDef(
+                TextureTop: fields.GetOptionalTextureFieldValue("textureTop"),
+                TextureBottom: fields.GetOptionalTextureFieldValue("textureBottom"),
+                TextureMiddle: fields.GetOptionalTextureFieldValue("textureMiddle"),
                 Sector: fields.GetRequiredFieldValue<int>(block.Name, "sector"),
                 OffsetX: fields.GetOptionalFieldValue<int>("offsetX", 0),
                 OffsetY: fields.GetOptionalFieldValue<int>("offsetY", 0),
-                TextureTop: fields.GetOptionalFieldValue<string>("textureTop", "-"),
-                TextureBottom: fields.GetOptionalFieldValue<string>("textureBottom", "-"),
-                TextureMiddle: fields.GetOptionalFieldValue<string>("textureMiddle", "-"),
                 Comment: fields.GetOptionalFieldValue<string>("comment", "")
             );
         }
@@ -70,8 +70,8 @@ namespace Tiledriver.Core.FormatModels.Udmf.Reading
             var fields = block.GetFieldAssignments();
 
             return new Sector(
-                TextureFloor: fields.GetRequiredFieldValue<string>(block.Name, "textureFloor"),
-                TextureCeiling: fields.GetRequiredFieldValue<string>(block.Name, "textureCeiling"),
+                TextureFloor: fields.GetRequiredTextureFieldValue(block.Name, "textureFloor"),
+                TextureCeiling: fields.GetRequiredTextureFieldValue(block.Name, "textureCeiling"),
                 HeightFloor: fields.GetOptionalFieldValue<int>("heightFloor", 0),
                 HeightCeiling: fields.GetOptionalFieldValue<int>("heightCeiling", 0),
                 LightLevel: fields.GetOptionalFieldValue<int>("lightLevel", 160),
