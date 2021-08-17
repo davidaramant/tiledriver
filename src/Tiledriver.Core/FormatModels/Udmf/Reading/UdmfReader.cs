@@ -12,8 +12,7 @@ namespace Tiledriver.Core.FormatModels.Udmf.Reading
         public static MapData Read(Stream stream)
         {
             using var textReader = new StreamReader(stream, Encoding.ASCII, leaveOpen: true);
-            throw new System.NotImplementedException();
-            //return UdmfSemanticAnalyzer.ReadMapData(UdmfParser.Parse(new UnifiedLexer(textReader).Scan()));
+            return UdmfSemanticAnalyzer.ReadMapData(UdmfParser.Parse(new UnifiedLexer(textReader).Scan()));
         }
     }
 }
