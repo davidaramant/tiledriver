@@ -3,7 +3,7 @@
 
 using System.Collections.Generic;
 using System.IO;
-using Tiledriver.Core.DemoMaps;
+using Tiledriver.Core.DemoMaps.Wolf3D;
 using Tiledriver.Core.FormatModels.Wad;
 using Xunit;
 

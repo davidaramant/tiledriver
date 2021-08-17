@@ -15,7 +15,7 @@ using Tiledriver.Core.LevelGeometry.CanvasDrawingExtensions;
 using Tiledriver.Core.Wolf3D;
 using Size = Tiledriver.Core.LevelGeometry.Size;
 
-namespace Tiledriver.Core.DemoMaps
+namespace Tiledriver.Core.DemoMaps.Wolf3D
 {
     public static class TileDemoMap
     {

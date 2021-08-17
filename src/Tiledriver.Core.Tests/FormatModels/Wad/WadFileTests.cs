@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using FluentAssertions;
 using System.IO;
 using System.Linq;
-using Tiledriver.Core.DemoMaps;
+using Tiledriver.Core.DemoMaps.Wolf3D;
 using Tiledriver.Core.FormatModels.Uwmf.Reading;
 using Tiledriver.Core.FormatModels.Wad;
 using Tiledriver.Core.Tests.FormatModels.Uwmf.Reading;

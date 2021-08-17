@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Tiledriver.Core.DemoMaps;
+using Tiledriver.Core.DemoMaps.Wolf3D;
 using Tiledriver.Core.Extensions.Collections;
 using Tiledriver.Core.FormatModels.Textures;
 using Tiledriver.Core.FormatModels.Textures.Writing;

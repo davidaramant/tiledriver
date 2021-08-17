@@ -6,7 +6,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using Xunit;
 using FluentAssertions;
-using Tiledriver.Core.DemoMaps;
+using Tiledriver.Core.DemoMaps.Wolf3D;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.LevelGeometry.Mapping;
 using Tiledriver.Core.Wolf3D;

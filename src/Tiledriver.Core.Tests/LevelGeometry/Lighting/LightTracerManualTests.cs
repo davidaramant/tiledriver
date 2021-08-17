@@ -4,6 +4,7 @@
 using System;
 using System.IO;
 using System.Text;
+using Tiledriver.Core.DemoMaps.Wolf3D;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.LevelGeometry.Lighting;
@@ -24,7 +25,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Lighting
         //[Fact]
         public void ShouldGenerateVisualizationOfSimpleLightMap()
         {
-            MapData map = DemoMaps.TileDemoMap.Create();
+            MapData map = TileDemoMap.Create();
 
             var (floorLights, ceilingLights) =
                 LightTracer.Trace(

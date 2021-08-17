@@ -10,7 +10,7 @@ using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.LevelGeometry.CanvasDrawingExtensions;
 using Tiledriver.Core.Wolf3D;
 
-namespace Tiledriver.Core.DemoMaps
+namespace Tiledriver.Core.DemoMaps.Wolf3D
 {
     public static class ThingDemoMap
     {
