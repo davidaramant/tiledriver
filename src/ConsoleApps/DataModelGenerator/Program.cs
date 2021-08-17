@@ -38,7 +38,7 @@ namespace Tiledriver.DataModelGenerator
 
             UdmfModelGenerator.WriteToPath(udmfPath);
             UdmfWriterGenerator.WriteToPath(udmfWritingPath);
-            //UdmfSemanticAnalyzerGenerator.WriteToPath(udmfReadingPath);
+            UdmfSemanticAnalyzerGenerator.WriteToPath(udmfReadingPath);
 
             XlatModelGenerator.WriteToPath(xlatPath);
             XlatParserGenerator.WriteToPath(xlatReadingPath);
