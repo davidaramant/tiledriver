@@ -33,8 +33,8 @@ namespace Tiledriver.Core.Settings
         {
             var steamPath = PathUtil.Combine(GetBaseSteamPath(), "SteamApps", "common");
 
-            var wolf3DPath = PathUtil.Combine(steamPath, "Wolfenstein 3D");
-            var sodPath = PathUtil.Combine(steamPath, "Spear of Destiny");
+            var wolf3DPath = PathUtil.Combine(steamPath, "Wolfenstein 3D", "base");
+            var sodPath = PathUtil.Combine(steamPath, "Spear of Destiny", "base");
 
             return new GamePaths(
                 Wolf3D: PathUtil.VerifyPathExists(wolf3DPath), 
