@@ -20,7 +20,7 @@ using NUnit.Framework;
 namespace Tiledriver.Core.ManualTests
 {
     [TestFixture]
-    public sealed class CaveGenerationManualVisualizationTests
+    public sealed class CaveGenerationVisualization
     {
         [Test,Explicit]
         public void VisualizeGenerations()
