@@ -118,7 +118,7 @@ namespace Tiledriver.DataModelGenerator.Udmf
 
             foreach (var cp in block.Properties.OfType<CollectionProperty>().Where(p => p.Name != "planeMap"))
             {
-                output.Line($"case \"{cp.FormatName}\":").IncreaseIndent()
+                output.Line($"case \"{cp.ElementTypeName.ToLowerInvariant()}\":").IncreaseIndent()
                     .Line($"{cp.Name}Builder.Add(Read{cp.ElementTypeName}(b));")
                     .Line("break;").DecreaseIndent();
             }

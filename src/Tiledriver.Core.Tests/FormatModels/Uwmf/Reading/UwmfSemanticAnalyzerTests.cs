@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Reading
 {
-    public sealed class UwmfSemanticAnalyzerTests
+    public sealed class UdmfSemanticAnalyzerTests
     {
         [Fact]
         public void ShouldRoundTripDemoMap()

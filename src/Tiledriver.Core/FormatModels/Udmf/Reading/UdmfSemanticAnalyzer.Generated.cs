@@ -124,13 +124,13 @@ namespace Tiledriver.Core.FormatModels.Udmf.Reading
                     case Block b:
                         switch (b.Name.Id.ToLower())
                         {
-                            case "lineDef":
+                            case "linedef":
                                 lineDefBuilder.Add(ReadLineDef(b));
                                 break;
-                            case "sideDef":
+                            case "sidedef":
                                 sideDefBuilder.Add(ReadSideDef(b));
                                 break;
-                            case "vertices":
+                            case "vertex":
                                 verticesBuilder.Add(ReadVertex(b));
                                 break;
                             case "sector":
