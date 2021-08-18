@@ -3,9 +3,9 @@
 [![.NET Windows](https://github.com/davidaramant/tiledriver/actions/workflows/dotnet-windows.yml/badge.svg)](https://github.com/davidaramant/tiledriver/actions/workflows/dotnet-windows.yml)
 [![.NET macOS](https://github.com/davidaramant/tiledriver/actions/workflows/dotnet-macos.yml/badge.svg)](https://github.com/davidaramant/tiledriver/actions/workflows/dotnet-macos.yml)
 
-Tiledriver is a .NET toolkit for Unified Wolfenstein Mapping Format (UWMF) levels, supported by the [ECWolf](http://maniacsvault.net/ecwolf/) engine.
+Tiledriver is a .NET toolkit for [Unified Wolfenstein Mapping Format (UWMF)](https://maniacsvault.net/ecwolf/wiki/Universal_Wolfenstein_Map_Format) and [Unified Doom Mapping Format (UDMF)](https://doomwiki.org/wiki/UDMF) levels, supported by [ECWolf](http://maniacsvault.net/ecwolf/) and [ZDoom](https://zdoom.org).
 
-"Toolkit" is deliberatly vague. See the [capabilities](#capabilities) below for more detail about what Tiledriver can actually do.
+"Toolkit" is deliberately vague. See the [capabilities](#capabilities) below for more detail about what Tiledriver can actually do.
 
 Tiledriver supports Windows and macOS. There is nothing intentionally broken about Linux, but I think it needs more Skia packages or something. Support for that platform is not a priority for me so the issue is ignored for now.
 
@@ -28,13 +28,16 @@ Tiledriver does a bunch of random stuff since the goal of the project has shifte
 
 Once upon a time this project had a GUI application written in WPF for viewing UWMF levels. However, this got broken during the migration to .NET 5. A GUI may come back as a Maui app.
 
+A recent (as of writing) change is a sort-of merge with the "sister" [Sector Director](https://github.com/davidaramant/sector-director) project. Sector Director was similar but targeted Doom instead of Wolf 3D.
+
 ### Format Models
 
 |Format|Reading?|Writing?|
 |---|:---:|:---:|
 |[`UWMF`](https://maniacsvault.net/ecwolf/wiki/Universal_Wolfenstein_Map_Format)|Yes|Yes|
+|[`UDMF`](https://doomwiki.org/wiki/UDMF)|Yes|Yes|
 |[`XLAT`](https://maniacsvault.net/ecwolf/wiki/Map_translator)|Yes|No|
-|[`MAPINFO`](https://maniacsvault.net/ecwolf/wiki/MAPINFO)|Partial|TODO|
+|[`MAPINFO`](https://maniacsvault.net/ecwolf/wiki/MAPINFO) (ECWolf flavor)|Partial|TODO|
 |[`TEXTURES`](https://maniacsvault.net/ecwolf/wiki/TEXTURES)|No|Yes|
 |WAD|Yes|Yes|
 |PK3|Yes|Yes|
@@ -50,20 +53,11 @@ Format Notes:
 ### Technical Debt
 
 - [X] The GUI project is broken under .NET 5 - deleted!
-- [X] The parsing system is old and ugly; Sector Director has a much nicer one
-  - [X] Get rid of T4 templates
-  - [X] UWMF
-  - [X] XLAT
-  - [X] MapInfo
 - [ ] There is way too much "temporary" code hanging out in `ECWolfLaucher`
-- [X] There is a `SteamGameSearcher` class that deals with the Windows Registry. Where is this supposed to live? Can you make a truly cross-platform console app in .NET 5?
-- [X] Transition to XUnit/FluentAssertions. Maybe NUnit is causing that weird test failure on Ubuntu
-- [X] Use Skia or something instead of `System.Drawing` since it's broke on macOS
 
 ### Level Generation
 
 - [ ] Move any and all cellular automata stuff out of the launcher project
-- [X] Create generator for Wang tiles
 
 ## Contributors
 
