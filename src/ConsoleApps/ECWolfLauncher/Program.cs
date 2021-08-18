@@ -1,6 +1,6 @@
 ﻿// Copyright (c) 2016, David Aramant
 // Copyright (c) 2017, David Aramant and Aaron Alexander
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using AutoMapper;
 using ShellProgressBar;
@@ -50,7 +50,7 @@ namespace TestRunner
                 //    file =>
                 //    {
                 //        var outputFile = Path.Combine(
-                //            @"C:\Users\david\Desktop\Wolf3D Maps\tiledriver_ltsm_images", 
+                //            @"C:\Users\david\Desktop\Wolf3D Maps\tiledriver_ltsm_images",
                 //            Path.GetFileNameWithoutExtension(file) + ".png");
 
                 //        var mapImage = new ScaledFastImage(64,64,2);
@@ -123,17 +123,17 @@ namespace TestRunner
                 //    Select(s => " " + s + ".metamap").
                 //    ToImmutableArray();
                 //ConvertMetaMapsToImages(
-                //    Directory.EnumerateFiles(@"C:\Users\david\Desktop\Wolf3D Maps\metamaps").Where(name=>!badEndings.Any(name.EndsWith)), 
+                //    Directory.EnumerateFiles(@"C:\Users\david\Desktop\Wolf3D Maps\metamaps").Where(name=>!badEndings.Any(name.EndsWith)),
                 //    outputPath:@"C:\Users\david\Desktop\Wolf3D Maps\Images");
 
-                //var goodMaps = 
+                //var goodMaps =
                 //    Directory.EnumerateFiles(@"C:\Users\david\Desktop\Wolf3D Maps\Images").
                 //    Select(Path.GetFileNameWithoutExtension).
                 //    ToImmutableHashSet();
 
                 //MergeMetaMaps(
                 //    @"C:\git\tiledriver-ml\metamaps_user",
-                //    @"C:\git\tiledriver-ml\MegaMetaMapTrimmed", 
+                //    @"C:\git\tiledriver-ml\MegaMetaMapTrimmed",
                 //    goodMaps: goodMaps,
                 //    condenseSolidRows: true);
 
@@ -157,8 +157,8 @@ namespace TestRunner
 
                 //LoadMapInEcWolf(CAGenerator.Generate(), projectPath: Path.GetFullPath("Cave"));
 
-                const int imageScale = 4;
-                // Visualize multiple generations                
+                //const int imageScale = 4;
+                // Visualize multiple generations
                 //foreach (var generation in Enumerable.Range(0, 7))
                 //{
                 //    var genMap = CAGenerator.Generate(width: 128, height: 128, generations: generation, seed: 0, borderOffset: 0);
@@ -272,7 +272,7 @@ namespace TestRunner
                 {
                     var imagePath = Path.Combine(outputPath, Path.GetFileNameWithoutExtension(mapPath) + ".png");
                     var metaMap = MetaMap.Load(mapPath);
-                    
+
                     MetaMapImageExporter.Export(metaMap, MapPalette.Full, imagePath, scale: 4);
                     progress.Tick();
                 });
@@ -308,7 +308,7 @@ namespace TestRunner
                     {
                         throw new NotImplementedException("What was this doing");
                         //filename = filename.RemoveLast(ending.Length);
-                        break;
+                        //break;
                     }
                 }
 
@@ -356,7 +356,7 @@ namespace TestRunner
                     {
                         throw new NotImplementedException("What was this doing");
                         //filename = filename.RemoveLast(ending.Length);
-                        break;
+                        //break;
                     }
                 }
 
@@ -828,7 +828,7 @@ namespace TestRunner
                     return "DOOR1_1";
                 return "DOOR2_1";
             }
-            
+
             return tile.TextureNorth;
         }
 
@@ -912,7 +912,7 @@ namespace TestRunner
             using (var resources = Pk3File.Open(ecWolfPk3Path))
             {
                 throw new NotImplementedException("WHY IS ALL THIS STUFF HERE?????");
-                //var mapInfos = 
+                //var mapInfos =
                 //    LoadMapInfo(resources, mapInfoStream: resources.Lookup("mapinfo/spear.txt"));
                 //var xlat = XlatReader.Read()
                 //    LoadXlat(resources, resources.Lookup(mapInfos.GameInfo.Value.Translator.Value));

@@ -24,16 +24,16 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures
 
         // Manual test
         //[Fact]
-        public void ShouldRenderTextureAndShowIt()
-        {
-            const string fileName = nameof(RenderedTextureTests) + "_" + nameof(ShouldRenderTextureAndShowIt) + ".png";
-
-            using var stream = File.Open(fileName, FileMode.Create);
-            var texture = new RenderedTexture(BackgroundColor: SKColors.White,
-                Text: "Line 1\nLine 2\nLINE THREE\nLine Four");
-            texture.RenderTo(stream);
-
-            Process.Start("open", fileName);
-        }
+        // public void ShouldRenderTextureAndShowIt()
+        // {
+        //     const string fileName = nameof(RenderedTextureTests) + "_" + nameof(ShouldRenderTextureAndShowIt) + ".png";
+        //
+        //     using var stream = File.Open(fileName, FileMode.Create);
+        //     var texture = new RenderedTexture(BackgroundColor: SKColors.White,
+        //         Text: "Line 1\nLine 2\nLINE THREE\nLine Four");
+        //     texture.RenderTo(stream);
+        //
+        //     Process.Start("open", fileName);
+        // }
     }
 }

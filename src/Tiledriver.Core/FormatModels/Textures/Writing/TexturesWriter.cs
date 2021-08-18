@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Collections.Generic;
@@ -55,8 +55,8 @@ namespace Tiledriver.Core.FormatModels.Textures.Writing
                     .Flag(nameof(patch.FlipY), patch.FlipY)
                     .Flag(nameof(patch.UseOffsets), patch.UseOffsets)
                     .OptionalLine(nameof(patch.Rotate), patch.Rotate, PatchRotation.None, rotation => ((int)rotation).ToString())
-                    .OptionalLine(nameof(patch.Translation), patch.Translation, null, FormatTranslation)
-                    .OptionalLine(nameof(patch.Blend), patch.Blend, null,
+                    .OptionalLine(nameof(patch.Translation), patch.Translation,  FormatTranslation)
+                    .OptionalLine(nameof(patch.Blend), patch.Blend,
                         blend => "\"" + blend.Color + "\"" + (blend.Alpha.HasValue ? $", {blend.Alpha}" : string.Empty))
                     .OptionalLine(nameof(patch.Alpha), patch.Alpha, 1)
                     .OptionalLine(nameof(patch.Style), patch.Style, RenderStyle.Copy, style => style.ToString())
@@ -118,6 +118,16 @@ namespace Tiledriver.Core.FormatModels.Textures.Writing
             public WriterUtil OptionalLine<T>(string name, T value, T defaultValue, Func<T, string> formatter)
             {
                 if (!EqualityComparer<T>.Default.Equals(value, defaultValue))
+                {
+                    Line(name + " " + formatter(value));
+                }
+
+                return this;
+            }
+
+            public WriterUtil OptionalLine<T>(string name, T? value, Func<T, string> formatter) where T: class
+            {
+                if (value != null)
                 {
                     Line(name + " " + formatter(value));
                 }
