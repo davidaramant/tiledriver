@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarks", "Benchmarks\Be
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaveGenerator", "CaveGenerator\CaveGenerator.csproj", "{EE26C5E8-C13D-4424-870E-C0525BEF5EE6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tiledriver.Core.ManualTests", "Tiledriver.Core.ManualTests\Tiledriver.Core.ManualTests.csproj", "{91453A35-B3CA-4768-B496-1DA7ED1B20ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{EE26C5E8-C13D-4424-870E-C0525BEF5EE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE26C5E8-C13D-4424-870E-C0525BEF5EE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE26C5E8-C13D-4424-870E-C0525BEF5EE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91453A35-B3CA-4768-B496-1DA7ED1B20ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91453A35-B3CA-4768-B496-1DA7ED1B20ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91453A35-B3CA-4768-B496-1DA7ED1B20ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91453A35-B3CA-4768-B496-1DA7ED1B20ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

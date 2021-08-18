@@ -1,5 +1,5 @@
 // Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using SkiaSharp;
 using System;
@@ -15,18 +15,14 @@ using Tiledriver.Core.LevelGeometry.Lighting;
 using Tiledriver.Core.Utils.ConnectedComponentLabeling;
 using Tiledriver.Core.Utils.ConnectedComponentLabeling.Extensions;
 using Tiledriver.Core.Utils.Images;
-using Xunit;
-using Xunit.Abstractions;
+using NUnit.Framework;
 
-namespace Tiledriver.Core.Tests.LevelGeometry
+namespace Tiledriver.Core.ManualTests
 {
+    [TestFixture]
     public sealed class CaveGenerationManualVisualizationTests
     {
-        private readonly ITestOutputHelper _output;
-
-        public CaveGenerationManualVisualizationTests(ITestOutputHelper output) => _output = output;
-
-        //[Fact]
+        [Test,Explicit]
         public void VisualizeGenerations()
         {
             const int generations = 6;
@@ -34,7 +30,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry
             Parallel.ForEach(Enumerable.Range(0, 30), seed =>
             {
                 var stopWatch = Stopwatch.StartNew();
-                _output.WriteLine($"Seed {seed} - Start");
+                Console.Out.WriteLine($"Seed {seed} - Start");
                 Size dimensions = new(128, 128);
 
                 var random = new Random(seed);
@@ -79,7 +75,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry
                         .OrderByDescending(component => component.Area)
                         .ToArray();
 
-                _output.WriteLine($"Seed {seed} - {components.Length} connected areas found");
+                Console.Out.WriteLine($"Seed {seed} - {components.Length} connected areas found");
 
                 using var componentsImg = new FastImage(board.Width, board.Height, scale: 10);
                 componentsImg.Fill(SKColors.DarkSlateBlue);
@@ -107,7 +103,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry
 
                 // Show just the largest component
 
-                _output.WriteLine($"Seed {seed} - Area of largest component: {largestComponent.Area}");
+                Console.Out.WriteLine($"Seed {seed} - Area of largest component: {largestComponent.Area}");
 
                 using var largestComponentImg = GenericVisualizer.RenderBinary(
                     dimensions,
@@ -144,7 +140,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry
                         percentAreaToCover: 0.008)
                     .ToArray();
 
-                _output.WriteLine($"Seed {seed} - Number of lights: {lights.Length}");
+                Console.Out.WriteLine($"Seed {seed} - Number of lights: {lights.Length}");
 
                 var (floorLighting, _) =
                     LightTracer.Trace(dimensions, p => board[p] == CellType.Alive, lightRange, lights);
@@ -162,7 +158,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry
 
                 SaveImage(lightImg, ++step, "Lighting & Treasure");
 
-                _output.WriteLine($"Seed {seed} - Took {stopWatch.Elapsed}");
+                Console.Out.WriteLine($"Seed {seed} - Took {stopWatch.Elapsed}");
             });
         }
     }
