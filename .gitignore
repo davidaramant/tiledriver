@@ -242,5 +242,6 @@ _Pvt_Extensions
 /ml/*.metamap
 /src/.idea
 
+src/ConsoleApps/Benchmarks/BenchmarkDotNet*
 WangscapeTilesets/Cave/output/
 WangscapeTilesets/Cave/tiles/

@@ -50,18 +50,23 @@ namespace Tiledriver.Core.Utils.ConnectedComponentLabeling
                 {
                     currentComponentId = JoinAreas(spot, spot.Left());
                 }
+
                 // right
-                if (spot.X < dimensions.Width - 1 && map[spot.Y, spot.X + 1] != currentComponentId && map[spot.Y, spot.X + 1] != 0)
+                if (spot.X < dimensions.Width - 1 && map[spot.Y, spot.X + 1] != currentComponentId &&
+                    map[spot.Y, spot.X + 1] != 0)
                 {
                     currentComponentId = JoinAreas(spot, spot.Right());
                 }
+
                 // top
                 if (spot.Y > 0 && map[spot.Y - 1, spot.X] != currentComponentId && map[spot.Y - 1, spot.X] != 0)
                 {
                     currentComponentId = JoinAreas(spot, spot.Above());
                 }
+
                 // bottom
-                if (spot.Y < dimensions.Height - 1 && map[spot.Y + 1, spot.X] != currentComponentId && map[spot.Y + 1, spot.X] != 0)
+                if (spot.Y < dimensions.Height - 1 && map[spot.Y + 1, spot.X] != currentComponentId &&
+                    map[spot.Y + 1, spot.X] != 0)
                 {
                     currentComponentId = JoinAreas(spot, spot.Below());
                 }
@@ -82,5 +87,73 @@ namespace Tiledriver.Core.Utils.ConnectedComponentLabeling
 
         private static IEnumerable<Position> GetAllSpacesWithId(Size dimensions, int[,] map, int id) =>
             dimensions.GetAllPositions().Where(p => map[p.Y, p.X] == id);
+
+        public static IEnumerable<ConnectedArea> FindEmptyAreas2(Size dimensions, Func<Position, bool> isEmpty)
+        {
+            int label = 0;
+            Dictionary<Position, int> covered = new();
+            Queue<(Position P, int Label)> queue = new();
+
+            IEnumerable<Position> GetNeighbors(Position p)
+            {
+                if (p.X > 0)
+                {
+                    yield return p.Left();
+                }
+
+                if (p.X < dimensions.Width - 1)
+                {
+                    yield return p.Right();
+                }
+
+                if (p.Y > 0)
+                {
+                    yield return p.Above();
+                }
+
+                if (p.Y < dimensions.Height - 1)
+                {
+                    yield return p.Below();
+                }
+            }
+
+            for (int y = 0; y < dimensions.Height; y++)
+            {
+                for (int x = 0; x < dimensions.Width; x++)
+                {
+                    var p = new Position(x, y);
+
+                    if (!isEmpty(p) || covered.ContainsKey(p))
+                        continue;
+
+                    queue.Enqueue((p, label));
+
+                    while (queue.Any())
+                    {
+                        var (qP, currentLabel) = queue.Dequeue();
+                        foreach (var neighbor in GetNeighbors(qP).Where(n => isEmpty(n) && !covered.ContainsKey(n)))
+                        {
+                            covered.Add(neighbor, currentLabel);
+                            queue.Enqueue((neighbor, currentLabel));
+                        }
+                    }
+
+                    label++;
+                }
+            }
+
+            var rawAreas = new List<Position>[label];
+            for (int i = 0; i < label; i++)
+            {
+                rawAreas[i] = new List<Position>();
+            }
+
+            foreach (var pair in covered)
+            {
+                rawAreas[pair.Value].Add(pair.Key);
+            }
+
+            return rawAreas.Select(points => new ConnectedArea(points));
+        }
     }
 }
