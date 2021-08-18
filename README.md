@@ -12,7 +12,7 @@ Tiledriver supports Windows and macOS. There is nothing intentionally broken abo
 ## Table of Contents
 
 * [License](#licensing)
-* [Capcilities](#capabilities)
+* [Capabilities](#capabilities)
 * [TODO](#todo)
 * [Contributors](#contributors)
 
