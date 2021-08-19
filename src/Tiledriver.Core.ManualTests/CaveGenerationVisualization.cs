@@ -22,6 +22,8 @@ namespace Tiledriver.Core.ManualTests
     [TestFixture]
     public sealed class CaveGenerationVisualization
     {
+        private const int ImageScale = 10;
+
         [Test, Explicit]
         public void ShowEntireProcess()
         {
@@ -68,7 +70,8 @@ namespace Tiledriver.Core.ManualTests
                     dimensions,
                     isTrue: p => boardToSave[p] == CellType.Alive,
                     trueColor: SKColors.DarkSlateBlue,
-                    falseColor: SKColors.White);
+                    falseColor: SKColors.White,
+                    scale:ImageScale);
                 SaveImage(img, boardToSave.Generation, $"Cellular Generation {boardToSave.Generation}");
             }
 
@@ -134,7 +137,8 @@ namespace Tiledriver.Core.ManualTests
                 dimensions,
                 isTrue: largestComponent.Contains,
                 trueColor: SKColors.White,
-                falseColor: SKColors.DarkSlateBlue);
+                falseColor: SKColors.DarkSlateBlue,
+                scale:ImageScale);
 
             step++;
             if (visualizeProcess)
@@ -155,7 +159,8 @@ namespace Tiledriver.Core.ManualTests
                     if (distanceToEdge.TryGetValue(p, out int d) && d == 0)
                         return SKColors.Gray;
                     return SKColors.White;
-                });
+                },
+                scale:ImageScale);
 
             step++;
             if (visualizeProcess)

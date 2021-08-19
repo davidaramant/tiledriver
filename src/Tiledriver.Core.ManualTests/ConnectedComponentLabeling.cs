@@ -123,7 +123,8 @@ namespace Tiledriver.Core.ManualTests
                     }
 
                     return SKColors.Black;
-                });
+                },
+                scale:10);
 
             SaveImage(image, "Distance");
         }

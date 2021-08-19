@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using SkiaSharp;
 using System;
@@ -14,13 +14,13 @@ namespace Tiledriver.Core.Utils.Images
                 Func<Position, bool> isTrue,
                 SKColor trueColor,
                 SKColor falseColor,
-                int scale = 10) =>
+                int scale = 1) =>
             RenderPalette(dimensions, getColor: p => isTrue(p) ? trueColor : falseColor, scale);
 
         public static IFastImage RenderPalette(
             Size dimensions,
             Func<Position, SKColor> getColor,
-            int scale = 10)
+            int scale = 1)
         {
             var image = new FastImage(dimensions.Width, dimensions.Height, scale);
 
