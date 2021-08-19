@@ -26,23 +26,21 @@ namespace Tiledriver.Core.ManualTests
         public void ShowEntireProcess()
         {
             CreateCave(
-                seed:13,
-                folderName:"Cave Generation Process",
-                visualizeProcess:true,
-                generations:6);
+                seed: 13,
+                folderName: "Cave Generation Process",
+                visualizeProcess: true,
+                generations: 6);
         }
 
-        [Test,Explicit]
+        [Test, Explicit]
         public void ShowLotsOfSeeds()
         {
             const int generations = 6;
             const bool visualizeProcess = false;
             const string folderName = "Cave Seeds";
 
-            Parallel.ForEach(Enumerable.Range(0, 100), seed =>
-            {
-                CreateCave(seed, folderName, visualizeProcess, generations);
-            });
+            Parallel.ForEach(Enumerable.Range(0, 100),
+                seed => { CreateCave(seed, folderName, visualizeProcess, generations); });
         }
 
         private static void CreateCave(int seed, string folderName, bool visualizeProcess, int generations)
@@ -148,8 +146,7 @@ namespace Tiledriver.Core.ManualTests
 
             // Find interior
 
-            var edge = largestComponent.Where(p => largestComponent.CountAdjacentWalls(p) > 0).ToHashSet();
-            var edge2 = largestComponent.Where(p => p.GetMooreNeighbors().Any(edge.Contains)).ToHashSet();
+            var distanceToEdge = largestComponent.DetermineDistanceToEdges();
 
             using var interiorImg = GenericVisualizer.RenderPalette(
                 dimensions,
@@ -157,7 +154,7 @@ namespace Tiledriver.Core.ManualTests
                 {
                     if (!largestComponent.Contains(p))
                         return SKColors.DarkSlateBlue;
-                    if (edge2.Contains(p))
+                    if (distanceToEdge.TryGetValue(p, out int d) && d == 0)
                         return SKColors.Gray;
                     return SKColors.White;
                 });
@@ -186,7 +183,12 @@ namespace Tiledriver.Core.ManualTests
 
             // Place treasure
             var treasures =
-                CaveThingPlacement.RandomlyPlaceTreasure(largestComponent, edge, floorLighting, lightRange, random);
+                CaveThingPlacement.RandomlyPlaceTreasure(
+                    area: largestComponent,
+                    edge: distanceToEdge.Where(p => p.Value == 0).Select(p => p.Key),
+                    floorLighting: floorLighting,
+                    lightRange: lightRange,
+                    random: random);
 
             foreach (var t in treasures)
             {
