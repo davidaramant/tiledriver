@@ -57,9 +57,7 @@ namespace Tiledriver.Core.ManualTests
                     .Fill(random, probabilityAlive: 0.6)
                     .MakeBorderAlive(thickness: 3);
 
-            DirectoryInfo dirInfo = Directory.CreateDirectory(
-                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                    folderName));
+            DirectoryInfo dirInfo = OutputLocation.CreateDirectory(folderName);
 
             void SaveImage(IFastImage image, int step, string description) =>
                 image.Save(Path.Combine(dirInfo.FullName, $"Seed {seed:00} - Step {step:00} - {description}.png"));

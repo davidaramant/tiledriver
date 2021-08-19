@@ -37,9 +37,7 @@ namespace Tiledriver.Core.ManualTests
         [SetUp]
         public void MakeDirectory()
         {
-            _dirInfo = Directory.CreateDirectory(
-                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                    "CCL Visualizations"));
+            _dirInfo = OutputLocation.CreateDirectory("Connected Component Labeling");
         }
 
         void SaveImage(IFastImage image, string description) =>
@@ -112,7 +110,7 @@ namespace Tiledriver.Core.ManualTests
             var palette =
                 Enumerable
                     .Range(0, maxDistance + 1)
-                    .Select(d => SKColor.FromHsv(0,100 - (100f)*((float)d / maxDistance) , 100))
+                    .Select(d => SKColor.FromHsv(0, 100 - (100f) * ((float)d / maxDistance), 100))
                     .ToArray();
 
             var image = GenericVisualizer.RenderPalette(
@@ -127,7 +125,7 @@ namespace Tiledriver.Core.ManualTests
                     return SKColors.Black;
                 });
 
-            SaveImage(image,"Distance");
+            SaveImage(image, "Distance");
         }
     }
 }
