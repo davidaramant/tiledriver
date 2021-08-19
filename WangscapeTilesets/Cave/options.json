@@ -30,7 +30,8 @@
       "variant"
     ]
   ],
-  "AlphaCalculatorMode":"Max",
+  "AlphaCalculatorMode":"TopTwo",
+  "AlphaCalculatorTopTwoPower": 2,
   "DefaultModuleGroup": "default_module_group.json",
   "LeftBorderModuleGroups": [
     {
