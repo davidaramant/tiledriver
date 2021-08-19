@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using SkiaSharp;
+using Tiledriver.Core.Extensions.Enumerable;
 using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.Utils.CellularAutomata;
 using Tiledriver.Core.Utils.ConnectedComponentLabeling;
@@ -17,40 +18,48 @@ namespace Tiledriver.Core.ManualTests
     [TestFixture]
     public class ConnectedComponentLabeling
     {
-        [Test, Explicit]
-        public void VisualizeComponents()
+        private DirectoryInfo _dirInfo;
+
+        private static CellBoard MakeBoard()
         {
             const int generations = 6;
             const int seed = 3;
             Size dimensions = new(128, 128);
 
             var random = new Random(seed);
-            var board =
+            return
                 new CellBoard(dimensions)
                     .Fill(random, probabilityAlive: 0.6)
                     .MakeBorderAlive(thickness: 3)
                     .RunGenerations(generations, minAliveNeighborsToLive: 5);
+        }
 
-            DirectoryInfo dirInfo = Directory.CreateDirectory(
-                                        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                                            "CCL Visualizations")) ??
-                                    throw new Exception("Could not create directory");
+        [SetUp]
+        public void MakeDirectory()
+        {
+            _dirInfo = Directory.CreateDirectory(
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                    "CCL Visualizations"));
+        }
 
-            void SaveImage(IFastImage image, string description) =>
-                image.Save(Path.Combine(dirInfo.FullName, $"{description}.png"));
+        void SaveImage(IFastImage image, string description) =>
+            image.Save(Path.Combine(_dirInfo.FullName, $"{description}.png"));
 
+        [Test, Explicit]
+        public void VisualizeComponents()
+        {
+            var board = MakeBoard();
 
             var tests = new ( Func<Size, Func<Position, bool>, IEnumerable<ConnectedArea>> Finder, string Description)[]
             {
                 (ConnectedComponentAnalyzer.FindEmptyAreas, "Original"),
-                (ConnectedComponentAnalyzer.FindEmptyAreas2, "New"),
+                //(ConnectedComponentAnalyzer.FindEmptyAreas2, "New"),
             };
 
             List<ConnectedArea[]> results = new(2);
 
             foreach (var test in tests)
             {
-
                 var components =
                     test.Finder(board.Dimensions, p => board[p] == CellType.Dead)
                         .OrderByDescending(component => component.Area)
@@ -84,23 +93,41 @@ namespace Tiledriver.Core.ManualTests
 
                 SaveImage(componentsImg, test.Description);
             }
+        }
 
-            for (int areaIndex = 0; areaIndex < 25; areaIndex++)
-            {
-                var oldArea = results[0][areaIndex];
-                var newArea = results[1][areaIndex];
+        [Test, Explicit]
+        public void DistanceToEdges()
+        {
+            var board = MakeBoard();
+            var largestComponent =
+                ConnectedComponentAnalyzer
+                    .FindEmptyAreas(board.Dimensions, p => board[p] == CellType.Dead)
+                    .MaxElement(component => component.Area) ??
+                throw new InvalidOperationException("This can't happen");
+            var interiorInfo = largestComponent.DetermineDistanceToEdges();
+            var maxDistance = interiorInfo.Values.Max();
 
-                var oldNotInNew = oldArea.Except(newArea).ToArray();
-                var newNotInOld = newArea.Except(oldArea).ToArray();
+            Console.Out.WriteLine($"Max Distance: {maxDistance}");
 
-                if (oldNotInNew.Any() || newNotInOld.Any())
+            var palette =
+                Enumerable
+                    .Range(0, maxDistance + 1)
+                    .Select(d => SKColor.FromHsv(0,100 - (100f)*((float)d / maxDistance) , 100))
+                    .ToArray();
+
+            var image = GenericVisualizer.RenderPalette(
+                board.Dimensions,
+                p =>
                 {
-                    Console.Out.WriteLine($"Area {areaIndex} differs");
-                    Console.Out.WriteLine("Old not in new: " + string.Join(", ", oldNotInNew.Select(p=>p.ToString())));
-                    Console.Out.WriteLine("New not in old: " + string.Join(", ", newNotInOld.Select(p=>p.ToString())));
-                }
-            }
+                    if (interiorInfo.TryGetValue(p, out var distance))
+                    {
+                        return palette[distance];
+                    }
 
+                    return SKColors.Black;
+                });
+
+            SaveImage(image,"Distance");
         }
     }
 }
