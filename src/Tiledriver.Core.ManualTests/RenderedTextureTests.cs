@@ -11,17 +11,23 @@ namespace Tiledriver.Core.ManualTests
 {
     public class RenderedTextureTests
     {
-         [Test, Explicit]
-         public void ShouldRenderTextureAndShowIt()
-         {
-             const string fileName = nameof(RenderedTextureTests) + "_" + nameof(ShouldRenderTextureAndShowIt) + ".png";
+        private DirectoryInfo _dirInfo;
 
-             using var stream = File.Open(fileName, FileMode.Create);
-             var texture = new RenderedTexture(BackgroundColor: SKColors.White,
-                 Text: "Line 1\nLine 2\nLINE THREE\nLine Four");
-             texture.RenderTo(stream);
+        [SetUp]
+        public void CreateDirectory()
+        {
+            _dirInfo = OutputLocation.CreateDirectory("Rendered Textures");
+        }
 
-             Process.Start("open", fileName);
-         }
+        [Test, Explicit]
+        public void RenderTexture()
+        {
+            var filePath = Path.Combine(_dirInfo.FullName, "Text.png");
+
+            using var stream = File.Open(filePath, FileMode.Create);
+            var texture = new RenderedTexture(BackgroundColor: SKColors.White,
+                Text: "Line 1\nLine 2\nLINE THREE\nLine Four");
+            texture.RenderTo(stream);
+        }
     }
 }
