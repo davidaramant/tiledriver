@@ -1,10 +1,11 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Linq;
+using Tiledriver.Core.LevelGeometry;
 
-namespace Tiledriver.Core.LevelGeometry.CellularAutomata
+namespace Tiledriver.Core.Utils.CellularAutomata
 {
     public sealed class CellBoard
     {
@@ -19,7 +20,7 @@ namespace Tiledriver.Core.LevelGeometry.CellularAutomata
 
         private CellType[,] CurrentBoard => Generation % 2 == 0 ? _even : _odd;
         private CellType[,] PreviousBoard => Generation % 2 == 0 ? _odd : _even;
-        
+
         public CellBoard(Size dimensions)
         {
             Dimensions = dimensions;

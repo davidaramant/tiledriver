@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using BenchmarkDotNet.Attributes;
 using Tiledriver.Core.LevelGeometry;
-using Tiledriver.Core.LevelGeometry.CellularAutomata;
+using Tiledriver.Core.Utils.CellularAutomata;
 using Tiledriver.Core.Utils.ConnectedComponentLabeling;
 
 namespace Benchmarks

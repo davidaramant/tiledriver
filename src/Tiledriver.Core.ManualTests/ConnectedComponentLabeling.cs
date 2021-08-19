@@ -8,7 +8,7 @@ using System.Linq;
 using NUnit.Framework;
 using SkiaSharp;
 using Tiledriver.Core.LevelGeometry;
-using Tiledriver.Core.LevelGeometry.CellularAutomata;
+using Tiledriver.Core.Utils.CellularAutomata;
 using Tiledriver.Core.Utils.ConnectedComponentLabeling;
 using Tiledriver.Core.Utils.Images;
 
@@ -18,7 +18,7 @@ namespace Tiledriver.Core.ManualTests
     public class ConnectedComponentLabeling
     {
         [Test, Explicit]
-        public void VisualizeLabelingAlgorithms()
+        public void VisualizeComponents()
         {
             const int generations = 6;
             const int seed = 3;
@@ -43,7 +43,7 @@ namespace Tiledriver.Core.ManualTests
             var tests = new ( Func<Size, Func<Position, bool>, IEnumerable<ConnectedArea>> Finder, string Description)[]
             {
                 (ConnectedComponentAnalyzer.FindEmptyAreas, "Original"),
-                //(ConnectedComponentAnalyzer.FindEmptyAreas2, "New"),
+                (ConnectedComponentAnalyzer.FindEmptyAreas2, "New"),
             };
 
             List<ConnectedArea[]> results = new(2);

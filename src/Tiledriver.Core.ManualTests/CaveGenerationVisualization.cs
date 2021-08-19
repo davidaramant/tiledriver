@@ -9,13 +9,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.LevelGeometry.CaveGeneration;
-using Tiledriver.Core.LevelGeometry.CellularAutomata;
 using Tiledriver.Core.LevelGeometry.Extensions;
 using Tiledriver.Core.LevelGeometry.Lighting;
 using Tiledriver.Core.Utils.ConnectedComponentLabeling;
 using Tiledriver.Core.Utils.ConnectedComponentLabeling.Extensions;
 using Tiledriver.Core.Utils.Images;
 using NUnit.Framework;
+using Tiledriver.Core.Utils.CellularAutomata;
 
 namespace Tiledriver.Core.ManualTests
 {
