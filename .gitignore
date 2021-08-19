@@ -243,5 +243,6 @@ _Pvt_Extensions
 /src/.idea
 
 src/ConsoleApps/Benchmarks/BenchmarkDotNet*
+WangscapeTilesets/Wangscape
 WangscapeTilesets/Cave/output/
 WangscapeTilesets/Cave/tiles/
