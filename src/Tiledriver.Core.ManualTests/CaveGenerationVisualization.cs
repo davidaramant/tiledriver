@@ -22,146 +22,180 @@ namespace Tiledriver.Core.ManualTests
     [TestFixture]
     public sealed class CaveGenerationVisualization
     {
+        [Test, Explicit]
+        public void ShowEntireProcess()
+        {
+            CreateCave(
+                seed:13,
+                folderName:"Cave Generation Process",
+                visualizeProcess:true,
+                generations:6);
+        }
+
         [Test,Explicit]
-        public void VisualizeProcess()
+        public void ShowLotsOfSeeds()
         {
             const int generations = 6;
+            const bool visualizeProcess = false;
+            const string folderName = "Cave Seeds";
 
             Parallel.ForEach(Enumerable.Range(0, 100), seed =>
             {
-                var stopWatch = Stopwatch.StartNew();
+                CreateCave(seed, folderName, visualizeProcess, generations);
+            });
+        }
 
-                void Log(string msg) => Console.WriteLine(stopWatch.Elapsed + ": " + msg);
-                Log($"Seed {seed} - Start");
-                Size dimensions = new(128, 128);
+        private static void CreateCave(int seed, string folderName, bool visualizeProcess, int generations)
+        {
+            var stopWatch = Stopwatch.StartNew();
 
-                var random = new Random(seed);
-                var board =
-                    new CellBoard(dimensions)
-                        .Fill(random, probabilityAlive: 0.6)
-                        .MakeBorderAlive(thickness: 3);
+            void Log(string msg) => Console.WriteLine(stopWatch.Elapsed + ": " + msg);
+            Log($"Seed {seed} - Start");
+            Size dimensions = new(128, 128);
 
-                DirectoryInfo dirInfo = Directory.CreateDirectory(
-                                            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                                                "Cellular Automata Generation Visualizations")) ??
-                                        throw new Exception("Could not create directory");
+            var random = new Random(seed);
+            var board =
+                new CellBoard(dimensions)
+                    .Fill(random, probabilityAlive: 0.6)
+                    .MakeBorderAlive(thickness: 3);
 
-                void SaveImage(IFastImage image, int step, string description) =>
-                    image.Save(Path.Combine(dirInfo.FullName, $"Seed {seed:00} - Step {step:00} - {description}.png"));
+            DirectoryInfo dirInfo = Directory.CreateDirectory(
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                    folderName));
 
-                void SaveBoard(CellBoard boardToSave)
-                {
-                    using var img = GenericVisualizer.RenderBinary(
-                        dimensions,
-                        isTrue: p => boardToSave[p] == CellType.Alive,
-                        trueColor: SKColors.DarkSlateBlue,
-                        falseColor: SKColors.White);
-                    SaveImage(img, boardToSave.Generation, $"Cellular Generation {boardToSave.Generation}");
-                }
+            void SaveImage(IFastImage image, int step, string description) =>
+                image.Save(Path.Combine(dirInfo.FullName, $"Seed {seed:00} - Step {step:00} - {description}.png"));
 
+            void SaveBoard(CellBoard boardToSave)
+            {
+                using var img = GenericVisualizer.RenderBinary(
+                    dimensions,
+                    isTrue: p => boardToSave[p] == CellType.Alive,
+                    trueColor: SKColors.DarkSlateBlue,
+                    falseColor: SKColors.White);
+                SaveImage(img, boardToSave.Generation, $"Cellular Generation {boardToSave.Generation}");
+            }
+
+            if (visualizeProcess)
+            {
                 SaveBoard(board);
+            }
 
-                for (int i = 0; i < generations; i++)
+            for (int i = 0; i < generations; i++)
+            {
+                board = board.RunGenerations(1, minAliveNeighborsToLive: 5);
+                if (visualizeProcess)
                 {
-                    board = board.RunGenerations(1, minAliveNeighborsToLive: 5);
                     SaveBoard(board);
                 }
+            }
 
-                // Find all components, render picture of all of them
+            // Find all components, render picture of all of them
 
-                var step = generations;
+            var step = generations;
 
-                var components =
-                    ConnectedComponentAnalyzer
-                        .FindEmptyAreas(board.Dimensions, p => board[p] == CellType.Dead)
-                        .OrderByDescending(component => component.Area)
-                        .ToArray();
-
-                Log($"Seed {seed} - {components.Length} connected areas found");
-
-                using var componentsImg = new FastImage(board.Width, board.Height, scale: 10);
-                componentsImg.Fill(SKColors.DarkSlateBlue);
-
-                var largestComponent = components.First();
-                foreach (var p in largestComponent)
-                {
-                    componentsImg.SetPixel(p.X, p.Y, SKColors.White);
-                }
-
-                var hueShift = 360d / (components.Length - 1);
-
-                double hue = 0;
-                foreach (ConnectedArea c in components.Skip(1))
-                {
-                    foreach (var p in c)
-                    {
-                        componentsImg.SetPixel(p.X, p.Y, SKColor.FromHsl((float) hue, 100, 50));
-                    }
-
-                    hue += hueShift;
-                }
-
-                SaveImage(componentsImg, ++step, "All Components");
-
-                // Show just the largest component
-
-                Log($"Seed {seed} - Area of largest component: {largestComponent.Area}");
-
-                using var largestComponentImg = GenericVisualizer.RenderBinary(
-                    dimensions,
-                    isTrue: largestComponent.Contains,
-                    trueColor: SKColors.White,
-                    falseColor: SKColors.DarkSlateBlue);
-
-                SaveImage(largestComponentImg, ++step, "Largest Component");
-
-                // Find interior
-
-                var edge = largestComponent.Where(p => largestComponent.CountAdjacentWalls(p) > 0).ToHashSet();
-                var edge2 = largestComponent.Where(p => p.GetMooreNeighbors().Any(edge.Contains)).ToHashSet();
-
-                using var interiorImg = GenericVisualizer.RenderPalette(
-                    dimensions,
-                    getColor: p =>
-                    {
-                        if (!largestComponent.Contains(p))
-                            return SKColors.DarkSlateBlue;
-                        if (edge2.Contains(p))
-                            return SKColors.Gray;
-                        return SKColors.White;
-                    });
-
-                SaveImage(interiorImg, ++step, "Interior");
-
-                // Place some lights
-                var lightRange = new LightRange(DarkLevels: 15, LightLevels: 15);
-                var lights = CaveThingPlacement.RandomlyPlaceLights(
-                        largestComponent,
-                        random,
-                        lightRange,
-                        percentAreaToCover: 0.008)
+            var components =
+                ConnectedComponentAnalyzer
+                    .FindEmptyAreas(board.Dimensions, p => board[p] == CellType.Dead)
+                    .OrderByDescending(component => component.Area)
                     .ToArray();
 
-                Log($"Seed {seed} - Number of lights: {lights.Length}");
+            Log($"Seed {seed} - {components.Length} connected areas found");
 
-                var (floorLighting, _) =
-                    LightTracer.Trace(dimensions, p => board[p] == CellType.Alive, lightRange, lights);
+            using var componentsImg = new FastImage(board.Width, board.Height, scale: 10);
+            componentsImg.Fill(SKColors.DarkSlateBlue);
 
-                using var lightImg = LightMapVisualizer.Render(floorLighting, lights, largestComponent);
+            var largestComponent = components.First();
+            foreach (var p in largestComponent)
+            {
+                componentsImg.SetPixel(p.X, p.Y, SKColors.White);
+            }
 
-                // Place treasure
-                var treasures =
-                    CaveThingPlacement.RandomlyPlaceTreasure(largestComponent, edge, floorLighting, lightRange, random);
+            var hueShift = 360d / (components.Length - 1);
 
-                foreach (var t in treasures)
+            double hue = 0;
+            foreach (ConnectedArea c in components.Skip(1))
+            {
+                foreach (var p in c)
                 {
-                    lightImg.SetPixel(t.Location.X, t.Location.Y, SKColors.Gold);
+                    componentsImg.SetPixel(p.X, p.Y, SKColor.FromHsl((float)hue, 100, 50));
                 }
 
-                SaveImage(lightImg, ++step, "Lighting & Treasure");
+                hue += hueShift;
+            }
 
-                Log($"Seed {seed}");
-            });
+            step++;
+            if (visualizeProcess)
+            {
+                SaveImage(componentsImg, step, "All Components");
+            }
+
+            // Show just the largest component
+
+            Log($"Seed {seed} - Area of largest component: {largestComponent.Area}");
+
+            using var largestComponentImg = GenericVisualizer.RenderBinary(
+                dimensions,
+                isTrue: largestComponent.Contains,
+                trueColor: SKColors.White,
+                falseColor: SKColors.DarkSlateBlue);
+
+            step++;
+            if (visualizeProcess)
+            {
+                SaveImage(largestComponentImg, step, "Largest Component");
+            }
+
+            // Find interior
+
+            var edge = largestComponent.Where(p => largestComponent.CountAdjacentWalls(p) > 0).ToHashSet();
+            var edge2 = largestComponent.Where(p => p.GetMooreNeighbors().Any(edge.Contains)).ToHashSet();
+
+            using var interiorImg = GenericVisualizer.RenderPalette(
+                dimensions,
+                getColor: p =>
+                {
+                    if (!largestComponent.Contains(p))
+                        return SKColors.DarkSlateBlue;
+                    if (edge2.Contains(p))
+                        return SKColors.Gray;
+                    return SKColors.White;
+                });
+
+            step++;
+            if (visualizeProcess)
+            {
+                SaveImage(interiorImg, step, "Interior");
+            }
+
+            // Place some lights
+            var lightRange = new LightRange(DarkLevels: 15, LightLevels: 15);
+            var lights = CaveThingPlacement.RandomlyPlaceLights(
+                    largestComponent,
+                    random,
+                    lightRange,
+                    percentAreaToCover: 0.008)
+                .ToArray();
+
+            Log($"Seed {seed} - Number of lights: {lights.Length}");
+
+            var (floorLighting, _) =
+                LightTracer.Trace(dimensions, p => board[p] == CellType.Alive, lightRange, lights);
+
+            using var lightImg = LightMapVisualizer.Render(floorLighting, lights, largestComponent);
+
+            // Place treasure
+            var treasures =
+                CaveThingPlacement.RandomlyPlaceTreasure(largestComponent, edge, floorLighting, lightRange, random);
+
+            foreach (var t in treasures)
+            {
+                lightImg.SetPixel(t.Location.X, t.Location.Y, SKColors.Gold);
+            }
+
+            SaveImage(lightImg, ++step, "Lighting & Treasure");
+
+            Log($"Seed {seed} - Complete");
         }
     }
 }
