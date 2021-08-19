@@ -18,7 +18,7 @@ namespace Tiledriver.Core.ManualTests
     public class ConnectedComponentLabeling
     {
         [Test, Explicit]
-        public void VisualizeComponents()
+        public void VisualizeLabelingAlgorithms()
         {
             const int generations = 6;
             const int seed = 3;
@@ -43,7 +43,7 @@ namespace Tiledriver.Core.ManualTests
             var tests = new ( Func<Size, Func<Position, bool>, IEnumerable<ConnectedArea>> Finder, string Description)[]
             {
                 (ConnectedComponentAnalyzer.FindEmptyAreas, "Original"),
-                (ConnectedComponentAnalyzer.FindEmptyAreas2, "New"),
+                //(ConnectedComponentAnalyzer.FindEmptyAreas2, "New"),
             };
 
             List<ConnectedArea[]> results = new(2);

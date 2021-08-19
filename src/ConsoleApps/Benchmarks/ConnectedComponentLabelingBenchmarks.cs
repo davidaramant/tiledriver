@@ -13,7 +13,7 @@ namespace Benchmarks
     public class ConnectedComponentLabelingBenchmarks
     {
         private const int Seed = 3;
-        private readonly Size _dimensions = new(128, 128);
+        private readonly Size _dimensions = new(1024, 1024);
         private CellBoard _board;
 
         [GlobalSetup]
@@ -34,11 +34,11 @@ namespace Benchmarks
                 .FindEmptyAreas(_board.Dimensions, p => _board[p] == CellType.Dead).Count();
         }
 
-        [Benchmark]
-        public int Alternative()
-        {
-            return ConnectedComponentAnalyzer
-                .FindEmptyAreas2(_board.Dimensions, p => _board[p] == CellType.Dead).Count();
-        }
+        //[Benchmark]
+        //public int Tweaks()
+        //{
+        //    return ConnectedComponentAnalyzer
+        //        .FindEmptyAreas2(_board.Dimensions, p => _board[p] == CellType.Dead).Count();
+        //}
     }
 }
