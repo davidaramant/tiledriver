@@ -17,7 +17,7 @@ using Tiledriver.Core.Utils.Images;
 namespace Tiledriver.Core.ManualTests
 {
     [TestFixture]
-    public class ConnectedComponentLabeling
+    public class ConnectedComponentLabelingVisualization
     {
         private DirectoryInfo _dirInfo;
 
