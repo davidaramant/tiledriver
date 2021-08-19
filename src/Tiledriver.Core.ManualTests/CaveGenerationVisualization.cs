@@ -148,7 +148,7 @@ namespace Tiledriver.Core.ManualTests
 
             // Find interior
 
-            var distanceToEdge = largestComponent.DetermineDistanceToEdges();
+            var distanceToEdge = largestComponent.DetermineDistanceToEdges(Neighborhood.VonNeumann);
 
             using var interiorImg = GenericVisualizer.RenderPalette(
                 dimensions,

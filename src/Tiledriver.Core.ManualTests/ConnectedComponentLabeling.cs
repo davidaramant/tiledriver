@@ -9,6 +9,7 @@ using NUnit.Framework;
 using SkiaSharp;
 using Tiledriver.Core.Extensions.Enumerable;
 using Tiledriver.Core.LevelGeometry;
+using Tiledriver.Core.LevelGeometry.Extensions;
 using Tiledriver.Core.Utils.CellularAutomata;
 using Tiledriver.Core.Utils.ConnectedComponentLabeling;
 using Tiledriver.Core.Utils.Images;
@@ -102,31 +103,30 @@ namespace Tiledriver.Core.ManualTests
                     .FindEmptyAreas(board.Dimensions, p => board[p] == CellType.Dead)
                     .MaxElement(component => component.Area) ??
                 throw new InvalidOperationException("This can't happen");
-            var interiorInfo = largestComponent.DetermineDistanceToEdges();
-            var maxDistance = interiorInfo.Values.Max();
 
-            Console.Out.WriteLine($"Max Distance: {maxDistance}");
+            foreach (var neighborhood in new[] { Neighborhood.Moore, Neighborhood.VonNeumann })
+            {
+                var interiorInfo = largestComponent.DetermineDistanceToEdges(neighborhood);
+                var maxDistance = interiorInfo.Values.Max();
 
-            var palette =
-                Enumerable
-                    .Range(0, maxDistance + 1)
-                    .Select(d => SKColor.FromHsv(0, 100 - (100f) * ((float)d / maxDistance), 100))
-                    .ToArray();
+                Console.Out.WriteLine($"Max Distance for {neighborhood} Neighborhood: {maxDistance}");
 
-            var image = GenericVisualizer.RenderPalette(
-                board.Dimensions,
-                p =>
-                {
-                    if (interiorInfo.TryGetValue(p, out var distance))
-                    {
-                        return palette[distance];
-                    }
+                var palette =
+                    Enumerable
+                        .Range(0, maxDistance + 1)
+                        .Select(d => SKColor.FromHsv(0, 0, 100f * ((float)d / maxDistance)))
+                        .ToArray();
 
-                    return SKColors.Black;
-                },
-                scale:10);
+                var image = GenericVisualizer.RenderPalette(
+                    board.Dimensions,
+                    p =>
+                        interiorInfo.TryGetValue(p, out var distance)
+                        ? palette[distance]
+                        : SKColors.DarkSlateGray,
+                    scale: 5);
 
-            SaveImage(image, "Distance");
+                SaveImage(image, $"Distance - {neighborhood} Neighborhood");
+            }
         }
     }
 }

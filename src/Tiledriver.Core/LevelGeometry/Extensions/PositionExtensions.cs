@@ -1,10 +1,17 @@
 ﻿// Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
+using System;
 using System.Collections.Generic;
 
 namespace Tiledriver.Core.LevelGeometry.Extensions
 {
+    public enum Neighborhood
+    {
+        VonNeumann,
+        Moore
+    }
+
     public static class PositionExtensions
     {
         public static Position Left(this Position p) => new(p.X - 1, p.Y);
@@ -42,5 +49,12 @@ namespace Tiledriver.Core.LevelGeometry.Extensions
             yield return BelowLeft(p);
         }
 
+        public static IEnumerable<Position> GetNeighbors(this Position p, Neighborhood neighborhood) =>
+            neighborhood switch
+            {
+                Neighborhood.Moore => p.GetMooreNeighbors(),
+                Neighborhood.VonNeumann => p.GetVonNeumannNeighbors(),
+                _ => throw new Exception("Unknown type")
+            };
     }
 }

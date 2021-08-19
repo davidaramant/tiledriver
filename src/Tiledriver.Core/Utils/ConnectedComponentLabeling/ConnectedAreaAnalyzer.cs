@@ -10,7 +10,7 @@ namespace Tiledriver.Core.Utils.ConnectedComponentLabeling
 {
     public static class ConnectedAreaAnalyzer
     {
-        public static IReadOnlyDictionary<Position, int> DetermineDistanceToEdges(this ConnectedArea area)
+        public static IReadOnlyDictionary<Position, int> DetermineDistanceToEdges(this ConnectedArea area, Neighborhood neighborhood)
         {
             LinkedList<Position> remainingPositions = new(area);
             Dictionary<Position, int> posToDistance = new();
@@ -23,10 +23,8 @@ namespace Tiledriver.Core.Utils.ConnectedComponentLabeling
                 return !area.Contains(p) ? -1 : null;
             }
 
-            // Use 8-way neighborhood here instead of 4-way (von Neumann).
-            // 4-way adds ugly artifacts to the process.
             bool IsTouchingDistance(Position p, int distance) =>
-                p.GetMooreNeighbors().Select(GetDistance).Any(d => d == distance);
+                p.GetNeighbors(neighborhood).Select(GetDistance).Any(d => d == distance);
 
             int distance = -1;
             while (remainingPositions.Any())
