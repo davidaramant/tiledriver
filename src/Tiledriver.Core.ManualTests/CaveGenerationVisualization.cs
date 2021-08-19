@@ -23,14 +23,16 @@ namespace Tiledriver.Core.ManualTests
     public sealed class CaveGenerationVisualization
     {
         [Test,Explicit]
-        public void VisualizeGenerations()
+        public void VisualizeProcess()
         {
             const int generations = 6;
 
-            Parallel.ForEach(Enumerable.Range(0, 30), seed =>
+            Parallel.ForEach(Enumerable.Range(0, 100), seed =>
             {
                 var stopWatch = Stopwatch.StartNew();
-                Console.Out.WriteLine($"Seed {seed} - Start");
+
+                void Log(string msg) => Console.WriteLine(stopWatch.Elapsed + ": " + msg);
+                Log($"Seed {seed} - Start");
                 Size dimensions = new(128, 128);
 
                 var random = new Random(seed);
@@ -75,7 +77,7 @@ namespace Tiledriver.Core.ManualTests
                         .OrderByDescending(component => component.Area)
                         .ToArray();
 
-                Console.Out.WriteLine($"Seed {seed} - {components.Length} connected areas found");
+                Log($"Seed {seed} - {components.Length} connected areas found");
 
                 using var componentsImg = new FastImage(board.Width, board.Height, scale: 10);
                 componentsImg.Fill(SKColors.DarkSlateBlue);
@@ -103,7 +105,7 @@ namespace Tiledriver.Core.ManualTests
 
                 // Show just the largest component
 
-                Console.Out.WriteLine($"Seed {seed} - Area of largest component: {largestComponent.Area}");
+                Log($"Seed {seed} - Area of largest component: {largestComponent.Area}");
 
                 using var largestComponentImg = GenericVisualizer.RenderBinary(
                     dimensions,
@@ -140,7 +142,7 @@ namespace Tiledriver.Core.ManualTests
                         percentAreaToCover: 0.008)
                     .ToArray();
 
-                Console.Out.WriteLine($"Seed {seed} - Number of lights: {lights.Length}");
+                Log($"Seed {seed} - Number of lights: {lights.Length}");
 
                 var (floorLighting, _) =
                     LightTracer.Trace(dimensions, p => board[p] == CellType.Alive, lightRange, lights);
@@ -158,7 +160,7 @@ namespace Tiledriver.Core.ManualTests
 
                 SaveImage(lightImg, ++step, "Lighting & Treasure");
 
-                Console.Out.WriteLine($"Seed {seed} - Took {stopWatch.Elapsed}");
+                Log($"Seed {seed}");
             });
         }
     }
