@@ -168,57 +168,6 @@ namespace TestRunner
                 //    SimpleMapImageExporter.Export(genMetaMap, MapPalette.CarveOutRooms, $"ca-gen{generation + 1}.png", scale: imageScale);
                 //}
 
-
-                //var caMap = CAGenerator.Generate(
-                //    width: 128, height: 128,
-                //    stalagmiteProb: 0.02,
-                //    stalactiteProb: 0.04,
-                //    generations: 6,
-                //    seed: 0);
-                //var metaMap = MetaMapAnalyzer.Analyze(caMap, includeAllEmptyAreas: true);
-                //var roomGraph = RoomAnalyzer.Analyze(metaMap);
-                //var trimmedRoomGraph = new RoomGraph(roomGraph.Width, roomGraph.Height,
-                //    new[] { roomGraph.OrderBy(r => r.Area).Last() });
-
-
-                //MetaMapImageExporter.Export(roomGraph, "ca-gen7-playable-spaces.png", scale: imageScale);
-                ////Process.Start("graph.png");
-                //MetaMapImageExporter.Export(trimmedRoomGraph, "ca-gen7-only-largest-room.png", scale: imageScale);
-                ////Process.Start("trimmed-graph.png");
-
-                //// ************************************
-                //// Strip out all but the largest room
-                //var largeRoom = trimmedRoomGraph.First();
-                //var clonedMap = caMap.Clone();
-                //for (int row = 0; row < clonedMap.Height; row++)
-                //{
-                //    for (int col = 0; col < clonedMap.Width; col++)
-                //    {
-                //        if (!largeRoom.Contains(new Point(col, row)))
-                //        {
-                //            var index = row * clonedMap.Width + col;
-                //            clonedMap.PlaneMaps[0].TileSpaces[index].Tile = 0;
-                //        }
-                //    }
-                //}
-
-                //var firstPlayableSpaceIndex = clonedMap.PlaneMaps[0].TileSpaces.Select((ts, index) => (ts, index)).First(_ => !_.Item1.HasTile).Item2;
-                //var playerStart = clonedMap.Things.First(thing => thing.Type == Actor.Player1Start.ClassName);
-                //playerStart.X = firstPlayableSpaceIndex % clonedMap.Width + 0.5;
-                //playerStart.Y = firstPlayableSpaceIndex / clonedMap.Width + 0.5;
-
-                //// remove things that are now in walls
-                //var thingListCopy = clonedMap.Things.ToList();
-                //clonedMap.Things.Clear();
-                //clonedMap.Things.AddRange(thingListCopy.Where(t => !clonedMap.TileSpaceAt(t.TilePosition()).HasTile));
-
-                //// ***************************************
-
-                //LightTracer.AddRandomLightsToMap(clonedMap, largeRoom, lightRadius: 15,
-                //    percentAreaToCoverWithLights: 0.005);
-
-                //LoadMapInEcWolf(clonedMap, "Cave");
-
                 //TranslateGameMapsFormat();
                 //Flatten();
                 //Pk3Test();
@@ -500,69 +449,6 @@ namespace TestRunner
             TestComparison("Wolf3D Map r3m", "Custom Map", -1);
 
             Console.ReadLine();
-        }
-
-        sealed class MapNameComparer : Comparer<string>
-        {
-            [Flags]
-            public enum Type
-            {
-                Wolf3D,
-                Mirrored = 1 << 0,
-                Rotated90 = 1 << 1,
-                Rotated180 = 1 << 2,
-                Rotated270 = 1 << 3,
-                Custom = 1 << 4,
-            }
-
-            public static Type DetermineType(string path)
-            {
-                var fileName = Path.GetFileNameWithoutExtension(path);
-
-                var type = fileName.Contains("Wolf3D") ? Type.Wolf3D : Type.Custom;
-
-                if (fileName.EndsWith(" m"))
-                {
-                    type |= Type.Mirrored;
-                }
-                else if (fileName.EndsWith(" r1"))
-                {
-                    type |= Type.Rotated90;
-                }
-                else if (fileName.EndsWith(" r1m"))
-                {
-                    type |= Type.Mirrored;
-                    type |= Type.Rotated90;
-                }
-                else if (fileName.EndsWith(" r2"))
-                {
-                    type |= Type.Rotated180;
-                }
-                else if (fileName.EndsWith(" r2m"))
-                {
-                    type |= Type.Mirrored;
-                    type |= Type.Rotated180;
-                }
-                else if (fileName.EndsWith(" r3"))
-                {
-                    type |= Type.Rotated270;
-                }
-                else if (fileName.EndsWith(" r3m"))
-                {
-                    type |= Type.Mirrored;
-                    type |= Type.Rotated270;
-                }
-
-                return type;
-            }
-
-            public override int Compare(string x, string y)
-            {
-                var xType = DetermineType(x);
-                var yType = DetermineType(y);
-
-                return xType.CompareTo(yType);
-            }
         }
 
         private static void RemoveDuplicateMaps(string inputPath)
@@ -1022,6 +908,5 @@ namespace TestRunner
 
         private static void LoadMapInEcWolf(MapData uwmfMap) => ConfigLoader.Load().CreateECWolfLauncher().LoadMapInEcWolf(uwmfMap);
     }
-
 }
 
