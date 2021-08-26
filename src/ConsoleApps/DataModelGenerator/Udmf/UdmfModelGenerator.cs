@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Generic;
 using System.IO;
@@ -21,6 +21,10 @@ namespace Tiledriver.DataModelGenerator.Udmf
             foreach (var block in UdmfDefinitions.Blocks)
             {
                 WriteRecord(basePath, block);
+                if (block.Serialization != SerializationType.TopLevel)
+                {
+                    WriteBuilder(basePath, block);
+                }
             }
         }
 
@@ -49,13 +53,47 @@ namespace Tiledriver.DataModelGenerator.Udmf
                 .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
                 .Line($"public sealed partial record {block.ClassName}(")
                 .IncreaseIndent()
-                .JoinLines(",", block.OrderedProperties.Select(GetPropertyDefinition))
+                .JoinLines(",", block.OrderedProperties.Select(GetRecordPropertyDefinition))
                 .DecreaseIndent()
                 .Line(");")
                 .CloseParen();
         }
 
-        static string GetPropertyDefinition(Property property)
+        static void WriteBuilder(string basePath, Block block)
+        {
+            using var blockStream =
+                File.CreateText(Path.Combine(basePath, block.ClassName + "Builder.Generated.cs"));
+            using var output = new IndentedWriter(blockStream);
+
+            var containsTexture = block.Properties.Any(p => p is TextureProperty);
+            var containsNullables = block.Properties.Any(p => !p.HasDefault);
+            List<string> includes = new() {"System.CodeDom.Compiler", "System"};
+            if (containsTexture)
+            {
+                includes.Add("Tiledriver.Core.FormatModels.Common");
+            }
+
+            output
+                .WriteHeader("Tiledriver.Core.FormatModels.Udmf", includes, enableNullables:containsNullables)
+                .OpenParen()
+                .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
+                .Line($"public sealed partial class {block.ClassName}Builder")
+                .OpenParen()
+                .JoinLines("",block.OrderedProperties.Select(GetBuilderPropertyDefinition))
+                .Line()
+                .Line($"public {block.ClassName} Build() =>")
+                .IncreaseIndent()
+                .Line("new(")
+                .IncreaseIndent()
+                .JoinLines(",", block.OrderedProperties.Select(GetBuilderPropertyAssignment))
+                .DecreaseIndent()
+                .Line(");")
+                .DecreaseIndent()
+                .CloseParen()
+                .CloseParen();
+        }
+
+        static string GetRecordPropertyDefinition(Property property)
         {
             var definition = $"{property.PropertyType} {property.PropertyName}";
 
@@ -66,6 +104,41 @@ namespace Tiledriver.DataModelGenerator.Udmf
             }
 
             return definition;
+        }
+
+        static string GetBuilderPropertyDefinition(Property property)
+        {
+            var type = property.PropertyType + (property.HasDefault ? "" : "?");
+
+            var definition = $"{type} {property.PropertyName} {{ get; set; }}";
+
+            var defaultString = property.DefaultString;
+            if (defaultString != null)
+            {
+                definition += $" = {defaultString};";
+            }
+
+            return definition;
+        }
+
+        static string GetBuilderPropertyAssignment(Property property)
+        {
+            var normalAssignment =  $"{property.PropertyName}: {property.PropertyName}";
+
+            if (!property.HasDefault)
+            {
+                if (property is TextureProperty { IsOptional: true })
+                {
+                    normalAssignment += " ?? Texture.None";
+                }
+                else
+                {
+                    normalAssignment +=
+                        $" ?? throw new ArgumentNullException(\"{property.PropertyName} must have a value assigned.\")";
+                }
+            }
+
+            return normalAssignment;
         }
     }
 }

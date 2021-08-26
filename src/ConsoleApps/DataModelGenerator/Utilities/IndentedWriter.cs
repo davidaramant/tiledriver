@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2016, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Collections.Generic;
@@ -16,7 +16,10 @@ namespace Tiledriver.DataModelGenerator.Utilities
         public int IndentionLevel { get; private set; }
         public string CurrentIndent => new string(' ', IndentionLevel * 4);
 
-        public IndentedWriter WriteHeader(string nameSpace, IEnumerable<string> usingNamespaces)
+        public IndentedWriter WriteHeader(
+            string nameSpace,
+            IEnumerable<string> usingNamespaces,
+            bool enableNullables = false)
         {
             Line($@"// Copyright (c) {DateTime.Today.Year}, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.");
@@ -28,6 +31,12 @@ namespace Tiledriver.DataModelGenerator.Utilities
             }
 
             Line();
+
+            if (enableNullables)
+            {
+                Line("#nullable enable");
+            }
+
             Line($"namespace {nameSpace}");
 
             return this;
