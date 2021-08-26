@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Collections.Generic;
@@ -86,11 +86,11 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
             }
 
             return new TileMappings(
-                ambushModzones.ToImmutableList(),
-                changeTriggerModzones.ToImmutableList(),
-                tileTemplates.ToImmutableList(),
-                triggerTemplates.ToImmutableList(),
-                zoneTemplates.ToImmutableList());
+                ambushModzones.ToImmutableArray(),
+                changeTriggerModzones.ToImmutableArray(),
+                tileTemplates.ToImmutableArray(),
+                triggerTemplates.ToImmutableArray(),
+                zoneTemplates.ToImmutableArray());
         }
 
         private static TileMappings ParseTileMappings(IEnumerator<Token> tokenStream)
@@ -134,11 +134,11 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
 
                     case CloseBraceToken:
                         return new TileMappings(
-                            ambushModzones.ToImmutableList(),
-                            changeTriggerModzones.ToImmutableList(),
-                            tileTemplates.ToImmutableList(),
-                            triggerTemplates.ToImmutableList(),
-                            zoneTemplates.ToImmutableList());
+                            ambushModzones.ToImmutableArray(),
+                            changeTriggerModzones.ToImmutableArray(),
+                            tileTemplates.ToImmutableArray(),
+                            triggerTemplates.ToImmutableArray(),
+                            zoneTemplates.ToImmutableArray());
 
                     default:
                         throw ParsingException.CreateError(token, "identifier or end of block");
@@ -266,8 +266,8 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
 
                     case CloseBraceToken:
                         return new FlatMappings(
-                            ceilings.ToImmutableList(),
-                            floors.ToImmutableList());
+                            ceilings.ToImmutableArray(),
+                            floors.ToImmutableArray());
 
                     default:
                         throw ParsingException.CreateError(token, "identifier or end of block");

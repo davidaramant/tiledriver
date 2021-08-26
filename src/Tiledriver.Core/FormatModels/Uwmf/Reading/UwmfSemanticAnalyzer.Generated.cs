@@ -112,13 +112,13 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
         {
             Dictionary<Identifier, Token> fields = new();
             var block = new IdentifierToken(FilePosition.StartOfFile, "MapData");
-            var tileBuilder = ImmutableList.CreateBuilder<Tile>();
-            var sectorBuilder = ImmutableList.CreateBuilder<Sector>();
-            var zoneBuilder = ImmutableList.CreateBuilder<Zone>();
-            var planeBuilder = ImmutableList.CreateBuilder<Plane>();
-            var planeMapBuilder = ImmutableList.CreateBuilder<ImmutableArray<MapSquare>>();
-            var thingBuilder = ImmutableList.CreateBuilder<Thing>();
-            var triggerBuilder = ImmutableList.CreateBuilder<Trigger>();
+            var tileBuilder = ImmutableArray.CreateBuilder<Tile>();
+            var sectorBuilder = ImmutableArray.CreateBuilder<Sector>();
+            var zoneBuilder = ImmutableArray.CreateBuilder<Zone>();
+            var planeBuilder = ImmutableArray.CreateBuilder<Plane>();
+            var planeMapBuilder = ImmutableArray.CreateBuilder<ImmutableArray<MapSquare>>();
+            var thingBuilder = ImmutableArray.CreateBuilder<Thing>();
+            var triggerBuilder = ImmutableArray.CreateBuilder<Trigger>();
 
             foreach(var expression in ast)
             {

@@ -37,16 +37,15 @@ namespace Tiledriver.Core.DemoMaps.Wolf3D
                 Width: mapSize.Width,
                 Height: mapSize.Height,
                 Tiles: tiles,
-                Sectors: ImmutableList.Create<Sector>().Add(
+                Sectors: ImmutableArray.Create(
                     new Sector(
                         TextureCeiling: "#C0C0C0",
                         TextureFloor: "#A0A0A0"
                     )),
-                Zones: ImmutableList.Create<Zone>().Add(new Zone()),
-                Planes: ImmutableList.Create<Plane>().Add(new Plane(Depth: 64)),
-                PlaneMaps: ImmutableList.Create<ImmutableArray<MapSquare>>()
-                    .Add(planeMap),
-                Things: ImmutableList.Create<Thing>().Add(new Thing(
+                Zones: ImmutableArray.Create(new Zone()),
+                Planes: ImmutableArray.Create(new Plane(Depth: 64)),
+                PlaneMaps: ImmutableArray.Create(planeMap),
+                Things: ImmutableArray.Create(new Thing(
                     Type: Actor.Player1Start.ClassName,
                     X: 1.5,
                     Y: 1.5,
@@ -57,11 +56,11 @@ namespace Tiledriver.Core.DemoMaps.Wolf3D
                     Skill3: true,
                     Skill4: true
                 )),
-                Triggers: ImmutableList<Trigger>.Empty
+                Triggers: ImmutableArray<Trigger>.Empty
             );
         }
 
-        private static (ImmutableArray<MapSquare>, ImmutableList<Tile>) CreateGeometry(Size size, TextureQueue textureQueue)
+        private static (ImmutableArray<MapSquare>, ImmutableArray<Tile>) CreateGeometry(Size size, TextureQueue textureQueue)
         {
             var baseTile = DefaultTile.GrayStone1;
             var nsTexture = baseTile.TextureNorth.Name;
@@ -94,10 +93,10 @@ namespace Tiledriver.Core.DemoMaps.Wolf3D
                     TextureWest = newEW,
                 });
 
-                textureQueue.Add(new CompositeTexture(newNS, 64, 64, ImmutableList.Create(
+                textureQueue.Add(new CompositeTexture(newNS, 64, 64, ImmutableArray.Create(
                     new Patch(nsTexture, 0, 0),
                     new Patch(nsTexture, 0, 0, Blend: new ColorBlend("000000", Alpha: 0.1 * darkLevel)))));
-                textureQueue.Add(new CompositeTexture(newEW, 64, 64, ImmutableList.Create(
+                textureQueue.Add(new CompositeTexture(newEW, 64, 64, ImmutableArray.Create(
                     new Patch(ewTexture, 0, 0),
                     new Patch(ewTexture, 0, 0, Blend: new ColorBlend("000000", Alpha: 0.1 * darkLevel)))));
             }
@@ -117,15 +116,15 @@ namespace Tiledriver.Core.DemoMaps.Wolf3D
                     TextureWest = newEW,
                 });
 
-                textureQueue.Add(new CompositeTexture(newNS, 64, 64, ImmutableList.Create(
+                textureQueue.Add(new CompositeTexture(newNS, 64, 64, ImmutableArray.Create(
                     new Patch(nsTexture, 0, 0),
                     new Patch(nsTexture, 0, 0, Blend: new ColorBlend("FFFFFF", Alpha: 0.1 * lightLevel)))));
-                textureQueue.Add(new CompositeTexture(newEW, 64, 64, ImmutableList.Create(
+                textureQueue.Add(new CompositeTexture(newEW, 64, 64, ImmutableArray.Create(
                     new Patch(ewTexture, 0, 0),
                     new Patch(ewTexture, 0, 0, Blend: new ColorBlend("FFFFFF", Alpha: 0.1 * lightLevel)))));
             }
 
-            return (board.ToPlaneMap(), tiles.ToImmutableList());
+            return (board.ToPlaneMap(), tiles.ToImmutableArray());
         }
     }
 }

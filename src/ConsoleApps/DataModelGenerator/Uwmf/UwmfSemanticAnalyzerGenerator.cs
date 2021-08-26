@@ -100,7 +100,7 @@ namespace Tiledriver.DataModelGenerator.Uwmf
                 .Line("Dictionary<Identifier, Token> fields = new();")
                 .Line("var block = new IdentifierToken(FilePosition.StartOfFile, \"MapData\");")
                 .Lines(block.Properties.OfType<CollectionProperty>().Select(cp =>
-                    $"var {cp.Name}Builder = ImmutableList.CreateBuilder<{cp.ElementTypeName}>();"))
+                    $"var {cp.Name}Builder = ImmutableArray.CreateBuilder<{cp.ElementTypeName}>();"))
                 .Line()
                 .Line("foreach(var expression in ast)")
                 .OpenParen()

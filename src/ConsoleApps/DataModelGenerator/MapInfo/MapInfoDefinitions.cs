@@ -92,10 +92,10 @@ namespace Tiledriver.DataModelGenerator.MapInfo
                     new BlockProperty("messageColors"),
                     new StringProperty("messageFontColor"),
                     new StringProperty("pageIndexFontColor"),
-                    new ListProperty("playerClasses", elementType: "string"),
+                    new ArrayProperty("playerClasses", elementType: "string"),
                     new BlockProperty("psyched"),
                     new StringProperty("pushwallSoundSequence"),
-                    new ListProperty("quitMessages", elementType: "string"),
+                    new ArrayProperty("quitMessages", elementType: "string"),
                     new StringProperty("scoresMusic"),
                     new StringProperty("signOn"),
                     new StringProperty("titleMusic"),
@@ -151,7 +151,7 @@ namespace Tiledriver.DataModelGenerator.MapInfo
                 Metadata: ImmutableArray<Property>.Empty.Add(new StringProperty("name")),
                 Properties: new Property[]
                 {
-                    new ListProperty("intermissionActions", elementType: "IIntermissionAction"),
+                    new ArrayProperty("intermissionActions", elementType: "IIntermissionAction"),
                 }.ToImmutableArray()),
 
             new NormalBlock("IntermissionDraw",
@@ -202,7 +202,7 @@ namespace Tiledriver.DataModelGenerator.MapInfo
                 metadata: ImmutableArray<Property>.Empty,
                 properties: new Property[]
                 {
-                    new ListProperty("text", elementType: "string"),
+                    new ArrayProperty("text", elementType: "string"),
                     new IdentifierProperty("textAlignment"),
                     new IdentifierProperty("textAnchor"),
                     new StringProperty("textColor"),
@@ -243,7 +243,7 @@ namespace Tiledriver.DataModelGenerator.MapInfo
                     new BooleanProperty("deathCam", isNullable:true),
                     new StringProperty("defaultCeiling", isNullable:true),
                     new StringProperty("defaultFloor", isNullable:true),
-                    new ListProperty("ensureInventory", elementType: "string"),
+                    new ArrayProperty("ensureInventory", elementType: "string"),
                     new BlockProperty("exitFade", propertyType: "ExitFadeInfo", isNullable:true),
                     new IntegerProperty("floorNumber", isNullable:true),
                     new StringProperty("highScoresGraphic", isNullable:true),
@@ -255,7 +255,7 @@ namespace Tiledriver.DataModelGenerator.MapInfo
                     new BlockProperty("next", propertyType: "NextMapInfo", isNullable:true),
                     new BlockProperty("secretNext", "NextMapInfo", isNullable:true),
                     new BlockProperty("victoryNext", propertyType: "NextMapInfo", isNullable:true),
-                    new ListProperty("SpecialActions", elementType: "SpecialAction"),
+                    new ArrayProperty("SpecialActions", elementType: "SpecialAction"),
                     new FlagProperty("noIntermission",isNullable:true),
                     new IntegerProperty("par", isNullable:true),
                     new StringProperty("translator", isNullable:true),

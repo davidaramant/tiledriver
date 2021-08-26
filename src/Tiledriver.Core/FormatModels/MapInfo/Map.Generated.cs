@@ -10,8 +10,8 @@ namespace Tiledriver.Core.FormatModels.MapInfo
     [GeneratedCode("DataModelGenerator", "1.0.0.0")]
     public sealed partial record Map(
         string MapLump,
-        ImmutableList<string> EnsureInventories,
-        ImmutableList<SpecialAction> SpecialActions,
+        ImmutableArray<string> EnsureInventories,
+        ImmutableArray<SpecialAction> SpecialActions,
         string? MapName = null,
         bool IsMapNameLookup = false,
         string? BorderTexture = null,

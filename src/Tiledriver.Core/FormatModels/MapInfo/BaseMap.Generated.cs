@@ -9,8 +9,8 @@ namespace Tiledriver.Core.FormatModels.MapInfo
 {
     [GeneratedCode("DataModelGenerator", "1.0.0.0")]
     public abstract partial record BaseMap(
-        ImmutableList<string> EnsureInventories,
-        ImmutableList<SpecialAction> SpecialActions,
+        ImmutableArray<string> EnsureInventories,
+        ImmutableArray<SpecialAction> SpecialActions,
         string? BorderTexture = null,
         int? Cluster = null,
         string? CompletionString = null,

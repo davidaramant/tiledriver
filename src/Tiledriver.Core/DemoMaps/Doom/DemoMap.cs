@@ -12,7 +12,7 @@ namespace Tiledriver.Core.DemoMaps.Doom
         {
             return new MapData(
                 NameSpace: "Doom",
-                Vertices: ImmutableList.Create(
+                Vertices: ImmutableArray.Create(
                     new Vertex // 0
                     (
                         X: 0,
@@ -73,7 +73,7 @@ namespace Tiledriver.Core.DemoMaps.Doom
                         Y: 528
                     )
                 ),
-                LineDefs: ImmutableList.Create(
+                LineDefs: ImmutableArray.Create(
                     new LineDef // 0
                     (
                         V1: 0,
@@ -175,7 +175,7 @@ namespace Tiledriver.Core.DemoMaps.Doom
                         Blocking: true
                     )
                 ),
-                SideDefs: ImmutableList.Create(
+                SideDefs: ImmutableArray.Create(
                     new SideDef // 0
                     (
                         sector: 0,
@@ -262,7 +262,7 @@ namespace Tiledriver.Core.DemoMaps.Doom
                         textureMiddle: "SHAWN2"
                     )
                 ),
-                Sectors: ImmutableList.Create(
+                Sectors: ImmutableArray.Create(
                     new Sector
                     (
                         HeightFloor: 0,
@@ -287,7 +287,7 @@ namespace Tiledriver.Core.DemoMaps.Doom
                         LightLevel: 255
                     )
                 ),
-                Things: ImmutableList.Create(
+                Things: ImmutableArray.Create(
                     new Thing(
                         X: 128,
                         Y: 64,

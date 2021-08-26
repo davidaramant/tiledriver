@@ -6,9 +6,9 @@ using System.Collections.Immutable;
 namespace Tiledriver.Core.FormatModels.Xlat
 {
     public sealed record TileMappings(
-            ImmutableList<AmbushModzone> AmbushModzones,
-            ImmutableList<ChangeTriggerModzone> ChangeTriggerModzones,
-            ImmutableList<TileTemplate> TileTemplates,
-            ImmutableList<TriggerTemplate> TriggerTemplates,
-            ImmutableList<ZoneTemplate> ZoneTemplates);
+        ImmutableArray<AmbushModzone> AmbushModzones,
+        ImmutableArray<ChangeTriggerModzone> ChangeTriggerModzones,
+        ImmutableArray<TileTemplate> TileTemplates,
+        ImmutableArray<TriggerTemplate> TriggerTemplates,
+        ImmutableArray<ZoneTemplate> ZoneTemplates);
 }

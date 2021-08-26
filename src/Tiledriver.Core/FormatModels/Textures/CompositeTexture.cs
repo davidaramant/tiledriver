@@ -9,7 +9,7 @@ namespace Tiledriver.Core.FormatModels.Textures
         string Name,
         int Width,
         int Height,
-        ImmutableList<Patch> Patches,
+        ImmutableArray<Patch> Patches,
         bool Optional = false,
         TextureNamespace Namespace = TextureNamespace.Texture,
         TextureOffset Offset = new(),

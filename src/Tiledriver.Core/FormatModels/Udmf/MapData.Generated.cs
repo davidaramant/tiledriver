@@ -9,11 +9,11 @@ namespace Tiledriver.Core.FormatModels.Udmf
     [GeneratedCode("DataModelGenerator", "1.0.0.0")]
     public sealed partial record MapData(
         string NameSpace,
-        ImmutableList<LineDef> LineDefs,
-        ImmutableList<SideDef> SideDefs,
-        ImmutableList<Vertex> Vertices,
-        ImmutableList<Sector> Sectors,
-        ImmutableList<Thing> Things,
+        ImmutableArray<LineDef> LineDefs,
+        ImmutableArray<SideDef> SideDefs,
+        ImmutableArray<Vertex> Vertices,
+        ImmutableArray<Sector> Sectors,
+        ImmutableArray<Thing> Things,
         string Comment = ""
     );
 }

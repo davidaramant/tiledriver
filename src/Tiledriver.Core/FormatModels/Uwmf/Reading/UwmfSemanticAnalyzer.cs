@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -11,7 +11,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
     public static partial class UwmfSemanticAnalyzer
     {
         private static MapSquare ReadMapSquare(IntTuple tuple) =>
-            tuple.Values.Count switch
+            tuple.Values.Length switch
             {
                 3 => new MapSquare(
                     Tile: tuple.Values[0].Value,

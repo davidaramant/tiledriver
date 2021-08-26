@@ -1,5 +1,5 @@
 // Copyright (c) 2019, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -107,7 +107,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
 
         private static IntTuple ParseIntTuple(FilePosition startLocation, IEnumerator<Token> tokenStream)
         {
-            var ints = ImmutableList.CreateBuilder<IntegerToken>();
+            var ints = ImmutableArray.CreateBuilder<IntegerToken>();
 
             var token = tokenStream.GetNext();
             switch (token)

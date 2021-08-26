@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2017, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Collections.Generic;
@@ -216,8 +216,8 @@ namespace Tiledriver.Core.Tests.FormatModels.MapMetadata
             var height = shortHandMap.GetLength(0);
 
             var planeMap = new List<MapSquare>();
-            var things = ImmutableList.CreateBuilder<Thing>();
-            var triggers = ImmutableList.CreateBuilder<Trigger>();
+            var things = ImmutableArray.CreateBuilder<Thing>();
+            var triggers = ImmutableArray.CreateBuilder<Trigger>();
 
             for (int y = 0; y < height; y++)
             {
@@ -259,8 +259,7 @@ namespace Tiledriver.Core.Tests.FormatModels.MapMetadata
                 Name: "To Analyze",
                 Width: width,
                 Height: height,
-                Tiles: new[]
-                {
+                Tiles: ImmutableArray.Create(
                     new Tile
                     (
                         TextureNorth: "GSTONEA1",
@@ -280,20 +279,18 @@ namespace Tiledriver.Core.Tests.FormatModels.MapMetadata
                         BlockingWest: false,
                         BlockingEast: false,
                         Comment: "HoloWall"
-                    ),
-                }.ToImmutableList(),
-                Sectors: ImmutableList.Create<Sector>().Add(
+                    )),
+                Sectors: ImmutableArray.Create(
                     new Sector
                     (
                         TextureCeiling: "#C0C0C0",
                         TextureFloor: "#A0A0A0"
                     )),
-                Zones: ImmutableList.Create<Zone>().Add(new Zone()),
-                Planes: ImmutableList.Create<Plane>().Add(new Plane(Depth: 64)),
-                PlaneMaps: ImmutableList.Create<ImmutableArray<MapSquare>>()
-                    .Add(planeMap.ToImmutableArray()),
-                Things: things.ToImmutableList(),
-                Triggers: triggers.ToImmutableList()
+                Zones: ImmutableArray.Create(new Zone()),
+                Planes: ImmutableArray.Create(new Plane(Depth: 64)),
+                PlaneMaps: ImmutableArray.Create(planeMap.ToImmutableArray()),
+                Things: things.ToImmutableArray(),
+                Triggers: triggers.ToImmutableArray()
             );
         }
     }

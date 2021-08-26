@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using FluentAssertions;
 using System.Collections.Immutable;
@@ -18,14 +18,14 @@ namespace Tiledriver.Core.Tests.FormatModels.Udmf.Writing
         {
             var map = new MapData(
                 NameSpace: "Doom",
-                Vertices: ImmutableList.Create(
+                Vertices: ImmutableArray.Create(
                     new Vertex(1, 2)),
-                LineDefs: ImmutableList<LineDef>.Empty,
-                SideDefs: ImmutableList.Create(
+                LineDefs: ImmutableArray<LineDef>.Empty,
+                SideDefs: ImmutableArray.Create(
                     new SideDef(sector: 0, textureMiddle: "texture")
                     ),
-                Sectors: ImmutableList<Sector>.Empty,
-                Things: ImmutableList<Thing>.Empty);
+                Sectors: ImmutableArray<Sector>.Empty,
+                Things: ImmutableArray<Thing>.Empty);
 
             using var ms = new MemoryStream();
             map.WriteTo(ms);

@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 using System.Collections.Immutable;
 using FluentAssertions;
 using Tiledriver.Core.FormatModels.Udmf;
@@ -19,7 +19,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Udmf.Reading
             CompareCollections(actual:actual.Things, expected:expected.Things);
         }
 
-        private static void CompareCollections<T>(ImmutableList<T> actual, ImmutableList<T> expected)
+        private static void CompareCollections<T>(ImmutableArray<T> actual, ImmutableArray<T> expected)
         {
             actual.Should().BeEquivalentTo(expected, options => options.ComparingByMembers<T>());
         }

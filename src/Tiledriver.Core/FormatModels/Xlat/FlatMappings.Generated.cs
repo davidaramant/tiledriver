@@ -8,7 +8,7 @@ namespace Tiledriver.Core.FormatModels.Xlat
 {
     [GeneratedCode("DataModelGenerator", "1.0.0.0")]
     public sealed partial record FlatMappings(
-        ImmutableList<string> Ceilings,
-        ImmutableList<string> Floors
+        ImmutableArray<string> Ceilings,
+        ImmutableArray<string> Floors
     );
 }

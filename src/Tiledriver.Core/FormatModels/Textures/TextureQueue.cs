@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -39,7 +39,7 @@ namespace Tiledriver.Core.FormatModels.Textures
                         256,
                         XScale: 4,
                         YScale: 4,
-                        Patches: ImmutableList.Create(new Patch(tex.Name, 0, 0, Rotate: renderedTexture.Rotation))));
+                        Patches: ImmutableArray.Create(new Patch(tex.Name, 0, 0, Rotate: renderedTexture.Rotation))));
                 _renderNameLookup.Add(renderedTexture, compositeName);
                 return compositeName;
             }

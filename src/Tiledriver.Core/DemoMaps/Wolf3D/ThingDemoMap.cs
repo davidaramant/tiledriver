@@ -22,7 +22,7 @@ namespace Tiledriver.Core.DemoMaps.Wolf3D
         // TODO: Add arguments for which types of things to include
         public static MapData CreateMapAndTextures(TextureQueue textureQueue)
         {
-            var things = GenerateThings().ToImmutableList();
+            var things = GenerateThings().ToImmutableArray();
 
             int width = things.Max(t => (int)(t.X + 0.5)) + HorizontalBuffer;
             int height = things.Max(t => (int)(t.Y + 0.5)) + VerticalBuffer;
@@ -33,7 +33,7 @@ namespace Tiledriver.Core.DemoMaps.Wolf3D
                 Name: "Thing Demo",
                 Width: width,
                 Height: height,
-                Tiles: ImmutableList.Create(
+                Tiles: ImmutableArray.Create(
                     new Tile(
                         TextureNorth: "GSTONEA1",
                         TextureSouth: "GSTONEA1",
@@ -52,7 +52,7 @@ namespace Tiledriver.Core.DemoMaps.Wolf3D
                         BlockingWest: true,
                         BlockingEast: true
                     )),
-                Sectors: ImmutableList.Create(
+                Sectors: ImmutableArray.Create(
                     new Sector(
                         TextureCeiling: "#C0C0C0",
                         TextureFloor: "#A0A0A0"
@@ -67,9 +67,9 @@ namespace Tiledriver.Core.DemoMaps.Wolf3D
                         TextureFloor: "#FF0000",
                         Comment: "Invalid thing"
                     )),
-                Zones: ImmutableList.Create(new Zone()),
-                Planes: ImmutableList.Create(new Plane(Depth: 64)),
-                PlaneMaps: ImmutableList.Create(CreateGeometry(width: width, height: height, things).ToImmutableArray()),
+                Zones: ImmutableArray.Create(new Zone()),
+                Planes: ImmutableArray.Create(new Plane(Depth: 64)),
+                PlaneMaps: ImmutableArray.Create(CreateGeometry(width: width, height: height, things).ToImmutableArray()),
                 Things: things.Add(
                     new Thing(
                         Type: Actor.Player1Start.ClassName,
@@ -82,7 +82,7 @@ namespace Tiledriver.Core.DemoMaps.Wolf3D
                         Skill2: true,
                         Skill3: true,
                         Skill4: true)),
-                Triggers: ImmutableList.Create(
+                Triggers: ImmutableArray.Create(
                     new Trigger(
                         X: 2,
                         Y: 1,

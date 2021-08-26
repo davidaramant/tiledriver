@@ -107,11 +107,11 @@ namespace Tiledriver.Core.FormatModels.Udmf.Reading
         {
             Dictionary<Identifier, Token> fields = new();
             var block = new IdentifierToken(FilePosition.StartOfFile, "MapData");
-            var lineDefBuilder = ImmutableList.CreateBuilder<LineDef>();
-            var sideDefBuilder = ImmutableList.CreateBuilder<SideDef>();
-            var verticesBuilder = ImmutableList.CreateBuilder<Vertex>();
-            var sectorBuilder = ImmutableList.CreateBuilder<Sector>();
-            var thingBuilder = ImmutableList.CreateBuilder<Thing>();
+            var lineDefBuilder = ImmutableArray.CreateBuilder<LineDef>();
+            var sideDefBuilder = ImmutableArray.CreateBuilder<SideDef>();
+            var verticesBuilder = ImmutableArray.CreateBuilder<Vertex>();
+            var sectorBuilder = ImmutableArray.CreateBuilder<Sector>();
+            var thingBuilder = ImmutableArray.CreateBuilder<Thing>();
 
             foreach(var expression in ast)
             {

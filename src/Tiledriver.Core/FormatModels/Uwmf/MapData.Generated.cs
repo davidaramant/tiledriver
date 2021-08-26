@@ -13,13 +13,13 @@ namespace Tiledriver.Core.FormatModels.Uwmf
         string Name,
         int Width,
         int Height,
-        ImmutableList<Tile> Tiles,
-        ImmutableList<Sector> Sectors,
-        ImmutableList<Zone> Zones,
-        ImmutableList<Plane> Planes,
-        ImmutableList<ImmutableArray<MapSquare>> PlaneMaps,
-        ImmutableList<Thing> Things,
-        ImmutableList<Trigger> Triggers,
+        ImmutableArray<Tile> Tiles,
+        ImmutableArray<Sector> Sectors,
+        ImmutableArray<Zone> Zones,
+        ImmutableArray<Plane> Planes,
+        ImmutableArray<ImmutableArray<MapSquare>> PlaneMaps,
+        ImmutableArray<Thing> Things,
+        ImmutableArray<Trigger> Triggers,
         string Comment = ""
     );
 }

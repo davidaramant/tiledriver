@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using FluentAssertions;
 using System.Collections.Immutable;
@@ -22,21 +22,21 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Writing
                 Name: "Some Name",
                 Width: 2,
                 Height: 1,
-                Tiles: ImmutableList.Create<Tile>().Add(new Tile(
+                Tiles: ImmutableArray.Create(new Tile(
                     TextureEast: "east",
                     TextureNorth: "north",
                     TextureWest: "west",
                     TextureSouth: "south")),
-                Sectors: ImmutableList<Sector>.Empty,
-                Zones: ImmutableList<Zone>.Empty,
-                Planes: ImmutableList<Plane>.Empty,
-                PlaneMaps: ImmutableList.Create<ImmutableArray<MapSquare>>().Add(
+                Sectors: ImmutableArray<Sector>.Empty,
+                Zones: ImmutableArray<Zone>.Empty,
+                Planes: ImmutableArray<Plane>.Empty,
+                PlaneMaps: ImmutableArray.Create(
                     new[] {
                         new MapSquare(1, 2, 3),
                         new MapSquare(4, 5, 6, 7)
                         }.ToImmutableArray()),
-                Things: ImmutableList<Thing>.Empty,
-                Triggers: ImmutableList<Trigger>.Empty);
+                Things: ImmutableArray<Thing>.Empty,
+                Triggers: ImmutableArray<Trigger>.Empty);
 
             using var ms = new MemoryStream();
             map.WriteTo(ms);

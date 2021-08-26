@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Immutable;
 using FluentAssertions;
@@ -26,16 +26,16 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Reading
             CompareCollections(actual:actual.Triggers, expected:expected.Triggers);
             CompareCollections(actual:actual.Zones, expected:expected.Zones);
 
-            actual.PlaneMaps.Should().HaveCount(expected.PlaneMaps.Count);
+            actual.PlaneMaps.Should().HaveCount(expected.PlaneMaps.Length);
 
-            for (int index = 0; index < actual.PlaneMaps.Count; index++)
+            for (int index = 0; index < actual.PlaneMaps.Length; index++)
             {
                 actual.PlaneMaps[index].Should().BeEquivalentTo(
                     expected.PlaneMaps[index],options => options.ComparingByMembers<MapSquare>() );
             }
         }
 
-        private static void CompareCollections<T>(ImmutableList<T> actual, ImmutableList<T> expected)
+        private static void CompareCollections<T>(ImmutableArray<T> actual, ImmutableArray<T> expected)
         {
             actual.Should().BeEquivalentTo(expected, options => options.ComparingByMembers<T>());
         }

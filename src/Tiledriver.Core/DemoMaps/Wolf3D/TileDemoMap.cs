@@ -44,13 +44,12 @@ namespace Tiledriver.Core.DemoMaps.Wolf3D
                 Name: "Tile Demo",
                 Width: mapSize.Width,
                 Height: mapSize.Height,
-                Tiles: originalTiles.Select(ot=>ot.Tile).ToImmutableList(),
+                Tiles: originalTiles.Select(ot=>ot.Tile).ToImmutableArray(),
                 Sectors: sectors,
-                Zones: ImmutableList.Create<Zone>().Add(new Zone()),
-                Planes: ImmutableList.Create<Plane>().Add(new Plane(Depth: 64)),
-                PlaneMaps: ImmutableList.Create<ImmutableArray<MapSquare>>()
-                    .Add(planeMap),
-                Things: ImmutableList.Create<Thing>().Add(new Thing(
+                Zones: ImmutableArray.Create(new Zone()),
+                Planes: ImmutableArray.Create(new Plane(Depth: 64)),
+                PlaneMaps: ImmutableArray.Create(planeMap),
+                Things: ImmutableArray.Create(new Thing(
                     Type: Actor.Player1Start.ClassName,
                     X: 1.5,
                     Y: 1.5,
@@ -61,18 +60,18 @@ namespace Tiledriver.Core.DemoMaps.Wolf3D
                     Skill3: true,
                     Skill4: true
                 )),
-                Triggers: ImmutableList<Trigger>.Empty
+                Triggers: ImmutableArray<Trigger>.Empty
             );
         }
 
-        private static (ImmutableArray<MapSquare>, ImmutableList<Sector>) CreateGeometry(
+        private static (ImmutableArray<MapSquare>, ImmutableArray<Sector>) CreateGeometry(
             IReadOnlyList<(string Name, Tile Tile)> tiles,
             Size size,
             int rows,
             TextureQueue textureQueue)
         {
             var boundaryTileIndex = tiles.FindIndex(namedTile => namedTile.Tile == DefaultTile.GrayStone1);
-            var sectors = ImmutableList.CreateBuilder<Sector>();
+            var sectors = ImmutableArray.CreateBuilder<Sector>();
 
             var defaultSector = new Sector(
                 TextureCeiling: Texture.SolidColor(CeilingColor),

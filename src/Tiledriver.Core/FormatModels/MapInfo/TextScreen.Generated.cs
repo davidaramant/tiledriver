@@ -9,7 +9,7 @@ namespace Tiledriver.Core.FormatModels.MapInfo
 {
     [GeneratedCode("DataModelGenerator", "1.0.0.0")]
     public sealed partial record TextScreen(
-        ImmutableList<string> Texts,
+        ImmutableArray<string> Texts,
         Identifier TextAlignment,
         Identifier TextAnchor,
         string TextColor,

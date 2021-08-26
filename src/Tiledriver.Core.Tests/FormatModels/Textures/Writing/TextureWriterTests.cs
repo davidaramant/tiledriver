@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Collections.Immutable;
@@ -21,7 +21,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures.Writing
                 "ALADDER2",
                 72,
                 256,
-                Patches: ImmutableList.Create(
+                Patches: ImmutableArray.Create(
                     new Patch("RW45_1", 0, 0, Rotate: PatchRotation.Rotate90),
                     new Patch("RW45_1", 0, 64, Rotate: PatchRotation.Rotate90),
                     new Patch("RW45_1", 0, 128, Rotate: PatchRotation.Rotate90),
@@ -62,7 +62,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures.Writing
                 512,
                 XScale: 4,
                 YScale: 4,
-                Patches: ImmutableList.Create(
+                Patches: ImmutableArray.Create(
                     new Patch(
                         "AG_512_2",
                         0,
@@ -100,7 +100,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures.Writing
                 10,
                 10,
                 Offset: new TextureOffset(5, 6),
-                Patches: ImmutableList<Patch>.Empty);
+                Patches: ImmutableArray<Patch>.Empty);
 
             var actual = GetText(texture);
 
@@ -120,7 +120,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures.Writing
                 "Name",
                 10,
                 10,
-                Patches: ImmutableList.Create(
+                Patches: ImmutableArray.Create(
                     new Patch(
                         "Name2",
                         0,
@@ -148,7 +148,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures.Writing
                 "Name",
                 10,
                 10,
-                Patches: ImmutableList.Create(
+                Patches: ImmutableArray.Create(
                     new Patch(
                         "Name2",
                         0,
@@ -176,7 +176,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures.Writing
                 "Name",
                 10,
                 10,
-                Patches: ImmutableList.Create(
+                Patches: ImmutableArray.Create(
                     new Patch(
                         "Name2",
                         0,
