@@ -8,7 +8,13 @@ namespace Tiledriver.Core.LevelGeometry.Extensions
 {
     public enum Neighborhood
     {
+        /// <summary>
+        /// 4-way neighborhood
+        /// </summary>
         VonNeumann,
+        /// <summary>
+        /// 8-way neighborhood
+        /// </summary>
         Moore
     }
 

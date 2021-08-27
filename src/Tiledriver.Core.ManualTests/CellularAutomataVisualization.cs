@@ -22,17 +22,15 @@ namespace Tiledriver.Core.ManualTests
         public void RenderABunchOfOptions()
         {
             var path = OutputLocation.CreateDirectory("Cellular Automata Trials").FullName;
-            const int minGeneration = 5;
-            const int generationRange = 3;
             var trials =
                 (from seed in Enumerable.Range(0, 3)
                     from size in new[] { 128, 192 }
                     from probAlive in new[] { 0.48, 0.5, 0.52 }
                     select (seed, size, probAlive)).ToArray();
 
-            const bool showOnlyLargestArea = true;
+            const bool showOnlyTheLargestArea = true;
 
-            IFastImage Visualize(CellBoard board)
+            IFastImage Visualize(CellBoard board, bool showOnlyLargestArea)
             {
                 if (showOnlyLargestArea)
                 {
@@ -68,7 +66,7 @@ namespace Tiledriver.Core.ManualTests
                         .MakeBorderAlive(thickness: 3)
                         .GenerateStandardCave();
 
-                using var img = Visualize(board);
+                using var img = Visualize(board, showOnlyTheLargestArea);
 
                 img.Save(Path.Combine(path, $"Size {trial.size}" +
                                             $" - ProbAlive {trial.probAlive:F2}" +
