@@ -22,13 +22,41 @@ namespace Tiledriver.Core.ManualTests
         public void RenderABunchOfOptions()
         {
             var path = OutputLocation.CreateDirectory("Cellular Automata Trials").FullName;
-            const int minGeneration = 6;
+            const int minGeneration = 5;
             const int generationRange = 3;
             var trials =
                 (from seed in Enumerable.Range(0, 3)
-                from size in new[] { 128, 192 }
-                from probAlive in new[]{0.59,0.6,0.61}
-                select (seed, size, probAlive)).ToArray();
+                    from size in new[] { 128, 192 }
+                    from probAlive in new[] { 0.48, 0.5, 0.52 }
+                    select (seed, size, probAlive)).ToArray();
+
+            const bool showOnlyLargestArea = true;
+
+            IFastImage Visualize(CellBoard board)
+            {
+                if (showOnlyLargestArea)
+                {
+                    var (area, size) =
+                        ConnectedAreaAnalyzer
+                            .FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Dead)
+                            .MaxElement(component => component.Area)
+                            ?.TrimExcess(1) ??
+                        throw new InvalidOperationException("This can't happen");
+
+                    return GenericVisualizer.RenderBinary(size,
+                        isTrue: area.Contains,
+                        trueColor: SKColors.White,
+                        falseColor: SKColors.Black);
+                }
+                else
+                {
+                    return GenericVisualizer.RenderBinary(board.Dimensions,
+                        isTrue: p => board[p] == CellType.Dead,
+                        trueColor: SKColors.White,
+                        falseColor: SKColors.Black);
+                }
+            }
+
 
             Parallel.ForEach(trials, trial =>
             {
@@ -38,35 +66,14 @@ namespace Tiledriver.Core.ManualTests
                     new CellBoard(new Size(trial.size, trial.size))
                         .Fill(random, probabilityAlive: trial.probAlive)
                         .MakeBorderAlive(thickness: 3)
-                        .RunGenerations(minGeneration);
+                        .GenerateStandardCave();
 
-                for (int i = 0; i <= generationRange; i++)
-                {
-                    if (i > 0)
-                    {
-                        board.RunGenerations(1);
-                    }
+                using var img = Visualize(board);
 
-                    var (area,size) =
-                        ConnectedAreaAnalyzer
-                            .FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Dead)
-                            .MaxElement(component => component.Area)
-                            ?.TrimExcess(1) ??
-                        throw new InvalidOperationException("This can't happen");
-
-                    int generation = minGeneration + i;
-
-                    using var img = GenericVisualizer.RenderBinary(size,
-                        isTrue: area.Contains,
-                        trueColor: SKColors.White,
-                        falseColor: SKColors.Black);
-
-                    img.Save(Path.Combine(path, $"Size {trial.size}" +
-                                                $" - ProbAlive {trial.probAlive:F2}" +
-                                                $" - Seed {trial.seed}" +
-                                                $" - Generations {generation}" +
-                                                $".png"));
-                }
+                img.Save(Path.Combine(path, $"Size {trial.size}" +
+                                            $" - ProbAlive {trial.probAlive:F2}" +
+                                            $" - Seed {trial.seed}" +
+                                            $".png"));
             });
         }
     }

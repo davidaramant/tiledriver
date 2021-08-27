@@ -61,10 +61,10 @@ namespace Tiledriver.Core.Utils.CellularAutomata
             return this;
         }
 
-        public CellBoard RunGenerations(int generations)
+        public CellBoard RunGenerations(int generations, Func<Func<int, int>,bool>? isNextGenAlive = null)
         {
-            const int minAliveNeighborsToLive = 5;
-            
+            isNextGenAlive ??= (countAlive => countAlive(1) >= 5);
+
             foreach (var g in Enumerable.Range(1, generations))
             {
                 Generation++;
@@ -73,10 +73,7 @@ namespace Tiledriver.Core.Utils.CellularAutomata
                 {
                     for (int col = 0; col < Width; col++)
                     {
-                        var aliveNeighbors = CountAliveNeighbors(PreviousBoard, row: row, col: col);
-
-                        CurrentBoard[row, col] =
-                            aliveNeighbors >= minAliveNeighborsToLive ? CellType.Alive : CellType.Dead;
+                        CurrentBoard[row, col] = isNextGenAlive(radius => CountAliveNeighbors(PreviousBoard,row,col,radius)) ? CellType.Alive : CellType.Dead;
                     }
                 }
             }
@@ -84,56 +81,26 @@ namespace Tiledriver.Core.Utils.CellularAutomata
             return this;
         }
 
-        private int CountAliveNeighbors(CellType[,] board, int row, int col)
+        private int CountAliveNeighbors(CellType[,] board, int row, int col, int radius)
         {
             int count = 0;
 
-            // Horizontal
-            // left
-            if (col > 0 && board[row, col - 1] == CellType.Alive)
+            for (int y = row - radius; y < row + radius + 1; y++)
             {
-                count++;
-            }
-            // right
-            if (col < Dimensions.Width - 1 && board[row, col + 1] == CellType.Alive)
-            {
-                count++;
-            }
+                for (int x = col - radius; x < col + radius + 1; x++)
+                {
+                    if (x < 0 || x >= Dimensions.Width ||
+                        y < 0 || y >= Dimensions.Height ||
+                        (x == col && y == col))
+                    {
+                        continue;
+                    }
 
-            // Vertical
-            // top
-            if (row > 0 && board[row - 1, col] == CellType.Alive)
-            {
-                count++;
-            }
-            // bottom
-            if (row < Dimensions.Height - 1 && board[row + 1, col] == CellType.Alive)
-            {
-                count++;
-            }
-
-            // top left corner
-            if (col > 0 && row > 0 && board[row - 1, col - 1] == CellType.Alive)
-            {
-                count++;
-            }
-
-            // top right corner
-            if (col < Dimensions.Width - 1 && row > 0 && board[row - 1, col + 1] == CellType.Alive)
-            {
-                count++;
-            }
-
-            // bottom left corner
-            if (col > 0 && row < Dimensions.Height - 1 && board[row + 1, col - 1] == CellType.Alive)
-            {
-                count++;
-            }
-
-            // bottom right corner
-            if (col < Dimensions.Width - 1 && row < Dimensions.Height - 1 && board[row + 1, col + 1] == CellType.Alive)
-            {
-                count++;
+                    if (board[y, x] == CellType.Alive)
+                    {
+                        count++;
+                    }
+                }
             }
 
             return count;

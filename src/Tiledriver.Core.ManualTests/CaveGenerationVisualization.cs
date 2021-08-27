@@ -30,22 +30,20 @@ namespace Tiledriver.Core.ManualTests
             CreateCave(
                 seed: 13,
                 folderName: "Cave Generation Process",
-                visualizeProcess: true,
-                generations: 6);
+                visualizeProcess: true);
         }
 
         [Test, Explicit]
         public void ShowLotsOfSeeds()
         {
-            const int generations = 6;
             const bool visualizeProcess = false;
             const string folderName = "Cave Seeds";
 
             Parallel.ForEach(Enumerable.Range(0, 100),
-                seed => { CreateCave(seed, folderName, visualizeProcess, generations); });
+                seed => { CreateCave(seed, folderName, visualizeProcess); });
         }
 
-        private static void CreateCave(int seed, string folderName, bool visualizeProcess, int generations)
+        private static void CreateCave(int seed, string folderName, bool visualizeProcess)
         {
             var stopWatch = Stopwatch.StartNew();
 
@@ -56,7 +54,7 @@ namespace Tiledriver.Core.ManualTests
             var random = new Random(seed);
             var board =
                 new CellBoard(dimensions)
-                    .Fill(random, probabilityAlive: 0.6)
+                    .Fill(random, probabilityAlive: 0.5)
                     .MakeBorderAlive(thickness: 3);
 
             DirectoryInfo dirInfo = OutputLocation.CreateDirectory(folderName);
@@ -80,18 +78,27 @@ namespace Tiledriver.Core.ManualTests
                 SaveBoard(board);
             }
 
-            for (int i = 0; i < generations; i++)
+            if (visualizeProcess)
             {
-                board = board.RunGenerations(1);
-                if (visualizeProcess)
+                for (int i = 0; i < 4; i++)
                 {
+                    board.RunGenerations(1, CellRule.FiveNeighborsOrInEmptyArea);
+                        SaveBoard(board);
+                }
+                for (int i = 0; i < 3; i++)
+                {
+                    board.RunGenerations(1, CellRule.FiveNeighbors);
                     SaveBoard(board);
                 }
+            }
+            else
+            {
+                board.GenerateStandardCave();
             }
 
             // Find all components, render picture of all of them
 
-            var step = generations;
+            var step = 7;
 
             var components =
                 ConnectedAreaAnalyzer
