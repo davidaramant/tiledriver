@@ -51,8 +51,8 @@ namespace Tiledriver.Core.ManualTests
 
             var tests = new ( Func<Size, Func<Position, bool>, IEnumerable<ConnectedArea>> Finder, string Description)[]
             {
-                (ConnectedComponentAnalyzer.FindEmptyAreas, "Original"),
-                //(ConnectedComponentAnalyzer.FindEmptyAreas2, "New"),
+                (ConnectedAreaAnalyzer.FindForegroundAreas, "Original"),
+                //(ConnectedAreaAnalyzer.FindEmptyAreas2, "New"),
             };
 
             List<ConnectedArea[]> results = new(2);
@@ -99,8 +99,8 @@ namespace Tiledriver.Core.ManualTests
         {
             var board = MakeBoard();
             var largestComponent =
-                ConnectedComponentAnalyzer
-                    .FindEmptyAreas(board.Dimensions, p => board[p] == CellType.Dead)
+                ConnectedAreaAnalyzer
+                    .FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Dead)
                     .MaxElement(component => component.Area) ??
                 throw new InvalidOperationException("This can't happen");
 

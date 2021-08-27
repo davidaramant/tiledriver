@@ -94,8 +94,8 @@ namespace Tiledriver.Core.ManualTests
             var step = generations;
 
             var components =
-                ConnectedComponentAnalyzer
-                    .FindEmptyAreas(board.Dimensions, p => board[p] == CellType.Dead)
+                ConnectedAreaAnalyzer
+                    .FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Dead)
                     .OrderByDescending(component => component.Area)
                     .ToArray();
 

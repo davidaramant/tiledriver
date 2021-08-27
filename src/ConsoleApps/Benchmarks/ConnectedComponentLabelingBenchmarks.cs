@@ -30,14 +30,14 @@ namespace Benchmarks
         [Benchmark]
         public int Baseline()
         {
-            return ConnectedComponentAnalyzer
-                .FindEmptyAreas(_board.Dimensions, p => _board[p] == CellType.Dead).Count();
+            return ConnectedAreaAnalyzer
+                .FindForegroundAreas(_board.Dimensions, p => _board[p] == CellType.Dead).Count();
         }
 
         //[Benchmark]
         //public int Tweaks()
         //{
-        //    return ConnectedComponentAnalyzer
+        //    return ConnectedAreaAnalyzer
         //        .FindEmptyAreas2(_board.Dimensions, p => _board[p] == CellType.Dead).Count();
         //}
     }

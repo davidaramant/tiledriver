@@ -49,8 +49,8 @@ namespace Tiledriver.Core.ManualTests
                     }
 
                     var largestComponent =
-                        ConnectedComponentAnalyzer
-                            .FindEmptyAreas(board.Dimensions, p => board[p] == CellType.Dead)
+                        ConnectedAreaAnalyzer
+                            .FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Dead)
                             .MaxElement(component => component.Area) ??
                         throw new InvalidOperationException("This can't happen");
 
