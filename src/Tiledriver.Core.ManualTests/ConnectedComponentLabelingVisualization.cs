@@ -32,7 +32,7 @@ namespace Tiledriver.Core.ManualTests
                 new CellBoard(dimensions)
                     .Fill(random, probabilityAlive: 0.6)
                     .MakeBorderAlive(thickness: 3)
-                    .RunGenerations(generations, minAliveNeighborsToLive: 5);
+                    .RunGenerations(generations);
         }
 
         [SetUp]

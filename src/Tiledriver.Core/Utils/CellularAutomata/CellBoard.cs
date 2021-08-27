@@ -61,8 +61,10 @@ namespace Tiledriver.Core.Utils.CellularAutomata
             return this;
         }
 
-        public CellBoard RunGenerations(int generations, int minAliveNeighborsToLive)
+        public CellBoard RunGenerations(int generations)
         {
+            const int minAliveNeighborsToLive = 5;
+            
             foreach (var g in Enumerable.Range(1, generations))
             {
                 Generation++;

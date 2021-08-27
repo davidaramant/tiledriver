@@ -24,7 +24,7 @@ namespace Benchmarks
                 new CellBoard(_dimensions)
                     .Fill(random, probabilityAlive: 0.6)
                     .MakeBorderAlive(thickness: 3)
-                    .RunGenerations(6, minAliveNeighborsToLive: 5);
+                    .RunGenerations(6);
         }
 
         [Benchmark]

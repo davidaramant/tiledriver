@@ -82,7 +82,7 @@ namespace Tiledriver.Core.ManualTests
 
             for (int i = 0; i < generations; i++)
             {
-                board = board.RunGenerations(1, minAliveNeighborsToLive: 5);
+                board = board.RunGenerations(1);
                 if (visualizeProcess)
                 {
                     SaveBoard(board);

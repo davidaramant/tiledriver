@@ -28,8 +28,7 @@ namespace Tiledriver.Core.ManualTests
                 (from seed in Enumerable.Range(0, 3)
                 from size in new[] { 128, 192 }
                 from probAlive in new[]{0.59,0.6,0.61}
-                from minAlive in new []{5}
-                select (seed, size, probAlive, minAlive)).ToArray();
+                select (seed, size, probAlive)).ToArray();
 
             Parallel.ForEach(trials, trial =>
             {
@@ -39,32 +38,31 @@ namespace Tiledriver.Core.ManualTests
                     new CellBoard(new Size(trial.size, trial.size))
                         .Fill(random, probabilityAlive: trial.probAlive)
                         .MakeBorderAlive(thickness: 3)
-                        .RunGenerations(minGeneration,trial.minAlive);
+                        .RunGenerations(minGeneration);
 
                 for (int i = 0; i <= generationRange; i++)
                 {
                     if (i > 0)
                     {
-                        board.RunGenerations(1, trial.minAlive);
+                        board.RunGenerations(1);
                     }
 
-                    var largestComponent =
+                    var (area,size) =
                         ConnectedAreaAnalyzer
                             .FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Dead)
-                            .MaxElement(component => component.Area) ??
+                            .MaxElement(component => component.Area)
+                            ?.TrimExcess(1) ??
                         throw new InvalidOperationException("This can't happen");
 
                     int generation = minGeneration + i;
 
-                    using var img = GenericVisualizer.RenderBinary(board.Dimensions,
-                        isTrue: largestComponent.Contains,
+                    using var img = GenericVisualizer.RenderBinary(size,
+                        isTrue: area.Contains,
                         trueColor: SKColors.White,
-                        falseColor: SKColors.Black,
-                        scale:1024/trial.size);
+                        falseColor: SKColors.Black);
 
                     img.Save(Path.Combine(path, $"Size {trial.size}" +
                                                 $" - ProbAlive {trial.probAlive:F2}" +
-                                                $" - MinAlive {trial.minAlive}" +
                                                 $" - Seed {trial.seed}" +
                                                 $" - Generations {generation}" +
                                                 $".png"));
