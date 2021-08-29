@@ -44,7 +44,7 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                     .Fill(random, probabilityAlive: 0.5)
                     .RunGenerations(6);
 
-            var lightRange = new LightRange(DarkLevels: 15, LightLevels: 15);
+            var lightRange = new LightRange(DarkLevels: 15, LightLevels: 5);
             var lights = CaveThingPlacement.RandomlyPlaceLights(
                     caveArea,
                     random,
@@ -122,38 +122,68 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
         {
             var planeMap = new Canvas(size);
 
-            double GetAlpha(int light)
-            {
-                double min = 0.2;
-                double darkStep = (1 - min) / ceilingLight.Range.DarkLevels;
-                double max = 1.3;
-                double lightStep = (max - 1) / ceilingLight.Range.LightLevels;
+            double minLight = 0.2;
+            double darkStep = (1 - minLight) / ceilingLight.Range.DarkLevels;
+            double maxLight = 1.1;
+            double lightStep = (maxLight - 1) / ceilingLight.Range.LightLevels;
 
-                return light switch
+
+            double GetAlpha(int light) =>
+                light switch
                 {
                     0 => 0,
                     int pos when pos > 0 => pos * lightStep,
                     int neg when neg < 0 => -neg * darkStep,
                     _ => throw new InvalidOperationException("Impossible")
                 };
-            }
 
 
-            string GetTextureName(Corners corners, int light)
+            string GetTextureName(Corners corners, int light, bool isEastWest = false)
             {
-                string name = $"t{(int)corners:D2}{light::+#;-#;+#}";
-                textureQueue.Add(new CompositeTexture(name, 256, 256,
-                    ImmutableArray.Create(
+                string name = $"t{(int)corners:D2}{light:+#;-#;#}{(isEastWest ? "dark" : "")}";
+
+                var patches = ImmutableArray.CreateBuilder<Patch>();
+
+                if (light > 0)
+                {
+                    patches.Add(
                         new Patch(
                             $"{texturePrefix}{(int)corners:D2}",
                             0,
-                            0),
+                            0,
+                            Blend: new ColorBlend("FFFFFF", GetAlpha(light))));
+                }
+                else if(light < 0)
+                {
+                    patches.Add(
                         new Patch(
                             $"{texturePrefix}{(int)corners:D2}",
                             0,
                             0,
-                            Blend: new ColorBlend(light >= 0 ? "FFFFFF" : "000000", GetAlpha(light)))),
-                    XScale: 4, YScale: 4));
+                            Blend: new ColorBlend("000000", GetAlpha(light))));
+                }
+                else
+                {
+                    patches.Add(
+                        new Patch(
+                            $"{texturePrefix}{(int)corners:D2}",
+                            0,
+                            0));
+                }
+
+                if (isEastWest)
+                {
+                    patches.Add(
+                        new Patch(
+                            $"{texturePrefix}{(int)corners:D2}",
+                            0,
+                            0,
+                            Blend: new ColorBlend("000000"),
+                            Style: RenderStyle.Translucent,
+                            Alpha: 0.075));
+                }
+
+                textureQueue.Add(new CompositeTexture(name, 256, 256, patches.ToImmutable(), XScale: 4, YScale: 4));
                 return name;
 
             }
@@ -179,9 +209,9 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                     TextureFloor: GetTextureName(description.Floor, description.FloorLight)));
             var tileSequence = new ModelSequence<TileDescription, Tile>(description =>
                 new Tile(
-                    TextureEast: GetTextureName(description.EastCorners, description.EastLight),
+                    TextureEast: GetTextureName(description.EastCorners, description.EastLight, isEastWest: true),
                     TextureNorth: GetTextureName(description.NorthCorners, description.NorthLight),
-                    TextureWest: GetTextureName(description.WestCorners, description.WestLight),
+                    TextureWest: GetTextureName(description.WestCorners, description.WestLight, isEastWest: true),
                     TextureSouth: GetTextureName(description.SouthCorners, description.SouthLight),
                     TextureOverhead: GetTextureName(description.FloorCorners, 0)));
 
