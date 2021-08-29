@@ -46,7 +46,7 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                     .RunGenerations(6);
 
             var (planeMap, sectors, tiles) =
-                CreateGeometry(caveBoard.Dimensions, caveArea, alternateFloor, alternateCeiling, textureQueue);
+                CreateGeometry(caveBoard.Dimensions, caveArea, alternateFloor, alternateCeiling, textureQueue, texturePrefix);
 
             var playerPosition = caveArea.First();
 
@@ -81,7 +81,8 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
             ConnectedArea cave,
             CellBoard alternateFloor,
             CellBoard alternateCeiling,
-            TextureQueue textureQueue)
+            TextureQueue textureQueue,
+            string texturePrefix)
         {
             var planeMap = new Canvas(size);
 
@@ -89,7 +90,7 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
             {
                 string name = $"t{(int)corners:D2}";
                 textureQueue.Add(new CompositeTexture(name, 256, 256,
-                    ImmutableArray.Create(new Patch($"TILE{(int)corners:D2}", 0, 0)),
+                    ImmutableArray.Create(new Patch($"{texturePrefix}{(int)corners:D2}", 0, 0)),
                     XScale: 4, YScale: 4));
                 return name;
 
