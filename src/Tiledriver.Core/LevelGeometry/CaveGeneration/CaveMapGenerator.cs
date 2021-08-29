@@ -34,14 +34,19 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
 
             var interior = caveArea.DetermineDistanceToEdges(Neighborhood.VonNeumann);
 
-            var alternateMaterial =
+            var alternateFloor =
+                new CellBoard(new Size(caveBoard.Dimensions.Width + 1, caveBoard.Dimensions.Height + 1))
+                    .Fill(random, probabilityAlive: 0.5)
+                    .MakeBorderAlive(thickness: 3)
+                    .RunGenerations(6);
+            var alternateCeiling =
                 new CellBoard(new Size(caveBoard.Dimensions.Width + 1, caveBoard.Dimensions.Height + 1))
                     .Fill(random, probabilityAlive: 0.5)
                     .MakeBorderAlive(thickness: 3)
                     .RunGenerations(6);
 
             var (planeMap, sectors, tiles) =
-                CreateGeometry(caveBoard.Dimensions, caveArea, alternateMaterial, textureQueue);
+                CreateGeometry(caveBoard.Dimensions, caveArea, alternateFloor, alternateCeiling, textureQueue);
 
             var playerPosition = caveArea.First();
 
@@ -74,7 +79,8 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
         static (ImmutableArray<MapSquare>, ImmutableArray<Sector>, ImmutableArray<Tile>) CreateGeometry(
             Size size,
             ConnectedArea cave,
-            CellBoard alternateMaterial,
+            CellBoard alternateFloor,
+            CellBoard alternateCeiling,
             TextureQueue textureQueue)
         {
             var planeMap = new Canvas(size);
@@ -89,23 +95,31 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
 
             }
 
+            Corners GetCorners(CellBoard board, Position pos) => ToCorners(
+                topLeft: board[pos] == CellType.Dead,
+                topRight: board[pos.Right()] == CellType.Dead,
+                bottomLeft: board[pos.Below()] == CellType.Dead,
+                bottomRight: board[pos.BelowRight()] == CellType.Dead);
+
             var sectorSequence = new ModelSequence<SectorDescription, Sector>(description =>
                 new Sector(
-                    TextureCeiling: GetTextureName(description.Ceiling,description.CeilingLight),
-                    TextureFloor: GetTextureName(description.Floor,description.FloorLight)));
+                    TextureCeiling: GetTextureName(description.Ceiling, description.CeilingLight),
+                    TextureFloor: GetTextureName(description.Floor, description.FloorLight)));
             var tileSequence = new ModelSequence<TileDescription, Tile>(description =>
                 new Tile(
-                    TextureEast: GetTextureName(description.EastCorners,description.EastLight),
-                    TextureNorth: GetTextureName(description.NorthCorners,description.NorthLight),
-                    TextureWest: GetTextureName(description.WestCorners,description.WestLight),
-                    TextureSouth: GetTextureName(description.SouthCorners,description.SouthLight)));
+                    TextureEast: GetTextureName(description.EastCorners, description.EastLight),
+                    TextureNorth: GetTextureName(description.NorthCorners, description.NorthLight),
+                    TextureWest: GetTextureName(description.WestCorners, description.WestLight),
+                    TextureSouth: GetTextureName(description.SouthCorners, description.SouthLight)));
 
             for (int y = 0; y < size.Height; y++)
             {
                 for (int x = 0; x < size.Width; x++)
                 {
+                    var pos = new Position(x, y);
+
                     int tileId = -1;
-                    if (!cave.Contains(new Position(x, y)))
+                    if (!cave.Contains(pos))
                     {
                         tileId = tileSequence.GetIndex(new TileDescription(
                             NorthCorners: Corners.None,
@@ -119,8 +133,8 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                     }
 
                     int sectorId = sectorSequence.GetIndex(new SectorDescription(
-                        Floor: Corners.None,
-                        Ceiling: Corners.None,
+                        Floor: GetCorners(alternateFloor, pos),
+                        Ceiling: GetCorners(alternateCeiling, pos),
                         FloorLight: 0,
                         CeilingLight: 0));
 
@@ -136,6 +150,12 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                 sectorSequence.GetDefinitions().ToImmutableArray(),
                 tileSequence.GetDefinitions().ToImmutableArray());
         }
+
+        private static Corners ToCorners(bool topLeft, bool topRight, bool bottomLeft, bool bottomRight) =>
+            (topLeft ? Corners.TopLeft : Corners.None) |
+            (bottomLeft ? Corners.BottomLeft : Corners.None) |
+            (topRight ? Corners.TopRight : Corners.None) |
+            (bottomRight ? Corners.BottomRight : Corners.None);
 
         private sealed record SectorDescription(
             Corners Floor,
