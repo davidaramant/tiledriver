@@ -23,15 +23,15 @@ namespace WangscapeTilesetChopper.Model
             }
             if (CornerTextures[1] == "variant")
             {
-                corners |= Corners.TopRight;
+                corners |= Corners.BottomLeft;
             }
             if (CornerTextures[2] == "variant")
             {
-                corners |= Corners.BottomRight;
+                corners |= Corners.TopRight;
             }
             if (CornerTextures[3] == "variant")
             {
-                corners |= Corners.BottomLeft;
+                corners |= Corners.BottomRight;
             }
 
             return corners;
