@@ -14,7 +14,7 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
 {
     public static class CaveMapGenerator
     {
-        public static MapData Create(int seed, string texture0, string texture1)
+        public static MapData Create(int seed, string texturePrefix)
         {
             var random = new Random(seed);
 
@@ -39,7 +39,7 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                     .RunGenerations(6);
 
             var (planeMap, sectors, tiles) =
-                CreateGeometry(caveBoard.Dimensions, caveArea, alternateMaterial, texture0, texture1);
+                CreateGeometry(caveBoard.Dimensions, caveArea, alternateMaterial, texturePrefix);
 
             return new MapData(
                 NameSpace: "Wolf3D",
@@ -60,44 +60,61 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
             Size size,
             ConnectedArea cave,
             CellBoard alternateMaterial,
-            string texture0,
-            string texture1)
+            string texturePrefix)
         {
-            var planeMap = ImmutableArray.CreateBuilder<MapSquare>();
+            var planeMap = new Canvas(size);
+            
             var sectorSequence = new ModelSequence<SectorDescription, Sector>(description =>
-                new Sector(TextureCeiling: Texture.None, TextureFloor: Texture.None));
+                new Sector(
+                    TextureCeiling: texturePrefix, 
+                    TextureFloor: texturePrefix));
             var tileSequence = new ModelSequence<TileDescription, Tile>(description =>
                 new Tile(
-                    TextureEast: Texture.None,
-                    TextureNorth: Texture.None,
-                    TextureWest: Texture.None,
-                    TextureSouth: Texture.None));
+                    TextureEast: texturePrefix,
+                    TextureNorth: texturePrefix,
+                    TextureWest: texturePrefix,
+                    TextureSouth: texturePrefix));
 
             for (int y = 0; y < size.Height; y++)
             {
                 for (int x = 0; x < size.Width; x++)
                 {
-                    planeMap.Add(new MapSquare(Tile: 0, Sector: 0, Zone: 0));
+                    int tileId = 0;
+                    if (cave.Contains(new Position(x, y)))
+                    {
+                        tileId = tileSequence.GetIndex(new TileDescription(
+                            NorthCorners: Corners.None,
+                            EastCorners: Corners.None,
+                            SouthCorners: Corners.None,
+                            WestCorners: Corners.None,
+                            NorthLight: 0,
+                            EastLight: 0,
+                            SouthLight: 0,
+                            WestLight: 0));
+                    }
+
+                    int sectorId = sectorSequence.GetIndex(new SectorDescription(
+                        Floor: Corners.None,
+                        Ceiling: Corners.None, 
+                        FloorLight: 0, 
+                        CeilingLight: 0));
+
+                    planeMap.Set(x,y,
+                        tile:tileId,
+                        sector:sectorId, 
+                        zone:0);
                 }
             }
 
             return (
-                planeMap.ToImmutable(),
+                planeMap.ToPlaneMap(),
                 sectorSequence.GetDefinitions().ToImmutableArray(),
                 tileSequence.GetDefinitions().ToImmutableArray());
         }
 
-        [Flags]
-        private enum Corners : byte
-        {
-            TopLeft = 0b0001,
-            TopRight = 0b0010,
-            BottomLeft = 0b0100,
-            BottomRight = 0b1000
-        }
-
         private sealed record SectorDescription(
-            Corners Corners,
+            Corners Floor,
+            Corners Ceiling,
             int FloorLight,
             int CeilingLight);
 
