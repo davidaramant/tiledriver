@@ -26,27 +26,26 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                     .MakeBorderAlive(thickness: 3)
                     .GenerateStandardCave();
 
-            var caveArea =
+            var (caveArea,size) =
                 ConnectedAreaAnalyzer
                     .FindForegroundAreas(caveBoard.Dimensions, p => caveBoard[p] == CellType.Dead)
                     .OrderByDescending(a => a.Area)
-                    .First();
+                    .First()
+                    .TrimExcess(border:1);
 
             var interior = caveArea.DetermineDistanceToEdges(Neighborhood.VonNeumann);
 
             var alternateFloor =
-                new CellBoard(new Size(caveBoard.Dimensions.Width + 1, caveBoard.Dimensions.Height + 1))
+                new CellBoard(new Size(size.Width + 1, size.Height + 1))
                     .Fill(random, probabilityAlive: 0.5)
-                    .MakeBorderAlive(thickness: 3)
                     .RunGenerations(6);
             var alternateCeiling =
-                new CellBoard(new Size(caveBoard.Dimensions.Width + 1, caveBoard.Dimensions.Height + 1))
+                new CellBoard(new Size(size.Width + 1, size.Height + 1))
                     .Fill(random, probabilityAlive: 0.5)
-                    .MakeBorderAlive(thickness: 3)
                     .RunGenerations(6);
 
             var (planeMap, sectors, tiles) =
-                CreateGeometry(caveBoard.Dimensions, caveArea, alternateFloor, alternateCeiling, textureQueue, texturePrefix);
+                CreateGeometry(size, caveArea, alternateFloor, alternateCeiling, textureQueue, texturePrefix);
 
             var playerPosition = caveArea.First();
 
@@ -54,8 +53,8 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                 NameSpace: "Wolf3D",
                 TileSize: 64,
                 Name: "Procedural Cave",
-                Width: caveBoard.Dimensions.Width,
-                Height: caveBoard.Dimensions.Height,
+                Width: size.Width,
+                Height: size.Height,
                 Tiles: tiles,
                 Sectors: sectors,
                 Zones: ImmutableArray.Create(new Zone()),
@@ -118,7 +117,8 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                     TextureEast: GetTextureName(description.EastCorners, description.EastLight),
                     TextureNorth: GetTextureName(description.NorthCorners, description.NorthLight),
                     TextureWest: GetTextureName(description.WestCorners, description.WestLight),
-                    TextureSouth: GetTextureName(description.SouthCorners, description.SouthLight)));
+                    TextureSouth: GetTextureName(description.SouthCorners, description.SouthLight),
+                    TextureOverhead: GetTextureName(description.FloorCorners, 0)));
 
             for (int y = 0; y < size.Height; y++)
             {
@@ -134,6 +134,7 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                             EastCorners: GetSideCorners(left: pos.BelowRight(), right: pos.Right()),
                             SouthCorners: GetSideCorners(left: pos.Below(), right: pos.BelowRight()),
                             WestCorners: GetSideCorners(left: pos, right: pos.Below()),
+                            FloorCorners: GetCorners(alternateFloor, pos),
                             NorthLight: 0,
                             EastLight: 0,
                             SouthLight: 0,
@@ -176,6 +177,7 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
             Corners EastCorners,
             Corners SouthCorners,
             Corners WestCorners,
+            Corners FloorCorners,
             int NorthLight,
             int EastLight,
             int SouthLight,
