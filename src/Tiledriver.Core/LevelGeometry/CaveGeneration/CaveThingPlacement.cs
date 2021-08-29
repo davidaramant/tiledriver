@@ -16,7 +16,8 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
         public static IEnumerable<LightDefinition> RandomlyPlaceLights(
             ConnectedArea area,
             Random random, LightRange lightRange,
-            double percentAreaToCover)
+            double percentAreaToCover,
+            bool varyHeight = false)
         {
             var numLights = (int)(area.Area * percentAreaToCover);
 
@@ -42,7 +43,8 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                         return new LightDefinition(
                             position,
                             Brightness: (int)(lightRange.LightLevels * 1.25),
-                            Radius: 15);
+                            Radius: 15,
+                            Height: varyHeight ? (random.Next(2) == 0 ? LightHeight.Ceiling : LightHeight.Floor) : LightHeight.Middle);
                     }
                 });
         }

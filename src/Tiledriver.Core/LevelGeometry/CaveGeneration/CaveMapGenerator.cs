@@ -4,10 +4,10 @@
 using System;
 using System.Collections.Immutable;
 using System.Linq;
-using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Textures;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.LevelGeometry.Extensions;
+using Tiledriver.Core.LevelGeometry.Lighting;
 using Tiledriver.Core.Utils.CellularAutomata;
 using Tiledriver.Core.Utils.ConnectedComponentLabeling;
 using Tiledriver.Core.Wolf3D;
@@ -26,12 +26,12 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                     .MakeBorderAlive(thickness: 3)
                     .GenerateStandardCave();
 
-            var (caveArea,size) =
+            var (caveArea, size) =
                 ConnectedAreaAnalyzer
                     .FindForegroundAreas(caveBoard.Dimensions, p => caveBoard[p] == CellType.Dead)
                     .OrderByDescending(a => a.Area)
                     .First()
-                    .TrimExcess(border:1);
+                    .TrimExcess(border: 1);
 
             var interior = caveArea.DetermineDistanceToEdges(Neighborhood.VonNeumann);
 
@@ -44,10 +44,45 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                     .Fill(random, probabilityAlive: 0.5)
                     .RunGenerations(6);
 
+            var lightRange = new LightRange(DarkLevels: 15, LightLevels: 15);
+            var lights = CaveThingPlacement.RandomlyPlaceLights(
+                    caveArea,
+                    random,
+                    lightRange,
+                    percentAreaToCover: 0.008,
+                    varyHeight: true)
+                .ToArray();
+
             var (planeMap, sectors, tiles) =
                 CreateGeometry(size, caveArea, alternateFloor, alternateCeiling, textureQueue, texturePrefix);
 
             var playerPosition = caveArea.First();
+
+            var things =
+                lights.Select(light => new Thing(
+                    Type: light.Height == LightHeight.Ceiling ? Actor.CeilingLight.ClassName : Actor.FloorLamp.ClassName,
+                    X: light.Center.X + 0.5,
+                    Y: light.Center.Y + 0.5,
+                    Z: 0,
+                    Angle: 0,
+                    Ambush: false,
+                    Skill1: true,
+                    Skill2: true,
+                    Skill3: true,
+                    Skill4: true)).ToList();
+
+            things.Add(new Thing(
+                Type: Actor.Player1Start.ClassName,
+                X: playerPosition.X + 0.5,
+                Y: playerPosition.Y + 0.5,
+                Z: 0,
+                Angle: 0,
+                Ambush: false,
+                Skill1: true,
+                Skill2: true,
+                Skill3: true,
+                Skill4: true));
+
 
             return new MapData(
                 NameSpace: "Wolf3D",
@@ -60,18 +95,7 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                 Zones: ImmutableArray.Create(new Zone()),
                 Planes: ImmutableArray.Create(new Plane(Depth: 64)),
                 PlaneMaps: ImmutableArray.Create(planeMap),
-                Things: ImmutableArray.Create(
-                    new Thing(
-                    Type: Actor.Player1Start.ClassName,
-                        X: playerPosition.X + 0.5,
-                        Y: playerPosition.Y + 0.5,
-                        Z: 0,
-                        Angle: 0,
-                        Ambush: true,
-                        Skill1: true,
-                        Skill2: true,
-                        Skill3: true,
-                        Skill4: true)),
+                Things: things.ToImmutableArray(),
                 Triggers: ImmutableArray<Trigger>.Empty);
         }
 
