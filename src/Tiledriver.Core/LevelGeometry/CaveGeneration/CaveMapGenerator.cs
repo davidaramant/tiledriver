@@ -41,12 +41,7 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                     .RunGenerations(6);
 
             var (planeMap, sectors, tiles) =
-                CreateGeometry(caveBoard.Dimensions, caveArea, alternateMaterial, "t");
-
-            textureQueue.Add(new CompositeTexture("t00", 256, 256,
-                ImmutableArray.Create(new Patch("TILE00", 0, 0)),
-                XScale: 4, YScale: 4));
-
+                CreateGeometry(caveBoard.Dimensions, caveArea, alternateMaterial, textureQueue);
 
             var playerPosition = caveArea.First();
 
@@ -80,20 +75,30 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
             Size size,
             ConnectedArea cave,
             CellBoard alternateMaterial,
-            string texturePrefix)
+            TextureQueue textureQueue)
         {
             var planeMap = new Canvas(size);
 
+            string GetTextureName(Corners corners, int light)
+            {
+                string name = $"t{(int)corners:D2}";
+                textureQueue.Add(new CompositeTexture(name, 256, 256,
+                    ImmutableArray.Create(new Patch($"TILE{(int)corners:D2}", 0, 0)),
+                    XScale: 4, YScale: 4));
+                return name;
+
+            }
+
             var sectorSequence = new ModelSequence<SectorDescription, Sector>(description =>
                 new Sector(
-                    TextureCeiling: texturePrefix + "00",
-                    TextureFloor: texturePrefix + "00"));
+                    TextureCeiling: GetTextureName(description.Ceiling,description.CeilingLight),
+                    TextureFloor: GetTextureName(description.Floor,description.FloorLight)));
             var tileSequence = new ModelSequence<TileDescription, Tile>(description =>
                 new Tile(
-                    TextureEast: texturePrefix + "00",
-                    TextureNorth: texturePrefix + "00",
-                    TextureWest: texturePrefix + "00",
-                    TextureSouth: texturePrefix + "00"));
+                    TextureEast: GetTextureName(description.EastCorners,description.EastLight),
+                    TextureNorth: GetTextureName(description.NorthCorners,description.NorthLight),
+                    TextureWest: GetTextureName(description.WestCorners,description.WestLight),
+                    TextureSouth: GetTextureName(description.SouthCorners,description.SouthLight)));
 
             for (int y = 0; y < size.Height; y++)
             {

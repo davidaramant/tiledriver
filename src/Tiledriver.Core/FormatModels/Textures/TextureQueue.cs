@@ -10,13 +10,23 @@ namespace Tiledriver.Core.FormatModels.Textures
     public sealed class TextureQueue
     {
         private readonly List<CompositeTexture> _definitions = new();
+        private readonly HashSet<string> _compositeNames = new();
         private readonly List<(RenderedTexture, Texture)> _renderQueue = new();
         private readonly Dictionary<RenderedTexture, Texture> _renderNameLookup = new();
 
         public IReadOnlyList<CompositeTexture> Definitions => _definitions;
         public IReadOnlyList<(RenderedTexture, Texture)> RenderQueue => _renderQueue;
 
-        public void Add(params CompositeTexture[] definitions) => _definitions.AddRange(definitions);
+        public void Add(params CompositeTexture[] definitions)
+        {
+            foreach (var def in definitions)
+            {
+                if (_compositeNames.Add(def.Name))
+                {
+                    _definitions.Add(def);
+                }
+            }
+        }
 
         public Texture Add(RenderedTexture renderedTexture)
         {
