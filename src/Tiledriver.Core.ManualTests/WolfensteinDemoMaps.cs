@@ -82,15 +82,21 @@ namespace Tiledriver.Core.ManualTests
             var textureQueue = new TextureQueue();
             var maps = mapCreators.Select(creator => creator(textureQueue)).ToList();
 
+            var textureLumps = new List<ILump>();
+            if (extraTextures.Any() || textureQueue.RenderQueue.Any())
+            {
+                textureLumps.Add(new Marker("P_START"));
+                textureLumps.AddRange(extraTextures.Select(pair => new DataLump(pair.Name, pair.Data)));
+                textureLumps.AddRange(textureQueue.RenderQueue.Select(r => DataLump.ReadFromStream(r.Item2.Name, r.Item1.RenderTo)));
+                textureLumps.Add(new Marker("P_END"));
+            }
+
 
             return new List<ILump>
                 {
                     DataLump.ReadFromStream("TEXTURES", stream => TexturesWriter.Write(textureQueue.Definitions, stream)),
                 }
-                .AddRangeAndContinue(
-                    textureQueue.RenderQueue.Select(r => DataLump.ReadFromStream(r.Item2.Name, r.Item1.RenderTo)))
-                .AddRangeAndContinue(
-                    extraTextures.Select(pair => new DataLump(pair.Name, pair.Data)))
+                .AddRangeAndContinue(textureLumps)
                 .AddRangeAndContinue(maps.SelectMany((map, index) => new ILump[]
                 {
                     new Marker($"MAP{index + 1:00}"),
