@@ -5,16 +5,18 @@ using System;
 using System.Collections.Immutable;
 using System.Linq;
 using Tiledriver.Core.FormatModels.Common;
+using Tiledriver.Core.FormatModels.Textures;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.LevelGeometry.Extensions;
 using Tiledriver.Core.Utils.CellularAutomata;
 using Tiledriver.Core.Utils.ConnectedComponentLabeling;
+using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.LevelGeometry.CaveGeneration
 {
     public static class CaveMapGenerator
     {
-        public static MapData Create(int seed, string texturePrefix)
+        public static MapData Create(int seed, string texturePrefix, TextureQueue textureQueue)
         {
             var random = new Random(seed);
 
@@ -39,7 +41,14 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                     .RunGenerations(6);
 
             var (planeMap, sectors, tiles) =
-                CreateGeometry(caveBoard.Dimensions, caveArea, alternateMaterial, texturePrefix);
+                CreateGeometry(caveBoard.Dimensions, caveArea, alternateMaterial, "t");
+
+            textureQueue.Add(new CompositeTexture("t00", 256, 256,
+                ImmutableArray.Create(new Patch("TILE00", 0, 0)),
+                XScale: 4, YScale: 4));
+
+
+            var playerPosition = caveArea.First();
 
             return new MapData(
                 NameSpace: "Wolf3D",
@@ -52,7 +61,18 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                 Zones: ImmutableArray.Create(new Zone()),
                 Planes: ImmutableArray.Create(new Plane(Depth: 64)),
                 PlaneMaps: ImmutableArray.Create(planeMap),
-                Things: ImmutableArray<Thing>.Empty,
+                Things: ImmutableArray.Create(
+                    new Thing(
+                    Type: Actor.Player1Start.ClassName,
+                        X: playerPosition.X + 0.5,
+                        Y: playerPosition.Y + 0.5,
+                        Z: 0,
+                        Angle: 0,
+                        Ambush: true,
+                        Skill1: true,
+                        Skill2: true,
+                        Skill3: true,
+                        Skill4: true)),
                 Triggers: ImmutableArray<Trigger>.Empty);
         }
 
@@ -63,24 +83,24 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
             string texturePrefix)
         {
             var planeMap = new Canvas(size);
-            
+
             var sectorSequence = new ModelSequence<SectorDescription, Sector>(description =>
                 new Sector(
-                    TextureCeiling: texturePrefix, 
-                    TextureFloor: texturePrefix));
+                    TextureCeiling: texturePrefix + "00",
+                    TextureFloor: texturePrefix + "00"));
             var tileSequence = new ModelSequence<TileDescription, Tile>(description =>
                 new Tile(
-                    TextureEast: texturePrefix,
-                    TextureNorth: texturePrefix,
-                    TextureWest: texturePrefix,
-                    TextureSouth: texturePrefix));
+                    TextureEast: texturePrefix + "00",
+                    TextureNorth: texturePrefix + "00",
+                    TextureWest: texturePrefix + "00",
+                    TextureSouth: texturePrefix + "00"));
 
             for (int y = 0; y < size.Height; y++)
             {
                 for (int x = 0; x < size.Width; x++)
                 {
-                    int tileId = 0;
-                    if (cave.Contains(new Position(x, y)))
+                    int tileId = -1;
+                    if (!cave.Contains(new Position(x, y)))
                     {
                         tileId = tileSequence.GetIndex(new TileDescription(
                             NorthCorners: Corners.None,
@@ -95,14 +115,14 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
 
                     int sectorId = sectorSequence.GetIndex(new SectorDescription(
                         Floor: Corners.None,
-                        Ceiling: Corners.None, 
-                        FloorLight: 0, 
+                        Ceiling: Corners.None,
+                        FloorLight: 0,
                         CeilingLight: 0));
 
-                    planeMap.Set(x,y,
-                        tile:tileId,
-                        sector:sectorId, 
-                        zone:0);
+                    planeMap.Set(x, y,
+                        tile: tileId,
+                        sector: sectorId,
+                        zone: 0);
                 }
             }
 

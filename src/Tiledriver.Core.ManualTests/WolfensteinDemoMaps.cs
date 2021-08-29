@@ -3,7 +3,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using NUnit.Framework;
 using Tiledriver.Core.DemoMaps.Wolf3D;
 using Tiledriver.Core.Extensions.Collections;
@@ -11,6 +15,7 @@ using Tiledriver.Core.FormatModels.Textures;
 using Tiledriver.Core.FormatModels.Textures.Writing;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Wad;
+using Tiledriver.Core.LevelGeometry.CaveGeneration;
 using Tiledriver.Core.Settings;
 
 namespace Tiledriver.Core.ManualTests
@@ -18,10 +23,18 @@ namespace Tiledriver.Core.ManualTests
     [TestFixture]
     public class WolfensteinDemoMaps
     {
-        [Test, Explicit]
-        public void LaunchAll()
+        private DirectoryInfo _dirInfo;
+
+        [SetUp]
+        public void CreateDirectory()
         {
-            Load(CreateWadContents(new Func<TextureQueue,MapData>[]{
+            _dirInfo = OutputLocation.CreateDirectory("Wolf3D Demo Maps");
+        }
+
+        [Test, Explicit]
+        public void All()
+        {
+            Load(CreateWadContents(new Func<TextureQueue, MapData>[]{
                 TexturesDemoMap.CreateMapAndTextures,
                 TileDemoMap.CreateMapAndTextures,
                 ThingDemoMap.CreateMapAndTextures,
@@ -29,35 +42,46 @@ namespace Tiledriver.Core.ManualTests
         }
 
         [Test, Explicit]
-        public void LaunchTexturesDemo() =>
-            Load(CreateWadContents(new Func<TextureQueue,MapData>[]{
+        public void TexturesDemo() =>
+            Load(CreateWadContents(new Func<TextureQueue, MapData>[]{
                 TexturesDemoMap.CreateMapAndTextures
             }));
 
         [Test, Explicit]
-        public void LaunchTileDemo() =>
-            Load(CreateWadContents(new Func<TextureQueue,MapData>[]{
+        public void TileDemo() =>
+            Load(CreateWadContents(new Func<TextureQueue, MapData>[]{
                 TileDemoMap.CreateMapAndTextures
             }));
 
         [Test, Explicit]
-        public void LaunchThingDemo() =>
-            Load(CreateWadContents(new Func<TextureQueue,MapData>[]{
+        public void ThingDemo() =>
+            Load(CreateWadContents(new Func<TextureQueue, MapData>[]{
                 ThingDemoMap.CreateMapAndTextures
             }));
 
-        static void Load(IEnumerable<ILump> contents)
+        [Test, Explicit]
+        public void CaveMap() =>
+            Load(CreateWadContents(new Func<TextureQueue, MapData>[]{
+                textureQueue => CaveMapGenerator.Create(seed: 13, texturePrefix: "TILE", textureQueue:textureQueue)
+            },
+                Enumerable.Range(0,16).Select(i=>($"TILE{i:d2}", (byte[])(Resource.ResourceManager.GetObject($"tile{i:00}",CultureInfo.InvariantCulture)?? throw new ArgumentException("Somehow the name was wrong"))))));
+
+        void Load(IEnumerable<ILump> contents, [CallerMemberName]string? name = null)
         {
             ConfigLoader
                 .Load()
                 .CreateECWolfLauncher()
-                .CreateAndLoadWadInEcWolf(contents, "demo.wad");
+                .CreateAndLoadWadInEcWolf(contents, Path.Combine(_dirInfo.FullName, (name ?? "demo") + ".wad"));
         }
 
-        static IEnumerable<ILump> CreateWadContents(IEnumerable<Func<TextureQueue, MapData>> mapCreators)
+        IEnumerable<ILump> CreateWadContents(
+            IEnumerable<Func<TextureQueue, MapData>> mapCreators,
+            IEnumerable<(string Name, byte[] Data)>? extraTextures = null)
         {
+            extraTextures ??= Enumerable.Empty<(string Name, byte[] Data)>();
             var textureQueue = new TextureQueue();
             var maps = mapCreators.Select(creator => creator(textureQueue)).ToList();
+
 
             return new List<ILump>
                 {
@@ -65,6 +89,8 @@ namespace Tiledriver.Core.ManualTests
                 }
                 .AddRangeAndContinue(
                     textureQueue.RenderQueue.Select(r => DataLump.ReadFromStream(r.Item2.Name, r.Item1.RenderTo)))
+                .AddRangeAndContinue(
+                    extraTextures.Select(pair => new DataLump(pair.Name, pair.Data)))
                 .AddRangeAndContinue(maps.SelectMany((map, index) => new ILump[]
                 {
                     new Marker($"MAP{index + 1:00}"),
