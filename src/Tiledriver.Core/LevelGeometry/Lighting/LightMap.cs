@@ -15,6 +15,15 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
         public int this[int col, int row] => _lightLevels[row * Size.Width + col];
         public int this[Position p] => this[p.X, p.Y];
 
+        public int GetSafeLight(Position p)
+        {
+            if (p.X < 0 || p.X >= Size.Width ||
+                p.Y < 0 || p.Y >= Size.Height)
+                return 0;
+
+            return this[p];
+        }
+
         public LightMap(LightRange range, Size size)
         {
             Range = range;

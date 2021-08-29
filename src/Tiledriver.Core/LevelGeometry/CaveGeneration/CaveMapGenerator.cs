@@ -49,12 +49,23 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                     caveArea,
                     random,
                     lightRange,
-                    percentAreaToCover: 0.008,
+                    percentAreaToCover: 0.01,
                     varyHeight: true)
                 .ToArray();
 
+            var (floorLighting, ceilingLighting) =
+                LightTracer.Trace(size, p => !caveArea.Contains(p), lightRange, lights);
+
             var (planeMap, sectors, tiles) =
-                CreateGeometry(size, caveArea, alternateFloor, alternateCeiling, textureQueue, texturePrefix);
+                CreateGeometry(
+                    size,
+                    caveArea,
+                    alternateFloor,
+                    alternateCeiling,
+                    floorLighting,
+                    ceilingLighting,
+                    textureQueue,
+                    texturePrefix);
 
             var playerPosition = caveArea.First();
 
@@ -104,16 +115,44 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
             ConnectedArea cave,
             CellBoard alternateFloor,
             CellBoard alternateCeiling,
+            LightMap floorLight,
+            LightMap ceilingLight,
             TextureQueue textureQueue,
             string texturePrefix)
         {
             var planeMap = new Canvas(size);
 
+            double GetAlpha(int light)
+            {
+                double min = 0.2;
+                double darkStep = (1 - min) / ceilingLight.Range.DarkLevels;
+                double max = 1.3;
+                double lightStep = (max - 1) / ceilingLight.Range.LightLevels;
+
+                return light switch
+                {
+                    0 => 0,
+                    int pos when pos > 0 => pos * lightStep,
+                    int neg when neg < 0 => -neg * darkStep,
+                    _ => throw new InvalidOperationException("Impossible")
+                };
+            }
+
+
             string GetTextureName(Corners corners, int light)
             {
-                string name = $"t{(int)corners:D2}";
+                string name = $"t{(int)corners:D2}{light::+#;-#;+#}";
                 textureQueue.Add(new CompositeTexture(name, 256, 256,
-                    ImmutableArray.Create(new Patch($"{texturePrefix}{(int)corners:D2}", 0, 0)),
+                    ImmutableArray.Create(
+                        new Patch(
+                            $"{texturePrefix}{(int)corners:D2}",
+                            0,
+                            0),
+                        new Patch(
+                            $"{texturePrefix}{(int)corners:D2}",
+                            0,
+                            0,
+                            Blend: new ColorBlend(light >= 0 ? "FFFFFF" : "000000", GetAlpha(light)))),
                     XScale: 4, YScale: 4));
                 return name;
 
@@ -131,6 +170,8 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                 bottomLeft: alternateFloor[left] == CellType.Dead,
                 bottomRight: alternateFloor[right] == CellType.Dead
                 );
+
+            int GetSideLight(Position p) => (ceilingLight.GetSafeLight(p) + floorLight.GetSafeLight(p)) / 2;
 
             var sectorSequence = new ModelSequence<SectorDescription, Sector>(description =>
                 new Sector(
@@ -159,17 +200,17 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                             SouthCorners: GetSideCorners(left: pos.Below(), right: pos.BelowRight()),
                             WestCorners: GetSideCorners(left: pos, right: pos.Below()),
                             FloorCorners: GetCorners(alternateFloor, pos),
-                            NorthLight: 0,
-                            EastLight: 0,
-                            SouthLight: 0,
-                            WestLight: 0));
+                            NorthLight: GetSideLight(pos.Above()),
+                            EastLight: GetSideLight(pos.Right()),
+                            SouthLight: GetSideLight(pos.Below()),
+                            WestLight: GetSideLight(pos.Left())));
                     }
 
                     int sectorId = sectorSequence.GetIndex(new SectorDescription(
                         Floor: GetCorners(alternateFloor, pos),
                         Ceiling: GetCorners(alternateCeiling, pos),
-                        FloorLight: 0,
-                        CeilingLight: 0));
+                        FloorLight: floorLight[pos],
+                        CeilingLight: ceilingLight[pos]));
 
                     planeMap.Set(x, y,
                         tile: tileId,
