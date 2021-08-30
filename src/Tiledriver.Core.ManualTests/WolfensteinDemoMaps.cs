@@ -23,13 +23,7 @@ namespace Tiledriver.Core.ManualTests
     [TestFixture]
     public class WolfensteinDemoMaps
     {
-        private DirectoryInfo _dirInfo;
-
-        [SetUp]
-        public void CreateDirectory()
-        {
-            _dirInfo = OutputLocation.CreateDirectory("Wolf3D Demo Maps");
-        }
+        private readonly DirectoryInfo _dirInfo = OutputLocation.CreateDirectory("Wolf3D Demo Maps");
 
         [Test, Explicit]
         public void All()

@@ -19,7 +19,7 @@ namespace Tiledriver.Core.ManualTests
     [TestFixture]
     public class ConnectedComponentLabelingVisualization
     {
-        private DirectoryInfo _dirInfo;
+        private readonly DirectoryInfo _dirInfo = OutputLocation.CreateDirectory("Connected Component Labeling");
 
         private static CellBoard MakeBoard()
         {
@@ -33,12 +33,6 @@ namespace Tiledriver.Core.ManualTests
                     .Fill(random, probabilityAlive: 0.6)
                     .MakeBorderAlive(thickness: 3)
                     .RunGenerations(generations);
-        }
-
-        [SetUp]
-        public void MakeDirectory()
-        {
-            _dirInfo = OutputLocation.CreateDirectory("Connected Component Labeling");
         }
 
         void SaveImage(IFastImage image, string description) =>

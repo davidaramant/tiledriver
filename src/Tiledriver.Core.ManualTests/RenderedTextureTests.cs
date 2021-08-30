@@ -11,13 +11,7 @@ namespace Tiledriver.Core.ManualTests
 {
     public class RenderedTextureTests
     {
-        private DirectoryInfo _dirInfo;
-
-        [SetUp]
-        public void CreateDirectory()
-        {
-            _dirInfo = OutputLocation.CreateDirectory("Rendered Textures");
-        }
+        private readonly DirectoryInfo _dirInfo = OutputLocation.CreateDirectory("Rendered Textures");
 
         [Test, Explicit]
         public void RenderTexture()
