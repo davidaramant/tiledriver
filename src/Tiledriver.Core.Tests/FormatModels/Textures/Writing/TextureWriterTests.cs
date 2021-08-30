@@ -81,8 +81,6 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures.Writing
                 "\tXScale 4.0",
                 "\tYScale 4.0",
                 "\tPatch AG_512_2, 0, 0",
-                "\t{",
-                "\t}",
                 "\tPatch MSW1_UP, 64, 288",
                 "\t{",
                 "\t\tStyle CopyAlpha",
@@ -192,6 +190,30 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures.Writing
                 "\t{",
                 "\t\tTranslation Desaturate, 20",
                 "\t}",
+                "}");
+
+            actual.Should().Be(expected);
+        }
+
+        [Fact]
+        public void ShouldNotWritePatchParentsIfNoContent()
+        {
+            var texture = new CompositeTexture(
+                "Name",
+                10,
+                10,
+                Patches: ImmutableArray.Create(
+                    new Patch(
+                        "Name2",
+                        0,
+                        0)));
+
+            var actual = GetText(texture);
+
+            var expected = Assemble(
+                "Texture Name, 10, 10",
+                "{",
+                "\tPatch Name2, 0, 0",
                 "}");
 
             actual.Should().Be(expected);

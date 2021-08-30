@@ -59,7 +59,7 @@ Format Notes:
 
 ### Short Term
 
-- [ ] The writer for `TEXTURES` spits out unnecessary empty paren blocks
+- [x] The writer for `TEXTURES` spits out unnecessary empty paren blocks
 - [ ] The floor/ceiling lighting distinction is a hack
 - [ ] Refactor light mapper to spit out one or two light maps
 - [ ] Should `LightMap` really be an array internally? It may be more convenient to use a set

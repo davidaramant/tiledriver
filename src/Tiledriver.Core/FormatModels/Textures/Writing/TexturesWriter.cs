@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Tiledriver.Core.FormatModels.Textures.Writing
@@ -22,11 +23,11 @@ namespace Tiledriver.Core.FormatModels.Textures.Writing
 
         public static void Write(CompositeTexture texture, StreamWriter writer)
         {
-            var output = new WriterUtil(writer);
+            var output = new WriterUtil();
 
             var optional = texture.Optional ? "optional " : "";
 
-            output
+            output = output
                 .Line($"{texture.Namespace} {optional}{texture.Name}, {texture.Width}, {texture.Height}")
                 .OpenBrace()
                 .OptionalLine("XScale", texture.XScale, 1)
@@ -48,7 +49,7 @@ namespace Tiledriver.Core.FormatModels.Textures.Writing
                     };
                 }
 
-                output
+                output = output
                     .Line($"{patch.Namespace} {patch.Name}, {patch.XOrigin}, {patch.YOrigin}")
                     .OpenBrace()
                     .Flag(nameof(patch.FlipX), patch.FlipX)
@@ -63,50 +64,57 @@ namespace Tiledriver.Core.FormatModels.Textures.Writing
                     .CloseBrace();
             }
 
-            output.CloseBrace();
+            output
+                .CloseBrace()
+                .WriteTo(writer);
         }
 
         private sealed class WriterUtil
         {
-            private readonly StreamWriter _writer;
-            private int _indentationLevel = 0;
+            private readonly List<string> _lines = new();
+            private readonly WriterUtil? _parent;
+            private readonly int _indentationLevel = 0;
 
-            private int IndentationLevel
+            private string Indentation { get; } = "";
+
+            public WriterUtil()
             {
-                get => _indentationLevel;
-                set
-                {
-                    _indentationLevel = value;
-                    Indentation = new string('\t', value);
-                }
             }
 
-            private string Indentation { get; set; } = "";
-
-            public WriterUtil(StreamWriter writer) => _writer = writer;
+            private WriterUtil(WriterUtil parent)
+            {
+                _parent = parent;
+                _indentationLevel = parent._indentationLevel + 1;
+                Indentation = new string('\t', _indentationLevel);
+            }
 
             public WriterUtil Line(string line)
             {
-                _writer.WriteLine(Indentation + line);
+                _lines.Add(Indentation + line);
                 return this;
             }
 
             public WriterUtil OpenBrace()
             {
-                Line("{");
-                IndentationLevel++;
-                return this;
+                return new WriterUtil(this);
             }
 
             public WriterUtil CloseBrace()
             {
-                IndentationLevel--;
-                return Line("}");
+                var parent = _parent ?? throw new InvalidOperationException();
+
+                if (_lines.Any())
+                {
+                    parent.Line("{");
+                    parent._lines.AddRange(_lines);
+                    parent.Line("}");
+                }
+                return parent;
             }
 
             public WriterUtil OptionalLine(string name, double value, double defaultValue)
             {
-                const double TOLERANCE = 0.1;
+                const double TOLERANCE = 0.01;
                 if (Math.Abs(value - defaultValue) > TOLERANCE)
                 {
                     Line($"{name} {value:F1}");
@@ -143,6 +151,14 @@ namespace Tiledriver.Core.FormatModels.Textures.Writing
                 }
 
                 return this;
+            }
+
+            public void WriteTo(StreamWriter writer)
+            {
+                foreach (var line in _lines)
+                {
+                    writer.WriteLine(line);
+                }
             }
         }
     }
