@@ -8,41 +8,42 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
 {
     public sealed class LightMap
     {
-        private readonly int[] _lightLevels;
+        private readonly Dictionary<Position, int> _lightLevels = new();
+        private int _defaultLightLevel = 0;
         public Size Size { get; }
         public LightRange Range { get; }
 
-        public int this[int col, int row] => _lightLevels[row * Size.Width + col];
-        public int this[Position p] => this[p.X, p.Y];
-
-        public int GetSafeLight(Position p)
-        {
-            if (p.X < 0 || p.X >= Size.Width ||
-                p.Y < 0 || p.Y >= Size.Height)
-                return 0;
-
-            return this[p];
-        }
+        public int this[int col, int row] => this[new Position(col, row)];
+        public int this[Position p] => 
+            _lightLevels.TryGetValue(p, out int light) 
+                ? light 
+                : (Size.Contains(p) ? _defaultLightLevel : 0);
 
         public LightMap(LightRange range, Size size)
         {
             Range = range;
             Size = size;
-            _lightLevels = new int[size.Width * size.Height];
         }
 
         public LightMap Blackout()
         {
-            Array.Fill(_lightLevels, -Range.DarkLevels);
+            _defaultLightLevel = -Range.DarkLevels;
             return this;
         }
 
         public void Lighten(Position point, int amount)
         {
-            ref int current = ref _lightLevels[point.Y * Size.Width + point.X];
-            current = Math.Min(current + amount, Range.LightLevels);
-        }
+            if (!Size.Contains(point))
+                return;
 
-        public IEnumerable<int> GetLightLevels() => _lightLevels;
+            if (!_lightLevels.TryGetValue(point, out int light))
+            {
+                light = _defaultLightLevel;
+            }
+
+            light = Math.Min(light + amount, Range.LightLevels);
+
+            _lightLevels[point] = light;
+        }
     }
 }

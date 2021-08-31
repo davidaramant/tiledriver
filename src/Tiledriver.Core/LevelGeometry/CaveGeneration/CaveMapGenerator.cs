@@ -201,7 +201,7 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                 bottomRight: alternateFloor[right] == CellType.Dead
                 );
 
-            int GetSideLight(Position p) => (ceilingLight.GetSafeLight(p) + floorLight.GetSafeLight(p)) / 2;
+            int GetSideLight(Position p) => (ceilingLight[p] + floorLight[p]) / 2;
 
             var sectorSequence = new ModelSequence<SectorDescription, Sector>(description =>
                 new Sector(

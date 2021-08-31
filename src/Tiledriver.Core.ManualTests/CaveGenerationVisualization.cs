@@ -12,7 +12,6 @@ using Tiledriver.Core.LevelGeometry.CaveGeneration;
 using Tiledriver.Core.LevelGeometry.Extensions;
 using Tiledriver.Core.LevelGeometry.Lighting;
 using Tiledriver.Core.Utils.ConnectedComponentLabeling;
-using Tiledriver.Core.Utils.ConnectedComponentLabeling.Extensions;
 using Tiledriver.Core.Utils.Images;
 using NUnit.Framework;
 using Tiledriver.Core.Utils.CellularAutomata;
@@ -176,12 +175,12 @@ namespace Tiledriver.Core.ManualTests
             }
 
             // Place some lights
-            var lightRange = new LightRange(DarkLevels: 15, LightLevels: 15);
+            var lightRange = new LightRange(DarkLevels: 15, LightLevels: 5);
             var lights = CaveThingPlacement.RandomlyPlaceLights(
                     largestComponent,
                     random,
                     lightRange,
-                    percentAreaToCover: 0.008)
+                    percentAreaToCover: 0.01)
                 .ToArray();
 
             Log($"Seed {seed} - Number of lights: {lights.Length}");
