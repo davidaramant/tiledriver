@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Generic;
 using System.Linq;
@@ -16,24 +16,12 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
         {
             var image = new FastImage(lightMap.Size.Width, lightMap.Size.Height, scale);
 
-            var darkIncrement = 128 / lightMap.Range.DarkLevels;
-            var lightIncrement = 128 / lightMap.Range.LightLevels;
-
             for (int y = 0; y < lightMap.Size.Height; y++)
             {
                 for (int x = 0; x < lightMap.Size.Width; x++)
                 {
-                    byte intensity = 128;
                     var light = lightMap[x, y];
-                    if (light > 0)
-                    {
-                        intensity += (byte)(light * lightIncrement);
-                    }
-                    else
-                    {
-                        intensity += (byte)(light * darkIncrement);
-
-                    }
+                    byte intensity = (byte)((((double)light + lightMap.Range.DarkLevels) / lightMap.Range.Total) * 256);
 
                     image.SetPixel(x, y, new SKColor(intensity, intensity, intensity));
                 }
