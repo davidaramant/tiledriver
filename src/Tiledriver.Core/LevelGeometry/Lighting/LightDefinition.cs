@@ -29,12 +29,14 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
 
         public (int Floor, int Ceiling) GetBrightness(Position location)
         {
+            int ReduceBrightness(int brightness) => (int)(brightness * 0.75);
+
             (int Floor, int Ceiling) TakeIntoAccountHeight(int brightness) =>
                 Height switch
                 {
-                    LightHeight.Middle => (brightness,brightness),
-                    LightHeight.Floor => (brightness, Math.Max(0, brightness - 2)),
-                    LightHeight.Ceiling => (Math.Max(0, brightness - 2), brightness),
+                    LightHeight.Middle => (brightness, brightness),
+                    LightHeight.Floor => (brightness, ReduceBrightness(brightness)),
+                    LightHeight.Ceiling => (ReduceBrightness(brightness), brightness),
                     _ => throw new ArgumentOutOfRangeException()
                 };
 
