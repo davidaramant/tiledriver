@@ -50,7 +50,7 @@ namespace Tiledriver.Core.ManualTests
                 .ToArray();
 
             var (floorLighting, ceilingLight) =
-                LightTracer.Trace(dimensions, p => board[p] == CellType.Alive, lightRange, lights);
+                LightTracer.Trace(dimensions, p=>!largestComponent.Contains(p), lightRange, lights);
 
             using var floorImg = LightMapVisualizer.Render(floorLighting, lights, largestComponent, scale:5);
             using var ceilingImg = LightMapVisualizer.Render(ceilingLight, lights, largestComponent, scale:5);

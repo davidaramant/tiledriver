@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using SkiaSharp;
@@ -35,7 +36,13 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
             var image = Render(lightMap, scale);
             foreach (var light in lights)
             {
-                image.SetPixel(light.Center.X, light.Center.Y, SKColors.HotPink);
+                image.SetPixel(light.Center.X, light.Center.Y, light.Height switch
+                {
+                    LightHeight.Ceiling => SKColors.Orange,
+                    LightHeight.Middle => SKColors.HotPink,
+                    LightHeight.Floor => SKColors.Red,
+                    _ => throw new Exception("Impossible")
+                });
             }
 
             return image;

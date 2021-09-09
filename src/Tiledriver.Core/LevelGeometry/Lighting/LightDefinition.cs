@@ -29,7 +29,7 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
 
         public (int Floor, int Ceiling) GetBrightness(Position location)
         {
-            int ReduceBrightness(int brightness) => (int)(brightness * 0.75);
+            int ReduceBrightness(int brightness) => (int)Math.Max(0, brightness - 0.2 * Brightness);
 
             (int Floor, int Ceiling) TakeIntoAccountHeight(int brightness) =>
                 Height switch
