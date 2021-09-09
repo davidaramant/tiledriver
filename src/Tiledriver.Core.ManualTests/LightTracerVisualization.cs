@@ -9,6 +9,7 @@ using Tiledriver.Core.LevelGeometry.Lighting;
 using Tiledriver.Core.Utils.ConnectedComponentLabeling;
 using Tiledriver.Core.Utils.Images;
 using NUnit.Framework;
+using Tiledriver.Core.LevelGeometry.Extensions;
 using Tiledriver.Core.Utils.CellularAutomata;
 
 namespace Tiledriver.Core.ManualTests
@@ -39,13 +40,15 @@ namespace Tiledriver.Core.ManualTests
                     .First()
                     .TrimExcess(border: 1);
 
+            var interior = largestComponent.DetermineDistanceToEdges(Neighborhood.VonNeumann);
+
             // Place some lights
             var lightRange = new LightRange(DarkLevels: 15, LightLevels: 5);
             var lights = CaveThingPlacement.RandomlyPlaceLights(
-                    largestComponent,
+                    interior.Where(pair=>pair.Value == 2).Select(pair=>pair.Key).ToList(),
                     random,
                     lightRange,
-                    percentAreaToCover: 0.01,
+                    percentAreaToCover: 0.05,
                     varyHeight: true)
                 .ToArray();
 

@@ -14,12 +14,13 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
     public static class CaveThingPlacement
     {
         public static IEnumerable<LightDefinition> RandomlyPlaceLights(
-            ConnectedArea area,
-            Random random, LightRange lightRange,
+            IReadOnlyList<Position> validPositions,
+            Random random,
+            LightRange lightRange,
             double percentAreaToCover,
             bool varyHeight = false)
         {
-            var numLights = (int)(area.Area * percentAreaToCover);
+            var numLights = (int)(validPositions.Count * percentAreaToCover);
 
             var positions = new List<Position>();
 
@@ -29,8 +30,8 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                 {
                     while (true)
                     {
-                        var posIndex = random.Next(0, area.Area);
-                        var position = area.ElementAt(posIndex);
+                        var posIndex = random.Next(0, validPositions.Count);
+                        var position = validPositions[posIndex];
 
                         var positionIsInvalid =
                             positions.Any(p => p.Touches(position));

@@ -177,10 +177,10 @@ namespace Tiledriver.Core.ManualTests
             // Place some lights
             var lightRange = new LightRange(DarkLevels: 15, LightLevels: 5);
             var lights = CaveThingPlacement.RandomlyPlaceLights(
-                    largestComponent,
+                    distanceToEdge.Where(pair=>pair.Value == 2).Select(pair=>pair.Key).ToList(),
                     random,
                     lightRange,
-                    percentAreaToCover: 0.01)
+                    percentAreaToCover: 0.05)
                 .ToArray();
 
             Log($"Seed {seed} - Number of lights: {lights.Length}");
