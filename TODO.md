@@ -18,6 +18,8 @@
 
 ## Short Term
 
+### Wolf
+
 - [x] The writer for `TEXTURES` spits out unnecessary empty paren blocks
 - [x] The floor/ceiling lighting distinction is a hack (still a hack, but slightly less crude)
 - [ ] Refactor light mapper to spit out one or two light maps
@@ -29,3 +31,12 @@
   - This would need weapons & ammo too
   - It would be a shame not to do patrolling enemies. Maybe use the interior distances?
 - [ ] Connect disjoint caves as secrets?
+
+### Doom
+
+- [ ] Infrastructure for generating a cave map
+- [ ] Option to flip visualizations across Y-axis
+- [ ] Place 1-sided walls using marching squares
+- [ ] Utility to correct texture offsets
+- [ ] Textures for use in Doom
+- [ ] Place 2-sided walls for interior regions
