@@ -24,6 +24,11 @@ namespace Tiledriver.Core.Settings
                 config = config with { ECWolfPath = Path.Combine(config.ECWolfPath, "ecwolf.exe") };
             }
 
+            if (!config.GZDoomPath.EndsWith("gzdoom.exe", StringComparison.InvariantCultureIgnoreCase))
+            {
+                config = config with { GZDoomPath = Path.Combine(config.GZDoomPath, "gzdoom.exe") };
+            }
+
             if (!config.GamePaths.Complete)
             {
                 var steamPaths = SteamGameSearcher.GetGamePaths();

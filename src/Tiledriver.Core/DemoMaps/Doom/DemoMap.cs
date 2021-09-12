@@ -179,31 +179,31 @@ namespace Tiledriver.Core.DemoMaps.Doom
                     new SideDef // 0
                     (
                         sector: 0,
-                        textureMiddle: "STARTAN1"
+                        textureMiddle: "STARTAN2"
                     ),
 
                     new SideDef // 1
                     (
                         sector: 1,
-                        textureMiddle: "STARTAN1"
+                        textureMiddle: "STARTAN2"
                     ),
 
                     new SideDef // 2
                     (
                         sector: 0,
-                        textureMiddle: "STARTAN1"
+                        textureMiddle: "STARTAN2"
                     ),
 
                     new SideDef // 3
                     (
                         sector: 0,
-                        textureMiddle: "STARTAN1"
+                        textureMiddle: "STARTAN2"
                     ),
 
                     new SideDef // 4
                     (
                         sector: 1,
-                        textureMiddle: "STARTAN1"
+                        textureMiddle: "STARTAN2"
                     ),
 
                     new SideDef // 5
@@ -221,14 +221,14 @@ namespace Tiledriver.Core.DemoMaps.Doom
                     new SideDef // 7
                     (
                         sector: 1,
-                        textureMiddle: "STARTAN1"
+                        textureMiddle: "STARTAN2"
                     ),
 
                     new SideDef // 8
                     (
                         sector: 1,
                         offsetX: 160,
-                        textureMiddle: "STARTAN1"
+                        textureMiddle: "STARTAN2"
                     ),
 
                     new SideDef // 9
@@ -247,8 +247,8 @@ namespace Tiledriver.Core.DemoMaps.Doom
                     (
                         sector: 1,
                         offsetX: 96,
-                        textureTop: "STARTAN1",
-                        textureBottom: "STARTAN1"
+                        textureTop: "STARTAN2",
+                        textureBottom: "STARTAN2"
                     ),
 
                     new SideDef // 12

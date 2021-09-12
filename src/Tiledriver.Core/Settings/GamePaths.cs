@@ -5,13 +5,15 @@ namespace Tiledriver.Core.Settings
 {
     public sealed record GamePaths(
         string? Wolf3D,
-        string? SpearOfDestiny)
+        string? SpearOfDestiny,
+        string? Doom)
     {
-        public bool Complete => Wolf3D != null && SpearOfDestiny != null;
+        public bool Complete => Wolf3D != null && SpearOfDestiny != null && Doom != null;
 
         public GamePaths MergeWith(GamePaths other) =>
             new(
                 Wolf3D ?? other.Wolf3D,
-                SpearOfDestiny ?? other.SpearOfDestiny);
+                SpearOfDestiny ?? other.SpearOfDestiny,
+                Doom ?? other.Doom);
     }
 }

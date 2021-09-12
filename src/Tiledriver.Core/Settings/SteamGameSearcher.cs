@@ -38,7 +38,8 @@ namespace Tiledriver.Core.Settings
 
             return new GamePaths(
                 Wolf3D: PathUtil.VerifyPathExists(wolf3DPath), 
-                SpearOfDestiny: PathUtil.VerifyPathExists(sodPath));
+                SpearOfDestiny: PathUtil.VerifyPathExists(sodPath),
+                Doom: string.Empty);
         }
     }
 }

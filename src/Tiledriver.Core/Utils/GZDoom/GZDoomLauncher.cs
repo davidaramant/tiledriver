@@ -1,49 +1,47 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+
 
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using Tiledriver.Core.FormatModels.Uwmf;
+using Tiledriver.Core.FormatModels.Udmf;
 using Tiledriver.Core.FormatModels.Wad;
 
-namespace Tiledriver.Core.Utils.ECWolf
+namespace Tiledriver.Core.Utils.GZDoom
 {
-    /// <summary>
-    /// Launches ECWolf
-    /// </summary>
-    public class Launcher
+    public sealed class GZDoomLauncher
     {
-        private readonly string _ecWolfExePath;
+        private readonly string _gzDoomExePath;
 
-        public Launcher(string ecWolfExePath)
+        public GZDoomLauncher(string gzDoomExePath)
         {
-            if (!File.Exists(ecWolfExePath))
+            if (!File.Exists(gzDoomExePath))
             {
-                throw new FileNotFoundException("Could not find ECWolf EXE.");
+                throw new FileNotFoundException("Could not find GZDoom EXE: " + gzDoomExePath);
             }
-            _ecWolfExePath = ecWolfExePath;
+            _gzDoomExePath = gzDoomExePath;
         }
 
         /// <summary>
         /// Create a WAD with the given map
         /// </summary>
-        /// <param name="uwmfMap">The map to save</param>
+        /// <param name="udmfMap">The map to save</param>
         /// <param name="wadFilePath">
         /// (Optional) The path to the WAD to create. If not specified, something will be created in the temporary directory.
         /// </param>
-        public void LoadMapInEcWolf(
-            MapData uwmfMap,
+        public void LoadMap(
+            MapData udmfMap,
             string? wadFilePath = null)
         {
             var wad = new List<ILump>
             {
                 new Marker("MAP01"),
-                new UwmfLump("TEXTMAP", uwmfMap),
+                new UdmfLump("TEXTMAP", udmfMap),
                 new Marker("ENDMAP")
             };
 
-            CreateAndLoadWadInEcWolf(wad, wadFilePath);
+            CreateAndLoadWad(wad, wadFilePath);
         }
 
         /// <summary>
@@ -53,7 +51,7 @@ namespace Tiledriver.Core.Utils.ECWolf
         /// <param name="wadFilePath">
         /// (Optional) The path to the WAD to create. If not specified, something will be created in the temporary directory.
         /// </param>
-        public void CreateAndLoadWadInEcWolf(
+        public void CreateAndLoadWad(
             IEnumerable<ILump> lumps,
             string? wadFilePath = null)
         {
@@ -62,14 +60,14 @@ namespace Tiledriver.Core.Utils.ECWolf
 
             WadWriter.SaveTo(lumps,pathToLoad);
 
-            LoadWadInEcWolf(pathToLoad);
+            LoadWad(pathToLoad);
         }
 
-        public void LoadWadInEcWolf(string wadPath)
+        public void LoadWad(string wadPath)
         {
             Process.Start(
-                _ecWolfExePath,
-                $"--file \"{wadPath}\" --data wl6 --hard --nowait --tedlevel map01");
+                _gzDoomExePath,
+                $"-iwad doom2.wad -file \"{wadPath}\" -skill 4 -warp 01");
         }
     }
 }
