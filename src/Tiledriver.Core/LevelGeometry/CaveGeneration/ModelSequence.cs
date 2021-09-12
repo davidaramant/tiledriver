@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Tiledriver.Core.FormatModels.Uwmf;
 
 namespace Tiledriver.Core.LevelGeometry.CaveGeneration
 {
@@ -23,10 +22,7 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
         /// Constructs a new instance with a method to transform a description to a model.
         /// </summary>
         /// <param name="transformToModel">How to transform a description to a model.</param>
-        public ModelSequence(Func<TDescription, TModel> transformToModel)
-        {
-            _transformToModel = transformToModel;
-        }
+        public ModelSequence(Func<TDescription, TModel> transformToModel) => _transformToModel = transformToModel;
 
         public int GetIndex(TDescription description)
         {

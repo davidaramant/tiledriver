@@ -46,10 +46,10 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
 
             var lightRange = new LightRange(DarkLevels: 15, LightLevels: 5);
             var lights = CaveThingPlacement.RandomlyPlaceLights(
-                    caveArea.ToList(),
+                    interior.Where(pair=>pair.Value == 2).Select(pair=>pair.Key).ToList(),
                     random,
                     lightRange,
-                    percentAreaToCover: 0.01,
+                    percentAreaToCover: 0.05,
                     varyHeight: true)
                 .ToArray();
 
