@@ -21,7 +21,15 @@ namespace Tiledriver.Core.ManualTests
         [Test, Explicit]
         public void RenderABunchOfOptions()
         {
-            var path = OutputLocation.CreateDirectory("Cellular Automata Trials").FullName;
+            var dir = OutputLocation.CreateDirectory("Cellular Automata Trials");
+
+            foreach (var file in dir.GetFiles())
+            {
+                file.Delete();
+            }
+
+            var path = dir.FullName;
+
             var trials =
                 (from seed in Enumerable.Range(0, 3)
                     from size in new[] { 128, 192 }
