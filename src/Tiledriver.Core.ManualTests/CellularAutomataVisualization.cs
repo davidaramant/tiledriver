@@ -38,32 +38,6 @@ namespace Tiledriver.Core.ManualTests
 
             const bool showOnlyTheLargestArea = true;
 
-            IFastImage Visualize(CellBoard board, bool showOnlyLargestArea)
-            {
-                if (showOnlyLargestArea)
-                {
-                    var (area, size) =
-                        ConnectedAreaAnalyzer
-                            .FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Dead)
-                            .MaxElement(component => component.Area)
-                            ?.TrimExcess(1) ??
-                        throw new InvalidOperationException("This can't happen");
-
-                    return GenericVisualizer.RenderBinary(size,
-                        isTrue: area.Contains,
-                        trueColor: SKColors.White,
-                        falseColor: SKColors.Black);
-                }
-                else
-                {
-                    return GenericVisualizer.RenderBinary(board.Dimensions,
-                        isTrue: p => board[p] == CellType.Dead,
-                        trueColor: SKColors.White,
-                        falseColor: SKColors.Black);
-                }
-            }
-
-
             Parallel.ForEach(trials, trial =>
             {
                 var random = new Random(trial.seed);
@@ -81,6 +55,61 @@ namespace Tiledriver.Core.ManualTests
                                             $" - Seed {trial.seed}" +
                                             $".png"));
             });
+        }
+
+        [Test, Explicit]
+        public void ScaleBoard()
+        {
+            var dir = OutputLocation.CreateDirectory("Cellular Automata Scaling");
+
+            foreach (var file in dir.GetFiles())
+            {
+                file.Delete();
+            }
+
+            var path = dir.FullName;
+
+            const bool showOnlyTheLargestArea = false;
+
+            var random = new Random();
+
+            var board =
+                new CellBoard(new Size(128, 128))
+                    .Fill(random, probabilityAlive: 0.5)
+                    .MakeBorderAlive(thickness: 3)
+                    .GenerateStandardCave();
+
+            foreach (var scale in new[] { 1, 2, 3 })
+            {
+                using var img = Visualize(board.Scale(scale), showOnlyTheLargestArea);
+
+                img.Save(Path.Combine(path, $"cave x{scale}.png"));
+            }
+        }
+
+        IFastImage Visualize(CellBoard board, bool showOnlyLargestArea)
+        {
+            if (showOnlyLargestArea)
+            {
+                var (area, size) =
+                    ConnectedAreaAnalyzer
+                        .FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Dead)
+                        .MaxElement(component => component.Area)
+                        ?.TrimExcess(1) ??
+                    throw new InvalidOperationException("This can't happen");
+
+                return GenericVisualizer.RenderBinary(size,
+                    isTrue: area.Contains,
+                    trueColor: SKColors.White,
+                    falseColor: SKColors.Black);
+            }
+            else
+            {
+                return GenericVisualizer.RenderBinary(board.Dimensions,
+                    isTrue: p => board[p] == CellType.Dead,
+                    trueColor: SKColors.White,
+                    falseColor: SKColors.Black);
+            }
         }
     }
 }

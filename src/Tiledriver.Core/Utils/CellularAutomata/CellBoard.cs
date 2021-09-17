@@ -29,6 +29,35 @@ namespace Tiledriver.Core.Utils.CellularAutomata
             _even = new CellType[dimensions.Height, dimensions.Width];
         }
 
+        private CellBoard(Size dimensions, CellType[,] initial) : this(dimensions)
+        {
+            _even = initial;
+        }
+
+        public CellBoard Scale(int scale)
+        {
+            var newSize = Dimensions * scale;
+            var initial = new CellType[newSize.Height, newSize.Width];
+
+            var current = CurrentBoard;
+
+            for (int y = 0; y < Dimensions.Height; y++)
+            {
+                for (int x = 0; x < Dimensions.Width; x++)
+                {
+                    for (int yOffset = 0; yOffset < scale; yOffset++)
+                    {
+                        for (int xOffset = 0; xOffset < scale; xOffset++)
+                        {
+                            initial[y * scale + yOffset, x * scale + xOffset] = current[y, x];
+                        }
+                    }
+                }
+            }
+
+            return new CellBoard(newSize, initial);
+        }
+
         public CellBoard Fill(Random random, double probabilityAlive)
         {
             Generation = 0;
