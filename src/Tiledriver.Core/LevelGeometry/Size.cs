@@ -9,5 +9,7 @@ namespace Tiledriver.Core.LevelGeometry
 
         public Rectangle ToRectangle() => new(new Position(0, 0), this);
         public bool Contains(Position p) => p.X >= 0 && p.X < Width && p.Y >= 0 && p.Y < Height;
+
+        public static Size operator *(Size size, int scale) => new(size.Width * scale, size.Height * scale);
     }
 }
