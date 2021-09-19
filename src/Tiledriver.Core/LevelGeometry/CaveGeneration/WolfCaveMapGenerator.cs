@@ -46,7 +46,7 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
 
             var lightRange = new LightRange(DarkLevels: 15, LightLevels: 5);
             var lights = CaveThingPlacement.RandomlyPlaceLights(
-                    interior.Where(pair=>pair.Value == 2).Select(pair=>pair.Key).ToList(),
+                    interior.Where(pair => pair.Value == 2).Select(pair => pair.Key).ToList(),
                     random,
                     lightRange,
                     percentAreaToCover: 0.05,
@@ -153,7 +153,7 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                             0,
                             Blend: new ColorBlend("FFFFFF", GetAlpha(light))));
                 }
-                else if(light < 0)
+                else if (light < 0)
                 {
                     patches.Add(
                         new Patch(
@@ -189,10 +189,7 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
             }
 
             Corners GetCorners(CellBoard board, Position pos) => Corner.Create(
-                topLeft: board[pos] == CellType.Dead,
-                topRight: board[pos.Right()] == CellType.Dead,
-                bottomLeft: board[pos.Below()] == CellType.Dead,
-                bottomRight: board[pos.BelowRight()] == CellType.Dead);
+                pos, p => board[p] == CellType.Dead);
 
             Corners GetSideCorners(Position left, Position right) => Corner.Create(
                 topLeft: alternateCeiling[left] == CellType.Dead,
