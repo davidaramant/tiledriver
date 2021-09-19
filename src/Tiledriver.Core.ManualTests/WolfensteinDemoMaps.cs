@@ -55,7 +55,7 @@ namespace Tiledriver.Core.ManualTests
         [Test, Explicit]
         public void CaveMap() =>
             Load(CreateWadContents(new Func<TextureQueue, MapData>[]{
-                textureQueue => CaveMapGenerator.Create(seed: 13, texturePrefix: "TILE", textureQueue:textureQueue)
+                textureQueue => WolfCaveMapGenerator.Create(seed: 13, texturePrefix: "TILE", textureQueue:textureQueue)
             },
                 Enumerable.Range(0,16).Select(i=>($"TILE{i:d2}", (byte[])(Resource.ResourceManager.GetObject($"tile{i:00}",CultureInfo.InvariantCulture)?? throw new ArgumentException("Somehow the name was wrong"))))));
 

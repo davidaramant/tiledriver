@@ -14,7 +14,7 @@ using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.LevelGeometry.CaveGeneration
 {
-    public static class CaveMapGenerator
+    public static class WolfCaveMapGenerator
     {
         public static MapData Create(int seed, string texturePrefix, TextureQueue textureQueue)
         {
