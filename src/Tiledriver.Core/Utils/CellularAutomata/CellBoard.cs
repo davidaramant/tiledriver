@@ -1,4 +1,4 @@
-// Copyright (c) 2021, David Aramant
+﻿// Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
@@ -27,6 +27,17 @@ namespace Tiledriver.Core.Utils.CellularAutomata
 
             _odd = new CellType[dimensions.Height, dimensions.Width];
             _even = new CellType[dimensions.Height, dimensions.Width];
+        }
+
+        public CellBoard(Size dimensions, Func<Position,CellType> typeAtPosition) : this(dimensions)
+        {
+            for (int y = 0; y < dimensions.Height; y++)
+            {
+                for (int x = 0; x < dimensions.Width; x++)
+                {
+                    _even[y, x] = typeAtPosition(new Position(x, y));
+                }
+            }
         }
 
         private CellBoard(Size dimensions, CellType[,] initial) : this(dimensions)
