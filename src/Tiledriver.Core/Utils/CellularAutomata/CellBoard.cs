@@ -34,9 +34,9 @@ namespace Tiledriver.Core.Utils.CellularAutomata
             _even = initial;
         }
 
-        public CellBoard Scale(int scale)
+        public CellBoard Quadruple()
         {
-            var newSize = Dimensions * scale;
+            var newSize = Dimensions * 2;
             var initial = new CellType[newSize.Height, newSize.Width];
 
             var current = CurrentBoard;
@@ -45,13 +45,11 @@ namespace Tiledriver.Core.Utils.CellularAutomata
             {
                 for (int x = 0; x < Dimensions.Width; x++)
                 {
-                    for (int yOffset = 0; yOffset < scale; yOffset++)
-                    {
-                        for (int xOffset = 0; xOffset < scale; xOffset++)
-                        {
-                            initial[y * scale + yOffset, x * scale + xOffset] = current[y, x];
-                        }
-                    }
+                    var value = current[y, x];
+                    initial[y * 2, x * 2] = value;
+                    initial[y * 2, x * 2 + 1] = value;
+                    initial[y * 2 + 1, x * 2] = value;
+                    initial[y * 2 + 1, x * 2 + 1] = value;
                 }
             }
 
@@ -90,9 +88,9 @@ namespace Tiledriver.Core.Utils.CellularAutomata
             return this;
         }
 
-        public CellBoard RunGenerations(int generations, Func<Func<int, int>,bool>? isNextGenAlive = null)
+        public CellBoard RunGenerations(int generations, CellRule.IsNextGenAlive? isNextGenAlive = null)
         {
-            isNextGenAlive ??= (countAlive => countAlive(1) >= 5);
+            isNextGenAlive ??= CellRule.FiveOrMoreNeighbors;
 
             foreach (var g in Enumerable.Range(1, generations))
             {
@@ -102,7 +100,12 @@ namespace Tiledriver.Core.Utils.CellularAutomata
                 {
                     for (int col = 0; col < Width; col++)
                     {
-                        CurrentBoard[row, col] = isNextGenAlive(radius => CountAliveNeighbors(PreviousBoard,row,col,radius)) ? CellType.Alive : CellType.Dead;
+                        CurrentBoard[row, col] =
+                            isNextGenAlive(
+                                PreviousBoard[row, col], 
+                                radius => CountAliveNeighbors(PreviousBoard, row, col, radius)) 
+                            ? CellType.Alive 
+                            : CellType.Dead;
                     }
                 }
             }
