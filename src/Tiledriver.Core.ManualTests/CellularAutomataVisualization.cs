@@ -1,13 +1,12 @@
 // Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
+using NUnit.Framework;
+using SkiaSharp;
 using System;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using NUnit.Framework;
-using SkiaSharp;
 using Tiledriver.Core.Extensions.Enumerable;
 using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.LevelGeometry.Extensions;
@@ -35,9 +34,8 @@ namespace Tiledriver.Core.ManualTests
                 (from seed in Enumerable.Range(0, 3)
                  from size in new[] { 160 }
                  from probAlive in new[] { 0.5 }
-                 from scale in new[] { 2 }
-                 from flipPercent in new[] {0, 0.05, 0.075}
-                 select (seed, size, probAlive, scale, flipPercent)).ToArray();
+                 from flipPercent in new[] { 0, 0.05, 0.075 }
+                 select (seed, size, probAlive, flipPercent)).ToArray();
 
             Parallel.ForEach(trials, trial =>
             {
@@ -48,7 +46,7 @@ namespace Tiledriver.Core.ManualTests
                         .Fill(random, probabilityAlive: trial.probAlive)
                         .MakeBorderAlive(thickness: 10)
                         .GenerateStandardCave()
-                        .Scale(trial.scale);
+                        .Quadruple();
 
                 var (area, trimmedSize) =
                     ConnectedAreaAnalyzer
@@ -58,7 +56,7 @@ namespace Tiledriver.Core.ManualTests
                     throw new InvalidOperationException("This can't happen");
 
                 var interior = area.DetermineDistanceToEdges(Neighborhood.VonNeumann);
-                var edge = interior.Where(pair => pair.Value == 0).Select(pair => pair.Key).OrderBy (x => random.Next()).ToList();
+                var edge = interior.Where(pair => pair.Value == 0).Select(pair => pair.Key).OrderBy(x => random.Next()).ToList();
 
                 var numToFlip = (int)(edge.Count * trial.flipPercent);
                 var jaggedArea = new ConnectedArea(area.Except(edge.Take(numToFlip)));
@@ -68,8 +66,7 @@ namespace Tiledriver.Core.ManualTests
                 img.Save(Path.Combine(path, $"Size {trial.size}" +
                                             $" - ProbAlive {trial.probAlive:F2}" +
                                             $" - Seed {trial.seed}" +
-                                            $" - Scale x{trial.scale}" +
-                                            $" - Flip {trial.flipPercent:P}" + 
+                                            $" - Flip {trial.flipPercent:P}" +
                                             $".png"));
             });
         }
@@ -86,25 +83,50 @@ namespace Tiledriver.Core.ManualTests
 
             var path = dir.FullName;
 
-            const bool showOnlyTheLargestArea = false;
+            void Save(CellBoard board, string name, int scale)
+            {
+                using var img = Visualize(board, false, scale);
+                img.Save(Path.Combine(path, $"{name}.png"));
+            }
 
             var random = new Random();
 
             var board =
                 new CellBoard(new Size(128, 128))
                     .Fill(random, probabilityAlive: 0.5)
-                    .MakeBorderAlive(thickness: 3)
+                    .MakeBorderAlive(thickness: 1)
                     .GenerateStandardCave();
 
-            foreach (var scale in new[] { 1, 2, 3 })
-            {
-                using var img = Visualize(board.Scale(scale), showOnlyTheLargestArea);
+            Save(board, "1. board", 8);
 
-                img.Save(Path.Combine(path, $"cave x{scale}.png"));
-            }
+            var (largestArea, newSize) =
+                ConnectedAreaAnalyzer
+                    .FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Dead)
+                    .MaxElement(component => component.Area)
+                    ?.TrimExcess(1) ??
+                throw new InvalidOperationException("This can't happen");
+
+            var board2 = new CellBoard(newSize,
+                typeAtPosition: p => largestArea.Contains(p) ? CellType.Dead : CellType.Alive);
+
+            var board_x2 = board2.Quadruple();
+
+            Save(board_x2, "2. board 2x", 4);
+
+            board_x2.RunGenerations(1);
+
+            Save(board_x2, "3. board 2x - smoothed", 4);
+
+            var board_x4 = board_x2.Quadruple().RunGenerations(1);
+
+            Save(board_x4, "4. board 4x - smoothed", 2);
+
+            var board_x8 = board_x4.ScaleAndSmooth();
+
+            Save(board_x8, "5. board 8x - smoothed", 1);
         }
 
-        IFastImage Visualize(CellBoard board, bool showOnlyLargestArea)
+        IFastImage Visualize(CellBoard board, bool showOnlyLargestArea, int scale = 1)
         {
             if (showOnlyLargestArea)
             {
@@ -118,14 +140,16 @@ namespace Tiledriver.Core.ManualTests
                 return GenericVisualizer.RenderBinary(size,
                     isTrue: area.Contains,
                     trueColor: SKColors.White,
-                    falseColor: SKColors.Black);
+                    falseColor: SKColors.Black,
+                    scale: scale);
             }
             else
             {
                 return GenericVisualizer.RenderBinary(board.Dimensions,
                     isTrue: p => board[p] == CellType.Dead,
                     trueColor: SKColors.White,
-                    falseColor: SKColors.Black);
+                    falseColor: SKColors.Black,
+                    scale: scale);
             }
         }
 

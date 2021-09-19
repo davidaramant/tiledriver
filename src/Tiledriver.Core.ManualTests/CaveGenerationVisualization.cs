@@ -86,7 +86,7 @@ namespace Tiledriver.Core.ManualTests
                 }
                 for (int i = 0; i < 3; i++)
                 {
-                    board.RunGenerations(1, CellRule.FiveNeighbors);
+                    board.RunGenerations(1, CellRule.FiveOrMoreNeighbors);
                     SaveBoard(board);
                 }
             }
