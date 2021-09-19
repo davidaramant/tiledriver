@@ -32,10 +32,9 @@ namespace Tiledriver.Core.ManualTests
 
             var trials =
                 (from seed in Enumerable.Range(0, 3)
-                 from size in new[] { 160 }
-                 from probAlive in new[] { 0.5 }
-                 from flipPercent in new[] { 0, 0.05, 0.075 }
-                 select (seed, size, probAlive, flipPercent)).ToArray();
+                 from size in new[] { 96, 128 }
+                 from probAlive in new[] { 0.48, 0.5, 0.52 }
+                 select (seed, size, probAlive)).ToArray();
 
             Parallel.ForEach(trials, trial =>
             {
@@ -44,29 +43,17 @@ namespace Tiledriver.Core.ManualTests
                 var board =
                     new CellBoard(new Size(trial.size, trial.size))
                         .Fill(random, probabilityAlive: trial.probAlive)
-                        .MakeBorderAlive(thickness: 10)
+                        .MakeBorderAlive(thickness: 1)
                         .GenerateStandardCave()
-                        .Quadruple();
+                        .TrimToLargestDeadArea()
+                        .ScaleAndSmooth()
+                        .ScaleAndSmooth();
 
-                var (area, trimmedSize) =
-                    ConnectedAreaAnalyzer
-                        .FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Dead)
-                        .MaxElement(component => component.Area)
-                        ?.TrimExcess(1) ??
-                    throw new InvalidOperationException("This can't happen");
-
-                var interior = area.DetermineDistanceToEdges(Neighborhood.VonNeumann);
-                var edge = interior.Where(pair => pair.Value == 0).Select(pair => pair.Key).OrderBy(x => random.Next()).ToList();
-
-                var numToFlip = (int)(edge.Count * trial.flipPercent);
-                var jaggedArea = new ConnectedArea(area.Except(edge.Take(numToFlip)));
-
-                using var img = Visualize(trimmedSize, jaggedArea);
+                using var img = Visualize(board, showOnlyLargestArea:false);
 
                 img.Save(Path.Combine(path, $"Size {trial.size}" +
                                             $" - ProbAlive {trial.probAlive:F2}" +
                                             $" - Seed {trial.seed}" +
-                                            $" - Flip {trial.flipPercent:P}" +
                                             $".png"));
             });
         }

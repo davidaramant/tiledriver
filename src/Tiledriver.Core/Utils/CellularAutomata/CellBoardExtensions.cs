@@ -1,6 +1,10 @@
 // Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
+using System;
+using Tiledriver.Core.Extensions.Enumerable;
+using Tiledriver.Core.Utils.ConnectedComponentLabeling;
+
 namespace Tiledriver.Core.Utils.CellularAutomata
 {
     public static class CellBoardExtensions
@@ -12,5 +16,18 @@ namespace Tiledriver.Core.Utils.CellularAutomata
                 .RunGenerations(3, CellRule.FiveOrMoreNeighbors);
 
         public static CellBoard ScaleAndSmooth(this CellBoard board) => board.Quadruple().RunGenerations(1);
+
+        public static CellBoard TrimToLargestDeadArea(this CellBoard board)
+        {
+            var (largestArea, newSize) =
+                ConnectedAreaAnalyzer
+                    .FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Dead)
+                    .MaxElement(component => component.Area)
+                    ?.TrimExcess(1) ??
+                throw new InvalidOperationException("This can't happen");
+
+            return new CellBoard(newSize,
+                typeAtPosition: p => largestArea.Contains(p) ? CellType.Dead : CellType.Alive);
+        }
     }
 }
