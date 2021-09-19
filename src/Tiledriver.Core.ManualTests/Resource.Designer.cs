@@ -63,6 +63,16 @@ namespace Tiledriver.Core.ManualTests {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] crystal {
+            get {
+                object obj = ResourceManager.GetObject("crystal", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] tile00 {
             get {
                 object obj = ResourceManager.GetObject("tile00", resourceCulture);

@@ -3,6 +3,7 @@
 
 using System;
 using System.IO;
+using System.Text;
 
 namespace Tiledriver.Core.FormatModels.Wad
 {
@@ -16,6 +17,10 @@ namespace Tiledriver.Core.FormatModels.Wad
         {
             Name = name;
             _data = data;
+        }
+
+        public DataLump(LumpName name, string text) : this(name, Encoding.ASCII.GetBytes(text))
+        {
         }
 
         public static DataLump FromStream(LumpName name, Stream stream)

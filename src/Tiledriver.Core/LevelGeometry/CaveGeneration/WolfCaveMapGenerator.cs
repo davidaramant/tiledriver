@@ -69,9 +69,15 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
 
             var playerPosition = caveArea.First();
 
+            textureQueue.Add(
+                new CompositeTexture("CRF1A", Width: 64, Height: 64, Namespace: TextureNamespace.Sprite,
+                    Patches: ImmutableArray.Create(new Patch("CRYSTAL", 0, 0))),
+                new CompositeTexture("CRC1A", Width: 64, Height: 64, Namespace: TextureNamespace.Sprite,
+                    Patches: ImmutableArray.Create(new Patch("CRYSTAL", 0, 0, FlipY: true))));
+
             var things =
                 lights.Select(light => new Thing(
-                    Type: light.Height == LightHeight.Ceiling ? Actor.CeilingLight.ClassName : Actor.FloorLamp.ClassName,
+                    Type: light.Height == LightHeight.Ceiling ? "CeilingCrystal" : "FloorCrystal",
                     X: light.Center.X + 0.5,
                     Y: light.Center.Y + 0.5,
                     Z: 0,
