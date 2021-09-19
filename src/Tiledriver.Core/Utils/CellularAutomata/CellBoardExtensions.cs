@@ -15,7 +15,15 @@ namespace Tiledriver.Core.Utils.CellularAutomata
                 .RunGenerations(4, CellRule.FiveNeighborsOrInEmptyArea)
                 .RunGenerations(3, CellRule.FiveOrMoreNeighbors);
 
-        public static CellBoard ScaleAndSmooth(this CellBoard board) => board.Quadruple().RunGenerations(1);
+        public static CellBoard ScaleAndSmooth(this CellBoard board, int times = 1)
+        {
+            for (int i = 0; i < times; i++)
+            {
+                board = board.Quadruple().RunGenerations(1);
+            }
+
+            return board;
+        }
 
         public static CellBoard TrimToLargestDeadArea(this CellBoard board)
         {
