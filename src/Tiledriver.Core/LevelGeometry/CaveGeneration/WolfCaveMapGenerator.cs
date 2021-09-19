@@ -188,13 +188,13 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
 
             }
 
-            Corners GetCorners(CellBoard board, Position pos) => ToCorners(
+            Corners GetCorners(CellBoard board, Position pos) => Corner.Create(
                 topLeft: board[pos] == CellType.Dead,
                 topRight: board[pos.Right()] == CellType.Dead,
                 bottomLeft: board[pos.Below()] == CellType.Dead,
                 bottomRight: board[pos.BelowRight()] == CellType.Dead);
 
-            Corners GetSideCorners(Position left, Position right) => ToCorners(
+            Corners GetSideCorners(Position left, Position right) => Corner.Create(
                 topLeft: alternateCeiling[left] == CellType.Dead,
                 topRight: alternateCeiling[right] == CellType.Dead,
                 bottomLeft: alternateFloor[left] == CellType.Dead,
@@ -254,12 +254,6 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                 sectorSequence.GetDefinitions().ToImmutableArray(),
                 tileSequence.GetDefinitions().ToImmutableArray());
         }
-
-        private static Corners ToCorners(bool topLeft, bool topRight, bool bottomLeft, bool bottomRight) =>
-            (topLeft ? Corners.TopLeft : Corners.None) |
-            (bottomLeft ? Corners.BottomLeft : Corners.None) |
-            (topRight ? Corners.TopRight : Corners.None) |
-            (bottomRight ? Corners.BottomRight : Corners.None);
 
         private sealed record SectorDescription(
             Corners Floor,
