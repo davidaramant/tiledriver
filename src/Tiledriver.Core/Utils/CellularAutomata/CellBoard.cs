@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2021, David Aramant
+// Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
@@ -122,6 +122,7 @@ namespace Tiledriver.Core.Utils.CellularAutomata
                         y < 0 || y >= Dimensions.Height ||
                         (x == col && y == col))
                     {
+                        count++;
                         continue;
                     }
 
