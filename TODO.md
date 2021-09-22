@@ -34,9 +34,10 @@
 
 ### Doom
 
-- [ ] Infrastructure for generating a cave map
+- [x] Infrastructure for generating a cave map
 - [ ] Option to flip visualizations across Y-axis
-- [ ] Place 1-sided walls using marching squares
+- [x] Place 1-sided walls using marching squares
+- [ ] Don't generate so many redundant linedefs
 - [ ] Utility to correct texture offsets
 - [ ] Textures for use in Doom
 - [ ] Place 2-sided walls for interior regions

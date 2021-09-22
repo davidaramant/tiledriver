@@ -14,22 +14,25 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
     public sealed class DoomCaveMapGenerator
     {
         private const int LogicalUnitSize = 64;
+        private const int SmoothingSteps = 2;
+        private const int DetailUnitSize = LogicalUnitSize >> SmoothingSteps;
 
         public static MapData Create(int seed, TextureQueue textureQueue)
         {
             var random = new Random(seed);
 
             var logicalBoard = GenerateLogicalBoard(random);
+            var fineDetailBoard = logicalBoard.ScaleAndSmooth(SmoothingSteps);
 
             var vertexCache = new ModelSequence<LogicalPoint, Vertex>(
-                p => new Vertex(p.X * LogicalUnitSize, p.Y * LogicalUnitSize));
+                p => new Vertex(p.X * DetailUnitSize, p.Y * DetailUnitSize));
 
             var lineCache = new ModelSequence<LineDescription, LineDef>(
                 ld => new LineDef(V1: ld.V1, V2: ld.V2, SideFront: 0));
 
             DrawOneSidedWalls(
-                logicalBoard.Dimensions,
-                isPointInsideMap: p => logicalBoard[p] == CellType.Dead,
+                fineDetailBoard.Dimensions,
+                isPointInsideMap: p => fineDetailBoard[p] == CellType.Dead,
                 vertexCache,
                 lineCache);
 
@@ -76,55 +79,66 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                 .GenerateStandardCave()
                 .TrimToLargestDeadArea();
 
+        private enum Side
+        {
+            Left,
+            Top,
+            Right,
+            Bottom
+        }
+
         private static void DrawOneSidedWalls(
             Size size,
             Func<Position, bool> isPointInsideMap,
             ModelSequence<LogicalPoint, Vertex> vertexCache,
             ModelSequence<LineDescription, LineDef> lineCache)
         {
-            void Line(LogicalPoint fromPoint, LogicalPoint toPoint) =>
-                lineCache.GetIndex(
-                    new LineDescription(
-                        vertexCache.GetIndex(toPoint),
-                        vertexCache.GetIndex(fromPoint)));
-
             for (int y = 0; y < size.Height - 1; y++)
             {
                 for (int x = 0; x < size.Width - 1; x++)
                 {
+                    LogicalPoint GetMiddleOfSide(Side side) => side switch
+                    {
+                        Side.Left => new(x, y + 0.5),
+                        Side.Top => new(x + 0.5, y),
+                        Side.Right => new(x + 1, y + 0.5),
+                        Side.Bottom => new(x + 0.5, y + 1),
+                        _ => throw new Exception("Impossible")
+                    };
+
+                    void Line(Side fromSide, Side toSide) =>
+                        lineCache.GetIndex(
+                            new LineDescription(
+                                vertexCache.GetIndex(GetMiddleOfSide(toSide)),
+                                vertexCache.GetIndex(GetMiddleOfSide(fromSide))));
+
                     var p = new Position(x, y);
                     var inMapCorners = Corner.Create(p, isPointInsideMap);
 
-                    LogicalPoint center = new(x + 0.5, y + 0.5);
-                    LogicalPoint middleTop = new(x + 0.5, y);
-                    LogicalPoint middleRight = new(x + 1, y + 0.5);
-                    LogicalPoint middleBottom = new(x + 0.5, y + 1);
-                    LogicalPoint middleLeft = new(x, y + 0.5);
-
                     switch (inMapCorners)
                     {
-                        case Corners.BottomLeft: Line(middleLeft, middleBottom); break;
-                        case Corners.BottomRight: Line(middleBottom, middleRight); break;
-                        case Corners.TopRight: Line(middleRight, middleTop); break;
-                        case Corners.TopLeft: Line(middleTop, middleLeft); break;
+                        case Corners.BottomLeft: Line(Side.Left, Side.Bottom); break;
+                        case Corners.BottomRight: Line(Side.Bottom, Side.Right); break;
+                        case Corners.TopRight: Line(Side.Right, Side.Top); break;
+                        case Corners.TopLeft: Line(Side.Top, Side.Left); break;
 
-                        case Corners.ExceptBottomLeft: Line(middleBottom, middleLeft); break;
-                        case Corners.ExceptBottomRight: Line(middleRight, middleBottom); break;
-                        case Corners.ExceptTopLeft: Line(middleLeft, middleTop); break;
-                        case Corners.ExceptTopRight: Line(middleTop, middleRight); break;
+                        case Corners.ExceptBottomLeft: Line(Side.Bottom, Side.Left); break;
+                        case Corners.ExceptBottomRight: Line(Side.Right, Side.Bottom); break;
+                        case Corners.ExceptTopLeft: Line(Side.Left, Side.Top); break;
+                        case Corners.ExceptTopRight: Line(Side.Top, Side.Right); break;
 
-                        case Corners.Top: Line(middleRight, middleLeft); break;
-                        case Corners.Bottom: Line(middleLeft, middleRight); break;
-                        case Corners.Left: Line(middleTop, middleBottom); break;
-                        case Corners.Right: Line(middleBottom, middleTop); break;
+                        case Corners.Top: Line(Side.Right, Side.Left); break;
+                        case Corners.Bottom: Line(Side.Left, Side.Right); break;
+                        case Corners.Left: Line(Side.Top, Side.Bottom); break;
+                        case Corners.Right: Line(Side.Bottom, Side.Top); break;
 
                         case Corners.TopLeftAndBottomRight:
-                            Line(middleBottom, middleLeft);
-                            Line(middleTop, middleRight);
+                            Line(Side.Bottom, Side.Left);
+                            Line(Side.Top, Side.Right);
                             break;
                         case Corners.TopRightAndBottomLeft:
-                            Line(middleLeft, middleTop);
-                            Line(middleRight, middleBottom);
+                            Line(Side.Left, Side.Top);
+                            Line(Side.Right, Side.Bottom);
                             break;
 
                         case Corners.None:
