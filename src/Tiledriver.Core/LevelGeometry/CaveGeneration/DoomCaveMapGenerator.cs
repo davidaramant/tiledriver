@@ -28,9 +28,9 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                 ld => new LineDef(V1: ld.V1, V2: ld.V2, SideFront: 0));
 
             DrawOneSidedWalls(
-                logicalBoard.Dimensions, 
+                logicalBoard.Dimensions,
                 isPointInsideMap: p => logicalBoard[p] == CellType.Dead,
-                vertexCache, 
+                vertexCache,
                 lineCache);
 
             var firstSpot =
@@ -82,6 +82,12 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
             ModelSequence<LogicalPoint, Vertex> vertexCache,
             ModelSequence<LineDescription, LineDef> lineCache)
         {
+            void Line(LogicalPoint fromPoint, LogicalPoint toPoint) =>
+                lineCache.GetIndex(
+                    new LineDescription(
+                        vertexCache.GetIndex(toPoint),
+                        vertexCache.GetIndex(fromPoint)));
+
             for (int y = 0; y < size.Height - 1; y++)
             {
                 for (int x = 0; x < size.Width - 1; x++)
@@ -89,7 +95,43 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                     var p = new Position(x, y);
                     var inMapCorners = Corner.Create(p, isPointInsideMap);
 
-                    // TODO: Do marching tiles here
+                    LogicalPoint center = new(x + 0.5, y + 0.5);
+                    LogicalPoint middleTop = new(x + 0.5, y);
+                    LogicalPoint middleRight = new(x + 1, y + 0.5);
+                    LogicalPoint middleBottom = new(x + 0.5, y + 1);
+                    LogicalPoint middleLeft = new(x, y + 0.5);
+
+                    switch (inMapCorners)
+                    {
+                        case Corners.BottomLeft: Line(middleLeft, middleBottom); break;
+                        case Corners.BottomRight: Line(middleBottom, middleRight); break;
+                        case Corners.TopRight: Line(middleRight, middleTop); break;
+                        case Corners.TopLeft: Line(middleTop, middleLeft); break;
+
+                        case Corners.ExceptBottomLeft: Line(middleBottom, middleLeft); break;
+                        case Corners.ExceptBottomRight: Line(middleRight, middleBottom); break;
+                        case Corners.ExceptTopLeft: Line(middleLeft, middleTop); break;
+                        case Corners.ExceptTopRight: Line(middleTop, middleRight); break;
+
+                        case Corners.Top: Line(middleRight, middleLeft); break;
+                        case Corners.Bottom: Line(middleLeft, middleRight); break;
+                        case Corners.Left: Line(middleTop, middleBottom); break;
+                        case Corners.Right: Line(middleBottom, middleTop); break;
+
+                        case Corners.TopLeftAndBottomRight:
+                            Line(middleBottom, middleLeft);
+                            Line(middleTop, middleRight);
+                            break;
+                        case Corners.TopRightAndBottomLeft:
+                            Line(middleLeft, middleTop);
+                            Line(middleRight, middleBottom);
+                            break;
+
+                        case Corners.None:
+                        case Corners.All:
+                        default:
+                            break;
+                    }
                 }
             }
         }

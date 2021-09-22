@@ -13,6 +13,7 @@ using Tiledriver.Core.FormatModels.Textures;
 using Tiledriver.Core.FormatModels.Textures.Writing;
 using Tiledriver.Core.FormatModels.Udmf;
 using Tiledriver.Core.FormatModels.Wad;
+using Tiledriver.Core.LevelGeometry.CaveGeneration;
 using Tiledriver.Core.Settings;
 
 namespace Tiledriver.Core.ManualTests
@@ -28,7 +29,13 @@ namespace Tiledriver.Core.ManualTests
                 tq => DemoMap.Create()
             }));
 
-        void Load(IEnumerable<ILump> contents, [CallerMemberName]string? name = null)
+        [Test, Explicit]
+        public void CaveMap() =>
+            Load(CreateWadContents(new Func<TextureQueue, MapData>[]{
+                tq => DoomCaveMapGenerator.Create(seed:13,tq)
+            }));
+
+        void Load(IEnumerable<ILump> contents, [CallerMemberName] string? name = null)
         {
             ConfigLoader
                 .Load()
@@ -61,7 +68,7 @@ namespace Tiledriver.Core.ManualTests
                 lumps.Add(DataLump.ReadFromStream("TEXTURES",
                     stream => TexturesWriter.Write(textureQueue.Definitions, stream)));
             }
-        
+
             lumps
                 .AddRangeAndContinue(textureLumps)
                 .AddRangeAndContinue(maps.SelectMany((map, index) => new ILump[]
