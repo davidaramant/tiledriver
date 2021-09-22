@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -57,6 +58,24 @@ namespace Tiledriver.Core.ManualTests
         {
             var textureQueue = new TextureQueue();
 
+            textureQueue.Add(
+                new CompositeTexture("CRSFA0",
+                    Width: 35,
+                    Height: 37,
+                    Namespace: TextureNamespace.Sprite,
+                    XScale: 2,
+                    YScale: 2,
+                    Offset: new TextureOffset(17,32),
+                    Patches: ImmutableArray.Create(new Patch("CRYSTAL", 0, 0))),
+                new CompositeTexture("CRSCA0", 
+                    Width: 35, 
+                    Height: 37, 
+                    Namespace: TextureNamespace.Sprite, 
+                    XScale: 2,
+                    YScale: 2,
+                    Offset: new TextureOffset(17,133),
+                    Patches: ImmutableArray.Create(new Patch("CRYSTAL", 0, 0, FlipY: true))));
+
             var map = WolfCaveMapGenerator.Create(seed: 13, texturePrefix: "TILE", textureQueue: textureQueue);
 
             Load(new List<ILump> { new Marker("P_START") }
@@ -82,7 +101,7 @@ namespace Tiledriver.Core.ManualTests
 	states
 	{
 		Spawn:
-			CRC1 A -1
+			CRSC A -1
 			stop
 	}
 }
@@ -91,7 +110,7 @@ actor FloorCrystal
 	states
 	{
 		Spawn:
-			CRF1 A -1
+			CRSF A -1
 			stop
 	}
 }"),

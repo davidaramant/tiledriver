@@ -24,7 +24,7 @@
 - [x] The floor/ceiling lighting distinction is a hack (still a hack, but slightly less crude)
 - [ ] Refactor light mapper to spit out one or two light maps
 - [x] Should `LightMap` really be an array internally? It may be more convenient to use a set
-- [ ] Need sprites for glowing crystals
+- [x] Need sprites for glowing crystals
 - [ ] Port over stalagmites/stalactites?
 - [ ] Place treasure
 - [ ] Enemies?
