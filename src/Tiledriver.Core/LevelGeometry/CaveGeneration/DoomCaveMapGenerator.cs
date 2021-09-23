@@ -2,6 +2,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Tiledriver.Core.FormatModels.Common;
@@ -30,13 +31,13 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
             var lineCache = new ModelSequence<LineDescription, LineDef>(
                 ld => new LineDef(V1: ld.V1, V2: ld.V2, SideFront: 0));
 
-            DrawOneSidedWalls(
+            var edges = FindEdges(
                 fineDetailBoard.Dimensions,
-                isPointInsideMap: p => fineDetailBoard[p] == CellType.Dead,
-                vertexCache,
-                lineCache);
+                isCornerInsideMap: p => fineDetailBoard[p] == CellType.Dead);
 
-            var firstSpot =
+            DrawEdges(edges, vertexCache, lineCache);
+
+            var firstOpenSpot =
                 (from y in Enumerable.Range(0, logicalBoard.Height)
                  from x in Enumerable.Range(0, logicalBoard.Width)
                  select new Position(x, y)).First(p => logicalBoard[p] == CellType.Dead);
@@ -57,8 +58,8 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                     HeightCeiling: 128,
                     LightLevel: 192)),
                 Things: ImmutableArray.Create(new Thing(
-                    X: firstSpot.X * LogicalUnitSize + LogicalUnitSize / 2,
-                    Y: firstSpot.Y * LogicalUnitSize + LogicalUnitSize / 2,
+                    X: firstOpenSpot.X * LogicalUnitSize + LogicalUnitSize / 2,
+                    Y: firstOpenSpot.Y * LogicalUnitSize + LogicalUnitSize / 2,
                     Angle: 90,
                     Type: 1,
                     Skill1: true,
@@ -87,65 +88,78 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
             Bottom
         }
 
-        private static void DrawOneSidedWalls(
+        private static IReadOnlyDictionary<Position, Corners> FindEdges(
             Size size,
-            Func<Position, bool> isPointInsideMap,
-            ModelSequence<LogicalPoint, Vertex> vertexCache,
-            ModelSequence<LineDescription, LineDef> lineCache)
+            Func<Position, bool> isCornerInsideMap)
         {
+            var edges = new Dictionary<Position, Corners>();
+
             for (int y = 0; y < size.Height - 1; y++)
             {
                 for (int x = 0; x < size.Width - 1; x++)
                 {
-                    LogicalPoint GetMiddleOfSide(Side side) => side switch
-                    {
-                        Side.Left => new(x, y + 0.5),
-                        Side.Top => new(x + 0.5, y),
-                        Side.Right => new(x + 1, y + 0.5),
-                        Side.Bottom => new(x + 0.5, y + 1),
-                        _ => throw new Exception("Impossible")
-                    };
-
-                    void Line(Side fromSide, Side toSide) =>
-                        lineCache.GetIndex(
-                            new LineDescription(
-                                vertexCache.GetIndex(GetMiddleOfSide(toSide)),
-                                vertexCache.GetIndex(GetMiddleOfSide(fromSide))));
-
                     var p = new Position(x, y);
-                    var inMapCorners = Corner.Create(p, isPointInsideMap);
+                    var inMapCorners = Corner.Create(p, isCornerInsideMap);
+                    if (inMapCorners != Corners.None && inMapCorners != Corners.All)
+                        edges[p] = inMapCorners;
+                }
+            }
 
-                    switch (inMapCorners)
-                    {
-                        case Corners.BottomLeft: Line(Side.Left, Side.Bottom); break;
-                        case Corners.BottomRight: Line(Side.Bottom, Side.Right); break;
-                        case Corners.TopRight: Line(Side.Right, Side.Top); break;
-                        case Corners.TopLeft: Line(Side.Top, Side.Left); break;
+            return edges;
+        }
 
-                        case Corners.ExceptBottomLeft: Line(Side.Bottom, Side.Left); break;
-                        case Corners.ExceptBottomRight: Line(Side.Right, Side.Bottom); break;
-                        case Corners.ExceptTopLeft: Line(Side.Left, Side.Top); break;
-                        case Corners.ExceptTopRight: Line(Side.Top, Side.Right); break;
+        private static void DrawEdges(IReadOnlyDictionary<Position, Corners> edges,
+            ModelSequence<LogicalPoint, Vertex> vertexCache,
+            ModelSequence<LineDescription, LineDef> lineCache)
+        {
+            foreach (var pair in edges)
+            {
+                LogicalPoint GetMiddleOfSide(Position p, Side side) => side switch
+                {
+                    Side.Left => new(p.X, p.Y + 0.5),
+                    Side.Top => new(p.X + 0.5, p.Y),
+                    Side.Right => new(p.X + 1, p.Y + 0.5),
+                    Side.Bottom => new(p.X + 0.5, p.Y + 1),
+                    _ => throw new Exception("Impossible")
+                };
 
-                        case Corners.Top: Line(Side.Right, Side.Left); break;
-                        case Corners.Bottom: Line(Side.Left, Side.Right); break;
-                        case Corners.Left: Line(Side.Top, Side.Bottom); break;
-                        case Corners.Right: Line(Side.Bottom, Side.Top); break;
+                void DrawLine(Position pos, Side fromSide, Side toSide) =>
+                    lineCache.GetIndex(
+                        new LineDescription(
+                            vertexCache.GetIndex(GetMiddleOfSide(pos, toSide)),
+                            vertexCache.GetIndex(GetMiddleOfSide(pos, fromSide))));
 
-                        case Corners.TopLeftAndBottomRight:
-                            Line(Side.Bottom, Side.Left);
-                            Line(Side.Top, Side.Right);
-                            break;
-                        case Corners.TopRightAndBottomLeft:
-                            Line(Side.Left, Side.Top);
-                            Line(Side.Right, Side.Bottom);
-                            break;
+                var p = pair.Key;
+                var inMapCorners = pair.Value;
 
-                        case Corners.None:
-                        case Corners.All:
-                        default:
-                            break;
-                    }
+                switch (inMapCorners)
+                {
+                    case Corners.BottomLeft: DrawLine(p, Side.Left, Side.Bottom); break;
+                    case Corners.BottomRight: DrawLine(p, Side.Bottom, Side.Right); break;
+                    case Corners.TopRight: DrawLine(p, Side.Right, Side.Top); break;
+                    case Corners.TopLeft: DrawLine(p, Side.Top, Side.Left); break;
+
+                    case Corners.ExceptBottomLeft: DrawLine(p, Side.Bottom, Side.Left); break;
+                    case Corners.ExceptBottomRight: DrawLine(p, Side.Right, Side.Bottom); break;
+                    case Corners.ExceptTopLeft: DrawLine(p, Side.Left, Side.Top); break;
+                    case Corners.ExceptTopRight: DrawLine(p, Side.Top, Side.Right); break;
+
+                    case Corners.Top: DrawLine(p, Side.Right, Side.Left); break;
+                    case Corners.Bottom: DrawLine(p, Side.Left, Side.Right); break;
+                    case Corners.Left: DrawLine(p, Side.Top, Side.Bottom); break;
+                    case Corners.Right: DrawLine(p, Side.Bottom, Side.Top); break;
+
+                    case Corners.TopLeftAndBottomRight:
+                        DrawLine(p, Side.Bottom, Side.Left);
+                        DrawLine(p, Side.Top, Side.Right);
+                        break;
+                    case Corners.TopRightAndBottomLeft:
+                        DrawLine(p, Side.Left, Side.Top);
+                        DrawLine(p, Side.Right, Side.Bottom);
+                        break;
+
+                    default:
+                        break;
                 }
             }
         }
