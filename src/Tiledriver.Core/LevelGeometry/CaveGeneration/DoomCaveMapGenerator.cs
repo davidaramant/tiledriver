@@ -31,11 +31,11 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
             var lineCache = new ModelSequence<LineDescription, LineDef>(
                 ld => new LineDef(V1: ld.V1, V2: ld.V2, SideFront: 0));
 
-            var edges = FindEdges(
+            var borderTiles = FindBorderTiles(
                 fineDetailBoard.Dimensions,
                 isCornerInsideMap: p => fineDetailBoard[p] == CellType.Dead);
 
-            DrawEdges(edges, vertexCache, lineCache);
+            DrawEdges(borderTiles, vertexCache, lineCache);
 
             var firstOpenSpot =
                 (from y in Enumerable.Range(0, logicalBoard.Height)
@@ -88,11 +88,11 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
             Bottom
         }
 
-        private static IReadOnlyDictionary<Position, Corners> FindEdges(
+        private static IReadOnlyList<(Position Position, Corners InMapCorners)> FindBorderTiles(
             Size size,
             Func<Position, bool> isCornerInsideMap)
         {
-            var edges = new Dictionary<Position, Corners>();
+            var edges = new List<(Position, Corners)>();
 
             for (int y = 0; y < size.Height - 1; y++)
             {
@@ -101,18 +101,19 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                     var p = new Position(x, y);
                     var inMapCorners = Corner.Create(p, isCornerInsideMap);
                     if (inMapCorners != Corners.None && inMapCorners != Corners.All)
-                        edges[p] = inMapCorners;
+                        edges.Add((p,inMapCorners));
                 }
             }
 
             return edges;
         }
 
-        private static void DrawEdges(IReadOnlyDictionary<Position, Corners> edges,
+        private static void DrawEdges(
+            IReadOnlyList<(Position Position, Corners InMapCorners)> borderTiles,
             ModelSequence<LogicalPoint, Vertex> vertexCache,
             ModelSequence<LineDescription, LineDef> lineCache)
         {
-            foreach (var pair in edges)
+            foreach (var borderTile in borderTiles)
             {
                 LogicalPoint GetMiddleOfSide(Position p, Side side) => side switch
                 {
@@ -129,8 +130,8 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                             vertexCache.GetIndex(GetMiddleOfSide(pos, toSide)),
                             vertexCache.GetIndex(GetMiddleOfSide(pos, fromSide))));
 
-                var p = pair.Key;
-                var inMapCorners = pair.Value;
+                var p = borderTile.Position;
+                var inMapCorners = borderTile.InMapCorners;
 
                 switch (inMapCorners)
                 {
