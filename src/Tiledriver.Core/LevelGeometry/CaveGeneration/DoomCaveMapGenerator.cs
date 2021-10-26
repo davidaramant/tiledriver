@@ -90,23 +90,11 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
 
         private static IReadOnlyList<(Position Position, Corners InMapCorners)> FindBorderTiles(
             Size size,
-            Func<Position, bool> isCornerInsideMap)
-        {
-            var edges = new List<(Position, Corners)>();
-
-            for (int y = 0; y < size.Height - 1; y++)
-            {
-                for (int x = 0; x < size.Width - 1; x++)
-                {
-                    var p = new Position(x, y);
-                    var inMapCorners = Corner.Create(p, isCornerInsideMap);
-                    if (inMapCorners != Corners.None && inMapCorners != Corners.All)
-                        edges.Add((p,inMapCorners));
-                }
-            }
-
-            return edges;
-        }
+            Func<Position, bool> isCornerInsideMap) =>
+            size.GetAllPositions()
+                .Select(p => ( p, InMapCorners: Corner.Create(p, isCornerInsideMap) ))
+                .Where(tile => tile.InMapCorners != Corners.None && tile.InMapCorners != Corners.All)
+                .ToList();
 
         private static void DrawEdges(
             IReadOnlyList<(Position Position, Corners InMapCorners)> borderTiles,
