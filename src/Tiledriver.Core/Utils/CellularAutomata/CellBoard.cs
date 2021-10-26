@@ -7,7 +7,7 @@ using Tiledriver.Core.LevelGeometry;
 
 namespace Tiledriver.Core.Utils.CellularAutomata
 {
-    public sealed class CellBoard
+    public sealed class CellBoard : IBox
     {
         private readonly CellType[,] _odd;
         private readonly CellType[,] _even;

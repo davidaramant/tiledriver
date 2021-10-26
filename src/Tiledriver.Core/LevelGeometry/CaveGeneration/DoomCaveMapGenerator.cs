@@ -8,6 +8,7 @@ using System.Linq;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Textures;
 using Tiledriver.Core.FormatModels.Udmf;
+using Tiledriver.Core.LevelGeometry.Extensions;
 using Tiledriver.Core.Utils.CellularAutomata;
 
 namespace Tiledriver.Core.LevelGeometry.CaveGeneration
@@ -38,9 +39,7 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
             DrawEdges(borderTiles, vertexCache, lineCache);
 
             var firstOpenSpot =
-                (from y in Enumerable.Range(0, logicalBoard.Height)
-                 from x in Enumerable.Range(0, logicalBoard.Width)
-                 select new Position(x, y)).First(p => logicalBoard[p] == CellType.Dead);
+                logicalBoard.GetAllPositions().First(p => logicalBoard[p] == CellType.Dead);
 
             return new MapData(
                 NameSpace: "Doom",
@@ -101,50 +100,38 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
             ModelSequence<LogicalPoint, Vertex> vertexCache,
             ModelSequence<LineDescription, LineDef> lineCache)
         {
-            foreach (var borderTile in borderTiles)
+            foreach (var (pos, inMapCorners) in borderTiles)
             {
-                LogicalPoint GetMiddleOfSide(Position p, Side side) => side switch
-                {
-                    Side.Left => new(p.X, p.Y + 0.5),
-                    Side.Top => new(p.X + 0.5, p.Y),
-                    Side.Right => new(p.X + 1, p.Y + 0.5),
-                    Side.Bottom => new(p.X + 0.5, p.Y + 1),
-                    _ => throw new Exception("Impossible")
-                };
-
-                void DrawLine(Position pos, Side fromSide, Side toSide) =>
+                void DrawLine(Position p, Side fromSide, Side toSide) =>
                     lineCache.GetIndex(
                         new LineDescription(
-                            vertexCache.GetIndex(GetMiddleOfSide(pos, toSide)),
-                            vertexCache.GetIndex(GetMiddleOfSide(pos, fromSide))));
-
-                var p = borderTile.Position;
-                var inMapCorners = borderTile.InMapCorners;
+                            vertexCache.GetIndex(GetMiddleOfSide(p, toSide)),
+                            vertexCache.GetIndex(GetMiddleOfSide(p, fromSide))));
 
                 switch (inMapCorners)
                 {
-                    case Corners.BottomLeft: DrawLine(p, Side.Left, Side.Bottom); break;
-                    case Corners.BottomRight: DrawLine(p, Side.Bottom, Side.Right); break;
-                    case Corners.TopRight: DrawLine(p, Side.Right, Side.Top); break;
-                    case Corners.TopLeft: DrawLine(p, Side.Top, Side.Left); break;
+                    case Corners.BottomLeft: DrawLine(pos, Side.Left, Side.Bottom); break;
+                    case Corners.BottomRight: DrawLine(pos, Side.Bottom, Side.Right); break;
+                    case Corners.TopRight: DrawLine(pos, Side.Right, Side.Top); break;
+                    case Corners.TopLeft: DrawLine(pos, Side.Top, Side.Left); break;
 
-                    case Corners.ExceptBottomLeft: DrawLine(p, Side.Bottom, Side.Left); break;
-                    case Corners.ExceptBottomRight: DrawLine(p, Side.Right, Side.Bottom); break;
-                    case Corners.ExceptTopLeft: DrawLine(p, Side.Left, Side.Top); break;
-                    case Corners.ExceptTopRight: DrawLine(p, Side.Top, Side.Right); break;
+                    case Corners.ExceptBottomLeft: DrawLine(pos, Side.Bottom, Side.Left); break;
+                    case Corners.ExceptBottomRight: DrawLine(pos, Side.Right, Side.Bottom); break;
+                    case Corners.ExceptTopLeft: DrawLine(pos, Side.Left, Side.Top); break;
+                    case Corners.ExceptTopRight: DrawLine(pos, Side.Top, Side.Right); break;
 
-                    case Corners.Top: DrawLine(p, Side.Right, Side.Left); break;
-                    case Corners.Bottom: DrawLine(p, Side.Left, Side.Right); break;
-                    case Corners.Left: DrawLine(p, Side.Top, Side.Bottom); break;
-                    case Corners.Right: DrawLine(p, Side.Bottom, Side.Top); break;
+                    case Corners.Top: DrawLine(pos, Side.Right, Side.Left); break;
+                    case Corners.Bottom: DrawLine(pos, Side.Left, Side.Right); break;
+                    case Corners.Left: DrawLine(pos, Side.Top, Side.Bottom); break;
+                    case Corners.Right: DrawLine(pos, Side.Bottom, Side.Top); break;
 
                     case Corners.TopLeftAndBottomRight:
-                        DrawLine(p, Side.Bottom, Side.Left);
-                        DrawLine(p, Side.Top, Side.Right);
+                        DrawLine(pos, Side.Bottom, Side.Left);
+                        DrawLine(pos, Side.Top, Side.Right);
                         break;
                     case Corners.TopRightAndBottomLeft:
-                        DrawLine(p, Side.Left, Side.Top);
-                        DrawLine(p, Side.Right, Side.Bottom);
+                        DrawLine(pos, Side.Left, Side.Top);
+                        DrawLine(pos, Side.Right, Side.Bottom);
                         break;
 
                     default:
@@ -152,6 +139,16 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                 }
             }
         }
+
+        private static LogicalPoint GetMiddleOfSide(Position p, Side side) =>
+            side switch
+            {
+                Side.Left => new(p.X, p.Y + 0.5),
+                Side.Top => new(p.X + 0.5, p.Y),
+                Side.Right => new(p.X + 1, p.Y + 0.5),
+                Side.Bottom => new(p.X + 0.5, p.Y + 1),
+                _ => throw new Exception("Impossible")
+            };
 
         private sealed record LineDescription(
             int V1,
