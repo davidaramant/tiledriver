@@ -149,6 +149,5 @@ namespace Tiledriver.Core.Utils.CellularAutomata
 
             return count;
         }
-
     }
 }

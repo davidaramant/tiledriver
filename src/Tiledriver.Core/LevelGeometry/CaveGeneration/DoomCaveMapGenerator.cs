@@ -158,5 +158,22 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
             double X,
             double Y);
 
+        public enum LineDirection
+        {
+            Left,
+            UpLeft,
+            Up,
+            UpRight,
+            Right,
+            DownRight,
+            Down,
+            DownLeft,
+        }
+
+        public sealed record Line(
+            Position Start,
+            LineDirection Direction,
+            int Length
+        );
     }
 }
