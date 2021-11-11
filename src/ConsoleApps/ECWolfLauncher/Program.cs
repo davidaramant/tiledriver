@@ -458,7 +458,7 @@ namespace TestRunner
                 AsParallel().
                 Select(filePath =>
                     {
-                        using (var md5 = new MD5CryptoServiceProvider())
+                        using (var md5 = MD5.Create())
                         using (var fs = File.OpenRead(filePath))
                         {
                             return (filePath: filePath, hash: BitConverter.ToString(md5.ComputeHash(fs)));
