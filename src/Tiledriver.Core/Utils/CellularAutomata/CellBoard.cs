@@ -3,7 +3,9 @@
 
 using System;
 using System.Linq;
+using Tiledriver.Core.Extensions.Collections;
 using Tiledriver.Core.LevelGeometry;
+using Tiledriver.Core.LevelGeometry.Extensions;
 
 namespace Tiledriver.Core.Utils.CellularAutomata
 {
@@ -77,6 +79,20 @@ namespace Tiledriver.Core.Utils.CellularAutomata
                 {
                     _even[row, col] = random.NextDouble() <= probabilityAlive ? CellType.Alive : CellType.Dead;
                 }
+            }
+
+            return this;
+        }
+
+        public CellBoard AddNoise(Random random, double percentage)
+        {
+            var allPositions = Dimensions.GetAllPositions().ToList();
+            allPositions.Shuffle(random);
+
+            foreach(var pos in allPositions.Take((int)(Dimensions.Area * percentage)))
+            {
+                var value = CurrentBoard[pos.Y, pos.X];
+                CurrentBoard[pos.Y, pos.X] = value == CellType.Alive ? CellType.Dead : CellType.Alive;
             }
 
             return this;
