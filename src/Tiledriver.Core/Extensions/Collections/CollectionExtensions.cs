@@ -40,5 +40,20 @@ namespace Tiledriver.Core.Extensions.Collections
         // Cheat because it's absurd that interface doesn't have this
         public static int FindIndex<T>(this IReadOnlyList<T> list, Predicate<T> predicate) =>
             ((List<T>) list).FindIndex(predicate);
+
+        public static void Shuffle<T>(this IList<T> list, Random? random = null)
+        {
+            var rng = random ?? new Random();
+            
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
+        }
     }
 }
