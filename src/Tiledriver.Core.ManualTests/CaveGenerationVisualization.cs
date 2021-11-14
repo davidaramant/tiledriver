@@ -61,7 +61,7 @@ namespace Tiledriver.Core.ManualTests
             void SaveImage(IFastImage image, int step, string description) =>
                 image.Save(Path.Combine(dirInfo.FullName, $"Seed {seed:00} - Step {step:00} - {description}.png"));
 
-            void SaveBoard(CellBoard boardToSave)
+            void SaveBoard(CellBoard boardToSave, int generation)
             {
                 using var img = GenericVisualizer.RenderBinary(
                     dimensions,
@@ -69,25 +69,29 @@ namespace Tiledriver.Core.ManualTests
                     trueColor: SKColors.DarkSlateBlue,
                     falseColor: SKColors.White,
                     scale:ImageScale);
-                SaveImage(img, boardToSave.Generation, $"Cellular Generation {boardToSave.Generation}");
+                SaveImage(img, generation, $"Cellular Generation {generation}");
             }
+
+            int generation = 0;
 
             if (visualizeProcess)
             {
-                SaveBoard(board);
+                SaveBoard(board, generation);
             }
 
             if (visualizeProcess)
             {
                 for (int i = 0; i < 4; i++)
                 {
+                    generation++;
                     board.RunGenerations(1, CellRule.FiveNeighborsOrInEmptyArea);
-                        SaveBoard(board);
+                        SaveBoard(board, generation);
                 }
                 for (int i = 0; i < 3; i++)
                 {
+                    generation++;
                     board.RunGenerations(1, CellRule.FiveOrMoreNeighbors);
-                    SaveBoard(board);
+                    SaveBoard(board, generation);
                 }
             }
             else
