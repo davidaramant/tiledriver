@@ -76,7 +76,7 @@ namespace Tiledriver.Core.ManualTests
                 img.Save(Path.Combine(path, $"{name}.png"));
             }
 
-            var random = new Random();
+            var random = new Random(0);
 
             var board =
                 new CellBoard(new Size(128, 128))
@@ -86,32 +86,24 @@ namespace Tiledriver.Core.ManualTests
 
             Save(board, "1. board", 8);
 
-            var (largestArea, newSize) =
-                ConnectedAreaAnalyzer
-                    .FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Dead)
-                    .MaxElement(component => component.Area)
-                    ?.TrimExcess(1) ??
-                throw new InvalidOperationException("This can't happen");
+            const int scalingIterations = 3;
 
-            var board2 = new CellBoard(newSize,
-                typeAtPosition: p => largestArea.Contains(p) ? CellType.Dead : CellType.Alive);
+            CellBoard last = board;
 
-            var board_x2 = board2.Quadruple();
+            foreach (var noise in new[] { 0, 0.05, 0.1, 0.15, 0.2 })
+            {
+                CellBoard scaled = board;
 
-            Save(board_x2, "2. board 2x", 4);
+                foreach (int scalingIteration in Enumerable.Range(1, scalingIterations))
+                {
+                    scaled = scaled.Quadruple().AddNoise(random, noise).RunGenerations(1);
 
-            board_x2.RunGenerations(1);
+                    Save(scaled, $"{scalingIteration + 1}. board {1 << scalingIteration}x - noise {noise:F2}",  8 / (1 << scalingIteration));
 
-            Save(board_x2, "3. board 2x - smoothed", 4);
-
-            var board_x4 = board_x2.Quadruple().RunGenerations(1);
-
-            Save(board_x4, "4. board 4x - smoothed", 2);
-
-            var board_x8 = board_x4.ScaleAndSmooth();
-
-            Save(board_x8, "5. board 8x - smoothed", 1);
-        }
+                    last = scaled;
+                }
+            }
+        }        
 
         static IFastImage Visualize(CellBoard board, bool showOnlyLargestArea, int scale = 1)
         {
@@ -139,7 +131,5 @@ namespace Tiledriver.Core.ManualTests
                     scale: scale);
             }
         }
-
-        static IFastImage Visualize(Size size, ConnectedArea area) => GenericVisualizer.RenderBinary(size, area.Contains, SKColors.White, SKColors.Black);
     }
 }

@@ -42,6 +42,106 @@ namespace Tiledriver.Core.ManualTests
                 seed => { CreateCave(seed, folderName, visualizeProcess); });
         }
 
+        [Test, Explicit]
+        public void MakeDetailedCave()
+        {
+            var dir = OutputLocation.CreateDirectory("Detailed Cave");
+
+            static IFastImage Visualize(CellBoard board, int scale = 1) =>
+                GenericVisualizer.RenderBinary(board.Dimensions,
+                        isTrue: p => board[p] == CellType.Dead,
+                        trueColor: SKColors.White,
+                        falseColor: SKColors.Black,
+                        scale: scale);
+
+            foreach (var file in dir.GetFiles())
+            {
+                file.Delete();
+            }
+
+            var path = dir.FullName;
+
+            void SaveImage(IFastImage image, string name)
+            {
+                image.Save(Path.Combine(path, $"{name}.png"));
+            }
+
+            void Save(CellBoard board, string name, int scale)
+            {
+                using var img = Visualize(board, scale);
+                SaveImage(img, name);
+            }
+
+            var random = new Random(1);
+
+            var board =
+                new CellBoard(new Size(128, 128))
+                    .Fill(random, probabilityAlive: 0.5)
+                    .MakeBorderAlive(thickness: 1)
+                    .GenerateStandardCave();
+
+            Save(board, "1. board", 8);
+
+            const int scalingIterations = 3;
+            const double noise = 0.2;
+
+            CellBoard scaled = board;
+
+            foreach (int scalingIteration in Enumerable.Range(1, scalingIterations))
+            {
+                scaled = scaled.Quadruple().AddNoise(random, noise).RunGenerations(1);
+
+                Save(scaled, $"{scalingIteration + 1}. board {1 << scalingIteration}x - noise {noise:F2}", 8 / (1 << scalingIteration));
+            }
+
+            var trimmed = scaled.TrimToLargestDeadArea();
+
+            Save(trimmed, "5. trimmed", 1);
+
+            // remove noise
+            var aliveAreas =
+                ConnectedAreaAnalyzer
+                    .FindForegroundAreas(trimmed.Dimensions, p => trimmed[p] == CellType.Alive)
+                    .Where(area => area.Area > 64)
+                    .ToArray();
+
+            var denoised = new CellBoard(trimmed.Dimensions, pos => aliveAreas.Any(a => a.Contains(pos)) ? CellType.Alive : CellType.Dead);
+
+            Save(denoised, "6. denoised", 1);
+
+            var fullyDenoised = denoised.ScaleAndSmooth();
+
+            Save(fullyDenoised, "7. smoothed and scaled", 1);
+
+            // Very silly!!! Need to turn CellBoard into ConnectedArea
+            var (playArea, dimensions) = ConnectedAreaAnalyzer
+                    .FindForegroundAreas(fullyDenoised.Dimensions, p => fullyDenoised[p] == CellType.Dead)
+                    .First()
+                    .TrimExcess(border: 1); // border would not be useful during actual Doom level generation
+
+            var interiorDistances = playArea.DetermineDistanceToEdges(Neighborhood.Moore);
+
+            var largestDistance = interiorDistances.Values.Max();
+
+            using var interiorImg = GenericVisualizer.RenderPalette(
+                dimensions,
+                getColor: p =>
+                {
+                    if (!playArea.Contains(p))
+                        return SKColors.Black;
+                    if (interiorDistances.TryGetValue(p, out int d))
+                    {
+                        return SKColor.FromHsv(0, (d / (float)largestDistance)*100, 100);
+                    }
+                    return SKColors.White;
+                },
+                scale: 1);
+
+            // TODO: Step the colors; it's too smooth
+
+            SaveImage(interiorImg, "8. interior");
+        }
+
         private static void CreateCave(int seed, string folderName, bool visualizeProcess)
         {
             var stopWatch = Stopwatch.StartNew();
@@ -68,7 +168,7 @@ namespace Tiledriver.Core.ManualTests
                     isTrue: p => boardToSave[p] == CellType.Alive,
                     trueColor: SKColors.DarkSlateBlue,
                     falseColor: SKColors.White,
-                    scale:ImageScale);
+                    scale: ImageScale);
                 SaveImage(img, generation, $"Cellular Generation {generation}");
             }
 
@@ -85,7 +185,7 @@ namespace Tiledriver.Core.ManualTests
                 {
                     generation++;
                     board.RunGenerations(1, CellRule.FiveNeighborsOrInEmptyArea);
-                        SaveBoard(board, generation);
+                    SaveBoard(board, generation);
                 }
                 for (int i = 0; i < 3; i++)
                 {
@@ -148,7 +248,7 @@ namespace Tiledriver.Core.ManualTests
                 isTrue: largestComponent.Contains,
                 trueColor: SKColors.White,
                 falseColor: SKColors.DarkSlateBlue,
-                scale:ImageScale);
+                scale: ImageScale);
 
             step++;
             if (visualizeProcess)
@@ -170,7 +270,7 @@ namespace Tiledriver.Core.ManualTests
                         return SKColors.Gray;
                     return SKColors.White;
                 },
-                scale:ImageScale);
+                scale: ImageScale);
 
             step++;
             if (visualizeProcess)
@@ -181,7 +281,7 @@ namespace Tiledriver.Core.ManualTests
             // Place some lights
             var lightRange = new LightRange(DarkLevels: 15, LightLevels: 5);
             var lights = CaveThingPlacement.RandomlyPlaceLights(
-                    distanceToEdge.Where(pair=>pair.Value == 2).Select(pair=>pair.Key).ToList(),
+                    distanceToEdge.Where(pair => pair.Value == 2).Select(pair => pair.Key).ToList(),
                     random,
                     lightRange,
                     percentAreaToCover: 0.05)

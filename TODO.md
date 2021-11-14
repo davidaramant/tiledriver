@@ -40,4 +40,11 @@
 - [ ] Don't generate so many redundant linedefs
 - [ ] Utility to correct texture offsets
 - [ ] Textures for use in Doom
+- [x] Create detailed cave outline
+- [ ] Create interior of cave
 - [ ] Place 2-sided walls for interior regions
+
+### General
+
+- [ ] Should CellBoard and ConnectedArea be combined????
+- [ ] Making the detailed cave is super slow; profile what the issue is
