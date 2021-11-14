@@ -55,18 +55,12 @@ namespace mm
                 imageName = Path.GetFileNameWithoutExtension(opts.InputMapPath) + ".png";
             }
 
-            MapPalette PickPalette(ImagePalette palette)
+            static MapPalette PickPalette(ImagePalette palette) => palette switch
             {
-                switch (palette)
-                {
-                    case ImagePalette.HighlightWalls: return MapPalette.HighlightWalls;
-                    case ImagePalette.Full: return MapPalette.Full;
-
-                    case ImagePalette.CarveOutRooms:
-                    default:
-                        return MapPalette.CarveOutRooms;
-                }
-            }
+                ImagePalette.HighlightWalls => MapPalette.HighlightWalls,
+                ImagePalette.Full => MapPalette.Full,
+                _ => MapPalette.CarveOutRooms,
+            };
 
             var imagePath = Path.Combine(Path.GetDirectoryName(opts.InputMapPath), imageName);
             MetaMapImageExporter.Export(map, PickPalette(opts.Theme), imagePath, scale: opts.Scale);

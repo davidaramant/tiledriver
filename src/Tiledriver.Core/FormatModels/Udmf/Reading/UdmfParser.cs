@@ -40,16 +40,12 @@ namespace Tiledriver.Core.FormatModels.Udmf.Reading
         private static IExpression ParseBlock(IdentifierToken name, IEnumerator<Token> tokenStream)
         {
             var token = tokenStream.GetNext();
-            switch (token)
+            return token switch
             {
-                case CloseBraceToken _:
-                    return new Block(name, ImmutableArray<Assignment>.Empty);
-
-                case IdentifierToken i:
-                    return ParseBlock(name, i, tokenStream);
-                default:
-                    throw ParsingException.CreateError(token, "identifier or end of block");
-            }
+                CloseBraceToken _ => new Block(name, ImmutableArray<Assignment>.Empty),
+                IdentifierToken i => ParseBlock(name, i, tokenStream),
+                _ => throw ParsingException.CreateError(token, "identifier or end of block"),
+            };
         }
 
         private static Block ParseBlock(IdentifierToken name, IdentifierToken fieldName, IEnumerator<Token> tokenStream)
@@ -68,7 +64,7 @@ namespace Tiledriver.Core.FormatModels.Udmf.Reading
                         tokenStream.ExpectNext<EqualsToken>();
                         assignments.Add(tokenStream.ParseAssignment(i));
                         break;
-                    case CloseBraceToken cb:
+                    case CloseBraceToken:
                         return new Block(name, assignments.ToImmutableArray());
                     default:
                         throw ParsingException.CreateError(token, "identifier or end of block");

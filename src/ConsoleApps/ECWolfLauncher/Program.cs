@@ -215,17 +215,15 @@ namespace TestRunner
             }
             Directory.CreateDirectory(outputPath);
 
-            using (var progress = new ProgressBar(allFiles.Length, "Converting images..."))
+            using var progress = new ProgressBar(allFiles.Length, "Converting images...");
+            Parallel.ForEach(allFiles, mapPath =>
             {
-                Parallel.ForEach(allFiles, mapPath =>
-                {
-                    var imagePath = Path.Combine(outputPath, Path.GetFileNameWithoutExtension(mapPath) + ".png");
-                    var metaMap = MetaMap.Load(mapPath);
+                var imagePath = Path.Combine(outputPath, Path.GetFileNameWithoutExtension(mapPath) + ".png");
+                var metaMap = MetaMap.Load(mapPath);
 
-                    MetaMapImageExporter.Export(metaMap, MapPalette.Full, imagePath, scale: 4);
-                    progress.Tick();
-                });
-            }
+                MetaMapImageExporter.Export(metaMap, MapPalette.Full, imagePath, scale: 4);
+                progress.Tick();
+            });
         }
 
         private static void ReexportGoodMetaMapsToImages(
@@ -365,7 +363,7 @@ namespace TestRunner
 
         private static void RotateMaps(string inputPath)
         {
-            string MutateFileName(string path, string postfix)
+            static string MutateFileName(string path, string postfix)
             {
                 var fileName = Path.GetFileNameWithoutExtension(path) + " " + postfix;
 

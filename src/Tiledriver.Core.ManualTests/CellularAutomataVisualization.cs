@@ -113,7 +113,7 @@ namespace Tiledriver.Core.ManualTests
             Save(board_x8, "5. board 8x - smoothed", 1);
         }
 
-        IFastImage Visualize(CellBoard board, bool showOnlyLargestArea, int scale = 1)
+        static IFastImage Visualize(CellBoard board, bool showOnlyLargestArea, int scale = 1)
         {
             if (showOnlyLargestArea)
             {
@@ -140,9 +140,6 @@ namespace Tiledriver.Core.ManualTests
             }
         }
 
-        IFastImage Visualize(Size size, ConnectedArea area)
-        {
-            return GenericVisualizer.RenderBinary(size, area.Contains, SKColors.White, SKColors.Black);
-        }
+        static IFastImage Visualize(Size size, ConnectedArea area) => GenericVisualizer.RenderBinary(size, area.Contains, SKColors.White, SKColors.Black);
     }
 }

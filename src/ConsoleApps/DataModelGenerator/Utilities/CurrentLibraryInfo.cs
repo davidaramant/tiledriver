@@ -9,7 +9,7 @@ namespace Tiledriver.DataModelGenerator.Utilities
     static class CurrentLibraryInfo
     {
         private static readonly Lazy<(string Name, Version Version)> _info = 
-            new Lazy<(string Name, Version Version)>(() =>
+            new(() =>
             {
                 var currentAssembly = Assembly.GetAssembly(typeof(CurrentLibraryInfo)) ?? throw new Exception("Can't find this assembly?!");
 

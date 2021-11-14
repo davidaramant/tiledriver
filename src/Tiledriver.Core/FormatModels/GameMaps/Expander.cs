@@ -61,7 +61,7 @@ namespace Tiledriver.Core.FormatModels.GameMaps
 
             while (outputPos < outputLength)
             {
-                var copyPos = 0;
+                int copyPos;
                 var length = input[inputPos++];
 
                 if (length == 0 && (input[inputPos] == nearTag || input[inputPos] == farTag))

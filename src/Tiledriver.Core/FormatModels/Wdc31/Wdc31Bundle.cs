@@ -16,13 +16,11 @@ namespace Tiledriver.Core.FormatModels.Wdc31
 
         public static bool IsValid(Stream mapStream)
         {
-            using (var reader = new BinaryReader(mapStream, Encoding.ASCII, leaveOpen: true))
-            {
-                var version = new string(reader.ReadChars(6));
-                bool isValid = version == FileVersion;
-                mapStream.Position -= 6;
-                return isValid;
-            }
+            using var reader = new BinaryReader(mapStream, Encoding.ASCII, leaveOpen: true);
+            var version = new string(reader.ReadChars(6));
+            bool isValid = version == FileVersion;
+            mapStream.Position -= 6;
+            return isValid;
         }
 
         public static IEnumerable<BinaryMap> ReadMaps(Stream mapStream)

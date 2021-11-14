@@ -49,7 +49,7 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
                         ExpectNext<EqualsToken>(tokenStream);
                         assignments.Add(tokenStream.ParseAssignment(i));
                         break;
-                    case CloseBraceToken cb:
+                    case CloseBraceToken:
                         return new Block(name, assignments.ToImmutableArray());
                     default:
                         throw ParsingException.CreateError(token, "identifier or end of block");
@@ -62,10 +62,14 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
             var valueToken = GetNext(tokenStream);
             switch (valueToken)
             {
-                case IntegerToken i: break;
-                case FloatToken f: break;
-                case BooleanToken b: break;
-                case StringToken s: break;
+                case IntegerToken:
+                    break;
+                case FloatToken:
+                    break;
+                case BooleanToken:
+                    break;
+                case StringToken:
+                    break;
                 default:
                     throw ParsingException.CreateError(valueToken, "value");
             }

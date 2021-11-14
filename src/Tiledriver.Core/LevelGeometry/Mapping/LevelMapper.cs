@@ -54,7 +54,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             return (_hasGold ? 1 : 0) + (_hasSilver ? 1 : 0);
         }
 
-        private MapLocation FindStart(MapData data)
+        private static MapLocation FindStart(MapData data)
         {
             var startThing = data.Things.Single(thing => thing.Type == Actor.Player1Start.ClassName);
 
@@ -98,7 +98,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             _hasSilver |= room.Locations.Any(loc => _silverLocations.Any(key => (int)key.X == loc.X && (int)key.Y == loc.Y));
         }
 
-        private bool TryExpand(
+        private static bool TryExpand(
             Func<MapLocation, bool> moveCheck, 
             Func<MapLocation, MapLocation?> targetTile, 
             IRoom room, 
@@ -243,7 +243,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                         if (_hasSilver)
                         {
                             _lockedWays.Remove(lockedWay);
-                            Dictionary<IList<Passage>, MapLocation> passages = new Dictionary<IList<Passage>, MapLocation>();
+                            Dictionary<IList<Passage>, MapLocation> passages = new();
                             TryPassage(lockedWay.GetNext, lockedWay.HasProperFormattedPassage, lockedWay.MoveBackCheck, lockedWay.FromLocation, lockedWay.FromRoom, passages);
                             ExplorePassages(passages, lockedWay.FromRoom);
                         }
@@ -252,7 +252,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                         if (_hasGold)
                         {
                             _lockedWays.Remove(lockedWay);
-                            Dictionary<IList<Passage>, MapLocation> passages = new Dictionary<IList<Passage>, MapLocation>();
+                            Dictionary<IList<Passage>, MapLocation> passages = new();
                             TryPassage(lockedWay.GetNext, lockedWay.HasProperFormattedPassage, lockedWay.MoveBackCheck, lockedWay.FromLocation, lockedWay.FromRoom, passages);
                             ExplorePassages(passages, lockedWay.FromRoom);
                         }
@@ -261,7 +261,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                         if (_hasSilver && _hasGold)
                         {
                             _lockedWays.Remove(lockedWay);
-                            Dictionary<IList<Passage>, MapLocation> passages = new Dictionary<IList<Passage>, MapLocation>();
+                            Dictionary<IList<Passage>, MapLocation> passages = new();
                             TryPassage(lockedWay.GetNext, lockedWay.HasProperFormattedPassage, lockedWay.MoveBackCheck, lockedWay.FromLocation, lockedWay.FromRoom, passages);
                             ExplorePassages(passages, lockedWay.FromRoom);
                         }

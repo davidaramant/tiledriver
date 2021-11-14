@@ -196,19 +196,15 @@ namespace Tiledriver.Core.Tests.FormatModels.MapMetadata
             failures.Should().BeEmpty();
         }
 
-        private static TileType ExpandTile(char shortHandType)
+        private static TileType ExpandTile(char shortHandType) => shortHandType switch
         {
-            switch (shortHandType)
-            {
-                case '#': return TileType.Wall;
-                case ' ': return TileType.Empty;
-                case 'D': return TileType.Door;
-                case 'P': return TileType.PushWall;
-                case '~': return TileType.Unreachable;
-                default:
-                    throw new Exception("Unknown character in shorthand meta map");
-            }
-        }
+            '#' => TileType.Wall,
+            ' ' => TileType.Empty,
+            'D' => TileType.Door,
+            'P' => TileType.PushWall,
+            '~' => TileType.Unreachable,
+            _ => throw new Exception("Unknown character in shorthand meta map"),
+        };
 
         private static MapData ExpandMapFromShorthand(char[,] shortHandMap)
         {

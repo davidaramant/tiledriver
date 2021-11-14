@@ -51,10 +51,10 @@ namespace Tiledriver.Core.ManualTests
 
             List<ConnectedArea[]> results = new(2);
 
-            foreach (var test in tests)
+            foreach (var (Finder, Description) in tests)
             {
                 var components =
-                    test.Finder(board.Dimensions, p => board[p] == CellType.Dead)
+                    Finder(board.Dimensions, p => board[p] == CellType.Dead)
                         .OrderByDescending(component => component.Area)
                         .ToArray();
 
@@ -84,7 +84,7 @@ namespace Tiledriver.Core.ManualTests
                     hue += hueShift;
                 }
 
-                SaveImage(componentsImg, test.Description);
+                SaveImage(componentsImg, Description);
             }
         }
 

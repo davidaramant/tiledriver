@@ -24,11 +24,11 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
                 {
                     case IdentifierToken mapId when mapId.Id == "map":
                         {
-                            var header = ParseMapHeader(mapId, tokenStream);
+                            var (mapLump, mapName, isMapNameLookup) = ParseMapHeader(mapId, tokenStream);
                             var assignmentLookup = GetAssignmentLookup(tokenStream, alreadyOpened: true);
-                            var map = ParseMap(assignmentLookup, header.mapLump, header.mapName, header.isMapNameLookup, defaultMap);
+                            var map = ParseMap(assignmentLookup, mapLump, mapName, isMapNameLookup, defaultMap);
                             lumpToMap.Add(
-                                header.mapLump.ToUpperInvariant(),
+                                mapLump.ToUpperInvariant(),
                                 map);
                         }
                         break;
@@ -246,7 +246,7 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
                 ? assignmentLookup[id]
                 : Enumerable.Empty<VariableAssignment>();
 
-            TToken MustGet<TToken>(IdentifierToken id, Queue<Token> valueQueue) where TToken : Token
+            static TToken MustGet<TToken>(IdentifierToken id, Queue<Token> valueQueue) where TToken : Token
             {
                 if (!valueQueue.Any())
                 {

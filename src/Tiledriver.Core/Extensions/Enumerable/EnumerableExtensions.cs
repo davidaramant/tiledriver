@@ -33,7 +33,7 @@ namespace Tiledriver.Core.Extensions.Enumerable
         public static T? MaxElement<T>(this IEnumerable<T> sequence, Func<T, int> selector)
         {
             var max = int.MinValue;
-            T? maxElement = default(T);
+            T? maxElement = default;
 
             foreach (var t in sequence)
             {

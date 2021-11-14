@@ -45,19 +45,17 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
 
         public void Save(string path)
         {
-            using (var fs = File.Open(path, FileMode.Create))
-            using (var writer = new BinaryWriter(fs))
-            {
-                writer.Write(Version);
-                writer.Write(Width);
-                writer.Write(Height);
+            using var fs = File.Open(path, FileMode.Create);
+            using var writer = new BinaryWriter(fs);
+            writer.Write(Version);
+            writer.Write(Width);
+            writer.Write(Height);
 
-                for (int y = 0; y < Height; y++)
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
                 {
-                    for (int x = 0; x < Width; x++)
-                    {
-                        writer.Write((byte)this[x, y]);
-                    }
+                    writer.Write((byte)this[x, y]);
                 }
             }
         }
@@ -97,28 +95,26 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
 
         public static MetaMap Load(string path)
         {
-            using (var fs = File.Open(path, FileMode.Open))
-            using (var reader = new BinaryReader(fs))
+            using var fs = File.Open(path, FileMode.Open);
+            using var reader = new BinaryReader(fs);
+            if (reader.ReadUInt64() != Version)
             {
-                if (reader.ReadUInt64() != Version)
-                {
-                    throw new ParsingException("Unsupported version");
-                }
-                var width = reader.ReadInt32();
-                var height = reader.ReadInt32();
-
-                var map = new MetaMap(width, height);
-
-                for (int y = 0; y < height; y++)
-                {
-                    for (int x = 0; x < width; x++)
-                    {
-                        map[x, y] = (TileType)reader.ReadByte();
-                    }
-                }
-
-                return map;
+                throw new ParsingException("Unsupported version");
             }
+            var width = reader.ReadInt32();
+            var height = reader.ReadInt32();
+
+            var map = new MetaMap(width, height);
+
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    map[x, y] = (TileType)reader.ReadByte();
+                }
+            }
+
+            return map;
         }
     }
 }

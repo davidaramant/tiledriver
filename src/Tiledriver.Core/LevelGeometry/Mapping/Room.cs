@@ -30,7 +30,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             Weapons = new List<Thing>();
             Treasure = new List<Thing>();
             Health = new List<Thing>();
-            _locations.CollectionChanged += _locations_CollectionChanged;
+            _locations.CollectionChanged += Locations_CollectionChanged;
         }
 
         public string Name { get; }
@@ -78,7 +78,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
         public bool HasGoldKey => goldKeys > 0;
         public bool HasSilverKey => silverKeys > 0;
 
-        private void _locations_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        private void Locations_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
             {
@@ -117,14 +117,14 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                         silverKeys += increment;
                 }
 
-                if (mapLocation.Tile == null && mapLocation.Things.Count() == 0)
+                if (mapLocation.Tile == null && !mapLocation.Things.Any())
                     BoringTiles += increment;
             }
         }
 
         private string DebuggerDisplay => $"Room: Name={Name}; Locations={Locations.Count})";
 
-        private string[] bossTypes = new[]
+        private readonly string[] bossTypes = new[]
         {
             Actor.MechaHitler.ClassName,
             Actor.Gift.ClassName,
@@ -134,7 +134,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             Actor.Schabbs.ClassName
         };
 
-        private string[] enemyTypes = new[]
+        private readonly string[] enemyTypes = new[]
         {
             Actor.Dog.ClassName,
             Actor.FakeHitler.ClassName,
@@ -144,13 +144,13 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             Actor.WolfensteinSS.ClassName
         };
 
-        private string[] WeaponTypes = new[]
+        private readonly string[] WeaponTypes = new[]
         {
             Actor.GatlingGunUpgrade.ClassName,
             Actor.MachineGun.ClassName
         };
 
-        private string[] TreasureTypes = new[]
+        private readonly string[] TreasureTypes = new[]
         {
             Actor.Chalice.ClassName,
             Actor.ChestofJewels.ClassName,
@@ -158,7 +158,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             Actor.Crown.ClassName
         };
 
-        private string[] HealthTypes = new[]
+        private readonly string[] HealthTypes = new[]
         {
             Actor.Blood.ClassName,
             Actor.Dog.ClassName,

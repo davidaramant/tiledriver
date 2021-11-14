@@ -38,7 +38,7 @@ namespace Tiledriver.Core.FormatModels.Textures.Writing
 
             foreach (var patch in texture.Patches)
             {
-                string FormatTranslation(Translation? translation)
+                static string FormatTranslation(Translation? translation)
                 {
                     return translation switch
                     {

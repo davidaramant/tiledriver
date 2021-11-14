@@ -41,19 +41,13 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
         private static IExpression ParseBlockOrTupleList(IdentifierToken name, IEnumerator<Token> tokenStream)
         {
             var token = tokenStream.GetNext();
-            switch (token)
+            return token switch
             {
-                case OpenBraceToken ob:
-                    return ParseIntTupleList(name, ob.Location, tokenStream);
-
-                case CloseBraceToken _:
-                    return new Block(name, ImmutableArray<Assignment>.Empty);
-
-                case IdentifierToken i:
-                    return ParseBlock(name, i, tokenStream);
-                default:
-                    throw ParsingException.CreateError(token, "identifier, end of block, or start of tuple");
-            }
+                OpenBraceToken ob => ParseIntTupleList(name, ob.Location, tokenStream),
+                CloseBraceToken _ => new Block(name, ImmutableArray<Assignment>.Empty),
+                IdentifierToken i => ParseBlock(name, i, tokenStream),
+                _ => throw ParsingException.CreateError(token, "identifier, end of block, or start of tuple"),
+            };
         }
 
         private static Block ParseBlock(IdentifierToken name, IdentifierToken fieldName, IEnumerator<Token> tokenStream)
@@ -72,7 +66,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
                         tokenStream.ExpectNext<EqualsToken>();
                         assignments.Add(tokenStream.ParseAssignment(i));
                         break;
-                    case CloseBraceToken cb:
+                    case CloseBraceToken:
                         return new Block(name, assignments.ToImmutableArray());
                     default:
                         throw ParsingException.CreateError(token, "identifier or end of block");

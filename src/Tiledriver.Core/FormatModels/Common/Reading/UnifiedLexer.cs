@@ -132,7 +132,7 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
                 _tokenBuffer.Clear();
                 SkipChar();
 
-                bool IsHexChar(char c) =>
+                static bool IsHexChar(char c) =>
                     char.IsDigit(c) ||
                     (c >= 'a' && c <= 'f') ||
                     (c >= 'A' && c <= 'F');
@@ -193,12 +193,12 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
             }
 
             var name = BufferAsString();
-            switch (name)
+            return name switch
             {
-                case "true": return new BooleanToken(start, true);
-                case "false": return new BooleanToken(start, false);
-                default: return new IdentifierToken(start, new Identifier(name));
-            }
+                "true" => new BooleanToken(start, true),
+                "false" => new BooleanToken(start, false),
+                _ => new IdentifierToken(start, new Identifier(name)),
+            };
         }
 
         private void SkipComment()

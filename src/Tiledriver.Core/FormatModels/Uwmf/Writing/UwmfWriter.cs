@@ -21,7 +21,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Writing
 
         private static void Write(this StreamWriter writer, ImmutableArray<MapSquare> planeMap)
         {
-            string Convert(MapSquare ts)
+            static string Convert(MapSquare ts)
             {
                 var tagPortion =
                     ts.Tag != 0 ?

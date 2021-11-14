@@ -37,16 +37,16 @@ namespace Tiledriver.Core.FormatModels.Wad
         #region Equality stuff
         public bool Equals(LumpName? other)
         {
-            if (ReferenceEquals(null, other)) return false;
+            if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
             return string.Equals(_name, other._name);
         }
 
         public override bool Equals(object? obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
+            if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj is LumpName && Equals((LumpName)obj);
+            return obj is LumpName name && Equals(name);
         }
 
         public override int GetHashCode()

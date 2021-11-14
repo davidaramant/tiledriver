@@ -15,6 +15,6 @@ namespace Tiledriver.Core.FormatModels.MapInfo
         }
 
         public static ClusterExitText FromMessage(string message) => new(message, false);
-        public static ClusterExitText FromLookup(string lookup) => new ClusterExitText(lookup, true);
+        public static ClusterExitText FromLookup(string lookup) => new(lookup, true);
     }
 }

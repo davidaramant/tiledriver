@@ -53,10 +53,10 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
 
                         if (!obscured)
                         {
-                            var increment = light.GetBrightness(location);
+                            var (floorIncrement, ceilingIncrement) = light.GetBrightness(location);
 
-                            floorLight.Lighten(location, increment.Floor);
-                            ceilingLight.Lighten(location, increment.Ceiling);
+                            floorLight.Lighten(location, floorIncrement);
+                            ceilingLight.Lighten(location, ceilingIncrement);
                         }
                     }
                 }

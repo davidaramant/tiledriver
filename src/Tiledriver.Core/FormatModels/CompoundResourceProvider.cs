@@ -8,7 +8,7 @@ namespace Tiledriver.Core.FormatModels
 {
     public sealed class CompoundResourceProvider : IResourceProvider
     {
-        private readonly Stack<IResourceProvider> _providers = new Stack<IResourceProvider>();
+        private readonly Stack<IResourceProvider> _providers = new();
 
         public void AddProvider(IResourceProvider provider)
         {

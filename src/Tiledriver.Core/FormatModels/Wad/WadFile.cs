@@ -12,7 +12,7 @@ namespace Tiledriver.Core.FormatModels.Wad
     // TODO: Should this be stateful to allow for lazy-loaded lumps?
     public sealed class WadFile : IEnumerable<ILump>
     {
-        private readonly List<ILump> _lumps = new List<ILump>();
+        private readonly List<ILump> _lumps = new();
         public int Count => _lumps.Count;
 
         public ILump this[int index] => _lumps[index];
@@ -24,10 +24,8 @@ namespace Tiledriver.Core.FormatModels.Wad
 
         public static WadFile Read(string filePath)
         {
-            using (var fs = File.OpenRead(filePath))
-            {
-                return Read(fs);
-            }
+            using var fs = File.OpenRead(filePath);
+            return Read(fs);
         }
 
         public static WadFile Read(Stream stream)

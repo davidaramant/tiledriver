@@ -37,7 +37,7 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
                     LightHeight.Middle => (brightness, brightness),
                     LightHeight.Floor => (brightness, ReduceBrightness(brightness)),
                     LightHeight.Ceiling => (ReduceBrightness(brightness), brightness),
-                    _ => throw new ArgumentOutOfRangeException()
+                    _ => throw new InvalidProgramException("Unknown LightHeight")
                 };
 
             var d2 = Center.DistanceSquared(location);

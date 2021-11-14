@@ -22,12 +22,11 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Lighting
             _output = output;
         }
 
-        //[Fact]
+        [Fact]
         public void ShouldGenerateVisualizationOfSimpleLightMap()
         {
             MapData map = TileDemoMap.Create();
-
-            var (floorLights, ceilingLights) =
+            var (floorLights, _) =
                 LightTracer.Trace(
                     map,
                     new LightRange(DarkLevels: 10, LightLevels: 10),
@@ -38,17 +37,6 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Lighting
                         new LightDefinition(new Position(map.Width-2,1),Brightness:20,Radius:20),
                         new LightDefinition(new Position(1,map.Height-2),Brightness:20,Radius:20),
                     });
-
-            //StringBuilder line = new StringBuilder();
-            //for (int y = 0; y < map.Height; y++)
-            //{
-            //    line.Clear();
-            //    for (int x = 0; x < map.Width; x++)
-            //    {
-            //        line.Append(floorLights[x, y]);
-            //    }
-            //    _output.WriteLine(line.ToString());
-            //}
 
             var image = LightMapVisualizer.Render(floorLights, scale: 20);
             image.Save(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "_output.png"));

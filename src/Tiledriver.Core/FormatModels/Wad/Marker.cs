@@ -1,6 +1,7 @@
 // Copyright (c) 2016, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
+using System;
 using System.IO;
 
 namespace Tiledriver.Core.FormatModels.Wad
@@ -22,7 +23,7 @@ namespace Tiledriver.Core.FormatModels.Wad
 
         public byte[] GetData()
         {
-            return new byte[0];
+            return Array.Empty<byte>();
         }
     }
 }

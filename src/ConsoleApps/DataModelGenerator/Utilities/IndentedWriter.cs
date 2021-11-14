@@ -14,7 +14,7 @@ namespace Tiledriver.DataModelGenerator.Utilities
         public IndentedWriter(StreamWriter writer) => _writer = writer;
 
         public int IndentionLevel { get; private set; }
-        public string CurrentIndent => new string(' ', IndentionLevel * 4);
+        public string CurrentIndent => new(' ', IndentionLevel * 4);
 
         public IndentedWriter WriteHeader(
             string nameSpace,

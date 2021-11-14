@@ -43,7 +43,7 @@ namespace Tiledriver.Core.ManualTests
                 .CreateAndLoadWad(contents, Path.Combine(_dirInfo.FullName, (name ?? "demo") + ".wad"));
         }
 
-        IEnumerable<ILump> CreateWadContents(
+        static IEnumerable<ILump> CreateWadContents(
             IEnumerable<Func<TextureQueue, MapData>> mapCreators,
             IEnumerable<(string Name, byte[] Data)>? extraTextures = null)
         {

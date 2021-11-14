@@ -10,7 +10,7 @@ namespace Tiledriver.Core.FormatModels.MapMetadata.Extensions
 {
     public static class ExtensionMethods
     {
-        public static Position GetPosition(this Thing thing) => new Position((int) thing.X, (int) thing.Y);
+        public static Position GetPosition(this Thing thing) => new((int) thing.X, (int) thing.Y);
 
         public static void AddAllSurrounding(this Queue<Position> positions, Position p)
         {

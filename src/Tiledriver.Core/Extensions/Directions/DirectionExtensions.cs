@@ -48,7 +48,7 @@ namespace Tiledriver.Core.Extensions.Directions
                         break;
 
                     default:
-                        throw new ArgumentException();
+                        throw new InvalidProgramException("Unknown direction");
                 }
             }
         }

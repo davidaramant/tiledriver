@@ -15,8 +15,8 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
 {
     public class LevelMapperTest
     {
-        private MapData _data;
-        private ImmutableArray<MapSquare> _planeMap;
+        private readonly MapData _data;
+        private readonly ImmutableArray<MapSquare> _planeMap;
 
         private Tile? _tileAllWalls;
 
@@ -582,7 +582,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             _data.Tiles.Add(_tileWestNorthEastWalls);
         }
 
-        private void AssertLocationInRoom(IRoom room, int x, int y)
+        private static void AssertLocationInRoom(IRoom room, int x, int y)
         {
             room.Locations.Should().Contain(location => location.X == x && location.Y == y);
         }
