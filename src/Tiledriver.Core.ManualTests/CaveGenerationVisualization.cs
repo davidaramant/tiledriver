@@ -45,6 +45,8 @@ namespace Tiledriver.Core.ManualTests
         [Test, Explicit]
         public void MakeDetailedCave()
         {
+            var totalTime = Stopwatch.StartNew();
+            var stepTime = Stopwatch.StartNew();
             var dir = OutputLocation.CreateDirectory("Detailed Cave");
 
             static IFastImage Visualize(CellBoard board, int scale = 1) =>
@@ -61,9 +63,16 @@ namespace Tiledriver.Core.ManualTests
 
             var path = dir.FullName;
 
+            void LogProgress(string msg)
+            {
+                TestContext.Progress.WriteLine($"{totalTime.Elapsed}: {msg} (step time {stepTime.Elapsed})");
+                stepTime.Restart();
+            }
+
             void SaveImage(IFastImage image, string name)
             {
                 image.Save(Path.Combine(path, $"{name}.png"));
+                LogProgress(name);
             }
 
             void Save(CellBoard board, string name, int scale)
@@ -119,7 +128,11 @@ namespace Tiledriver.Core.ManualTests
                     .First()
                     .TrimExcess(border: 1); // border would not be useful during actual Doom level generation
 
+            LogProgress("Converted CellBoard into ConnectedArea");
+
             var interiorDistances = playArea.DetermineDistanceToEdges(Neighborhood.Moore);
+
+            LogProgress("Found interior distances");
 
             var largestDistance = interiorDistances.Values.Max();
 
@@ -131,7 +144,7 @@ namespace Tiledriver.Core.ManualTests
                         return SKColors.Black;
                     if (interiorDistances.TryGetValue(p, out int d))
                     {
-                        return SKColor.FromHsv(0, (d / (float)largestDistance)*100, 100);
+                        return SKColor.FromHsv(0, (d / (float)largestDistance) * 100, 100);
                     }
                     return SKColors.White;
                 },
