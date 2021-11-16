@@ -2,7 +2,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
-using Tiledriver.Core.Extensions.Enumerable;
+using System.Linq;
 using Tiledriver.Core.Utils.ConnectedComponentLabeling;
 
 namespace Tiledriver.Core.Utils.CellularAutomata
@@ -30,7 +30,7 @@ namespace Tiledriver.Core.Utils.CellularAutomata
             var (largestArea, newSize) =
                 ConnectedAreaAnalyzer
                     .FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Dead)
-                    .MaxElement(component => component.Area)
+                    .MaxBy(component => component.Area)
                     ?.TrimExcess(1) ??
                 throw new InvalidOperationException("This can't happen");
 

@@ -29,23 +29,5 @@ namespace Tiledriver.Core.Extensions.Enumerable
 
             return minIndex;
         }
-
-        public static T? MaxElement<T>(this IEnumerable<T> sequence, Func<T, int> selector)
-        {
-            var max = int.MinValue;
-            T? maxElement = default;
-
-            foreach (var t in sequence)
-            {
-                var value = selector(t);
-                if (value > max)
-                {
-                    max = value;
-                    maxElement = t;
-                }
-            }
-
-            return maxElement;
-        }
     }
 }
