@@ -5,4 +5,4 @@ using System;
 using BenchmarkDotNet.Running;
 using Benchmarks;
 
-var summary = BenchmarkRunner.Run<ConnectedComponentLabelingBenchmarks>();
+var summary = BenchmarkRunner.Run<EdgeDistanceBenchmarks>();

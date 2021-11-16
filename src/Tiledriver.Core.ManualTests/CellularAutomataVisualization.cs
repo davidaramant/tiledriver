@@ -112,7 +112,7 @@ namespace Tiledriver.Core.ManualTests
                 var (area, size) =
                     ConnectedAreaAnalyzer
                         .FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Dead)
-                        .MaxElement(component => component.Area)
+                        .MaxBy(component => component.Area)
                         ?.TrimExcess(1) ??
                     throw new InvalidOperationException("This can't happen");
 

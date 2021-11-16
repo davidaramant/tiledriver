@@ -104,7 +104,7 @@ namespace Tiledriver.Core.Utils.ConnectedComponentLabeling
             }
 
             bool IsTouchingDistance(Position p, int distance) =>
-                getNeighborhood(p).Select(GetDistance).Any(d => d == distance);
+                getNeighborhood(p).Any(p => GetDistance(p) == distance);
 
             int distance = -1;
             while (remainingPositions.Any())
@@ -130,6 +130,56 @@ namespace Tiledriver.Core.Utils.ConnectedComponentLabeling
             }
 
             return posToDistance;
+        }
+
+        public static IReadOnlyDictionary<Position, int> DetermineDistanceToEdges2(
+            this ConnectedArea area,
+            Neighborhood neighborhood) =>
+            DetermineDistanceToEdges2(area,
+                neighborhood == Neighborhood.Moore
+                    ? PositionExtensions.GetMooreNeighbors
+                    : PositionExtensions.GetVonNeumannNeighbors);
+
+        private static IReadOnlyDictionary<Position, int> DetermineDistanceToEdges2(
+            ConnectedArea area,
+            Func<Position, IEnumerable<Position>> getNeighborhood)
+        {
+            HashSet<Position> remainingPositions = new(area);
+            List<HashSet<Position>> boundaries = new();
+
+            // Find initial edge
+
+            bool IsTouchingOutside(Position p) => getNeighborhood(p).Any(p => !area.Contains(p));            
+
+            var outerEdge = remainingPositions.Where(IsTouchingOutside).ToHashSet();
+            boundaries.Add(outerEdge);
+
+            remainingPositions.ExceptWith(outerEdge);
+
+            // Find remaining boundaries
+
+            while (remainingPositions.Any())
+            {
+                var lastBoundary = boundaries.Last();
+
+                var boundary = remainingPositions.Where(p => getNeighborhood(p).Any(lastBoundary.Contains)).ToHashSet();
+
+                boundaries.Add(boundary);
+
+                remainingPositions.ExceptWith(boundary);
+            }
+
+            // Convert to dictionary (blah)
+
+            var output = new Dictionary<Position, int>();
+            for(int distance = 0; distance < boundaries.Count; distance++)
+            {
+                foreach(var p in boundaries[distance])
+                {
+                    output.Add(p, distance);
+                }
+            }
+            return output;
         }
     }
 }

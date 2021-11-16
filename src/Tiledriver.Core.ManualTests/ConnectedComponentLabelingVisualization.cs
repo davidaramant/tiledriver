@@ -95,7 +95,7 @@ namespace Tiledriver.Core.ManualTests
             var largestComponent =
                 ConnectedAreaAnalyzer
                     .FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Dead)
-                    .MaxElement(component => component.Area) ??
+                    .MaxBy(component => component.Area) ??
                 throw new InvalidOperationException("This can't happen");
 
             foreach (var neighborhood in new[] { Neighborhood.Moore, Neighborhood.VonNeumann })

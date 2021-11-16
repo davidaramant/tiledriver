@@ -130,7 +130,7 @@ namespace Tiledriver.Core.ManualTests
 
             LogProgress("Converted CellBoard into ConnectedArea");
 
-            var interiorDistances = playArea.DetermineDistanceToEdges(Neighborhood.Moore);
+            var interiorDistances = playArea.DetermineDistanceToEdges2(Neighborhood.Moore);
 
             LogProgress("Found interior distances");
 

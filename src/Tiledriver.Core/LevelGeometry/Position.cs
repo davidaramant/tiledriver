@@ -3,7 +3,7 @@
 
 namespace Tiledriver.Core.LevelGeometry
 {
-    public sealed record Position(int X, int Y)
+    public readonly record struct Position(int X, int Y)
     {
         public static Position operator +(Position p, PositionDelta d) => new(p.X + d.X, p.Y + d.Y);
         public static Position operator -(Position p, PositionDelta d) => new(p.X - d.X, p.Y - d.Y);
