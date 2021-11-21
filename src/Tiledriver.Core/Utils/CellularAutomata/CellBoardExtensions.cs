@@ -25,6 +25,27 @@ namespace Tiledriver.Core.Utils.CellularAutomata
             return board;
         }
 
+        public static CellBoard ScaleAddNoiseAndSmooth(this CellBoard board, Random random, double noise, int times = 1)
+        {
+            for(int i = 0; i < times; i++)
+            {
+                board = board.Quadruple().AddNoise(random, noise).RunGenerations(1);
+            }
+
+            return board;
+        }
+
+        public static CellBoard RemoveNoise(this CellBoard board)
+        {
+            var aliveAreas =
+                ConnectedAreaAnalyzer
+                    .FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Alive)
+                    .Where(area => area.Area > 64)
+                    .ToArray();
+
+            return new CellBoard(board.Dimensions, pos => aliveAreas.Any(a => a.Contains(pos)) ? CellType.Alive : CellType.Dead);
+        }
+
         public static CellBoard TrimToLargestDeadArea(this CellBoard board)
         {
             var (largestArea, newSize) =

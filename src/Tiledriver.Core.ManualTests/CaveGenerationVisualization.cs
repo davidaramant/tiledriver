@@ -89,9 +89,11 @@ namespace Tiledriver.Core.ManualTests
                     .MakeBorderAlive(thickness: 1)
                     .GenerateStandardCave();
 
-            Save(board, "1. board", 8);
+            int step = 1;
 
-            const int scalingIterations = 3;
+            Save(board, $"{step++}. board", 8);
+
+            const int scalingIterations = 2;
             const double noise = 0.2;
 
             CellBoard scaled = board;
@@ -100,12 +102,12 @@ namespace Tiledriver.Core.ManualTests
             {
                 scaled = scaled.Quadruple().AddNoise(random, noise).RunGenerations(1);
 
-                Save(scaled, $"{scalingIteration + 1}. board {1 << scalingIteration}x - noise {noise:F2}", 8 / (1 << scalingIteration));
+                Save(scaled, $"{step++}. board {1 << scalingIteration}x - noise {noise:F2}", 8 / (1 << scalingIteration));
             }
 
             var trimmed = scaled.TrimToLargestDeadArea();
 
-            Save(trimmed, "5. trimmed", 1);
+            Save(trimmed, $"{step++}. trimmed", 1);
 
             // remove noise
             var aliveAreas =
@@ -116,11 +118,11 @@ namespace Tiledriver.Core.ManualTests
 
             var denoised = new CellBoard(trimmed.Dimensions, pos => aliveAreas.Any(a => a.Contains(pos)) ? CellType.Alive : CellType.Dead);
 
-            Save(denoised, "6. denoised", 1);
+            Save(denoised, $"{step++}. denoised", 1);
 
             var fullyDenoised = denoised.ScaleAndSmooth();
 
-            Save(fullyDenoised, "7. smoothed and scaled", 1);
+            Save(fullyDenoised, $"{step++}. smoothed and scaled", 1);
 
             // Very silly!!! Need to turn CellBoard into ConnectedArea
             var (playArea, dimensions) = ConnectedAreaAnalyzer
@@ -150,7 +152,7 @@ namespace Tiledriver.Core.ManualTests
                 },
                 scale: 1);
 
-            SaveImage(interiorImg, "8. interior");
+            SaveImage(interiorImg, $"{step++}. interior");
         }
 
         private static void CreateCave(int seed, string folderName, bool visualizeProcess)

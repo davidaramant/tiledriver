@@ -15,8 +15,8 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
 {
     public sealed class DoomCaveMapGenerator
     {
-        private const int LogicalUnitSize = 64;
-        private const int SmoothingSteps = 2;
+        private const int LogicalUnitSize = 32;
+        private const int SmoothingSteps = 1;
         private const int DetailUnitSize = LogicalUnitSize >> SmoothingSteps;
 
         public static MapData Create(int seed, TextureQueue textureQueue)
@@ -77,6 +77,8 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                 .Fill(random, probabilityAlive: 0.5)
                 .MakeBorderAlive(thickness: 1)
                 .GenerateStandardCave()
+                .ScaleAddNoiseAndSmooth(random,noise:0.2,times:2)
+                .RemoveNoise()
                 .TrimToLargestDeadArea();
 
         private enum Side
@@ -90,7 +92,7 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
         private static IReadOnlyList<(Position Position, Corners InMapCorners)> FindBorderTiles(
             Size size,
             Func<Position, bool> isCornerInsideMap) =>
-            size.GetAllPositions()
+            size.GetAllPositionsExclusiveMax()
                 .Select(p => ( p, InMapCorners: Corner.Create(p, isCornerInsideMap) ))
                 .Where(tile => tile.InMapCorners != Corners.None && tile.InMapCorners != Corners.All)
                 .ToList();
