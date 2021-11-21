@@ -36,9 +36,9 @@ public class EdgeDistanceBenchmarks
     }
 
     [Benchmark]
-    public IReadOnlyDictionary<Position, int> Baseline() => _area.DetermineDistanceToEdges(Neighborhood.Moore);
+    public IReadOnlyDictionary<Position, int> Baseline() => _area.DetermineInteriorEdgeDistance(Neighborhood.Moore);
 
 
-    [Benchmark]
-    public IReadOnlyDictionary<Position, int> Tweaked() => _area.DetermineDistanceToEdges2(Neighborhood.Moore);
+    //[Benchmark]
+    //public IReadOnlyDictionary<Position, int> Tweaked() => _area.DetermineDistanceToEdges2(Neighborhood.Moore);
 }

@@ -100,7 +100,7 @@ namespace Tiledriver.Core.ManualTests
 
             foreach (var neighborhood in new[] { Neighborhood.Moore, Neighborhood.VonNeumann })
             {
-                var interiorInfo = largestComponent.DetermineDistanceToEdges(neighborhood);
+                var interiorInfo = largestComponent.DetermineInteriorEdgeDistance(neighborhood);
                 var maxDistance = interiorInfo.Values.Max();
 
                 Console.Out.WriteLine($"Max Distance for {neighborhood} Neighborhood: {maxDistance}");

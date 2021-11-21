@@ -33,7 +33,7 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
                     .First()
                     .TrimExcess(border: 1);
 
-            var interior = caveArea.DetermineDistanceToEdges(Neighborhood.VonNeumann);
+            var interior = caveArea.DetermineInteriorEdgeDistance(Neighborhood.VonNeumann);
 
             var alternateFloor =
                 new CellBoard(new Size(size.Width + 1, size.Height + 1))

@@ -130,27 +130,25 @@ namespace Tiledriver.Core.ManualTests
 
             LogProgress("Converted CellBoard into ConnectedArea");
 
-            var interiorDistances = playArea.DetermineDistanceToEdges2(Neighborhood.Moore);
+            var interiorDistances = playArea.DetermineInteriorEdgeDistance(Neighborhood.Moore);
 
             LogProgress("Found interior distances");
 
             var largestDistance = interiorDistances.Values.Max();
+            var numLevels = 6;
+            var levelSize = largestDistance / numLevels;
 
             using var interiorImg = GenericVisualizer.RenderPalette(
                 dimensions,
                 getColor: p =>
                 {
-                    if (!playArea.Contains(p))
-                        return SKColors.Black;
                     if (interiorDistances.TryGetValue(p, out int d))
                     {
-                        return SKColor.FromHsv(0, (d / (float)largestDistance) * 100, 100);
+                        return SKColor.FromHsv(0, (1 - ((d / levelSize) / (float)numLevels)) * 100, 100);
                     }
-                    return SKColors.White;
+                    return SKColors.Black;
                 },
                 scale: 1);
-
-            // TODO: Step the colors; it's too smooth
 
             SaveImage(interiorImg, "8. interior");
         }
@@ -271,7 +269,7 @@ namespace Tiledriver.Core.ManualTests
 
             // Find interior
 
-            var distanceToEdge = largestComponent.DetermineDistanceToEdges(Neighborhood.VonNeumann);
+            var distanceToEdge = largestComponent.DetermineInteriorEdgeDistance(Neighborhood.VonNeumann);
 
             using var interiorImg = GenericVisualizer.RenderPalette(
                 dimensions,

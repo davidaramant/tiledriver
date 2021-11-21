@@ -80,101 +80,56 @@ namespace Tiledriver.Core.Utils.ConnectedComponentLabeling
             return rawAreas.Select(points => new ConnectedArea(points));
         }
 
-        public static IReadOnlyDictionary<Position, int> DetermineDistanceToEdges(
+        /// <summary>
+        /// Finds the interior contours of the area.
+        /// </summary>
+        /// <param name="area">The area to analyze.</param>
+        /// <param name="neighborhood">What type of neighborhood to segerate contours by.</param>
+        /// <returns>
+        /// A list of the contours. Each index corresponds to the distance from the outer edge (0 is right next to it, 1 is futher inside, etc).
+        /// </returns>
+        public static IReadOnlyList<IReadOnlySet<Position>> DetermineInteriorContours(
             this ConnectedArea area,
-            Neighborhood neighborhood) =>
-            DetermineDistanceToEdges(area,
+            Neighborhood neighborhood)
+        {
+            Func<Position, IEnumerable<Position>> getNeighborhood =
                 neighborhood == Neighborhood.Moore
                     ? PositionExtensions.GetMooreNeighbors
-                    : PositionExtensions.GetVonNeumannNeighbors);
+                    : PositionExtensions.GetVonNeumannNeighbors;
 
-        private static IReadOnlyDictionary<Position, int> DetermineDistanceToEdges(
-            ConnectedArea area,
-            Func<Position, IEnumerable<Position>> getNeighborhood)
-        {
-            LinkedList<Position> remainingPositions = new(area);
-            Dictionary<Position, int> posToDistance = new();
-
-            int? GetDistance(Position p)
-            {
-                if (posToDistance.TryGetValue(p, out int distance))
-                    return distance;
-
-                return !area.Contains(p) ? -1 : null;
-            }
-
-            bool IsTouchingDistance(Position p, int distance) =>
-                getNeighborhood(p).Any(p => GetDistance(p) == distance);
-
-            int distance = -1;
-            while (remainingPositions.Any())
-            {
-                var posNode = remainingPositions.First;
-
-                while (posNode != null)
-                {
-                    if (IsTouchingDistance(posNode.Value, distance))
-                    {
-                        posToDistance.Add(posNode.Value, distance + 1);
-                        var next = posNode.Next;
-                        remainingPositions.Remove(posNode);
-                        posNode = next;
-                    }
-                    else
-                    {
-                        posNode = posNode.Next;
-                    }
-                }
-
-                distance++;
-            }
-
-            return posToDistance;
-        }
-
-        public static IReadOnlyDictionary<Position, int> DetermineDistanceToEdges2(
-            this ConnectedArea area,
-            Neighborhood neighborhood) =>
-            DetermineDistanceToEdges2(area,
-                neighborhood == Neighborhood.Moore
-                    ? PositionExtensions.GetMooreNeighbors
-                    : PositionExtensions.GetVonNeumannNeighbors);
-
-        private static IReadOnlyDictionary<Position, int> DetermineDistanceToEdges2(
-            ConnectedArea area,
-            Func<Position, IEnumerable<Position>> getNeighborhood)
-        {
             HashSet<Position> remainingPositions = new(area);
-            List<HashSet<Position>> boundaries = new();
+            List<IReadOnlySet<Position>> edges = new();
 
-            // Find initial edge
+            // Find outer edge
 
-            bool IsTouchingOutside(Position p) => getNeighborhood(p).Any(p => !area.Contains(p));            
-
-            var outerEdge = remainingPositions.Where(IsTouchingOutside).ToHashSet();
-            boundaries.Add(outerEdge);
-
+            var outerEdge = remainingPositions.Where(p => getNeighborhood(p).Any(p => !area.Contains(p))).ToHashSet();
+            edges.Add(outerEdge);
             remainingPositions.ExceptWith(outerEdge);
 
             // Find remaining boundaries
 
             while (remainingPositions.Any())
             {
-                var lastBoundary = boundaries.Last();
+                var lastEdge = edges.Last();
 
-                var boundary = remainingPositions.Where(p => getNeighborhood(p).Any(lastBoundary.Contains)).ToHashSet();
-
-                boundaries.Add(boundary);
-
-                remainingPositions.ExceptWith(boundary);
+                var edge = remainingPositions.Where(p => getNeighborhood(p).Any(lastEdge.Contains)).ToHashSet();
+                edges.Add(edge);
+                remainingPositions.ExceptWith(edge);
             }
 
-            // Convert to dictionary (blah)
+            return edges;
+        }
+
+        public static IReadOnlyDictionary<Position, int> DetermineInteriorEdgeDistance(
+            this ConnectedArea area,
+            Neighborhood neighborhood)
+        {
+            var edges = DetermineInteriorContours(area, neighborhood);
 
             var output = new Dictionary<Position, int>();
-            for(int distance = 0; distance < boundaries.Count; distance++)
+            for (int distance = 0; distance < edges.Count; distance++)
             {
-                foreach(var p in boundaries[distance])
+                foreach (var p in edges[distance])
                 {
                     output.Add(p, distance);
                 }

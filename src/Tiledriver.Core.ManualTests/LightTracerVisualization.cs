@@ -40,7 +40,7 @@ namespace Tiledriver.Core.ManualTests
                     .First()
                     .TrimExcess(border: 1);
 
-            var interior = largestComponent.DetermineDistanceToEdges(Neighborhood.VonNeumann);
+            var interior = largestComponent.DetermineInteriorEdgeDistance(Neighborhood.VonNeumann);
 
             // Place some lights
             var lightRange = new LightRange(DarkLevels: 15, LightLevels: 5);
