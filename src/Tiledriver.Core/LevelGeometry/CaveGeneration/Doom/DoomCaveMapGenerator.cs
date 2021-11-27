@@ -15,31 +15,28 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 
 public sealed class DoomCaveMapGenerator
 {
-    private const int LogicalUnitSize = 32;
-    private const int SmoothingSteps = 1;
-    private const int DetailUnitSize = LogicalUnitSize >> SmoothingSteps;
+    private const int PlayerWidth = 32; // TODO: There should be a Doom Things list somewhere
+    private const int LogicalUnitSize = 16;
 
     public static MapData Create(int seed, TextureQueue textureQueue)
     {
         var random = new Random(seed);
 
-        var logicalBoard = GenerateLogicalBoard(random);
-        var fineDetailBoard = logicalBoard.ScaleAndSmooth(SmoothingSteps);
+        var geometryBoard = GenerateGeometryBoard(random);
 
         var vertexCache = new ModelSequence<LogicalPoint, Vertex>(
-            p => new Vertex(p.X * DetailUnitSize, p.Y * DetailUnitSize));
+            p => new Vertex(p.X * LogicalUnitSize, p.Y * LogicalUnitSize));
 
         var lineCache = new ModelSequence<LineDescription, LineDef>(
             ld => new LineDef(V1: ld.V1, V2: ld.V2, SideFront: 0));
 
         var borderTiles = FindBorderTiles(
-            fineDetailBoard.Dimensions,
-            isCornerInsideMap: p => fineDetailBoard[p] == CellType.Dead);
+            geometryBoard.Dimensions,
+            isCornerInsideMap: p => geometryBoard[p] == CellType.Dead);
 
         DrawEdges(borderTiles, vertexCache, lineCache);
 
-        var firstOpenSpot =
-            logicalBoard.GetAllPositions().First(p => logicalBoard[p] == CellType.Dead);
+        var playerLogicalSpot = FindPlayerSpot(geometryBoard);
 
         return new MapData(
             NameSpace: "Doom",
@@ -57,8 +54,8 @@ public sealed class DoomCaveMapGenerator
                 HeightCeiling: 128,
                 LightLevel: 192)),
             Things: ImmutableArray.Create(new Thing(
-                X: firstOpenSpot.X * LogicalUnitSize + LogicalUnitSize / 2,
-                Y: firstOpenSpot.Y * LogicalUnitSize + LogicalUnitSize / 2,
+                X: playerLogicalSpot.X * LogicalUnitSize + LogicalUnitSize / 2,
+                Y: playerLogicalSpot.Y * LogicalUnitSize + LogicalUnitSize / 2,
                 Angle: 90,
                 Type: 1,
                 Skill1: true,
@@ -72,14 +69,31 @@ public sealed class DoomCaveMapGenerator
             )));
     }
 
-    private static CellBoard GenerateLogicalBoard(Random random) =>
+    private static Position FindPlayerSpot(CellBoard board)
+    {
+        // Add a buffer so the player doesn't start out stuck in the walls
+        var squaresToCheck = (int)Math.Ceiling((double)PlayerWidth / LogicalUnitSize) + 2;
+
+        return
+            board.Dimensions
+            .GetAllPositions()
+            .First(p =>
+                (from yd in Enumerable.Range(0, squaresToCheck)
+                 from xd in Enumerable.Range(0, squaresToCheck)
+                 select p + new PositionDelta(xd, yd))
+                 .All(p2 => board[p2] == CellType.Dead))
+            + new PositionDelta(1, 1);
+    }
+
+    private static CellBoard GenerateGeometryBoard(Random random) =>
         new CellBoard(new Size(128, 128))
             .Fill(random, probabilityAlive: 0.5)
             .MakeBorderAlive(thickness: 1)
             .GenerateStandardCave()
             .ScaleAddNoiseAndSmooth(random, noise: 0.2, times: 2)
             .RemoveNoise()
-            .TrimToLargestDeadArea();
+            .TrimToLargestDeadArea()
+            .ScaleAndSmooth();
 
     private enum Side
     {
