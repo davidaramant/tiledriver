@@ -4,13 +4,13 @@
 using System;
 using System.IO;
 using System.Linq;
-using Tiledriver.Core.LevelGeometry.CaveGeneration;
 using Tiledriver.Core.LevelGeometry.Lighting;
 using Tiledriver.Core.Utils.ConnectedComponentLabeling;
 using Tiledriver.Core.Utils.Images;
 using NUnit.Framework;
 using Tiledriver.Core.LevelGeometry.Extensions;
 using Tiledriver.Core.Utils.CellularAutomata;
+using Tiledriver.Core.LevelGeometry.CaveGeneration.Wolf;
 
 namespace Tiledriver.Core.ManualTests
 {

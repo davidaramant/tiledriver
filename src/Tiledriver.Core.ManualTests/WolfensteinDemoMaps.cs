@@ -15,7 +15,7 @@ using Tiledriver.Core.FormatModels.Textures;
 using Tiledriver.Core.FormatModels.Textures.Writing;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Wad;
-using Tiledriver.Core.LevelGeometry.CaveGeneration;
+using Tiledriver.Core.LevelGeometry.CaveGeneration.Wolf;
 using Tiledriver.Core.Settings;
 
 namespace Tiledriver.Core.ManualTests
