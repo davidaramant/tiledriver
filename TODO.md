@@ -43,8 +43,10 @@
 - [x] Create detailed cave outline
 - [ ] Create interior of cave
 - [ ] Place 2-sided walls for interior regions
+- [ ] Utility method for placing Thing at location (check that it fits)
+- [ ] Doom Things helper list (like the Wolf Actors)
 
 ### General
 
 - [ ] Should CellBoard and ConnectedArea be combined????
-- [ ] Making the detailed cave is super slow; profile what the issue is
+- [x] Making the detailed cave is super slow; profile what the issue is
