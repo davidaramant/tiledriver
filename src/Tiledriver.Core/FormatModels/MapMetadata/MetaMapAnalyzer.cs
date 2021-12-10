@@ -8,9 +8,9 @@ using System.Linq;
 using Tiledriver.Core.Extensions.Collections;
 using Tiledriver.Core.FormatModels.MapMetadata.Extensions;
 using Tiledriver.Core.FormatModels.Uwmf;
+using Tiledriver.Core.GameInfo.Wolf3D;
 using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.LevelGeometry.Extensions;
-using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.FormatModels.MapMetadata
 {

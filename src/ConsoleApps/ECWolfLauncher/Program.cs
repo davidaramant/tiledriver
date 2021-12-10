@@ -31,7 +31,6 @@ using Tiledriver.Core.FormatModels.Xlat.Reading;
 using Tiledriver.Core.LevelGeometry.Lighting;
 using Tiledriver.Core.MapConversion;
 using Tiledriver.Core.Settings;
-using Tiledriver.Core.Wolf3D;
 
 namespace TestRunner
 {

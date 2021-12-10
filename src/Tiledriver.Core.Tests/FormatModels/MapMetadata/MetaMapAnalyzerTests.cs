@@ -4,12 +4,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 using Xunit;
 using FluentAssertions;
 using Tiledriver.Core.FormatModels.MapMetadata;
 using Tiledriver.Core.FormatModels.Uwmf;
-using Tiledriver.Core.Wolf3D;
+using Tiledriver.Core.GameInfo.Wolf3D;
 
 namespace Tiledriver.Core.Tests.FormatModels.MapMetadata
 {

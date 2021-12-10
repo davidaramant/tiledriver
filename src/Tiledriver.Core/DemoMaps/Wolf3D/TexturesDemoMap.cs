@@ -6,9 +6,9 @@ using System.Collections.Immutable;
 using System.Linq;
 using Tiledriver.Core.FormatModels.Textures;
 using Tiledriver.Core.FormatModels.Uwmf;
+using Tiledriver.Core.GameInfo.Wolf3D;
 using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.LevelGeometry.CanvasDrawingExtensions;
-using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.DemoMaps.Wolf3D
 {

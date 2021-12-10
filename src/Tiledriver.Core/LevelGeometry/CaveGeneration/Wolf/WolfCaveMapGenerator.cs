@@ -6,12 +6,12 @@ using System.Collections.Immutable;
 using System.Linq;
 using Tiledriver.Core.FormatModels.Textures;
 using Tiledriver.Core.FormatModels.Uwmf;
+using Tiledriver.Core.GameInfo.Wolf3D;
 using Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 using Tiledriver.Core.LevelGeometry.Extensions;
 using Tiledriver.Core.LevelGeometry.Lighting;
 using Tiledriver.Core.Utils.CellularAutomata;
 using Tiledriver.Core.Utils.ConnectedComponentLabeling;
-using Tiledriver.Core.Wolf3D;
 
 namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Wolf;
 

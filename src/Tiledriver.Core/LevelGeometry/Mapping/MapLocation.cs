@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Tiledriver.Core.FormatModels.Uwmf;
-using Tiledriver.Core.Wolf3D;
+using Tiledriver.Core.GameInfo.Wolf3D;
 
 namespace Tiledriver.Core.LevelGeometry.Mapping
 {

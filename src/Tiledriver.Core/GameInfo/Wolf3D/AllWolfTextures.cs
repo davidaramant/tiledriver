@@ -3,15 +3,15 @@
 
 using System.Collections.Generic;
 
-namespace Tiledriver.Core.Wolf3D
+namespace Tiledriver.Core.GameInfo.Wolf3D;
+
+/// <summary>
+/// Temporary dumping ground until I figure out what to do with these.
+/// </summary>
+public static class AllWolfTextures
 {
-    /// <summary>
-    /// Temporary dumping ground until I figure out what to do with these.
-    /// </summary>
-    public static class AllWolfTextures
+    public static readonly IEnumerable<string> AllTextures = new[]
     {
-        public static readonly IEnumerable<string> AllTextures = new[]
-        {
             "GSTONEA1",	// Gray Stone 1 N/S
             "GSTONEA2",	// Gray Stone 1 E/W
             "GSTONEB1",	// Gray Stone 2 N/S
@@ -119,5 +119,4 @@ namespace Tiledriver.Core.Wolf3D
             "DOOR3_1",	// Locked Door N/S
             "DOOR3_2"	 // Locked Door E/W
         };
-    }
 }

@@ -9,7 +9,7 @@ using FluentAssertions;
 using Tiledriver.Core.DemoMaps.Wolf3D;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.LevelGeometry.Mapping;
-using Tiledriver.Core.Wolf3D;
+using Tiledriver.Core.GameInfo.Wolf3D;
 
 namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
 {
