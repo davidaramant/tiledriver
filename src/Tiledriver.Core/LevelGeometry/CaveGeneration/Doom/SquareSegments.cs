@@ -53,4 +53,6 @@ public enum SquareSegments : byte
     Corners_UpperRightAndLowerLeft = Corner_UpperRight | Corner_LowerLeft,
 
     Corners_All = Corners_Upper | Corners_Lower,
+
+    All = 255
 }

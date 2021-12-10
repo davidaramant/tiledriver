@@ -6,26 +6,26 @@ using System;
 namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 
 [Flags]
-enum Corners : byte
+public enum Corners : byte
 {
-    BottomLeft = 0b0001,
-    BottomRight = 0b0010,
-    TopRight = 0b0100,
-    TopLeft = 0b1000,
+    LowerLeft = 0b0001,
+    LowerRight = 0b0010,
+    UpperRight = 0b0100,
+    UpperLeft = 0b1000,
 
     None = 0,
-    All = BottomLeft | BottomRight | TopRight | TopLeft,
+    All = LowerLeft | LowerRight | UpperRight | UpperLeft,
 
-    Top = TopLeft | TopRight,
-    Bottom = BottomLeft | BottomRight,
-    Left = TopLeft | BottomLeft,
-    Right = TopRight | BottomRight,
+    Upper = UpperLeft | UpperRight,
+    Lower = LowerLeft | LowerRight,
+    Left = UpperLeft | LowerLeft,
+    Right = UpperRight | LowerRight,
 
-    ExceptBottomLeft = BottomRight | TopRight | TopLeft,
-    ExceptBottomRight = BottomLeft | TopRight | TopLeft,
-    ExceptTopLeft = BottomLeft | BottomRight | TopRight,
-    ExceptTopRight = BottomLeft | BottomRight | TopLeft,
+    AllButLowerLeft = LowerRight | UpperRight | UpperLeft,
+    AllButLowerRight = LowerLeft | UpperRight | UpperLeft,
+    AllButUpperLeft = LowerLeft | LowerRight | UpperRight,
+    AllButUpperRight = LowerLeft | LowerRight | UpperLeft,
 
-    TopLeftAndBottomRight = TopLeft | BottomRight,
-    TopRightAndBottomLeft = TopRight | BottomLeft,
+    UpperLeftAndLowerRight = UpperLeft | LowerRight,
+    UpperRightAndLowerLeft = UpperRight | LowerLeft,
 }

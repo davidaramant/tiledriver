@@ -126,26 +126,26 @@ public sealed class DoomCaveMapGenerator
 
             switch (inMapCorners)
             {
-                case Corners.BottomLeft: DrawLine(pos, Side.Left, Side.Bottom); break;
-                case Corners.BottomRight: DrawLine(pos, Side.Bottom, Side.Right); break;
-                case Corners.TopRight: DrawLine(pos, Side.Right, Side.Top); break;
-                case Corners.TopLeft: DrawLine(pos, Side.Top, Side.Left); break;
+                case Corners.LowerLeft: DrawLine(pos, Side.Left, Side.Bottom); break;
+                case Corners.LowerRight: DrawLine(pos, Side.Bottom, Side.Right); break;
+                case Corners.UpperRight: DrawLine(pos, Side.Right, Side.Top); break;
+                case Corners.UpperLeft: DrawLine(pos, Side.Top, Side.Left); break;
 
-                case Corners.ExceptBottomLeft: DrawLine(pos, Side.Bottom, Side.Left); break;
-                case Corners.ExceptBottomRight: DrawLine(pos, Side.Right, Side.Bottom); break;
-                case Corners.ExceptTopLeft: DrawLine(pos, Side.Left, Side.Top); break;
-                case Corners.ExceptTopRight: DrawLine(pos, Side.Top, Side.Right); break;
+                case Corners.AllButLowerLeft: DrawLine(pos, Side.Bottom, Side.Left); break;
+                case Corners.AllButLowerRight: DrawLine(pos, Side.Right, Side.Bottom); break;
+                case Corners.AllButUpperLeft: DrawLine(pos, Side.Left, Side.Top); break;
+                case Corners.AllButUpperRight: DrawLine(pos, Side.Top, Side.Right); break;
 
-                case Corners.Top: DrawLine(pos, Side.Right, Side.Left); break;
-                case Corners.Bottom: DrawLine(pos, Side.Left, Side.Right); break;
+                case Corners.Upper: DrawLine(pos, Side.Right, Side.Left); break;
+                case Corners.Lower: DrawLine(pos, Side.Left, Side.Right); break;
                 case Corners.Left: DrawLine(pos, Side.Top, Side.Bottom); break;
                 case Corners.Right: DrawLine(pos, Side.Bottom, Side.Top); break;
 
-                case Corners.TopLeftAndBottomRight:
+                case Corners.UpperLeftAndLowerRight:
                     DrawLine(pos, Side.Bottom, Side.Left);
                     DrawLine(pos, Side.Top, Side.Right);
                     break;
-                case Corners.TopRightAndBottomLeft:
+                case Corners.UpperRightAndLowerLeft:
                     DrawLine(pos, Side.Left, Side.Top);
                     DrawLine(pos, Side.Right, Side.Bottom);
                     break;
