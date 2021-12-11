@@ -6,4 +6,7 @@ namespace Tiledriver.DataModelGenerator.DoomGameInfo;
 sealed record Actor(
     string Name,
     int Id,
-    string Description);
+    string Description)
+{
+    public string SafeName => Name.TrimStart('$');
+}

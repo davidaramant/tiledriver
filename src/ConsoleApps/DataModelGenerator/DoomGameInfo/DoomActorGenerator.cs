@@ -54,8 +54,19 @@ internal static partial class DoomActorGenerator
         output
             .WriteHeader("Tiledriver.Core.GameInfo.Doom", new[] { "System.Collections.Generic", "System.CodeDom.Compiler" })
             .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
-            .Line($"public static class Actor")
-            .OpenParen()
+            .Line($"public sealed partial record Actor")
+            .OpenParen();
+
+        foreach(var actor in actors)
+        {
+
+            output
+                .Line($"/// <summary>{actor.Description}</summary>")
+                .Line($"public static readonly Actor {actor.SafeName} = new({actor.Id}, \"{actor.Description}\");")
+                .Line();
+        }
+
+        output
             .CloseParen();
     }
 

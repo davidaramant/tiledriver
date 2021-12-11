@@ -10,6 +10,5 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DemoMaps" />
-    <Folder Include="GameInfo\Doom\" />
   </ItemGroup>
 </Project>
