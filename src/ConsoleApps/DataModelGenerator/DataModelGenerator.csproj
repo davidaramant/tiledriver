@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Humanizer" Version="2.11.10" />
+    <PackageReference Include="Humanizer" Version="2.13.14" />
+    <PackageReference Include="Pidgin" Version="3.0.0" />
   </ItemGroup>
 </Project>

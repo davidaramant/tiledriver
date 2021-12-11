@@ -1,4 +1,4 @@
-﻿// Taken from the source code of UltimateDoomBuilder
+﻿// Taken from the source code of UltimateDoomBuilder (slightly tweaked to remove float and boolean values)
 players
 {
 	color = 10;	// Light Green
@@ -112,7 +112,6 @@ monsters
 	{
 		title = "Spectre";
 		renderstyle = "translucent";
-		alpha = 0.25f;
 		width = 30;
 		sprite = "SARGF1";
 		class = "Spectre";
@@ -994,7 +993,6 @@ monsters
 	{
 		title = "Monsters Spawner";
 		sprite = "BOSFB0";
-		locksprite = true;
 		height = 32;
 		class = "BossEye";
 	}
