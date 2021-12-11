@@ -52,12 +52,10 @@ internal static partial class DoomActorGenerator
         using var output = new IndentedWriter(blockStream);
 
         output
-            .WriteHeader("Tiledriver.Core.GameInfo.Doom", new[] { "System.Collections.Generic" })
-            .OpenParen()
+            .WriteHeader("Tiledriver.Core.GameInfo.Doom", new[] { "System.Collections.Generic", "System.CodeDom.Compiler" })
             .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
             .Line($"public static class Actor")
             .OpenParen()
-            .CloseParen()
             .CloseParen();
     }
 

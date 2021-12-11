@@ -24,7 +24,6 @@ namespace Tiledriver.DataModelGenerator.Uwmf
 
             output
                 .WriteHeader("Tiledriver.Core.FormatModels.Uwmf.Writing", new[] { "System.CodeDom.Compiler", "System.IO" })
-                .OpenParen()
                 .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
                 .Line($"public static partial class UwmfWriter")
                 .OpenParen();
@@ -34,7 +33,7 @@ namespace Tiledriver.DataModelGenerator.Uwmf
                 CreateBlockWriter(output, block);
             }
 
-            output.CloseParen().CloseParen();
+            output.CloseParen();
         }
 
         private static void CreateBlockWriter(IndentedWriter output, Block block)

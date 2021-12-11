@@ -45,14 +45,12 @@ namespace Tiledriver.DataModelGenerator.Uwmf
 
             output
                 .WriteHeader("Tiledriver.Core.FormatModels.Uwmf", includes)
-                .OpenParen()
                 .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
                 .Line($"public sealed partial record {block.ClassName}(")
                 .IncreaseIndent()
                 .JoinLines(",", block.OrderedProperties.Select(GetPropertyDefinition))
                 .DecreaseIndent()
-                .Line(");")
-                .CloseParen();
+                .Line(");");
         }
 
         static string GetPropertyDefinition(Property property)

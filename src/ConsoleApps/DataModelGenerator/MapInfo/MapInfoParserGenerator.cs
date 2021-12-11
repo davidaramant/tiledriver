@@ -35,7 +35,6 @@ namespace Tiledriver.DataModelGenerator.MapInfo
             output
                 .Line("#nullable enable")
                 .WriteHeader("Tiledriver.Core.FormatModels.MapInfo.Reading", includes)
-                .OpenParen()
                 .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
                 .Line($"public static partial class MapDeclarationParser")
                 .OpenParen();
@@ -48,7 +47,7 @@ namespace Tiledriver.DataModelGenerator.MapInfo
             output.Line();
             WriteDefaultMapUpdater(output, MapInfoDefinitions.Blocks.Single(b => b.ClassName == "DefaultMap"));
 
-            output.CloseParen().CloseParen();
+            output.CloseParen();
         }
 
         private static void WriteParser(IndentedWriter output, IBlock block)

@@ -4,16 +4,14 @@
 using System.CodeDom.Compiler;
 using System.Collections.Immutable;
 
-namespace Tiledriver.Core.FormatModels.Udmf
-{
-    [GeneratedCode("DataModelGenerator", "1.0.0.0")]
-    public sealed partial record MapData(
-        string NameSpace,
-        ImmutableArray<LineDef> LineDefs,
-        ImmutableArray<SideDef> SideDefs,
-        ImmutableArray<Vertex> Vertices,
-        ImmutableArray<Sector> Sectors,
-        ImmutableArray<Thing> Things,
-        string Comment = ""
-    );
-}
+namespace Tiledriver.Core.FormatModels.Udmf;
+[GeneratedCode("DataModelGenerator", "1.0.0.0")]
+public sealed partial record MapData(
+    string NameSpace,
+    ImmutableArray<LineDef> LineDefs,
+    ImmutableArray<SideDef> SideDefs,
+    ImmutableArray<Vertex> Vertices,
+    ImmutableArray<Sector> Sectors,
+    ImmutableArray<Thing> Things,
+    string Comment = ""
+);

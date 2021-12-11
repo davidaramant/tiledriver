@@ -37,7 +37,7 @@ namespace Tiledriver.DataModelGenerator.Utilities
                 Line("#nullable enable");
             }
 
-            Line($"namespace {nameSpace}");
+            Line($"namespace {nameSpace};");
 
             return this;
         }

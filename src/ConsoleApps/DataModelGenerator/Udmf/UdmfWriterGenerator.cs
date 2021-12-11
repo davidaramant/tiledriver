@@ -28,7 +28,6 @@ namespace Tiledriver.DataModelGenerator.Udmf
                         "System.IO",
                         "Tiledriver.Core.FormatModels.Common"
                     })
-                .OpenParen()
                 .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
                 .Line($"public static partial class UdmfWriter")
                 .OpenParen();
@@ -38,7 +37,7 @@ namespace Tiledriver.DataModelGenerator.Udmf
                 CreateBlockWriter(output, block);
             }
 
-            output.CloseParen().CloseParen();
+            output.CloseParen();
         }
 
         private static void CreateBlockWriter(IndentedWriter output, Block block)

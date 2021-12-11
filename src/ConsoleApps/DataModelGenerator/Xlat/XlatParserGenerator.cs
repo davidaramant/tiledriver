@@ -30,7 +30,6 @@ namespace Tiledriver.DataModelGenerator.Xlat
 
             output
                 .WriteHeader("Tiledriver.Core.FormatModels.Xlat.Reading", includes)
-                .OpenParen()
                 .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
                 .Line($"public static partial class XlatParser")
                 .OpenParen();
@@ -40,7 +39,7 @@ namespace Tiledriver.DataModelGenerator.Xlat
                 CreateBlockReader(output, block);
             }
 
-            output.CloseParen().CloseParen();
+            output.CloseParen();
         }
 
         private static string CreateParameterAssignment(Property property, string context = "block.Name") => property switch

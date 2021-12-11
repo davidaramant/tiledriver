@@ -46,7 +46,6 @@ namespace Tiledriver.DataModelGenerator.Xlat
 
             output
                 .WriteHeader("Tiledriver.Core.FormatModels.Xlat", includes)
-                .OpenParen()
                 .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
                 .Line($"public sealed partial record {block.ClassName}(")
                 .IncreaseIndent()
@@ -77,8 +76,6 @@ namespace Tiledriver.DataModelGenerator.Xlat
                 output.Line(");");
 
             }
-
-            output.CloseParen();
         }
 
         static string GetPropertyDefinition(Property property)

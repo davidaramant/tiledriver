@@ -56,7 +56,6 @@ namespace Tiledriver.DataModelGenerator.MapInfo
 
             output
                 .WriteHeader("Tiledriver.Core.FormatModels.MapInfo", includes)
-                .OpenParen()
                 .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
                 .Line($"public {qualifier} partial record {block.ClassName}(")
                 .IncreaseIndent()
@@ -73,8 +72,7 @@ namespace Tiledriver.DataModelGenerator.MapInfo
             }
 
             output
-                .Line(");")
-                .CloseParen();
+                .Line(");");
         }
 
         static string GetPropertyDefinition(Property property)

@@ -34,7 +34,6 @@ namespace Tiledriver.DataModelGenerator.Udmf
 
             output
                 .WriteHeader("Tiledriver.Core.FormatModels.Udmf.Reading", includes)
-                .OpenParen()
                 .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
                 .Line($"public static partial class UdmfSemanticAnalyzer")
                 .OpenParen();
@@ -46,7 +45,7 @@ namespace Tiledriver.DataModelGenerator.Udmf
 
             CreateGlobalBlockReader(output, UdmfDefinitions.Blocks.Single(b => b.Serialization == SerializationType.TopLevel));
 
-            output.CloseParen().CloseParen();
+            output.CloseParen();
         }
 
         private static string CreateParameterAssignment(Property property, string context = "block.Name") => property switch

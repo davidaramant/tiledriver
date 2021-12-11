@@ -36,7 +36,6 @@ namespace Tiledriver.DataModelGenerator.Uwmf
 
             output
                 .WriteHeader("Tiledriver.Core.FormatModels.Uwmf.Reading", includes)
-                .OpenParen()
                 .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
                 .Line($"public static partial class UwmfSemanticAnalyzer")
                 .OpenParen();
@@ -48,7 +47,7 @@ namespace Tiledriver.DataModelGenerator.Uwmf
 
             CreateGlobalBlockReader(output, UwmfDefinitions.Blocks.Single(b => b.Serialization == SerializationType.TopLevel));
 
-            output.CloseParen().CloseParen();
+            output.CloseParen();
         }
 
         private static string CreateParameterAssignment(Property property, string context = "block.Name") => property switch

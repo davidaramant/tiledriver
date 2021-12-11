@@ -4,21 +4,19 @@
 using System.CodeDom.Compiler;
 using Tiledriver.Core.FormatModels.Common;
 
-namespace Tiledriver.Core.FormatModels.MapInfo
-{
-    [GeneratedCode("DataModelGenerator", "1.0.0.0")]
-    public sealed partial record Skill(
-        Identifier Id,
-        double DamageFactor,
-        int Lives,
-        int MapFilter,
-        string MustConfirm,
-        string Name,
-        string PicName,
-        double PlayerDamageFactor,
-        bool QuizHints,
-        double ScoreMultiplier,
-        int SpawnFilter,
-        bool FastMontsters = true
-    );
-}
+namespace Tiledriver.Core.FormatModels.MapInfo;
+[GeneratedCode("DataModelGenerator", "1.0.0.0")]
+public sealed partial record Skill(
+    Identifier Id,
+    double DamageFactor,
+    int Lives,
+    int MapFilter,
+    string MustConfirm,
+    string Name,
+    string PicName,
+    double PlayerDamageFactor,
+    bool QuizHints,
+    double ScoreMultiplier,
+    int SpawnFilter,
+    bool FastMontsters = true
+);

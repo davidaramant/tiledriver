@@ -49,14 +49,12 @@ namespace Tiledriver.DataModelGenerator.Udmf
 
             output
                 .WriteHeader("Tiledriver.Core.FormatModels.Udmf", includes)
-                .OpenParen()
                 .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
                 .Line($"public sealed partial record {block.ClassName}(")
                 .IncreaseIndent()
                 .JoinLines(",", block.OrderedProperties.Select(GetRecordPropertyDefinition))
                 .DecreaseIndent()
-                .Line(");")
-                .CloseParen();
+                .Line(");");
         }
 
         static void WriteBuilder(string basePath, Block block)
@@ -75,7 +73,6 @@ namespace Tiledriver.DataModelGenerator.Udmf
 
             output
                 .WriteHeader("Tiledriver.Core.FormatModels.Udmf", includes, enableNullables:containsNullables)
-                .OpenParen()
                 .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
                 .Line($"public sealed partial class {block.ClassName}Builder")
                 .OpenParen()
@@ -89,7 +86,6 @@ namespace Tiledriver.DataModelGenerator.Udmf
                 .DecreaseIndent()
                 .Line(");")
                 .DecreaseIndent()
-                .CloseParen()
                 .CloseParen();
         }
 
