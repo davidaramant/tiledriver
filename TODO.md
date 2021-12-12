@@ -45,6 +45,9 @@
 - [ ] Place 2-sided walls for interior regions
 - [ ] Utility method for placing Thing at location (check that it fits)
 - [ ] Doom Things helper list (like the Wolf Actors)
+  - [x] Actor list
+  - [ ] Actor categories
+  - [ ] Textures & Flats
 
 ### General
 
