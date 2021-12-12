@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using Tiledriver.DataModelGenerator.DoomGameInfo.Parsing;
 using Tiledriver.DataModelGenerator.Utilities;
@@ -37,10 +36,16 @@ internal static partial class DoomActorGenerator
         {
             foreach (var actor in category.Actors)
             {
+                var lookup = new PropertyLookup(
+                    category.GlobalAssignments, 
+                    actor.Assignments);
+
                 yield return new Actor(
-                    Name: actor.Assignments["class"].ToString() ?? throw new Exception("No class in actor"),
+                    Name: lookup.GetString("class"),
                     Id: actor.Id,
-                    Description: actor.Assignments["title"].ToString() ?? throw new Exception("No title in actor"));
+                    Description: lookup.GetString("title"),
+                    Radius: lookup.GetInt("width"), // This is named poorly in the config file
+                    Height: lookup.GetInt("height"));
             }
         }
     }
@@ -59,15 +64,47 @@ internal static partial class DoomActorGenerator
 
         foreach(var actor in actors)
         {
-
             output
                 .Line($"/// <summary>{actor.Description}</summary>")
-                .Line($"public static readonly Actor {actor.SafeName} = new({actor.Id}, \"{actor.Description}\");")
+                .Line($"public static readonly Actor {actor.SafeName} = new(")
+                .IncreaseIndent()
+                .JoinLines(",",new[] {
+                    $"Id: {actor.Id}",
+                    $"Description: \"{actor.Description}\"",
+                    $"Width: {actor.Width}",
+                    $"Height: {actor.Height}"
+                })
+                .DecreaseIndent()
+                .Line(");")
                 .Line();
         }
 
         output
             .CloseParen();
+    }
+
+    sealed class PropertyLookup
+    {
+        private readonly string _context;
+        private readonly IReadOnlyDictionary<string, object> _parentAssignments;
+        private readonly IReadOnlyDictionary<string, object> _actorAssignments;
+
+        public PropertyLookup(
+            IReadOnlyDictionary<string, object> parentAssignments,
+            IReadOnlyDictionary<string, object> actorAssignments)
+        {
+            _parentAssignments = parentAssignments;
+            _actorAssignments = actorAssignments;
+            _context = GetString("class");
+        }
+
+        private object GetValue(string name) => 
+            _actorAssignments.TryLookupValue(name) ?? 
+            _parentAssignments.TryLookupValue(name) ?? 
+            throw new ArgumentException($"Could not find {name} for {_context}");
+
+        public int GetInt(string name) => (int)GetValue(name);
+        public string GetString(string name) => (string)GetValue(name);
     }
 
 }

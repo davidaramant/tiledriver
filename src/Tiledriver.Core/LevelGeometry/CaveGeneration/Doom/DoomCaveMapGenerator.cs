@@ -8,6 +8,7 @@ using System.Linq;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Textures;
 using Tiledriver.Core.FormatModels.Udmf;
+using Tiledriver.Core.GameInfo.Doom;
 using Tiledriver.Core.LevelGeometry.Extensions;
 using Tiledriver.Core.Utils.CellularAutomata;
 
@@ -15,7 +16,6 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 
 public sealed class DoomCaveMapGenerator
 {
-    private const int PlayerWidth = 32; // TODO: There should be a Doom Things list somewhere
     private const int LogicalUnitSize = 16;
 
     public static MapData Create(int seed, TextureQueue textureQueue)
@@ -53,26 +53,17 @@ public sealed class DoomCaveMapGenerator
                 HeightFloor: 0,
                 HeightCeiling: 128,
                 LightLevel: 192)),
-            Things: ImmutableArray.Create(new Thing(
-                X: playerLogicalSpot.X * LogicalUnitSize + LogicalUnitSize / 2,
-                Y: playerLogicalSpot.Y * LogicalUnitSize + LogicalUnitSize / 2,
-                Angle: 90,
-                Type: 1,
-                Skill1: true,
-                Skill2: true,
-                Skill3: true,
-                Skill4: true,
-                Skill5: true,
-                Single: true,
-                Dm: true,
-                Coop: true
-            )));
+            Things: ImmutableArray.Create(
+                Actor.Player1Start.MakeThing(
+                    x: playerLogicalSpot.X * LogicalUnitSize + LogicalUnitSize / 2,
+                    y: playerLogicalSpot.Y * LogicalUnitSize + LogicalUnitSize / 2,
+                    angle: 90)));
     }
 
     private static Position FindPlayerSpot(CellBoard board)
     {
         // Add a buffer so the player doesn't start out stuck in the walls
-        var squaresToCheck = (int)Math.Ceiling((double)PlayerWidth / LogicalUnitSize) + 2;
+        var squaresToCheck = (int)Math.Ceiling((double)Actor.Player1Start.Width / LogicalUnitSize) + 2;
 
         return
             board.Dimensions
