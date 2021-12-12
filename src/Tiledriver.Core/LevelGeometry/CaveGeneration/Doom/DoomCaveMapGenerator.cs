@@ -11,6 +11,7 @@ using Tiledriver.Core.FormatModels.Udmf;
 using Tiledriver.Core.GameInfo.Doom;
 using Tiledriver.Core.LevelGeometry.Extensions;
 using Tiledriver.Core.Utils.CellularAutomata;
+using Tiledriver.Core.Utils.ConnectedComponentLabeling;
 
 namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 
@@ -22,7 +23,11 @@ public sealed class DoomCaveMapGenerator
     {
         var random = new Random(seed);
 
-        var geometryBoard = GenerateGeometryBoard(random);
+        CellBoard geometryBoard = GenerateGeometryBoard(random);
+        (ConnectedArea playableSpace, Size boardSize) = geometryBoard.TrimToLargestDeadConnectedArea();
+
+        var internalDistances = playableSpace.DetermineInteriorEdgeDistance(Neighborhood.Moore);
+        // TODO: Feed the above into FindBorderTiles
 
         var vertexCache = new ModelSequence<LogicalPoint, Vertex>(
             p => new Vertex(p.X * LogicalUnitSize, p.Y * LogicalUnitSize));
@@ -101,6 +106,18 @@ public sealed class DoomCaveMapGenerator
             .Select(p => (p, InMapCorners: Corner.Create(p, isCornerInsideMap)))
             .Where(tile => tile.InMapCorners != Corners.None && tile.InMapCorners != Corners.All)
             .ToList();
+
+    // Check all layers for corners
+    // - Turn corners into SquareSegments
+    // Turn layers of SquareSegments into sectorId[SquareSegments] (-1 is outside I guess)
+    // Filter out ones where all sectorId values are the same
+    // LATER iterate over list to find line segments
+    //
+    // What does this return? (Position, sectorId[SquareSegments]) ?
+    private static IReadOnlyList<(Position Position, Corners InMapCorners)> FindBorderTiles2(
+        Size size,
+        Func<Position, bool> isCornerInsideMap) =>
+        throw new NotImplementedException();
 
     private static void DrawEdges(
         IReadOnlyList<(Position Position, Corners InMapCorners)> borderTiles,

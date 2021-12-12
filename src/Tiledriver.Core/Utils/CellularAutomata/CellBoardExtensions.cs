@@ -3,6 +3,7 @@
 
 using System;
 using System.Linq;
+using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.Utils.ConnectedComponentLabeling;
 
 namespace Tiledriver.Core.Utils.CellularAutomata
@@ -27,7 +28,7 @@ namespace Tiledriver.Core.Utils.CellularAutomata
 
         public static CellBoard ScaleAddNoiseAndSmooth(this CellBoard board, Random random, double noise, int times = 1)
         {
-            for(int i = 0; i < times; i++)
+            for (int i = 0; i < times; i++)
             {
                 board = board.Quadruple().AddNoise(random, noise).RunGenerations(1);
             }
@@ -49,14 +50,17 @@ namespace Tiledriver.Core.Utils.CellularAutomata
         public static CellBoard TrimToLargestDeadArea(this CellBoard board)
         {
             var (largestArea, newSize) =
+                TrimToLargestDeadConnectedArea(board);
+
+            return new CellBoard(newSize,
+                typeAtPosition: p => largestArea.Contains(p) ? CellType.Dead : CellType.Alive);
+        }
+
+        public static (ConnectedArea, Size) TrimToLargestDeadConnectedArea(this CellBoard board) =>
                 ConnectedAreaAnalyzer
                     .FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Dead)
                     .MaxBy(component => component.Area)
                     ?.TrimExcess(1) ??
                 throw new InvalidOperationException("This can't happen");
-
-            return new CellBoard(newSize,
-                typeAtPosition: p => largestArea.Contains(p) ? CellType.Dead : CellType.Alive);
-        }
     }
 }
