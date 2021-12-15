@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using Tiledriver.Core.Extensions.Collections;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Textures;
 using Tiledriver.Core.FormatModels.Udmf;
@@ -38,6 +39,8 @@ public sealed class DoomCaveMapGenerator
         var borderTiles = FindBorderTiles(
             geometryBoard.Dimensions,
             isCornerInsideMap: p => geometryBoard[p] == CellType.Dead);
+
+        FindBorderTiles2(boardSize, internalDistances);
 
         DrawEdges(borderTiles, vertexCache, lineCache);
 
@@ -113,11 +116,40 @@ public sealed class DoomCaveMapGenerator
     // Filter out ones where all sectorId values are the same
     // LATER iterate over list to find line segments
     //
-    // What does this return? (Position, sectorId[SquareSegments]) ?
-    private static IReadOnlyList<(Position Position, Corners InMapCorners)> FindBorderTiles2(
+    // What does this return? (Position, SquareSegmentSectors) ?
+    private static IReadOnlyList<(Position Position, SquareSegmentSectors)> FindBorderTiles2(
         Size size,
-        Func<Position, bool> isCornerInsideMap) =>
-        throw new NotImplementedException();
+        IReadOnlyDictionary<Position, int> interiorDistances) =>
+        size.GetAllPositionsExclusiveMax()
+        .Select(p =>
+        {
+            var upperLeft = interiorDistances.TryGet(p) ?? -1;
+            var upperRight = interiorDistances.TryGet(p.Right()) ?? -1;
+            var lowerLeft = interiorDistances.TryGet(p.Below()) ?? -1;
+            var lowerRight = interiorDistances.TryGet(p.BelowRight()) ?? -1;
+
+            // Assertion: For distances, there can be at most two different distances
+            var diff = new[] { upperLeft, upperRight, lowerLeft, lowerRight }.Distinct().Count();
+            System.Diagnostics.Debug.Assert(diff <= 2);
+
+            // TODO: Move the above trash into a submethod that returns... SquareSegmentsSectors? Should that type be more generic?
+            // Maybe each segment should index into "something" that can vary - height, light level, alternate texture, water, etc
+
+            return (p, new SquareSegmentSectors(new int[8]));
+        })
+        .Where(t => !t.Item2.IsUniform)
+        .ToList();
+
+
+    sealed class SquareSegmentSectors
+    {
+        private readonly int[] _sectors;
+
+        public SquareSegmentSectors(IEnumerable<int> sectors) => _sectors = sectors.ToArray();
+
+        public int this[SquareSegments id] => _sectors[(int)id];
+        public bool IsUniform => _sectors.Skip(1).All(s => s == _sectors[0]);
+    }
 
     private static void DrawEdges(
         IReadOnlyList<(Position Position, Corners InMapCorners)> borderTiles,

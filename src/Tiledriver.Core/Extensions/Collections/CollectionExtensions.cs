@@ -55,5 +55,8 @@ namespace Tiledriver.Core.Extensions.Collections
                 list[n] = value;
             }
         }
+
+        public static TValue? TryGet<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dict, TKey key) where TValue : struct => 
+            dict.TryGetValue(key, out var value) ? value : default;
     }
 }
