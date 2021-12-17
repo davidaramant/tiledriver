@@ -28,19 +28,18 @@ public sealed class DoomCaveMapGenerator
         (ConnectedArea playableSpace, Size boardSize) = geometryBoard.TrimToLargestDeadConnectedArea();
 
         var internalDistances = playableSpace.DetermineInteriorEdgeDistance(Neighborhood.Moore);
-        // TODO: Feed the above into FindBorderTiles
 
-        var vertexCache = new ModelSequence<LogicalPoint, Vertex>(
-            p => new Vertex(p.X * LogicalUnitSize, p.Y * LogicalUnitSize));
-
-        var lineCache = new ModelSequence<LineDescription, LineDef>(
-            ld => new LineDef(V1: ld.V1, V2: ld.V2, SideFront: 0));
+        var vertexCache = new ModelSequence<LogicalPoint, Vertex>(ConvertToVertex);
+        var lineCache = new ModelSequence<LineDescription, LineDef>(ConvertToLineDef);
+        var sectorCache = new ModelSequence<SectorDescription, Sector>(ConvertToSector);
 
         var borderTiles = FindBorderTiles(
             geometryBoard.Dimensions,
             isCornerInsideMap: p => geometryBoard[p] == CellType.Dead);
 
-        FindBorderTiles2(boardSize, internalDistances);
+        var borderTiles2 = FindBorderTiles2(boardSize, internalDistances);
+
+        DrawEdges2(borderTiles2, vertexCache, lineCache, sectorCache);
 
         DrawEdges(borderTiles, vertexCache, lineCache);
 
@@ -67,6 +66,15 @@ public sealed class DoomCaveMapGenerator
                     y: playerLogicalSpot.Y * LogicalUnitSize + LogicalUnitSize / 2,
                     angle: 90)));
     }
+
+    private static Vertex ConvertToVertex(LogicalPoint p) => new(p.X * LogicalUnitSize, p.Y * LogicalUnitSize);
+    private static LineDef ConvertToLineDef(LineDescription ld) => new(V1: ld.V1, V2: ld.V2, SideFront: 0);
+    private static Sector ConvertToSector(SectorDescription sd) => new(
+                TextureFloor: new Texture("RROCK16"),
+                TextureCeiling: new Texture("FLAT10"),
+                HeightFloor: 0,
+                HeightCeiling: 128,
+                LightLevel: 16 * sd.HeightLevel);
 
     private static Position FindPlayerSpot(CellBoard board)
     {
@@ -110,44 +118,57 @@ public sealed class DoomCaveMapGenerator
             .Where(tile => tile.InMapCorners != Corners.None && tile.InMapCorners != Corners.All)
             .ToList();
 
-    // Check all layers for corners
-    // - Turn corners into SquareSegments
-    // Turn layers of SquareSegments into sectorId[SquareSegments] (-1 is outside I guess)
-    // Filter out ones where all sectorId values are the same
-    // LATER iterate over list to find line segments
-    //
-    // What does this return? (Position, SquareSegmentSectors) ?
     private static IReadOnlyList<(Position Position, SquareSegmentSectors)> FindBorderTiles2(
         Size size,
         IReadOnlyDictionary<Position, int> interiorDistances) =>
         size.GetAllPositionsExclusiveMax()
         .Select(p =>
         {
-            var upperLeft = interiorDistances.TryGet(p) ?? -1;
-            var upperRight = interiorDistances.TryGet(p.Right()) ?? -1;
-            var lowerLeft = interiorDistances.TryGet(p.Below()) ?? -1;
-            var lowerRight = interiorDistances.TryGet(p.BelowRight()) ?? -1;
+            var heightLookup = GetHeightLookup(interiorDistances, p);
 
-            // Assertion: For distances, there can be at most two different distances
-            var diff = new[] { upperLeft, upperRight, lowerLeft, lowerRight }.Distinct().Count();
-            System.Diagnostics.Debug.Assert(diff <= 2);
+            var sectorIds =
+                SquareSegmentsExtensions.GetAllSegments()
+                .Select(seq => new SectorDescription(HeightLevel: heightLookup(seq)))
+                .ToArray();
 
-            // TODO: Move the above trash into a submethod that returns... SquareSegmentsSectors? Should that type be more generic?
-            // Maybe each segment should index into "something" that can vary - height, light level, alternate texture, water, etc
-
-            return (p, new SquareSegmentSectors(new int[8]));
+            return (p, new SquareSegmentSectors(sectorIds));
         })
         .Where(t => !t.Item2.IsUniform)
         .ToList();
 
+    private static Func<SquareSegment, int> GetHeightLookup(
+        IReadOnlyDictionary<Position, int> interiorDistances,
+        Position position)
+    {
+        var upperLeft = interiorDistances.TryGet(position) ?? -1;
+        var upperRight = interiorDistances.TryGet(position.Right()) ?? -1;
+        var lowerLeft = interiorDistances.TryGet(position.Below()) ?? -1;
+        var lowerRight = interiorDistances.TryGet(position.BelowRight()) ?? -1;
+
+        // Because this is operating on internal distances from walls, there are only 1 or 2 different values for the
+        // corners.
+        var minHeight = Min(upperLeft, upperRight, lowerLeft, lowerRight);
+        var maxHeight = Max(upperLeft, upperRight, lowerLeft, lowerRight);
+
+        var segments = Corner.Create(
+            topLeft: upperLeft == maxHeight,
+            topRight: upperRight == maxHeight,
+            bottomLeft: lowerLeft == maxHeight,
+            bottomRight: lowerRight == maxHeight).ToSquareSegments();
+
+        return seg => segments.HasFlag(seg.ToSquareSegments()) ? maxHeight : minHeight;
+    }
+
+    private static int Min(int v1, int v2, int v3, int v4) => Math.Min(v1, Math.Min(v2, Math.Min(v3, v4)));
+    private static int Max(int v1, int v2, int v3, int v4) => Math.Max(v1, Math.Max(v2, Math.Max(v3, v4)));
 
     sealed class SquareSegmentSectors
     {
-        private readonly int[] _sectors;
+        private readonly SectorDescription[] _sectors;
 
-        public SquareSegmentSectors(IEnumerable<int> sectors) => _sectors = sectors.ToArray();
+        public SquareSegmentSectors(IEnumerable<SectorDescription> sectors) => _sectors = sectors.ToArray();
 
-        public int this[SquareSegments id] => _sectors[(int)id];
+        public SectorDescription this[SquareSegment id] => _sectors[(int)id];
         public bool IsUniform => _sectors.Skip(1).All(s => s == _sectors[0]);
     }
 
@@ -196,19 +217,39 @@ public sealed class DoomCaveMapGenerator
         }
     }
 
+    private static void DrawEdges2(
+        IReadOnlyList<(Position Position, SquareSegmentSectors Sectors)> borderTiles,
+        ModelSequence<LogicalPoint, Vertex> vertexCache,
+        ModelSequence<LineDescription, LineDef> lineCache,
+        ModelSequence<SectorDescription, Sector> sectorCache)
+    {
+        // Loop over tiles
+        //   Get all line segments from sector segments (new method in SquareSegmentSectors?)
+        //     This will loop over all the segment ids
+        //     If [this]!=[next], there should be a line segment between them
+        //     Create line description based on that
+        //
+        // TODO: Add sector ids to LineDescription
+
+        throw new NotImplementedException();
+    }
+
     private static LogicalPoint GetMiddleOfSide(Position p, Side side) =>
-        side switch
-        {
-            Side.Left => new(p.X, p.Y + 0.5),
-            Side.Top => new(p.X + 0.5, p.Y),
-            Side.Right => new(p.X + 1, p.Y + 0.5),
-            Side.Bottom => new(p.X + 0.5, p.Y + 1),
-            _ => throw new Exception("Impossible")
-        };
+    side switch
+    {
+        Side.Left => new(p.X, p.Y + 0.5),
+        Side.Top => new(p.X + 0.5, p.Y),
+        Side.Right => new(p.X + 1, p.Y + 0.5),
+        Side.Bottom => new(p.X + 0.5, p.Y + 1),
+        _ => throw new Exception("Impossible")
+    };
 
     private sealed record LineDescription(
         int V1,
         int V2);
+
+    private sealed record SectorDescription(
+        int HeightLevel);
 
     private sealed record LogicalPoint(
         double X,
@@ -226,6 +267,7 @@ public sealed class DoomCaveMapGenerator
         DownLeft,
     }
 
+    // TODO: Not used yet - will be useful when simplifying geometry
     public sealed record Line(
         Position Start,
         LineDirection Direction,
