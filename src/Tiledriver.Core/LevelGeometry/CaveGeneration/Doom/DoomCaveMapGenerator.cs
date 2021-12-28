@@ -30,8 +30,8 @@ public sealed class DoomCaveMapGenerator
         var internalDistances = playableSpace.DetermineInteriorEdgeDistance(Neighborhood.Moore);
 
         var vertexCache = new ModelSequence<LogicalPoint, Vertex>(ConvertToVertex);
-        var lineCache = new ModelSequence<LineDescription, LineDef>(ConvertToLineDef);
         var sectorCache = new ModelSequence<SectorDescription, Sector>(ConvertToSector);
+        var lineCache = new ModelSequence<LineDescription, LineDef>(ld => ConvertToLineDef(ld, sectorCache));
 
         var borderTiles = FindBorderTiles(
             geometryBoard.Dimensions,
@@ -68,7 +68,13 @@ public sealed class DoomCaveMapGenerator
     }
 
     private static Vertex ConvertToVertex(LogicalPoint p) => new(p.X * LogicalUnitSize, p.Y * LogicalUnitSize);
-    private static LineDef ConvertToLineDef(LineDescription ld) => new(V1: ld.V1, V2: ld.V2, SideFront: 0);
+    private static LineDef ConvertToLineDef(LineDescription ld, ModelSequence<SectorDescription, Sector> sectorCache) => 
+        new(
+            V1: ld.LeftVertex, 
+            V2: ld.RightVertex, 
+            TwoSided: ld.BackSector != null,            
+            SideFront: sectorCache.GetIndex(ld.FrontSector!),
+            SideBack: ld.BackSector == null ? -1 : sectorCache.GetIndex(ld.BackSector));
     private static Sector ConvertToSector(SectorDescription sd) => new(
                 TextureFloor: new Texture("RROCK16"),
                 TextureCeiling: new Texture("FLAT10"),
@@ -228,8 +234,6 @@ public sealed class DoomCaveMapGenerator
         //     This will loop over all the segment ids
         //     If [this]!=[next], there should be a line segment between them
         //     Create line description based on that
-        //
-        // TODO: Add sector ids to LineDescription
 
         throw new NotImplementedException();
     }
@@ -244,9 +248,13 @@ public sealed class DoomCaveMapGenerator
         _ => throw new Exception("Impossible")
     };
 
+    // TODO: FrontSector should not be nullable
+    // TODO: LeftVertex & RightVertex should not be indices because of simplification
     private sealed record LineDescription(
-        int V1,
-        int V2);
+        int LeftVertex,
+        int RightVertex,
+        SectorDescription? FrontSector = null,
+        SectorDescription? BackSector = null);
 
     private sealed record SectorDescription(
         int HeightLevel);
