@@ -158,81 +158,6 @@ public sealed class DoomCaveMapGenerator
         return seg => segments.HasFlag(seg.ToSquareSegments()) ? maxHeight : minHeight;
     }
 
-    sealed class SquareSegmentSectors
-    {
-        private readonly SectorDescription[] _sectors;
-
-        public SquareSegmentSectors(IEnumerable<SectorDescription> sectors) => _sectors = sectors.ToArray();
-
-        public SectorDescription this[SquareSegment id] => _sectors[(int)id];
-        public bool IsUniform => _sectors.Skip(1).All(s => s == _sectors[0]);
-
-        public IEnumerable<InternalEdge> GetEdges() =>
-            new InternalEdge[]
-            {
-                new InternalEdge.DiagTopLeft(
-                    UpperLeftOuter:this[SquareSegment.UpperLeftOuter],
-                    UpperLeftInner:this[SquareSegment.UpperLeftInner]),
-                new InternalEdge.DiagTopRight(
-                    UpperRightOuter:this[SquareSegment.UpperRightOuter],
-                    UpperRightInner:this[SquareSegment.UpperRightInner]),
-                new InternalEdge.DiagBottomRight(
-                    LowerRightOuter:this[SquareSegment.LowerRightOuter],
-                    LowerRightInner:this[SquareSegment.LowerRightInner]),
-                new InternalEdge.DiagBottomLeft(
-                    LowerLeftOuter:this[SquareSegment.LowerLeftOuter],
-                    LowerLeftInner:this[SquareSegment.LowerLeftInner]),
-                new InternalEdge.HorizontalLeft(
-                    UpperLeftInner:this[SquareSegment.UpperLeftInner],
-                    LowerLeftInner:this[SquareSegment.LowerLeftInner]),
-                new InternalEdge.HorizontalRight(
-                    UpperRightInner:this[SquareSegment.UpperRightInner],
-                    LowerRightInner:this[SquareSegment.LowerRightInner]),
-                new InternalEdge.VerticalTop(
-                    UpperLeftInner:this[SquareSegment.UpperLeftInner],
-                    UpperRightInner:this[SquareSegment.UpperRightInner]),
-                new InternalEdge.VerticalBottom(
-                    LowerRightInner:this[SquareSegment.LowerRightInner],
-                    LowerLeftInner:this[SquareSegment.LowerLeftInner]),
-            }.Where(ie => ie.IsValid);
-    }
-
-    abstract record InternalEdge(bool IsValid)
-    {
-        public sealed record DiagTopLeft(
-            SectorDescription UpperLeftOuter,
-            SectorDescription UpperLeftInner)
-            : InternalEdge(UpperLeftOuter != UpperLeftInner);
-        public sealed record DiagTopRight(
-            SectorDescription UpperRightOuter,
-            SectorDescription UpperRightInner)
-            : InternalEdge(UpperRightOuter != UpperRightInner);
-        public sealed record DiagBottomRight(
-            SectorDescription LowerRightOuter,
-            SectorDescription LowerRightInner)
-            : InternalEdge(LowerRightOuter != LowerRightInner);
-        public sealed record DiagBottomLeft(
-            SectorDescription LowerLeftOuter,
-            SectorDescription LowerLeftInner)
-            : InternalEdge(LowerLeftOuter != LowerLeftInner);
-        public sealed record HorizontalLeft(
-            SectorDescription UpperLeftInner,
-            SectorDescription LowerLeftInner)
-            : InternalEdge(UpperLeftInner != LowerLeftInner);
-        public sealed record HorizontalRight(
-            SectorDescription UpperRightInner,
-            SectorDescription LowerRightInner)
-            : InternalEdge(UpperRightInner != LowerRightInner);
-        public sealed record VerticalTop(
-            SectorDescription UpperLeftInner,
-            SectorDescription UpperRightInner)
-            : InternalEdge(UpperLeftInner != UpperRightInner);
-        public sealed record VerticalBottom(
-            SectorDescription LowerRightInner,
-            SectorDescription LowerLeftInner)
-            : InternalEdge(LowerRightInner != LowerLeftInner);
-    }
-
     //private static void DrawEdges(
     //    IReadOnlyList<(Position Position, Corners InMapCorners)> borderTiles,
     //    ModelSequence<LogicalPoint, Vertex> vertexCache,
@@ -302,24 +227,6 @@ public sealed class DoomCaveMapGenerator
         Side.Bottom => new(p.X + 0.5, p.Y + 1),
         _ => throw new Exception("Impossible")
     };
-
-    // TODO: LeftVertex & RightVertex should not be indices because of simplification
-    private sealed record LineDescription(
-        int LeftVertex,
-        int RightVertex,
-        SectorDescription FrontSector,
-        SectorDescription BackSector);
-
-    private sealed record SectorDescription(
-        int HeightLevel)
-    {
-        public static readonly SectorDescription Outside = new(-1);
-        public bool IsOutside => this == Outside;
-    }
-
-    private sealed record LogicalPoint(
-        double X,
-        double Y);
 
 
 
