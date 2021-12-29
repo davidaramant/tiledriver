@@ -10,11 +10,11 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 /// </summary>
 /// <remarks>
 /// +-----+
-/// |1/|\3|
-/// |/2|4\|
+/// |0/|\2|
+/// |/1|3\|
 /// +-----+
-/// |\8|6/|
-/// |7\|/5|
+/// |\7|5/|
+/// |6\|/4|
 /// +-----+
 /// </remarks>
 [Flags]

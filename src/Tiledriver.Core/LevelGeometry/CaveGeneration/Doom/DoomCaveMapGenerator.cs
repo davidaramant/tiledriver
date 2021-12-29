@@ -13,6 +13,7 @@ using Tiledriver.Core.GameInfo.Doom;
 using Tiledriver.Core.LevelGeometry.Extensions;
 using Tiledriver.Core.Utils.CellularAutomata;
 using Tiledriver.Core.Utils.ConnectedComponentLabeling;
+using static Tiledriver.Core.Utils.MathUtil;
 
 namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 
@@ -33,15 +34,15 @@ public sealed class DoomCaveMapGenerator
         var sectorCache = new ModelSequence<SectorDescription, Sector>(ConvertToSector);
         var lineCache = new ModelSequence<LineDescription, LineDef>(ld => ConvertToLineDef(ld, sectorCache));
 
-        var borderTiles = FindBorderTiles(
-            geometryBoard.Dimensions,
-            isCornerInsideMap: p => geometryBoard[p] == CellType.Dead);
+        //var borderTiles = FindBorderTiles(
+        //    geometryBoard.Dimensions,
+        //    isCornerInsideMap: p => geometryBoard[p] == CellType.Dead);
 
-        var borderTiles2 = FindBorderTiles2(boardSize, internalDistances);
+        var edges = GetEdges(boardSize, internalDistances);
 
-        DrawEdges2(borderTiles2, vertexCache, lineCache, sectorCache);
+        //DrawEdges2(borderTiles2, vertexCache, lineCache, sectorCache);
 
-        DrawEdges(borderTiles, vertexCache, lineCache);
+        //DrawEdges(borderTiles, vertexCache, lineCache);
 
         var playerLogicalSpot = FindPlayerSpot(geometryBoard);
 
@@ -68,13 +69,13 @@ public sealed class DoomCaveMapGenerator
     }
 
     private static Vertex ConvertToVertex(LogicalPoint p) => new(p.X * LogicalUnitSize, p.Y * LogicalUnitSize);
-    private static LineDef ConvertToLineDef(LineDescription ld, ModelSequence<SectorDescription, Sector> sectorCache) => 
+    private static LineDef ConvertToLineDef(LineDescription ld, ModelSequence<SectorDescription, Sector> sectorCache) =>
         new(
-            V1: ld.LeftVertex, 
-            V2: ld.RightVertex, 
-            TwoSided: ld.BackSector != null,            
+            V1: ld.LeftVertex,
+            V2: ld.RightVertex,
+            TwoSided: !ld.BackSector.IsOutside,
             SideFront: sectorCache.GetIndex(ld.FrontSector!),
-            SideBack: ld.BackSector == null ? -1 : sectorCache.GetIndex(ld.BackSector));
+            SideBack: ld.BackSector.IsOutside ? -1 : sectorCache.GetIndex(ld.BackSector));
     private static Sector ConvertToSector(SectorDescription sd) => new(
                 TextureFloor: new Texture("RROCK16"),
                 TextureCeiling: new Texture("FLAT10"),
@@ -116,15 +117,7 @@ public sealed class DoomCaveMapGenerator
         Bottom
     }
 
-    private static IReadOnlyList<(Position Position, Corners InMapCorners)> FindBorderTiles(
-        Size size,
-        Func<Position, bool> isCornerInsideMap) =>
-        size.GetAllPositionsExclusiveMax()
-            .Select(p => (p, InMapCorners: Corner.Create(p, isCornerInsideMap)))
-            .Where(tile => tile.InMapCorners != Corners.None && tile.InMapCorners != Corners.All)
-            .ToList();
-
-    private static IReadOnlyList<(Position Position, SquareSegmentSectors)> FindBorderTiles2(
+    private static IReadOnlyDictionary<Position, IReadOnlyList<InternalEdge>> GetEdges(
         Size size,
         IReadOnlyDictionary<Position, int> interiorDistances) =>
         size.GetAllPositionsExclusiveMax()
@@ -137,10 +130,10 @@ public sealed class DoomCaveMapGenerator
                 .Select(seq => new SectorDescription(HeightLevel: heightLookup(seq)))
                 .ToArray();
 
-            return (p, new SquareSegmentSectors(sectorIds));
+            return (Position: p, Sectors: new SquareSegmentSectors(sectorIds));
         })
-        .Where(t => !t.Item2.IsUniform)
-        .ToList();
+        .Where(t => !t.Sectors.IsUniform)
+        .ToDictionary(pair => pair.Position, pair => (IReadOnlyList<InternalEdge>)pair.Sectors.GetEdges().ToList());
 
     private static Func<SquareSegment, int> GetHeightLookup(
         IReadOnlyDictionary<Position, int> interiorDistances,
@@ -165,9 +158,6 @@ public sealed class DoomCaveMapGenerator
         return seg => segments.HasFlag(seg.ToSquareSegments()) ? maxHeight : minHeight;
     }
 
-    private static int Min(int v1, int v2, int v3, int v4) => Math.Min(v1, Math.Min(v2, Math.Min(v3, v4)));
-    private static int Max(int v1, int v2, int v3, int v4) => Math.Max(v1, Math.Max(v2, Math.Max(v3, v4)));
-
     sealed class SquareSegmentSectors
     {
         private readonly SectorDescription[] _sectors;
@@ -176,55 +166,120 @@ public sealed class DoomCaveMapGenerator
 
         public SectorDescription this[SquareSegment id] => _sectors[(int)id];
         public bool IsUniform => _sectors.Skip(1).All(s => s == _sectors[0]);
-    }
 
-    private static void DrawEdges(
-        IReadOnlyList<(Position Position, Corners InMapCorners)> borderTiles,
-        ModelSequence<LogicalPoint, Vertex> vertexCache,
-        ModelSequence<LineDescription, LineDef> lineCache)
-    {
-        foreach (var (pos, inMapCorners) in borderTiles)
-        {
-            void DrawLine(Position p, Side fromSide, Side toSide) =>
-                lineCache.GetIndex(
-                    new LineDescription(
-                        vertexCache.GetIndex(GetMiddleOfSide(p, toSide)),
-                        vertexCache.GetIndex(GetMiddleOfSide(p, fromSide))));
-
-            switch (inMapCorners)
+        public IEnumerable<InternalEdge> GetEdges() =>
+            new InternalEdge[]
             {
-                case Corners.LowerLeft: DrawLine(pos, Side.Left, Side.Bottom); break;
-                case Corners.LowerRight: DrawLine(pos, Side.Bottom, Side.Right); break;
-                case Corners.UpperRight: DrawLine(pos, Side.Right, Side.Top); break;
-                case Corners.UpperLeft: DrawLine(pos, Side.Top, Side.Left); break;
-
-                case Corners.AllButLowerLeft: DrawLine(pos, Side.Bottom, Side.Left); break;
-                case Corners.AllButLowerRight: DrawLine(pos, Side.Right, Side.Bottom); break;
-                case Corners.AllButUpperLeft: DrawLine(pos, Side.Left, Side.Top); break;
-                case Corners.AllButUpperRight: DrawLine(pos, Side.Top, Side.Right); break;
-
-                case Corners.Upper: DrawLine(pos, Side.Right, Side.Left); break;
-                case Corners.Lower: DrawLine(pos, Side.Left, Side.Right); break;
-                case Corners.Left: DrawLine(pos, Side.Top, Side.Bottom); break;
-                case Corners.Right: DrawLine(pos, Side.Bottom, Side.Top); break;
-
-                case Corners.UpperLeftAndLowerRight:
-                    DrawLine(pos, Side.Bottom, Side.Left);
-                    DrawLine(pos, Side.Top, Side.Right);
-                    break;
-                case Corners.UpperRightAndLowerLeft:
-                    DrawLine(pos, Side.Left, Side.Top);
-                    DrawLine(pos, Side.Right, Side.Bottom);
-                    break;
-
-                default:
-                    break;
-            }
-        }
+                new InternalEdge.DiagTopLeft(
+                    UpperLeftOuter:this[SquareSegment.UpperLeftOuter],
+                    UpperLeftInner:this[SquareSegment.UpperLeftInner]),
+                new InternalEdge.DiagTopRight(
+                    UpperRightOuter:this[SquareSegment.UpperRightOuter],
+                    UpperRightInner:this[SquareSegment.UpperRightInner]),
+                new InternalEdge.DiagBottomRight(
+                    LowerRightOuter:this[SquareSegment.LowerRightOuter],
+                    LowerRightInner:this[SquareSegment.LowerRightInner]),
+                new InternalEdge.DiagBottomLeft(
+                    LowerLeftOuter:this[SquareSegment.LowerLeftOuter],
+                    LowerLeftInner:this[SquareSegment.LowerLeftInner]),
+                new InternalEdge.HorizontalLeft(
+                    UpperLeftInner:this[SquareSegment.UpperLeftInner],
+                    LowerLeftInner:this[SquareSegment.LowerLeftInner]),
+                new InternalEdge.HorizontalRight(
+                    UpperRightInner:this[SquareSegment.UpperRightInner],
+                    LowerRightInner:this[SquareSegment.LowerRightInner]),
+                new InternalEdge.VerticalTop(
+                    UpperLeftInner:this[SquareSegment.UpperLeftInner],
+                    UpperRightInner:this[SquareSegment.UpperRightInner]),
+                new InternalEdge.VerticalBottom(
+                    LowerRightInner:this[SquareSegment.LowerRightInner],
+                    LowerLeftInner:this[SquareSegment.LowerLeftInner]),
+            }.Where(ie => ie.IsValid);
     }
+
+    abstract record InternalEdge(bool IsValid)
+    {
+        public sealed record DiagTopLeft(
+            SectorDescription UpperLeftOuter,
+            SectorDescription UpperLeftInner)
+            : InternalEdge(UpperLeftOuter != UpperLeftInner);
+        public sealed record DiagTopRight(
+            SectorDescription UpperRightOuter,
+            SectorDescription UpperRightInner)
+            : InternalEdge(UpperRightOuter != UpperRightInner);
+        public sealed record DiagBottomRight(
+            SectorDescription LowerRightOuter,
+            SectorDescription LowerRightInner)
+            : InternalEdge(LowerRightOuter != LowerRightInner);
+        public sealed record DiagBottomLeft(
+            SectorDescription LowerLeftOuter,
+            SectorDescription LowerLeftInner)
+            : InternalEdge(LowerLeftOuter != LowerLeftInner);
+        public sealed record HorizontalLeft(
+            SectorDescription UpperLeftInner,
+            SectorDescription LowerLeftInner)
+            : InternalEdge(UpperLeftInner != LowerLeftInner);
+        public sealed record HorizontalRight(
+            SectorDescription UpperRightInner,
+            SectorDescription LowerRightInner)
+            : InternalEdge(UpperRightInner != LowerRightInner);
+        public sealed record VerticalTop(
+            SectorDescription UpperLeftInner,
+            SectorDescription UpperRightInner)
+            : InternalEdge(UpperLeftInner != UpperRightInner);
+        public sealed record VerticalBottom(
+            SectorDescription LowerRightInner,
+            SectorDescription LowerLeftInner)
+            : InternalEdge(LowerRightInner != LowerLeftInner);
+    }
+
+    //private static void DrawEdges(
+    //    IReadOnlyList<(Position Position, Corners InMapCorners)> borderTiles,
+    //    ModelSequence<LogicalPoint, Vertex> vertexCache,
+    //    ModelSequence<LineDescription, LineDef> lineCache)
+    //{
+    //    foreach (var (pos, inMapCorners) in borderTiles)
+    //    {
+    //        void DrawLine(Position p, Side fromSide, Side toSide) =>
+    //            lineCache.GetIndex(
+    //                new LineDescription(
+    //                    vertexCache.GetIndex(GetMiddleOfSide(p, toSide)),
+    //                    vertexCache.GetIndex(GetMiddleOfSide(p, fromSide))));
+
+    //        switch (inMapCorners)
+    //        {
+    //            case Corners.LowerLeft: DrawLine(pos, Side.Left, Side.Bottom); break;
+    //            case Corners.LowerRight: DrawLine(pos, Side.Bottom, Side.Right); break;
+    //            case Corners.UpperRight: DrawLine(pos, Side.Right, Side.Top); break;
+    //            case Corners.UpperLeft: DrawLine(pos, Side.Top, Side.Left); break;
+
+    //            case Corners.AllButLowerLeft: DrawLine(pos, Side.Bottom, Side.Left); break;
+    //            case Corners.AllButLowerRight: DrawLine(pos, Side.Right, Side.Bottom); break;
+    //            case Corners.AllButUpperLeft: DrawLine(pos, Side.Left, Side.Top); break;
+    //            case Corners.AllButUpperRight: DrawLine(pos, Side.Top, Side.Right); break;
+
+    //            case Corners.Upper: DrawLine(pos, Side.Right, Side.Left); break;
+    //            case Corners.Lower: DrawLine(pos, Side.Left, Side.Right); break;
+    //            case Corners.Left: DrawLine(pos, Side.Top, Side.Bottom); break;
+    //            case Corners.Right: DrawLine(pos, Side.Bottom, Side.Top); break;
+
+    //            case Corners.UpperLeftAndLowerRight:
+    //                DrawLine(pos, Side.Bottom, Side.Left);
+    //                DrawLine(pos, Side.Top, Side.Right);
+    //                break;
+    //            case Corners.UpperRightAndLowerLeft:
+    //                DrawLine(pos, Side.Left, Side.Top);
+    //                DrawLine(pos, Side.Right, Side.Bottom);
+    //                break;
+
+    //            default:
+    //                break;
+    //        }
+    //    }
+    //}
 
     private static void DrawEdges2(
-        IReadOnlyList<(Position Position, SquareSegmentSectors Sectors)> borderTiles,
+        IEnumerable<(Position Position, SquareSegmentSectors Sectors)> borderTiles,
         ModelSequence<LogicalPoint, Vertex> vertexCache,
         ModelSequence<LineDescription, LineDef> lineCache,
         ModelSequence<SectorDescription, Sector> sectorCache)
@@ -248,20 +303,26 @@ public sealed class DoomCaveMapGenerator
         _ => throw new Exception("Impossible")
     };
 
-    // TODO: FrontSector should not be nullable
     // TODO: LeftVertex & RightVertex should not be indices because of simplification
     private sealed record LineDescription(
         int LeftVertex,
         int RightVertex,
-        SectorDescription? FrontSector = null,
-        SectorDescription? BackSector = null);
+        SectorDescription FrontSector,
+        SectorDescription BackSector);
 
     private sealed record SectorDescription(
-        int HeightLevel);
+        int HeightLevel)
+    {
+        public static readonly SectorDescription Outside = new(-1);
+        public bool IsOutside => this == Outside;
+    }
 
     private sealed record LogicalPoint(
         double X,
         double Y);
+
+
+
 
     public enum LineDirection
     {

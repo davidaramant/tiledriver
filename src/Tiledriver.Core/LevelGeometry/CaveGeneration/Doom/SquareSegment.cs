@@ -8,24 +8,24 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 /// </summary>
 /// <remarks>
 /// +-----+
-/// |1/|\3|
-/// |/2|4\|
+/// |0/|\2|
+/// |/1|3\|
 /// +-----+
-/// |\8|6/|
-/// |7\|/5|
+/// |\7|5/|
+/// |6\|/4|
 /// +-----+
 /// </remarks>
 public enum SquareSegment
 {
-    UpperLeftOuter = 1,
-    UpperLeftInner = 2,
+    UpperLeftOuter = 0,
+    UpperLeftInner = 1,
 
-    UpperRightOuter = 3,
-    UpperRightInner = 4,
+    UpperRightOuter = 2,
+    UpperRightInner = 3,
 
-    LowerRightOuter = 5,
-    LowerRightInner = 6,
+    LowerRightOuter = 4,
+    LowerRightInner = 5,
 
-    LowerLeftOuter = 7,
-    LowerLeftInner = 8,
+    LowerLeftOuter = 6,
+    LowerLeftInner = 7,
 }
