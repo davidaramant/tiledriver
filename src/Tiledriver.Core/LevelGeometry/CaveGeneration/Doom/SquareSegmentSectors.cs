@@ -15,24 +15,30 @@ public sealed class SquareSegmentSectors
     public SectorDescription this[SquareSegment id] => _sectors[(int)id];
     public bool IsUniform => _sectors.Skip(1).All(s => s == _sectors[0]);
 
-    private EdgeInfo? GetEdge(SquareSegment topOrLeftId, SquareSegment bottomOrRightId)
+    public Dictionary<InternalEdgeId, InternalEdge> GetInternalEdges()
     {
-        var topOrLeft = this[topOrLeftId];
-        var bottomOrRight = this[bottomOrRightId];
+        var lookup = new Dictionary<InternalEdgeId, InternalEdge>();
 
-        return topOrLeft != bottomOrRight ? EdgeInfo.Construct(topOrLeft, bottomOrRight) : null;
+        void AddEdge(InternalEdgeId id, SquareSegment topOrLeftId, SquareSegment bottomOrRightId)
+        {
+            var topOrLeft = this[topOrLeftId];
+            var bottomOrRight = this[bottomOrRightId];
+
+            if (topOrLeft != bottomOrRight)
+            {
+                lookup.Add(id, new InternalEdge(id, EdgeInfo.Construct(topOrLeft, bottomOrRight)));
+            }
+        }
+
+        AddEdge(InternalEdgeId.DiagTopLeft, topOrLeftId: SquareSegment.UpperLeftOuter, bottomOrRightId: SquareSegment.UpperLeftInner);
+        AddEdge(InternalEdgeId.DiagTopRight, topOrLeftId: SquareSegment.UpperRightOuter, bottomOrRightId: SquareSegment.UpperRightInner);
+        AddEdge(InternalEdgeId.DiagBottomRight, topOrLeftId: SquareSegment.LowerRightInner, bottomOrRightId: SquareSegment.LowerRightOuter);
+        AddEdge(InternalEdgeId.DiagBottomLeft, topOrLeftId: SquareSegment.LowerLeftInner, bottomOrRightId: SquareSegment.LowerLeftOuter);
+        AddEdge(InternalEdgeId.HorizontalLeft, topOrLeftId: SquareSegment.UpperLeftInner, bottomOrRightId: SquareSegment.LowerLeftInner);
+        AddEdge(InternalEdgeId.HorizontalRight, topOrLeftId: SquareSegment.UpperRightInner, bottomOrRightId: SquareSegment.LowerRightInner);
+        AddEdge(InternalEdgeId.VerticalTop, topOrLeftId: SquareSegment.UpperLeftInner, bottomOrRightId: SquareSegment.UpperRightInner);
+        AddEdge(InternalEdgeId.VerticalBottom, topOrLeftId: SquareSegment.LowerLeftInner, bottomOrRightId: SquareSegment.LowerRightInner);
+
+        return lookup;
     }
-
-    public InternalEdges GetInternalEdges() => new()
-    {
-        DiagTopLeft = GetEdge(topOrLeftId: SquareSegment.UpperLeftOuter, bottomOrRightId: SquareSegment.UpperLeftInner),
-        DiagTopRight = GetEdge(topOrLeftId: SquareSegment.UpperRightOuter, bottomOrRightId: SquareSegment.UpperRightInner),
-        DiagBottomRight = GetEdge(topOrLeftId: SquareSegment.LowerRightInner, bottomOrRightId: SquareSegment.LowerRightOuter),
-        DiagBottomLeft = GetEdge(topOrLeftId: SquareSegment.LowerLeftInner, bottomOrRightId: SquareSegment.LowerLeftOuter),
-        
-        HorizontalLeft = GetEdge(topOrLeftId: SquareSegment.UpperLeftInner, bottomOrRightId: SquareSegment.LowerLeftInner),
-        HorizontalRight = GetEdge(topOrLeftId: SquareSegment.UpperRightInner, bottomOrRightId: SquareSegment.LowerRightInner),
-        VerticalTop = GetEdge(topOrLeftId: SquareSegment.UpperLeftInner, bottomOrRightId: SquareSegment.UpperRightInner),
-        VerticalBottom = GetEdge(topOrLeftId: SquareSegment.LowerLeftInner, bottomOrRightId: SquareSegment.LowerRightInner),
-    };
 }

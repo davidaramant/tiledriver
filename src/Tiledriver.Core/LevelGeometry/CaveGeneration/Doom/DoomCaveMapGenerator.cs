@@ -110,7 +110,7 @@ public sealed class DoomCaveMapGenerator
             .TrimToLargestDeadArea()
             .ScaleAndSmooth();
 
-    private static Dictionary<Position, InternalEdges> GetEdges(
+    private static Dictionary<Position, Dictionary<InternalEdgeId, InternalEdge>> GetEdges(
         Size size,
         IReadOnlyDictionary<Position, int> interiorDistances) =>
         size.GetAllPositionsExclusiveMax()
@@ -198,7 +198,7 @@ public sealed class DoomCaveMapGenerator
     //}
 
     private static void DrawEdges(
-        Dictionary<Position, InternalEdges> edges,
+        Dictionary<Position, Dictionary<InternalEdgeId, InternalEdge>> edges,
         ModelSequence<VertexDescription, Vertex> vertexCache,
         ModelSequence<LineDescription, LineDef> lineCache,
         ModelSequence<SectorDescription, Sector> sectorCache)

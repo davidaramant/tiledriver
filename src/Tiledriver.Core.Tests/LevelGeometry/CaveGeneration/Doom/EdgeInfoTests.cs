@@ -16,7 +16,7 @@ public sealed class EdgeInfoTests
         
         var edge = EdgeInfo.Construct(topOrLeft: sd, bottomOrRight: SectorDescription.OutsideLevel);
 
-        edge.FrontIsTopOrLeft.Should().BeTrue();
+        edge.IsFrontTopOrLeft.Should().BeTrue();
         edge.Front.Should().Be(sd);
         edge.Back.Should().Be(SectorDescription.OutsideLevel);
     }
@@ -28,7 +28,7 @@ public sealed class EdgeInfoTests
 
         var edge = EdgeInfo.Construct(topOrLeft: SectorDescription.OutsideLevel, bottomOrRight: sd );
 
-        edge.FrontIsTopOrLeft.Should().BeFalse();
+        edge.IsFrontTopOrLeft.Should().BeFalse();
         edge.Front.Should().Be(sd);
         edge.Back.Should().Be(SectorDescription.OutsideLevel);
     }
@@ -41,7 +41,7 @@ public sealed class EdgeInfoTests
 
         var edge = EdgeInfo.Construct(topOrLeft: top, bottomOrRight: bottom);
 
-        edge.FrontIsTopOrLeft.Should().BeTrue();
+        edge.IsFrontTopOrLeft.Should().BeTrue();
         edge.Front.Should().Be(top);
         edge.Back.Should().Be(bottom);
     }
@@ -54,7 +54,7 @@ public sealed class EdgeInfoTests
 
         var edge = EdgeInfo.Construct(topOrLeft: top, bottomOrRight: bottom);
 
-        edge.FrontIsTopOrLeft.Should().BeFalse();
+        edge.IsFrontTopOrLeft.Should().BeFalse();
         edge.Front.Should().Be(bottom);
         edge.Back.Should().Be(top);
     }
