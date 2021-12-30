@@ -209,12 +209,36 @@ public sealed class DoomCaveMapGenerator
         //   - Reverse, but concatenate this time
         //   - Add line to cache
 
-        //(Position, InternalEdges) FindStartingEdge() => edges.
-        //Position p;
-        //InternalEdge edge;
+        (Position, InternalEdge) FindStartingEdge()
+        {
+            var edgeSequence = edges.SelectMany(positionAndEdges => positionAndEdges.Value.Values.Select(edge => (Position: positionAndEdges.Key, Edge: edge)));
+
+            return edgeSequence.FirstOrDefault(pair => pair.Edge.IsSingleSided, edgeSequence.First());
+        }
 
 
+        // TODO: This is absurd; need a data structure for this thing
+        // MapGraph composed of MapNode
+        // MapNode is Position and InternalEdge
+        // MapNode actions:
+        // - FollowLine(bool goRight) : MapNode
+        //    - The above should be moved out of InternalEdge
+        // - StartPoint: VertexDescription
+        // - EndPoint: VertexDescription
+        // MapGraph actions:
+        // - IsEmpty: bool
+        // - FindStartingNode(): MapNode
+        // - Contains(MapNode): bool
+        // - Remove(MapNode)
 
-        throw new NotImplementedException();
+
+        while (edges.Any())
+        {
+            var (position, edge) = FindStartingEdge();
+
+            var (newPosition, newEdge) = edge.FollowLine(goRight: false, position);
+
+
+        }
     }
 }

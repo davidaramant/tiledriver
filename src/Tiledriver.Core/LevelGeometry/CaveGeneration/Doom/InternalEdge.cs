@@ -7,6 +7,8 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 
 public sealed record InternalEdge(InternalEdgeId Id, EdgeInfo Sides)
 {
+    public bool IsSingleSided => Sides.Back.IsOutsideLevel;
+
     public (Position, InternalEdge) FollowLine(bool goRight, Position square) =>
         (Id switch
             {
