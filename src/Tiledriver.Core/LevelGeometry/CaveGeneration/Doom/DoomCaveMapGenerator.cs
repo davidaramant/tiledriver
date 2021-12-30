@@ -74,9 +74,9 @@ public sealed class DoomCaveMapGenerator
         new(
             V1: ld.LeftVertex,
             V2: ld.RightVertex,
-            TwoSided: !ld.BackSector.IsOutside,
+            TwoSided: !ld.BackSector.IsOutsideLevel,
             SideFront: sectorCache.GetIndex(ld.FrontSector!),
-            SideBack: ld.BackSector.IsOutside ? -1 : sectorCache.GetIndex(ld.BackSector));
+            SideBack: ld.BackSector.IsOutsideLevel ? -1 : sectorCache.GetIndex(ld.BackSector));
     private static Sector ConvertToSector(SectorDescription sd) => new(
                 TextureFloor: new Texture("RROCK16"),
                 TextureCeiling: new Texture("FLAT10"),
@@ -205,9 +205,15 @@ public sealed class DoomCaveMapGenerator
     {
         // While there are remaining edges;
         // - Find a (perferably) single-sided edge
-        //   - Go as far as possible in one direction
+        //   - Go as far as possible left
         //   - Reverse, but concatenate this time
         //   - Add line to cache
+
+        //(Position, InternalEdges) FindStartingEdge() => edges.
+        //Position p;
+        //InternalEdge edge;
+
+
 
         throw new NotImplementedException();
     }

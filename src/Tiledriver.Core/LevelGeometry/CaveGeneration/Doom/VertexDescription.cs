@@ -9,11 +9,13 @@ public sealed record VertexDescription(
     Position Square,
     SquarePoint Point)
 {
-    public static VertexDescription Normalized(Position square, SquarePoint point) =>
-        point switch
+    public VertexDescription Normalize() =>
+        Point switch
         {
-            SquarePoint.RightMiddle => new(square.Right(), SquarePoint.LeftMiddle),
-            SquarePoint.BottomMiddle => new(square.Below(), SquarePoint.TopMiddle),
-            _ => new(square, point)
+            SquarePoint.RightMiddle => new(Square.Right(), SquarePoint.LeftMiddle),
+            SquarePoint.BottomMiddle => new(Square.Below(), SquarePoint.TopMiddle),
+            _ => new(Square, Point)
         };
+
+
 }

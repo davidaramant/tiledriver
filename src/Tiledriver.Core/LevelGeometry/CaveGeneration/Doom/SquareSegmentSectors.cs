@@ -20,7 +20,7 @@ public sealed class SquareSegmentSectors
         var topOrLeft = this[topOrLeftId];
         var bottomOrRight = this[bottomOrRightId];
 
-        return topOrLeft != bottomOrRight ? new EdgeInfo(topOrLeft, bottomOrRight) : null;
+        return topOrLeft != bottomOrRight ? EdgeInfo.Construct(topOrLeft, bottomOrRight) : null;
     }
 
     public InternalEdges GetInternalEdges() => new()
