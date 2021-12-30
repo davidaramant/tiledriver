@@ -3,6 +3,11 @@
 
 namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 
-public sealed record LogicalPoint(
-    double X,
-    double Y);
+public enum SquarePoint
+{
+    LeftMiddle,
+    TopMiddle,
+    RightMiddle,
+    BottomMiddle,
+    Center
+}

@@ -19,7 +19,7 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 
 public sealed class DoomCaveMapGenerator
 {
-    private const int LogicalUnitSize = 16;
+    public const int LogicalUnitSize = 16;
 
     public static MapData Create(int seed, TextureQueue textureQueue)
     {
@@ -30,19 +30,14 @@ public sealed class DoomCaveMapGenerator
 
         var internalDistances = playableSpace.DetermineInteriorEdgeDistance(Neighborhood.Moore);
 
-        var vertexCache = new ModelSequence<LogicalPoint, Vertex>(ConvertToVertex);
+        var vertexCache = new ModelSequence<VertexDescription, Vertex>(ConvertToVertex);
         var sectorCache = new ModelSequence<SectorDescription, Sector>(ConvertToSector);
         var lineCache = new ModelSequence<LineDescription, LineDef>(ld => ConvertToLineDef(ld, sectorCache));
-
-        //var borderTiles = FindBorderTiles(
-        //    geometryBoard.Dimensions,
-        //    isCornerInsideMap: p => geometryBoard[p] == CellType.Dead);
+        // TODO: Need sideDefCache too!!!
 
         var edges = GetEdges(boardSize, internalDistances);
 
-        //DrawEdges2(borderTiles2, vertexCache, lineCache, sectorCache);
-
-        //DrawEdges(borderTiles, vertexCache, lineCache);
+        DrawEdges(edges, vertexCache, lineCache, sectorCache);
 
         var playerLogicalSpot = FindPlayerSpot(geometryBoard);
 
@@ -55,12 +50,7 @@ public sealed class DoomCaveMapGenerator
                 TextureBottom: Texture.None,
                 Sector: 0)),
             Vertices: vertexCache.GetDefinitions().ToImmutableArray(),
-            Sectors: ImmutableArray.Create(new Sector(
-                TextureFloor: new Texture("RROCK16"),
-                TextureCeiling: new Texture("FLAT10"),
-                HeightFloor: 0,
-                HeightCeiling: 128,
-                LightLevel: 192)),
+            Sectors: sectorCache.GetDefinitions().ToImmutableArray(),
             Things: ImmutableArray.Create(
                 Actor.Player1Start.MakeThing(
                     x: playerLogicalSpot.X * LogicalUnitSize + LogicalUnitSize / 2,
@@ -68,7 +58,18 @@ public sealed class DoomCaveMapGenerator
                     angle: 90)));
     }
 
-    private static Vertex ConvertToVertex(LogicalPoint p) => new(p.X * LogicalUnitSize, p.Y * LogicalUnitSize);
+    private static Vertex ConvertToVertex(VertexDescription vp) =>
+        vp.Point switch
+        {
+            SquarePoint.LeftMiddle => new(vp.Square.X * LogicalUnitSize, (vp.Square.Y + 0.5) * LogicalUnitSize),
+            SquarePoint.TopMiddle => new((vp.Square.X + 0.5) * LogicalUnitSize, vp.Square.Y * LogicalUnitSize),
+            //SquarePoint.RightMiddle => new((vp.Square.X + 1) * LogicalUnitSize, (vp.Square.Y + 0.5) * LogicalUnitSize),
+            //SquarePoint.BottomMiddle => new((vp.Square.X + 0.5) * LogicalUnitSize, (vp.Square.Y + 1) * LogicalUnitSize),
+            SquarePoint.Center => new((vp.Square.X + 0.5) * LogicalUnitSize, (vp.Square.Y + 0.5) * LogicalUnitSize),
+            _ => throw new Exception("Impossible; Vertices should have been normalized to prevent this")
+        };
+
+    //new(p.X * LogicalUnitSize, p.Y * LogicalUnitSize);
     private static LineDef ConvertToLineDef(LineDescription ld, ModelSequence<SectorDescription, Sector> sectorCache) =>
         new(
             V1: ld.LeftVertex,
@@ -109,15 +110,7 @@ public sealed class DoomCaveMapGenerator
             .TrimToLargestDeadArea()
             .ScaleAndSmooth();
 
-    private enum Side
-    {
-        Left,
-        Top,
-        Right,
-        Bottom
-    }
-
-    private static IReadOnlyDictionary<Position, IReadOnlyList<InternalEdge>> GetEdges(
+    private static Dictionary<Position, InternalEdges> GetEdges(
         Size size,
         IReadOnlyDictionary<Position, int> interiorDistances) =>
         size.GetAllPositionsExclusiveMax()
@@ -125,6 +118,7 @@ public sealed class DoomCaveMapGenerator
         {
             var heightLookup = GetHeightLookup(interiorDistances, p);
 
+            // TODO: this happens to work because of the -1 thing
             var sectorIds =
                 SquareSegmentsExtensions.GetAllSegments()
                 .Select(seq => new SectorDescription(HeightLevel: heightLookup(seq)))
@@ -133,7 +127,7 @@ public sealed class DoomCaveMapGenerator
             return (Position: p, Sectors: new SquareSegmentSectors(sectorIds));
         })
         .Where(t => !t.Sectors.IsUniform)
-        .ToDictionary(pair => pair.Position, pair => (IReadOnlyList<InternalEdge>)pair.Sectors.GetEdges().ToList());
+        .ToDictionary(pair => pair.Position, pair => pair.Sectors.GetInternalEdges());
 
     private static Func<SquareSegment, int> GetHeightLookup(
         IReadOnlyDictionary<Position, int> interiorDistances,
@@ -203,50 +197,18 @@ public sealed class DoomCaveMapGenerator
     //    }
     //}
 
-    private static void DrawEdges2(
-        IEnumerable<(Position Position, SquareSegmentSectors Sectors)> borderTiles,
-        ModelSequence<LogicalPoint, Vertex> vertexCache,
+    private static void DrawEdges(
+        Dictionary<Position, InternalEdges> edges,
+        ModelSequence<VertexDescription, Vertex> vertexCache,
         ModelSequence<LineDescription, LineDef> lineCache,
         ModelSequence<SectorDescription, Sector> sectorCache)
     {
-        // Loop over tiles
-        //   Get all line segments from sector segments (new method in SquareSegmentSectors?)
-        //     This will loop over all the segment ids
-        //     If [this]!=[next], there should be a line segment between them
-        //     Create line description based on that
+        // While there are remaining edges;
+        // - Find a (perferably) single-sided edge
+        //   - Go as far as possible in one direction
+        //   - Reverse, but concatenate this time
+        //   - Add line to cache
 
         throw new NotImplementedException();
     }
-
-    private static LogicalPoint GetMiddleOfSide(Position p, Side side) =>
-    side switch
-    {
-        Side.Left => new(p.X, p.Y + 0.5),
-        Side.Top => new(p.X + 0.5, p.Y),
-        Side.Right => new(p.X + 1, p.Y + 0.5),
-        Side.Bottom => new(p.X + 0.5, p.Y + 1),
-        _ => throw new Exception("Impossible")
-    };
-
-
-
-
-    public enum LineDirection
-    {
-        Left,
-        UpLeft,
-        Up,
-        UpRight,
-        Right,
-        DownRight,
-        Down,
-        DownLeft,
-    }
-
-    // TODO: Not used yet - will be useful when simplifying geometry
-    public sealed record Line(
-        Position Start,
-        LineDirection Direction,
-        int Length
-    );
 }

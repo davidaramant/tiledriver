@@ -15,32 +15,24 @@ public sealed class SquareSegmentSectors
     public SectorDescription this[SquareSegment id] => _sectors[(int)id];
     public bool IsUniform => _sectors.Skip(1).All(s => s == _sectors[0]);
 
-    public IEnumerable<InternalEdge> GetEdges() =>
-        new InternalEdge[]
-        {
-                new InternalEdge.DiagTopLeft(
-                    UpperLeftOuter:this[SquareSegment.UpperLeftOuter],
-                    UpperLeftInner:this[SquareSegment.UpperLeftInner]),
-                new InternalEdge.DiagTopRight(
-                    UpperRightOuter:this[SquareSegment.UpperRightOuter],
-                    UpperRightInner:this[SquareSegment.UpperRightInner]),
-                new InternalEdge.DiagBottomRight(
-                    LowerRightOuter:this[SquareSegment.LowerRightOuter],
-                    LowerRightInner:this[SquareSegment.LowerRightInner]),
-                new InternalEdge.DiagBottomLeft(
-                    LowerLeftOuter:this[SquareSegment.LowerLeftOuter],
-                    LowerLeftInner:this[SquareSegment.LowerLeftInner]),
-                new InternalEdge.HorizontalLeft(
-                    UpperLeftInner:this[SquareSegment.UpperLeftInner],
-                    LowerLeftInner:this[SquareSegment.LowerLeftInner]),
-                new InternalEdge.HorizontalRight(
-                    UpperRightInner:this[SquareSegment.UpperRightInner],
-                    LowerRightInner:this[SquareSegment.LowerRightInner]),
-                new InternalEdge.VerticalTop(
-                    UpperLeftInner:this[SquareSegment.UpperLeftInner],
-                    UpperRightInner:this[SquareSegment.UpperRightInner]),
-                new InternalEdge.VerticalBottom(
-                    LowerRightInner:this[SquareSegment.LowerRightInner],
-                    LowerLeftInner:this[SquareSegment.LowerLeftInner]),
-        }.Where(ie => ie.IsValid);
+    private EdgeInfo? GetEdge(SquareSegment topOrLeftId, SquareSegment bottomOrRightId)
+    {
+        var topOrLeft = this[topOrLeftId];
+        var bottomOrRight = this[bottomOrRightId];
+
+        return topOrLeft != bottomOrRight ? new EdgeInfo(topOrLeft, bottomOrRight) : null;
+    }
+
+    public InternalEdges GetInternalEdges() => new()
+    {
+        DiagTopLeft = GetEdge(topOrLeftId: SquareSegment.UpperLeftOuter, bottomOrRightId: SquareSegment.UpperLeftInner),
+        DiagTopRight = GetEdge(topOrLeftId: SquareSegment.UpperRightOuter, bottomOrRightId: SquareSegment.UpperRightInner),
+        DiagBottomRight = GetEdge(topOrLeftId: SquareSegment.LowerRightInner, bottomOrRightId: SquareSegment.LowerRightOuter),
+        DiagBottomLeft = GetEdge(topOrLeftId: SquareSegment.LowerLeftInner, bottomOrRightId: SquareSegment.LowerLeftOuter),
+        
+        HorizontalLeft = GetEdge(topOrLeftId: SquareSegment.UpperLeftInner, bottomOrRightId: SquareSegment.LowerLeftInner),
+        HorizontalRight = GetEdge(topOrLeftId: SquareSegment.UpperRightInner, bottomOrRightId: SquareSegment.LowerRightInner),
+        VerticalTop = GetEdge(topOrLeftId: SquareSegment.UpperLeftInner, bottomOrRightId: SquareSegment.UpperRightInner),
+        VerticalBottom = GetEdge(topOrLeftId: SquareSegment.LowerLeftInner, bottomOrRightId: SquareSegment.LowerRightInner),
+    };
 }
