@@ -110,7 +110,7 @@ public sealed class DoomCaveMapGenerator
             .TrimToLargestDeadArea()
             .ScaleAndSmooth();
 
-    private static Dictionary<Position, Dictionary<InternalEdgeId, InternalEdge>> GetEdges(
+    private static Dictionary<Position, Dictionary<EdgeSegmentId, EdgeSegment>> GetEdges(
         Size size,
         IReadOnlyDictionary<Position, int> interiorDistances) =>
         size.GetAllPositionsExclusiveMax()
@@ -198,7 +198,7 @@ public sealed class DoomCaveMapGenerator
     //}
 
     private static void DrawEdges(
-        Dictionary<Position, Dictionary<InternalEdgeId, InternalEdge>> edges,
+        Dictionary<Position, Dictionary<EdgeSegmentId, EdgeSegment>> edges,
         ModelSequence<VertexDescription, Vertex> vertexCache,
         ModelSequence<LineDescription, LineDef> lineCache,
         ModelSequence<SectorDescription, Sector> sectorCache)
@@ -209,36 +209,28 @@ public sealed class DoomCaveMapGenerator
         //   - Reverse, but concatenate this time
         //   - Add line to cache
 
-        (Position, InternalEdge) FindStartingEdge()
-        {
-            var edgeSequence = edges.SelectMany(positionAndEdges => positionAndEdges.Value.Values.Select(edge => (Position: positionAndEdges.Key, Edge: edge)));
+        //(Position, EdgeSegment) FindStartingEdge()
+        //{
+        //    var edgeSequence = edges.SelectMany(positionAndEdges => positionAndEdges.Value.Values.Select(edge => (Position: positionAndEdges.Key, Edge: edge)));
 
-            return edgeSequence.FirstOrDefault(pair => pair.Edge.IsSingleSided, edgeSequence.First());
-        }
+        //    return edgeSequence.FirstOrDefault(pair => pair.Edge.IsSingleSided, edgeSequence.First());
+        //}
 
 
-        // TODO: This is absurd; need a data structure for this thing
-        // MapGraph composed of MapNode
-        // MapNode is Position and InternalEdge
-        // MapNode actions:
-        // - FollowLine(bool goRight) : MapNode
-        //    - The above should be moved out of InternalEdge
-        // - StartPoint: VertexDescription
-        // - EndPoint: VertexDescription
-        // MapGraph actions:
+        // SectorEdgeGraph actions:
         // - IsEmpty: bool
         // - FindStartingNode(): MapNode
         // - Contains(MapNode): bool
         // - Remove(MapNode)
 
 
-        while (edges.Any())
-        {
-            var (position, edge) = FindStartingEdge();
+        //while (edges.Any())
+        //{
+        //    var (position, edge) = FindStartingEdge();
 
-            var (newPosition, newEdge) = edge.FollowLine(goRight: false, position);
+        //    var (newPosition, newEdge) = edge.FollowLine(goRight: false, position);
 
 
-        }
+        //}
     }
 }

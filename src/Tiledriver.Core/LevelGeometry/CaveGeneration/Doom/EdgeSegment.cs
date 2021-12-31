@@ -3,14 +3,6 @@
 
 namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 
-public enum InternalEdgeId
-{
-    DiagTopLeft,
-    DiagTopRight,
-    DiagBottomLeft,
-    DiagBottomRight,
-    HorizontalLeft,
-    HorizontalRight,
-    VerticalTop,
-    VerticalBottom,
-}
+public sealed record EdgeSegment(
+    EdgeSegmentId Id, 
+    EdgeInfo Sides);
