@@ -30,7 +30,7 @@ public sealed class DoomCaveMapGenerator
 
         var internalDistances = playableSpace.DetermineInteriorEdgeDistance(Neighborhood.Moore);
 
-        var vertexCache = new ModelSequence<VertexDescription, Vertex>(ConvertToVertex);
+        var vertexCache = new ModelSequence<LatticePoint, Vertex>(ConvertToVertex);
         var sectorCache = new ModelSequence<SectorDescription, Sector>(ConvertToSector);
         var lineCache = new ModelSequence<LineDescription, LineDef>(ld => ConvertToLineDef(ld, sectorCache));
         // TODO: Need sideDefCache too!!!
@@ -58,18 +58,15 @@ public sealed class DoomCaveMapGenerator
                     angle: 90)));
     }
 
-    private static Vertex ConvertToVertex(VertexDescription vp) =>
-        vp.Point switch
+    private static Vertex ConvertToVertex(LatticePoint lp) =>
+        lp.Point switch
         {
-            SquarePoint.LeftMiddle => new(vp.Square.X * LogicalUnitSize, (vp.Square.Y + 0.5) * LogicalUnitSize),
-            SquarePoint.TopMiddle => new((vp.Square.X + 0.5) * LogicalUnitSize, vp.Square.Y * LogicalUnitSize),
-            //SquarePoint.RightMiddle => new((vp.Square.X + 1) * LogicalUnitSize, (vp.Square.Y + 0.5) * LogicalUnitSize),
-            //SquarePoint.BottomMiddle => new((vp.Square.X + 0.5) * LogicalUnitSize, (vp.Square.Y + 1) * LogicalUnitSize),
-            SquarePoint.Center => new((vp.Square.X + 0.5) * LogicalUnitSize, (vp.Square.Y + 0.5) * LogicalUnitSize),
+            SquarePoint.LeftMiddle => new(lp.Square.X * LogicalUnitSize, (lp.Square.Y + 0.5) * LogicalUnitSize),
+            SquarePoint.TopMiddle => new((lp.Square.X + 0.5) * LogicalUnitSize, lp.Square.Y * LogicalUnitSize),
+            SquarePoint.Center => new((lp.Square.X + 0.5) * LogicalUnitSize, (lp.Square.Y + 0.5) * LogicalUnitSize),
             _ => throw new Exception("Impossible; Vertices should have been normalized to prevent this")
         };
 
-    //new(p.X * LogicalUnitSize, p.Y * LogicalUnitSize);
     private static LineDef ConvertToLineDef(LineDescription ld, ModelSequence<SectorDescription, Sector> sectorCache) =>
         new(
             V1: ld.LeftVertex,
@@ -199,7 +196,7 @@ public sealed class DoomCaveMapGenerator
 
     private static void DrawEdges(
         Dictionary<Position, Dictionary<EdgeSegmentId, EdgeSegment>> edges,
-        ModelSequence<VertexDescription, Vertex> vertexCache,
+        ModelSequence<LatticePoint, Vertex> vertexCache,
         ModelSequence<LineDescription, LineDef> lineCache,
         ModelSequence<SectorDescription, Sector> sectorCache)
     {

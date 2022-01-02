@@ -10,8 +10,8 @@ public sealed record EdgeNode(
     EdgeSegment Segment)
 {
     public bool IsSingleSided => Segment.Back.IsOutsideLevel;
-    public VertexDescription StartPoint => new(Square, Segment.Id.GetPoint(topOrLeftIsFront: Segment.IsFrontTopOrLeft, leftSide: true));
-    public VertexDescription EndPoint => new(Square, Segment.Id.GetPoint(topOrLeftIsFront: Segment.IsFrontTopOrLeft, leftSide: false));
+    public LatticePoint StartPoint => new(Square, Segment.Id.GetPoint(topOrLeftIsFront: Segment.IsFrontTopOrLeft, leftSide: true));
+    public LatticePoint EndPoint => new(Square, Segment.Id.GetPoint(topOrLeftIsFront: Segment.IsFrontTopOrLeft, leftSide: false));
 
     public EdgeNode FollowLine(bool goRight) => new(
         Segment.Id switch
