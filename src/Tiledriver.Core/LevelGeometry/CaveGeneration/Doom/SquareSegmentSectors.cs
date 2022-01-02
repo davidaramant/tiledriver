@@ -26,7 +26,7 @@ public sealed class SquareSegmentSectors
 
             if (topOrLeft != bottomOrRight)
             {
-                lookup.Add(id, new EdgeSegment(id, EdgeInfo.Construct(topOrLeft, bottomOrRight)));
+                lookup.Add(id, EdgeSegment.Construct(id, topOrLeft, bottomOrRight));
             }
         }
 

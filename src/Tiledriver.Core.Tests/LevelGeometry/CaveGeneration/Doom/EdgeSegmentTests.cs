@@ -7,14 +7,14 @@ using Xunit;
 
 namespace Tiledriver.Core.Tests.LevelGeometry.CaveGeneration.Doom;
 
-public sealed class EdgeInfoTests
+public sealed class EdgeSegmentTests
 {
     [Fact]
     public void ShouldDetermineFrontIfBottomIsOutsideLevel()
     {
         var sd = new SectorDescription(0);
         
-        var edge = EdgeInfo.Construct(topOrLeft: sd, bottomOrRight: SectorDescription.OutsideLevel);
+        var edge = EdgeSegment.Construct(id:EdgeSegmentId.HorizontalLeft, topOrLeft: sd, bottomOrRight: SectorDescription.OutsideLevel);
 
         edge.IsFrontTopOrLeft.Should().BeTrue();
         edge.Front.Should().Be(sd);
@@ -26,7 +26,7 @@ public sealed class EdgeInfoTests
     {
         var sd = new SectorDescription(0);
 
-        var edge = EdgeInfo.Construct(topOrLeft: SectorDescription.OutsideLevel, bottomOrRight: sd );
+        var edge = EdgeSegment.Construct(id: EdgeSegmentId.HorizontalLeft, topOrLeft: SectorDescription.OutsideLevel, bottomOrRight: sd );
 
         edge.IsFrontTopOrLeft.Should().BeFalse();
         edge.Front.Should().Be(sd);
@@ -39,7 +39,7 @@ public sealed class EdgeInfoTests
         var top = new SectorDescription(0);
         var bottom = new SectorDescription(1);
 
-        var edge = EdgeInfo.Construct(topOrLeft: top, bottomOrRight: bottom);
+        var edge = EdgeSegment.Construct(id: EdgeSegmentId.HorizontalLeft, topOrLeft: top, bottomOrRight: bottom);
 
         edge.IsFrontTopOrLeft.Should().BeTrue();
         edge.Front.Should().Be(top);
@@ -52,7 +52,7 @@ public sealed class EdgeInfoTests
         var top = new SectorDescription(1);
         var bottom = new SectorDescription(0);
 
-        var edge = EdgeInfo.Construct(topOrLeft: top, bottomOrRight: bottom);
+        var edge = EdgeSegment.Construct(id: EdgeSegmentId.HorizontalLeft, topOrLeft: top, bottomOrRight: bottom);
 
         edge.IsFrontTopOrLeft.Should().BeFalse();
         edge.Front.Should().Be(bottom);

@@ -4,5 +4,21 @@
 namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 
 public sealed record EdgeSegment(
-    EdgeSegmentId Id, 
-    EdgeInfo Sides);
+    EdgeSegmentId Id,
+    SectorDescription Front,
+    SectorDescription Back,
+    bool IsFrontTopOrLeft)
+{
+    public static EdgeSegment Construct(
+        EdgeSegmentId id,
+        SectorDescription topOrLeft,
+        SectorDescription bottomOrRight)
+    {
+        var topIsSmallest = topOrLeft.CompareTo(bottomOrRight) < 0;
+        return new(
+            id,
+            Front: topIsSmallest ? topOrLeft : bottomOrRight,
+            Back: topIsSmallest ? bottomOrRight : topOrLeft,
+            IsFrontTopOrLeft: topIsSmallest);
+    }
+}

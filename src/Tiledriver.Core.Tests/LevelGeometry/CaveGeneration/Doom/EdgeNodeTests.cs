@@ -10,12 +10,8 @@ namespace Tiledriver.Core.Tests.LevelGeometry.CaveGeneration.Doom;
 
 public sealed class EdgeNodeTests
 {
-    static TheoryData<EdgeSegment, Position> MoveRightWhenTopOrLeftIsFront()
-    {
-        var edgeInfo = new EdgeInfo(Front: new SectorDescription(1), Back: SectorDescription.OutsideLevel, IsFrontTopOrLeft: true);
-
-        return MoveRight(edgeInfo);
-    }
+    static TheoryData<EdgeSegment, Position> MoveRightWhenTopOrLeftIsFront() =>
+        MoveRight(front: new SectorDescription(1), back: SectorDescription.OutsideLevel, isFrontTopOrLeft: true);
 
     [Theory]
     [MemberData(nameof(MoveRightWhenTopOrLeftIsFront))]
@@ -28,12 +24,8 @@ public sealed class EdgeNodeTests
         newNode.Square.Should().Be(expectedPosition);
     }
 
-    static TheoryData<EdgeSegment, Position> MoveLeftWhenTopOrLeftIsFront()
-    {
-        var edgeInfo = new EdgeInfo(Front: new SectorDescription(1), Back: SectorDescription.OutsideLevel, IsFrontTopOrLeft: true);
-
-        return MoveLeft(edgeInfo);
-    }
+    static TheoryData<EdgeSegment, Position> MoveLeftWhenTopOrLeftIsFront() => 
+        MoveLeft(front: new SectorDescription(1), back: SectorDescription.OutsideLevel, isFrontTopOrLeft: true);
 
     [Theory]
     [MemberData(nameof(MoveLeftWhenTopOrLeftIsFront))]
@@ -46,12 +38,8 @@ public sealed class EdgeNodeTests
         newNode.Square.Should().Be(expectedPosition);
     }
 
-    static TheoryData<EdgeSegment, Position> MoveLeftWhenTopOrLeftIsNotFront()
-    {
-        var edgeInfo = new EdgeInfo(Front: new SectorDescription(1), Back: SectorDescription.OutsideLevel, IsFrontTopOrLeft: false);
-
-        return MoveLeft(edgeInfo);
-    }
+    static TheoryData<EdgeSegment, Position> MoveLeftWhenTopOrLeftIsNotFront() => 
+        MoveLeft(front: new SectorDescription(1), back: SectorDescription.OutsideLevel, isFrontTopOrLeft: false);
 
     [Theory]
     [MemberData(nameof(MoveLeftWhenTopOrLeftIsNotFront))]
@@ -64,12 +52,8 @@ public sealed class EdgeNodeTests
         newNode.Square.Should().Be(expectedPosition);
     }
 
-    static TheoryData<EdgeSegment, Position> MoveRightWhenTopOrLeftIsNotFront()
-    {
-        var edgeInfo = new EdgeInfo(Front: new SectorDescription(1), Back: SectorDescription.OutsideLevel, IsFrontTopOrLeft: false);
-
-        return MoveRight(edgeInfo);
-    }
+    static TheoryData<EdgeSegment, Position> MoveRightWhenTopOrLeftIsNotFront() => 
+        MoveRight(front: new SectorDescription(1), back: SectorDescription.OutsideLevel, isFrontTopOrLeft: false);
 
     [Theory]
     [MemberData(nameof(MoveRightWhenTopOrLeftIsNotFront))]
@@ -82,79 +66,79 @@ public sealed class EdgeNodeTests
         newNode.Square.Should().Be(expectedPosition);
     }
 
-    static TheoryData<EdgeSegment, Position> MoveRight(EdgeInfo edgeInfo)
+    static TheoryData<EdgeSegment, Position> MoveRight(SectorDescription front, SectorDescription back, bool isFrontTopOrLeft)
     {
         return new()
         {
             {
-                new EdgeSegment(EdgeSegmentId.DiagTopLeft, edgeInfo),
+                new EdgeSegment(EdgeSegmentId.DiagTopLeft, front, back, isFrontTopOrLeft),
                 new Position(-1, 0)
             },
             {
-                new EdgeSegment(EdgeSegmentId.DiagBottomRight, edgeInfo),
+                new EdgeSegment(EdgeSegmentId.DiagBottomRight, front, back, isFrontTopOrLeft),
                 new Position(0, 1)
             },
             {
-                new EdgeSegment(EdgeSegmentId.DiagTopRight, edgeInfo),
+                new EdgeSegment(EdgeSegmentId.DiagTopRight, front, back, isFrontTopOrLeft),
                 new Position(0, -1)
             },
             {
-                new EdgeSegment(EdgeSegmentId.DiagBottomLeft, edgeInfo),
+                new EdgeSegment(EdgeSegmentId.DiagBottomLeft, front, back, isFrontTopOrLeft),
                 new Position(-1, 0)
             },
             {
-                new EdgeSegment(EdgeSegmentId.HorizontalLeft, edgeInfo),
+                new EdgeSegment(EdgeSegmentId.HorizontalLeft, front, back, isFrontTopOrLeft),
                 new Position(-1, 0)
             },
             {
-                new EdgeSegment(EdgeSegmentId.HorizontalRight, edgeInfo),
+                new EdgeSegment(EdgeSegmentId.HorizontalRight, front, back, isFrontTopOrLeft),
                 new Position(0, 0)
             },
             {
-                new EdgeSegment(EdgeSegmentId.VerticalTop, edgeInfo),
+                new EdgeSegment(EdgeSegmentId.VerticalTop, front, back, isFrontTopOrLeft),
                 new Position(0, 0)
             },
             {
-                new EdgeSegment(EdgeSegmentId.VerticalBottom, edgeInfo),
+                new EdgeSegment(EdgeSegmentId.VerticalBottom, front, back, isFrontTopOrLeft),
                 new Position(0, 1)
             },
         };
     }
 
-    static TheoryData<EdgeSegment, Position> MoveLeft(EdgeInfo edgeInfo)
+    static TheoryData<EdgeSegment, Position> MoveLeft(SectorDescription front, SectorDescription back, bool isFrontTopOrLeft)
     {
         return new()
         {
             {
-                new EdgeSegment(EdgeSegmentId.DiagTopLeft, edgeInfo),
+                new EdgeSegment(EdgeSegmentId.DiagTopLeft, front, back, isFrontTopOrLeft),
                 new Position(0, -1)
             },
             {
-                new EdgeSegment(EdgeSegmentId.DiagBottomRight, edgeInfo),
+                new EdgeSegment(EdgeSegmentId.DiagBottomRight, front, back, isFrontTopOrLeft),
                 new Position(1, 0)
             },
             {
-                new EdgeSegment(EdgeSegmentId.DiagTopRight, edgeInfo),
+                new EdgeSegment(EdgeSegmentId.DiagTopRight, front, back, isFrontTopOrLeft),
                 new Position(1, 0)
             },
             {
-                new EdgeSegment(EdgeSegmentId.DiagBottomLeft, edgeInfo),
+                new EdgeSegment(EdgeSegmentId.DiagBottomLeft, front, back, isFrontTopOrLeft),
                 new Position(0, 1)
             },
             {
-                new EdgeSegment(EdgeSegmentId.HorizontalLeft, edgeInfo),
+                new EdgeSegment(EdgeSegmentId.HorizontalLeft, front, back, isFrontTopOrLeft),
                 new Position(0, 0)
             },
             {
-                new EdgeSegment(EdgeSegmentId.HorizontalRight, edgeInfo),
+                new EdgeSegment(EdgeSegmentId.HorizontalRight, front, back, isFrontTopOrLeft),
                 new Position(1, 0)
             },
             {
-                new EdgeSegment(EdgeSegmentId.VerticalTop, edgeInfo),
+                new EdgeSegment(EdgeSegmentId.VerticalTop, front, back, isFrontTopOrLeft),
                 new Position(0, -1)
             },
             {
-                new EdgeSegment(EdgeSegmentId.VerticalBottom, edgeInfo),
+                new EdgeSegment(EdgeSegmentId.VerticalBottom, front, back, isFrontTopOrLeft),
                 new Position(0, 0)
             },
         };
