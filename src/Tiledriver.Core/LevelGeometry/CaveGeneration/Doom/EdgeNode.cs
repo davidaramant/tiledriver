@@ -13,6 +13,8 @@ public sealed record EdgeNode(
     public LatticePoint StartPoint => new(Square, Segment.Id.GetPoint(topOrLeftIsFront: Segment.IsFrontTopOrLeft, leftSide: true));
     public LatticePoint EndPoint => new(Square, Segment.Id.GetPoint(topOrLeftIsFront: Segment.IsFrontTopOrLeft, leftSide: false));
 
+    public LatticePoint GetPointAtEnd(bool leftSide) => leftSide ? StartPoint : EndPoint;
+
     public EdgeNode FollowLine(bool goRight) => new(
         Segment.Id switch
         {

@@ -227,30 +227,38 @@ public sealed class DoomCaveMapGenerator
         // var spanGraph = new Dictionary<LatticePoint, EdgeSpan>();
 
         var covered = new HashSet<EdgeNode>();
-        foreach(var edgeNode in edges)
+        foreach (var edgeNode in edges)
         {
             if (covered.Contains(edgeNode))
                 continue;
 
-            var leftNode = edgeNode;
-
-            while (true)
+            EdgeNode FollowNode(EdgeNode start, bool goRight)
             {
-                var nextLeftNode = leftNode.FollowLine(goRight: false);
-                // TODO: This check isn't good enough - it also needs to check what _other_ edges are connected
-                if (!covered.Contains(nextLeftNode) &&
-                    segmentGraph.TryGetValue(leftNode.StartPoint, out var connectedEdges) &&
-                    connectedEdges.Contains(nextLeftNode))
+                var node = start;
+
+                while (true)
                 {
-                    leftNode = nextLeftNode;
+                    var nextNode = node.FollowLine(goRight: goRight);
+                    if (!covered.Contains(nextNode) &&
+                        segmentGraph.TryGetValue(node.GetPointAtEnd(leftSide: goRight), out var connectedEdges) &&
+                        connectedEdges.Count == 2 &&
+                        connectedEdges.Contains(nextNode))
+                    {
+                        node = nextNode;
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
-                else
-                {
-                    break;
-                }
+
+                return node;
             }
 
+            var leftNode = FollowNode(edgeNode, goRight: false);
+            var rightNode = FollowNode(edgeNode, goRight: true);
 
+            // TODO: This should be edges of the span...
         }
 
 
