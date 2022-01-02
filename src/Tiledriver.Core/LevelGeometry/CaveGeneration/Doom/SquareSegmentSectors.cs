@@ -15,9 +15,9 @@ public sealed class SquareSegmentSectors
     public SectorDescription this[SquareSegment id] => _sectors[(int)id];
     public bool IsUniform => _sectors.Skip(1).All(s => s == _sectors[0]);
 
-    public Dictionary<EdgeSegmentId, EdgeSegment> GetInternalEdges()
+    public IEnumerable<EdgeSegment> GetInternalEdges()
     {
-        var lookup = new Dictionary<EdgeSegmentId, EdgeSegment>();
+        var lookup = new List<EdgeSegment>();
 
         void AddEdge(EdgeSegmentId id, SquareSegment topOrLeftId, SquareSegment bottomOrRightId)
         {
@@ -26,7 +26,7 @@ public sealed class SquareSegmentSectors
 
             if (topOrLeft != bottomOrRight)
             {
-                lookup.Add(id, EdgeSegment.Construct(id, topOrLeft, bottomOrRight));
+                lookup.Add(EdgeSegment.Construct(id, topOrLeft, bottomOrRight));
             }
         }
 

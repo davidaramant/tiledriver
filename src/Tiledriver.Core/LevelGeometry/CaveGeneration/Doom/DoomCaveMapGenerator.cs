@@ -107,7 +107,7 @@ public sealed class DoomCaveMapGenerator
             .TrimToLargestDeadArea()
             .ScaleAndSmooth();
 
-    private static Dictionary<Position, Dictionary<EdgeSegmentId, EdgeSegment>> GetEdges(
+    private static IReadOnlyList<EdgeNode> GetEdges(
         Size size,
         IReadOnlyDictionary<Position, int> interiorDistances) =>
         size.GetAllPositionsExclusiveMax()
@@ -124,7 +124,8 @@ public sealed class DoomCaveMapGenerator
             return (Position: p, Sectors: new SquareSegmentSectors(sectorIds));
         })
         .Where(t => !t.Sectors.IsUniform)
-        .ToDictionary(pair => pair.Position, pair => pair.Sectors.GetInternalEdges());
+        .SelectMany(pair => pair.Sectors.GetInternalEdges().Select(edge => new EdgeNode(pair.Position, edge)))
+        .ToList();
 
     private static Func<SquareSegment, int> GetHeightLookup(
         IReadOnlyDictionary<Position, int> interiorDistances,
@@ -195,11 +196,70 @@ public sealed class DoomCaveMapGenerator
     //}
 
     private static void DrawEdges(
-        Dictionary<Position, Dictionary<EdgeSegmentId, EdgeSegment>> edges,
+        IReadOnlyList<EdgeNode> edges,
         ModelSequence<LatticePoint, Vertex> vertexCache,
         ModelSequence<LineDescription, LineDef> lineCache,
         ModelSequence<SectorDescription, Sector> sectorCache)
     {
+        var segmentGraph = new Dictionary<LatticePoint, HashSet<EdgeNode>>();
+
+        foreach (var edgeNode in edges)
+        {
+            if (segmentGraph.TryGetValue(edgeNode.StartPoint, out var fromStartSegments))
+            {
+                fromStartSegments.Add(edgeNode);
+            }
+            else
+            {
+                segmentGraph.Add(edgeNode.StartPoint, new HashSet<EdgeNode> { edgeNode });
+            }
+
+            if (segmentGraph.TryGetValue(edgeNode.EndPoint, out var fromEndSegments))
+            {
+                fromEndSegments.Add(edgeNode);
+            }
+            else
+            {
+                segmentGraph.Add(edgeNode.EndPoint, new HashSet<EdgeNode> { edgeNode });
+            }
+        }
+
+        // var spanGraph = new Dictionary<LatticePoint, EdgeSpan>();
+
+        var covered = new HashSet<EdgeNode>();
+        foreach(var edgeNode in edges)
+        {
+            if (covered.Contains(edgeNode))
+                continue;
+
+            var leftNode = edgeNode;
+
+            while (true)
+            {
+                var nextLeftNode = leftNode.FollowLine(goRight: false);
+                // TODO: This check isn't good enough - it also needs to check what _other_ edges are connected
+                if (!covered.Contains(nextLeftNode) &&
+                    segmentGraph.TryGetValue(leftNode.StartPoint, out var connectedEdges) &&
+                    connectedEdges.Contains(nextLeftNode))
+                {
+                    leftNode = nextLeftNode;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+
+        }
+
+
+
+
+
+
+
+
         // While there are remaining edges;
         // - Find a (perferably) single-sided edge
         //   - Go as far as possible left
