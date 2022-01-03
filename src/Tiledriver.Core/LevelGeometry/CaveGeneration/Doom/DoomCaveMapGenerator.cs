@@ -70,7 +70,7 @@ public sealed class DoomCaveMapGenerator
             V1: ld.RightVertex,
             V2: ld.LeftVertex,
             TwoSided: !ld.BackSector.IsOutsideLevel,
-            SideFront: sectorCache.GetIndex(ld.FrontSector!),
+            SideFront: sectorCache.GetIndex(ld.FrontSector!), // TODO: WRONG! this is a side def index!!!!
             SideBack: ld.BackSector.IsOutsideLevel ? -1 : sectorCache.GetIndex(ld.BackSector));
     private static Sector ConvertToSector(SectorDescription sd) => new(
                 TextureFloor: new Texture(sd.HeightLevel % 2 == 0 ? "RROCK16" : "FLAT10"),
@@ -125,51 +125,6 @@ public sealed class DoomCaveMapGenerator
         .SelectMany(pair => pair.Sectors.GetInternalEdges().Select(edge => new EdgeNode(pair.Position, edge)))
         .ToList();
 
-    //private static void DrawEdges(
-    //    IReadOnlyList<(Position Position, Corners InMapCorners)> borderTiles,
-    //    ModelSequence<LogicalPoint, Vertex> vertexCache,
-    //    ModelSequence<LineDescription, LineDef> lineCache)
-    //{
-    //    foreach (var (pos, inMapCorners) in borderTiles)
-    //    {
-    //        void DrawLine(Position p, Side fromSide, Side toSide) =>
-    //            lineCache.GetIndex(
-    //                new LineDescription(
-    //                    vertexCache.GetIndex(GetMiddleOfSide(p, toSide)),
-    //                    vertexCache.GetIndex(GetMiddleOfSide(p, fromSide))));
-
-    //        switch (inMapCorners)
-    //        {
-    //            case Corners.LowerLeft: DrawLine(pos, Side.Left, Side.Bottom); break;
-    //            case Corners.LowerRight: DrawLine(pos, Side.Bottom, Side.Right); break;
-    //            case Corners.UpperRight: DrawLine(pos, Side.Right, Side.Top); break;
-    //            case Corners.UpperLeft: DrawLine(pos, Side.Top, Side.Left); break;
-
-    //            case Corners.AllButLowerLeft: DrawLine(pos, Side.Bottom, Side.Left); break;
-    //            case Corners.AllButLowerRight: DrawLine(pos, Side.Right, Side.Bottom); break;
-    //            case Corners.AllButUpperLeft: DrawLine(pos, Side.Left, Side.Top); break;
-    //            case Corners.AllButUpperRight: DrawLine(pos, Side.Top, Side.Right); break;
-
-    //            case Corners.Upper: DrawLine(pos, Side.Right, Side.Left); break;
-    //            case Corners.Lower: DrawLine(pos, Side.Left, Side.Right); break;
-    //            case Corners.Left: DrawLine(pos, Side.Top, Side.Bottom); break;
-    //            case Corners.Right: DrawLine(pos, Side.Bottom, Side.Top); break;
-
-    //            case Corners.UpperLeftAndLowerRight:
-    //                DrawLine(pos, Side.Bottom, Side.Left);
-    //                DrawLine(pos, Side.Top, Side.Right);
-    //                break;
-    //            case Corners.UpperRightAndLowerLeft:
-    //                DrawLine(pos, Side.Left, Side.Top);
-    //                DrawLine(pos, Side.Right, Side.Bottom);
-    //                break;
-
-    //            default:
-    //                break;
-    //        }
-    //    }
-    //}
-
     private static void DrawEdges(
         IReadOnlyList<EdgeNode> edges,
         ModelSequence<LatticePoint, Vertex> vertexCache,
@@ -205,6 +160,8 @@ public sealed class DoomCaveMapGenerator
         {
             if (covered.Contains(edgeNode))
                 continue;
+
+            covered.Add(edgeNode);
 
             EdgeNode FollowNode(EdgeNode start, bool goRight)
             {

@@ -19,7 +19,7 @@ public static class SquareLayerTransition
         var lowerLeft = interiorDistances.GetValueOr(position.Below(), -1);
         var lowerRight = interiorDistances.GetValueOr(position.BelowRight(), -1);
 
-        // HACK: Don't worry about other distances for now
+        // HACK: Don't worry about other distances for now - this requires side defs to work
         upperLeft = upperLeft == -1 ? -1 : 0;
         upperRight = upperRight == -1 ? -1 : 0;
         lowerLeft = lowerLeft == -1 ? -1 : 0;
