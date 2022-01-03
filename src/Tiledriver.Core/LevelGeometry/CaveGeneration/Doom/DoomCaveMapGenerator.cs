@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using Tiledriver.Core.Extensions.Collections;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Textures;
 using Tiledriver.Core.FormatModels.Udmf;
@@ -13,7 +12,6 @@ using Tiledriver.Core.GameInfo.Doom;
 using Tiledriver.Core.LevelGeometry.Extensions;
 using Tiledriver.Core.Utils.CellularAutomata;
 using Tiledriver.Core.Utils.ConnectedComponentLabeling;
-using static Tiledriver.Core.Utils.MathUtil;
 
 namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 
@@ -37,7 +35,7 @@ public sealed class DoomCaveMapGenerator
 
         var edges = GetEdges(boardSize, internalDistances);
 
-        DrawEdges(edges, vertexCache, lineCache, sectorCache);
+        DrawEdges(edges, vertexCache, lineCache);
 
         var playerLogicalSpot = FindPlayerSpot(geometryBoard);
 
@@ -113,7 +111,7 @@ public sealed class DoomCaveMapGenerator
         size.GetAllPositionsExclusiveMax()
         .Select(p =>
         {
-            var heightLookup = GetHeightLookup(interiorDistances, p);
+            var heightLookup = SquareLayerTransition.GetHeightLookup(interiorDistances, p);
 
             // TODO: this happens to work because of the -1 thing
             var sectorIds =
@@ -126,29 +124,6 @@ public sealed class DoomCaveMapGenerator
         .Where(t => !t.Sectors.IsUniform)
         .SelectMany(pair => pair.Sectors.GetInternalEdges().Select(edge => new EdgeNode(pair.Position, edge)))
         .ToList();
-
-    private static Func<SquareSegment, int> GetHeightLookup(
-        IReadOnlyDictionary<Position, int> interiorDistances,
-        Position position)
-    {
-        var upperLeft = interiorDistances.TryGet(position) ?? -1;
-        var upperRight = interiorDistances.TryGet(position.Right()) ?? -1;
-        var lowerLeft = interiorDistances.TryGet(position.Below()) ?? -1;
-        var lowerRight = interiorDistances.TryGet(position.BelowRight()) ?? -1;
-
-        // Because this is operating on internal distances from walls, there are only 1 or 2 different values for the
-        // corners.
-        var minHeight = Min(upperLeft, upperRight, lowerLeft, lowerRight);
-        var maxHeight = Max(upperLeft, upperRight, lowerLeft, lowerRight);
-
-        var segments = Corner.Create(
-            topLeft: upperLeft == maxHeight,
-            topRight: upperRight == maxHeight,
-            bottomLeft: lowerLeft == maxHeight,
-            bottomRight: lowerRight == maxHeight).ToSquareSegments();
-
-        return seg => segments.HasFlag(seg.ToSquareSegments()) ? maxHeight : minHeight;
-    }
 
     //private static void DrawEdges(
     //    IReadOnlyList<(Position Position, Corners InMapCorners)> borderTiles,
@@ -198,8 +173,7 @@ public sealed class DoomCaveMapGenerator
     private static void DrawEdges(
         IReadOnlyList<EdgeNode> edges,
         ModelSequence<LatticePoint, Vertex> vertexCache,
-        ModelSequence<LineDescription, LineDef> lineCache,
-        ModelSequence<SectorDescription, Sector> sectorCache)
+        ModelSequence<LineDescription, LineDef> lineCache)
     {
         var segmentGraph = new Dictionary<LatticePoint, HashSet<EdgeNode>>();
 
@@ -244,6 +218,7 @@ public sealed class DoomCaveMapGenerator
                         connectedEdges.Count == 2 &&
                         connectedEdges.Contains(nextNode))
                     {
+                        covered.Add(node);
                         node = nextNode;
                     }
                     else
@@ -258,7 +233,11 @@ public sealed class DoomCaveMapGenerator
             var leftNode = FollowNode(edgeNode, goRight: false);
             var rightNode = FollowNode(edgeNode, goRight: true);
 
-            // TODO: This should be edges of the span...
+            lineCache.GetIndex(new LineDescription(
+                LeftVertex: vertexCache.GetIndex(leftNode.StartPoint),
+                RightVertex: vertexCache.GetIndex(rightNode.EndPoint),
+                FrontSector: leftNode.Segment.Front,
+                BackSector: leftNode.Segment.Back));
         }
 
 

@@ -11,5 +11,4 @@ public sealed record LineDescription(
     int LeftVertex,
     int RightVertex,
     SectorDescription FrontSector,
-    SectorDescription BackSector,
-    int TextureOffset);
+    SectorDescription BackSector);
