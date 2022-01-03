@@ -130,6 +130,90 @@ public sealed class DoomCaveMapGenerator
         ModelSequence<LatticePoint, Vertex> vertexCache,
         ModelSequence<LineDescription, LineDef> lineCache)
     {
+        // TODO: Probably need real graph types to clean some of this up
+        var spanGraph = ConstructEdgeSpanGraph(edges);
+
+        foreach (var edgeSpan in spanGraph.SelectMany(kvp => kvp.Value).Distinct())
+        {
+            lineCache.GetIndex(new LineDescription(
+                LeftVertex: vertexCache.GetIndex(edgeSpan.Start),
+                RightVertex: vertexCache.GetIndex(edgeSpan.End),
+                FrontSector: edgeSpan.Segment.Front,
+                BackSector: edgeSpan.Segment.Back));
+        }
+    }
+
+    public static IReadOnlyDictionary<LatticePoint, IReadOnlySet<EdgeSpan>> ConstructEdgeSpanGraph(
+        IReadOnlyList<EdgeNode> edges)
+    {
+        var segmentGraph = ConstructSegmentGraph(edges);
+        var spanGraph = new Dictionary<LatticePoint, HashSet<EdgeSpan>>();
+
+        var covered = new HashSet<EdgeNode>();
+        foreach (var edgeNode in edges)
+        {
+            if (covered.Contains(edgeNode))
+                continue;
+
+            covered.Add(edgeNode);
+
+            EdgeNode FollowNode(EdgeNode start, bool goRight)
+            {
+                var node = start;
+
+                while (true)
+                {
+                    var nextNode = node.FollowLine(goRight: goRight);
+                    if (!covered.Contains(nextNode) &&
+                        segmentGraph.TryGetValue(node.GetPointAtEnd(leftSide: goRight), out var connectedEdges) &&
+                        connectedEdges.Count == 2 &&
+                        connectedEdges.Contains(nextNode))
+                    {
+                        node = nextNode;
+                        covered.Add(node);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                return node;
+            }
+
+            var leftNode = FollowNode(edgeNode, goRight: false);
+            var rightNode = FollowNode(edgeNode, goRight: true);
+
+            var span = new EdgeSpan(
+                Start: leftNode.StartPoint,
+                End: rightNode.EndPoint,
+                Segment: leftNode.Segment);
+
+            if (spanGraph.TryGetValue(span.Start, out var fromStartSegments))
+            {
+                fromStartSegments.Add(span);
+            }
+            else
+            {
+                spanGraph.Add(span.Start, new HashSet<EdgeSpan> { span });
+            }
+
+            if (spanGraph.TryGetValue(span.End, out var fromEndSegments))
+            {
+                fromEndSegments.Add(span);
+            }
+            else
+            {
+                spanGraph.Add(span.End, new HashSet<EdgeSpan> { span });
+            }
+        }
+
+        return spanGraph.ToDictionary(kvp => kvp.Key, kvp => (IReadOnlySet<EdgeSpan>)kvp.Value);
+    }
+
+    public static IReadOnlyDictionary<LatticePoint, IReadOnlySet<EdgeNode>> ConstructSegmentGraph(
+        IReadOnlyList<EdgeNode> edges)
+    {
         var segmentGraph = new Dictionary<LatticePoint, HashSet<EdgeNode>>();
 
         foreach (var edgeNode in edges)
@@ -153,85 +237,6 @@ public sealed class DoomCaveMapGenerator
             }
         }
 
-        // var spanGraph = new Dictionary<LatticePoint, EdgeSpan>();
-
-        var covered = new HashSet<EdgeNode>();
-        foreach (var edgeNode in edges)
-        {
-            if (covered.Contains(edgeNode))
-                continue;
-
-            covered.Add(edgeNode);
-
-            EdgeNode FollowNode(EdgeNode start, bool goRight)
-            {
-                var node = start;
-
-                while (true)
-                {
-                    var nextNode = node.FollowLine(goRight: goRight);
-                    if (!covered.Contains(nextNode) &&
-                        segmentGraph.TryGetValue(node.GetPointAtEnd(leftSide: goRight), out var connectedEdges) &&
-                        connectedEdges.Count == 2 &&
-                        connectedEdges.Contains(nextNode))
-                    {
-                        covered.Add(node);
-                        node = nextNode;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-
-                return node;
-            }
-
-            var leftNode = FollowNode(edgeNode, goRight: false);
-            var rightNode = FollowNode(edgeNode, goRight: true);
-
-            lineCache.GetIndex(new LineDescription(
-                LeftVertex: vertexCache.GetIndex(leftNode.StartPoint),
-                RightVertex: vertexCache.GetIndex(rightNode.EndPoint),
-                FrontSector: leftNode.Segment.Front,
-                BackSector: leftNode.Segment.Back));
-        }
-
-
-
-
-
-
-
-
-        // While there are remaining edges;
-        // - Find a (perferably) single-sided edge
-        //   - Go as far as possible left
-        //   - Reverse, but concatenate this time
-        //   - Add line to cache
-
-        //(Position, EdgeSegment) FindStartingEdge()
-        //{
-        //    var edgeSequence = edges.SelectMany(positionAndEdges => positionAndEdges.Value.Values.Select(edge => (Position: positionAndEdges.Key, Edge: edge)));
-
-        //    return edgeSequence.FirstOrDefault(pair => pair.Edge.IsSingleSided, edgeSequence.First());
-        //}
-
-
-        // SectorEdgeGraph actions:
-        // - IsEmpty: bool
-        // - FindStartingNode(): MapNode
-        // - Contains(MapNode): bool
-        // - Remove(MapNode)
-
-
-        //while (edges.Any())
-        //{
-        //    var (position, edge) = FindStartingEdge();
-
-        //    var (newPosition, newEdge) = edge.FollowLine(goRight: false, position);
-
-
-        //}
+        return segmentGraph.ToDictionary(kvp => kvp.Key, kvp => (IReadOnlySet<EdgeNode>)kvp.Value);
     }
 }
