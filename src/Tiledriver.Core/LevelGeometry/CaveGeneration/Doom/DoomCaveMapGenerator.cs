@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2021, David Aramant
+// Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System;
@@ -67,17 +67,17 @@ public sealed class DoomCaveMapGenerator
 
     private static LineDef ConvertToLineDef(LineDescription ld, ModelSequence<SectorDescription, Sector> sectorCache) =>
         new(
-            V1: ld.LeftVertex,
-            V2: ld.RightVertex,
+            V1: ld.RightVertex,
+            V2: ld.LeftVertex,
             TwoSided: !ld.BackSector.IsOutsideLevel,
             SideFront: sectorCache.GetIndex(ld.FrontSector!),
             SideBack: ld.BackSector.IsOutsideLevel ? -1 : sectorCache.GetIndex(ld.BackSector));
     private static Sector ConvertToSector(SectorDescription sd) => new(
-                TextureFloor: new Texture("RROCK16"),
-                TextureCeiling: new Texture("FLAT10"),
+                TextureFloor: new Texture(sd.HeightLevel % 2 == 0 ? "RROCK16" : "FLAT10"),
+                TextureCeiling: new Texture(sd.HeightLevel % 2 == 1 ? "RROCK16" : "FLAT10"),
                 HeightFloor: 0,
                 HeightCeiling: 128,
-                LightLevel: 16 * sd.HeightLevel);
+                LightLevel: 255);
 
     private static Position FindPlayerSpot(CellBoard board)
     {
