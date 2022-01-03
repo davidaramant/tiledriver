@@ -105,7 +105,7 @@ public sealed class DoomCaveMapGenerator
             .TrimToLargestDeadArea()
             .ScaleAndSmooth();
 
-    private static IReadOnlyList<EdgeNode> GetEdges(
+    private static IReadOnlyList<EdgeSpan> GetEdges(
         Size size,
         IReadOnlyDictionary<Position, int> interiorDistances) =>
         size.GetAllPositionsExclusiveMax()
@@ -122,18 +122,18 @@ public sealed class DoomCaveMapGenerator
             return (Position: p, Sectors: new SquareSegmentSectors(sectorIds));
         })
         .Where(t => !t.Sectors.IsUniform)
-        .SelectMany(pair => pair.Sectors.GetInternalEdges().Select(edge => new EdgeNode(pair.Position, edge)))
+        .SelectMany(pair => pair.Sectors.GetInternalEdges().Select(edge => EdgeSpan.FromPosition(pair.Position, edge)))
         .ToList();
 
     private static void DrawEdges(
-        IReadOnlyList<EdgeNode> edges,
+        IReadOnlyList<EdgeSpan> edges,
         ModelSequence<LatticePoint, Vertex> vertexCache,
         ModelSequence<LineDescription, LineDef> lineCache)
     {
-        // TODO: Probably need real graph types to clean some of this up
-        var spanGraph = ConstructEdgeSpanGraph(edges);
+        var segmentGraph = EdgeGraph.FromEdges(edges);
+        var spanGraph = segmentGraph.Simplify();
 
-        foreach (var edgeSpan in spanGraph.SelectMany(kvp => kvp.Value).Distinct())
+        foreach (var edgeSpan in spanGraph.GetAllEdges())
         {
             lineCache.GetIndex(new LineDescription(
                 LeftVertex: vertexCache.GetIndex(edgeSpan.Start),
@@ -141,102 +141,5 @@ public sealed class DoomCaveMapGenerator
                 FrontSector: edgeSpan.Segment.Front,
                 BackSector: edgeSpan.Segment.Back));
         }
-    }
-
-    public static IReadOnlyDictionary<LatticePoint, IReadOnlySet<EdgeSpan>> ConstructEdgeSpanGraph(
-        IReadOnlyList<EdgeNode> edges)
-    {
-        var segmentGraph = ConstructSegmentGraph(edges);
-        var spanGraph = new Dictionary<LatticePoint, HashSet<EdgeSpan>>();
-
-        var covered = new HashSet<EdgeNode>();
-        foreach (var edgeNode in edges)
-        {
-            if (covered.Contains(edgeNode))
-                continue;
-
-            covered.Add(edgeNode);
-
-            EdgeNode FollowNode(EdgeNode start, bool goRight)
-            {
-                var node = start;
-
-                while (true)
-                {
-                    var nextNode = node.FollowLine(goRight: goRight);
-                    if (!covered.Contains(nextNode) &&
-                        segmentGraph.TryGetValue(node.GetPointAtEnd(leftSide: goRight), out var connectedEdges) &&
-                        connectedEdges.Count == 2 &&
-                        connectedEdges.Contains(nextNode))
-                    {
-                        node = nextNode;
-                        covered.Add(node);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-
-                return node;
-            }
-
-            var leftNode = FollowNode(edgeNode, goRight: false);
-            var rightNode = FollowNode(edgeNode, goRight: true);
-
-            var span = new EdgeSpan(
-                Start: leftNode.StartPoint,
-                End: rightNode.EndPoint,
-                Segment: leftNode.Segment);
-
-            if (spanGraph.TryGetValue(span.Start, out var fromStartSegments))
-            {
-                fromStartSegments.Add(span);
-            }
-            else
-            {
-                spanGraph.Add(span.Start, new HashSet<EdgeSpan> { span });
-            }
-
-            if (spanGraph.TryGetValue(span.End, out var fromEndSegments))
-            {
-                fromEndSegments.Add(span);
-            }
-            else
-            {
-                spanGraph.Add(span.End, new HashSet<EdgeSpan> { span });
-            }
-        }
-
-        return spanGraph.ToDictionary(kvp => kvp.Key, kvp => (IReadOnlySet<EdgeSpan>)kvp.Value);
-    }
-
-    public static IReadOnlyDictionary<LatticePoint, IReadOnlySet<EdgeNode>> ConstructSegmentGraph(
-        IReadOnlyList<EdgeNode> edges)
-    {
-        var segmentGraph = new Dictionary<LatticePoint, HashSet<EdgeNode>>();
-
-        foreach (var edgeNode in edges)
-        {
-            if (segmentGraph.TryGetValue(edgeNode.StartPoint, out var fromStartSegments))
-            {
-                fromStartSegments.Add(edgeNode);
-            }
-            else
-            {
-                segmentGraph.Add(edgeNode.StartPoint, new HashSet<EdgeNode> { edgeNode });
-            }
-
-            if (segmentGraph.TryGetValue(edgeNode.EndPoint, out var fromEndSegments))
-            {
-                fromEndSegments.Add(edgeNode);
-            }
-            else
-            {
-                segmentGraph.Add(edgeNode.EndPoint, new HashSet<EdgeNode> { edgeNode });
-            }
-        }
-
-        return segmentGraph.ToDictionary(kvp => kvp.Key, kvp => (IReadOnlySet<EdgeNode>)kvp.Value);
     }
 }

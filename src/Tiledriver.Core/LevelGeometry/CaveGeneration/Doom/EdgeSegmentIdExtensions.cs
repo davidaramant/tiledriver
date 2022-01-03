@@ -5,7 +5,7 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 
 public static class EdgeSegmentIdExtensions
 {
-    public static EdgeSegmentId FollowEdge(this EdgeSegmentId id) => 
+    public static EdgeSegmentId FollowEdge(this EdgeSegmentId id) =>
         id switch
         {
             EdgeSegmentId.DiagTopLeft => EdgeSegmentId.DiagBottomRight,
@@ -30,6 +30,20 @@ public static class EdgeSegmentIdExtensions
             EdgeSegmentId.HorizontalRight => topOrLeftIsFront == leftSide ? SquarePoint.RightMiddle : SquarePoint.Center,
             EdgeSegmentId.VerticalTop => topOrLeftIsFront == leftSide ? SquarePoint.TopMiddle : SquarePoint.Center,
             EdgeSegmentId.VerticalBottom => topOrLeftIsFront == leftSide ? SquarePoint.Center : SquarePoint.BottomMiddle,
+            _ => throw new System.NotImplementedException(),
+        };
+
+    public static LineSlope GetLineSlope(this EdgeSegmentId id) =>
+        id switch
+        {
+            EdgeSegmentId.DiagTopLeft => LineSlope.DecreasingY,
+            EdgeSegmentId.DiagTopRight => LineSlope.IncreasingY,
+            EdgeSegmentId.DiagBottomLeft => LineSlope.DecreasingY,
+            EdgeSegmentId.DiagBottomRight => LineSlope.IncreasingY,
+            EdgeSegmentId.HorizontalLeft => LineSlope.Horizontal,
+            EdgeSegmentId.HorizontalRight => LineSlope.Horizontal,
+            EdgeSegmentId.VerticalTop => LineSlope.Vertical,
+            EdgeSegmentId.VerticalBottom => LineSlope.Vertical,
             _ => throw new System.NotImplementedException(),
         };
 }
