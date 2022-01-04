@@ -37,12 +37,15 @@
 - [x] Infrastructure for generating a cave map
 - [ ] Option to flip visualizations across Y-axis
 - [x] Place 1-sided walls using marching squares
-- [ ] Don't generate so many redundant linedefs
-- [ ] Utility to correct texture offsets
+- [x] Don't generate so many redundant linedefs
+- [ ] Walk graph to set correct texture offsets
 - [ ] Textures for use in Doom
 - [x] Create detailed cave outline
-- [ ] Create interior of cave
-- [ ] Place 2-sided walls for interior regions
+- [x] Create interior of cave
+- [ ] Cave lighting
+- [ ] Alternate material
+- [ ] Tweak how height level is used (sine wave?)
+- [x] Place 2-sided walls for interior regions
 - [ ] Utility method for placing Thing at location (check that it fits)
 - [ ] Doom Things helper list (like the Wolf Actors)
   - [x] Actor list

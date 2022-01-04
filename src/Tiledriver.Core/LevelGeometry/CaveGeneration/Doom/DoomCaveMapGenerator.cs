@@ -66,21 +66,20 @@ public sealed class DoomCaveMapGenerator
         ModelSequence<SectorDescription, Sector> sectorCache,
         ModelSequence<SideDef, SideDef> sideDefCache)
     {
-        var oneSided = ld.BackSector.IsOutsideLevel;
         var frontSide = sideDefCache.GetIndex(new SideDef(
             sector: sectorCache.GetIndex(ld.FrontSector),
-            textureMiddle: oneSided ? new Texture("ROCK5") : null));
-        var backSide = oneSided
-            ? -1
-            : sideDefCache.GetIndex(new SideDef(
+            textureMiddle: ld.IsTwoSided ? null : new Texture("ROCK5")));
+        var backSide = ld.IsTwoSided
+            ? sideDefCache.GetIndex(new SideDef(
                 sector: sectorCache.GetIndex(ld.BackSector),
                 textureTop: new Texture("ROCK5"),
-                textureBottom: new Texture("ROCK5")));
+                textureBottom: new Texture("ROCK5")))
+            : -1;
 
         return new(
             V1: ld.RightVertex,
             V2: ld.LeftVertex,
-            TwoSided: !oneSided,
+            TwoSided: ld.IsTwoSided,
             SideFront: frontSide,
             SideBack: backSide);
     }
@@ -143,10 +142,10 @@ public sealed class DoomCaveMapGenerator
         ModelSequence<LineDescription, LineDef> lineCache)
     {
         var segmentGraph = SectorEdgeGraph.FromEdges(edges);
-        var spanGraph = segmentGraph.Simplify();
-        Console.Out.WriteLine($"Number of edges simplified from {segmentGraph.EdgeCount:N0} to {spanGraph.EdgeCount:N0}");
+        var edgeGraph = segmentGraph.Simplify();
+        Console.Out.WriteLine($"Number of edges simplified from {segmentGraph.EdgeCount:N0} to {edgeGraph.EdgeCount:N0}");
 
-        foreach (var edgeSpan in spanGraph.GetAllEdges())
+        foreach (var edgeSpan in edgeGraph.GetAllEdges())
         {
             lineCache.GetIndex(new LineDescription(
                 LeftVertex: vertexCache.GetIndex(edgeSpan.Start),
