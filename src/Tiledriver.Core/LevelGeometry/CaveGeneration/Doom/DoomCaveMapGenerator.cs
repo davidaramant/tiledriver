@@ -105,7 +105,7 @@ public sealed class DoomCaveMapGenerator
             .TrimToLargestDeadArea()
             .ScaleAndSmooth();
 
-    private static IReadOnlyList<EdgeSpan> GetEdges(
+    private static IReadOnlyList<SectorEdge> GetEdges(
         Size size,
         IReadOnlyDictionary<Position, int> interiorDistances) =>
         size.GetAllPositionsExclusiveMax()
@@ -122,16 +122,17 @@ public sealed class DoomCaveMapGenerator
             return (Position: p, Sectors: new SquareSegmentSectors(sectorIds));
         })
         .Where(t => !t.Sectors.IsUniform)
-        .SelectMany(pair => pair.Sectors.GetInternalEdges().Select(edge => EdgeSpan.FromPosition(pair.Position, edge)))
+        .SelectMany(pair => pair.Sectors.GetInternalEdges().Select(edge => SectorEdge.FromPosition(pair.Position, edge)))
         .ToList();
 
     private static void DrawEdges(
-        IReadOnlyList<EdgeSpan> edges,
+        IReadOnlyList<SectorEdge> edges,
         ModelSequence<LatticePoint, Vertex> vertexCache,
         ModelSequence<LineDescription, LineDef> lineCache)
     {
-        var segmentGraph = EdgeGraph.FromEdges(edges);
+        var segmentGraph = SectorEdgeGraph.FromEdges(edges);
         var spanGraph = segmentGraph.Simplify();
+        Console.Out.WriteLine($"Number of edges simplified from {segmentGraph.EdgeCount:N} to {spanGraph.EdgeCount:N}");
 
         foreach (var edgeSpan in spanGraph.GetAllEdges())
         {
