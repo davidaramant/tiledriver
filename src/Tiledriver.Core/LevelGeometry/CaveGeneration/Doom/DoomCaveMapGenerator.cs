@@ -100,7 +100,7 @@ public sealed class DoomCaveMapGenerator
             .Fill(random, probabilityAlive: 0.5)
             .MakeBorderAlive(thickness: 1)
             .GenerateStandardCave()
-            .ScaleAddNoiseAndSmooth(random, noise: 0.2, times: 2)
+            .ScaleAddNoiseAndSmooth(random, noise: 0.2, times: 1)
             .RemoveNoise()
             .TrimToLargestDeadArea()
             .ScaleAndSmooth();
