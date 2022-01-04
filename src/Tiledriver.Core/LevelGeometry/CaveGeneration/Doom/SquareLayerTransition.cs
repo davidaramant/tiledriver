@@ -19,12 +19,6 @@ public static class SquareLayerTransition
         var lowerLeft = interiorDistances.GetValueOr(position.Below(), -1);
         var lowerRight = interiorDistances.GetValueOr(position.BelowRight(), -1);
 
-        // HACK: Don't worry about other distances for now - this requires side defs to work
-        upperLeft = upperLeft == -1 ? -1 : 0;
-        upperRight = upperRight == -1 ? -1 : 0;
-        lowerLeft = lowerLeft == -1 ? -1 : 0;
-        lowerRight = lowerRight == -1 ? -1 : 0;
-
         // Because this is operating on internal distances from walls, there are only 1 or 2 different values for the
         // corners.
         var minHeight = Min(upperLeft, upperRight, lowerLeft, lowerRight);

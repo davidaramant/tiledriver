@@ -28,10 +28,10 @@ public sealed class DoomCaveMapGenerator
 
         var internalDistances = playableSpace.DetermineInteriorEdgeDistance(Neighborhood.Moore);
 
+        var sideDefCache = new ModelSequence<SideDef, SideDef>(s => s); // Seems silly, but what should be abstracted about it?
         var vertexCache = new ModelSequence<LatticePoint, Vertex>(ConvertToVertex);
         var sectorCache = new ModelSequence<SectorDescription, Sector>(ConvertToSector);
-        var lineCache = new ModelSequence<LineDescription, LineDef>(ld => ConvertToLineDef(ld, sectorCache));
-        // TODO: Need sideDefCache too!!!
+        var lineCache = new ModelSequence<LineDescription, LineDef>(ld => ConvertToLineDef(ld, sectorCache, sideDefCache));
 
         var edges = GetEdges(boardSize, internalDistances);
 
@@ -42,11 +42,7 @@ public sealed class DoomCaveMapGenerator
         return new MapData(
             NameSpace: "Doom",
             LineDefs: lineCache.GetDefinitions().ToImmutableArray(),
-            SideDefs: ImmutableArray.Create(new SideDef(
-                TextureTop: Texture.None,
-                TextureMiddle: new Texture("ROCK5"),
-                TextureBottom: Texture.None,
-                Sector: 0)),
+            SideDefs: sideDefCache.GetDefinitions().ToImmutableArray(),
             Vertices: vertexCache.GetDefinitions().ToImmutableArray(),
             Sectors: sectorCache.GetDefinitions().ToImmutableArray(),
             Things: ImmutableArray.Create(
@@ -65,18 +61,34 @@ public sealed class DoomCaveMapGenerator
             _ => throw new Exception("Impossible; Vertices should have been normalized to prevent this")
         };
 
-    private static LineDef ConvertToLineDef(LineDescription ld, ModelSequence<SectorDescription, Sector> sectorCache) =>
-        new(
+    private static LineDef ConvertToLineDef(
+        LineDescription ld,
+        ModelSequence<SectorDescription, Sector> sectorCache,
+        ModelSequence<SideDef, SideDef> sideDefCache)
+    {
+        var oneSided = ld.BackSector.IsOutsideLevel;
+        var frontSide = sideDefCache.GetIndex(new SideDef(
+            sector: sectorCache.GetIndex(ld.FrontSector),
+            textureMiddle: oneSided ? new Texture("ROCK5") : null));
+        var backSide = oneSided
+            ? -1
+            : sideDefCache.GetIndex(new SideDef(
+                sector: sectorCache.GetIndex(ld.BackSector),
+                textureTop: new Texture("ROCK5"),
+                textureBottom: new Texture("ROCK5")));
+
+        return new(
             V1: ld.RightVertex,
             V2: ld.LeftVertex,
-            TwoSided: !ld.BackSector.IsOutsideLevel,
-            SideFront: sectorCache.GetIndex(ld.FrontSector!), // TODO: WRONG! this is a side def index!!!!
-            SideBack: ld.BackSector.IsOutsideLevel ? -1 : sectorCache.GetIndex(ld.BackSector));
+            TwoSided: !oneSided,
+            SideFront: frontSide,
+            SideBack: backSide);
+    }
     private static Sector ConvertToSector(SectorDescription sd) => new(
-                TextureFloor: new Texture(sd.HeightLevel % 2 == 0 ? "RROCK16" : "FLAT10"),
-                TextureCeiling: new Texture(sd.HeightLevel % 2 == 1 ? "RROCK16" : "FLAT10"),
-                HeightFloor: 0,
-                HeightCeiling: 128,
+                TextureFloor: "RROCK16",
+                TextureCeiling: "FLAT10",
+                HeightFloor: 0 - sd.HeightLevel * 8,
+                HeightCeiling: 128 + sd.HeightLevel * 8,
                 LightLevel: 255);
 
     private static Position FindPlayerSpot(CellBoard board)
