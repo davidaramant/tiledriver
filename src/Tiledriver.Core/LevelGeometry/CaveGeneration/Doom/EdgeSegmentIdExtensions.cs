@@ -38,8 +38,8 @@ public static class EdgeSegmentIdExtensions
         {
             EdgeSegmentId.DiagTopLeft => LineSlope.DecreasingY,
             EdgeSegmentId.DiagTopRight => LineSlope.IncreasingY,
-            EdgeSegmentId.DiagBottomLeft => LineSlope.DecreasingY,
-            EdgeSegmentId.DiagBottomRight => LineSlope.IncreasingY,
+            EdgeSegmentId.DiagBottomLeft => LineSlope.IncreasingY,
+            EdgeSegmentId.DiagBottomRight => LineSlope.DecreasingY,
             EdgeSegmentId.HorizontalLeft => LineSlope.Horizontal,
             EdgeSegmentId.HorizontalRight => LineSlope.Horizontal,
             EdgeSegmentId.VerticalTop => LineSlope.Vertical,

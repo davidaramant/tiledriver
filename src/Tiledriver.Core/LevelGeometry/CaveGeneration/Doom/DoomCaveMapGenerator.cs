@@ -132,7 +132,7 @@ public sealed class DoomCaveMapGenerator
     {
         var segmentGraph = SectorEdgeGraph.FromEdges(edges);
         var spanGraph = segmentGraph.Simplify();
-        Console.Out.WriteLine($"Number of edges simplified from {segmentGraph.EdgeCount:N} to {spanGraph.EdgeCount:N}");
+        Console.Out.WriteLine($"Number of edges simplified from {segmentGraph.EdgeCount:N0} to {spanGraph.EdgeCount:N0}");
 
         foreach (var edgeSpan in spanGraph.GetAllEdges())
         {

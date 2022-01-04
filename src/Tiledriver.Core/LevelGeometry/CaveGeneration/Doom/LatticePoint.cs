@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Tiledriver.Core.LevelGeometry.Extensions;
 
 namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
@@ -10,6 +11,7 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 /// <summary>
 /// A point in the edge lattice.
 /// </summary>
+[DebuggerDisplay("{ToString()}")]
 public sealed class LatticePoint : IEquatable<LatticePoint?>
 {
     /// <summary>
@@ -31,6 +33,8 @@ public sealed class LatticePoint : IEquatable<LatticePoint?>
             _ => (square, point)
         };
     }
+
+    public override string ToString() => $"({Square.X}, {Square.Y}, {Point})";
 
     #region Equality
     public override bool Equals(object? obj) => Equals(obj as LatticePoint);

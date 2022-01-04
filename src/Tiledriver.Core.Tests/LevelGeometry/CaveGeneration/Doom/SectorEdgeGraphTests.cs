@@ -51,6 +51,56 @@ public sealed class SectorEdgeGraphTests
         edge.End.Should().Be(new LatticePoint(new Position(1, 0), SquarePoint.RightMiddle));
     }
 
+    [Fact]
+    public void ShouldSimplifyVerticalEdges()
+    {
+        var graph = SectorEdgeGraph.FromEdges(new[] {
+            BuildEdge(
+                new Position(0, 0),
+                EdgeSegmentId.VerticalTop),
+            BuildEdge(
+                new Position(0, 0),
+                EdgeSegmentId.VerticalBottom),
+            BuildEdge(
+                new Position(0, 1),
+                EdgeSegmentId.VerticalTop),
+            BuildEdge(
+                new Position(0, 1),
+                EdgeSegmentId.VerticalBottom)});
+
+        var simpleGraph = graph.Simplify();
+
+        simpleGraph.EdgeCount.Should().Be(1);
+        var edge = simpleGraph.GetAllEdges().First();
+        edge.Start.Should().Be(new LatticePoint(new Position(0, 1), SquarePoint.BottomMiddle));
+        edge.End.Should().Be(new LatticePoint(new Position(0, 0), SquarePoint.TopMiddle));
+    }
+
+    [Fact]
+    public void ShouldSimplifyPositiveSlopedEdges()
+    {
+        var graph = SectorEdgeGraph.FromEdges(new[] {
+            BuildEdge(
+                new Position(0, 0),
+                EdgeSegmentId.DiagTopRight),
+            BuildEdge(
+                new Position(1, 0),
+                EdgeSegmentId.DiagBottomLeft),
+            BuildEdge(
+                new Position(1, 1),
+                EdgeSegmentId.DiagTopRight),
+            BuildEdge(
+                new Position(2, 1),
+                EdgeSegmentId.DiagBottomLeft)});
+
+        var simpleGraph = graph.Simplify();
+
+        simpleGraph.EdgeCount.Should().Be(1);
+        var edge = simpleGraph.GetAllEdges().First();
+        edge.Start.Should().Be(new LatticePoint(new Position(0, 0), SquarePoint.TopMiddle));
+        edge.End.Should().Be(new LatticePoint(new Position(2, 1), SquarePoint.BottomMiddle));
+    }
+
     private static SectorEdge BuildEdge(Position square, EdgeSegmentId id) =>
         SectorEdge.FromPosition(
                 square,
