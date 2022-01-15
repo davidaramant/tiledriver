@@ -18,6 +18,7 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 public sealed class DoomCaveMapGenerator
 {
     public const int LogicalUnitSize = 16;
+    public const int TextureWidth = 128;
 
     public static MapData Create(int seed, TextureQueue textureQueue)
     {
@@ -68,12 +69,14 @@ public sealed class DoomCaveMapGenerator
     {
         var frontSide = sideDefCache.GetIndex(new SideDef(
             sector: sectorCache.GetIndex(ld.FrontSector),
-            textureMiddle: ld.IsTwoSided ? null : new Texture("ROCKRED1")));
+            textureMiddle: ld.IsTwoSided ? null : new Texture("BIGDOOR2"),
+            offsetX: ld.TextureXOffset));
         var backSide = ld.IsTwoSided
             ? sideDefCache.GetIndex(new SideDef(
                 sector: sectorCache.GetIndex(ld.BackSector),
-                textureTop: new Texture("ROCKRED1"),
-                textureBottom: new Texture("ROCKRED1")))
+                textureTop: new Texture("BIGDOOR2"),
+                textureBottom: new Texture("BIGDOOR2"),
+                offsetX: ld.TextureXOffset))
             : -1;
 
         return new(
@@ -145,13 +148,56 @@ public sealed class DoomCaveMapGenerator
         var edgeGraph = segmentGraph.Simplify();
         Console.Out.WriteLine($"Number of edges simplified from {segmentGraph.EdgeCount:N0} to {edgeGraph.EdgeCount:N0}");
 
-        foreach (var edgeSpan in edgeGraph.GetAllEdges())
+        var remainingEdges = edgeGraph.GetAllEdges().ToHashSet();
+
+        double Distance(LatticePoint p1, LatticePoint p2)
         {
-            lineCache.GetIndex(new LineDescription(
-                LeftVertex: vertexCache.GetIndex(edgeSpan.Start),
-                RightVertex: vertexCache.GetIndex(edgeSpan.End),
-                FrontSector: edgeSpan.Segment.Front,
-                BackSector: edgeSpan.Segment.Back));
+            var v1 = ConvertToVertex(p1);
+            var v2 = ConvertToVertex(p2);
+
+            var dx = v1.X - v2.X;
+            var dy = v1.Y - v2.Y;
+            return Math.Sqrt(dx * dx + dy * dy);
+        }
+
+        // TODO with texture offsets:
+        // - Something is wrong with the offsets. Does it have something to do with the lines being flipped from what I think a Doom level has?
+        // - How do offsets work for the back of a line?
+
+        while (remainingEdges.Any())
+        {
+            var startingEdge = remainingEdges.FirstOrDefault(e => e.IsSingleSided) ?? remainingEdges.First();
+
+            var stack = new Stack<(SectorEdge Edge, double Offset)>();
+            stack.Push((startingEdge, 0));
+
+            while (stack.Any())
+            {
+                var (edge, offset) = stack.Pop();
+
+                if (!remainingEdges.Contains(edge))
+                    continue;
+
+                remainingEdges.Remove(edge);
+
+                lineCache.GetIndex(new LineDescription(
+                    LeftVertex: vertexCache.GetIndex(edge.Start),
+                    RightVertex: vertexCache.GetIndex(edge.End),
+                    FrontSector: edge.Segment.Front,
+                    BackSector: edge.Segment.Back,
+                    TextureXOffset: (int)Math.Round(offset)));
+
+                var length = Distance(edge.Start, edge.End);
+
+                offset = (offset + length) % TextureWidth;
+
+                var connected = edgeGraph.GetEdgesConnectedTo(edge.End);
+
+                foreach (var connectedEdge in connected)
+                {
+                    stack.Push((connectedEdge, offset));
+                }
+            }
         }
     }
 }

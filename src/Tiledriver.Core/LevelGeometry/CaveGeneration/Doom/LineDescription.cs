@@ -9,7 +9,8 @@ public sealed record LineDescription(
     int LeftVertex,
     int RightVertex,
     SectorDescription FrontSector,
-    SectorDescription BackSector)
+    SectorDescription BackSector,
+    int TextureXOffset = 0)
 {
     public bool IsTwoSided => !BackSector.IsOutsideLevel;
 }

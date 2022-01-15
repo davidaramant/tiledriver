@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2022, David Aramant
+// Copyright (c) 2022, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System.Collections.Generic;
@@ -97,7 +97,7 @@ public sealed class SectorEdgeGraph
 
             allSimplifiedEdges.Add(span);
 
-            AddToGraph(simplifiedPointToEdges, edge);
+            AddToGraph(simplifiedPointToEdges, span);
         }
 
         return new(allSimplifiedEdges, simplifiedPointToEdges);
