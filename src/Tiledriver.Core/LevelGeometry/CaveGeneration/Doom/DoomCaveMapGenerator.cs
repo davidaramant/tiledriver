@@ -68,12 +68,12 @@ public sealed class DoomCaveMapGenerator
     {
         var frontSide = sideDefCache.GetIndex(new SideDef(
             sector: sectorCache.GetIndex(ld.FrontSector),
-            textureMiddle: ld.IsTwoSided ? null : new Texture("ROCK5")));
+            textureMiddle: ld.IsTwoSided ? null : new Texture("ROCKRED1")));
         var backSide = ld.IsTwoSided
             ? sideDefCache.GetIndex(new SideDef(
                 sector: sectorCache.GetIndex(ld.BackSector),
-                textureTop: new Texture("ROCK5"),
-                textureBottom: new Texture("ROCK5")))
+                textureTop: new Texture("ROCKRED1"),
+                textureBottom: new Texture("ROCKRED1")))
             : -1;
 
         return new(
@@ -84,9 +84,9 @@ public sealed class DoomCaveMapGenerator
             SideBack: backSide);
     }
     private static Sector ConvertToSector(SectorDescription sd) => new(
-                TextureFloor: "RROCK16",
-                TextureCeiling: "FLAT10",
-                HeightFloor: 0 - sd.HeightLevel * 8,
+                TextureFloor: "FLOOR6_1",
+                TextureCeiling: "FLOOR6_1",
+                HeightFloor: 0 - sd.HeightLevel * 4,
                 HeightCeiling: 128 + sd.HeightLevel * 8,
                 LightLevel: 255);
 

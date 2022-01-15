@@ -14,10 +14,17 @@ public static class SquareLayerTransition
         IReadOnlyDictionary<Position, int> interiorDistances,
         Position position)
     {
-        var upperLeft = interiorDistances.GetValueOr(position, -1);
-        var upperRight = interiorDistances.GetValueOr(position.Right(), -1);
-        var lowerLeft = interiorDistances.GetValueOr(position.Below(), -1);
-        var lowerRight = interiorDistances.GetValueOr(position.BelowRight(), -1);
+        static int Normalize(int distance) =>
+            distance switch
+            {
+                -1 => -1,
+                _ => distance / 2
+            };
+
+        var upperLeft = Normalize(interiorDistances.GetValueOr(position, -1));
+        var upperRight = Normalize(interiorDistances.GetValueOr(position.Right(), -1));
+        var lowerLeft = Normalize(interiorDistances.GetValueOr(position.Below(), -1));
+        var lowerRight = Normalize(interiorDistances.GetValueOr(position.BelowRight(), -1));
 
         // Because this is operating on internal distances from walls, there are only 1 or 2 different values for the
         // corners.
