@@ -197,19 +197,19 @@ namespace Tiledriver.Core.ManualTests
                 for (int i = 0; i < 4; i++)
                 {
                     generation++;
-                    board.RunGenerations(1, CellRule.FiveNeighborsOrInEmptyArea);
+                    board = board.RunGenerations(1, CellRule.FiveNeighborsOrInEmptyArea);
                     SaveBoard(board, generation);
                 }
                 for (int i = 0; i < 3; i++)
                 {
                     generation++;
-                    board.RunGenerations(1, CellRule.FiveOrMoreNeighbors);
+                    board = board.RunGenerations(1, CellRule.FiveOrMoreNeighbors);
                     SaveBoard(board, generation);
                 }
             }
             else
             {
-                board.GenerateStandardCave();
+                board = board.GenerateStandardCave();
             }
 
             // Find all components, render picture of all of them
@@ -302,10 +302,32 @@ namespace Tiledriver.Core.ManualTests
 
             Log($"Seed {seed} - Number of lights: {lights.Length}");
 
+            foreach (var light in lights)
+            {
+                largestComponentImg.SetPixel(light.Center.X, light.Center.Y, light.Height switch
+                {
+                    LightHeight.Ceiling => SKColors.Orange,
+                    LightHeight.Middle => SKColors.HotPink,
+                    LightHeight.Floor => SKColors.Red,
+                    _ => throw new Exception("Impossible")
+                });
+            }
+            if(visualizeProcess)
+            {
+                step++;
+                SaveImage(largestComponentImg, step, "Light Positions");
+            }
+
             var (floorLighting, _) =
                 LightTracer.Trace(dimensions, p => board[p] == CellType.Alive, lightRange, lights);
 
             using var lightImg = LightMapVisualizer.Render(floorLighting, lights, largestComponent);
+
+            if (visualizeProcess)
+            {
+                step++;
+                SaveImage(lightImg, step, "Lighting");
+            } 
 
             // Place treasure
             var treasures =
@@ -321,7 +343,7 @@ namespace Tiledriver.Core.ManualTests
                 lightImg.SetPixel(t.Location.X, t.Location.Y, SKColors.Gold);
             }
 
-            SaveImage(lightImg, ++step, "Lighting & Treasure");
+            SaveImage(lightImg, ++step, "Treasure");
 
             Log($"Seed {seed} - Complete");
         }
