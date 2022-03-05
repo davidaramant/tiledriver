@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using Tiledriver.Core.LevelGeometry.CoordinateSystems;
 
 namespace Tiledriver.Core.LevelGeometry.Extensions
 {
@@ -20,39 +21,36 @@ namespace Tiledriver.Core.LevelGeometry.Extensions
 
     public static class PositionExtensions
     {
-        public static Position Left(this Position p) => new(p.X - 1, p.Y);
-        public static Position Above(this Position p) => new(p.X, p.Y - 1);
-        public static Position Right(this Position p) => new(p.X + 1, p.Y);
-        public static Position Below(this Position p) => new(p.X, p.Y + 1);
-
-        public static Position AboveLeft(this Position p) => new(p.X - 1, p.Y - 1);
-        public static Position AboveRight(this Position p) => new(p.X + 1, p.Y - 1);
-        public static Position BelowRight(this Position p) => new(p.X + 1, p.Y + 1);
-        public static Position BelowLeft(this Position p) => new(p.X - 1, p.Y + 1);
-
-
         public static bool Touches(this Position p, Position other) =>
             (p.X == other.X && (p.Y == other.Y - 1 || p.Y == other.Y + 1)) ||
             (p.Y == other.Y && (p.X == other.X - 1 || p.X == other.X + 1));
 
+        /// <summary>
+        /// Gets the 4 neighbors of this position.
+        /// </summary>
         public static IEnumerable<Position> GetVonNeumannNeighbors(this Position p)
         {
-            yield return Left(p);
-            yield return Above(p);
-            yield return Right(p);
-            yield return Below(p);
+            // Coordinate system doesn't matter for this
+            yield return p + CoordinateSystem.BottomLeft.Up;
+            yield return p + CoordinateSystem.BottomLeft.Right; 
+            yield return p + CoordinateSystem.BottomLeft.Down; 
+            yield return p + CoordinateSystem.BottomLeft.Left;
         }
 
+        /// <summary>
+        /// Gets the 8 neighbors of this position.
+        /// </summary>
         public static IEnumerable<Position> GetMooreNeighbors(this Position p)
         {
-            yield return Left(p);
-            yield return AboveLeft(p);
-            yield return Above(p);
-            yield return AboveRight(p);
-            yield return Right(p);
-            yield return BelowRight(p);
-            yield return Below(p);
-            yield return BelowLeft(p);
+            // Coordinate system doesn't matter for this
+            yield return p + CoordinateSystem.BottomLeft.Up;
+            yield return p + CoordinateSystem.BottomLeft.UpAndRight;
+            yield return p + CoordinateSystem.BottomLeft.Right; 
+            yield return p + CoordinateSystem.BottomLeft.DownAndRight; 
+            yield return p + CoordinateSystem.BottomLeft.Down; 
+            yield return p + CoordinateSystem.BottomLeft.DownAndLeft; 
+            yield return p + CoordinateSystem.BottomLeft.Left;
+            yield return p + CoordinateSystem.BottomLeft.UpAndLeft;
         }
 
         public static IEnumerable<Position> GetNeighbors(this Position p, Neighborhood neighborhood) =>

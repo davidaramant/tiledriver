@@ -10,12 +10,14 @@ using Tiledriver.Core.FormatModels.MapMetadata.Extensions;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.GameInfo.Wolf3D;
 using Tiledriver.Core.LevelGeometry;
-using Tiledriver.Core.LevelGeometry.Extensions;
+using Tiledriver.Core.LevelGeometry.CoordinateSystems;
 
 namespace Tiledriver.Core.FormatModels.MapMetadata
 {
     public static class MetaMapAnalyzer
     {
+        private static readonly IPositionOffsets Position = CoordinateSystem.TopLeft;
+
         public static MetaMap Analyze(MapData mapData, bool includeAllEmptyAreas = false)
         {
             var doorLocations =
@@ -87,18 +89,18 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                     {
                         case TileType.Door:
                             // Doors can be stacked - keep going!
-                            var left = leftSide.Left();
+                            var left = leftSide + Position.Left;
                             while (GetTileType(left) == TileType.Door)
                             {
                                 metaMap[left] = TileType.Door;
-                                left = left.Left();
+                                left = left + Position.Left;
                             }
                             spotsToCheck.Enqueue(left);
                             break;
                         case TileType.PushWall:
-                            spotsToCheck.Enqueue(leftSide.Above());
-                            spotsToCheck.Enqueue(leftSide.Left());
-                            spotsToCheck.Enqueue(leftSide.Below());
+                            spotsToCheck.Enqueue(leftSide + Position.Up);
+                            spotsToCheck.Enqueue(leftSide + Position.Left);
+                            spotsToCheck.Enqueue(leftSide + Position.Down);
                             break;
                         case TileType.Empty:
                             break;
@@ -131,19 +133,19 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                             break;
                         case TileType.Door:
                             // Doors can be stacked - keep going!
-                            var right = currentSpot.Right();
+                            var right = currentSpot + Position.Right;
                             while (GetTileType(right) == TileType.Door)
                             {
                                 metaMap[right] = TileType.Door;
-                                right = right.Right();
+                                right = right + Position.Right;
                             }
                             spotsToCheck.Enqueue(right);
                             inEmptySpace = false;
                             break;
                         case TileType.PushWall:
-                            spotsToCheck.Enqueue(currentSpot.Above());
-                            spotsToCheck.Enqueue(currentSpot.Right());
-                            spotsToCheck.Enqueue(currentSpot.Below());
+                            spotsToCheck.Enqueue(currentSpot + Position.Up);
+                            spotsToCheck.Enqueue(currentSpot + Position.Right);
+                            spotsToCheck.Enqueue(currentSpot + Position.Down);
                             inEmptySpace = false;
                             break;
                         case TileType.Wall:
@@ -157,7 +159,7 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
 
                     if (spot.Y > 0)
                     {
-                        var pointAbove = currentSpot.Above();
+                        var pointAbove = currentSpot + Position.Up;
                         if (!emptySpanAbove)
                         {
                             var tileType = GetTileType(pointAbove);
@@ -170,18 +172,18 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                                 case TileType.Door:
                                     metaMap[pointAbove] = tileType;
                                     // Doors can be stacked - keep going!
-                                    var above = pointAbove.Above();
+                                    var above = pointAbove + Position.Up;
                                     while (GetTileType(above) == TileType.Door)
                                     {
                                         metaMap[above] = TileType.Door;
-                                        above = above.Above();
+                                        above = above + Position.Up;
                                     }
                                     spotsToCheck.Enqueue(above);
                                     break;
                                 case TileType.PushWall:
-                                    spotsToCheck.Enqueue(pointAbove.Left());
-                                    spotsToCheck.Enqueue(pointAbove.Above());
-                                    spotsToCheck.Enqueue(pointAbove.Right());
+                                    spotsToCheck.Enqueue(pointAbove + Position.Left);
+                                    spotsToCheck.Enqueue(pointAbove + Position.Up);
+                                    spotsToCheck.Enqueue(pointAbove + Position.Right);
                                     metaMap[pointAbove] = tileType;
                                     break;
                                 case TileType.Wall:
@@ -201,19 +203,19 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                                 case TileType.Door:
                                     metaMap[pointAbove] = tileType;
                                     // Doors can be stacked - keep going!
-                                    var above = pointAbove.Above();
+                                    var above = pointAbove + Position.Up;
                                     while (GetTileType(above) == TileType.Door)
                                     {
                                         metaMap[above] = TileType.Door;
-                                        above = above.Above();
+                                        above = above + Position.Up;
                                     }
                                     spotsToCheck.Enqueue(above);
                                     emptySpanAbove = false;
                                     break;
                                 case TileType.PushWall:
-                                    spotsToCheck.Enqueue(pointAbove.Left());
-                                    spotsToCheck.Enqueue(pointAbove.Above());
-                                    spotsToCheck.Enqueue(pointAbove.Right());
+                                    spotsToCheck.Enqueue(pointAbove + Position.Left);
+                                    spotsToCheck.Enqueue(pointAbove + Position.Up);
+                                    spotsToCheck.Enqueue(pointAbove + Position.Right);
                                     metaMap[pointAbove] = tileType;
                                     emptySpanAbove = false;
                                     break;
@@ -229,7 +231,7 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
 
                     if (spot.Y < mapData.Height - 1)
                     {
-                        var pointBelow = currentSpot.Below();
+                        var pointBelow = currentSpot + Position.Down;
                         if (!emptySpanBelow)
                         {
                             var tileType = GetTileType(pointBelow);
@@ -242,18 +244,18 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                                 case TileType.Door:
                                     metaMap[pointBelow] = tileType;
                                     // Doors can be stacked - keep going!
-                                    var below = pointBelow.Below();
+                                    var below = pointBelow + Position.Down;
                                     while (GetTileType(below) == TileType.Door)
                                     {
                                         metaMap[below] = TileType.Door;
-                                        below = below.Below();
+                                        below = below + Position.Down;
                                     }
                                     spotsToCheck.Enqueue(below);
                                     break;
                                 case TileType.PushWall:
-                                    spotsToCheck.Enqueue(pointBelow.Left());
-                                    spotsToCheck.Enqueue(pointBelow.Below());
-                                    spotsToCheck.Enqueue(pointBelow.Right());
+                                    spotsToCheck.Enqueue(pointBelow + Position.Left);
+                                    spotsToCheck.Enqueue(pointBelow + Position.Down);
+                                    spotsToCheck.Enqueue(pointBelow + Position.Right);
                                     metaMap[pointBelow] = tileType;
                                     break;
                                 case TileType.Wall:
@@ -273,19 +275,19 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                                 case TileType.Door:
                                     metaMap[pointBelow] = tileType;
                                     // Doors can be stacked - keep going!
-                                    var below = pointBelow.Below();
+                                    var below = pointBelow + Position.Down;
                                     while (GetTileType(below) == TileType.Door)
                                     {
                                         metaMap[below] = TileType.Door;
-                                        below = below.Below();
+                                        below = below + Position.Down;
                                     }
                                     spotsToCheck.Enqueue(below);
                                     emptySpanBelow = false;
                                     break;
                                 case TileType.PushWall:
-                                    spotsToCheck.Enqueue(pointBelow.Left());
-                                    spotsToCheck.Enqueue(pointBelow.Below());
-                                    spotsToCheck.Enqueue(pointBelow.Right());
+                                    spotsToCheck.Enqueue(pointBelow + Position.Left);
+                                    spotsToCheck.Enqueue(pointBelow + Position.Down);
+                                    spotsToCheck.Enqueue(pointBelow + Position.Right);
                                     metaMap[pointBelow] = tileType;
                                     emptySpanBelow = false;
                                     break;

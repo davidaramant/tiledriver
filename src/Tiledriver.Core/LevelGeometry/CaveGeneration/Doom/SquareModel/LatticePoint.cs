@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Tiledriver.Core.LevelGeometry.Extensions;
+using Tiledriver.Core.LevelGeometry.CoordinateSystems;
 
 namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom.SquareModel;
 
@@ -28,8 +28,8 @@ public sealed class LatticePoint : IEquatable<LatticePoint?>
     {
         (Square, Point) = point switch
         {
-            SquarePoint.RightMiddle => (square.Right(), SquarePoint.LeftMiddle),
-            SquarePoint.TopMiddle => (square.Above(), SquarePoint.BottomMiddle),
+            SquarePoint.RightMiddle => (square + CoordinateSystem.BottomLeft.Right, SquarePoint.LeftMiddle),
+            SquarePoint.TopMiddle => (square + CoordinateSystem.BottomLeft.Up, SquarePoint.BottomMiddle),
             _ => (square, point)
         };
     }

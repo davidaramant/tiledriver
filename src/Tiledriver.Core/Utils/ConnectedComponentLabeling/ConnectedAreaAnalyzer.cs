@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tiledriver.Core.LevelGeometry;
+using Tiledriver.Core.LevelGeometry.CoordinateSystems;
 using Tiledriver.Core.LevelGeometry.Extensions;
 
 namespace Tiledriver.Core.Utils.ConnectedComponentLabeling
@@ -21,22 +22,22 @@ namespace Tiledriver.Core.Utils.ConnectedComponentLabeling
             {
                 if (p.X > 0)
                 {
-                    yield return p.Left();
+                    yield return p + CoordinateSystem.TopLeft.Left;
                 }
 
                 if (p.X < dimensions.Width - 1)
                 {
-                    yield return p.Right();
+                    yield return p + CoordinateSystem.TopLeft.Right;
                 }
 
                 if (p.Y > 0)
                 {
-                    yield return p.Above();
+                    yield return p + CoordinateSystem.TopLeft.Up;
                 }
 
                 if (p.Y < dimensions.Height - 1)
                 {
-                    yield return p.Below();
+                    yield return p + CoordinateSystem.TopLeft.Down;
                 }
             }
 

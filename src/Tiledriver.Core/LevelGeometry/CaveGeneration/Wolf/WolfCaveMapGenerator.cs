@@ -7,8 +7,9 @@ using System.Linq;
 using Tiledriver.Core.FormatModels.Textures;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.GameInfo.Wolf3D;
-using Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
+// TODO: This is a massive problem... I think it's just Corner, but it needs to move out and be safe for both coordinate systems
 using Tiledriver.Core.LevelGeometry.CaveGeneration.Doom.SquareModel;
+using Tiledriver.Core.LevelGeometry.CoordinateSystems;
 using Tiledriver.Core.LevelGeometry.Extensions;
 using Tiledriver.Core.LevelGeometry.Lighting;
 using Tiledriver.Core.Utils.CellularAutomata;
@@ -18,6 +19,8 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Wolf;
 
 public static class WolfCaveMapGenerator
 {
+    private static readonly IPositionOffsets Offset = CoordinateSystem.TopLeft;
+
     public static MapData Create(int seed, string texturePrefix, TextureQueue textureQueue)
     {
         var random = new Random(seed);
@@ -190,8 +193,8 @@ public static class WolfCaveMapGenerator
 
         }
 
-        Corners GetCorners(CellBoard board, Position pos) => Corner.Create(
-            pos, p => board[p] == CellType.Dead);
+        Corners GetCorners(CellBoard board, Position pos) => Corner.CreateFromUpperLeft(
+            upperLeft:pos, on:p => board[p] == CellType.Dead);
 
         Corners GetSideCorners(Position left, Position right) => Corner.Create(
             topLeft: alternateCeiling[left] == CellType.Dead,
@@ -224,15 +227,15 @@ public static class WolfCaveMapGenerator
                 if (!cave.Contains(pos))
                 {
                     tileId = tileSequence.GetIndex(new TileDescription(
-                        NorthCorners: GetSideCorners(left: pos.Right(), right: pos),
-                        EastCorners: GetSideCorners(left: pos.BelowRight(), right: pos.Right()),
-                        SouthCorners: GetSideCorners(left: pos.Below(), right: pos.BelowRight()),
-                        WestCorners: GetSideCorners(left: pos, right: pos.Below()),
+                        NorthCorners: GetSideCorners(left: pos + Offset.Right, right: pos),
+                        EastCorners: GetSideCorners(left: pos + Offset.DownAndRight, right: pos + Offset.Right),
+                        SouthCorners: GetSideCorners(left: pos + Offset.Down, right: pos + Offset.DownAndRight),
+                        WestCorners: GetSideCorners(left: pos, right: pos + Offset.Down),
                         FloorCorners: GetCorners(alternateFloor, pos),
-                        NorthLight: GetSideLight(pos.Above()),
-                        EastLight: GetSideLight(pos.Right()),
-                        SouthLight: GetSideLight(pos.Below()),
-                        WestLight: GetSideLight(pos.Left())));
+                        NorthLight: GetSideLight(pos + Offset.Up),
+                        EastLight: GetSideLight(pos + Offset.Right),
+                        SouthLight: GetSideLight(pos + Offset.Down),
+                        WestLight: GetSideLight(pos + Offset.Left)));
                 }
 
                 int sectorId = sectorSequence.GetIndex(new SectorDescription(

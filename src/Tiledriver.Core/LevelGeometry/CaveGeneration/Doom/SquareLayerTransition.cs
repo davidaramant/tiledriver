@@ -5,12 +5,15 @@ using System;
 using System.Collections.Generic;
 using Tiledriver.Core.Extensions.Collections;
 using Tiledriver.Core.LevelGeometry.CaveGeneration.Doom.SquareModel;
-using Tiledriver.Core.LevelGeometry.Extensions;
+using Tiledriver.Core.LevelGeometry.CoordinateSystems;
 using static Tiledriver.Core.Utils.MathUtil;
 namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 
 public static class SquareLayerTransition
 {
+    // TODO: Can this use BottomLeft???
+    private static readonly IPositionOffsets PositionOffset = CoordinateSystem.TopLeft;
+
     public static Func<SquareSegment, int> GetHeightLookup(
         IReadOnlyDictionary<Position, int> interiorDistances,
         Position position)
@@ -23,9 +26,9 @@ public static class SquareLayerTransition
             };
 
         var upperLeft = Normalize(interiorDistances.GetValueOr(position, -1));
-        var upperRight = Normalize(interiorDistances.GetValueOr(position.Right(), -1));
-        var lowerLeft = Normalize(interiorDistances.GetValueOr(position.Below(), -1));
-        var lowerRight = Normalize(interiorDistances.GetValueOr(position.BelowRight(), -1));
+        var upperRight = Normalize(interiorDistances.GetValueOr(position + PositionOffset.Right, -1));
+        var lowerLeft = Normalize(interiorDistances.GetValueOr(position + PositionOffset.Down, -1));
+        var lowerRight = Normalize(interiorDistances.GetValueOr(position + PositionOffset.DownAndRight, -1));
 
         // Because this is operating on internal distances from walls, there are only 1 or 2 different values for the
         // corners.

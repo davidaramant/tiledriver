@@ -14,10 +14,10 @@ namespace Tiledriver.Core.FormatModels.MapMetadata.Extensions
 
         public static void AddAllSurrounding(this Queue<Position> positions, Position p)
         {
-            positions.Enqueue(p.Right());
-            positions.Enqueue(p.Left());
-            positions.Enqueue(p.Above());
-            positions.Enqueue(p.Below());
+            foreach (var neighbor in p.GetVonNeumannNeighbors())
+            {
+                positions.Enqueue(neighbor);
+            }
         }
 
         public static bool Contains(this Size bounds, Position position)
