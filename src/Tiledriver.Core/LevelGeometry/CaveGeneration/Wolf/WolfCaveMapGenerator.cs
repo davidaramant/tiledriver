@@ -8,6 +8,7 @@ using Tiledriver.Core.FormatModels.Textures;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.GameInfo.Wolf3D;
 using Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
+using Tiledriver.Core.LevelGeometry.CaveGeneration.Doom.SquareModel;
 using Tiledriver.Core.LevelGeometry.Extensions;
 using Tiledriver.Core.LevelGeometry.Lighting;
 using Tiledriver.Core.Utils.CellularAutomata;

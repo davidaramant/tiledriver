@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
+namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom.SquareModel;
 
 public static class SquareSegmentsExtensions
 {

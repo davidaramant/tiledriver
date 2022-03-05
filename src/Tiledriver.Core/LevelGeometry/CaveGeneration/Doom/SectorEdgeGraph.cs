@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Tiledriver.Core.LevelGeometry.CaveGeneration.Doom.SquareModel;
 
 namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 

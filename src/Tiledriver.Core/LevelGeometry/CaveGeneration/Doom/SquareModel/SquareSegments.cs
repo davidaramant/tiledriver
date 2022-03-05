@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
+namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom.SquareModel;
 
 /// <summary>
 /// Segments of a square for use in Marching Squares

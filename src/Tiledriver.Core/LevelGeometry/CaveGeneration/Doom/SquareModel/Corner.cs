@@ -4,7 +4,7 @@
 using System;
 using Tiledriver.Core.LevelGeometry.Extensions;
 
-namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
+namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom.SquareModel;
 
 public static class Corner
 {

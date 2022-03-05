@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Tiledriver.Core.LevelGeometry.Extensions;
 
-namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
+namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom.SquareModel;
 
 /// <summary>
 /// A point in the edge lattice.

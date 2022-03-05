@@ -4,6 +4,7 @@
 using Xunit;
 using FluentAssertions;
 using Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
+using Tiledriver.Core.LevelGeometry.CaveGeneration.Doom.SquareModel;
 
 namespace Tiledriver.Core.Tests.LevelGeometry.CaveGeneration.Doom;
 

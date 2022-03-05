@@ -9,6 +9,7 @@ using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Textures;
 using Tiledriver.Core.FormatModels.Udmf;
 using Tiledriver.Core.GameInfo.Doom;
+using Tiledriver.Core.LevelGeometry.CaveGeneration.Doom.SquareModel;
 using Tiledriver.Core.LevelGeometry.Extensions;
 using Tiledriver.Core.Utils.CellularAutomata;
 using Tiledriver.Core.Utils.ConnectedComponentLabeling;

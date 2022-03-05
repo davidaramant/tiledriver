@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using Tiledriver.Core.Extensions.Collections;
+using Tiledriver.Core.LevelGeometry.CaveGeneration.Doom.SquareModel;
 using Tiledriver.Core.LevelGeometry.Extensions;
 using static Tiledriver.Core.Utils.MathUtil;
 namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;

@@ -6,6 +6,7 @@ using Xunit;
 using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 using System.Collections.Generic;
+using Tiledriver.Core.LevelGeometry.CaveGeneration.Doom.SquareModel;
 
 namespace Tiledriver.Core.Tests.LevelGeometry.CaveGeneration.Doom;
 
