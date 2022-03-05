@@ -2,6 +2,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using FluentAssertions;
+using System;
 using Xunit;
 using Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 using Tiledriver.Core.LevelGeometry;
@@ -103,11 +104,12 @@ public sealed class SectorEdgeGraphTests
     }
 
     private static SectorEdge BuildEdge(Position square, EdgeSegmentId id) =>
-        SectorEdge.FromPosition(
-                square,
-                new EdgeSegment(
-                    id,
-                    new SectorDescription(1),
-                    SectorDescription.OutsideLevel,
-                    IsFrontTopOrLeft: false));
+        throw new NotImplementedException();
+        //SectorEdge.FromPosition(
+        //        square,
+        //        new EdgeSegment(
+        //            id,
+        //            new SectorDescription(1),
+        //            SectorDescription.OutsideLevel,
+        //            IsFrontTopOrLeft: false));
 }

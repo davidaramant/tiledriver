@@ -20,25 +20,30 @@ public sealed class SquareSegmentSectors
     {
         var lookup = new List<EdgeSegment>();
 
-        void AddEdge(EdgeSegmentId id, SquareSegment topOrLeftId, SquareSegment bottomOrRightId)
+        void AddEdge(EdgeSegmentId id, SquareSegment segment1, SquareSegment segment2)
         {
-            var topOrLeft = this[topOrLeftId];
-            var bottomOrRight = this[bottomOrRightId];
+            var side1 = this[segment1];
+            var side2 = this[segment2];
 
-            if (topOrLeft != bottomOrRight)
+            if (side1 != side2)
             {
-                lookup.Add(EdgeSegment.Construct(id, topOrLeft, bottomOrRight));
+                var side1IsSmaller = side1.CompareTo(side2) < 0;
+                var (front, frontSegment) = side1IsSmaller ? (side1, segment1) : (side2, segment2);
+                var back = side1IsSmaller ? side2 : side1;
+                var (left, right) = id.GetLeftAndRight(frontSegment);
+
+                lookup.Add(new EdgeSegment(id, front, back, left, right));
             }
         }
 
-        AddEdge(EdgeSegmentId.DiagTopLeft, topOrLeftId: SquareSegment.UpperLeftOuter, bottomOrRightId: SquareSegment.UpperLeftInner);
-        AddEdge(EdgeSegmentId.DiagTopRight, topOrLeftId: SquareSegment.UpperRightOuter, bottomOrRightId: SquareSegment.UpperRightInner);
-        AddEdge(EdgeSegmentId.DiagBottomRight, topOrLeftId: SquareSegment.LowerRightInner, bottomOrRightId: SquareSegment.LowerRightOuter);
-        AddEdge(EdgeSegmentId.DiagBottomLeft, topOrLeftId: SquareSegment.LowerLeftInner, bottomOrRightId: SquareSegment.LowerLeftOuter);
-        AddEdge(EdgeSegmentId.HorizontalLeft, topOrLeftId: SquareSegment.UpperLeftInner, bottomOrRightId: SquareSegment.LowerLeftInner);
-        AddEdge(EdgeSegmentId.HorizontalRight, topOrLeftId: SquareSegment.UpperRightInner, bottomOrRightId: SquareSegment.LowerRightInner);
-        AddEdge(EdgeSegmentId.VerticalTop, topOrLeftId: SquareSegment.UpperLeftInner, bottomOrRightId: SquareSegment.UpperRightInner);
-        AddEdge(EdgeSegmentId.VerticalBottom, topOrLeftId: SquareSegment.LowerLeftInner, bottomOrRightId: SquareSegment.LowerRightInner);
+        AddEdge(EdgeSegmentId.DiagTopLeft, segment1: SquareSegment.UpperLeftOuter, segment2: SquareSegment.UpperLeftInner);
+        AddEdge(EdgeSegmentId.DiagTopRight, segment1: SquareSegment.UpperRightOuter, segment2: SquareSegment.UpperRightInner);
+        AddEdge(EdgeSegmentId.DiagBottomRight, segment1: SquareSegment.LowerRightInner, segment2: SquareSegment.LowerRightOuter);
+        AddEdge(EdgeSegmentId.DiagBottomLeft, segment1: SquareSegment.LowerLeftInner, segment2: SquareSegment.LowerLeftOuter);
+        AddEdge(EdgeSegmentId.HorizontalLeft, segment1: SquareSegment.UpperLeftInner, segment2: SquareSegment.LowerLeftInner);
+        AddEdge(EdgeSegmentId.HorizontalRight, segment1: SquareSegment.UpperRightInner, segment2: SquareSegment.LowerRightInner);
+        AddEdge(EdgeSegmentId.VerticalTop, segment1: SquareSegment.UpperLeftInner, segment2: SquareSegment.UpperRightInner);
+        AddEdge(EdgeSegmentId.VerticalBottom, segment1: SquareSegment.LowerLeftInner, segment2: SquareSegment.LowerRightInner);
 
         return lookup;
     }
