@@ -81,8 +81,8 @@ public sealed class DoomCaveMapGenerator
             : -1;
 
         return new(
-            V1: ld.RightVertex,
-            V2: ld.LeftVertex,
+            V1: ld.LeftVertex,
+            V2: ld.RightVertex,
             TwoSided: ld.IsTwoSided,
             SideFront: frontSide,
             SideBack: backSide);
