@@ -14,12 +14,12 @@ public static class Corner
         (topRight ? Corners.UpperRight : Corners.None) |
         (bottomRight ? Corners.LowerRight : Corners.None);
 
-    public static Corners Create(Position p, Func<Position, bool> on) =>
+    public static Corners Create(Position lowerLeft, Func<Position, bool> on) =>
         Create(
-            topLeft: on(p),
-            topRight: on(p.Right()),
-            bottomLeft: on(p.Below()),
-            bottomRight: on(p.BelowRight())
+            topLeft: on(lowerLeft.Above()),
+            topRight: on(lowerLeft.AboveRight()),
+            bottomLeft: on(lowerLeft),
+            bottomRight: on(lowerLeft.Right())
         );
 
     public static SquareSegments ToSquareSegments(this Corners corners) => corners switch
