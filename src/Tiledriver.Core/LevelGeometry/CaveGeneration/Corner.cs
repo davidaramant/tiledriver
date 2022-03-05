@@ -2,9 +2,10 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
 using System;
+using Tiledriver.Core.LevelGeometry.CaveGeneration.Doom.SquareModel;
 using Tiledriver.Core.LevelGeometry.CoordinateSystems;
 
-namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom.SquareModel;
+namespace Tiledriver.Core.LevelGeometry.CaveGeneration;
 
 public static class Corner
 {

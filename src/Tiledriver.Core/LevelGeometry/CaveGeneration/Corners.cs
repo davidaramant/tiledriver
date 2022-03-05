@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom.SquareModel;
+namespace Tiledriver.Core.LevelGeometry.CaveGeneration;
 
 [Flags]
 public enum Corners : byte
