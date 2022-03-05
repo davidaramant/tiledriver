@@ -29,7 +29,7 @@ public sealed class LatticePoint : IEquatable<LatticePoint?>
         (Square, Point) = point switch
         {
             SquarePoint.RightMiddle => (square.Right(), SquarePoint.LeftMiddle),
-            SquarePoint.BottomMiddle => (square.Below(), SquarePoint.TopMiddle),
+            SquarePoint.TopMiddle => (square.Above(), SquarePoint.BottomMiddle),
             _ => (square, point)
         };
     }
