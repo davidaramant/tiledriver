@@ -7,20 +7,27 @@ using System.Diagnostics;
 using System.IO;
 using Tiledriver.Core.FormatModels.Udmf;
 using Tiledriver.Core.FormatModels.Wad;
+using Tiledriver.Core.Settings;
 
 namespace Tiledriver.Core.Utils.GZDoom
 {
     public sealed class GZDoomLauncher
     {
-        private readonly string _gzDoomExePath;
+        private readonly DoomConfig _config;
 
-        public GZDoomLauncher(string gzDoomExePath)
+        public GZDoomLauncher(DoomConfig config)
         {
-            if (!File.Exists(gzDoomExePath))
+            if (!File.Exists(config.GZDoomExePath))
             {
-                throw new FileNotFoundException("Could not find GZDoom EXE: " + gzDoomExePath);
+                throw new FileNotFoundException("Could not find GZDoom EXE: " + config.GZDoomExePath);
             }
-            _gzDoomExePath = gzDoomExePath;
+
+            if (!File.Exists(config.Doom2IwadPath))
+            {
+                throw new FileNotFoundException("Could not find Doom 2 IWAD: " + config.Doom2IwadPath);
+            }
+
+            _config = config;
         }
 
         /// <summary>
@@ -66,8 +73,8 @@ namespace Tiledriver.Core.Utils.GZDoom
         public void LoadWad(string wadPath)
         {
             Process.Start(
-                _gzDoomExePath,
-                $"-iwad doom2.wad -file \"{wadPath}\" -skill 4 -warp 01");
+                _config.GZDoomExePath,
+                $"-iwad \"{_config.Doom2IwadPath}\" -file \"{wadPath}\" -skill 4 -warp 01");
         }
     }
 }
