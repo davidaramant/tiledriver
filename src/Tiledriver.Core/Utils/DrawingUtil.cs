@@ -22,12 +22,7 @@ namespace Tiledriver.Core.Utils
         /// </summary>
         public static IEnumerable<(int X, int Y)> BresenhamLine(int x0, int y0, int x1, int y1)
         {
-            static void Swap(ref int a, ref int b)
-            {
-                int c = a;
-                a = b;
-                b = c;
-            }
+            static void Swap(ref int a, ref int b) => (a, b) = (b, a);
 
             bool steep = Math.Abs(y1 - y0) > Math.Abs(x1 - x0);
             if (steep)

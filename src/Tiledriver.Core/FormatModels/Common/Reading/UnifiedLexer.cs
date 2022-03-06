@@ -134,8 +134,7 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
 
                 static bool IsHexChar(char c) =>
                     char.IsDigit(c) ||
-                    (c >= 'a' && c <= 'f') ||
-                    (c >= 'A' && c <= 'F');
+                    c is >= 'a' and <= 'f' or >= 'A' and <= 'F';
 
                 if (!IsHexChar(PeekChar()))
                 {

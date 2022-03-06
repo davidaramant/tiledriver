@@ -58,7 +58,7 @@ namespace Tiledriver.DataModelGenerator.Udmf
                 if (p is ScalarProperty sp)
                 {
                     var defaultValue = sp.DefaultString;
-                    if (sp is TextureProperty tp && tp.IsOptional)
+                    if (sp is TextureProperty {IsOptional: true})
                     {
                         defaultValue = "Texture.None";
                     }

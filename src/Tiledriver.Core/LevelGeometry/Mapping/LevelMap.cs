@@ -18,9 +18,6 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             AllRooms = allRooms;
         }
 
-        public IEnumerable<IRoom> EndingRooms
-        {
-            get { return AllRooms.Where(room => room.IsEndingRoom); }
-        }
+        public IEnumerable<IRoom> EndingRooms => AllRooms.Where(room => room.IsEndingRoom);
     }
 }

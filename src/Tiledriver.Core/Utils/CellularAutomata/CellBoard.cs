@@ -130,9 +130,7 @@ namespace Tiledriver.Core.Utils.CellularAutomata
                     }
                 }
 
-                var temp = currentBoard;
-                currentBoard = previousBoard;
-                previousBoard = temp;
+                (currentBoard, previousBoard) = (previousBoard, currentBoard);
             }
 
             return new CellBoard(Dimensions, previousBoard);

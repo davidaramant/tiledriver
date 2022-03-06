@@ -13,7 +13,7 @@ namespace Tiledriver.DataModelGenerator.DoomGameInfo.Parsing;
 
 static class DoomActorParser
 {
-    public static readonly Parser<char, Unit> Separator =
+    static readonly Parser<char, Unit> Separator =
         Whitespace.SkipAtLeastOnce().
         Or(CommentParser.SkipLineComment(Parser.String("//"))).SkipMany();
 
@@ -33,7 +33,7 @@ static class DoomActorParser
 
     static readonly Parser<char, string> Identifier = Token(char.IsLower).ManyString();
 
-    public static readonly Parser<char, Assignment> Assignment =
+    static readonly Parser<char, Assignment> Assignment =
        Map((id, equalsSign, value, semicolon) => new Assignment(id, value),
            Identifier.Before(Separator),
            Equal.Before(Separator),

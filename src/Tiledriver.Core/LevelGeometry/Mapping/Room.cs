@@ -37,10 +37,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
         public IDictionary<IList<Passage>, IRoom> AdjacentRooms { get; }
 
-        public IList<MapLocation> Locations
-        {
-            get { return _locations; }
-        }
+        public IList<MapLocation> Locations => _locations;
 
 
         public bool IsStartingRoom
@@ -57,13 +54,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             }
         }
 
-        public bool IsEndingRoom
-        {
-            get
-            {
-                return Locations.Any(location => location.CanExit());
-            }
-        }
+        public bool IsEndingRoom => Locations.Any(location => location.CanExit());
 
 
         public int UnopenableDoors { get; set; }

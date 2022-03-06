@@ -10,6 +10,7 @@ using Tiledriver.Core.GameInfo.Wolf3D;
 
 namespace Tiledriver.Core.LevelGeometry.Mapping
 {
+    // TODO: This class is not remotely safe - it relies on mutating collections that are now immutable
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public class MapLocation : IEquatable<MapLocation>
     {

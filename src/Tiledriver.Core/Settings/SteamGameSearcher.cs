@@ -1,7 +1,7 @@
 ﻿// Copyright (c) 2017, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
 
-using Tiledriver.Utils;
+using Tiledriver.Core.Utils;
 
 namespace Tiledriver.Core.Settings
 {

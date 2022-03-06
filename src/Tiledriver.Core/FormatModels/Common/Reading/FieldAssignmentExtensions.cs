@@ -35,7 +35,7 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
             return GetTokenValue<T>(fieldName, token);
         }
 
-        public static T? GetOptionalFieldValue<T>(
+        public static T GetOptionalFieldValue<T>(
             this IReadOnlyDictionary<Identifier, Token> fields,
             Identifier fieldName,
             T defaultValue) =>

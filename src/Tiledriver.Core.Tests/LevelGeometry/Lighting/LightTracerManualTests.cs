@@ -32,10 +32,10 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Lighting
                     new LightRange(DarkLevels: 10, LightLevels: 10),
                     new LightDefinition[]
                     {
-                        new LightDefinition(new Position(1,1),Brightness:20,Radius:20),
-                        new LightDefinition(new Position(map.Width-2,map.Height-2),Brightness:20,Radius:20),
-                        new LightDefinition(new Position(map.Width-2,1),Brightness:20,Radius:20),
-                        new LightDefinition(new Position(1,map.Height-2),Brightness:20,Radius:20),
+                        new(new Position(1,1),Brightness:20,Radius:20),
+                        new(new Position(map.Width-2,map.Height-2),Brightness:20,Radius:20),
+                        new(new Position(map.Width-2,1),Brightness:20,Radius:20),
+                        new(new Position(1,map.Height-2),Brightness:20,Radius:20),
                     });
 
             var image = LightMapVisualizer.Render(floorLights, scale: 20);
