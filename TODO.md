@@ -38,7 +38,7 @@
 - [ ] Option to flip visualizations across Y-axis
 - [x] Place 1-sided walls using marching squares
 - [x] Don't generate so many redundant linedefs
-- [ ] Walk graph to set correct texture offsets
+- [x] Walk graph to set correct texture offsets
 - [ ] Textures for use in Doom
 - [x] Create detailed cave outline
 - [x] Create interior of cave
