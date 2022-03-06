@@ -40,7 +40,7 @@ internal static partial class DoomActorGenerator
             actor.Assignments)
         select new Actor(
             Name: lookup.GetString("class"),
-            CategoryName: category.Name.Humanize(LetterCasing.Title).Singularize(),
+            CategoryName: category.Name.Titleize().Singularize(),
             Id: actor.Id,
             Description: lookup.GetString("title"),
             Radius: lookup.GetInt("width"), // This is named poorly in the config file
