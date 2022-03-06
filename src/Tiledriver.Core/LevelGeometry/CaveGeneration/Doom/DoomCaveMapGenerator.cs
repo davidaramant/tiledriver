@@ -97,7 +97,8 @@ public sealed class DoomCaveMapGenerator
     private static Position FindPlayerSpot(CellBoard board)
     {
         // Add a buffer so the player doesn't start out stuck in the walls
-        var squaresToCheck = (int)Math.Ceiling((double)Actor.Player1Start.Width / LogicalUnitSize) + 2;
+        const int buffer = 2;
+        var squaresToCheck = (int)Math.Ceiling((double)Actor.Player1Start.Width / LogicalUnitSize) + buffer;
 
         return
             board.Dimensions
@@ -107,7 +108,7 @@ public sealed class DoomCaveMapGenerator
                  from xd in Enumerable.Range(0, squaresToCheck)
                  select p + new PositionDelta(xd, yd))
                  .All(p2 => board[p2] == CellType.Dead))
-            + new PositionDelta(1, 1);
+            + new PositionDelta(buffer / 2, buffer / 2);
     }
 
     private static CellBoard GenerateGeometryBoard(Random random) =>
@@ -151,18 +152,8 @@ public sealed class DoomCaveMapGenerator
 
         var remainingEdges = edgeGraph.GetAllEdges().ToHashSet();
 
-        double Distance(LatticePoint p1, LatticePoint p2)
-        {
-            var v1 = ConvertToVertex(p1);
-            var v2 = ConvertToVertex(p2);
-
-            var dx = v1.X - v2.X;
-            var dy = v1.Y - v2.Y;
-            return Math.Sqrt(dx * dx + dy * dy);
-        }
-
         // TODO with texture offsets:
-        // - How do offsets work for the back of a line?
+        // - Properly set offsets on the backside of lines - those are different values
 
         while (remainingEdges.Any())
         {
@@ -187,7 +178,7 @@ public sealed class DoomCaveMapGenerator
                     BackSector: edge.Segment.Back,
                     TextureXOffset: (int)Math.Round(offset)));
 
-                var length = Distance(edge.Start, edge.End);
+                var length = DistanceBetween(edge.Start, edge.End);
 
                 offset = (offset + length) % TextureWidth;
 
@@ -198,6 +189,16 @@ public sealed class DoomCaveMapGenerator
                     stack.Push((connectedEdge, offset));
                 }
             }
+        }
+
+        static double DistanceBetween(LatticePoint p1, LatticePoint p2)
+        {
+            var v1 = ConvertToVertex(p1);
+            var v2 = ConvertToVertex(p2);
+
+            double dx = v1.X - v2.X;
+            double dy = v1.Y - v2.Y;
+            return Math.Sqrt(dx * dx + dy * dy);
         }
     }
 }
