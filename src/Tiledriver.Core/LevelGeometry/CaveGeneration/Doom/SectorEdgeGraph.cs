@@ -60,7 +60,6 @@ public sealed class SectorEdgeGraph
 
             (SectorEdge End, int StepsTaken) FollowNode(SectorEdge initial, bool goRight)
             {
-                var slope = initial.Segment.Id.GetLineSlope();
                 var node = initial;
                 int steps = 0;
 

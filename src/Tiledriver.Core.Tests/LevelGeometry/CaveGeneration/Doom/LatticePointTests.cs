@@ -13,10 +13,10 @@ public sealed class LatticePointTests
     [Fact]
     public void ShouldNormalizeBottomMiddlePoint()
     {
-        var bottomMiddleAbove = new LatticePoint(new Position(0, 0), SquarePoint.BottomMiddle);
-        var topMiddleBelow = new LatticePoint(new Position(0, 1), SquarePoint.TopMiddle);
+        var below = new LatticePoint(new Position(0, 0), SquarePoint.TopMiddle);
+        var above = new LatticePoint(new Position(0, 1), SquarePoint.BottomMiddle);
 
-        bottomMiddleAbove.Should().Be(topMiddleBelow);
+        below.Should().Be(above);
     }
 
     [Fact]

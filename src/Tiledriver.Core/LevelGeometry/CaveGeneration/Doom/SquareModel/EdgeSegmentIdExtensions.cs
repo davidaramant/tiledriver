@@ -7,20 +7,6 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom.SquareModel;
 
 public static class EdgeSegmentIdExtensions
 {
-    public static EdgeSegmentId FollowEdge(this EdgeSegmentId id) =>
-        id switch
-        {
-            EdgeSegmentId.DiagTopLeft => EdgeSegmentId.DiagBottomRight,
-            EdgeSegmentId.DiagTopRight => EdgeSegmentId.DiagBottomLeft,
-            EdgeSegmentId.DiagBottomLeft => EdgeSegmentId.DiagTopRight,
-            EdgeSegmentId.DiagBottomRight => EdgeSegmentId.DiagTopLeft,
-            EdgeSegmentId.HorizontalLeft => EdgeSegmentId.HorizontalRight,
-            EdgeSegmentId.HorizontalRight => EdgeSegmentId.HorizontalLeft,
-            EdgeSegmentId.VerticalTop => EdgeSegmentId.VerticalBottom,
-            EdgeSegmentId.VerticalBottom => EdgeSegmentId.VerticalTop,
-            _ => throw new System.Exception("Not possible"),
-        };
-
     public static (SquarePoint Left, SquarePoint Right) GetLeftAndRight(this EdgeSegmentId id, SquareSegment frontSegment) =>
         (id, frontSegment) switch
         {
@@ -51,27 +37,13 @@ public static class EdgeSegmentIdExtensions
             _ => throw new NotImplementedException($"This combination is not valid: {id}, {frontSegment}")
         };
 
-    public static SquarePoint GetPoint(this EdgeSegmentId id, bool topOrLeftIsFront, bool leftSide) =>
-        id switch
-        {
-            EdgeSegmentId.DiagTopLeft => topOrLeftIsFront == leftSide ? SquarePoint.TopMiddle : SquarePoint.LeftMiddle,
-            EdgeSegmentId.DiagTopRight => topOrLeftIsFront == leftSide ? SquarePoint.RightMiddle : SquarePoint.TopMiddle,
-            EdgeSegmentId.DiagBottomLeft => topOrLeftIsFront == leftSide ? SquarePoint.BottomMiddle : SquarePoint.LeftMiddle,
-            EdgeSegmentId.DiagBottomRight => topOrLeftIsFront == leftSide ? SquarePoint.RightMiddle : SquarePoint.BottomMiddle,
-            EdgeSegmentId.HorizontalLeft => topOrLeftIsFront == leftSide ? SquarePoint.Center : SquarePoint.LeftMiddle,
-            EdgeSegmentId.HorizontalRight => topOrLeftIsFront == leftSide ? SquarePoint.RightMiddle : SquarePoint.Center,
-            EdgeSegmentId.VerticalTop => topOrLeftIsFront == leftSide ? SquarePoint.TopMiddle : SquarePoint.Center,
-            EdgeSegmentId.VerticalBottom => topOrLeftIsFront == leftSide ? SquarePoint.Center : SquarePoint.BottomMiddle,
-            _ => throw new System.NotImplementedException(),
-        };
-
     public static LineSlope GetLineSlope(this EdgeSegmentId id) =>
         id switch
         {
-            EdgeSegmentId.DiagTopLeft => LineSlope.DecreasingY,
-            EdgeSegmentId.DiagTopRight => LineSlope.IncreasingY,
-            EdgeSegmentId.DiagBottomLeft => LineSlope.IncreasingY,
-            EdgeSegmentId.DiagBottomRight => LineSlope.DecreasingY,
+            EdgeSegmentId.DiagTopLeft => LineSlope.IncreasingY,
+            EdgeSegmentId.DiagTopRight => LineSlope.DecreasingY,
+            EdgeSegmentId.DiagBottomLeft => LineSlope.DecreasingY,
+            EdgeSegmentId.DiagBottomRight => LineSlope.IncreasingY,
             EdgeSegmentId.HorizontalLeft => LineSlope.Horizontal,
             EdgeSegmentId.HorizontalRight => LineSlope.Horizontal,
             EdgeSegmentId.VerticalTop => LineSlope.Vertical,

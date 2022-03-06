@@ -16,10 +16,9 @@ public sealed record SectorEdge(
     public LatticePoint GetPointAtEnd(bool leftSide) => leftSide ? Start : End;
 
     public static SectorEdge FromPosition(Position square, EdgeSegment segment) =>
-        throw new NotImplementedException();
-    //new(
-    //    Start: new(square, segment.Id.GetPoint(topOrLeftIsFront: segment.IsFrontTopOrLeft, leftSide: true)),
-    //    End: new(square, segment.Id.GetPoint(topOrLeftIsFront: segment.IsFrontTopOrLeft, leftSide: false)),
-    //    Segment: segment,
-    //    NumSquares: 1);
+        new(
+            Start: new(square, segment.Left),
+            End: new(square, segment.Right),
+            Segment: segment,
+            NumSquares: 1);
 }
