@@ -23,6 +23,7 @@ public sealed class DoomCaveMapGenerator
 
     public static MapData Create(int seed, TextureQueue textureQueue)
     {
+        GC.KeepAlive(textureQueue); // SHUT UP ABOUT UNUSED PARAMETER!!
         var random = new Random(seed);
 
         CellBoard geometryBoard = GenerateGeometryBoard(random);

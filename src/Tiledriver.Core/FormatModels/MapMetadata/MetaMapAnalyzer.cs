@@ -93,7 +93,7 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                             while (GetTileType(left) == TileType.Door)
                             {
                                 metaMap[left] = TileType.Door;
-                                left = left + Position.Left;
+                                left += Position.Left;
                             }
                             spotsToCheck.Enqueue(left);
                             break;
@@ -137,7 +137,7 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                             while (GetTileType(right) == TileType.Door)
                             {
                                 metaMap[right] = TileType.Door;
-                                right = right + Position.Right;
+                                right += Position.Right;
                             }
                             spotsToCheck.Enqueue(right);
                             inEmptySpace = false;
@@ -176,7 +176,7 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                                     while (GetTileType(above) == TileType.Door)
                                     {
                                         metaMap[above] = TileType.Door;
-                                        above = above + Position.Up;
+                                        above += Position.Up;
                                     }
                                     spotsToCheck.Enqueue(above);
                                     break;
@@ -207,7 +207,7 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                                     while (GetTileType(above) == TileType.Door)
                                     {
                                         metaMap[above] = TileType.Door;
-                                        above = above + Position.Up;
+                                        above += Position.Up;
                                     }
                                     spotsToCheck.Enqueue(above);
                                     emptySpanAbove = false;
@@ -248,7 +248,7 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                                     while (GetTileType(below) == TileType.Door)
                                     {
                                         metaMap[below] = TileType.Door;
-                                        below = below + Position.Down;
+                                        below += Position.Down;
                                     }
                                     spotsToCheck.Enqueue(below);
                                     break;
@@ -279,7 +279,7 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
                                     while (GetTileType(below) == TileType.Door)
                                     {
                                         metaMap[below] = TileType.Door;
-                                        below = below + Position.Down;
+                                        below += Position.Down;
                                     }
                                     spotsToCheck.Enqueue(below);
                                     emptySpanBelow = false;
