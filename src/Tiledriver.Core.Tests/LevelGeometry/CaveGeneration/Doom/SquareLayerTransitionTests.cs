@@ -67,7 +67,7 @@ public sealed class SquareLayerTransitionTests
             },
             new Dictionary<SquareSegment, int>()
             {
-                {SquareSegment.UpperLeftOuter, 0 },
+                {SquareSegment.UpperLeftOuter, -1 },
                 {SquareSegment.UpperLeftInner, -1 },
 
                 {SquareSegment.UpperRightOuter, -1 },
@@ -76,7 +76,7 @@ public sealed class SquareLayerTransitionTests
                 {SquareSegment.LowerRightOuter, -1 },
                 {SquareSegment.LowerRightInner, -1 },
 
-                {SquareSegment.LowerLeftOuter, -1 },
+                {SquareSegment.LowerLeftOuter, 0 },
                 {SquareSegment.LowerLeftInner, -1 },
             });
 
@@ -90,17 +90,17 @@ public sealed class SquareLayerTransitionTests
         },
         new Dictionary<SquareSegment, int>()
         {
-            {SquareSegment.UpperLeftOuter, 0 },
-            {SquareSegment.UpperLeftInner, 0 },
+            {SquareSegment.UpperLeftOuter, -1 },
+            {SquareSegment.UpperLeftInner, -1 },
 
-            {SquareSegment.UpperRightOuter, 0 },
-            {SquareSegment.UpperRightInner, 0 },
+            {SquareSegment.UpperRightOuter, -1 },
+            {SquareSegment.UpperRightInner, -1 },
 
-            {SquareSegment.LowerRightOuter, -1 },
-            {SquareSegment.LowerRightInner, -1 },
+            {SquareSegment.LowerRightOuter, 0 },
+            {SquareSegment.LowerRightInner, 0 },
 
-            {SquareSegment.LowerLeftOuter, -1 },
-            {SquareSegment.LowerLeftInner, -1 },
+            {SquareSegment.LowerLeftOuter, 0 },
+            {SquareSegment.LowerLeftInner, 0 },
         });
 
 
