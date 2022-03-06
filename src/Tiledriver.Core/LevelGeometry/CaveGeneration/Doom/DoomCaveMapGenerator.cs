@@ -75,8 +75,8 @@ public sealed class DoomCaveMapGenerator
         var backSide = ld.IsTwoSided
             ? sideDefCache.GetIndex(new SideDef(
                 sector: sectorCache.GetIndex(ld.BackSector),
-                textureTop: new Texture("ROCKRED1"),
-                textureBottom: new Texture("ROCKRED1"),
+                textureTop: new Texture("FLOOR6_1"),
+                textureBottom: new Texture("FLOOR6_1"),
                 offsetX: ld.TextureXOffset))
             : -1;
 
@@ -92,7 +92,7 @@ public sealed class DoomCaveMapGenerator
                 TextureCeiling: "FLOOR6_1",
                 HeightFloor: 0 - sd.HeightLevel * 4,
                 HeightCeiling: 128 + sd.HeightLevel * 8,
-                LightLevel: 160);
+                LightLevel: 180);
 
     private static Position FindPlayerSpot(CellBoard board)
     {
