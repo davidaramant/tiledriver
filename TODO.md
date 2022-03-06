@@ -49,7 +49,7 @@
 - [ ] Utility method for placing Thing at location (check that it fits)
 - [ ] Doom Things helper list (like the Wolf Actors)
   - [x] Actor list
-  - [ ] Actor categories
+  - [x] Actor categories
   - [ ] Textures & Flats
 
 ### General

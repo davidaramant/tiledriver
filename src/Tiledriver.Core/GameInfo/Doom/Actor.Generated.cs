@@ -992,4 +992,316 @@ public sealed partial record Actor
         Height: 64
     );
 
+    public static class Player
+    {
+        public static Actor Player1Start => Actor.Player1Start;
+        public static Actor Player2Start => Actor.Player2Start;
+        public static Actor Player3Start => Actor.Player3Start;
+        public static Actor Player4Start => Actor.Player4Start;
+        public static Actor DeathmatchStart => Actor.DeathmatchStart;
+        public static IEnumerable<Actor> GetAll()
+        {
+            yield return Player1Start;
+            yield return Player2Start;
+            yield return Player3Start;
+            yield return Player4Start;
+            yield return DeathmatchStart;
+        }
+    }
+    public static class Teleport
+    {
+        public static Actor TeleportDest => Actor.TeleportDest;
+        public static IEnumerable<Actor> GetAll()
+        {
+            yield return TeleportDest;
+        }
+    }
+    public static class Monster
+    {
+        public static Actor ZombieMan => Actor.ZombieMan;
+        public static Actor ShotgunGuy => Actor.ShotgunGuy;
+        public static Actor DoomImp => Actor.DoomImp;
+        public static Actor Demon => Actor.Demon;
+        public static Actor Spectre => Actor.Spectre;
+        public static Actor LostSoul => Actor.LostSoul;
+        public static Actor Cacodemon => Actor.Cacodemon;
+        public static Actor BaronOfHell => Actor.BaronOfHell;
+        public static Actor Cyberdemon => Actor.Cyberdemon;
+        public static Actor SpiderMastermind => Actor.SpiderMastermind;
+        public static Actor ChaingunGuy => Actor.ChaingunGuy;
+        public static Actor HellKnight => Actor.HellKnight;
+        public static Actor Arachnotron => Actor.Arachnotron;
+        public static Actor PainElemental => Actor.PainElemental;
+        public static Actor Revenant => Actor.Revenant;
+        public static Actor Fatso => Actor.Fatso;
+        public static Actor Archvile => Actor.Archvile;
+        public static Actor WolfensteinSS => Actor.WolfensteinSS;
+        public static Actor CommanderKeen => Actor.CommanderKeen;
+        public static Actor BossBrain => Actor.BossBrain;
+        public static Actor BossEye => Actor.BossEye;
+        public static Actor BossTarget => Actor.BossTarget;
+        public static IEnumerable<Actor> GetAll()
+        {
+            yield return ZombieMan;
+            yield return ShotgunGuy;
+            yield return DoomImp;
+            yield return Demon;
+            yield return Spectre;
+            yield return LostSoul;
+            yield return Cacodemon;
+            yield return BaronOfHell;
+            yield return Cyberdemon;
+            yield return SpiderMastermind;
+            yield return ChaingunGuy;
+            yield return HellKnight;
+            yield return Arachnotron;
+            yield return PainElemental;
+            yield return Revenant;
+            yield return Fatso;
+            yield return Archvile;
+            yield return WolfensteinSS;
+            yield return CommanderKeen;
+            yield return BossBrain;
+            yield return BossEye;
+            yield return BossTarget;
+        }
+    }
+    public static class Weapon
+    {
+        public static Actor Chainsaw => Actor.Chainsaw;
+        public static Actor Shotgun => Actor.Shotgun;
+        public static Actor Chaingun => Actor.Chaingun;
+        public static Actor RocketLauncher => Actor.RocketLauncher;
+        public static Actor PlasmaRifle => Actor.PlasmaRifle;
+        public static Actor BFG9000 => Actor.BFG9000;
+        public static Actor SuperShotgun => Actor.SuperShotgun;
+        public static IEnumerable<Actor> GetAll()
+        {
+            yield return Chainsaw;
+            yield return Shotgun;
+            yield return Chaingun;
+            yield return RocketLauncher;
+            yield return PlasmaRifle;
+            yield return BFG9000;
+            yield return SuperShotgun;
+        }
+    }
+    public static class Ammunition
+    {
+        public static Actor Clip => Actor.Clip;
+        public static Actor Shell => Actor.Shell;
+        public static Actor RocketAmmo => Actor.RocketAmmo;
+        public static Actor Cell => Actor.Cell;
+        public static Actor ClipBox => Actor.ClipBox;
+        public static Actor ShellBox => Actor.ShellBox;
+        public static Actor RocketBox => Actor.RocketBox;
+        public static Actor CellPack => Actor.CellPack;
+        public static Actor Backpack => Actor.Backpack;
+        public static IEnumerable<Actor> GetAll()
+        {
+            yield return Clip;
+            yield return Shell;
+            yield return RocketAmmo;
+            yield return Cell;
+            yield return ClipBox;
+            yield return ShellBox;
+            yield return RocketBox;
+            yield return CellPack;
+            yield return Backpack;
+        }
+    }
+    public static class Health
+    {
+        public static Actor Stimpack => Actor.Stimpack;
+        public static Actor Medikit => Actor.Medikit;
+        public static Actor HealthBonus => Actor.HealthBonus;
+        public static Actor ArmorBonus => Actor.ArmorBonus;
+        public static Actor GreenArmor => Actor.GreenArmor;
+        public static Actor BlueArmor => Actor.BlueArmor;
+        public static IEnumerable<Actor> GetAll()
+        {
+            yield return Stimpack;
+            yield return Medikit;
+            yield return HealthBonus;
+            yield return ArmorBonus;
+            yield return GreenArmor;
+            yield return BlueArmor;
+        }
+    }
+    public static class Powerup
+    {
+        public static Actor Soulsphere => Actor.Soulsphere;
+        public static Actor InvulnerabilitySphere => Actor.InvulnerabilitySphere;
+        public static Actor Berserk => Actor.Berserk;
+        public static Actor BlurSphere => Actor.BlurSphere;
+        public static Actor RadSuit => Actor.RadSuit;
+        public static Actor Allmap => Actor.Allmap;
+        public static Actor Infrared => Actor.Infrared;
+        public static Actor Megasphere => Actor.Megasphere;
+        public static IEnumerable<Actor> GetAll()
+        {
+            yield return Soulsphere;
+            yield return InvulnerabilitySphere;
+            yield return Berserk;
+            yield return BlurSphere;
+            yield return RadSuit;
+            yield return Allmap;
+            yield return Infrared;
+            yield return Megasphere;
+        }
+    }
+    public static class Key
+    {
+        public static Actor BlueCard => Actor.BlueCard;
+        public static Actor BlueSkull => Actor.BlueSkull;
+        public static Actor RedCard => Actor.RedCard;
+        public static Actor RedSkull => Actor.RedSkull;
+        public static Actor YellowCard => Actor.YellowCard;
+        public static Actor YellowSkull => Actor.YellowSkull;
+        public static IEnumerable<Actor> GetAll()
+        {
+            yield return BlueCard;
+            yield return BlueSkull;
+            yield return RedCard;
+            yield return RedSkull;
+            yield return YellowCard;
+            yield return YellowSkull;
+        }
+    }
+    public static class Obstacle
+    {
+        public static Actor ExplosiveBarrel => Actor.ExplosiveBarrel;
+        public static Actor TechPillar => Actor.TechPillar;
+        public static Actor TallGreenColumn => Actor.TallGreenColumn;
+        public static Actor TallRedColumn => Actor.TallRedColumn;
+        public static Actor ShortGreenColumn => Actor.ShortGreenColumn;
+        public static Actor HeartColumn => Actor.HeartColumn;
+        public static Actor ShortRedColumn => Actor.ShortRedColumn;
+        public static Actor SkullColumn => Actor.SkullColumn;
+        public static Actor Stalagtite => Actor.Stalagtite;
+        public static Actor TorchTree => Actor.TorchTree;
+        public static Actor BigTree => Actor.BigTree;
+        public static Actor EvilEye => Actor.EvilEye;
+        public static Actor FloatingSkull => Actor.FloatingSkull;
+        public static Actor BurningBarrel => Actor.BurningBarrel;
+        public static IEnumerable<Actor> GetAll()
+        {
+            yield return ExplosiveBarrel;
+            yield return TechPillar;
+            yield return TallGreenColumn;
+            yield return TallRedColumn;
+            yield return ShortGreenColumn;
+            yield return HeartColumn;
+            yield return ShortRedColumn;
+            yield return SkullColumn;
+            yield return Stalagtite;
+            yield return TorchTree;
+            yield return BigTree;
+            yield return EvilEye;
+            yield return FloatingSkull;
+            yield return BurningBarrel;
+        }
+    }
+    public static class Light
+    {
+        public static Actor Column => Actor.Column;
+        public static Actor Candlestick => Actor.Candlestick;
+        public static Actor Candelabra => Actor.Candelabra;
+        public static Actor BlueTorch => Actor.BlueTorch;
+        public static Actor GreenTorch => Actor.GreenTorch;
+        public static Actor RedTorch => Actor.RedTorch;
+        public static Actor ShortBlueTorch => Actor.ShortBlueTorch;
+        public static Actor ShortGreenTorch => Actor.ShortGreenTorch;
+        public static Actor ShortRedTorch => Actor.ShortRedTorch;
+        public static Actor TechLamp => Actor.TechLamp;
+        public static Actor TechLamp2 => Actor.TechLamp2;
+        public static IEnumerable<Actor> GetAll()
+        {
+            yield return Column;
+            yield return Candlestick;
+            yield return Candelabra;
+            yield return BlueTorch;
+            yield return GreenTorch;
+            yield return RedTorch;
+            yield return ShortBlueTorch;
+            yield return ShortGreenTorch;
+            yield return ShortRedTorch;
+            yield return TechLamp;
+            yield return TechLamp2;
+        }
+    }
+    public static class Decoration
+    {
+        public static Actor BloodyTwitch => Actor.BloodyTwitch;
+        public static Actor NonsolidTwitch => Actor.NonsolidTwitch;
+        public static Actor Meat2 => Actor.Meat2;
+        public static Actor NonsolidMeat2 => Actor.NonsolidMeat2;
+        public static Actor Meat4 => Actor.Meat4;
+        public static Actor NonsolidMeat4 => Actor.NonsolidMeat4;
+        public static Actor HangingCorpse => Actor.HangingCorpse;
+        public static Actor NonsolidMeat3 => Actor.NonsolidMeat3;
+        public static Actor Meat5 => Actor.Meat5;
+        public static Actor NonsolidMeat5 => Actor.NonsolidMeat5;
+        public static Actor DeadStick => Actor.DeadStick;
+        public static Actor LiveStick => Actor.LiveStick;
+        public static Actor HeadOnAStick => Actor.HeadOnAStick;
+        public static Actor HeadsOnAStick => Actor.HeadsOnAStick;
+        public static Actor HeadCandles => Actor.HeadCandles;
+        public static Actor GibbedMarine => Actor.GibbedMarine;
+        public static Actor GibbedMarineExtra => Actor.GibbedMarineExtra;
+        public static Actor Gibs => Actor.Gibs;
+        public static Actor DeadMarine => Actor.DeadMarine;
+        public static Actor DeadZombieMan => Actor.DeadZombieMan;
+        public static Actor DeadShotgunGuy => Actor.DeadShotgunGuy;
+        public static Actor DeadDoomImp => Actor.DeadDoomImp;
+        public static Actor DeadDemon => Actor.DeadDemon;
+        public static Actor DeadCacodemon => Actor.DeadCacodemon;
+        public static Actor DeadLostSoul => Actor.DeadLostSoul;
+        public static Actor ColonGibs => Actor.ColonGibs;
+        public static Actor SmallBloodPool => Actor.SmallBloodPool;
+        public static Actor BrainStem => Actor.BrainStem;
+        public static Actor HangNoGuts => Actor.HangNoGuts;
+        public static Actor HangBNoBrain => Actor.HangBNoBrain;
+        public static Actor HangTLookingDown => Actor.HangTLookingDown;
+        public static Actor HangTSkull => Actor.HangTSkull;
+        public static Actor HangTLookingUp => Actor.HangTLookingUp;
+        public static Actor HangTNoBrain => Actor.HangTNoBrain;
+        public static IEnumerable<Actor> GetAll()
+        {
+            yield return BloodyTwitch;
+            yield return NonsolidTwitch;
+            yield return Meat2;
+            yield return NonsolidMeat2;
+            yield return Meat4;
+            yield return NonsolidMeat4;
+            yield return HangingCorpse;
+            yield return NonsolidMeat3;
+            yield return Meat5;
+            yield return NonsolidMeat5;
+            yield return DeadStick;
+            yield return LiveStick;
+            yield return HeadOnAStick;
+            yield return HeadsOnAStick;
+            yield return HeadCandles;
+            yield return GibbedMarine;
+            yield return GibbedMarineExtra;
+            yield return Gibs;
+            yield return DeadMarine;
+            yield return DeadZombieMan;
+            yield return DeadShotgunGuy;
+            yield return DeadDoomImp;
+            yield return DeadDemon;
+            yield return DeadCacodemon;
+            yield return DeadLostSoul;
+            yield return ColonGibs;
+            yield return SmallBloodPool;
+            yield return BrainStem;
+            yield return HangNoGuts;
+            yield return HangBNoBrain;
+            yield return HangTLookingDown;
+            yield return HangTSkull;
+            yield return HangTLookingUp;
+            yield return HangTNoBrain;
+        }
+    }
 }

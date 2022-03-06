@@ -5,6 +5,7 @@ namespace Tiledriver.DataModelGenerator.DoomGameInfo;
 
 sealed record Actor(
     string Name,
+    string CategoryName,
     int Id,
     string Description,
     int Radius,
