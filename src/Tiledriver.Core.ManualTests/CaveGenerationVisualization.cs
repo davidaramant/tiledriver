@@ -27,7 +27,7 @@ namespace Tiledriver.Core.ManualTests
         public void ShowEntireProcess()
         {
             CreateCave(
-                seed: 13,
+                seed: 1,
                 folderName: "Cave Generation Process",
                 visualizeProcess: true);
         }
