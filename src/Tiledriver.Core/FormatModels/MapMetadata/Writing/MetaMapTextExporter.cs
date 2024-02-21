@@ -3,40 +3,39 @@
 
 using System.IO;
 
-namespace Tiledriver.Core.FormatModels.MapMetadata.Writing
+namespace Tiledriver.Core.FormatModels.MapMetadata.Writing;
+
+public static class MetaMapTextExporter
 {
-	public static class MetaMapTextExporter
+	public static void Export(MetaMap map, string outputFilePath, bool unreachableIsSolid = true)
 	{
-		public static void Export(MetaMap map, string outputFilePath, bool unreachableIsSolid = true)
-		{
-			using var fs = File.CreateText(outputFilePath);
-			Export(map, fs, unreachableIsSolid);
-		}
+		using var fs = File.CreateText(outputFilePath);
+		Export(map, fs, unreachableIsSolid);
+	}
 
-		public static void Export(MetaMap map, TextWriter writer, bool unreachableIsSolid = true)
-		{
-			string DetermineCharacter(int x, int y) =>
-				map[x, y] switch
-				{
-					TileType.Empty => " ",
-					TileType.Wall => "█",
-					TileType.Door => "□",
-					TileType.PushWall => "□",
-					TileType.Unreachable => unreachableIsSolid ? "█" : " ",
-					_ => "!"
-				};
-
-			for (int y = 0; y < map.Height; y++)
+	public static void Export(MetaMap map, TextWriter writer, bool unreachableIsSolid = true)
+	{
+		string DetermineCharacter(int x, int y) =>
+			map[x, y] switch
 			{
-				for (int x = 0; x < map.Width; x++)
-				{
-					writer.Write(DetermineCharacter(x, y));
-				}
-				if (y < map.Height - 1)
-					writer.WriteLine();
-			}
+				TileType.Empty => " ",
+				TileType.Wall => "█",
+				TileType.Door => "□",
+				TileType.PushWall => "□",
+				TileType.Unreachable => unreachableIsSolid ? "█" : " ",
+				_ => "!"
+			};
 
-			writer.Flush();
+		for (int y = 0; y < map.Height; y++)
+		{
+			for (int x = 0; x < map.Width; x++)
+			{
+				writer.Write(DetermineCharacter(x, y));
+			}
+			if (y < map.Height - 1)
+				writer.WriteLine();
 		}
+
+		writer.Flush();
 	}
 }

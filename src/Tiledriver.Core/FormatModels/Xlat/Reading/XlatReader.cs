@@ -4,15 +4,14 @@
 using System.IO;
 using System.Text;
 
-namespace Tiledriver.Core.FormatModels.Xlat.Reading
+namespace Tiledriver.Core.FormatModels.Xlat.Reading;
+
+public static class XlatReader
 {
-	public static class XlatReader
+	public static MapTranslation Read(Stream xlatStream, IResourceProvider resourceProvider)
 	{
-		public static MapTranslation Read(Stream xlatStream, IResourceProvider resourceProvider)
-		{
-			using var textReader = new StreamReader(xlatStream, Encoding.ASCII);
-			var lexer = XlatLexer.Create(textReader);
-			return XlatParser.Parse(lexer.Scan(), resourceProvider);
-		}
+		using var textReader = new StreamReader(xlatStream, Encoding.ASCII);
+		var lexer = XlatLexer.Create(textReader);
+		return XlatParser.Parse(lexer.Scan(), resourceProvider);
 	}
 }

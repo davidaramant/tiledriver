@@ -4,25 +4,23 @@
 using System;
 using Tiledriver.Core.FormatModels.Common.Reading;
 
-namespace Tiledriver.Core.FormatModels.Common
+namespace Tiledriver.Core.FormatModels.Common;
+
+public sealed class ParsingException : Exception
 {
-	public sealed class ParsingException : Exception
+	public ParsingException(string message)
+		: base(message) { }
+
+	public static ParsingException CreateError(Token? token, string expected)
 	{
-		public ParsingException(string message)
-			: base(message) { }
-
-		public static ParsingException CreateError(Token? token, string expected)
+		if (token == null)
 		{
-			if (token == null)
-			{
-				return new ParsingException("Unexpected end of file");
-			}
-			return new ParsingException(
-				$"Unexpected token {token.GetType().Name} (expected {expected}) on {token.Location}"
-			);
+			return new ParsingException("Unexpected end of file");
 		}
-
-		public static ParsingException CreateError<TExpected>(Token? token) =>
-			CreateError(token, typeof(TExpected).Name);
+		return new ParsingException(
+			$"Unexpected token {token.GetType().Name} (expected {expected}) on {token.Location}"
+		);
 	}
+
+	public static ParsingException CreateError<TExpected>(Token? token) => CreateError(token, typeof(TExpected).Name);
 }

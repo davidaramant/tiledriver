@@ -9,24 +9,23 @@ using Tiledriver.Core.FormatModels.Udmf.Reading;
 using Tiledriver.Core.FormatModels.Udmf.Writing;
 using Xunit;
 
-namespace Tiledriver.Core.Tests.FormatModels.Udmf.Reading
+namespace Tiledriver.Core.Tests.FormatModels.Udmf.Reading;
+
+public sealed class UdmfSemanticAnalyzerTests
 {
-	public sealed class UdmfSemanticAnalyzerTests
+	[Fact]
+	public void ShouldRoundTripDemoMap()
 	{
-		[Fact]
-		public void ShouldRoundTripDemoMap()
-		{
-			var map = DemoMap.Create();
+		var map = DemoMap.Create();
 
-			using var stream = new MemoryStream();
-			map.WriteTo(stream);
+		using var stream = new MemoryStream();
+		map.WriteTo(stream);
 
-			stream.Position = 0;
+		stream.Position = 0;
 
-			using var textReader = new StreamReader(stream, Encoding.ASCII);
-			var roundTripped = UdmfSemanticAnalyzer.ReadMapData(UdmfParser.Parse(new UnifiedLexer(textReader).Scan()));
+		using var textReader = new StreamReader(stream, Encoding.ASCII);
+		var roundTripped = UdmfSemanticAnalyzer.ReadMapData(UdmfParser.Parse(new UnifiedLexer(textReader).Scan()));
 
-			UdmfComparison.AssertEqual(roundTripped, map);
-		}
+		UdmfComparison.AssertEqual(roundTripped, map);
 	}
 }

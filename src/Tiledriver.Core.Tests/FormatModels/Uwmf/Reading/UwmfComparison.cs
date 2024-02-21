@@ -5,41 +5,40 @@ using System.Collections.Immutable;
 using FluentAssertions;
 using Tiledriver.Core.FormatModels.Uwmf;
 
-namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Reading
+namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Reading;
+
+public static class UwmfComparison
 {
-	public static class UwmfComparison
+	public static void AssertEqual(MapData actual, MapData expected)
 	{
-		public static void AssertEqual(MapData actual, MapData expected)
+		actual.NameSpace.Should().Be(expected.NameSpace);
+		actual.TileSize.Should().Be(expected.TileSize);
+		actual.Name.Should().Be(expected.Name);
+		actual.Width.Should().Be(expected.Width);
+		actual.Height.Should().Be(expected.Height);
+		actual.TileSize.Should().Be(expected.TileSize);
+		actual.Width.Should().Be(expected.Width);
+
+		CompareCollections(actual: actual.Planes, expected: expected.Planes);
+		CompareCollections(actual: actual.Sectors, expected: expected.Sectors);
+		CompareCollections(actual: actual.Things, expected: expected.Things);
+		CompareCollections(actual: actual.Tiles, expected: expected.Tiles);
+		CompareCollections(actual: actual.Triggers, expected: expected.Triggers);
+		CompareCollections(actual: actual.Zones, expected: expected.Zones);
+
+		actual.PlaneMaps.Should().HaveCount(expected.PlaneMaps.Length);
+
+		for (int index = 0; index < actual.PlaneMaps.Length; index++)
 		{
-			actual.NameSpace.Should().Be(expected.NameSpace);
-			actual.TileSize.Should().Be(expected.TileSize);
-			actual.Name.Should().Be(expected.Name);
-			actual.Width.Should().Be(expected.Width);
-			actual.Height.Should().Be(expected.Height);
-			actual.TileSize.Should().Be(expected.TileSize);
-			actual.Width.Should().Be(expected.Width);
-
-			CompareCollections(actual: actual.Planes, expected: expected.Planes);
-			CompareCollections(actual: actual.Sectors, expected: expected.Sectors);
-			CompareCollections(actual: actual.Things, expected: expected.Things);
-			CompareCollections(actual: actual.Tiles, expected: expected.Tiles);
-			CompareCollections(actual: actual.Triggers, expected: expected.Triggers);
-			CompareCollections(actual: actual.Zones, expected: expected.Zones);
-
-			actual.PlaneMaps.Should().HaveCount(expected.PlaneMaps.Length);
-
-			for (int index = 0; index < actual.PlaneMaps.Length; index++)
-			{
-				actual
-					.PlaneMaps[index]
-					.Should()
-					.BeEquivalentTo(expected.PlaneMaps[index], options => options.ComparingByMembers<MapSquare>());
-			}
+			actual
+				.PlaneMaps[index]
+				.Should()
+				.BeEquivalentTo(expected.PlaneMaps[index], options => options.ComparingByMembers<MapSquare>());
 		}
+	}
 
-		private static void CompareCollections<T>(ImmutableArray<T> actual, ImmutableArray<T> expected)
-		{
-			actual.Should().BeEquivalentTo(expected, options => options.ComparingByMembers<T>());
-		}
+	private static void CompareCollections<T>(ImmutableArray<T> actual, ImmutableArray<T> expected)
+	{
+		actual.Should().BeEquivalentTo(expected, options => options.ComparingByMembers<T>());
 	}
 }

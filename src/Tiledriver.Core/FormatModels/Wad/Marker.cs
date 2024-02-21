@@ -4,26 +4,25 @@
 using System;
 using System.IO;
 
-namespace Tiledriver.Core.FormatModels.Wad
+namespace Tiledriver.Core.FormatModels.Wad;
+
+public sealed class Marker : ILump
 {
-	public sealed class Marker : ILump
+	public LumpName Name { get; }
+	public bool HasData => false;
+
+	public Marker(LumpName name)
 	{
-		public LumpName Name { get; }
-		public bool HasData => false;
+		Name = name;
+	}
 
-		public Marker(LumpName name)
-		{
-			Name = name;
-		}
+	public void WriteTo(Stream stream)
+	{
+		// Do nothing; no data
+	}
 
-		public void WriteTo(Stream stream)
-		{
-			// Do nothing; no data
-		}
-
-		public byte[] GetData()
-		{
-			return Array.Empty<byte>();
-		}
+	public byte[] GetData()
+	{
+		return Array.Empty<byte>();
 	}
 }

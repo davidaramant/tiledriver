@@ -5,63 +5,62 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using Tiledriver.Core.FormatModels.Common;
 
-namespace Tiledriver.Core.FormatModels.Textures
+namespace Tiledriver.Core.FormatModels.Textures;
+
+public sealed class TextureQueue
 {
-	public sealed class TextureQueue
+	private readonly List<CompositeTexture> _definitions = new();
+	private readonly HashSet<string> _compositeNames = new();
+	private readonly List<(RenderedTexture, Texture)> _renderQueue = new();
+	private readonly Dictionary<RenderedTexture, Texture> _renderNameLookup = new();
+
+	public IReadOnlyList<CompositeTexture> Definitions => _definitions;
+	public IReadOnlyList<(RenderedTexture, Texture)> RenderQueue => _renderQueue;
+
+	public void Add(params CompositeTexture[] definitions)
 	{
-		private readonly List<CompositeTexture> _definitions = new();
-		private readonly HashSet<string> _compositeNames = new();
-		private readonly List<(RenderedTexture, Texture)> _renderQueue = new();
-		private readonly Dictionary<RenderedTexture, Texture> _renderNameLookup = new();
-
-		public IReadOnlyList<CompositeTexture> Definitions => _definitions;
-		public IReadOnlyList<(RenderedTexture, Texture)> RenderQueue => _renderQueue;
-
-		public void Add(params CompositeTexture[] definitions)
+		foreach (var def in definitions)
 		{
-			foreach (var def in definitions)
+			if (_compositeNames.Add(def.Name))
 			{
-				if (_compositeNames.Add(def.Name))
-				{
-					_definitions.Add(def);
-				}
+				_definitions.Add(def);
 			}
 		}
+	}
 
-		public Texture Add(RenderedTexture renderedTexture)
+	public Texture Add(RenderedTexture renderedTexture)
+	{
+		if (_renderNameLookup.TryGetValue(renderedTexture, out var existing))
 		{
-			if (_renderNameLookup.TryGetValue(renderedTexture, out var existing))
-			{
-				return existing;
-			}
+			return existing;
+		}
 
-			var number = _renderQueue.Count;
-			var tex = new Texture(
-				string.IsNullOrWhiteSpace(renderedTexture.Name) ? $"RNDR{number:D3}" : renderedTexture.Name
+		var number = _renderQueue.Count;
+		var tex = new Texture(
+			string.IsNullOrWhiteSpace(renderedTexture.Name) ? $"RNDR{number:D3}" : renderedTexture.Name
+		);
+		_renderQueue.Add((renderedTexture, tex));
+
+		if (renderedTexture.HasText)
+		{
+			Texture compositeName = "TEXT" + number;
+			_definitions.Add(
+				new CompositeTexture(
+					compositeName.Name,
+					256,
+					256,
+					XScale: 4,
+					YScale: 4,
+					Patches: ImmutableArray.Create(new Patch(tex.Name, 0, 0, Rotate: renderedTexture.Rotation))
+				)
 			);
-			_renderQueue.Add((renderedTexture, tex));
-
-			if (renderedTexture.HasText)
-			{
-				Texture compositeName = "TEXT" + number;
-				_definitions.Add(
-					new CompositeTexture(
-						compositeName.Name,
-						256,
-						256,
-						XScale: 4,
-						YScale: 4,
-						Patches: ImmutableArray.Create(new Patch(tex.Name, 0, 0, Rotate: renderedTexture.Rotation))
-					)
-				);
-				_renderNameLookup.Add(renderedTexture, compositeName);
-				return compositeName;
-			}
-			else
-			{
-				_renderNameLookup.Add(renderedTexture, tex);
-				return tex;
-			}
+			_renderNameLookup.Add(renderedTexture, compositeName);
+			return compositeName;
+		}
+		else
+		{
+			_renderNameLookup.Add(renderedTexture, tex);
+			return tex;
 		}
 	}
 }

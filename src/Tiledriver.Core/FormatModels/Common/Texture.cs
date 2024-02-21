@@ -3,16 +3,15 @@
 
 using SkiaSharp;
 
-namespace Tiledriver.Core.FormatModels.Common
+namespace Tiledriver.Core.FormatModels.Common;
+
+public sealed record Texture(string Name)
 {
-	public sealed record Texture(string Name)
-	{
-		public bool IsColor => Name.StartsWith("#");
+	public bool IsColor => Name.StartsWith("#");
 
-		public static readonly Texture None = new("-");
+	public static readonly Texture None = new("-");
 
-		public static Texture SolidColor(SKColor color) => new($"#{color.Red:X2}{color.Green:X2}{color.Blue:X2}");
+	public static Texture SolidColor(SKColor color) => new($"#{color.Red:X2}{color.Green:X2}{color.Blue:X2}");
 
-		public static implicit operator Texture(string name) => new(name);
-	}
+	public static implicit operator Texture(string name) => new(name);
 }

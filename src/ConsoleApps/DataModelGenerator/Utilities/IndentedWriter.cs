@@ -6,117 +6,116 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Tiledriver.DataModelGenerator.Utilities
+namespace Tiledriver.DataModelGenerator.Utilities;
+
+public sealed class IndentedWriter : IDisposable
 {
-	public sealed class IndentedWriter : IDisposable
+	private readonly StreamWriter _writer;
+
+	public IndentedWriter(StreamWriter writer) => _writer = writer;
+
+	public int IndentionLevel { get; private set; }
+	public string CurrentIndent => new('\t', IndentionLevel);
+
+	public IndentedWriter WriteHeader(
+		string nameSpace,
+		IEnumerable<string> usingNamespaces,
+		bool enableNullables = false
+	)
 	{
-		private readonly StreamWriter _writer;
-
-		public IndentedWriter(StreamWriter writer) => _writer = writer;
-
-		public int IndentionLevel { get; private set; }
-		public string CurrentIndent => new('\t', IndentionLevel);
-
-		public IndentedWriter WriteHeader(
-			string nameSpace,
-			IEnumerable<string> usingNamespaces,
-			bool enableNullables = false
-		)
-		{
-			Line(
-				$@"// Copyright (c) {DateTime.Today.Year}, David Aramant
+		Line(
+			$@"// Copyright (c) {DateTime.Today.Year}, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE."
-			);
-			Line();
+		);
+		Line();
 
-			foreach (var usingNamespace in usingNamespaces.OrderBy(text => text))
-			{
-				Line($"using {usingNamespace};");
-			}
-
-			Line();
-
-			if (enableNullables)
-			{
-				Line("#nullable enable");
-			}
-
-			Line($"namespace {nameSpace};");
-
-			return this;
+		foreach (var usingNamespace in usingNamespaces.OrderBy(text => text))
+		{
+			Line($"using {usingNamespace};");
 		}
 
-		public IndentedWriter IncreaseIndent()
+		Line();
+
+		if (enableNullables)
 		{
-			IndentionLevel++;
-			return this;
+			Line("#nullable enable");
 		}
 
-		public IndentedWriter DecreaseIndent()
+		Line($"namespace {nameSpace};");
+
+		return this;
+	}
+
+	public IndentedWriter IncreaseIndent()
+	{
+		IndentionLevel++;
+		return this;
+	}
+
+	public IndentedWriter DecreaseIndent()
+	{
+		if (IndentionLevel == 0)
+			throw new InvalidOperationException();
+		IndentionLevel--;
+		return this;
+	}
+
+	public IndentedWriter OpenParen() => Line("{").IncreaseIndent();
+
+	public IndentedWriter CloseParen() => DecreaseIndent().Line("}");
+
+	public IndentedWriter Line(string line)
+	{
+		_writer.WriteLine(CurrentIndent + line);
+		return this;
+	}
+
+	public IndentedWriter Line()
+	{
+		_writer.WriteLine();
+		return this;
+	}
+
+	public IndentedWriter Lines(IEnumerable<string> lines)
+	{
+		foreach (var line in lines)
 		{
-			if (IndentionLevel == 0)
-				throw new InvalidOperationException();
-			IndentionLevel--;
-			return this;
+			Line(line);
 		}
 
-		public IndentedWriter OpenParen() => Line("{").IncreaseIndent();
+		return this;
+	}
 
-		public IndentedWriter CloseParen() => DecreaseIndent().Line("}");
+	public IndentedWriter JoinLines(string linePostfix, IEnumerable<string> lines)
+	{
+		using var enumerator = lines.GetEnumerator();
 
-		public IndentedWriter Line(string line)
+		string? actualLine = null;
+
+		if (enumerator.MoveNext())
 		{
-			_writer.WriteLine(CurrentIndent + line);
-			return this;
+			actualLine = enumerator.Current;
 		}
 
-		public IndentedWriter Line()
+		while (enumerator.MoveNext())
 		{
-			_writer.WriteLine();
-			return this;
+			Line(actualLine + linePostfix);
+			actualLine = enumerator.Current;
 		}
 
-		public IndentedWriter Lines(IEnumerable<string> lines)
+		if (actualLine != null)
 		{
-			foreach (var line in lines)
-			{
-				Line(line);
-			}
-
-			return this;
+			Line(actualLine);
 		}
 
-		public IndentedWriter JoinLines(string linePostfix, IEnumerable<string> lines)
+		return this;
+	}
+
+	public void Dispose()
+	{
+		if (IndentionLevel != 0)
 		{
-			using var enumerator = lines.GetEnumerator();
-
-			string? actualLine = null;
-
-			if (enumerator.MoveNext())
-			{
-				actualLine = enumerator.Current;
-			}
-
-			while (enumerator.MoveNext())
-			{
-				Line(actualLine + linePostfix);
-				actualLine = enumerator.Current;
-			}
-
-			if (actualLine != null)
-			{
-				Line(actualLine);
-			}
-
-			return this;
-		}
-
-		public void Dispose()
-		{
-			if (IndentionLevel != 0)
-			{
-				throw new InvalidOperationException("Indention level is screwed up.");
-			}
+			throw new InvalidOperationException("Indention level is screwed up.");
 		}
 	}
 }

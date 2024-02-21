@@ -5,81 +5,80 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using Tiledriver.Core.FormatModels.Common.Reading.AbstractSyntaxTree;
 
-namespace Tiledriver.Core.FormatModels.Common.Reading
+namespace Tiledriver.Core.FormatModels.Common.Reading;
+
+public static class TokenStreamExtensions
 {
-	public static class TokenStreamExtensions
+	public static Token? GetNext(this IEnumerator<Token> enumerator) =>
+		enumerator.MoveNext() ? enumerator.Current : null;
+
+	public static Token? GetNextSkippingNewlines(this IEnumerator<Token> enumerator)
 	{
-		public static Token? GetNext(this IEnumerator<Token> enumerator) =>
-			enumerator.MoveNext() ? enumerator.Current : null;
-
-		public static Token? GetNextSkippingNewlines(this IEnumerator<Token> enumerator)
+		while (enumerator.MoveNext())
 		{
-			while (enumerator.MoveNext())
+			if (enumerator.Current is not NewLineToken)
 			{
-				if (enumerator.Current is not NewLineToken)
-				{
-					return enumerator.Current;
-				}
-			}
-
-			return null;
-		}
-
-		public static TExpected ExpectNext<TExpected>(this IEnumerator<Token> tokenStream)
-			where TExpected : Token
-		{
-			var nextToken = GetNext(tokenStream);
-			return nextToken is TExpected token ? token : throw ParsingException.CreateError<TExpected>(nextToken);
-		}
-
-		public static TExpected ExpectNextSkippingNewlines<TExpected>(this IEnumerator<Token> tokenStream)
-			where TExpected : Token
-		{
-			var nextToken = GetNextSkippingNewlines(tokenStream);
-			return nextToken is TExpected token ? token : throw ParsingException.CreateError<TExpected>(nextToken);
-		}
-
-		public static Block ParseBlock(this IEnumerator<Token> tokenStream, IdentifierToken name)
-		{
-			var assignments = new List<Assignment>();
-
-			while (true)
-			{
-				var token = GetNext(tokenStream);
-				switch (token)
-				{
-					case IdentifierToken i:
-						ExpectNext<EqualsToken>(tokenStream);
-						assignments.Add(tokenStream.ParseAssignment(i));
-						break;
-					case CloseBraceToken:
-						return new Block(name, assignments.ToImmutableArray());
-					default:
-						throw ParsingException.CreateError(token, "identifier or end of block");
-				}
+				return enumerator.Current;
 			}
 		}
 
-		public static Assignment ParseAssignment(this IEnumerator<Token> tokenStream, IdentifierToken id)
+		return null;
+	}
+
+	public static TExpected ExpectNext<TExpected>(this IEnumerator<Token> tokenStream)
+		where TExpected : Token
+	{
+		var nextToken = GetNext(tokenStream);
+		return nextToken is TExpected token ? token : throw ParsingException.CreateError<TExpected>(nextToken);
+	}
+
+	public static TExpected ExpectNextSkippingNewlines<TExpected>(this IEnumerator<Token> tokenStream)
+		where TExpected : Token
+	{
+		var nextToken = GetNextSkippingNewlines(tokenStream);
+		return nextToken is TExpected token ? token : throw ParsingException.CreateError<TExpected>(nextToken);
+	}
+
+	public static Block ParseBlock(this IEnumerator<Token> tokenStream, IdentifierToken name)
+	{
+		var assignments = new List<Assignment>();
+
+		while (true)
 		{
-			var valueToken = GetNext(tokenStream);
-			switch (valueToken)
+			var token = GetNext(tokenStream);
+			switch (token)
 			{
-				case IntegerToken:
+				case IdentifierToken i:
+					ExpectNext<EqualsToken>(tokenStream);
+					assignments.Add(tokenStream.ParseAssignment(i));
 					break;
-				case FloatToken:
-					break;
-				case BooleanToken:
-					break;
-				case StringToken:
-					break;
+				case CloseBraceToken:
+					return new Block(name, assignments.ToImmutableArray());
 				default:
-					throw ParsingException.CreateError(valueToken, "value");
+					throw ParsingException.CreateError(token, "identifier or end of block");
 			}
-
-			ExpectNext<SemicolonToken>(tokenStream);
-
-			return new Assignment(id, valueToken);
 		}
+	}
+
+	public static Assignment ParseAssignment(this IEnumerator<Token> tokenStream, IdentifierToken id)
+	{
+		var valueToken = GetNext(tokenStream);
+		switch (valueToken)
+		{
+			case IntegerToken:
+				break;
+			case FloatToken:
+				break;
+			case BooleanToken:
+				break;
+			case StringToken:
+				break;
+			default:
+				throw ParsingException.CreateError(valueToken, "value");
+		}
+
+		ExpectNext<SemicolonToken>(tokenStream);
+
+		return new Assignment(id, valueToken);
 	}
 }

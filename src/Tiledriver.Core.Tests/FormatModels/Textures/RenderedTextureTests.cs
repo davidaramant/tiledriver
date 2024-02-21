@@ -9,17 +9,16 @@ using SkiaSharp;
 using Tiledriver.Core.FormatModels.Textures;
 using Xunit;
 
-namespace Tiledriver.Core.Tests.FormatModels.Textures
+namespace Tiledriver.Core.Tests.FormatModels.Textures;
+
+public sealed class RenderedTextureTests
 {
-	public sealed class RenderedTextureTests
+	[Fact]
+	public void ShouldRenderTextureToStream()
 	{
-		[Fact]
-		public void ShouldRenderTextureToStream()
-		{
-			using var stream = new MemoryStream();
-			var texture = new RenderedTexture(BackgroundColor: SKColors.White, Text: "Test");
-			texture.RenderTo(stream);
-			stream.Length.Should().BeGreaterThan(0);
-		}
+		using var stream = new MemoryStream();
+		var texture = new RenderedTexture(BackgroundColor: SKColors.White, Text: "Test");
+		texture.RenderTo(stream);
+		stream.Length.Should().BeGreaterThan(0);
 	}
 }

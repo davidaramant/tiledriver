@@ -5,14 +5,13 @@ using System.IO;
 using System.Text;
 using Tiledriver.Core.FormatModels.Common.Reading;
 
-namespace Tiledriver.Core.FormatModels.Udmf.Reading
+namespace Tiledriver.Core.FormatModels.Udmf.Reading;
+
+public static class UdmfReader
 {
-	public static class UdmfReader
+	public static MapData Read(Stream stream)
 	{
-		public static MapData Read(Stream stream)
-		{
-			using var textReader = new StreamReader(stream, Encoding.ASCII, leaveOpen: true);
-			return UdmfSemanticAnalyzer.ReadMapData(UdmfParser.Parse(new UnifiedLexer(textReader).Scan()));
-		}
+		using var textReader = new StreamReader(stream, Encoding.ASCII, leaveOpen: true);
+		return UdmfSemanticAnalyzer.ReadMapData(UdmfParser.Parse(new UnifiedLexer(textReader).Scan()));
 	}
 }

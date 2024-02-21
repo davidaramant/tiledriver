@@ -3,14 +3,13 @@
 
 using System.IO;
 
-namespace Tiledriver.Core.FormatModels.Wad
-{
-	public interface ILump
-	{
-		LumpName Name { get; }
-		bool HasData { get; }
+namespace Tiledriver.Core.FormatModels.Wad;
 
-		void WriteTo(Stream stream);
-		byte[] GetData();
-	}
+public interface ILump
+{
+	LumpName Name { get; }
+	bool HasData { get; }
+
+	void WriteTo(Stream stream);
+	byte[] GetData();
 }

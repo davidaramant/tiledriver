@@ -7,32 +7,31 @@ using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Common.Reading;
 using Tiledriver.Core.FormatModels.Common.Reading.AbstractSyntaxTree;
 
-namespace Tiledriver.Core.FormatModels.Xlat.Reading.AbstractSyntaxTree
+namespace Tiledriver.Core.FormatModels.Xlat.Reading.AbstractSyntaxTree;
+
+public sealed record Block(
+	IdentifierToken Name,
+	ushort OldName,
+	ImmutableArray<IdentifierToken> Attributes,
+	ImmutableArray<Assignment> Fields
+) : IExpression
 {
-	public sealed record Block(
-		IdentifierToken Name,
-		ushort OldName,
-		ImmutableArray<IdentifierToken> Attributes,
-		ImmutableArray<Assignment> Fields
-	) : IExpression
+	public IReadOnlyDictionary<Identifier, Token> GetFieldAssignments()
 	{
-		public IReadOnlyDictionary<Identifier, Token> GetFieldAssignments()
+		var assignments = new Dictionary<Identifier, Token>();
+
+		foreach (var field in Fields)
 		{
-			var assignments = new Dictionary<Identifier, Token>();
-
-			foreach (var field in Fields)
+			if (assignments.ContainsKey(field.Name.Id))
 			{
-				if (assignments.ContainsKey(field.Name.Id))
-				{
-					throw new ParsingException(
-						$"Duplicate field definition found: {field.Name.Id} on {field.Name.Location}"
-					);
-				}
-
-				assignments.Add(field.Name.Id, field.Value);
+				throw new ParsingException(
+					$"Duplicate field definition found: {field.Name.Id} on {field.Name.Location}"
+				);
 			}
 
-			return assignments;
+			assignments.Add(field.Name.Id, field.Value);
 		}
+
+		return assignments;
 	}
 }

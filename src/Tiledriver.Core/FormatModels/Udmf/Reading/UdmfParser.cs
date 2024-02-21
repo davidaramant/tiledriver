@@ -7,68 +7,67 @@ using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Common.Reading;
 using Tiledriver.Core.FormatModels.Common.Reading.AbstractSyntaxTree;
 
-namespace Tiledriver.Core.FormatModels.Udmf.Reading
+namespace Tiledriver.Core.FormatModels.Udmf.Reading;
+
+public static class UdmfParser
 {
-	public static class UdmfParser
+	public static IEnumerable<IExpression> Parse(IEnumerable<Token> tokens)
 	{
-		public static IEnumerable<IExpression> Parse(IEnumerable<Token> tokens)
+		using var tokenStream = tokens.GetEnumerator();
+		while (tokenStream.MoveNext())
 		{
-			using var tokenStream = tokens.GetEnumerator();
-			while (tokenStream.MoveNext())
+			if (tokenStream.Current is IdentifierToken i)
 			{
-				if (tokenStream.Current is IdentifierToken i)
+				switch (tokenStream.GetNext())
 				{
-					switch (tokenStream.GetNext())
-					{
-						case OpenBraceToken _:
-							yield return ParseBlock(i, tokenStream);
-							break;
-						case EqualsToken _:
-							yield return tokenStream.ParseAssignment(i);
-							break;
-						default:
-							throw ParsingException.CreateError(tokenStream.Current, "open brace or equals");
-					}
-				}
-				else
-				{
-					throw ParsingException.CreateError<IdentifierToken>(tokenStream.Current);
+					case OpenBraceToken _:
+						yield return ParseBlock(i, tokenStream);
+						break;
+					case EqualsToken _:
+						yield return tokenStream.ParseAssignment(i);
+						break;
+					default:
+						throw ParsingException.CreateError(tokenStream.Current, "open brace or equals");
 				}
 			}
+			else
+			{
+				throw ParsingException.CreateError<IdentifierToken>(tokenStream.Current);
+			}
 		}
+	}
 
-		private static IExpression ParseBlock(IdentifierToken name, IEnumerator<Token> tokenStream)
+	private static IExpression ParseBlock(IdentifierToken name, IEnumerator<Token> tokenStream)
+	{
+		var token = tokenStream.GetNext();
+		return token switch
+		{
+			CloseBraceToken _ => new Block(name, ImmutableArray<Assignment>.Empty),
+			IdentifierToken i => ParseBlock(name, i, tokenStream),
+			_ => throw ParsingException.CreateError(token, "identifier or end of block"),
+		};
+	}
+
+	private static Block ParseBlock(IdentifierToken name, IdentifierToken fieldName, IEnumerator<Token> tokenStream)
+	{
+		var assignments = new List<Assignment>();
+
+		tokenStream.ExpectNext<EqualsToken>();
+		assignments.Add(tokenStream.ParseAssignment(fieldName));
+
+		while (true)
 		{
 			var token = tokenStream.GetNext();
-			return token switch
+			switch (token)
 			{
-				CloseBraceToken _ => new Block(name, ImmutableArray<Assignment>.Empty),
-				IdentifierToken i => ParseBlock(name, i, tokenStream),
-				_ => throw ParsingException.CreateError(token, "identifier or end of block"),
-			};
-		}
-
-		private static Block ParseBlock(IdentifierToken name, IdentifierToken fieldName, IEnumerator<Token> tokenStream)
-		{
-			var assignments = new List<Assignment>();
-
-			tokenStream.ExpectNext<EqualsToken>();
-			assignments.Add(tokenStream.ParseAssignment(fieldName));
-
-			while (true)
-			{
-				var token = tokenStream.GetNext();
-				switch (token)
-				{
-					case IdentifierToken i:
-						tokenStream.ExpectNext<EqualsToken>();
-						assignments.Add(tokenStream.ParseAssignment(i));
-						break;
-					case CloseBraceToken:
-						return new Block(name, assignments.ToImmutableArray());
-					default:
-						throw ParsingException.CreateError(token, "identifier or end of block");
-				}
+				case IdentifierToken i:
+					tokenStream.ExpectNext<EqualsToken>();
+					assignments.Add(tokenStream.ParseAssignment(i));
+					break;
+				case CloseBraceToken:
+					return new Block(name, assignments.ToImmutableArray());
+				default:
+					throw ParsingException.CreateError(token, "identifier or end of block");
 			}
 		}
 	}

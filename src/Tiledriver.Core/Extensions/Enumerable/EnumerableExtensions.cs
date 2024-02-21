@@ -4,30 +4,29 @@
 using System;
 using System.Collections.Generic;
 
-namespace Tiledriver.Core.Extensions.Enumerable
+namespace Tiledriver.Core.Extensions.Enumerable;
+
+public static class EnumerableExtensions
 {
-	public static class EnumerableExtensions
+	public static int MinIndex<T>(this IEnumerable<T> sequence, Func<T, double> selector)
 	{
-		public static int MinIndex<T>(this IEnumerable<T> sequence, Func<T, double> selector)
+		int minIndex = 0;
+		double min = double.MaxValue;
+
+		int index = 0;
+		foreach (var value in sequence)
 		{
-			int minIndex = 0;
-			double min = double.MaxValue;
+			var current = selector(value);
 
-			int index = 0;
-			foreach (var value in sequence)
+			if (current < min)
 			{
-				var current = selector(value);
-
-				if (current < min)
-				{
-					minIndex = index;
-					min = current;
-				}
-
-				index++;
+				minIndex = index;
+				min = current;
 			}
 
-			return minIndex;
+			index++;
 		}
+
+		return minIndex;
 	}
 }

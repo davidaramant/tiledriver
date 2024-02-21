@@ -3,11 +3,10 @@
 
 using System;
 
-namespace Tiledriver.Core.FormatModels
+namespace Tiledriver.Core.FormatModels;
+
+public sealed class EntryNotFoundException : Exception
 {
-	public sealed class EntryNotFoundException : Exception
-	{
-		public EntryNotFoundException(string path)
-			: base(path) { }
-	}
+	public EntryNotFoundException(string path)
+		: base(path) { }
 }

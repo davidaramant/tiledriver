@@ -3,44 +3,43 @@
 
 using Tiledriver.Core.Utils;
 
-namespace Tiledriver.Core.Settings
+namespace Tiledriver.Core.Settings;
+
+public static class SteamGameSearcher
 {
-	public static class SteamGameSearcher
+	private static string? GetBaseSteamPath()
 	{
-		private static string? GetBaseSteamPath()
-		{
-			return "C:\\Program Files (x86)\\Steam";
-			// TODO: "Will .NET 6 allow this to live in the same project?");
-			//var steamCommonRegPath = Path.Combine("Software", "Valve", "Steam");
+		return "C:\\Program Files (x86)\\Steam";
+		// TODO: "Will .NET 6 allow this to live in the same project?");
+		//var steamCommonRegPath = Path.Combine("Software", "Valve", "Steam");
 
-			//var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(steamCommonRegPath);
+		//var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(steamCommonRegPath);
 
-			//if (key != null)
-			//{
-			//    return (key.GetValue("SteamPath") as string);
-			//}
+		//if (key != null)
+		//{
+		//    return (key.GetValue("SteamPath") as string);
+		//}
 
-			//key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(steamCommonRegPath);
-			//if (key != null)
-			//{
-			//    return (key.GetValue("InstallPath") as string);
-			//}
+		//key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(steamCommonRegPath);
+		//if (key != null)
+		//{
+		//    return (key.GetValue("InstallPath") as string);
+		//}
 
-			//return null;
-		}
+		//return null;
+	}
 
-		public static GamePaths GetGamePaths()
-		{
-			var steamPath = PathUtil.Combine(GetBaseSteamPath(), "SteamApps", "common");
+	public static GamePaths GetGamePaths()
+	{
+		var steamPath = PathUtil.Combine(GetBaseSteamPath(), "SteamApps", "common");
 
-			var wolf3DPath = PathUtil.Combine(steamPath, "Wolfenstein 3D", "base");
-			var sodPath = PathUtil.Combine(steamPath, "Spear of Destiny", "base");
+		var wolf3DPath = PathUtil.Combine(steamPath, "Wolfenstein 3D", "base");
+		var sodPath = PathUtil.Combine(steamPath, "Spear of Destiny", "base");
 
-			return new GamePaths(
-				Wolf3D: PathUtil.VerifyPathExists(wolf3DPath),
-				SpearOfDestiny: PathUtil.VerifyPathExists(sodPath),
-				Doom: string.Empty
-			);
-		}
+		return new GamePaths(
+			Wolf3D: PathUtil.VerifyPathExists(wolf3DPath),
+			SpearOfDestiny: PathUtil.VerifyPathExists(sodPath),
+			Doom: string.Empty
+		);
 	}
 }

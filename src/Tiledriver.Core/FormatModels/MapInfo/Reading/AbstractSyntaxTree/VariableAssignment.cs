@@ -5,10 +5,9 @@ using System.Collections.Immutable;
 using System.Linq;
 using Tiledriver.Core.FormatModels.Common.Reading;
 
-namespace Tiledriver.Core.FormatModels.MapInfo.Reading.AbstractSyntaxTree
+namespace Tiledriver.Core.FormatModels.MapInfo.Reading.AbstractSyntaxTree;
+
+public sealed record VariableAssignment(IdentifierToken Id, ImmutableArray<Token> Values)
 {
-	public sealed record VariableAssignment(IdentifierToken Id, ImmutableArray<Token> Values)
-	{
-		public bool HasValues => Values.Any();
-	}
+	public bool HasValues => Values.Any();
 }

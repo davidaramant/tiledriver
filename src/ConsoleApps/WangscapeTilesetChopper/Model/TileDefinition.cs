@@ -4,39 +4,38 @@
 using System.Collections.Immutable;
 using System.Text.Json.Serialization;
 
-namespace WangscapeTilesetChopper.Model
+namespace WangscapeTilesetChopper.Model;
+
+internal record TileDefinition(
+	[property: JsonPropertyName("corners")] ImmutableArray<string> CornerTextures,
+	string Filename,
+	int X,
+	int Y
+)
 {
-	internal record TileDefinition(
-		[property: JsonPropertyName("corners")] ImmutableArray<string> CornerTextures,
-		string Filename,
-		int X,
-		int Y
-	)
+	internal Corners ParseCorners()
 	{
-		internal Corners ParseCorners()
+		var corners = Corners.None;
+
+		if (CornerTextures[0] == "variant")
 		{
-			var corners = Corners.None;
-
-			if (CornerTextures[0] == "variant")
-			{
-				corners |= Corners.TopLeft;
-			}
-			if (CornerTextures[1] == "variant")
-			{
-				corners |= Corners.BottomLeft;
-			}
-			if (CornerTextures[2] == "variant")
-			{
-				corners |= Corners.TopRight;
-			}
-			if (CornerTextures[3] == "variant")
-			{
-				corners |= Corners.BottomRight;
-			}
-
-			return corners;
+			corners |= Corners.TopLeft;
+		}
+		if (CornerTextures[1] == "variant")
+		{
+			corners |= Corners.BottomLeft;
+		}
+		if (CornerTextures[2] == "variant")
+		{
+			corners |= Corners.TopRight;
+		}
+		if (CornerTextures[3] == "variant")
+		{
+			corners |= Corners.BottomRight;
 		}
 
-		internal string GetFileName() => $"tile{(int)ParseCorners():D2}.png";
+		return corners;
 	}
+
+	internal string GetFileName() => $"tile{(int)ParseCorners():D2}.png";
 }

@@ -4,17 +4,16 @@
 using System;
 using System.IO;
 
-namespace Tiledriver.Core.ManualTests
+namespace Tiledriver.Core.ManualTests;
+
+public static class OutputLocation
 {
-	public static class OutputLocation
-	{
-		public static DirectoryInfo CreateDirectory(string folderName) =>
-			Directory.CreateDirectory(
-				Path.Combine(
-					Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-					"Tiledriver Visualizations",
-					folderName
-				)
-			);
-	}
+	public static DirectoryInfo CreateDirectory(string folderName) =>
+		Directory.CreateDirectory(
+			Path.Combine(
+				Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+				"Tiledriver Visualizations",
+				folderName
+			)
+		);
 }
