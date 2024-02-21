@@ -10,6 +10,7 @@ namespace Tiledriver.Core.FormatModels.Common
         public bool IsColor => Name.StartsWith("#");
 
         public static readonly Texture None = new("-");
+
         public static Texture SolidColor(SKColor color) => new($"#{color.Red:X2}{color.Green:X2}{color.Blue:X2}");
 
         public static implicit operator Texture(string name) => new(name);

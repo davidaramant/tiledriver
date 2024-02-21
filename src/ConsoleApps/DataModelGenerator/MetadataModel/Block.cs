@@ -20,24 +20,19 @@ namespace Tiledriver.DataModelGenerator.MetadataModel
         string FormatName,
         string ClassName,
         ImmutableArray<Property> Properties,
-        SerializationType Serialization = SerializationType.Normal)
+        SerializationType Serialization = SerializationType.Normal
+    )
     {
         public string Name => FormatName;
 
         public Block(
             string FormatName,
             ImmutableArray<Property> Properties,
-            SerializationType Serialization = SerializationType.Normal)
-            : this(
-                FormatName,
-                FormatName.Pascalize(),
-                Properties,
-                Serialization)
-        {
-        }
+            SerializationType Serialization = SerializationType.Normal
+        )
+            : this(FormatName, FormatName.Pascalize(), Properties, Serialization) { }
 
         public IEnumerable<Property> OrderedProperties =>
-            Properties.Where(p => !p.HasDefault)
-            .Concat(Properties.Where(p => p.HasDefault));
+            Properties.Where(p => !p.HasDefault).Concat(Properties.Where(p => p.HasDefault));
     }
 }

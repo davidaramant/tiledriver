@@ -74,7 +74,11 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
             }
         }
 
-        private static IntTupleBlock ParseIntTupleList(IdentifierToken name, FilePosition startLocation, IEnumerator<Token> tokenStream)
+        private static IntTupleBlock ParseIntTupleList(
+            IdentifierToken name,
+            FilePosition startLocation,
+            IEnumerator<Token> tokenStream
+        )
         {
             var tuples = ImmutableArray.CreateBuilder<IntTuple>();
             tuples.Add(ParseIntTuple(startLocation, tokenStream));
@@ -96,7 +100,6 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
                         throw ParsingException.CreateError(token, "comma or end of block");
                 }
             }
-
         }
 
         private static IntTuple ParseIntTuple(FilePosition startLocation, IEnumerator<Token> tokenStream)
@@ -107,7 +110,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
             switch (token)
             {
                 case CloseBraceToken _:
-                    return new IntTuple(startLocation,ints.ToImmutable());
+                    return new IntTuple(startLocation, ints.ToImmutable());
                 case IntegerToken i:
                     ints.Add(i);
                     break;

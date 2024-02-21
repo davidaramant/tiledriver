@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 namespace Tiledriver.Core.FormatModels.MapInfo
 {
@@ -9,10 +9,7 @@ namespace Tiledriver.Core.FormatModels.MapInfo
         public bool ShouldTile { get; }
         public string? Palette { get; }
 
-        public IntermissionBackground(
-            string texture, 
-            bool shouldTile = false, 
-            string? palette = null)
+        public IntermissionBackground(string texture, bool shouldTile = false, string? palette = null)
         {
             Texture = texture;
             ShouldTile = shouldTile;

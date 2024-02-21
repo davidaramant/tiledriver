@@ -1,5 +1,5 @@
 // Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Collections.Generic;
@@ -34,7 +34,9 @@ public sealed class DoomCaveMapGenerator
         var sideDefCache = new ModelSequence<SideDef, SideDef>(s => s); // Seems silly, but what should be abstracted about it?
         var vertexCache = new ModelSequence<LatticePoint, Vertex>(ConvertToVertex);
         var sectorCache = new ModelSequence<SectorDescription, Sector>(ConvertToSector);
-        var lineCache = new ModelSequence<LineDescription, LineDef>(ld => ConvertToLineDef(ld, sectorCache, sideDefCache));
+        var lineCache = new ModelSequence<LineDescription, LineDef>(ld =>
+            ConvertToLineDef(ld, sectorCache, sideDefCache)
+        );
 
         var edges = GetEdges(boardSize, internalDistances);
 
@@ -52,7 +54,10 @@ public sealed class DoomCaveMapGenerator
                 Actor.Player1Start.MakeThing(
                     x: playerLogicalSpot.X * LogicalUnitSize + LogicalUnitSize / 2,
                     y: playerLogicalSpot.Y * LogicalUnitSize + LogicalUnitSize / 2,
-                    angle: 90)));
+                    angle: 90
+                )
+            )
+        );
     }
 
     private static Vertex ConvertToVertex(LatticePoint lp) =>
@@ -67,18 +72,25 @@ public sealed class DoomCaveMapGenerator
     private static LineDef ConvertToLineDef(
         LineDescription ld,
         ModelSequence<SectorDescription, Sector> sectorCache,
-        ModelSequence<SideDef, SideDef> sideDefCache)
+        ModelSequence<SideDef, SideDef> sideDefCache
+    )
     {
-        var frontSide = sideDefCache.GetIndex(new SideDef(
-            sector: sectorCache.GetIndex(ld.FrontSector),
-            textureMiddle: ld.IsTwoSided ? null : new Texture("ROCKRED1"),
-            offsetX: ld.TextureXOffset));
+        var frontSide = sideDefCache.GetIndex(
+            new SideDef(
+                sector: sectorCache.GetIndex(ld.FrontSector),
+                textureMiddle: ld.IsTwoSided ? null : new Texture("ROCKRED1"),
+                offsetX: ld.TextureXOffset
+            )
+        );
         var backSide = ld.IsTwoSided
-            ? sideDefCache.GetIndex(new SideDef(
-                sector: sectorCache.GetIndex(ld.BackSector),
-                textureTop: new Texture("FLOOR6_1"),
-                textureBottom: new Texture("FLOOR6_1"),
-                offsetX: ld.TextureXOffset))
+            ? sideDefCache.GetIndex(
+                new SideDef(
+                    sector: sectorCache.GetIndex(ld.BackSector),
+                    textureTop: new Texture("FLOOR6_1"),
+                    textureBottom: new Texture("FLOOR6_1"),
+                    offsetX: ld.TextureXOffset
+                )
+            )
             : -1;
 
         return new(
@@ -86,14 +98,18 @@ public sealed class DoomCaveMapGenerator
             V2: ld.RightVertex,
             TwoSided: ld.IsTwoSided,
             SideFront: frontSide,
-            SideBack: backSide);
+            SideBack: backSide
+        );
     }
-    private static Sector ConvertToSector(SectorDescription sd) => new(
-                TextureFloor: "FLOOR6_1",
-                TextureCeiling: "FLOOR6_1",
-                HeightFloor: 0 - sd.HeightLevel * 4,
-                HeightCeiling: 128 + sd.HeightLevel * 8,
-                LightLevel: 180);
+
+    private static Sector ConvertToSector(SectorDescription sd) =>
+        new(
+            TextureFloor: "FLOOR6_1",
+            TextureCeiling: "FLOOR6_1",
+            HeightFloor: 0 - sd.HeightLevel * 4,
+            HeightCeiling: 128 + sd.HeightLevel * 8,
+            LightLevel: 180
+        );
 
     private static Position FindPlayerSpot(CellBoard board)
     {
@@ -101,15 +117,15 @@ public sealed class DoomCaveMapGenerator
         const int buffer = 2;
         var squaresToCheck = (int)Math.Ceiling((double)Actor.Player1Start.Width / LogicalUnitSize) + buffer;
 
-        return
-            board.Dimensions
-            .GetAllPositions()
-            .First(p =>
-                (from yd in Enumerable.Range(0, squaresToCheck)
-                 from xd in Enumerable.Range(0, squaresToCheck)
-                 select p + new PositionDelta(xd, yd))
-                 .All(p2 => board[p2] == CellType.Dead))
-            + new PositionDelta(buffer / 2, buffer / 2);
+        return board
+                .Dimensions.GetAllPositions()
+                .First(p =>
+                    (
+                        from yd in Enumerable.Range(0, squaresToCheck)
+                        from xd in Enumerable.Range(0, squaresToCheck)
+                        select p + new PositionDelta(xd, yd)
+                    ).All(p2 => board[p2] == CellType.Dead)
+                ) + new PositionDelta(buffer / 2, buffer / 2);
     }
 
     private static CellBoard GenerateGeometryBoard(Random random) =>
@@ -124,32 +140,38 @@ public sealed class DoomCaveMapGenerator
 
     private static IReadOnlyList<SectorEdge> GetEdges(
         Size size,
-        IReadOnlyDictionary<Position, int> interiorDistances) =>
+        IReadOnlyDictionary<Position, int> interiorDistances
+    ) =>
         size.GetAllPositionsExclusiveMax()
-        .Select(p =>
-        {
-            var heightLookup = SquareLayerTransition.GetHeightLookup(interiorDistances, p);
+            .Select(p =>
+            {
+                var heightLookup = SquareLayerTransition.GetHeightLookup(interiorDistances, p);
 
-            // TODO: this happens to work because of the -1 thing
-            var sectorIds =
-                SquareSegmentsExtensions.GetAllSegments()
-                .Select(seq => new SectorDescription(HeightLevel: heightLookup(seq)))
-                .ToArray();
+                // TODO: this happens to work because of the -1 thing
+                var sectorIds = SquareSegmentsExtensions
+                    .GetAllSegments()
+                    .Select(seq => new SectorDescription(HeightLevel: heightLookup(seq)))
+                    .ToArray();
 
-            return (Position: p, Sectors: new SquareSegmentSectors(sectorIds));
-        })
-        .Where(t => !t.Sectors.IsUniform)
-        .SelectMany(pair => pair.Sectors.GetInternalEdges().Select(edge => SectorEdge.FromPosition(pair.Position, edge)))
-        .ToList();
+                return (Position: p, Sectors: new SquareSegmentSectors(sectorIds));
+            })
+            .Where(t => !t.Sectors.IsUniform)
+            .SelectMany(pair =>
+                pair.Sectors.GetInternalEdges().Select(edge => SectorEdge.FromPosition(pair.Position, edge))
+            )
+            .ToList();
 
     private static void DrawEdges(
         IReadOnlyList<SectorEdge> edges,
         ModelSequence<LatticePoint, Vertex> vertexCache,
-        ModelSequence<LineDescription, LineDef> lineCache)
+        ModelSequence<LineDescription, LineDef> lineCache
+    )
     {
         var segmentGraph = SectorEdgeGraph.FromEdges(edges);
         var edgeGraph = segmentGraph.Simplify();
-        Console.Out.WriteLine($"Number of edges simplified from {segmentGraph.EdgeCount:N0} to {edgeGraph.EdgeCount:N0}");
+        Console.Out.WriteLine(
+            $"Number of edges simplified from {segmentGraph.EdgeCount:N0} to {edgeGraph.EdgeCount:N0}"
+        );
 
         var remainingEdges = edgeGraph.GetAllEdges().ToHashSet();
 
@@ -172,12 +194,15 @@ public sealed class DoomCaveMapGenerator
 
                 remainingEdges.Remove(edge);
 
-                lineCache.GetIndex(new LineDescription(
-                    LeftVertex: vertexCache.GetIndex(edge.Start),
-                    RightVertex: vertexCache.GetIndex(edge.End),
-                    FrontSector: edge.Segment.Front,
-                    BackSector: edge.Segment.Back,
-                    TextureXOffset: (int)Math.Round(offset)));
+                lineCache.GetIndex(
+                    new LineDescription(
+                        LeftVertex: vertexCache.GetIndex(edge.Start),
+                        RightVertex: vertexCache.GetIndex(edge.End),
+                        FrontSector: edge.Segment.Front,
+                        BackSector: edge.Segment.Back,
+                        TextureXOffset: (int)Math.Round(offset)
+                    )
+                );
 
                 var length = DistanceBetween(edge.Start, edge.End);
 

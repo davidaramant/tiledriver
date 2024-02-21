@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2017, Leon Organ and Aaron Alexander
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Generic;
 using Tiledriver.Core.FormatModels.Uwmf;
@@ -21,7 +21,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
         int Lives { get; }
         int BoringTiles { get; }
         bool HasGoldKey { get; }
-        bool HasSilverKey { get;}
+        bool HasSilverKey { get; }
 
         IDictionary<IList<Passage>, IRoom> AdjacentRooms { get; }
         IList<MapLocation> Locations { get; }

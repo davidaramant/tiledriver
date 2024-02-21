@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Humanizer;
 using Tiledriver.DataModelGenerator.DoomGameInfo.Parsing;
 using Tiledriver.DataModelGenerator.Utilities;
-using Humanizer;
 
 namespace Tiledriver.DataModelGenerator.DoomGameInfo;
 
@@ -23,7 +23,8 @@ internal static partial class DoomActorGenerator
         var assembly = Assembly.GetExecutingAssembly();
         var resourceName = "Tiledriver.DataModelGenerator.DoomGameInfo.DoomActors.txt";
 
-        using Stream stream = assembly.GetManifestResourceStream(resourceName) ?? throw new Exception($"Could not find {resourceName}");
+        using Stream stream =
+            assembly.GetManifestResourceStream(resourceName) ?? throw new Exception($"Could not find {resourceName}");
         using StreamReader reader = new(stream);
 
         var categories = DoomActorParser.ParseCategories(reader);
@@ -35,16 +36,15 @@ internal static partial class DoomActorGenerator
     static IEnumerable<Actor> FlattenDefinitions(IEnumerable<ActorCategory> categories) =>
         from category in categories
         from actor in category.Actors
-        let lookup = new PropertyLookup(
-            category.GlobalAssignments,
-            actor.Assignments)
+        let lookup = new PropertyLookup(category.GlobalAssignments, actor.Assignments)
         select new Actor(
             Name: lookup.GetString("class"),
             CategoryName: category.Name.Titleize().Singularize(),
             Id: actor.Id,
             Description: lookup.GetString("title"),
             Radius: lookup.GetInt("width"), // This is named poorly in the config file
-            Height: lookup.GetInt("height"));
+            Height: lookup.GetInt("height")
+        );
 
     static void WriteActorFile(string basePath, IReadOnlyList<Actor> actors)
     {
@@ -52,7 +52,10 @@ internal static partial class DoomActorGenerator
         using var output = new IndentedWriter(blockStream);
 
         output
-            .WriteHeader("Tiledriver.Core.GameInfo.Doom", new[] { "System.Collections.Generic", "System.CodeDom.Compiler" })
+            .WriteHeader(
+                "Tiledriver.Core.GameInfo.Doom",
+                new[] { "System.Collections.Generic", "System.CodeDom.Compiler" }
+            )
             .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
             .Line($"public sealed partial record Actor")
             .OpenParen();
@@ -63,12 +66,16 @@ internal static partial class DoomActorGenerator
                 .Line($"/// <summary>{actor.Description}</summary>")
                 .Line($"public static readonly Actor {actor.SafeName} = new(")
                 .IncreaseIndent()
-                .JoinLines(",", new[] {
-                    $"Id: {actor.Id}",
-                    $"Description: \"{actor.Description}\"",
-                    $"Width: {actor.Width}",
-                    $"Height: {actor.Height}"
-                })
+                .JoinLines(
+                    ",",
+                    new[]
+                    {
+                        $"Id: {actor.Id}",
+                        $"Description: \"{actor.Description}\"",
+                        $"Width: {actor.Width}",
+                        $"Height: {actor.Height}"
+                    }
+                )
                 .DecreaseIndent()
                 .Line(");")
                 .Line();
@@ -79,16 +86,15 @@ internal static partial class DoomActorGenerator
             output
                 .Line($"public static class {category.Key}")
                 .OpenParen()
-                .Lines(category.Select(actor=>$"public static Actor {actor.SafeName} => Actor.{actor.SafeName};"))
+                .Lines(category.Select(actor => $"public static Actor {actor.SafeName} => Actor.{actor.SafeName};"))
                 .Line("public static IEnumerable<Actor> GetAll()")
                 .OpenParen()
-                .Lines(category.Select(actor=>$"yield return {actor.SafeName};"))
+                .Lines(category.Select(actor => $"yield return {actor.SafeName};"))
                 .CloseParen()
                 .CloseParen();
         }
 
-        output
-            .CloseParen();
+        output.CloseParen();
     }
 
     sealed class PropertyLookup
@@ -99,7 +105,8 @@ internal static partial class DoomActorGenerator
 
         public PropertyLookup(
             IReadOnlyDictionary<string, object> parentAssignments,
-            IReadOnlyDictionary<string, object> actorAssignments)
+            IReadOnlyDictionary<string, object> actorAssignments
+        )
         {
             _parentAssignments = parentAssignments;
             _actorAssignments = actorAssignments;
@@ -107,12 +114,12 @@ internal static partial class DoomActorGenerator
         }
 
         private object GetValue(string name) =>
-            _actorAssignments.TryLookupValue(name) ??
-            _parentAssignments.TryLookupValue(name) ??
-            throw new ArgumentException($"Could not find {name} for {_context}");
+            _actorAssignments.TryLookupValue(name)
+            ?? _parentAssignments.TryLookupValue(name)
+            ?? throw new ArgumentException($"Could not find {name} for {_context}");
 
         public int GetInt(string name) => (int)GetValue(name);
+
         public string GetString(string name) => (string)GetValue(name);
     }
-
 }

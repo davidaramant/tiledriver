@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2018, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.IO;
@@ -29,11 +29,7 @@ namespace mm
         /// <param name="theme">Theme to use for the image.</param>
         /// <param name="imageName">Name of the image file (by default, use the map name)</param>
         /// <param name="scale">How much to scale the output image.</param>
-        static void Main(
-            string inputMapPath,
-            ImagePalette theme,
-            string imageName = null,
-            int scale = 1)
+        static void Main(string inputMapPath, ImagePalette theme, string imageName = null, int scale = 1)
         {
             RunOptionsAndReturnExitCode(new Options(inputMapPath, theme, imageName, scale));
         }
@@ -55,12 +51,13 @@ namespace mm
                 imageName = Path.GetFileNameWithoutExtension(opts.InputMapPath) + ".png";
             }
 
-            static MapPalette PickPalette(ImagePalette palette) => palette switch
-            {
-                ImagePalette.HighlightWalls => MapPalette.HighlightWalls,
-                ImagePalette.Full => MapPalette.Full,
-                _ => MapPalette.CarveOutRooms,
-            };
+            static MapPalette PickPalette(ImagePalette palette) =>
+                palette switch
+                {
+                    ImagePalette.HighlightWalls => MapPalette.HighlightWalls,
+                    ImagePalette.Full => MapPalette.Full,
+                    _ => MapPalette.CarveOutRooms,
+                };
 
             var imagePath = Path.Combine(Path.GetDirectoryName(opts.InputMapPath), imageName);
             MetaMapImageExporter.Export(map, PickPalette(opts.Theme), imagePath, scale: opts.Scale);

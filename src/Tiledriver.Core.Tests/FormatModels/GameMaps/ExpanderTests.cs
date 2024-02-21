@@ -1,11 +1,11 @@
 ﻿// Copyright (c) 2016, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Linq;
-using Xunit;
 using FluentAssertions;
 using Tiledriver.Core.FormatModels.GameMaps;
+using Xunit;
 
 namespace Tiledriver.Core.Tests.FormatModels.GameMaps
 {
@@ -32,7 +32,9 @@ namespace Tiledriver.Core.Tests.FormatModels.GameMaps
         public void ShouldExpandRlewWithPrefix()
         {
             var input = new byte[] { 0x1A, 0x2B, 0xCD, 0xAB, 0x08, 0x00, 0xFF, 0xFF };
-            var expected = new byte[] { 0x1A, 0x2B }.Concat(Enumerable.Repeat<byte>(0xFF, 16)).ToArray();
+            var expected = new byte[] { 0x1A, 0x2B }
+                .Concat(Enumerable.Repeat<byte>(0xFF, 16))
+                .ToArray();
             var expanded = Expander.DecompressRlew(0xABCD, input, expected.Length);
             expanded.Should().BeEquivalentTo(expected, "array should have been expanded");
         }
@@ -49,13 +51,33 @@ namespace Tiledriver.Core.Tests.FormatModels.GameMaps
         [Fact]
         public void ShouldExpandMultipleRlewSections()
         {
-            var input = new byte[] { 0x55, 0x66, 0xCD, 0xAB, 0x08, 0x00, 0xFF, 0xFF, 0x1A, 0x2B, 0xCD, 0xAB, 0x04, 0x00, 0x11, 0x22, 0x33, 0x44 };
-            var expected =
-                new byte[] { 0x55, 0x66 }.
-                Concat(Repeat(new byte[] { 0xFF, 0xFF }, 8)).
-                Concat(new byte[] { 0x1A, 0x2B }).
-                Concat(Repeat(new byte[] { 0x11, 0x22 }, 4)).
-                Concat(new byte[] { 0x33, 0x44 }).ToArray();
+            var input = new byte[]
+            {
+                0x55,
+                0x66,
+                0xCD,
+                0xAB,
+                0x08,
+                0x00,
+                0xFF,
+                0xFF,
+                0x1A,
+                0x2B,
+                0xCD,
+                0xAB,
+                0x04,
+                0x00,
+                0x11,
+                0x22,
+                0x33,
+                0x44
+            };
+            var expected = new byte[] { 0x55, 0x66 }
+                .Concat(Repeat(new byte[] { 0xFF, 0xFF }, 8))
+                .Concat(new byte[] { 0x1A, 0x2B })
+                .Concat(Repeat(new byte[] { 0x11, 0x22 }, 4))
+                .Concat(new byte[] { 0x33, 0x44 })
+                .ToArray();
 
             var expanded = Expander.DecompressRlew(0xABCD, input, expected.Length);
             expanded.Should().BeEquivalentTo(expected, "array should have been expanded");

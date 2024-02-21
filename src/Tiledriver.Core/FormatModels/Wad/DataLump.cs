@@ -19,9 +19,8 @@ namespace Tiledriver.Core.FormatModels.Wad
             _data = data;
         }
 
-        public DataLump(LumpName name, string text) : this(name, Encoding.ASCII.GetBytes(text))
-        {
-        }
+        public DataLump(LumpName name, string text)
+            : this(name, Encoding.ASCII.GetBytes(text)) { }
 
         public static DataLump FromStream(LumpName name, Stream stream)
         {

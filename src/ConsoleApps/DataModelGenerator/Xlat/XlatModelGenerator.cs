@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Generic;
 using System.IO;
@@ -26,8 +26,7 @@ namespace Tiledriver.DataModelGenerator.Xlat
 
         static void WriteRecord(string basePath, Block block)
         {
-            using var blockStream =
-                File.CreateText(Path.Combine(basePath, block.ClassName + ".Generated.cs"));
+            using var blockStream = File.CreateText(Path.Combine(basePath, block.ClassName + ".Generated.cs"));
             using var output = new IndentedWriter(blockStream);
 
             var containsCollection = block.Properties.Any(p => p is CollectionProperty);
@@ -61,11 +60,12 @@ namespace Tiledriver.DataModelGenerator.Xlat
                     .IncreaseIndent()
                     .Line("new Tile(")
                     .IncreaseIndent()
-                    .JoinLines(",",
+                    .JoinLines(
+                        ",",
                         block
-                        .OrderedProperties
-                        .Where(p =>p.PropertyName!="OldNum")
-                        .Select(p=>$"{p.PropertyName}: {p.PropertyName}"))
+                            .OrderedProperties.Where(p => p.PropertyName != "OldNum")
+                            .Select(p => $"{p.PropertyName}: {p.PropertyName}")
+                    )
                     .DecreaseIndent()
                     .Line(");")
                     .DecreaseIndent()
@@ -74,7 +74,6 @@ namespace Tiledriver.DataModelGenerator.Xlat
             else
             {
                 output.Line(");");
-
             }
         }
 

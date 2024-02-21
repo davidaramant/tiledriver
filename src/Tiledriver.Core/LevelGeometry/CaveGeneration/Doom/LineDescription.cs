@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 
@@ -10,7 +10,8 @@ public sealed record LineDescription(
     int RightVertex,
     SectorDescription FrontSector,
     SectorDescription BackSector,
-    int TextureXOffset = 0)
+    int TextureXOffset = 0
+)
 {
     public bool IsTwoSided => !BackSector.IsOutsideLevel;
 }

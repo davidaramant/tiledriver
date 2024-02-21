@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Generic;
 using System.IO;
@@ -26,14 +26,13 @@ namespace Tiledriver.DataModelGenerator.Uwmf
 
         static void WriteRecord(string basePath, Block block)
         {
-            using var blockStream =
-                File.CreateText(Path.Combine(basePath, block.ClassName + ".Generated.cs"));
+            using var blockStream = File.CreateText(Path.Combine(basePath, block.ClassName + ".Generated.cs"));
             using var output = new IndentedWriter(blockStream);
 
             var containsTexture = block.Properties.Any(p => p is TextureProperty);
             var containsCollection = block.Properties.Any(p => p is CollectionProperty);
 
-            List<string> includes = new() {"System.CodeDom.Compiler"};
+            List<string> includes = new() { "System.CodeDom.Compiler" };
             if (containsTexture)
             {
                 includes.Add("Tiledriver.Core.FormatModels.Common");

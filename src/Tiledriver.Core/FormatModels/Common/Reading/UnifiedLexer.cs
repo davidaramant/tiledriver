@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2019, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Generic;
 using System.IO;
@@ -22,10 +22,11 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
         private readonly StringBuilder _tokenBuffer = new();
 
         public UnifiedLexer(
-            TextReader reader, 
-            bool reportNewlines = false, 
+            TextReader reader,
+            bool reportNewlines = false,
             bool allowDollarIdentifiers = false,
-            bool allowPipes = false)
+            bool allowPipes = false
+        )
         {
             _reader = reader;
             _reportNewlines = reportNewlines;
@@ -113,7 +114,7 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
 
                     case Null:
                         yield break;
-                    
+
                     default:
                         throw new ParsingException($"Unexpected character {next} at {_currentPosition}");
                 }
@@ -132,9 +133,7 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
                 _tokenBuffer.Clear();
                 SkipChar();
 
-                static bool IsHexChar(char c) =>
-                    char.IsDigit(c) ||
-                    c is >= 'a' and <= 'f' or >= 'A' and <= 'F';
+                static bool IsHexChar(char c) => char.IsDigit(c) || c is >= 'a' and <= 'f' or >= 'A' and <= 'F';
 
                 if (!IsHexChar(PeekChar()))
                 {

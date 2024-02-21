@@ -21,13 +21,10 @@ namespace Tiledriver.DataModelGenerator.Udmf
             using var output = new IndentedWriter(stream);
 
             output
-                .WriteHeader("Tiledriver.Core.FormatModels.Udmf.Writing",
-                    new[]
-                    {
-                        "System.CodeDom.Compiler",
-                        "System.IO",
-                        "Tiledriver.Core.FormatModels.Common"
-                    })
+                .WriteHeader(
+                    "Tiledriver.Core.FormatModels.Udmf.Writing",
+                    new[] { "System.CodeDom.Compiler", "System.IO", "Tiledriver.Core.FormatModels.Common" }
+                )
                 .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
                 .Line($"public static partial class UdmfWriter")
                 .OpenParen();
@@ -42,15 +39,11 @@ namespace Tiledriver.DataModelGenerator.Udmf
 
         private static void CreateBlockWriter(IndentedWriter output, Block block)
         {
-            output
-                .Line($"private static void Write(StreamWriter writer, {block.ClassName} {block.Name})")
-                .OpenParen();
+            output.Line($"private static void Write(StreamWriter writer, {block.ClassName} {block.Name})").OpenParen();
 
             if (block.Serialization == SerializationType.Normal)
             {
-                output
-                    .Line($"writer.WriteLine(\"{block.Name}\");")
-                    .Line("writer.WriteLine(\"{\");");
+                output.Line($"writer.WriteLine(\"{block.Name}\");").Line("writer.WriteLine(\"{\");");
             }
 
             foreach (var p in block.Properties)
@@ -58,7 +51,7 @@ namespace Tiledriver.DataModelGenerator.Udmf
                 if (p is ScalarProperty sp)
                 {
                     var defaultValue = sp.DefaultString;
-                    if (sp is TextureProperty {IsOptional: true})
+                    if (sp is TextureProperty { IsOptional: true })
                     {
                         defaultValue = "Texture.None";
                     }
@@ -66,11 +59,14 @@ namespace Tiledriver.DataModelGenerator.Udmf
                     string optionalDefault = defaultValue != null ? ", " + defaultValue : string.Empty;
                     string indent = block.Serialization == SerializationType.Normal ? string.Empty : ", indent:false";
 
-                    output.Line($"WriteProperty(writer, \"{sp.FormatName}\", {block.Name}.{sp.PropertyName}{optionalDefault}{indent});");
+                    output.Line(
+                        $"WriteProperty(writer, \"{sp.FormatName}\", {block.Name}.{sp.PropertyName}{optionalDefault}{indent});"
+                    );
                 }
                 else if (p is CollectionProperty cp)
                 {
-                    output.Line($"foreach(var block in {block.Name}.{cp.PropertyName})")
+                    output
+                        .Line($"foreach(var block in {block.Name}.{cp.PropertyName})")
                         .OpenParen()
                         .Line($"Write(writer, block);")
                         .CloseParen();

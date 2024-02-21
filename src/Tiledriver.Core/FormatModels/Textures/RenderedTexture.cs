@@ -17,16 +17,16 @@ namespace Tiledriver.Core.FormatModels.Textures
         SKColor TextColor,
         string Text = "",
         string Name = "",
-        PatchRotation Rotation = PatchRotation.None)
+        PatchRotation Rotation = PatchRotation.None
+    )
     {
         public RenderedTexture(
             SKColor BackgroundColor,
             string Text = "",
             string Name = "",
-            PatchRotation Rotation = PatchRotation.None)
-            : this(BackgroundColor, SKColors.Black, Text, Name, Rotation)
-        {
-        }
+            PatchRotation Rotation = PatchRotation.None
+        )
+            : this(BackgroundColor, SKColors.Black, Text, Name, Rotation) { }
 
         public bool HasText => !string.IsNullOrWhiteSpace(Text);
 
@@ -39,7 +39,7 @@ namespace Tiledriver.Core.FormatModels.Textures
             {
                 var entireArea = new SKRect(0, 0, size, size);
 
-                using var backgroundPaint = new SKPaint {Color = BackgroundColor};
+                using var backgroundPaint = new SKPaint { Color = BackgroundColor };
                 canvas.DrawRect(entireArea, backgroundPaint);
 
                 if (HasText)
@@ -59,12 +59,7 @@ namespace Tiledriver.Core.FormatModels.Textures
                     var halfLineHeight = lineHeight / 2;
                     for (int i = 0; i < lines.Length; i++)
                     {
-                        canvas.DrawText(
-                            lines[i],
-                            size / 2f,
-                            halfLineHeight + (i*lineHeight),
-                            font,
-                            textPaint);
+                        canvas.DrawText(lines[i], size / 2f, halfLineHeight + (i * lineHeight), font, textPaint);
                     }
                 }
             }

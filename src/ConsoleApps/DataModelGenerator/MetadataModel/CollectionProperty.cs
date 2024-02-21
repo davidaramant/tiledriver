@@ -11,7 +11,8 @@ namespace Tiledriver.DataModelGenerator.MetadataModel
         public virtual string ElementTypeName => (_explicitElementType ?? Name).Pascalize();
         public override string PropertyName => Name.Pluralize().Pascalize();
 
-        protected CollectionProperty(string name, string? elementTypeName = null) : base(name)
+        protected CollectionProperty(string name, string? elementTypeName = null)
+            : base(name)
         {
             _explicitElementType = elementTypeName;
         }

@@ -9,8 +9,18 @@ namespace Tiledriver.DataModelGenerator.MetadataModel
 
         public string? Default { get; }
 
-        public StringProperty(string name, string? defaultValue = null, string? formatName = null, bool isNullable = false)
-            : base(name, "string", isNullable: isNullable, defaultString: defaultValue == null ? null : $"\"{defaultValue}\"")
+        public StringProperty(
+            string name,
+            string? defaultValue = null,
+            string? formatName = null,
+            bool isNullable = false
+        )
+            : base(
+                name,
+                "string",
+                isNullable: isNullable,
+                defaultString: defaultValue == null ? null : $"\"{defaultValue}\""
+            )
         {
             FormatName = formatName ?? name;
             Default = defaultValue;

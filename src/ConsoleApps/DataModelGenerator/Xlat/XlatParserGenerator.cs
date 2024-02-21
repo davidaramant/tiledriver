@@ -42,18 +42,20 @@ namespace Tiledriver.DataModelGenerator.Xlat
             output.CloseParen();
         }
 
-        private static string CreateParameterAssignment(Property property, string context = "block.Name") => property switch
-        {
-            ScalarProperty sp => CreateParameterAssignment(sp, context),
-            CollectionProperty cp => CreateParameterAssignment(cp),
-            _ => throw new Exception("Unknown property type"),
-        };
+        private static string CreateParameterAssignment(Property property, string context = "block.Name") =>
+            property switch
+            {
+                ScalarProperty sp => CreateParameterAssignment(sp, context),
+                CollectionProperty cp => CreateParameterAssignment(cp),
+                _ => throw new Exception("Unknown property type"),
+            };
 
         private static string CreateParameterAssignment(ScalarProperty property, string context = "block.Name")
         {
-            var getValue = property.DefaultString == null
-                ? $"fields.GetRequiredFieldValue<{property.PropertyType}>({context}, \"{property.FormatName}\")"
-                : $"fields.GetOptionalFieldValue<{property.PropertyType}>(\"{property.FormatName}\", {property.DefaultString})";
+            var getValue =
+                property.DefaultString == null
+                    ? $"fields.GetRequiredFieldValue<{property.PropertyType}>({context}, \"{property.FormatName}\")"
+                    : $"fields.GetOptionalFieldValue<{property.PropertyType}>(\"{property.FormatName}\", {property.DefaultString})";
 
             return $"{property.PropertyName}: {getValue}";
         }
@@ -73,7 +75,10 @@ namespace Tiledriver.DataModelGenerator.Xlat
                 .Line($"return new {block.ClassName}(")
                 .IncreaseIndent()
                 .Line("oldNum,")
-                .JoinLines(",", block.OrderedProperties.Where(p=>p.Name != "oldNum").Select(p => CreateParameterAssignment(p)))
+                .JoinLines(
+                    ",",
+                    block.OrderedProperties.Where(p => p.Name != "oldNum").Select(p => CreateParameterAssignment(p))
+                )
                 .DecreaseIndent()
                 .Line(");")
                 .CloseParen();

@@ -28,11 +28,10 @@ namespace Tiledriver.Core.ManualTests
             Size dimensions = new(128, 128);
 
             var random = new Random(seed);
-            return
-                new CellBoard(dimensions)
-                    .Fill(random, probabilityAlive: 0.6)
-                    .MakeBorderAlive(thickness: 3)
-                    .RunGenerations(generations);
+            return new CellBoard(dimensions)
+                .Fill(random, probabilityAlive: 0.6)
+                .MakeBorderAlive(thickness: 3)
+                .RunGenerations(generations);
         }
 
         void SaveImage(IFastImage image, string description) =>
@@ -43,7 +42,7 @@ namespace Tiledriver.Core.ManualTests
         {
             var board = MakeBoard();
 
-            var tests = new ( Func<Size, Func<Position, bool>, IEnumerable<ConnectedArea>> Finder, string Description)[]
+            var tests = new (Func<Size, Func<Position, bool>, IEnumerable<ConnectedArea>> Finder, string Description)[]
             {
                 (ConnectedAreaAnalyzer.FindForegroundAreas, "Original"),
                 //(ConnectedAreaAnalyzer.FindEmptyAreas2, "New"),
@@ -53,10 +52,9 @@ namespace Tiledriver.Core.ManualTests
 
             foreach (var (Finder, Description) in tests)
             {
-                var components =
-                    Finder(board.Dimensions, p => board[p] == CellType.Dead)
-                        .OrderByDescending(component => component.Area)
-                        .ToArray();
+                var components = Finder(board.Dimensions, p => board[p] == CellType.Dead)
+                    .OrderByDescending(component => component.Area)
+                    .ToArray();
 
                 results.Add(components);
 
@@ -95,8 +93,7 @@ namespace Tiledriver.Core.ManualTests
             var largestComponent =
                 ConnectedAreaAnalyzer
                     .FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Dead)
-                    .MaxBy(component => component.Area) ??
-                throw new InvalidOperationException("This can't happen");
+                    .MaxBy(component => component.Area) ?? throw new InvalidOperationException("This can't happen");
 
             foreach (var neighborhood in new[] { Neighborhood.Moore, Neighborhood.VonNeumann })
             {
@@ -105,19 +102,16 @@ namespace Tiledriver.Core.ManualTests
 
                 Console.Out.WriteLine($"Max Distance for {neighborhood} Neighborhood: {maxDistance}");
 
-                var palette =
-                    Enumerable
-                        .Range(0, maxDistance + 1)
-                        .Select(d => SKColor.FromHsv(0, 0, 100f * ((float)d / maxDistance)))
-                        .ToArray();
+                var palette = Enumerable
+                    .Range(0, maxDistance + 1)
+                    .Select(d => SKColor.FromHsv(0, 0, 100f * ((float)d / maxDistance)))
+                    .ToArray();
 
                 var image = GenericVisualizer.RenderPalette(
                     board.Dimensions,
-                    p =>
-                        interiorInfo.TryGetValue(p, out var distance)
-                        ? palette[distance]
-                        : SKColors.DarkSlateGray,
-                    scale: 5);
+                    p => interiorInfo.TryGetValue(p, out var distance) ? palette[distance] : SKColors.DarkSlateGray,
+                    scale: 5
+                );
 
                 SaveImage(image, $"Distance - {neighborhood} Neighborhood");
             }

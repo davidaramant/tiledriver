@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Collections.Generic;
@@ -24,16 +24,13 @@ namespace Tiledriver.Core.ManualTests
         private readonly DirectoryInfo _dirInfo = OutputLocation.CreateDirectory("Doom Demo Maps");
 
         [Test, Explicit]
-        public void BoxDemo() =>
-            Load(CreateWadContents(new Func<TextureQueue, MapData>[]{
-                tq => DemoMap.Create()
-            }));
+        public void BoxDemo() => Load(CreateWadContents(new Func<TextureQueue, MapData>[] { tq => DemoMap.Create() }));
 
         [Test, Explicit]
         public void CaveMap() =>
-            Load(CreateWadContents(new Func<TextureQueue, MapData>[]{
-                tq => DoomCaveMapGenerator.Create(seed:13,tq)
-            }));
+            Load(
+                CreateWadContents(new Func<TextureQueue, MapData>[] { tq => DoomCaveMapGenerator.Create(seed: 13, tq) })
+            );
 
         void Load(IEnumerable<ILump> contents, [CallerMemberName] string? name = null)
         {
@@ -45,7 +42,8 @@ namespace Tiledriver.Core.ManualTests
 
         static IEnumerable<ILump> CreateWadContents(
             IEnumerable<Func<TextureQueue, MapData>> mapCreators,
-            IEnumerable<(string Name, byte[] Data)>? extraTextures = null)
+            IEnumerable<(string Name, byte[] Data)>? extraTextures = null
+        )
         {
             extraTextures ??= Enumerable.Empty<(string Name, byte[] Data)>();
             var textureQueue = new TextureQueue();
@@ -56,30 +54,39 @@ namespace Tiledriver.Core.ManualTests
             {
                 textureLumps.Add(new Marker("P_START"));
                 textureLumps.AddRange(extraTextures.Select(pair => new DataLump(pair.Name, pair.Data)));
-                textureLumps.AddRange(textureQueue.RenderQueue.Select(r => DataLump.ReadFromStream(r.Item2.Name, r.Item1.RenderTo)));
+                textureLumps.AddRange(
+                    textureQueue.RenderQueue.Select(r => DataLump.ReadFromStream(r.Item2.Name, r.Item1.RenderTo))
+                );
                 textureLumps.Add(new Marker("P_END"));
             }
-
 
             var lumps = new List<ILump>();
 
             if (textureQueue.Definitions.Any())
             {
-                lumps.Add(DataLump.ReadFromStream("TEXTURES",
-                    stream => TexturesWriter.Write(textureQueue.Definitions, stream)));
+                lumps.Add(
+                    DataLump.ReadFromStream(
+                        "TEXTURES",
+                        stream => TexturesWriter.Write(textureQueue.Definitions, stream)
+                    )
+                );
             }
 
             lumps
                 .AddRangeAndContinue(textureLumps)
-                .AddRangeAndContinue(maps.SelectMany((map, index) => new ILump[]
-                {
-                    new Marker($"MAP{index + 1:00}"),
-                    new UdmfLump("TEXTMAP", map),
-                    new Marker("ENDMAP")
-                }));
+                .AddRangeAndContinue(
+                    maps.SelectMany(
+                        (map, index) =>
+                            new ILump[]
+                            {
+                                new Marker($"MAP{index + 1:00}"),
+                                new UdmfLump("TEXTMAP", map),
+                                new Marker("ENDMAP")
+                            }
+                    )
+                );
 
             return lumps;
         }
-
     }
 }

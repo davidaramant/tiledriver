@@ -36,19 +36,28 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
             var image = Render(lightMap, scale);
             foreach (var light in lights)
             {
-                image.SetPixel(light.Center.X, light.Center.Y, light.Height switch
-                {
-                    LightHeight.Ceiling => SKColors.Orange,
-                    LightHeight.Middle => SKColors.HotPink,
-                    LightHeight.Floor => SKColors.Red,
-                    _ => throw new Exception("Impossible")
-                });
+                image.SetPixel(
+                    light.Center.X,
+                    light.Center.Y,
+                    light.Height switch
+                    {
+                        LightHeight.Ceiling => SKColors.Orange,
+                        LightHeight.Middle => SKColors.HotPink,
+                        LightHeight.Floor => SKColors.Red,
+                        _ => throw new Exception("Impossible")
+                    }
+                );
             }
 
             return image;
         }
 
-        public static IFastImage Render(LightMap lightMap, IEnumerable<LightDefinition> lights, ConnectedArea area, int scale = 10)
+        public static IFastImage Render(
+            LightMap lightMap,
+            IEnumerable<LightDefinition> lights,
+            ConnectedArea area,
+            int scale = 10
+        )
         {
             var image = Render(lightMap, lights, scale);
 

@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using Tiledriver.Core.LevelGeometry.CaveGeneration.Doom.SquareModel;
 
@@ -10,4 +10,5 @@ public sealed record EdgeSegment(
     SectorDescription Front,
     SectorDescription Back,
     SquarePoint Left,
-    SquarePoint Right);
+    SquarePoint Right
+);

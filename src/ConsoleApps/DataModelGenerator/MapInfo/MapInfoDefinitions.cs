@@ -1,5 +1,5 @@
 // Copyright (c) 2016, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Immutable;
 using System.Linq;
@@ -14,7 +14,8 @@ namespace Tiledriver.DataModelGenerator.MapInfo
         {
             // AUTOMAP
 
-            new NormalBlock("autoMap",
+            new NormalBlock(
+                "autoMap",
                 Metadata: ImmutableArray<Property>.Empty,
                 Properties: new Property[]
                 {
@@ -24,22 +25,24 @@ namespace Tiledriver.DataModelGenerator.MapInfo
                     new StringProperty(formatName: "fontColor", name: "FontColor"),
                     new StringProperty(formatName: "wallColor", name: "WallColor"),
                     new StringProperty(formatName: "yourColor", name: "YourColor"),
-                }.ToImmutableArray()),
-
+                }.ToImmutableArray()
+            ),
             // CLUSTER
 
-            new NormalBlock("cluster",
+            new NormalBlock(
+                "cluster",
                 Metadata: ImmutableArray<Property>.Empty.Add(new IntegerProperty("id")),
                 Properties: new Property[]
                 {
                     new BlockProperty("exitText", propertyType: "ClusterExitText"),
                     new FlagProperty("exitTextIsLump"),
                     new FlagProperty("exitTextIsMessage"),
-                }.ToImmutableArray()),
-
+                }.ToImmutableArray()
+            ),
             // EPISODE
 
-            new NormalBlock("episode",
+            new NormalBlock(
+                "episode",
                 Metadata: ImmutableArray.Create<Property>().Add(new StringProperty("map")),
                 Properties: new Property[]
                 {
@@ -50,11 +53,12 @@ namespace Tiledriver.DataModelGenerator.MapInfo
                     new FlagProperty("optional"),
                     new StringProperty("picName"),
                     new FlagProperty("remove"),
-                }.ToImmutableArray()),
-
+                }.ToImmutableArray()
+            ),
             // GAMEINFO
 
-            new NormalBlock("gameInfo",
+            new NormalBlock(
+                "gameInfo",
                 Metadata: ImmutableArray<Property>.Empty,
                 Properties: new Property[]
                 {
@@ -79,11 +83,15 @@ namespace Tiledriver.DataModelGenerator.MapInfo
                     new StringProperty("menuFade"),
                     new StringProperty(formatName: "menufontcolor_disabled", name: "menuFontColorDisabled"),
                     new StringProperty(formatName: "menufontcolor_highlight", name: "menuFontColorHighlight"),
-                    new StringProperty(formatName: "menufontcolor_highlightselection",
-                        name: "menuFontColorHighlightSelection"),
+                    new StringProperty(
+                        formatName: "menufontcolor_highlightselection",
+                        name: "menuFontColorHighlightSelection"
+                    ),
                     new StringProperty(formatName: "menufontcolor_invalid", name: "menuFontColorInvalid"),
-                    new StringProperty(formatName: "menufontcolor_invalidselection",
-                        name: "menuFontColorInvalidSelection"),
+                    new StringProperty(
+                        formatName: "menufontcolor_invalidselection",
+                        name: "menuFontColorInvalidSelection"
+                    ),
                     new StringProperty(formatName: "menufontcolor_label", name: "menuFontColorLabel"),
                     new StringProperty(formatName: "menufontcolor_selection", name: "menuFontColorSelection"),
                     new StringProperty(formatName: "menufontcolor_title", name: "menuFontColorTitle"),
@@ -106,9 +114,10 @@ namespace Tiledriver.DataModelGenerator.MapInfo
                     new StringProperty("translator"),
                     new StringProperty("victoryMusic"),
                     new StringProperty("victoryPic"),
-                }.ToImmutableArray()),
-
-            new NormalBlock("MenuColors",
+                }.ToImmutableArray()
+            ),
+            new NormalBlock(
+                "MenuColors",
                 Metadata: ImmutableArray<Property>.Empty,
                 Serialization: SerializationType.OrderedProperties,
                 Properties: new Property[]
@@ -119,9 +128,10 @@ namespace Tiledriver.DataModelGenerator.MapInfo
                     new StringProperty("background"),
                     new StringProperty("stripe"),
                     new StringProperty("stripeBg"),
-                }.ToImmutableArray()),
-
-            new NormalBlock("MenuWindowColors",
+                }.ToImmutableArray()
+            ),
+            new NormalBlock(
+                "MenuWindowColors",
                 Metadata: ImmutableArray<Property>.Empty,
                 Serialization: SerializationType.OrderedProperties,
                 Properties: new Property[]
@@ -132,9 +142,10 @@ namespace Tiledriver.DataModelGenerator.MapInfo
                     new StringProperty("indexBackground"),
                     new StringProperty("indexTop"),
                     new StringProperty("indexBottom"),
-                }.ToImmutableArray()),
-
-            new NormalBlock("MessageColors",
+                }.ToImmutableArray()
+            ),
+            new NormalBlock(
+                "MessageColors",
                 Serialization: SerializationType.OrderedProperties,
                 Metadata: ImmutableArray<Property>.Empty,
                 Properties: new Property[]
@@ -142,19 +153,21 @@ namespace Tiledriver.DataModelGenerator.MapInfo
                     new StringProperty("background"),
                     new StringProperty("top"),
                     new StringProperty("bottom"),
-                }.ToImmutableArray()),
-
+                }.ToImmutableArray()
+            ),
             // INTERMISSION
 
-            new NormalBlock("intermission",
+            new NormalBlock(
+                "intermission",
                 Serialization: SerializationType.Custom,
                 Metadata: ImmutableArray<Property>.Empty.Add(new StringProperty("name")),
                 Properties: new Property[]
                 {
                     new ArrayProperty("intermissionActions", elementType: "IIntermissionAction"),
-                }.ToImmutableArray()),
-
-            new NormalBlock("IntermissionDraw",
+                }.ToImmutableArray()
+            ),
+            new NormalBlock(
+                "IntermissionDraw",
                 Serialization: SerializationType.OrderedProperties,
                 Metadata: ImmutableArray<Property>.Empty,
                 Properties: new Property[]
@@ -162,9 +175,10 @@ namespace Tiledriver.DataModelGenerator.MapInfo
                     new StringProperty("texture"),
                     new IntegerProperty("x"),
                     new IntegerProperty("y"),
-                }.ToImmutableArray()),
-
-            new AbstractBlock("BaseIntermissionAction",
+                }.ToImmutableArray()
+            ),
+            new AbstractBlock(
+                "BaseIntermissionAction",
                 Metadata: ImmutableArray<Property>.Empty,
                 Properties: new Property[]
                 {
@@ -172,33 +186,35 @@ namespace Tiledriver.DataModelGenerator.MapInfo
                     new BlockProperty("draw", propertyType: "IntermissionDraw"),
                     new StringProperty("music"),
                     new DoubleProperty("time"),
-                }.ToImmutableArray()),
-
-            new InheritedBlock("Fader",
-                getBaseClass: ()=>Blocks.OfType<AbstractBlock>().Single(b=>b.ClassName == "BaseIntermissionAction"),
+                }.ToImmutableArray()
+            ),
+            new InheritedBlock(
+                "Fader",
+                getBaseClass: () => Blocks.OfType<AbstractBlock>().Single(b => b.ClassName == "BaseIntermissionAction"),
                 metadata: ImmutableArray<Property>.Empty,
-                properties: new Property[]
-                {
-                    new IdentifierProperty("fadeType"),
-                }),
-
-            new NormalBlock("GoToTitile",
+                properties: new Property[] { new IdentifierProperty("fadeType"), }
+            ),
+            new NormalBlock(
+                "GoToTitile",
                 Serialization: SerializationType.Normal,
                 Metadata: ImmutableArray<Property>.Empty,
-                Properties: ImmutableArray<Property>.Empty),
-
-            new InheritedBlock("Image",
-                getBaseClass: ()=>Blocks.OfType<AbstractBlock>().Single(b=>b.ClassName == "BaseIntermissionAction"),
+                Properties: ImmutableArray<Property>.Empty
+            ),
+            new InheritedBlock(
+                "Image",
+                getBaseClass: () => Blocks.OfType<AbstractBlock>().Single(b => b.ClassName == "BaseIntermissionAction"),
                 metadata: ImmutableArray<Property>.Empty,
-                properties: ImmutableArray<Property>.Empty),
-
-            new InheritedBlock("TextScreen",
-                getBaseClass: ()=>Blocks.OfType<AbstractBlock>().Single(b=>b.ClassName == "BaseIntermissionAction"),
+                properties: ImmutableArray<Property>.Empty
+            ),
+            new InheritedBlock(
+                "TextScreen",
+                getBaseClass: () => Blocks.OfType<AbstractBlock>().Single(b => b.ClassName == "BaseIntermissionAction"),
                 metadata: ImmutableArray<Property>.Empty,
-                properties: ImmutableArray<Property>.Empty),
-
-            new InheritedBlock("TextScreen",
-                getBaseClass: ()=>Blocks.OfType<AbstractBlock>().Single(b=>b.ClassName == "BaseIntermissionAction"),
+                properties: ImmutableArray<Property>.Empty
+            ),
+            new InheritedBlock(
+                "TextScreen",
+                getBaseClass: () => Blocks.OfType<AbstractBlock>().Single(b => b.ClassName == "BaseIntermissionAction"),
                 metadata: ImmutableArray<Property>.Empty,
                 properties: new Property[]
                 {
@@ -209,18 +225,16 @@ namespace Tiledriver.DataModelGenerator.MapInfo
                     new DoubleProperty("textDelay"),
                     new IntegerProperty("textSpeed"),
                     new BlockProperty("position", propertyType: "TextScreenPosition"),
-                }.ToImmutableArray()),
-
-            new NormalBlock("TextScreenPosition",
+                }.ToImmutableArray()
+            ),
+            new NormalBlock(
+                "TextScreenPosition",
                 Serialization: SerializationType.OrderedProperties,
                 Metadata: ImmutableArray<Property>.Empty,
-                Properties: new Property[]
-                {
-                    new IntegerProperty("x"),
-                    new IntegerProperty("y"),
-                }.ToImmutableArray()),
-
-            new NormalBlock("VictoryStats",
+                Properties: new Property[] { new IntegerProperty("x"), new IntegerProperty("y"), }.ToImmutableArray()
+            ),
+            new NormalBlock(
+                "VictoryStats",
                 Serialization: SerializationType.Normal,
                 Metadata: ImmutableArray<Property>.Empty,
                 Properties: new Property[]
@@ -229,76 +243,81 @@ namespace Tiledriver.DataModelGenerator.MapInfo
                     new BlockProperty("draw", propertyType: "IntermissionDraw"),
                     new StringProperty("music"),
                     new DoubleProperty("time"),
-                }.ToImmutableArray()),
-
+                }.ToImmutableArray()
+            ),
             // MAP
 
-            new AbstractBlock("BaseMap",
+            new AbstractBlock(
+                "BaseMap",
                 Metadata: ImmutableArray<Property>.Empty,
                 Properties: new Property[]
                 {
-                    new StringProperty("borderTexture", isNullable:true),
-                    new IntegerProperty("cluster", isNullable:true),
-                    new StringProperty("completionString", isNullable:true),
-                    new BooleanProperty("deathCam", isNullable:true),
-                    new StringProperty("defaultCeiling", isNullable:true),
-                    new StringProperty("defaultFloor", isNullable:true),
+                    new StringProperty("borderTexture", isNullable: true),
+                    new IntegerProperty("cluster", isNullable: true),
+                    new StringProperty("completionString", isNullable: true),
+                    new BooleanProperty("deathCam", isNullable: true),
+                    new StringProperty("defaultCeiling", isNullable: true),
+                    new StringProperty("defaultFloor", isNullable: true),
                     new ArrayProperty("ensureInventory", elementType: "string"),
-                    new BlockProperty("exitFade", propertyType: "ExitFadeInfo", isNullable:true),
-                    new IntegerProperty("floorNumber", isNullable:true),
-                    new StringProperty("highScoresGraphic", isNullable:true),
-                    new IntegerProperty("levelBonus", isNullable:true),
-                    new IntegerProperty("levelNum", isNullable:true),
-                    new StringProperty("music", isNullable:true),
-                    new FlagProperty("spawnWithWeaponRaised", isNullable:true),
-                    new BooleanProperty("secretDeathSounds", isNullable:true),
-                    new BlockProperty("next", propertyType: "NextMapInfo", isNullable:true),
-                    new BlockProperty("secretNext", "NextMapInfo", isNullable:true),
-                    new BlockProperty("victoryNext", propertyType: "NextMapInfo", isNullable:true),
+                    new BlockProperty("exitFade", propertyType: "ExitFadeInfo", isNullable: true),
+                    new IntegerProperty("floorNumber", isNullable: true),
+                    new StringProperty("highScoresGraphic", isNullable: true),
+                    new IntegerProperty("levelBonus", isNullable: true),
+                    new IntegerProperty("levelNum", isNullable: true),
+                    new StringProperty("music", isNullable: true),
+                    new FlagProperty("spawnWithWeaponRaised", isNullable: true),
+                    new BooleanProperty("secretDeathSounds", isNullable: true),
+                    new BlockProperty("next", propertyType: "NextMapInfo", isNullable: true),
+                    new BlockProperty("secretNext", "NextMapInfo", isNullable: true),
+                    new BlockProperty("victoryNext", propertyType: "NextMapInfo", isNullable: true),
                     new ArrayProperty("SpecialActions", elementType: "SpecialAction"),
-                    new FlagProperty("noIntermission",isNullable:true),
-                    new IntegerProperty("par", isNullable:true),
-                    new StringProperty("translator", isNullable:true),
-                }.ToImmutableArray()),
-
-            new InheritedBlock("defaultMap",
-                getBaseClass: ()=>Blocks.OfType<AbstractBlock>().Single(b=>b.ClassName == "BaseMap"),
+                    new FlagProperty("noIntermission", isNullable: true),
+                    new IntegerProperty("par", isNullable: true),
+                    new StringProperty("translator", isNullable: true),
+                }.ToImmutableArray()
+            ),
+            new InheritedBlock(
+                "defaultMap",
+                getBaseClass: () => Blocks.OfType<AbstractBlock>().Single(b => b.ClassName == "BaseMap"),
                 metadata: ImmutableArray<Property>.Empty,
-                properties: ImmutableArray<Property>.Empty),
-
-            new InheritedBlock("addDefaultMap",
-                getBaseClass: ()=>Blocks.OfType<AbstractBlock>().Single(b=>b.ClassName == "BaseMap"),
+                properties: ImmutableArray<Property>.Empty
+            ),
+            new InheritedBlock(
+                "addDefaultMap",
+                getBaseClass: () => Blocks.OfType<AbstractBlock>().Single(b => b.ClassName == "BaseMap"),
                 metadata: ImmutableArray<Property>.Empty,
-                properties: ImmutableArray<Property>.Empty),
-
-            new InheritedBlock("map",
-                getBaseClass: ()=>Blocks.OfType<AbstractBlock>().Single(b=>b.ClassName == "BaseMap"),
+                properties: ImmutableArray<Property>.Empty
+            ),
+            new InheritedBlock(
+                "map",
+                getBaseClass: () => Blocks.OfType<AbstractBlock>().Single(b => b.ClassName == "BaseMap"),
                 metadata: new Property[]
                 {
                     new StringProperty("mapLump"),
-                    new StringProperty("mapName", isNullable:true),
-                    new BooleanProperty("isMapNameLookup", defaultValue:false),
+                    new StringProperty("mapName", isNullable: true),
+                    new BooleanProperty("isMapNameLookup", defaultValue: false),
                 }.ToImmutableArray(),
-                properties: ImmutableArray<Property>.Empty),
-
-
-            new NormalBlock("specialAction",
+                properties: ImmutableArray<Property>.Empty
+            ),
+            new NormalBlock(
+                "specialAction",
                 Serialization: SerializationType.Custom,
                 Metadata: ImmutableArray<Property>.Empty,
                 Properties: new Property[]
                 {
                     new StringProperty(formatName: "actorclass", name: "actorClass"),
                     new StringProperty("special"),
-                    new IntegerProperty("arg0", defaultValue:0),
-                    new IntegerProperty("arg1", defaultValue:0),
-                    new IntegerProperty("arg2", defaultValue:0),
-                    new IntegerProperty("arg3", defaultValue:0),
-                    new IntegerProperty("arg4", defaultValue:0),
-                }.ToImmutableArray()),
-
+                    new IntegerProperty("arg0", defaultValue: 0),
+                    new IntegerProperty("arg1", defaultValue: 0),
+                    new IntegerProperty("arg2", defaultValue: 0),
+                    new IntegerProperty("arg3", defaultValue: 0),
+                    new IntegerProperty("arg4", defaultValue: 0),
+                }.ToImmutableArray()
+            ),
             // SKILL
 
-            new NormalBlock("skill",
+            new NormalBlock(
+                "skill",
                 Serialization: SerializationType.Normal,
                 Metadata: ImmutableArray<Property>.Empty.Add(new IdentifierProperty("id")),
                 Properties: new Property[]
@@ -314,8 +333,8 @@ namespace Tiledriver.DataModelGenerator.MapInfo
                     new BooleanProperty("quizHints"),
                     new DoubleProperty("scoreMultiplier"),
                     new IntegerProperty("spawnFilter"),
-                }.ToImmutableArray()),
-
+                }.ToImmutableArray()
+            ),
         }.ToImmutableArray();
     }
 }

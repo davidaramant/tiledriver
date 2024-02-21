@@ -1,5 +1,5 @@
 // Copyright (c) 2016, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Collections.Immutable;
@@ -52,7 +52,8 @@ namespace Tiledriver.Core.FormatModels.GameMaps
                 name: header.Name,
                 width: header.Width,
                 height: header.Height,
-                planes: new[] { plane0Data, plane1Data, plane2Data });
+                planes: new[] { plane0Data, plane1Data, plane2Data }
+            );
         }
 
         private void LoadPlane(ushort[] planeData, PlaneMetadata planeInfo, Stream mapsStream)

@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using Moq;
 using Tiledriver.Core.FormatModels;
@@ -21,9 +21,7 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfo.Reading
         public void ShouldParseWolf3DMapInfo()
         {
             var mockProvider = new Mock<IResourceProvider>();
-            mockProvider
-                .Setup(_ => _.Lookup("mapinfo/wolfcommon.txt"))
-                .Returns(TestFile.MapInfo.wolfcommon);
+            mockProvider.Setup(_ => _.Lookup("mapinfo/wolfcommon.txt")).Returns(TestFile.MapInfo.wolfcommon);
 
             using var stream = TestFile.MapInfo.wolf3d;
 
@@ -34,9 +32,7 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfo.Reading
         public void ShouldParseSpearMapInfo()
         {
             var mockProvider = new Mock<IResourceProvider>();
-            mockProvider
-                .Setup(_ => _.Lookup("mapinfo/wolfcommon.txt"))
-                .Returns(TestFile.MapInfo.wolfcommon);
+            mockProvider.Setup(_ => _.Lookup("mapinfo/wolfcommon.txt")).Returns(TestFile.MapInfo.wolfcommon);
 
             using var stream = TestFile.MapInfo.spear;
 

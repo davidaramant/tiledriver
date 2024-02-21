@@ -32,7 +32,12 @@ namespace Tiledriver.Core.FormatModels.Textures.Writing
                 .OpenBrace()
                 .OptionalLine("XScale", texture.XScale, 1)
                 .OptionalLine("YScale", texture.YScale, 1)
-                .OptionalLine(nameof(texture.Offset), texture.Offset, new TextureOffset(), offset => $"{offset.Horizontal}, {offset.Vertical}")
+                .OptionalLine(
+                    nameof(texture.Offset),
+                    texture.Offset,
+                    new TextureOffset(),
+                    offset => $"{offset.Horizontal}, {offset.Vertical}"
+                )
                 .Flag(nameof(texture.WorldPanning), texture.WorldPanning)
                 .Flag(nameof(texture.NoDecals), texture.NoDecals);
 
@@ -55,18 +60,24 @@ namespace Tiledriver.Core.FormatModels.Textures.Writing
                     .Flag(nameof(patch.FlipX), patch.FlipX)
                     .Flag(nameof(patch.FlipY), patch.FlipY)
                     .Flag(nameof(patch.UseOffsets), patch.UseOffsets)
-                    .OptionalLine(nameof(patch.Rotate), patch.Rotate, PatchRotation.None, rotation => ((int)rotation).ToString())
-                    .OptionalLine(nameof(patch.Translation), patch.Translation,  FormatTranslation)
-                    .OptionalLine(nameof(patch.Blend), patch.Blend,
-                        blend => "\"" + blend.Color + "\"" + (blend.Alpha.HasValue ? $", {blend.Alpha}" : string.Empty))
+                    .OptionalLine(
+                        nameof(patch.Rotate),
+                        patch.Rotate,
+                        PatchRotation.None,
+                        rotation => ((int)rotation).ToString()
+                    )
+                    .OptionalLine(nameof(patch.Translation), patch.Translation, FormatTranslation)
+                    .OptionalLine(
+                        nameof(patch.Blend),
+                        patch.Blend,
+                        blend => "\"" + blend.Color + "\"" + (blend.Alpha.HasValue ? $", {blend.Alpha}" : string.Empty)
+                    )
                     .OptionalLine(nameof(patch.Alpha), patch.Alpha, 1)
                     .OptionalLine(nameof(patch.Style), patch.Style, RenderStyle.Copy, style => style.ToString())
                     .CloseBrace();
             }
 
-            output
-                .CloseBrace()
-                .WriteTo(writer);
+            output.CloseBrace().WriteTo(writer);
         }
 
         private sealed class WriterUtil
@@ -77,9 +88,7 @@ namespace Tiledriver.Core.FormatModels.Textures.Writing
 
             private string Indentation { get; } = "";
 
-            public WriterUtil()
-            {
-            }
+            public WriterUtil() { }
 
             private WriterUtil(WriterUtil parent)
             {
@@ -133,7 +142,8 @@ namespace Tiledriver.Core.FormatModels.Textures.Writing
                 return this;
             }
 
-            public WriterUtil OptionalLine<T>(string name, T? value, Func<T, string> formatter) where T: class
+            public WriterUtil OptionalLine<T>(string name, T? value, Func<T, string> formatter)
+                where T : class
             {
                 if (value != null)
                 {

@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.IO;
@@ -25,9 +25,10 @@ namespace Tiledriver.Core.Tests.FormatModels.Common.Reading
             };
 
             var stream = new TokenSource(
-                tokens, 
+                tokens,
                 Mock.Of<IResourceProvider>(),
-                reader => throw new Exception("Shouldn't be called"));
+                reader => throw new Exception("Shouldn't be called")
+            );
 
             var actualTokens = stream.ToArray();
 
@@ -55,20 +56,21 @@ namespace Tiledriver.Core.Tests.FormatModels.Common.Reading
             var mockProvider = new Mock<IResourceProvider>();
             mockProvider.Setup(_ => _.Lookup("otherFile")).Returns(otherFileStream);
 
-            var stream = new TokenSource(
-                firstFileTokens, 
-                mockProvider.Object,
-                reader => new UnifiedLexer(reader));
+            var stream = new TokenSource(firstFileTokens, mockProvider.Object, reader => new UnifiedLexer(reader));
 
             var actualTokens = stream.ToArray();
 
-            actualTokens.Should().BeEquivalentTo(new Token[]
-            {
-                new IdentifierToken(FilePosition.StartOfFile, "otherId1"),
-                new IdentifierToken(new FilePosition(1,10), "otherId2"),
-                new IdentifierToken(FilePosition.StartOfFile, "id1"),
-                new IdentifierToken(FilePosition.StartOfFile, "id2")
-            });
+            actualTokens
+                .Should()
+                .BeEquivalentTo(
+                    new Token[]
+                    {
+                        new IdentifierToken(FilePosition.StartOfFile, "otherId1"),
+                        new IdentifierToken(new FilePosition(1, 10), "otherId2"),
+                        new IdentifierToken(FilePosition.StartOfFile, "id1"),
+                        new IdentifierToken(FilePosition.StartOfFile, "id2")
+                    }
+                );
         }
     }
 }

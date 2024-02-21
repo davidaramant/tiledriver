@@ -1,12 +1,11 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 
 namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 
-public sealed record SectorDescription(
-   int HeightLevel) : IComparable<SectorDescription>
+public sealed record SectorDescription(int HeightLevel) : IComparable<SectorDescription>
 {
     public static readonly SectorDescription OutsideLevel = new(-1);
     public bool IsOutsideLevel => this == OutsideLevel;

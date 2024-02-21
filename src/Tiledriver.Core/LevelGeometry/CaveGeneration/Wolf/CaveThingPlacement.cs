@@ -18,7 +18,8 @@ public static class CaveThingPlacement
         Random random,
         LightRange lightRange,
         double percentAreaToCover,
-        bool varyHeight = false)
+        bool varyHeight = false
+    )
     {
         var numLights = (int)(validPositions.Count * percentAreaToCover);
 
@@ -33,8 +34,7 @@ public static class CaveThingPlacement
                     var posIndex = random.Next(0, validPositions.Count);
                     var position = validPositions[posIndex];
 
-                    var positionIsInvalid =
-                        positions.Any(p => p.Touches(position));
+                    var positionIsInvalid = positions.Any(p => p.Touches(position));
 
                     if (positionIsInvalid)
                         continue;
@@ -45,7 +45,12 @@ public static class CaveThingPlacement
                         position,
                         Brightness: lightRange.DarkLevels,
                         Radius: 10,
-                        Height: varyHeight ? random.Next(2) == 0 ? LightHeight.Ceiling : LightHeight.Floor : LightHeight.Middle);
+                        Height: varyHeight
+                            ? random.Next(2) == 0
+                                ? LightHeight.Ceiling
+                                : LightHeight.Floor
+                            : LightHeight.Middle
+                    );
                 }
             });
     }
@@ -55,17 +60,21 @@ public static class CaveThingPlacement
         IEnumerable<Position> edge,
         LightMap floorLighting,
         LightRange lightRange,
-        Random random)
+        Random random
+    )
     {
         var maxScore = 3 * lightRange.DarkLevels;
         var cutOff = (int)(0.5 * maxScore);
 
-        var scoredLocations = edge
-                .Select(p => new { Location = p, Score = area.CountAdjacentWalls(p) * -floorLighting[p] })
-                .OrderBy(scoredLocation => scoredLocation.Score)
-                .Where(scoredLocation => scoredLocation.Score >= cutOff)
-                .OrderBy(sl => random.Next())
-                .ToArray();
+        var scoredLocations = edge.Select(p => new
+            {
+                Location = p,
+                Score = area.CountAdjacentWalls(p) * -floorLighting[p]
+            })
+            .OrderBy(scoredLocation => scoredLocation.Score)
+            .Where(scoredLocation => scoredLocation.Score >= cutOff)
+            .OrderBy(sl => random.Next())
+            .ToArray();
 
         var numberToTake = scoredLocations.Length / 2;
 

@@ -51,25 +51,18 @@ namespace Tiledriver.Core.DemoMaps.Wolf3D
                         BlockingSouth: true,
                         BlockingWest: true,
                         BlockingEast: true
-                    )),
+                    )
+                ),
                 Sectors: ImmutableArray.Create(
-                    new Sector(
-                        TextureCeiling: "#C0C0C0",
-                        TextureFloor: "#A0A0A0"
-                    ),
-                    new Sector(
-                        TextureCeiling: "#00FF00",
-                        TextureFloor: "#00FF00",
-                        Comment: "Good thing"
-                    ),
-                    new Sector(
-                        TextureCeiling: "#FF0000",
-                        TextureFloor: "#FF0000",
-                        Comment: "Invalid thing"
-                    )),
+                    new Sector(TextureCeiling: "#C0C0C0", TextureFloor: "#A0A0A0"),
+                    new Sector(TextureCeiling: "#00FF00", TextureFloor: "#00FF00", Comment: "Good thing"),
+                    new Sector(TextureCeiling: "#FF0000", TextureFloor: "#FF0000", Comment: "Invalid thing")
+                ),
                 Zones: ImmutableArray.Create(new Zone()),
                 Planes: ImmutableArray.Create(new Plane(Depth: 64)),
-                PlaneMaps: ImmutableArray.Create(CreateGeometry(width: width, height: height, things).ToImmutableArray()),
+                PlaneMaps: ImmutableArray.Create(
+                    CreateGeometry(width: width, height: height, things).ToImmutableArray()
+                ),
                 Things: things.Add(
                     new Thing(
                         Type: Actor.Player1Start.ClassName,
@@ -81,7 +74,9 @@ namespace Tiledriver.Core.DemoMaps.Wolf3D
                         Skill1: true,
                         Skill2: true,
                         Skill3: true,
-                        Skill4: true)),
+                        Skill4: true
+                    )
+                ),
                 Triggers: ImmutableArray.Create(
                     new Trigger(
                         X: 2,
@@ -102,14 +97,15 @@ namespace Tiledriver.Core.DemoMaps.Wolf3D
                         PlayerCross: false,
                         Repeatable: true,
                         Secret: false
-                    ))
+                    )
+                )
             );
         }
 
         private static IEnumerable<Thing> GenerateThings()
         {
-            var indexedActorGroups =
-                Actor.GetAll()
+            var indexedActorGroups = Actor
+                .GetAll()
                 .Where(a => a.ActorCategory != ActorCategory.Special)
                 .GroupBy(a => a.ActorCategory)
                 .Select((group, index) => new { group, index });
@@ -118,23 +114,26 @@ namespace Tiledriver.Core.DemoMaps.Wolf3D
         }
 
         private static IEnumerable<Thing> GenerateThings(IEnumerable<Actor> actors, int thingColumn) =>
-            actors.Select((actor, actorIndex) =>
-            {
-                var x = HorizontalBuffer + (2 * thingColumn);
-                var y = VerticalBuffer + actorIndex;
+            actors.Select(
+                (actor, actorIndex) =>
+                {
+                    var x = HorizontalBuffer + (2 * thingColumn);
+                    var y = VerticalBuffer + actorIndex;
 
-                return new Thing(
-                    Type: actor.ClassName,
-                    X: x + 0.5,
-                    Y: y + 0.5,
-                    Z: 0,
-                    Angle: 0,
-                    Skill1: true,
-                    Skill2: true,
-                    Skill3: true,
-                    Skill4: true,
-                    Ambush: true);
-            });
+                    return new Thing(
+                        Type: actor.ClassName,
+                        X: x + 0.5,
+                        Y: y + 0.5,
+                        Z: 0,
+                        Angle: 0,
+                        Skill1: true,
+                        Skill2: true,
+                        Skill3: true,
+                        Skill4: true,
+                        Ambush: true
+                    );
+                }
+            );
 
         private static IEnumerable<MapSquare> CreateGeometry(int width, int height, IEnumerable<Thing> things)
         {
@@ -142,10 +141,9 @@ namespace Tiledriver.Core.DemoMaps.Wolf3D
 
             var size = new Size(width, height);
 
-            var board =
-                new Canvas(size)
-                    .FillRectangle(size.ToRectangle(), tile: -1)
-                    .OutlineRectangle(size.ToRectangle(), tile: 0);
+            var board = new Canvas(size)
+                .FillRectangle(size.ToRectangle(), tile: -1)
+                .OutlineRectangle(size.ToRectangle(), tile: 0);
 
             // Make the starting nook
             board[new Position(2, 1)] = new MapSquare(Tile: 1, Sector: 0, Zone: 0, Tag: 1);

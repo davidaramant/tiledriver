@@ -16,5 +16,6 @@ namespace Tiledriver.Core.FormatModels.Textures
         double XScale = 1,
         double YScale = 1,
         bool WorldPanning = false,
-        bool NoDecals = false);
+        bool NoDecals = false
+    );
 }

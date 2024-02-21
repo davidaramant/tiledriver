@@ -2,10 +2,10 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
-using FluentAssertions;
 using System.IO;
 using System.Linq;
 using System.Text;
+using FluentAssertions;
 using Tiledriver.Core.DemoMaps.Wolf3D;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Common.Reading;
@@ -108,7 +108,10 @@ namespace Tiledriver.Core.Tests.FormatModels.Common.Reading
         [Fact]
         public void ShouldLexNewLines()
         {
-            var tokens = Scan("blockName\n{\n}\n", createLexer: reader => new UnifiedLexer(reader, reportNewlines: true));
+            var tokens = Scan(
+                "blockName\n{\n}\n",
+                createLexer: reader => new UnifiedLexer(reader, reportNewlines: true)
+            );
             tokens.Should().HaveCount(6);
             tokens[0].Should().BeOfType<IdentifierToken>();
             tokens[1].Should().BeOfType<NewLineToken>();

@@ -16,7 +16,8 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
         Position Center,
         int Brightness,
         int Radius,
-        LightHeight Height = LightHeight.Middle)
+        LightHeight Height = LightHeight.Middle
+    )
     {
         /// <summary>
         /// The 1D measure of how many tiles are affected by this light.

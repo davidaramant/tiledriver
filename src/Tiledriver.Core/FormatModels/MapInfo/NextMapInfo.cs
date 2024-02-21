@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 namespace Tiledriver.Core.FormatModels.MapInfo
 {
@@ -13,8 +13,9 @@ namespace Tiledriver.Core.FormatModels.MapInfo
             Destination = destination;
             IsEndSequence = isEndSequence;
         }
-        
+
         public static NextMapInfo Map(string mapName) => new(mapName, false);
+
         public static NextMapInfo EndSequence(string sequenceName) => new(sequenceName, true);
     }
 }

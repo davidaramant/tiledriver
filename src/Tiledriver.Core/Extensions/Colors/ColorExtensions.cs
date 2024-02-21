@@ -15,7 +15,7 @@ namespace Tiledriver.Core.Extensions.Colors
         public static SKColor ToSKColor(this (double h, double s, double l) hsl)
         {
             var (r, g, b) = Hsluv.HslToRgb(hsl);
-            return new SKColor((byte) (r * 255), (byte) (g * 255), (byte) (b * 255));
+            return new SKColor((byte)(r * 255), (byte)(g * 255), (byte)(b * 255));
         }
 
         public static SKColor ToColor(this HslColor hsl) => hsl.ToTuple().ToSKColor();

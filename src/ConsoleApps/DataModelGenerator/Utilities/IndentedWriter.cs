@@ -11,6 +11,7 @@ namespace Tiledriver.DataModelGenerator.Utilities
     public sealed class IndentedWriter : IDisposable
     {
         private readonly StreamWriter _writer;
+
         public IndentedWriter(StreamWriter writer) => _writer = writer;
 
         public int IndentionLevel { get; private set; }
@@ -19,10 +20,13 @@ namespace Tiledriver.DataModelGenerator.Utilities
         public IndentedWriter WriteHeader(
             string nameSpace,
             IEnumerable<string> usingNamespaces,
-            bool enableNullables = false)
+            bool enableNullables = false
+        )
         {
-            Line($@"// Copyright (c) {DateTime.Today.Year}, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.");
+            Line(
+                $@"// Copyright (c) {DateTime.Today.Year}, David Aramant
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE."
+            );
             Line();
 
             foreach (var usingNamespace in usingNamespaces.OrderBy(text => text))
@@ -57,6 +61,7 @@ namespace Tiledriver.DataModelGenerator.Utilities
         }
 
         public IndentedWriter OpenParen() => Line("{").IncreaseIndent();
+
         public IndentedWriter CloseParen() => DecreaseIndent().Line("}");
 
         public IndentedWriter Line(string line)

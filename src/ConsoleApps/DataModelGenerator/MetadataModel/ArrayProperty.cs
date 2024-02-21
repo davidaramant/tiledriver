@@ -5,7 +5,8 @@ namespace Tiledriver.DataModelGenerator.MetadataModel
 {
     sealed class ArrayProperty : CollectionProperty
     {
-        public ArrayProperty(string name, string elementType) : base(name)
+        public ArrayProperty(string name, string elementType)
+            : base(name)
         {
             ElementType = elementType;
         }

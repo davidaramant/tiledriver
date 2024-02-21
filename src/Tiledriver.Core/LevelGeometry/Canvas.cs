@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Collections.Generic;
@@ -77,7 +77,7 @@ namespace Tiledriver.Core.LevelGeometry
 
         public ICanvas Set(int x, int y, int? tile = null, int? sector = null, int? zone = null, int? tag = null)
         {
-            var startIndex = GetIndex(x,y);
+            var startIndex = GetIndex(x, y);
 
             if (tile != null)
             {

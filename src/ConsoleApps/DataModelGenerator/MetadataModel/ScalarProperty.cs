@@ -13,7 +13,8 @@ namespace Tiledriver.DataModelGenerator.MetadataModel
         public bool IsNullable { get; }
         public string BasePropertyType { get; }
 
-        protected ScalarProperty(string name, string type, bool isNullable, string? defaultString) : base(name)
+        protected ScalarProperty(string name, string type, bool isNullable, string? defaultString)
+            : base(name)
         {
             BasePropertyType = type;
             PropertyType = type + (isNullable ? "?" : string.Empty);

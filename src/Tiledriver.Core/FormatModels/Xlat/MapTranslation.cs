@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Generic;
 
@@ -14,7 +14,8 @@ namespace Tiledriver.Core.FormatModels.Xlat
         public MapTranslation(
             TileMappings tileMappings,
             IEnumerable<IMapping> thingMappings,
-            FlatMappings? flatMappings)
+            FlatMappings? flatMappings
+        )
         {
             TileMappings = tileMappings;
             FlatMappings = flatMappings;

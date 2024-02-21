@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2017, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.IO;
 
@@ -7,11 +7,7 @@ namespace Tiledriver.Core.FormatModels.Wdc31
 {
     public sealed class Header
     {
-        public Header(
-            string fileVersion,
-            int numberOfMaps,
-            ushort numberOfMapPlanes,
-            ushort maxMapNameLength)
+        public Header(string fileVersion, int numberOfMaps, ushort numberOfMapPlanes, ushort maxMapNameLength)
         {
             FileVersion = fileVersion;
             NumberOfMaps = numberOfMaps;
@@ -30,7 +26,8 @@ namespace Tiledriver.Core.FormatModels.Wdc31
                 fileVersion: new string(reader.ReadChars(6)),
                 numberOfMaps: reader.ReadInt32(),
                 numberOfMapPlanes: reader.ReadUInt16(),
-                maxMapNameLength: reader.ReadUInt16());
+                maxMapNameLength: reader.ReadUInt16()
+            );
         }
     }
 }

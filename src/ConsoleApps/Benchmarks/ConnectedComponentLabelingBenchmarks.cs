@@ -20,18 +20,18 @@ namespace Benchmarks
         public void Setup()
         {
             var random = new Random(Seed);
-            _board =
-                new CellBoard(_dimensions)
-                    .Fill(random, probabilityAlive: 0.6)
-                    .MakeBorderAlive(thickness: 3)
-                    .RunGenerations(6);
+            _board = new CellBoard(_dimensions)
+                .Fill(random, probabilityAlive: 0.6)
+                .MakeBorderAlive(thickness: 3)
+                .RunGenerations(6);
         }
 
         [Benchmark]
         public int Baseline()
         {
             return ConnectedAreaAnalyzer
-                .FindForegroundAreas(_board.Dimensions, p => _board[p] == CellType.Dead).Count();
+                .FindForegroundAreas(_board.Dimensions, p => _board[p] == CellType.Dead)
+                .Count();
         }
 
         //[Benchmark]

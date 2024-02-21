@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Collections.Generic;
@@ -43,11 +43,11 @@ foreach (var definition in tileDefinitions)
         tileCanvas.DrawBitmap(
             tileSheet,
             SKRect.Create(definition.X, definition.Y, tilesetDefinition.Width, tilesetDefinition.Height),
-            SKRect.Create(0, 0, tilesetDefinition.Width, tilesetDefinition.Height));
+            SKRect.Create(0, 0, tilesetDefinition.Width, tilesetDefinition.Height)
+        );
     }
 
-    using var tileStream =
-        File.Open(Path.Combine(outputDirectory, definition.GetFileName()), FileMode.Create);
+    using var tileStream = File.Open(Path.Combine(outputDirectory, definition.GetFileName()), FileMode.Create);
     tile.Encode(tileStream, SKEncodedImageFormat.Png, quality: 100);
 }
 
@@ -68,8 +68,6 @@ static T Deserialize<T>(string filePath)
     // TODO: Is there seriously no better way to read from a file?
     var serialized = File.ReadAllText(filePath);
 
-    return JsonSerializer.Deserialize<T>(
-        serialized,
-        new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? throw new ArgumentException($"Bad format for {Path.GetFileName(filePath)}");
-
+    return JsonSerializer.Deserialize<T>(serialized, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
+        ?? throw new ArgumentException($"Bad format for {Path.GetFileName(filePath)}");
 }

@@ -7,7 +7,7 @@ namespace Tiledriver.DataModelGenerator.MetadataModel
     {
         public double? Default { get; }
 
-        public DoubleProperty(string name, int? defaultValue = null) 
-            : base(name, "double",isNullable:false,defaultValue?.ToString()) => Default = defaultValue;
+        public DoubleProperty(string name, int? defaultValue = null)
+            : base(name, "double", isNullable: false, defaultValue?.ToString()) => Default = defaultValue;
     }
 }

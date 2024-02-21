@@ -19,8 +19,10 @@ namespace Tiledriver.Core.ManualTests
             var filePath = Path.Combine(_dirInfo.FullName, "Text.png");
 
             using var stream = File.Open(filePath, FileMode.Create);
-            var texture = new RenderedTexture(BackgroundColor: SKColors.White,
-                Text: "Line 1\nLine 2\nLINE THREE\nLine Four");
+            var texture = new RenderedTexture(
+                BackgroundColor: SKColors.White,
+                Text: "Line 1\nLine 2\nLINE THREE\nLine Four"
+            );
             texture.RenderTo(stream);
         }
     }

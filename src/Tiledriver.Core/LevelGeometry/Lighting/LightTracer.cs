@@ -14,7 +14,8 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
         public static (LightMap FloorLight, LightMap CeilingLight) Trace(
             MapData map,
             LightRange lightRange,
-            IEnumerable<LightDefinition> lights)
+            IEnumerable<LightDefinition> lights
+        )
         {
             var board = map.GetBoard();
             return Trace(map.Dimensions, p => board[p].HasTile, lightRange, lights);
@@ -22,9 +23,10 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
 
         public static (LightMap FloorLight, LightMap CeilingLight) Trace(
             Size dimensions,
-            Func<Position,bool> isPositionObscured,
+            Func<Position, bool> isPositionObscured,
             LightRange lightRange,
-            IEnumerable<LightDefinition> lights)
+            IEnumerable<LightDefinition> lights
+        )
         {
             var floorLight = new LightMap(lightRange, dimensions).Blackout();
             var ceilingLight = new LightMap(lightRange, dimensions).Blackout();
@@ -45,11 +47,9 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
                             continue;
 
                         // check for line of sight
-                        var obscured =
-                            DrawingUtil.BresenhamLine(
-                                    start: light.Center,
-                                    end: location)
-                                .Any(isPositionObscured);
+                        var obscured = DrawingUtil
+                            .BresenhamLine(start: light.Center, end: location)
+                            .Any(isPositionObscured);
 
                         if (!obscured)
                         {

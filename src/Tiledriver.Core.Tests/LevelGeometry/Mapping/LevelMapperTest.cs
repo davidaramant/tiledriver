@@ -1,15 +1,15 @@
 ﻿// Copyright (c) 2017, Aaron Alexander
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Collections.Immutable;
 using System.Linq;
-using Xunit;
 using FluentAssertions;
 using Tiledriver.Core.DemoMaps.Wolf3D;
 using Tiledriver.Core.FormatModels.Uwmf;
-using Tiledriver.Core.LevelGeometry.Mapping;
 using Tiledriver.Core.GameInfo.Wolf3D;
+using Tiledriver.Core.LevelGeometry.Mapping;
+using Xunit;
 
 namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
 {
@@ -134,7 +134,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
         /// <remarks>
         /// Room Shape:
         /// XXXXX
-        /// X   X 
+        /// X   X
         /// XXX X
         /// </remarks>
         [Fact(Skip = "This test needs to be updated with the new format model")]
@@ -508,7 +508,7 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
         private void AddKey(int x, int y, Key key)
         {
             var location = new MapLocation(_data, x, y);
-            location.AddThing(key==Key.Silver ? Actor.SilverKey.ClassName : Actor.GoldKey.ClassName);
+            location.AddThing(key == Key.Silver ? Actor.SilverKey.ClassName : Actor.GoldKey.ClassName);
         }
 
         private void AddPushwall(int x, int y)
@@ -569,13 +569,31 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Mapping
             _tileEastWestWalls = new Tile("GSTONEA1", "GSTONEA1", "GSTONEA1", "GSTONEA1", true, false, true, false);
             _data.Tiles.Add(_tileEastWestWalls);
 
-            _tileNorthEastSouthWalls = new Tile("GSTONEA1", "GSTONEA1", "GSTONEA1", "GSTONEA1", true, true, false, true);
+            _tileNorthEastSouthWalls = new Tile(
+                "GSTONEA1",
+                "GSTONEA1",
+                "GSTONEA1",
+                "GSTONEA1",
+                true,
+                true,
+                false,
+                true
+            );
             _data.Tiles.Add(_tileNorthEastSouthWalls);
 
             _tileEastSouthWestWalls = new Tile("GSTONEA1", "GSTONEA1", "GSTONEA1", "GSTONEA1", true, false, true, true);
             _data.Tiles.Add(_tileEastSouthWestWalls);
 
-            _tileSouthWestNorthWalls = new Tile("GSTONEA1", "GSTONEA1", "GSTONEA1", "GSTONEA1", false, true, true, true);
+            _tileSouthWestNorthWalls = new Tile(
+                "GSTONEA1",
+                "GSTONEA1",
+                "GSTONEA1",
+                "GSTONEA1",
+                false,
+                true,
+                true,
+                true
+            );
             _data.Tiles.Add(_tileSouthWestNorthWalls);
 
             _tileWestNorthEastWalls = new Tile("GSTONEA1", "GSTONEA1", "GSTONEA1", "GSTONEA1", true, true, true, false);

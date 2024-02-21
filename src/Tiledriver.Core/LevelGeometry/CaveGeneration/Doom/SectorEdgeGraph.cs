@@ -1,5 +1,5 @@
 // Copyright (c) 2022, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +16,7 @@ public sealed class SectorEdgeGraph
 
     public int EdgeCount => _edges.Count;
 
-    private SectorEdgeGraph(
-        List<SectorEdge> edges,
-        Graph pointToEdges)
+    private SectorEdgeGraph(List<SectorEdge> edges, Graph pointToEdges)
     {
         _edges = edges;
         _pointToEdges = pointToEdges;
@@ -40,10 +38,8 @@ public sealed class SectorEdgeGraph
 
     public IEnumerable<SectorEdge> GetAllEdges() => _edges;
 
-    public IEnumerable<SectorEdge> GetEdgesConnectedTo(LatticePoint point) => 
-        _pointToEdges.TryGetValue(point, out var edges) 
-        ? edges 
-        : Enumerable.Empty<SectorEdge>();
+    public IEnumerable<SectorEdge> GetEdgesConnectedTo(LatticePoint point) =>
+        _pointToEdges.TryGetValue(point, out var edges) ? edges : Enumerable.Empty<SectorEdge>();
 
     public SectorEdgeGraph Simplify()
     {
@@ -65,15 +61,19 @@ public sealed class SectorEdgeGraph
 
                 while (true)
                 {
-                    if (_pointToEdges.TryGetValue(node.GetPointAtEnd(leftSide: !goRight), out var connectedEdges) &&
-                        connectedEdges.Count == 2)
+                    if (
+                        _pointToEdges.TryGetValue(node.GetPointAtEnd(leftSide: !goRight), out var connectedEdges)
+                        && connectedEdges.Count == 2
+                    )
                     {
                         var nextNode = connectedEdges.Single(n => n != node);
 
-                        if (!covered.Contains(nextNode) &&
-                            nextNode.Segment.Front == node.Segment.Front &&
-                            nextNode.Segment.Back == node.Segment.Back &&
-                            nextNode.Segment.Id.GetLineSlope() == node.Segment.Id.GetLineSlope())
+                        if (
+                            !covered.Contains(nextNode)
+                            && nextNode.Segment.Front == node.Segment.Front
+                            && nextNode.Segment.Back == node.Segment.Back
+                            && nextNode.Segment.Id.GetLineSlope() == node.Segment.Id.GetLineSlope()
+                        )
                         {
                             node = nextNode;
                             covered.Add(node);
@@ -93,7 +93,8 @@ public sealed class SectorEdgeGraph
                 Start: leftNode.Start,
                 End: rightNode.End,
                 Segment: leftNode.Segment,
-                NumSquares: 1 + leftSteps + rightSteps);
+                NumSquares: 1 + leftSteps + rightSteps
+            );
 
             allSimplifiedEdges.Add(span);
 

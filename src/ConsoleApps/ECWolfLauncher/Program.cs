@@ -2,8 +2,6 @@
 // Copyright (c) 2017, David Aramant and Aaron Alexander
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using AutoMapper;
-using ShellProgressBar;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -14,6 +12,8 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using ShellProgressBar;
 using Tiledriver.Core.FormatModels;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.GameMaps;
@@ -191,7 +191,6 @@ namespace TestRunner
                 //        //(metaMap,fileNameWithNoExtension)=>SimpleMapTextExporter.Export(metaMap,fileNameWithNoExtension+".txt",unreachableIsSolid:true)
                 //        //),
                 //    });
-
             }
             catch (Exception e)
             {
@@ -215,34 +214,44 @@ namespace TestRunner
             Directory.CreateDirectory(outputPath);
 
             using var progress = new ProgressBar(allFiles.Length, "Converting images...");
-            Parallel.ForEach(allFiles, mapPath =>
-            {
-                var imagePath = Path.Combine(outputPath, Path.GetFileNameWithoutExtension(mapPath) + ".png");
-                var metaMap = MetaMap.Load(mapPath);
+            Parallel.ForEach(
+                allFiles,
+                mapPath =>
+                {
+                    var imagePath = Path.Combine(outputPath, Path.GetFileNameWithoutExtension(mapPath) + ".png");
+                    var metaMap = MetaMap.Load(mapPath);
 
-                MetaMapImageExporter.Export(metaMap, MapPalette.Full, imagePath, scale: 4);
-                progress.Tick();
-            });
+                    MetaMapImageExporter.Export(metaMap, MapPalette.Full, imagePath, scale: 4);
+                    progress.Tick();
+                }
+            );
         }
 
         private static void ReexportGoodMetaMapsToImages(
             string pathForGoodImages,
             string metaMapPath,
-            string outputPath)
+            string outputPath
+        )
         {
             ConvertMetaMapsToImages(
-                Directory.EnumerateFiles(pathForGoodImages).
-                    Select(Path.GetFileNameWithoutExtension).
-                    Select(f => Path.Combine(metaMapPath, f + ".metamap")),
-                outputPath);
+                Directory
+                    .EnumerateFiles(pathForGoodImages)
+                    .Select(Path.GetFileNameWithoutExtension)
+                    .Select(f => Path.Combine(metaMapPath, f + ".metamap")),
+                outputPath
+            );
         }
 
-        private static void ConvertGarbageMetaMapsToImages(string pathForGoodImages, string metaMapPath, string outputPath)
+        private static void ConvertGarbageMetaMapsToImages(
+            string pathForGoodImages,
+            string metaMapPath,
+            string outputPath
+        )
         {
-            var goodFiles =
-                Directory.GetFiles(pathForGoodImages).
-                Select(Path.GetFileNameWithoutExtension).
-                ToImmutableHashSet();
+            var goodFiles = Directory
+                .GetFiles(pathForGoodImages)
+                .Select(Path.GetFileNameWithoutExtension)
+                .ToImmutableHashSet();
 
             var endings = new[] { " m", " r1", " r1m", " r2", " r2m", " r3", " r3m" };
 
@@ -261,18 +270,23 @@ namespace TestRunner
                 return filename;
             }
 
-            var allFiles =
-                Directory.GetFiles(metaMapPath).
-                Select(Path.GetFileNameWithoutExtension).
-                Select(GetRawMapName).
-                ToImmutableHashSet();
+            var allFiles = Directory
+                .GetFiles(metaMapPath)
+                .Select(Path.GetFileNameWithoutExtension)
+                .Select(GetRawMapName)
+                .ToImmutableHashSet();
 
             var badFiles = allFiles.Except(goodFiles);
 
             ConvertMetaMapsToImages(badFiles.Select(f => Path.Combine(metaMapPath, f + ".metamap")), outputPath);
         }
 
-        private static void MergeMetaMaps(string metaMapsInputPath, string outputPath, ImmutableHashSet<string> goodMaps, bool condenseSolidRows = false)
+        private static void MergeMetaMaps(
+            string metaMapsInputPath,
+            string outputPath,
+            ImmutableHashSet<string> goodMaps,
+            bool condenseSolidRows = false
+        )
         {
             int TypeToIndex(TileType type)
             {
@@ -310,12 +324,12 @@ namespace TestRunner
             }
 
             Console.WriteLine("Loading maps...");
-            var maps =
-                Directory.EnumerateFiles(metaMapsInputPath).
-                Where(path => goodMaps.Contains(GetRawMapName(path))).
-                AsParallel().
-                Select(MetaMap.Load).
-                ToList();
+            var maps = Directory
+                .EnumerateFiles(metaMapsInputPath)
+                .Where(path => goodMaps.Contains(GetRawMapName(path)))
+                .AsParallel()
+                .Select(MetaMap.Load)
+                .ToList();
 
             int rowsSkipped = 0;
 
@@ -373,26 +387,29 @@ namespace TestRunner
 
             using (var progress = new ProgressBar(filesToGoThrough.Length, "Duplicating maps..."))
             {
-                Parallel.ForEach(filesToGoThrough, metaMapPath =>
-                {
-                    var map = MetaMap.Load(metaMapPath);
+                Parallel.ForEach(
+                    filesToGoThrough,
+                    metaMapPath =>
+                    {
+                        var map = MetaMap.Load(metaMapPath);
 
-                    map.Mirror().Save(MutateFileName(metaMapPath, "m"));
+                        map.Mirror().Save(MutateFileName(metaMapPath, "m"));
 
-                    var rotated90 = map.Rotate90();
-                    rotated90.Save(MutateFileName(metaMapPath, "r1"));
-                    rotated90.Mirror().Save(MutateFileName(metaMapPath, "r1m"));
+                        var rotated90 = map.Rotate90();
+                        rotated90.Save(MutateFileName(metaMapPath, "r1"));
+                        rotated90.Mirror().Save(MutateFileName(metaMapPath, "r1m"));
 
-                    var rotated180 = rotated90.Rotate90();
-                    rotated180.Save(MutateFileName(metaMapPath, "r2"));
-                    rotated180.Mirror().Save(MutateFileName(metaMapPath, "r2m"));
+                        var rotated180 = rotated90.Rotate90();
+                        rotated180.Save(MutateFileName(metaMapPath, "r2"));
+                        rotated180.Mirror().Save(MutateFileName(metaMapPath, "r2m"));
 
-                    var rotated270 = rotated180.Rotate90();
-                    rotated270.Save(MutateFileName(metaMapPath, "r3"));
-                    rotated270.Mirror().Save(MutateFileName(metaMapPath, "r3m"));
+                        var rotated270 = rotated180.Rotate90();
+                        rotated270.Save(MutateFileName(metaMapPath, "r3"));
+                        rotated270.Mirror().Save(MutateFileName(metaMapPath, "r3m"));
 
-                    progress.Tick();
-                });
+                        progress.Tick();
+                    }
+                );
             }
         }
 
@@ -414,15 +431,27 @@ namespace TestRunner
             }
 
             TestTypeDetermination("Wolf3D Map 1", MapNameComparer.Type.Wolf3D);
-            TestTypeDetermination("Wolf3D Map 1 r3m", MapNameComparer.Type.Wolf3D | MapNameComparer.Type.Rotated270 | MapNameComparer.Type.Mirrored);
+            TestTypeDetermination(
+                "Wolf3D Map 1 r3m",
+                MapNameComparer.Type.Wolf3D | MapNameComparer.Type.Rotated270 | MapNameComparer.Type.Mirrored
+            );
             TestTypeDetermination("Custom Map", MapNameComparer.Type.Custom);
             TestTypeDetermination("Custom Map m", MapNameComparer.Type.Custom | MapNameComparer.Type.Mirrored);
             TestTypeDetermination("Custom Map r1", MapNameComparer.Type.Custom | MapNameComparer.Type.Rotated90);
-            TestTypeDetermination("Custom Map r1m", MapNameComparer.Type.Custom | MapNameComparer.Type.Rotated90 | MapNameComparer.Type.Mirrored);
+            TestTypeDetermination(
+                "Custom Map r1m",
+                MapNameComparer.Type.Custom | MapNameComparer.Type.Rotated90 | MapNameComparer.Type.Mirrored
+            );
             TestTypeDetermination("Custom Map r2", MapNameComparer.Type.Custom | MapNameComparer.Type.Rotated180);
-            TestTypeDetermination("Custom Map r2m", MapNameComparer.Type.Custom | MapNameComparer.Type.Rotated180 | MapNameComparer.Type.Mirrored);
+            TestTypeDetermination(
+                "Custom Map r2m",
+                MapNameComparer.Type.Custom | MapNameComparer.Type.Rotated180 | MapNameComparer.Type.Mirrored
+            );
             TestTypeDetermination("Custom Map r3", MapNameComparer.Type.Custom | MapNameComparer.Type.Rotated270);
-            TestTypeDetermination("Custom Map r3m", MapNameComparer.Type.Custom | MapNameComparer.Type.Rotated270 | MapNameComparer.Type.Mirrored);
+            TestTypeDetermination(
+                "Custom Map r3m",
+                MapNameComparer.Type.Custom | MapNameComparer.Type.Rotated270 | MapNameComparer.Type.Mirrored
+            );
 
             void TestComparison(string x, string y, int expected)
             {
@@ -450,20 +479,20 @@ namespace TestRunner
 
         private static void RemoveDuplicateMaps(string inputPath)
         {
-            var duplicateFileGroups =
-                Directory.EnumerateFiles(inputPath, "*.metamap", SearchOption.AllDirectories).
-                AsParallel().
-                Select(filePath =>
+            var duplicateFileGroups = Directory
+                .EnumerateFiles(inputPath, "*.metamap", SearchOption.AllDirectories)
+                .AsParallel()
+                .Select(filePath =>
+                {
+                    using (var md5 = MD5.Create())
+                    using (var fs = File.OpenRead(filePath))
                     {
-                        using (var md5 = MD5.Create())
-                        using (var fs = File.OpenRead(filePath))
-                        {
-                            return (filePath: filePath, hash: BitConverter.ToString(md5.ComputeHash(fs)));
-                        }
-                    }).
-                GroupBy(tuple => tuple.hash).
-                Where(group => group.Count() > 1).
-                ToArray();
+                        return (filePath: filePath, hash: BitConverter.ToString(md5.ComputeHash(fs)));
+                    }
+                })
+                .GroupBy(tuple => tuple.hash)
+                .Where(group => group.Count() > 1)
+                .ToArray();
 
             var comparer = new MapNameComparer();
 
@@ -471,12 +500,18 @@ namespace TestRunner
 
             foreach (var dupeGroup in duplicateFileGroups)
             {
-                var filePaths = dupeGroup.Select(tuple => tuple.filePath).OrderBy(filePath => filePath, comparer).ToArray();
+                var filePaths = dupeGroup
+                    .Select(tuple => tuple.filePath)
+                    .OrderBy(filePath => filePath, comparer)
+                    .ToArray();
 
                 string fileToKeep = filePaths.First();
 
                 var filesToRemove = filePaths.Except(new[] { fileToKeep });
-                deletedFiles.Add($"{Path.GetFileName(fileToKeep)} - Duplicates: " + string.Join(", ", filesToRemove.Select(Path.GetFileName)));
+                deletedFiles.Add(
+                    $"{Path.GetFileName(fileToKeep)} - Duplicates: "
+                        + string.Join(", ", filesToRemove.Select(Path.GetFileName))
+                );
                 foreach (var file in filesToRemove)
                 {
                     File.Delete(file);
@@ -526,7 +561,10 @@ namespace TestRunner
             //File.WriteAllLines(Path.Combine(outputPath, "errors.txt"), failures);
         }
 
-        private static void ConvertMapsToSimpleFormat(string inputPath, List<(string path, Action<MetaMap, string> saveMethod)> outputDirsWithSaveMethods)
+        private static void ConvertMapsToSimpleFormat(
+            string inputPath,
+            List<(string path, Action<MetaMap, string> saveMethod)> outputDirsWithSaveMethods
+        )
         {
             foreach (var outputPath in outputDirsWithSaveMethods.Select(p => Path.Combine(inputPath, p.path)))
             {
@@ -737,16 +775,10 @@ namespace TestRunner
                 Directory.Delete("Wolf3D Maps", recursive: true);
             }
 
-            TranslateGameMapsFormat(
-                mapHeadPath,
-                gameMapsPath,
-                outputPath: "Wolf3D Maps",
-                levelSetName: "Wolf3D");
+            TranslateGameMapsFormat(mapHeadPath, gameMapsPath, outputPath: "Wolf3D Maps", levelSetName: "Wolf3D");
         }
 
-        private static void BatchConvertGameMaps(
-            string baseInputPath,
-            string outputPath)
+        private static void BatchConvertGameMaps(string baseInputPath, string outputPath)
         {
             if (Directory.Exists(outputPath))
             {
@@ -755,30 +787,32 @@ namespace TestRunner
             Directory.CreateDirectory(outputPath);
 
             string FindPathOf(string path, string name) =>
-                Directory.EnumerateFiles(path, name + ".*", SearchOption.AllDirectories).
-                Single(f => Path.GetExtension(f).ToLowerInvariant() != "bak");
+                Directory
+                    .EnumerateFiles(path, name + ".*", SearchOption.AllDirectories)
+                    .Single(f => Path.GetExtension(f).ToLowerInvariant() != "bak");
 
             TranslateGameMapsFormat(
-                Directory.GetDirectories(baseInputPath).Select(levelSetDir =>
-                {
-                    var name = Path.GetFileName(levelSetDir);
-                    Func<string> mapHeadPath = () => FindPathOf(levelSetDir, "MAPHEAD");
-                    Func<string> gameMapsPath = () => FindPathOf(levelSetDir, "GAMEMAPS");
+                Directory
+                    .GetDirectories(baseInputPath)
+                    .Select(levelSetDir =>
+                    {
+                        var name = Path.GetFileName(levelSetDir);
+                        Func<string> mapHeadPath = () => FindPathOf(levelSetDir, "MAPHEAD");
+                        Func<string> gameMapsPath = () => FindPathOf(levelSetDir, "GAMEMAPS");
 
-                    return (mapHeadPath, gameMapsPath, name);
-                }),
-                outputPath);
+                        return (mapHeadPath, gameMapsPath, name);
+                    }),
+                outputPath
+            );
 
             Console.WriteLine("Done!");
             Console.ReadKey();
         }
 
         private static void TranslateGameMapsFormat(
-            IEnumerable<(
-            Func<string> mapHeadPath,
-            Func<string> gameMapsPath,
-            string name)> levelSets,
-            string outputPath)
+            IEnumerable<(Func<string> mapHeadPath, Func<string> gameMapsPath, string name)> levelSets,
+            string outputPath
+        )
         {
             var config = ConfigLoader.Load();
             var ecWolfPk3Path = Path.ChangeExtension(config.ECWolfPath, "pk3");
@@ -843,7 +877,8 @@ namespace TestRunner
             string mapHeadPath,
             string gameMapsPath,
             string outputPath,
-            string levelSetName)
+            string levelSetName
+        )
         {
             var config = ConfigLoader.Load();
             var ecWolfPk3Path = Path.ChangeExtension(config.ECWolfPath, "pk3");
@@ -903,7 +938,7 @@ namespace TestRunner
             ConfigLoader.Load().CreateECWolfLauncher().LoadMapInEcWolf(uwmfMap, wadFilePath: wadFilePath);
         }
 
-        private static void LoadMapInEcWolf(MapData uwmfMap) => ConfigLoader.Load().CreateECWolfLauncher().LoadMapInEcWolf(uwmfMap);
+        private static void LoadMapInEcWolf(MapData uwmfMap) =>
+            ConfigLoader.Load().CreateECWolfLauncher().LoadMapInEcWolf(uwmfMap);
     }
 }
-

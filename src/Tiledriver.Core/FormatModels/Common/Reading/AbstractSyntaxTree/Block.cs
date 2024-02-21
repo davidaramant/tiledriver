@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2019, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -16,7 +16,9 @@ namespace Tiledriver.Core.FormatModels.Common.Reading.AbstractSyntaxTree
             {
                 if (assignments.ContainsKey(field.Name.Id))
                 {
-                    throw new ParsingException($"Duplicate field definition found: {field.Name.Id} on {field.Name.Location}");
+                    throw new ParsingException(
+                        $"Duplicate field definition found: {field.Name.Id} on {field.Name.Location}"
+                    );
                 }
 
                 assignments.Add(field.Name.Id, field.Value);

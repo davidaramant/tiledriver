@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2017, Leon Organ and Aaron Alexander
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Collections.Generic;
@@ -55,7 +55,8 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
         public MapSquare TilesSpace => _data.PlaneMaps[0][Y * _data.Width + X];
 
-        public IEnumerable<Thing> Things => _data.Things.Where(t => (int)Math.Floor(t.X) == X && (int)Math.Floor(t.Y) == Y);
+        public IEnumerable<Thing> Things =>
+            _data.Things.Where(t => (int)Math.Floor(t.X) == X && (int)Math.Floor(t.Y) == Y);
 
         public void AddThing(string className)
         {
@@ -77,7 +78,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             if (Y < 1)
                 return null;
 
-            return new MapLocation(_data, X, Y-1);
+            return new MapLocation(_data, X, Y - 1);
         }
 
         public MapLocation? West()
@@ -85,12 +86,12 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             if (X < 1)
                 return null;
 
-            return new MapLocation(_data, X-1, Y);
+            return new MapLocation(_data, X - 1, Y);
         }
 
         public MapLocation? South()
         {
-            if (Y+1 > _data.Height-1)
+            if (Y + 1 > _data.Height - 1)
                 return null;
 
             return new MapLocation(_data, X, Y + 1);
@@ -98,10 +99,10 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
         public MapLocation? East()
         {
-            if (X+1 > _data.Width - 1)
+            if (X + 1 > _data.Width - 1)
                 return null;
 
-            return new MapLocation(_data, X+1, Y);
+            return new MapLocation(_data, X + 1, Y);
         }
 
         public bool CanMoveNorth()
@@ -126,7 +127,13 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
         public bool CanExit()
         {
-            var exitBosses = new[] {Actor.MechaHitler.ClassName, Actor.Schabbs.ClassName, Actor.Gift.ClassName, Actor.FatFace.ClassName};
+            var exitBosses = new[]
+            {
+                Actor.MechaHitler.ClassName,
+                Actor.Schabbs.ClassName,
+                Actor.Gift.ClassName,
+                Actor.FatFace.ClassName
+            };
             if (Things.Any(thing => exitBosses.Contains(thing.Type)))
                 return true;
 
@@ -148,7 +155,11 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             return false;
         }
 
-        private bool CanMove(Func<Tile, bool> blockInTargetDirection, Func<Tile, bool> blockingInInverseDirection, Func<MapLocation?> targetSelector)
+        private bool CanMove(
+            Func<Tile, bool> blockInTargetDirection,
+            Func<Tile, bool> blockingInInverseDirection,
+            Func<MapLocation?> targetSelector
+        )
         {
             if (null != Tile)
             {
@@ -172,8 +183,8 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
             return true;
         }
-		
-		public bool HasBlocker()
+
+        public bool HasBlocker()
         {
             return Things.Any(t => Actor.GetAll().Single(a => a.ClassName == t.Type).IsSolid);
         }

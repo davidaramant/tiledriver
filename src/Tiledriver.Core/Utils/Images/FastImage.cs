@@ -16,9 +16,8 @@ namespace Tiledriver.Core.Utils.Images
         public int Height { get; }
         public int PixelCount => Width * Height;
 
-        public FastImage(SKSizeI resolution, int scale = 1) : this(resolution.Width, resolution.Height, scale)
-        {
-        }
+        public FastImage(SKSizeI resolution, int scale = 1)
+            : this(resolution.Width, resolution.Height, scale) { }
 
         public FastImage(int width, int height, int scale = 1)
         {
@@ -69,15 +68,13 @@ namespace Tiledriver.Core.Utils.Images
                         Height = resizedHeight,
                         ColorType = SKImageInfo.PlatformColorType,
                         AlphaType = SKAlphaType.Premul
-                    });
+                    }
+                );
                 using var paint = new SKPaint { IsAntialias = false, FilterQuality = SKFilterQuality.None };
 
                 using var img = SKImage.FromBitmap(_bitmap);
 
-                surface.Canvas.DrawImage(
-                    img,
-                    new SKRectI(0, 0, resizedWidth, resizedHeight),
-                    paint);
+                surface.Canvas.DrawImage(img, new SKRectI(0, 0, resizedWidth, resizedHeight), paint);
                 surface.Canvas.Flush();
 
                 using var newImg = surface.Snapshot();

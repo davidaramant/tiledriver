@@ -17,7 +17,7 @@ namespace Tiledriver.Core.Utils.CellularAutomata
         public int Width => Dimensions.Width;
         public int Height => Dimensions.Height;
         public CellType this[Position p] => _board[p.Y, p.X];
-        
+
         public CellBoard(Size dimensions)
         {
             Dimensions = dimensions;
@@ -25,7 +25,8 @@ namespace Tiledriver.Core.Utils.CellularAutomata
             _board = new CellType[dimensions.Height, dimensions.Width];
         }
 
-        public CellBoard(Size dimensions, Func<Position,CellType> typeAtPosition) : this(dimensions)
+        public CellBoard(Size dimensions, Func<Position, CellType> typeAtPosition)
+            : this(dimensions)
         {
             for (int y = 0; y < dimensions.Height; y++)
             {
@@ -36,7 +37,8 @@ namespace Tiledriver.Core.Utils.CellularAutomata
             }
         }
 
-        private CellBoard(Size dimensions, CellType[,] initial) : this(dimensions) => _board = initial;
+        private CellBoard(Size dimensions, CellType[,] initial)
+            : this(dimensions) => _board = initial;
 
         public CellBoard Quadruple()
         {
@@ -98,7 +100,12 @@ namespace Tiledriver.Core.Utils.CellularAutomata
             {
                 for (int col = 0; col < Width; col++)
                 {
-                    if (thickness > 0 && col < thickness || col > (Width - 1 - thickness) || row < thickness || row > (Height - thickness))
+                    if (
+                        thickness > 0 && col < thickness
+                        || col > (Width - 1 - thickness)
+                        || row < thickness
+                        || row > (Height - thickness)
+                    )
                     {
                         initial[row, col] = CellType.Alive;
                     }
@@ -121,11 +128,11 @@ namespace Tiledriver.Core.Utils.CellularAutomata
                 {
                     for (int col = 0; col < Width; col++)
                     {
-                        currentBoard[row, col] =
-                            isNextGenAlive(
-                                previousBoard[row, col], 
-                                radius => CountAliveNeighbors(previousBoard, row, col, radius)) 
-                            ? CellType.Alive 
+                        currentBoard[row, col] = isNextGenAlive(
+                            previousBoard[row, col],
+                            radius => CountAliveNeighbors(previousBoard, row, col, radius)
+                        )
+                            ? CellType.Alive
                             : CellType.Dead;
                     }
                 }
@@ -144,9 +151,7 @@ namespace Tiledriver.Core.Utils.CellularAutomata
             {
                 for (int x = col - radius; x < col + radius + 1; x++)
                 {
-                    if (x < 0 || x >= Dimensions.Width ||
-                        y < 0 || y >= Dimensions.Height ||
-                        (x == col && y == col))
+                    if (x < 0 || x >= Dimensions.Width || y < 0 || y >= Dimensions.Height || (x == col && y == col))
                     {
                         count++;
                         continue;

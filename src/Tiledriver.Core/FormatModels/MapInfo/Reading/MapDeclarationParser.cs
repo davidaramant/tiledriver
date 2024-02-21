@@ -15,7 +15,10 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
     {
         public static IReadOnlyDictionary<string, Map> ReadMapDeclarations(IEnumerator<Token> tokenStream)
         {
-            var defaultMap = new DefaultMap(EnsureInventories: ImmutableArray<string>.Empty, SpecialActions: ImmutableArray<SpecialAction>.Empty);
+            var defaultMap = new DefaultMap(
+                EnsureInventories: ImmutableArray<string>.Empty,
+                SpecialActions: ImmutableArray<SpecialAction>.Empty
+            );
             var lumpToMap = new Dictionary<string, Map>();
 
             while (tokenStream.MoveNext())
@@ -23,17 +26,17 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
                 switch (tokenStream.Current)
                 {
                     case IdentifierToken mapId when mapId.Id == "map":
+
                         {
                             var (mapLump, mapName, isMapNameLookup) = ParseMapHeader(mapId, tokenStream);
                             var assignmentLookup = GetAssignmentLookup(tokenStream, alreadyOpened: true);
                             var map = ParseMap(assignmentLookup, mapLump, mapName, isMapNameLookup, defaultMap);
-                            lumpToMap.Add(
-                                mapLump.ToUpperInvariant(),
-                                map);
+                            lumpToMap.Add(mapLump.ToUpperInvariant(), map);
                         }
                         break;
 
                     case IdentifierToken defaultMapId when defaultMapId.Id == "defaultMap":
+
                         {
                             var assignmentLookup = GetAssignmentLookup(tokenStream);
                             defaultMap = ParseDefaultMap(assignmentLookup);
@@ -41,6 +44,7 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
                         break;
 
                     case IdentifierToken addDefaultMapId when addDefaultMapId.Id == "addDefaultMap":
+
                         {
                             var assignmentLookup = GetAssignmentLookup(tokenStream);
                             var addDefaultMap = ParseAddDefaultMap(assignmentLookup);
@@ -55,7 +59,8 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
 
         private static (string mapLump, string? mapName, bool isMapNameLookup) ParseMapHeader(
             IdentifierToken context,
-            IEnumerator<Token> tokenStream)
+            IEnumerator<Token> tokenStream
+        )
         {
             var mapLump = tokenStream.ExpectNext<StringToken>().Value;
             string? mapName = null;
@@ -96,12 +101,21 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
             string mapLump,
             string? mapName,
             bool isMapNameLookup,
-            DefaultMap defaultMap);
+            DefaultMap defaultMap
+        );
+
         private static partial DefaultMap ParseDefaultMap(ILookup<Identifier, VariableAssignment> assignmentLookup);
-        private static partial AddDefaultMap ParseAddDefaultMap(ILookup<Identifier, VariableAssignment> assignmentLookup);
+
+        private static partial AddDefaultMap ParseAddDefaultMap(
+            ILookup<Identifier, VariableAssignment> assignmentLookup
+        );
+
         private static partial DefaultMap UpdateDefaultMap(DefaultMap defaultMap, AddDefaultMap addDefaultMap);
 
-        private static ILookup<Identifier, VariableAssignment> GetAssignmentLookup(IEnumerator<Token> tokenStream, bool alreadyOpened = false)
+        private static ILookup<Identifier, VariableAssignment> GetAssignmentLookup(
+            IEnumerator<Token> tokenStream,
+            bool alreadyOpened = false
+        )
         {
             var assignments = ParseBlock(tokenStream, alreadyOpened);
             return assignments.ToLookup(a => a.Id.Id, a => a);
@@ -175,7 +189,8 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
 
         private static VariableAssignment[] GetAssignments(
             ILookup<Identifier, VariableAssignment> assignmentLookup,
-            string formatName)
+            string formatName
+        )
         {
             var id = new Identifier(formatName);
             return assignmentLookup.Contains(id) ? assignmentLookup[id].ToArray() : Array.Empty<VariableAssignment>();
@@ -183,7 +198,8 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
 
         private static VariableAssignment? GetSingleAssignment(
             ILookup<Identifier, VariableAssignment> assignmentLookup,
-            string formatName)
+            string formatName
+        )
         {
             var assignments = GetAssignments(assignmentLookup, formatName);
 
@@ -196,7 +212,9 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
         }
 
         private static ImmutableArray<string> ReadListAssignment(
-            ILookup<Identifier, VariableAssignment> assignmentLookup, string formatName)
+            ILookup<Identifier, VariableAssignment> assignmentLookup,
+            string formatName
+        )
         {
             var assignment = GetSingleAssignment(assignmentLookup, formatName);
             if (assignment == null)
@@ -239,14 +257,17 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
             return strings.ToImmutable();
         }
 
-        private static ImmutableArray<SpecialAction> ReadSpecialActionAssignments(ILookup<Identifier, VariableAssignment> assignmentLookup)
+        private static ImmutableArray<SpecialAction> ReadSpecialActionAssignments(
+            ILookup<Identifier, VariableAssignment> assignmentLookup
+        )
         {
             var id = new Identifier("SpecialAction");
             var assignments = assignmentLookup.Contains(id)
                 ? assignmentLookup[id]
                 : Enumerable.Empty<VariableAssignment>();
 
-            static TToken MustGet<TToken>(IdentifierToken id, Queue<Token> valueQueue) where TToken : Token
+            static TToken MustGet<TToken>(IdentifierToken id, Queue<Token> valueQueue)
+                where TToken : Token
             {
                 if (!valueQueue.Any())
                 {
@@ -262,8 +283,8 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
                 return t;
             }
 
-            return assignments.Select(
-                va =>
+            return assignments
+                .Select(va =>
                 {
                     var valueQueue = new Queue<Token>(va.Values);
                     var actorClassToken = MustGet<StringToken>(va.Id, valueQueue);
@@ -293,13 +314,17 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
                         args[1],
                         args[2],
                         args[3],
-                        args[4]);
-
-                }).ToImmutableArray();
+                        args[4]
+                    );
+                })
+                .ToImmutableArray();
         }
 
-        private static TToken? GetSingleToken<TToken>(ILookup<Identifier, VariableAssignment> assignmentLookup,
-            string formatName) where TToken : Token
+        private static TToken? GetSingleToken<TToken>(
+            ILookup<Identifier, VariableAssignment> assignmentLookup,
+            string formatName
+        )
+            where TToken : Token
         {
             var assignment = GetSingleAssignment(assignmentLookup, formatName);
             if (assignment == null)
@@ -321,14 +346,20 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
             return t;
         }
 
-        private static string? ReadStringAssignment(ILookup<Identifier, VariableAssignment> assignmentLookup, string formatName) =>
-            GetSingleToken<StringToken>(assignmentLookup, formatName)?.Value;
+        private static string? ReadStringAssignment(
+            ILookup<Identifier, VariableAssignment> assignmentLookup,
+            string formatName
+        ) => GetSingleToken<StringToken>(assignmentLookup, formatName)?.Value;
 
-        private static int? ReadIntAssignment(ILookup<Identifier, VariableAssignment> assignmentLookup, string formatName) =>
-            GetSingleToken<IntegerToken>(assignmentLookup, formatName)?.Value;
+        private static int? ReadIntAssignment(
+            ILookup<Identifier, VariableAssignment> assignmentLookup,
+            string formatName
+        ) => GetSingleToken<IntegerToken>(assignmentLookup, formatName)?.Value;
 
-        private static bool? ReadBoolAssignment(ILookup<Identifier, VariableAssignment> assignmentLookup, string formatName) =>
-            GetSingleToken<BooleanToken>(assignmentLookup, formatName)?.Value;
+        private static bool? ReadBoolAssignment(
+            ILookup<Identifier, VariableAssignment> assignmentLookup,
+            string formatName
+        ) => GetSingleToken<BooleanToken>(assignmentLookup, formatName)?.Value;
 
         private static bool? ReadFlag(ILookup<Identifier, VariableAssignment> assignmentLookup, string formatName)
         {
@@ -346,7 +377,10 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
             return true;
         }
 
-        private static ExitFadeInfo? ReadExitFadeInfoAssignment(ILookup<Identifier, VariableAssignment> assignmentLookup, string formatName)
+        private static ExitFadeInfo? ReadExitFadeInfoAssignment(
+            ILookup<Identifier, VariableAssignment> assignmentLookup,
+            string formatName
+        )
         {
             var assignment = GetSingleAssignment(assignmentLookup, formatName);
             if (assignment == null)
@@ -375,7 +409,10 @@ namespace Tiledriver.Core.FormatModels.MapInfo.Reading
             return new ExitFadeInfo(colorToken.Value, durationToken.Value);
         }
 
-        private static NextMapInfo? ReadNextMapInfoAssignment(ILookup<Identifier, VariableAssignment> assignmentLookup, string formatName)
+        private static NextMapInfo? ReadNextMapInfoAssignment(
+            ILookup<Identifier, VariableAssignment> assignmentLookup,
+            string formatName
+        )
         {
             var assignment = GetSingleAssignment(assignmentLookup, formatName);
             if (assignment == null)

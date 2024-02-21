@@ -14,10 +14,8 @@ namespace Tiledriver.Core.LevelGeometry.Lighting
         public LightRange Range { get; }
 
         public int this[int col, int row] => this[new Position(col, row)];
-        public int this[Position p] => 
-            _lightLevels.TryGetValue(p, out int light) 
-                ? light 
-                : (Size.Contains(p) ? _defaultLightLevel : 0);
+        public int this[Position p] =>
+            _lightLevels.TryGetValue(p, out int light) ? light : (Size.Contains(p) ? _defaultLightLevel : 0);
 
         public LightMap(LightRange range, Size size)
         {

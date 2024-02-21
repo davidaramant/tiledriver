@@ -1,20 +1,20 @@
 // Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using SkiaSharp;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using NUnit.Framework;
+using SkiaSharp;
 using Tiledriver.Core.LevelGeometry;
+using Tiledriver.Core.LevelGeometry.CaveGeneration.Wolf;
 using Tiledriver.Core.LevelGeometry.Extensions;
 using Tiledriver.Core.LevelGeometry.Lighting;
+using Tiledriver.Core.Utils.CellularAutomata;
 using Tiledriver.Core.Utils.ConnectedComponentLabeling;
 using Tiledriver.Core.Utils.Images;
-using NUnit.Framework;
-using Tiledriver.Core.Utils.CellularAutomata;
-using Tiledriver.Core.LevelGeometry.CaveGeneration.Wolf;
 
 namespace Tiledriver.Core.ManualTests
 {
@@ -26,10 +26,7 @@ namespace Tiledriver.Core.ManualTests
         [Test, Explicit]
         public void ShowEntireProcess()
         {
-            CreateCave(
-                seed: 1,
-                folderName: "Cave Generation Process",
-                visualizeProcess: true);
+            CreateCave(seed: 1, folderName: "Cave Generation Process", visualizeProcess: true);
         }
 
         [Test, Explicit]
@@ -38,8 +35,13 @@ namespace Tiledriver.Core.ManualTests
             const bool visualizeProcess = false;
             const string folderName = "Cave Seeds";
 
-            Parallel.ForEach(Enumerable.Range(0, 100),
-                seed => { CreateCave(seed, folderName, visualizeProcess); });
+            Parallel.ForEach(
+                Enumerable.Range(0, 100),
+                seed =>
+                {
+                    CreateCave(seed, folderName, visualizeProcess);
+                }
+            );
         }
 
         [Test, Explicit]
@@ -50,11 +52,13 @@ namespace Tiledriver.Core.ManualTests
             var dir = OutputLocation.CreateDirectory("Detailed Cave");
 
             static IFastImage Visualize(CellBoard board, int scale = 1) =>
-                GenericVisualizer.RenderBinary(board.Dimensions,
-                        isTrue: p => board[p] == CellType.Dead,
-                        trueColor: SKColors.White,
-                        falseColor: SKColors.Black,
-                        scale: scale);
+                GenericVisualizer.RenderBinary(
+                    board.Dimensions,
+                    isTrue: p => board[p] == CellType.Dead,
+                    trueColor: SKColors.White,
+                    falseColor: SKColors.Black,
+                    scale: scale
+                );
 
             foreach (var file in dir.GetFiles())
             {
@@ -83,11 +87,10 @@ namespace Tiledriver.Core.ManualTests
 
             var random = new Random(1);
 
-            var board =
-                new CellBoard(new Size(128, 128))
-                    .Fill(random, probabilityAlive: 0.5)
-                    .MakeBorderAlive(thickness: 1)
-                    .GenerateStandardCave();
+            var board = new CellBoard(new Size(128, 128))
+                .Fill(random, probabilityAlive: 0.5)
+                .MakeBorderAlive(thickness: 1)
+                .GenerateStandardCave();
 
             int step = 1;
 
@@ -102,7 +105,11 @@ namespace Tiledriver.Core.ManualTests
             {
                 scaled = scaled.Quadruple().AddNoise(random, noise).RunGenerations(1);
 
-                Save(scaled, $"{step++}. board {1 << scalingIteration}x - noise {noise:F2}", 8 / (1 << scalingIteration));
+                Save(
+                    scaled,
+                    $"{step++}. board {1 << scalingIteration}x - noise {noise:F2}",
+                    8 / (1 << scalingIteration)
+                );
             }
 
             var trimmed = scaled.TrimToLargestDeadArea();
@@ -110,13 +117,15 @@ namespace Tiledriver.Core.ManualTests
             Save(trimmed, $"{step++}. trimmed", 1);
 
             // remove noise
-            var aliveAreas =
-                ConnectedAreaAnalyzer
-                    .FindForegroundAreas(trimmed.Dimensions, p => trimmed[p] == CellType.Alive)
-                    .Where(area => area.Area > 64)
-                    .ToArray();
+            var aliveAreas = ConnectedAreaAnalyzer
+                .FindForegroundAreas(trimmed.Dimensions, p => trimmed[p] == CellType.Alive)
+                .Where(area => area.Area > 64)
+                .ToArray();
 
-            var denoised = new CellBoard(trimmed.Dimensions, pos => aliveAreas.Any(a => a.Contains(pos)) ? CellType.Alive : CellType.Dead);
+            var denoised = new CellBoard(
+                trimmed.Dimensions,
+                pos => aliveAreas.Any(a => a.Contains(pos)) ? CellType.Alive : CellType.Dead
+            );
 
             Save(denoised, $"{step++}. denoised", 1);
 
@@ -126,9 +135,9 @@ namespace Tiledriver.Core.ManualTests
 
             // Very silly!!! Need to turn CellBoard into ConnectedArea
             var (playArea, dimensions) = ConnectedAreaAnalyzer
-                    .FindForegroundAreas(fullyDenoised.Dimensions, p => fullyDenoised[p] == CellType.Dead)
-                    .First()
-                    .TrimExcess(border: 1); // border would not be useful during actual Doom level generation
+                .FindForegroundAreas(fullyDenoised.Dimensions, p => fullyDenoised[p] == CellType.Dead)
+                .First()
+                .TrimExcess(border: 1); // border would not be useful during actual Doom level generation
 
             LogProgress("Converted CellBoard into ConnectedArea");
 
@@ -150,7 +159,8 @@ namespace Tiledriver.Core.ManualTests
                     }
                     return SKColors.Black;
                 },
-                scale: 1);
+                scale: 1
+            );
 
             SaveImage(interiorImg, $"{step++}. interior");
         }
@@ -164,10 +174,7 @@ namespace Tiledriver.Core.ManualTests
             Size dimensions = new(128, 128);
 
             var random = new Random(seed);
-            var board =
-                new CellBoard(dimensions)
-                    .Fill(random, probabilityAlive: 0.5)
-                    .MakeBorderAlive(thickness: 3);
+            var board = new CellBoard(dimensions).Fill(random, probabilityAlive: 0.5).MakeBorderAlive(thickness: 3);
 
             DirectoryInfo dirInfo = OutputLocation.CreateDirectory(folderName);
 
@@ -181,7 +188,8 @@ namespace Tiledriver.Core.ManualTests
                     isTrue: p => boardToSave[p] == CellType.Alive,
                     trueColor: SKColors.DarkSlateBlue,
                     falseColor: SKColors.White,
-                    scale: ImageScale);
+                    scale: ImageScale
+                );
                 SaveImage(img, generation, $"Cellular Generation {generation}");
             }
 
@@ -216,11 +224,10 @@ namespace Tiledriver.Core.ManualTests
 
             var step = 7;
 
-            var components =
-                ConnectedAreaAnalyzer
-                    .FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Dead)
-                    .OrderByDescending(component => component.Area)
-                    .ToArray();
+            var components = ConnectedAreaAnalyzer
+                .FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Dead)
+                .OrderByDescending(component => component.Area)
+                .ToArray();
 
             Log($"Seed {seed} - {components.Length} connected areas found");
 
@@ -261,7 +268,8 @@ namespace Tiledriver.Core.ManualTests
                 isTrue: largestComponent.Contains,
                 trueColor: SKColors.White,
                 falseColor: SKColors.DarkSlateBlue,
-                scale: ImageScale);
+                scale: ImageScale
+            );
 
             step++;
             if (visualizeProcess)
@@ -283,7 +291,8 @@ namespace Tiledriver.Core.ManualTests
                         return SKColors.Gray;
                     return SKColors.White;
                 },
-                scale: ImageScale);
+                scale: ImageScale
+            );
 
             step++;
             if (visualizeProcess)
@@ -293,33 +302,38 @@ namespace Tiledriver.Core.ManualTests
 
             // Place some lights
             var lightRange = new LightRange(DarkLevels: 15, LightLevels: 5);
-            var lights = CaveThingPlacement.RandomlyPlaceLights(
+            var lights = CaveThingPlacement
+                .RandomlyPlaceLights(
                     distanceToEdge.Where(pair => pair.Value == 2).Select(pair => pair.Key).ToList(),
                     random,
                     lightRange,
-                    percentAreaToCover: 0.05)
+                    percentAreaToCover: 0.05
+                )
                 .ToArray();
 
             Log($"Seed {seed} - Number of lights: {lights.Length}");
 
             foreach (var light in lights)
             {
-                largestComponentImg.SetPixel(light.Center.X, light.Center.Y, light.Height switch
-                {
-                    LightHeight.Ceiling => SKColors.Orange,
-                    LightHeight.Middle => SKColors.HotPink,
-                    LightHeight.Floor => SKColors.Red,
-                    _ => throw new Exception("Impossible")
-                });
+                largestComponentImg.SetPixel(
+                    light.Center.X,
+                    light.Center.Y,
+                    light.Height switch
+                    {
+                        LightHeight.Ceiling => SKColors.Orange,
+                        LightHeight.Middle => SKColors.HotPink,
+                        LightHeight.Floor => SKColors.Red,
+                        _ => throw new Exception("Impossible")
+                    }
+                );
             }
-            if(visualizeProcess)
+            if (visualizeProcess)
             {
                 step++;
                 SaveImage(largestComponentImg, step, "Light Positions");
             }
 
-            var (floorLighting, _) =
-                LightTracer.Trace(dimensions, p => board[p] == CellType.Alive, lightRange, lights);
+            var (floorLighting, _) = LightTracer.Trace(dimensions, p => board[p] == CellType.Alive, lightRange, lights);
 
             using var lightImg = LightMapVisualizer.Render(floorLighting, lights, largestComponent);
 
@@ -327,16 +341,16 @@ namespace Tiledriver.Core.ManualTests
             {
                 step++;
                 SaveImage(lightImg, step, "Lighting");
-            } 
+            }
 
             // Place treasure
-            var treasures =
-                CaveThingPlacement.RandomlyPlaceTreasure(
-                    area: largestComponent,
-                    edge: distanceToEdge.Where(p => p.Value == 0).Select(p => p.Key),
-                    floorLighting: floorLighting,
-                    lightRange: lightRange,
-                    random: random);
+            var treasures = CaveThingPlacement.RandomlyPlaceTreasure(
+                area: largestComponent,
+                edge: distanceToEdge.Where(p => p.Value == 0).Select(p => p.Key),
+                floorLighting: floorLighting,
+                lightRange: lightRange,
+                random: random
+            );
 
             foreach (var t in treasures)
             {

@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Collections.Generic;
@@ -38,10 +38,14 @@ public sealed class LatticePoint : IEquatable<LatticePoint?>
 
     #region Equality
     public override bool Equals(object? obj) => Equals(obj as LatticePoint);
+
     public bool Equals(LatticePoint? other) => other != null && Square.Equals(other.Square) && Point == other.Point;
+
     public override int GetHashCode() => HashCode.Combine(Square, Point);
 
-    public static bool operator ==(LatticePoint? left, LatticePoint? right) => EqualityComparer<LatticePoint>.Default.Equals(left, right);
+    public static bool operator ==(LatticePoint? left, LatticePoint? right) =>
+        EqualityComparer<LatticePoint>.Default.Equals(left, right);
+
     public static bool operator !=(LatticePoint? left, LatticePoint? right) => !(left == right);
     #endregion
 }

@@ -36,7 +36,9 @@ namespace Tiledriver.Core.FormatModels.Textures
             }
 
             var number = _renderQueue.Count;
-            var tex = new Texture(string.IsNullOrWhiteSpace(renderedTexture.Name) ? $"RNDR{number:D3}" : renderedTexture.Name);
+            var tex = new Texture(
+                string.IsNullOrWhiteSpace(renderedTexture.Name) ? $"RNDR{number:D3}" : renderedTexture.Name
+            );
             _renderQueue.Add((renderedTexture, tex));
 
             if (renderedTexture.HasText)
@@ -49,7 +51,9 @@ namespace Tiledriver.Core.FormatModels.Textures
                         256,
                         XScale: 4,
                         YScale: 4,
-                        Patches: ImmutableArray.Create(new Patch(tex.Name, 0, 0, Rotate: renderedTexture.Rotation))));
+                        Patches: ImmutableArray.Create(new Patch(tex.Name, 0, 0, Rotate: renderedTexture.Rotation))
+                    )
+                );
                 _renderNameLookup.Add(renderedTexture, compositeName);
                 return compositeName;
             }
@@ -57,7 +61,6 @@ namespace Tiledriver.Core.FormatModels.Textures
             {
                 _renderNameLookup.Add(renderedTexture, tex);
                 return tex;
-
             }
         }
     }

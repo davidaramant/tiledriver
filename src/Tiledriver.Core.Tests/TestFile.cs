@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.IO;
@@ -46,8 +46,8 @@ namespace Tiledriver.Core.Tests
 
             string resourcePath = $"Tiledriver.Core.Tests.TestFiles.{area}.{fileName}.txt";
 
-            return System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(resourcePath) 
-                   ?? throw new Exception("Could not find test file");
+            return System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(resourcePath)
+                ?? throw new Exception("Could not find test file");
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿namespace Tiledriver.Core.LevelGeometry.CoordinateSystems;
+
 public sealed class TopLeftOrigin : IPositionOffsets
 {
     public PositionDelta Up { get; } = new(0, -1);

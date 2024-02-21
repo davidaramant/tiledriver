@@ -13,9 +13,8 @@ namespace Tiledriver.Core.Utils
         /// <summary>
         /// Returns the sequence of points between <paramref name="start"/> and <paramref name="end"/>
         /// </summary>
-        public static IEnumerable<Position> BresenhamLine(Position start, Position end)
-            => BresenhamLine(start.X, start.Y, end.X, end.Y)
-                .Select(p => new Position(p.X, p.Y));
+        public static IEnumerable<Position> BresenhamLine(Position start, Position end) =>
+            BresenhamLine(start.X, start.Y, end.X, end.Y).Select(p => new Position(p.X, p.Y));
 
         /// <summary>
         /// Returns the sequence of points between (x0, y0) to (x1, y1)

@@ -19,19 +19,21 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Reading
             actual.TileSize.Should().Be(expected.TileSize);
             actual.Width.Should().Be(expected.Width);
 
-            CompareCollections(actual:actual.Planes, expected:expected.Planes);
-            CompareCollections(actual:actual.Sectors, expected:expected.Sectors);
-            CompareCollections(actual:actual.Things, expected:expected.Things);
-            CompareCollections(actual:actual.Tiles, expected:expected.Tiles);
-            CompareCollections(actual:actual.Triggers, expected:expected.Triggers);
-            CompareCollections(actual:actual.Zones, expected:expected.Zones);
+            CompareCollections(actual: actual.Planes, expected: expected.Planes);
+            CompareCollections(actual: actual.Sectors, expected: expected.Sectors);
+            CompareCollections(actual: actual.Things, expected: expected.Things);
+            CompareCollections(actual: actual.Tiles, expected: expected.Tiles);
+            CompareCollections(actual: actual.Triggers, expected: expected.Triggers);
+            CompareCollections(actual: actual.Zones, expected: expected.Zones);
 
             actual.PlaneMaps.Should().HaveCount(expected.PlaneMaps.Length);
 
             for (int index = 0; index < actual.PlaneMaps.Length; index++)
             {
-                actual.PlaneMaps[index].Should().BeEquivalentTo(
-                    expected.PlaneMaps[index],options => options.ComparingByMembers<MapSquare>() );
+                actual
+                    .PlaneMaps[index]
+                    .Should()
+                    .BeEquivalentTo(expected.PlaneMaps[index], options => options.ComparingByMembers<MapSquare>());
             }
         }
 

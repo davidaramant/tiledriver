@@ -1,10 +1,10 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using Xunit;
 using FluentAssertions;
 using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.LevelGeometry.Lighting;
+using Xunit;
 
 namespace Tiledriver.Core.Tests.LevelGeometry.Lighting
 {
@@ -28,13 +28,13 @@ namespace Tiledriver.Core.Tests.LevelGeometry.Lighting
 
         [Theory]
         [ClassData(typeof(LightDefinitionTestData))]
-        public void ShouldCalculateBrightnessAtLocation(Position location, LightHeight height, (int Floor, int Ceiling) brightness)
+        public void ShouldCalculateBrightnessAtLocation(
+            Position location,
+            LightHeight height,
+            (int Floor, int Ceiling) brightness
+        )
         {
-            var light = new LightDefinition(
-                Center: new Position(3, 3),
-                Brightness: 6,
-                Radius: 2,
-                Height: height);
+            var light = new LightDefinition(Center: new Position(3, 3), Brightness: 6, Radius: 2, Height: height);
 
             light.GetBrightness(location).Should().Be(brightness);
         }

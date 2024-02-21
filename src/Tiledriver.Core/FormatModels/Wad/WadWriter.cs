@@ -31,10 +31,9 @@ namespace Tiledriver.Core.FormatModels.Wad
 
                 lump.WriteTo(stream);
 
-                metadata.Add(new LumpMetadata(
-                    Position: startOfLump,
-                    Size: (int)stream.Position - startOfLump,
-                    Name: lump.Name));
+                metadata.Add(
+                    new LumpMetadata(Position: startOfLump, Size: (int)stream.Position - startOfLump, Name: lump.Name)
+                );
             }
 
             int startOfDirectory = (int)stream.Position;

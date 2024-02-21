@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Generic;
 using System.Linq;
@@ -36,14 +36,46 @@ public sealed class SquareSegmentSectors
             }
         }
 
-        AddEdge(EdgeSegmentId.DiagTopLeft, segment1: SquareSegment.UpperLeftOuter, segment2: SquareSegment.UpperLeftInner);
-        AddEdge(EdgeSegmentId.DiagTopRight, segment1: SquareSegment.UpperRightOuter, segment2: SquareSegment.UpperRightInner);
-        AddEdge(EdgeSegmentId.DiagBottomRight, segment1: SquareSegment.LowerRightInner, segment2: SquareSegment.LowerRightOuter);
-        AddEdge(EdgeSegmentId.DiagBottomLeft, segment1: SquareSegment.LowerLeftInner, segment2: SquareSegment.LowerLeftOuter);
-        AddEdge(EdgeSegmentId.HorizontalLeft, segment1: SquareSegment.UpperLeftInner, segment2: SquareSegment.LowerLeftInner);
-        AddEdge(EdgeSegmentId.HorizontalRight, segment1: SquareSegment.UpperRightInner, segment2: SquareSegment.LowerRightInner);
-        AddEdge(EdgeSegmentId.VerticalTop, segment1: SquareSegment.UpperLeftInner, segment2: SquareSegment.UpperRightInner);
-        AddEdge(EdgeSegmentId.VerticalBottom, segment1: SquareSegment.LowerLeftInner, segment2: SquareSegment.LowerRightInner);
+        AddEdge(
+            EdgeSegmentId.DiagTopLeft,
+            segment1: SquareSegment.UpperLeftOuter,
+            segment2: SquareSegment.UpperLeftInner
+        );
+        AddEdge(
+            EdgeSegmentId.DiagTopRight,
+            segment1: SquareSegment.UpperRightOuter,
+            segment2: SquareSegment.UpperRightInner
+        );
+        AddEdge(
+            EdgeSegmentId.DiagBottomRight,
+            segment1: SquareSegment.LowerRightInner,
+            segment2: SquareSegment.LowerRightOuter
+        );
+        AddEdge(
+            EdgeSegmentId.DiagBottomLeft,
+            segment1: SquareSegment.LowerLeftInner,
+            segment2: SquareSegment.LowerLeftOuter
+        );
+        AddEdge(
+            EdgeSegmentId.HorizontalLeft,
+            segment1: SquareSegment.UpperLeftInner,
+            segment2: SquareSegment.LowerLeftInner
+        );
+        AddEdge(
+            EdgeSegmentId.HorizontalRight,
+            segment1: SquareSegment.UpperRightInner,
+            segment2: SquareSegment.LowerRightInner
+        );
+        AddEdge(
+            EdgeSegmentId.VerticalTop,
+            segment1: SquareSegment.UpperLeftInner,
+            segment2: SquareSegment.UpperRightInner
+        );
+        AddEdge(
+            EdgeSegmentId.VerticalBottom,
+            segment1: SquareSegment.LowerLeftInner,
+            segment2: SquareSegment.LowerRightInner
+        );
 
         return lookup;
     }

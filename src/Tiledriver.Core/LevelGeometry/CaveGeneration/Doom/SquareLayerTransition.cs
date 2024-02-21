@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2022, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Collections.Generic;
@@ -7,6 +7,7 @@ using Tiledriver.Core.Extensions.Collections;
 using Tiledriver.Core.LevelGeometry.CaveGeneration.Doom.SquareModel;
 using Tiledriver.Core.LevelGeometry.CoordinateSystems;
 using static Tiledriver.Core.Utils.MathUtil;
+
 namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 
 public static class SquareLayerTransition
@@ -15,7 +16,8 @@ public static class SquareLayerTransition
 
     public static Func<SquareSegment, int> GetHeightLookup(
         IReadOnlyDictionary<Position, int> interiorDistances,
-        Position bottomLeft)
+        Position bottomLeft
+    )
     {
         static int Normalize(int distance) =>
             distance switch
@@ -34,11 +36,14 @@ public static class SquareLayerTransition
         var minHeight = Min(upperLeft, upperRight, lowerLeft, lowerRight);
         var maxHeight = Max(upperLeft, upperRight, lowerLeft, lowerRight);
 
-        var segments = Corner.Create(
-            topLeft: upperLeft == maxHeight,
-            topRight: upperRight == maxHeight,
-            bottomLeft: lowerLeft == maxHeight,
-            bottomRight: lowerRight == maxHeight).ToSquareSegments();
+        var segments = Corner
+            .Create(
+                topLeft: upperLeft == maxHeight,
+                topRight: upperRight == maxHeight,
+                bottomLeft: lowerLeft == maxHeight,
+                bottomRight: lowerRight == maxHeight
+            )
+            .ToSquareSegments();
 
         return seg => segments.HasFlag(seg.ToSquareSegments()) ? maxHeight : minHeight;
     }

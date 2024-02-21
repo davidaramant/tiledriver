@@ -15,15 +15,15 @@ namespace Tiledriver.Core.FormatModels.Udmf
             int offsetX = 0,
             int offsetY = 0,
             string comment = ""
-        ) : this(
-            TextureTop: textureTop ?? Texture.None,
-            TextureBottom: textureBottom ?? Texture.None,
-            TextureMiddle: textureMiddle ?? Texture.None,
-            Sector: sector,
-            OffsetX: offsetX,
-            OffsetY: offsetY,
-            Comment: comment)
-        {
-        }
+        )
+            : this(
+                TextureTop: textureTop ?? Texture.None,
+                TextureBottom: textureBottom ?? Texture.None,
+                TextureMiddle: textureMiddle ?? Texture.None,
+                Sector: sector,
+                OffsetX: offsetX,
+                OffsetY: offsetY,
+                Comment: comment
+            ) { }
     }
 }

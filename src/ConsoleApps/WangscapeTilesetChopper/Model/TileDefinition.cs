@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Immutable;
 using System.Text.Json.Serialization;
@@ -7,11 +7,11 @@ using System.Text.Json.Serialization;
 namespace WangscapeTilesetChopper.Model
 {
     internal record TileDefinition(
-        [property: JsonPropertyName("corners")]
-        ImmutableArray<string> CornerTextures,
+        [property: JsonPropertyName("corners")] ImmutableArray<string> CornerTextures,
         string Filename,
         int X,
-        int Y)
+        int Y
+    )
     {
         internal Corners ParseCorners()
         {

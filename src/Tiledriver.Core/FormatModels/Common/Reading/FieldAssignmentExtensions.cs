@@ -10,12 +10,14 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
         private static Token GetRequiredToken(
             IReadOnlyDictionary<Identifier, Token> fields,
             IdentifierToken contextName,
-            Identifier fieldName)
+            Identifier fieldName
+        )
         {
             if (!fields.ContainsKey(fieldName))
             {
                 throw new ParsingException(
-                    $"Missing required field {fieldName} in {contextName.Id} defined on {contextName.Location}");
+                    $"Missing required field {fieldName} in {contextName.Id} defined on {contextName.Location}"
+                );
             }
 
             return fields[fieldName];
@@ -29,7 +31,8 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
         public static T GetRequiredFieldValue<T>(
             this IReadOnlyDictionary<Identifier, Token> fields,
             IdentifierToken contextName,
-            Identifier fieldName)
+            Identifier fieldName
+        )
         {
             Token token = GetRequiredToken(fields, contextName, fieldName);
             return GetTokenValue<T>(fieldName, token);
@@ -38,15 +41,14 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
         public static T GetOptionalFieldValue<T>(
             this IReadOnlyDictionary<Identifier, Token> fields,
             Identifier fieldName,
-            T defaultValue) =>
-            fields.TryGetValue(fieldName, out var token)
-                ? GetTokenValue<T>(fieldName, token)
-                : defaultValue;
+            T defaultValue
+        ) => fields.TryGetValue(fieldName, out var token) ? GetTokenValue<T>(fieldName, token) : defaultValue;
 
         public static Texture GetRequiredTextureFieldValue(
             this IReadOnlyDictionary<Identifier, Token> fields,
             IdentifierToken contextName,
-            Identifier fieldName)
+            Identifier fieldName
+        )
         {
             var name = GetRequiredFieldValue<string>(fields, contextName, fieldName);
             return new Texture(name);
@@ -54,7 +56,8 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
 
         public static Texture GetOptionalTextureFieldValue(
             this IReadOnlyDictionary<Identifier, Token> fields,
-            Identifier fieldName)
+            Identifier fieldName
+        )
         {
             var name = GetOptionalFieldValue(fields, fieldName, "-");
             return name is null or "-" ? Texture.None : new Texture(name);
@@ -71,7 +74,8 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
         public static double GetRequiredDoubleFieldValue(
             this IReadOnlyDictionary<Identifier, Token> fields,
             IdentifierToken blockName,
-            Identifier fieldName)
+            Identifier fieldName
+        )
         {
             Token token = GetRequiredToken(fields, blockName, fieldName);
             return GetDoubleTokenValue(fieldName, token);

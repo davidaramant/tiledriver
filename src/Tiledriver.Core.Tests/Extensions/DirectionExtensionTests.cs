@@ -1,12 +1,12 @@
 // Copyright (c) 2016, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Generic;
 using System.Linq;
-using Xunit;
 using FluentAssertions;
 using Tiledriver.Core.Extensions.Directions;
 using Tiledriver.Core.LevelGeometry;
+using Xunit;
 
 namespace Tiledriver.Core.Tests.Extensions
 {
@@ -22,15 +22,15 @@ namespace Tiledriver.Core.Tests.Extensions
         [InlineData(0, 2, 3, 3, 2)] // Bottom Left
         [InlineData(1, 2, 3, 3, 3)] // Bottom Middle
         [InlineData(2, 2, 3, 3, 2)] // Bottom Right
-        public void ShouldReturnValidAdjacentPoints(
-            int x, int y,
-            int width, int height,
-            int expectedAdjacent)
+        public void ShouldReturnValidAdjacentPoints(int x, int y, int width, int height, int expectedAdjacent)
         {
             var location = new Position(x, y);
             var bounds = new Size(width, height);
 
-            location.GetAdjacentPoints(bounds, clockWise: false, start: Direction.East).Should().HaveCount(expectedAdjacent);
+            location
+                .GetAdjacentPoints(bounds, clockWise: false, start: Direction.East)
+                .Should()
+                .HaveCount(expectedAdjacent);
         }
 
         [Fact]
@@ -39,7 +39,8 @@ namespace Tiledriver.Core.Tests.Extensions
             VerifyDirections(
                 clockWise: false,
                 start: Direction.East,
-                expectedDirections: new[] { Direction.East, Direction.North, Direction.West, Direction.South, });
+                expectedDirections: new[] { Direction.East, Direction.North, Direction.West, Direction.South, }
+            );
         }
 
         [Fact]
@@ -48,7 +49,8 @@ namespace Tiledriver.Core.Tests.Extensions
             VerifyDirections(
                 clockWise: true,
                 start: Direction.West,
-                expectedDirections: new[] { Direction.West, Direction.North, Direction.East, Direction.South, });
+                expectedDirections: new[] { Direction.West, Direction.North, Direction.East, Direction.South, }
+            );
         }
 
         [Fact]
@@ -71,11 +73,10 @@ namespace Tiledriver.Core.Tests.Extensions
 
         private static void VerifyDirections(bool clockWise, Direction start, IEnumerable<Direction> expectedDirections)
         {
-            var directions =
-                new Position(1, 1).
-                    GetAdjacentPoints(new Size(3, 3), clockWise: clockWise, start: start).
-                    Select(tuple => tuple.direction).
-                    ToArray();
+            var directions = new Position(1, 1)
+                .GetAdjacentPoints(new Size(3, 3), clockWise: clockWise, start: start)
+                .Select(tuple => tuple.direction)
+                .ToArray();
 
             directions.Should().BeEquivalentTo(expectedDirections);
         }

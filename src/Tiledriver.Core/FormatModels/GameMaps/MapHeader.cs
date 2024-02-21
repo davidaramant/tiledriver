@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2016, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Text;
@@ -14,7 +14,8 @@ namespace Tiledriver.Core.FormatModels.GameMaps
             PlaneMetadata plane2Info,
             ushort width,
             ushort height,
-            string name)
+            string name
+        )
         {
             Plane0Info = plane0Info;
             Plane1Info = plane1Info;
@@ -33,7 +34,7 @@ namespace Tiledriver.Core.FormatModels.GameMaps
 
         public static MapHeader Parse(byte[] buffer)
         {
-            // The documentation claims the header can be RLEW compressed, but ignore that for now.  
+            // The documentation claims the header can be RLEW compressed, but ignore that for now.
             // I don't think the Wolf3D maps are compressed, at least.
             if (buffer.Length != 42)
             {
@@ -67,8 +68,8 @@ namespace Tiledriver.Core.FormatModels.GameMaps
                 plane2Info: new PlaneMetadata(Offset: plane2Offset, CompressedLength: plane2Length),
                 width: width,
                 height: height,
-                name: name);
+                name: name
+            );
         }
     }
-
 }

@@ -39,12 +39,12 @@ namespace Tiledriver.Core.Extensions.Collections
 
         // Cheat because it's absurd that interface doesn't have this
         public static int FindIndex<T>(this IReadOnlyList<T> list, Predicate<T> predicate) =>
-            ((List<T>) list).FindIndex(predicate);
+            ((List<T>)list).FindIndex(predicate);
 
         public static void Shuffle<T>(this IList<T> list, Random? random = null)
         {
             var rng = random ?? new Random();
-            
+
             int n = list.Count;
             while (n > 1)
             {
@@ -54,7 +54,11 @@ namespace Tiledriver.Core.Extensions.Collections
             }
         }
 
-        public static TValue GetValueOr<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dict, TKey key, TValue defaultValue) where TValue : struct => 
-            dict.TryGetValue(key, out var value) ? value : defaultValue;
+        public static TValue GetValueOr<TKey, TValue>(
+            this IReadOnlyDictionary<TKey, TValue> dict,
+            TKey key,
+            TValue defaultValue
+        )
+            where TValue : struct => dict.TryGetValue(key, out var value) ? value : defaultValue;
     }
 }

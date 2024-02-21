@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -9,7 +9,8 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
 {
     public static class TokenStreamExtensions
     {
-        public static Token? GetNext(this IEnumerator<Token> enumerator) => enumerator.MoveNext() ? enumerator.Current : null;
+        public static Token? GetNext(this IEnumerator<Token> enumerator) =>
+            enumerator.MoveNext() ? enumerator.Current : null;
 
         public static Token? GetNextSkippingNewlines(this IEnumerator<Token> enumerator)
         {
@@ -24,13 +25,15 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
             return null;
         }
 
-        public static TExpected ExpectNext<TExpected>(this IEnumerator<Token> tokenStream) where TExpected : Token
+        public static TExpected ExpectNext<TExpected>(this IEnumerator<Token> tokenStream)
+            where TExpected : Token
         {
             var nextToken = GetNext(tokenStream);
             return nextToken is TExpected token ? token : throw ParsingException.CreateError<TExpected>(nextToken);
         }
 
-        public static TExpected ExpectNextSkippingNewlines<TExpected>(this IEnumerator<Token> tokenStream) where TExpected : Token
+        public static TExpected ExpectNextSkippingNewlines<TExpected>(this IEnumerator<Token> tokenStream)
+            where TExpected : Token
         {
             var nextToken = GetNextSkippingNewlines(tokenStream);
             return nextToken is TExpected token ? token : throw ParsingException.CreateError<TExpected>(nextToken);

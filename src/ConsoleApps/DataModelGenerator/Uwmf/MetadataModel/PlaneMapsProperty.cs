@@ -10,8 +10,7 @@ namespace Tiledriver.DataModelGenerator.Uwmf.MetadataModel
         public override string PropertyType => "ImmutableArray<ImmutableArray<MapSquare>>";
         public override string ElementTypeName => "ImmutableArray<MapSquare>";
 
-        public PlaneMapsProperty() : base("planeMap")
-        {
-        }
+        public PlaneMapsProperty()
+            : base("planeMap") { }
     }
 }

@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2017, Aaron Alexander
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Collections.Generic;
@@ -103,7 +103,12 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             return contentBuilder.ToString();
         }
 
-        private static string NameRoom(IRoom room, bool isStartingRoom, bool isEndingRoom, Dictionary<IRoom, string> roomNameMap)
+        private static string NameRoom(
+            IRoom room,
+            bool isStartingRoom,
+            bool isEndingRoom,
+            Dictionary<IRoom, string> roomNameMap
+        )
         {
             var roomName = room.Name;
 

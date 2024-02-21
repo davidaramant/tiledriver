@@ -55,8 +55,9 @@ namespace Tiledriver.Core.Utils.ConnectedComponentLabeling
                     while (queue.Any())
                     {
                         var (qP, currentLabel) = queue.Dequeue();
-                        foreach (var neighbor in GetNeighbors(qP)
-                            .Where(n => isForeground(n) && !covered.ContainsKey(n)))
+                        foreach (
+                            var neighbor in GetNeighbors(qP).Where(n => isForeground(n) && !covered.ContainsKey(n))
+                        )
                         {
                             covered.Add(neighbor, currentLabel);
                             queue.Enqueue((neighbor, currentLabel));
@@ -91,7 +92,8 @@ namespace Tiledriver.Core.Utils.ConnectedComponentLabeling
         /// </returns>
         public static IReadOnlyList<IReadOnlySet<Position>> DetermineInteriorContours(
             this ConnectedArea area,
-            Neighborhood neighborhood)
+            Neighborhood neighborhood
+        )
         {
             Func<Position, IEnumerable<Position>> getNeighborhood =
                 neighborhood == Neighborhood.Moore
@@ -123,7 +125,8 @@ namespace Tiledriver.Core.Utils.ConnectedComponentLabeling
 
         public static IReadOnlyDictionary<Position, int> DetermineInteriorEdgeDistance(
             this ConnectedArea area,
-            Neighborhood neighborhood)
+            Neighborhood neighborhood
+        )
         {
             var edges = DetermineInteriorContours(area, neighborhood);
 

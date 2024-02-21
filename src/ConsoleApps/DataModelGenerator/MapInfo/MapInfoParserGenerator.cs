@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Diagnostics.CodeAnalysis;
@@ -53,7 +53,9 @@ namespace Tiledriver.DataModelGenerator.MapInfo
         private static void WriteParser(IndentedWriter output, IBlock block)
         {
             output
-                .Line($"private static partial {block.ClassName} Parse{block.ClassName}(ILookup<Identifier, VariableAssignment> assignmentLookup)")
+                .Line(
+                    $"private static partial {block.ClassName} Parse{block.ClassName}(ILookup<Identifier, VariableAssignment> assignmentLookup)"
+                )
                 .IncreaseIndent()
                 .Line($"=> new {block.ClassName}(")
                 .IncreaseIndent()
@@ -65,7 +67,8 @@ namespace Tiledriver.DataModelGenerator.MapInfo
 
         private static void WriteMapParser(IndentedWriter output, IBlock block)
         {
-            output.Line("private static partial Map ParseMap(")
+            output
+                .Line("private static partial Map ParseMap(")
                 .IncreaseIndent()
                 .Line("ILookup<Identifier, VariableAssignment> assignmentLookup,")
                 .Line("string mapLump,")
@@ -81,24 +84,32 @@ namespace Tiledriver.DataModelGenerator.MapInfo
         }
 
         private static string GetMapPropertyReader(Property property) =>
-            $"{property.PropertyName}: " + property switch
+            $"{property.PropertyName}: "
+            + property switch
             {
                 ScalarProperty { PropertyName: "MapName" } => "mapName",
                 ScalarProperty { PropertyName: "MapLump" } => "mapLump",
                 ScalarProperty { PropertyName: "IsMapNameLookup" } => "isMapNameLookup",
-                FlagProperty => $"ReadFlag(assignmentLookup, \"{property.FormatName}\") ?? defaultMap.{property.PropertyName}",
-                ScalarProperty sp => $"Read{sp.BasePropertyType.Pascalize()}Assignment(assignmentLookup, \"{property.FormatName}\") ?? defaultMap.{property.PropertyName}",
-                CollectionProperty { PropertyName: "SpecialActions" } => "ReadSpecialActionAssignments(assignmentLookup).AddRange(defaultMap.SpecialActions)",
-                CollectionProperty => $"ReadListAssignment(assignmentLookup, \"{property.FormatName}\").AddRange(defaultMap.{property.PropertyName})",
+                FlagProperty
+                    => $"ReadFlag(assignmentLookup, \"{property.FormatName}\") ?? defaultMap.{property.PropertyName}",
+                ScalarProperty sp
+                    => $"Read{sp.BasePropertyType.Pascalize()}Assignment(assignmentLookup, \"{property.FormatName}\") ?? defaultMap.{property.PropertyName}",
+                CollectionProperty { PropertyName: "SpecialActions" }
+                    => "ReadSpecialActionAssignments(assignmentLookup).AddRange(defaultMap.SpecialActions)",
+                CollectionProperty
+                    => $"ReadListAssignment(assignmentLookup, \"{property.FormatName}\").AddRange(defaultMap.{property.PropertyName})",
                 _ => throw new Exception("What type of property is this??")
             };
 
         private static string GetPropertyReader(Property property) =>
-            $"{property.PropertyName}: " + property switch
+            $"{property.PropertyName}: "
+            + property switch
             {
                 FlagProperty => $"ReadFlag(assignmentLookup, \"{property.FormatName}\")",
-                ScalarProperty sp => $"Read{sp.BasePropertyType.Pascalize()}Assignment(assignmentLookup, \"{property.FormatName}\")",
-                CollectionProperty { PropertyName: "SpecialActions" } => "ReadSpecialActionAssignments(assignmentLookup)",
+                ScalarProperty sp
+                    => $"Read{sp.BasePropertyType.Pascalize()}Assignment(assignmentLookup, \"{property.FormatName}\")",
+                CollectionProperty { PropertyName: "SpecialActions" }
+                    => "ReadSpecialActionAssignments(assignmentLookup)",
                 CollectionProperty => $"ReadListAssignment(assignmentLookup, \"{property.FormatName}\")",
                 _ => throw new Exception("What type of property is this??")
             };
@@ -106,7 +117,9 @@ namespace Tiledriver.DataModelGenerator.MapInfo
         private static void WriteDefaultMapUpdater(IndentedWriter output, IBlock block)
         {
             output
-                .Line($"private static partial DefaultMap UpdateDefaultMap(DefaultMap defaultMap, AddDefaultMap addDefaultMap) =>")
+                .Line(
+                    $"private static partial DefaultMap UpdateDefaultMap(DefaultMap defaultMap, AddDefaultMap addDefaultMap) =>"
+                )
                 .IncreaseIndent()
                 .Line("new DefaultMap(")
                 .IncreaseIndent()
@@ -117,7 +130,8 @@ namespace Tiledriver.DataModelGenerator.MapInfo
         }
 
         private static string GetPropertyCondenser(Property property) =>
-            $"{property.PropertyName}: " + property switch
+            $"{property.PropertyName}: "
+            + property switch
             {
                 ScalarProperty sp => $"addDefaultMap.{sp.PropertyName} ?? defaultMap.{sp.PropertyName}",
                 CollectionProperty cp => $"defaultMap.{cp.PropertyName}.AddRange(addDefaultMap.{cp.PropertyName})",

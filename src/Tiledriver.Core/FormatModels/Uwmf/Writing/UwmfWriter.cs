@@ -1,5 +1,5 @@
 // Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Collections.Immutable;
@@ -23,10 +23,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Writing
         {
             static string Convert(MapSquare ts)
             {
-                var tagPortion =
-                    ts.Tag != 0 ?
-                        $",{ts.Tag}" :
-                        string.Empty;
+                var tagPortion = ts.Tag != 0 ? $",{ts.Tag}" : string.Empty;
 
                 return $"\t{{{ts.Tile},{ts.Sector},{ts.Zone}{tagPortion}}}";
             }
@@ -37,10 +34,16 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Writing
             writer.WriteLine("}");
         }
 
-        private static void WriteProperty(StreamWriter writer, string name, Texture value, bool indent = true) => 
+        private static void WriteProperty(StreamWriter writer, string name, Texture value, bool indent = true) =>
             WriteProperty(writer, name, value.Name, indent: indent);
 
-        private static void WriteProperty(StreamWriter writer, string name, string value, string? defaultValue = null, bool indent = true)
+        private static void WriteProperty(
+            StreamWriter writer,
+            string name,
+            string value,
+            string? defaultValue = null,
+            bool indent = true
+        )
         {
             if (value != defaultValue)
             {
@@ -52,7 +55,13 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Writing
             }
         }
 
-        private static void WriteProperty(StreamWriter writer, string name, bool value, bool? defaultValue = null, bool indent = true)
+        private static void WriteProperty(
+            StreamWriter writer,
+            string name,
+            bool value,
+            bool? defaultValue = null,
+            bool indent = true
+        )
         {
             if (value != defaultValue)
             {
@@ -64,7 +73,13 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Writing
             }
         }
 
-        private static void WriteProperty(StreamWriter writer, string name, int value, int? defaultValue = null, bool indent = true)
+        private static void WriteProperty(
+            StreamWriter writer,
+            string name,
+            int value,
+            int? defaultValue = null,
+            bool indent = true
+        )
         {
             if (value != defaultValue)
             {
@@ -72,7 +87,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Writing
                 {
                     writer.Write('\t');
                 }
-            
+
                 writer.WriteLine($"{name} = {value};");
             }
         }

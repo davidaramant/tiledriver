@@ -13,6 +13,7 @@ namespace Tiledriver.Core.LevelGeometry.Extensions
         /// 4-way neighborhood
         /// </summary>
         VonNeumann,
+
         /// <summary>
         /// 8-way neighborhood
         /// </summary>
@@ -22,8 +23,8 @@ namespace Tiledriver.Core.LevelGeometry.Extensions
     public static class PositionExtensions
     {
         public static bool Touches(this Position p, Position other) =>
-            (p.X == other.X && (p.Y == other.Y - 1 || p.Y == other.Y + 1)) ||
-            (p.Y == other.Y && (p.X == other.X - 1 || p.X == other.X + 1));
+            (p.X == other.X && (p.Y == other.Y - 1 || p.Y == other.Y + 1))
+            || (p.Y == other.Y && (p.X == other.X - 1 || p.X == other.X + 1));
 
         /// <summary>
         /// Gets the 4 neighbors of this position.
@@ -32,8 +33,8 @@ namespace Tiledriver.Core.LevelGeometry.Extensions
         {
             // Coordinate system doesn't matter for this
             yield return p + CoordinateSystem.BottomLeft.Up;
-            yield return p + CoordinateSystem.BottomLeft.Right; 
-            yield return p + CoordinateSystem.BottomLeft.Down; 
+            yield return p + CoordinateSystem.BottomLeft.Right;
+            yield return p + CoordinateSystem.BottomLeft.Down;
             yield return p + CoordinateSystem.BottomLeft.Left;
         }
 
@@ -45,10 +46,10 @@ namespace Tiledriver.Core.LevelGeometry.Extensions
             // Coordinate system doesn't matter for this
             yield return p + CoordinateSystem.BottomLeft.Up;
             yield return p + CoordinateSystem.BottomLeft.UpAndRight;
-            yield return p + CoordinateSystem.BottomLeft.Right; 
-            yield return p + CoordinateSystem.BottomLeft.DownAndRight; 
-            yield return p + CoordinateSystem.BottomLeft.Down; 
-            yield return p + CoordinateSystem.BottomLeft.DownAndLeft; 
+            yield return p + CoordinateSystem.BottomLeft.Right;
+            yield return p + CoordinateSystem.BottomLeft.DownAndRight;
+            yield return p + CoordinateSystem.BottomLeft.Down;
+            yield return p + CoordinateSystem.BottomLeft.DownAndLeft;
             yield return p + CoordinateSystem.BottomLeft.Left;
             yield return p + CoordinateSystem.BottomLeft.UpAndLeft;
         }

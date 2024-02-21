@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.IO;
@@ -13,7 +13,8 @@ namespace Tiledriver.Core.Settings
             Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                 "Tiledriver",
-                "TiledriverConfig.json");
+                "TiledriverConfig.json"
+            );
 
         public static TiledriverConfig Load()
         {
@@ -52,10 +53,9 @@ namespace Tiledriver.Core.Settings
             var serialized = File.ReadAllText(filePath);
 
             return JsonSerializer.Deserialize<T>(
-                serialized,
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ??
-                   throw new ArgumentException($"Bad format for {Path.GetFileName(filePath)}");
-
+                    serialized,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                ) ?? throw new ArgumentException($"Bad format for {Path.GetFileName(filePath)}");
         }
     }
 }

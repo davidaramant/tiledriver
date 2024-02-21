@@ -14,9 +14,13 @@ namespace Tiledriver.Core.Utils.ConnectedComponentLabeling
         private readonly HashSet<Position> _positions;
 
         public ConnectedArea(IEnumerable<Position> tiles) => _positions = tiles.ToHashSet();
+
         public int Area => _positions.Count;
+
         public bool Contains(Position p) => _positions.Contains(p);
+
         public IEnumerator<Position> GetEnumerator() => _positions.GetEnumerator();
+
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         /// <summary>
@@ -43,7 +47,8 @@ namespace Tiledriver.Core.Utils.ConnectedComponentLabeling
 
             return (
                 new ConnectedArea(_positions.Select(p => p + adjustment)),
-                new Size((maxX - minX + 1) + 2 * border, (maxY - minY + 1) + 2 * border));
+                new Size((maxX - minX + 1) + 2 * border, (maxY - minY + 1) + 2 * border)
+            );
         }
     }
 }

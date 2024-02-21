@@ -13,9 +13,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
 {
     public static partial class XlatParser
     {
-        public static MapTranslation Parse(
-            IEnumerable<Token> tokens,
-            IResourceProvider resourceProvider)
+        public static MapTranslation Parse(IEnumerable<Token> tokens, IResourceProvider resourceProvider)
         {
             List<TileMappings> tileMappings = new();
             List<IMapping> thingMappings = new();
@@ -59,13 +57,9 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
                     default:
                         throw new ParsingException($"Unexpected identifier: {id}");
                 }
-
             }
 
-            return new MapTranslation(
-                Merge(tileMappings),
-                thingMappings,
-                flatMappings.LastOrDefault());
+            return new MapTranslation(Merge(tileMappings), thingMappings, flatMappings.LastOrDefault());
         }
 
         private static TileMappings Merge(IEnumerable<TileMappings> tileMappings)
@@ -90,7 +84,8 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
                 changeTriggerModzones.ToImmutableArray(),
                 tileTemplates.ToImmutableArray(),
                 triggerTemplates.ToImmutableArray(),
-                zoneTemplates.ToImmutableArray());
+                zoneTemplates.ToImmutableArray()
+            );
         }
 
         private static TileMappings ParseTileMappings(IEnumerator<Token> tokenStream)
@@ -138,7 +133,8 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
                             changeTriggerModzones.ToImmutableArray(),
                             tileTemplates.ToImmutableArray(),
                             triggerTemplates.ToImmutableArray(),
-                            zoneTemplates.ToImmutableArray());
+                            zoneTemplates.ToImmutableArray()
+                        );
 
                     default:
                         throw ParsingException.CreateError(token, "identifier or end of block");
@@ -150,12 +146,12 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
             IEnumerator<Token> tokenStream,
             IdentifierToken id,
             List<AmbushModzone> ambushModzones,
-            List<ChangeTriggerModzone> changeTriggerModzones)
+            List<ChangeTriggerModzone> changeTriggerModzones
+        )
         {
-            var oldNum =
-                tokenStream
-                    .ExpectNext<IntegerToken>()
-                    .ValueAsUshort(token => ParsingException.CreateError(token, "UShort value"));
+            var oldNum = tokenStream
+                .ExpectNext<IntegerToken>()
+                .ValueAsUshort(token => ParsingException.CreateError(token, "UShort value"));
 
             bool fillZone = false;
 
@@ -193,10 +189,9 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
 
         private static TileTemplate ParseTileTemplate(IEnumerator<Token> tokenStream, IdentifierToken id)
         {
-            var oldNum =
-                tokenStream
-                    .ExpectNext<IntegerToken>()
-                    .ValueAsUshort(token => ParsingException.CreateError(token, "UShort value"));
+            var oldNum = tokenStream
+                .ExpectNext<IntegerToken>()
+                .ValueAsUshort(token => ParsingException.CreateError(token, "UShort value"));
 
             tokenStream.ExpectNext<OpenBraceToken>();
 
@@ -207,10 +202,9 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
 
         private static TriggerTemplate ParseTriggerTemplate(IEnumerator<Token> tokenStream, IdentifierToken id)
         {
-            var oldNum =
-                tokenStream
-                    .ExpectNext<IntegerToken>()
-                    .ValueAsUshort(token => ParsingException.CreateError(token, "UShort value"));
+            var oldNum = tokenStream
+                .ExpectNext<IntegerToken>()
+                .ValueAsUshort(token => ParsingException.CreateError(token, "UShort value"));
 
             tokenStream.ExpectNext<OpenBraceToken>();
 
@@ -221,19 +215,16 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
 
         private static ZoneTemplate ParseZone(IEnumerator<Token> tokenStream, IdentifierToken id)
         {
-            var oldNum =
-                tokenStream
-                    .ExpectNext<IntegerToken>()
-                    .ValueAsUshort(token => ParsingException.CreateError(token, "UShort value"));
+            var oldNum = tokenStream
+                .ExpectNext<IntegerToken>()
+                .ValueAsUshort(token => ParsingException.CreateError(token, "UShort value"));
 
             tokenStream.ExpectNext<OpenBraceToken>();
 
             var block = tokenStream.ParseBlock(id);
             var fields = block.GetFieldAssignments();
 
-            return new ZoneTemplate(
-                oldNum,
-                Comment: fields.GetOptionalFieldValue("comment", ""));
+            return new ZoneTemplate(oldNum, Comment: fields.GetOptionalFieldValue("comment", ""));
         }
 
         private static FlatMappings ParseFlatMappings(IEnumerator<Token> tokenStream)
@@ -265,9 +256,7 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
                         break;
 
                     case CloseBraceToken:
-                        return new FlatMappings(
-                            ceilings.ToImmutableArray(),
-                            floors.ToImmutableArray());
+                        return new FlatMappings(ceilings.ToImmutableArray(), floors.ToImmutableArray());
 
                     default:
                         throw ParsingException.CreateError(token, "identifier or end of block");
@@ -344,10 +333,9 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
 
         private static Elevator ParseElevator(IEnumerator<Token> tokenStream, IdentifierToken id)
         {
-            var oldNum =
-                tokenStream
-                    .ExpectNext<IntegerToken>()
-                    .ValueAsUshort(token => ParsingException.CreateError(token, "UShort value"));
+            var oldNum = tokenStream
+                .ExpectNext<IntegerToken>()
+                .ValueAsUshort(token => ParsingException.CreateError(token, "UShort value"));
             tokenStream.ExpectNext<SemicolonToken>();
 
             return new Elevator(oldNum);
@@ -355,10 +343,9 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
 
         private static ThingTemplate ParseThingTemplate(IEnumerator<Token> tokenStream)
         {
-            var oldNum =
-                tokenStream
-                    .ExpectNext<IntegerToken>()
-                    .ValueAsUshort(token => ParsingException.CreateError(token, "UShort value"));
+            var oldNum = tokenStream
+                .ExpectNext<IntegerToken>()
+                .ValueAsUshort(token => ParsingException.CreateError(token, "UShort value"));
 
             tokenStream.ExpectNext<CommaToken>();
 
@@ -420,7 +407,8 @@ namespace Tiledriver.Core.FormatModels.Xlat.Reading
                 Holowall: flags.Contains("holowall"),
                 Pathing: flags.Contains("pathing"),
                 Ambush: flags.Contains("ambush"),
-                Minskill: minSkill);
+                Minskill: minSkill
+            );
         }
     }
 }

@@ -38,23 +38,22 @@ namespace Tiledriver.Core.FormatModels.Wad
 
             stream.Position = directoryPosition;
 
-            var directory =
-                Enumerable.Range(1, numLumps).
-                Select(_ => LumpMetadata.ReadFrom(stream))
-                .ToList();
+            var directory = Enumerable.Range(1, numLumps).Select(_ => LumpMetadata.ReadFrom(stream)).ToList();
 
-            return new WadFile(directory.Select<LumpMetadata, ILump>(info =>
-            {
-                if (info.Size == 0)
+            return new WadFile(
+                directory.Select<LumpMetadata, ILump>(info =>
                 {
-                    return new Marker(info.Name);
-                }
-                else
-                {
-                    stream.Position = info.Position;
-                    return new DataLump(info.Name, stream.ReadArray(info.Size));
-                }
-            }));
+                    if (info.Size == 0)
+                    {
+                        return new Marker(info.Name);
+                    }
+                    else
+                    {
+                        stream.Position = info.Position;
+                        return new DataLump(info.Name, stream.ReadArray(info.Size));
+                    }
+                })
+            );
         }
 
         IEnumerator IEnumerable.GetEnumerator()

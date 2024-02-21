@@ -1,4 +1,5 @@
 ﻿namespace Tiledriver.Core.LevelGeometry.CoordinateSystems;
+
 public interface IPositionOffsets
 {
     PositionDelta Up { get; }

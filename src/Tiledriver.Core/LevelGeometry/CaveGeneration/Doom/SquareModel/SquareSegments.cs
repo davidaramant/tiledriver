@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 
@@ -24,13 +24,13 @@ public enum SquareSegments : byte
 
     UpperLeftOuter = 1 << 0,
     UpperLeftInner = 1 << 1,
-    
+
     UpperRightOuter = 1 << 2,
     UpperRightInner = 1 << 3,
-    
+
     LowerRightOuter = 1 << 4,
     LowerRightInner = 1 << 5,
-    
+
     LowerLeftOuter = 1 << 6,
     LowerLeftInner = 1 << 7,
 

@@ -20,7 +20,8 @@ namespace Tiledriver.Core.FormatModels.Wad
             return new LumpMetadata(
                 Position: stream.ReadInt(),
                 Size: stream.ReadInt(),
-                Name: stream.ReadText(LumpName.MaxLength).TrimEnd((char) 0));
+                Name: stream.ReadText(LumpName.MaxLength).TrimEnd((char)0)
+            );
         }
     }
 }

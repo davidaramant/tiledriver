@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Collections;
@@ -26,7 +26,8 @@ namespace Tiledriver.Core.FormatModels.Common.Reading
         public TokenSource(
             IEnumerable<Token> tokens,
             IResourceProvider provider,
-            Func<TextReader, UnifiedLexer> createLexer)
+            Func<TextReader, UnifiedLexer> createLexer
+        )
         {
             _tokens = tokens;
             _provider = provider;

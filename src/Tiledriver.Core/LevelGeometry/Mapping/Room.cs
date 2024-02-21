@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2017, Aaron Alexander
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Collections;
@@ -39,7 +39,6 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
         public IList<MapLocation> Locations => _locations;
 
-
         public bool IsStartingRoom
         {
             get
@@ -55,7 +54,6 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
         }
 
         public bool IsEndingRoom => Locations.Any(location => location.CanExit());
-
 
         public int UnopenableDoors { get; set; }
         public IList<Thing> Enemies { get; }
@@ -82,7 +80,11 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             }
         }
 
-        private void AdjustCounters(Action<IList<Thing>, Thing> change, int increment, IEnumerable<MapLocation> locations)
+        private void AdjustCounters(
+            Action<IList<Thing>, Thing> change,
+            int increment,
+            IEnumerable<MapLocation> locations
+        )
         {
             foreach (var mapLocation in locations)
             {
@@ -102,7 +104,11 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                         change(Health, mapLocationThing);
                     if (mapLocationThing.Type == Actor.OneUp.ClassName)
                         Lives += increment;
-                    if (mapLocationThing.Type == Actor.GoldKey.ClassName || mapLocationThing.Type == Actor.Hans.ClassName || mapLocationThing.Type == Actor.Gretel.ClassName)
+                    if (
+                        mapLocationThing.Type == Actor.GoldKey.ClassName
+                        || mapLocationThing.Type == Actor.Hans.ClassName
+                        || mapLocationThing.Type == Actor.Gretel.ClassName
+                    )
                         goldKeys += increment;
                     if (mapLocationThing.Type == Actor.SilverKey.ClassName)
                         silverKeys += increment;
@@ -135,11 +141,7 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             Actor.WolfensteinSS.ClassName
         };
 
-        private readonly string[] WeaponTypes = new[]
-        {
-            Actor.GatlingGunUpgrade.ClassName,
-            Actor.MachineGun.ClassName
-        };
+        private readonly string[] WeaponTypes = new[] { Actor.GatlingGunUpgrade.ClassName, Actor.MachineGun.ClassName };
 
         private readonly string[] TreasureTypes = new[]
         {

@@ -43,31 +43,35 @@ namespace Tiledriver.DataModelGenerator.Udmf
                 CreateBlockReader(output, block);
             }
 
-            CreateGlobalBlockReader(output, UdmfDefinitions.Blocks.Single(b => b.Serialization == SerializationType.TopLevel));
+            CreateGlobalBlockReader(
+                output,
+                UdmfDefinitions.Blocks.Single(b => b.Serialization == SerializationType.TopLevel)
+            );
 
             output.CloseParen();
         }
 
-        private static string CreateParameterAssignment(Property property, string context = "block.Name") => property switch
-        {
-            ScalarProperty sp => CreateParameterAssignment(sp, context),
-            CollectionProperty cp => CreateParameterAssignment(cp),
-            _ => throw new Exception("Unknown property type"),
-        };
+        private static string CreateParameterAssignment(Property property, string context = "block.Name") =>
+            property switch
+            {
+                ScalarProperty sp => CreateParameterAssignment(sp, context),
+                CollectionProperty cp => CreateParameterAssignment(cp),
+                _ => throw new Exception("Unknown property type"),
+            };
 
         private static string CreateParameterAssignment(ScalarProperty property, string context = "block.Name")
         {
             var getValue = property switch
             {
                 DoubleProperty => $"fields.GetRequiredDoubleFieldValue({context}, \"{property.FormatName}\")",
-                TextureProperty tp =>
-                    !tp.IsOptional
-                    ? $"fields.GetRequiredTextureFieldValue({context}, \"{property.FormatName}\")"
-                    : $"fields.GetOptionalTextureFieldValue(\"{property.FormatName}\")",
-                _ =>
-                    property.DefaultString == null
-                    ? $"fields.GetRequiredFieldValue<{property.PropertyType}>({context}, \"{property.FormatName}\")"
-                    : $"fields.GetOptionalFieldValue<{property.PropertyType}>(\"{property.FormatName}\", {property.DefaultString})"
+                TextureProperty tp
+                    => !tp.IsOptional
+                        ? $"fields.GetRequiredTextureFieldValue({context}, \"{property.FormatName}\")"
+                        : $"fields.GetOptionalTextureFieldValue(\"{property.FormatName}\")",
+                _
+                    => property.DefaultString == null
+                        ? $"fields.GetRequiredFieldValue<{property.PropertyType}>({context}, \"{property.FormatName}\")"
+                        : $"fields.GetOptionalFieldValue<{property.PropertyType}>(\"{property.FormatName}\", {property.DefaultString})"
             };
 
             return $"{property.PropertyName}: {getValue}";
@@ -100,36 +104,50 @@ namespace Tiledriver.DataModelGenerator.Udmf
                 .OpenParen()
                 .Line("Dictionary<Identifier, Token> fields = new();")
                 .Line("var block = new IdentifierToken(FilePosition.StartOfFile, \"MapData\");")
-                .Lines(block.Properties.OfType<CollectionProperty>().Select(cp =>
-                    $"var {cp.Name}Builder = ImmutableArray.CreateBuilder<{cp.ElementTypeName}>();"))
+                .Lines(
+                    block
+                        .Properties.OfType<CollectionProperty>()
+                        .Select(cp => $"var {cp.Name}Builder = ImmutableArray.CreateBuilder<{cp.ElementTypeName}>();")
+                )
                 .Line()
                 .Line("foreach(var expression in ast)")
                 .OpenParen()
                 .Line("switch (expression)")
                 .OpenParen()
-                .Line("case Assignment a:").IncreaseIndent()
+                .Line("case Assignment a:")
+                .IncreaseIndent()
                 .Line("fields.Add(a.Name.Id, a.Value);")
-                .Line("break;").DecreaseIndent()
+                .Line("break;")
+                .DecreaseIndent()
                 .Line()
-                .Line("case Block b:").IncreaseIndent()
+                .Line("case Block b:")
+                .IncreaseIndent()
                 .Line("switch (b.Name.Id.ToLower())")
                 .OpenParen();
 
             foreach (var cp in block.Properties.OfType<CollectionProperty>().Where(p => p.Name != "planeMap"))
             {
-                output.Line($"case \"{cp.ElementTypeName.ToLowerInvariant()}\":").IncreaseIndent()
+                output
+                    .Line($"case \"{cp.ElementTypeName.ToLowerInvariant()}\":")
+                    .IncreaseIndent()
                     .Line($"{cp.Name}Builder.Add(Read{cp.ElementTypeName}(b));")
-                    .Line("break;").DecreaseIndent();
+                    .Line("break;")
+                    .DecreaseIndent();
             }
 
             output
-                .Line("default:").IncreaseIndent()
-                .Line("throw new ParsingException($\"Unknown block: {b.Name}\");").DecreaseIndent()
+                .Line("default:")
+                .IncreaseIndent()
+                .Line("throw new ParsingException($\"Unknown block: {b.Name}\");")
+                .DecreaseIndent()
                 .CloseParen()
-                .Line("break;").DecreaseIndent()
+                .Line("break;")
+                .DecreaseIndent()
                 .Line()
-                .Line("default:").IncreaseIndent()
-                .Line("throw new ParsingException(\"Unknown expression type\");").DecreaseIndent()
+                .Line("default:")
+                .IncreaseIndent()
+                .Line("throw new ParsingException(\"Unknown expression type\");")
+                .DecreaseIndent()
                 .CloseParen()
                 .CloseParen()
                 .Line()

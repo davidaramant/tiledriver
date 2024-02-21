@@ -15,5 +15,6 @@ namespace Tiledriver.Core.FormatModels.Textures
         Translation? Translation = null,
         ColorBlend? Blend = null,
         double Alpha = 1,
-        RenderStyle Style = RenderStyle.Copy);
+        RenderStyle Style = RenderStyle.Copy
+    );
 }

@@ -12,11 +12,11 @@ namespace Tiledriver.Core.Tests.FormatModels.Udmf.Reading
         {
             actual.NameSpace.Should().Be(expected.NameSpace);
 
-            CompareCollections(actual:actual.Vertices, expected:expected.Vertices);
-            CompareCollections(actual:actual.LineDefs, expected:expected.LineDefs);
-            CompareCollections(actual:actual.SideDefs, expected:expected.SideDefs);
-            CompareCollections(actual:actual.Sectors, expected:expected.Sectors);
-            CompareCollections(actual:actual.Things, expected:expected.Things);
+            CompareCollections(actual: actual.Vertices, expected: expected.Vertices);
+            CompareCollections(actual: actual.LineDefs, expected: expected.LineDefs);
+            CompareCollections(actual: actual.SideDefs, expected: expected.SideDefs);
+            CompareCollections(actual: actual.Sectors, expected: expected.Sectors);
+            CompareCollections(actual: actual.Things, expected: expected.Things);
         }
 
         private static void CompareCollections<T>(ImmutableArray<T> actual, ImmutableArray<T> expected)

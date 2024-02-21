@@ -11,7 +11,8 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
     /// </summary>
     /// <typeparam name="TDescription">A simplified description of a the model.</typeparam>
     /// <typeparam name="TModel">The full type that is being described.</typeparam>
-    public sealed class ModelSequence<TDescription,TModel> where TDescription : notnull
+    public sealed class ModelSequence<TDescription, TModel>
+        where TDescription : notnull
     {
         private readonly Dictionary<TDescription, int> _descriptionToIndex = new();
         private readonly Func<TDescription, TModel> _transformToModel;
@@ -37,8 +38,6 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration
         }
 
         public IEnumerable<TModel> GetDefinitions() =>
-            _descriptionToIndex
-                .OrderBy(pair => pair.Value)
-                .Select(pair => _transformToModel(pair.Key));
+            _descriptionToIndex.OrderBy(pair => pair.Value).Select(pair => _transformToModel(pair.Key));
     }
 }

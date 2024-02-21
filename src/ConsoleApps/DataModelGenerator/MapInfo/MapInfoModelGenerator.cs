@@ -1,13 +1,13 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Tiledriver.DataModelGenerator.MapInfo.MetadataModel;
 using Tiledriver.DataModelGenerator.MetadataModel;
 using Tiledriver.DataModelGenerator.Utilities;
-using Tiledriver.DataModelGenerator.MapInfo.MetadataModel;
 
 namespace Tiledriver.DataModelGenerator.MapInfo
 {
@@ -28,8 +28,7 @@ namespace Tiledriver.DataModelGenerator.MapInfo
 
         static void WriteRecord(string basePath, IBlock block)
         {
-            using var blockStream =
-                File.CreateText(Path.Combine(basePath, block.ClassName + ".Generated.cs"));
+            using var blockStream = File.CreateText(Path.Combine(basePath, block.ClassName + ".Generated.cs"));
             using var output = new IndentedWriter(blockStream);
 
             var containsCollection = block.OrderedProperties.Any(p => p is CollectionProperty);
@@ -71,8 +70,7 @@ namespace Tiledriver.DataModelGenerator.MapInfo
                     .DecreaseIndent();
             }
 
-            output
-                .Line(");");
+            output.Line(");");
         }
 
         static string GetPropertyDefinition(Property property)

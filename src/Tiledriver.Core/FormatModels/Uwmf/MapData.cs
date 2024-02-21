@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Immutable;
 using Tiledriver.Core.LevelGeometry;
@@ -25,6 +25,7 @@ namespace Tiledriver.Core.FormatModels.Uwmf
             }
 
             public ImmutableArray<MapSquare> ToPlaneMap() => _planeMap;
+
             public ICanvas ToCanvas() => new Canvas(Dimensions).Fill(_planeMap);
         }
 

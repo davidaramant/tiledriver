@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Immutable;
 using Humanizer;
@@ -12,7 +12,8 @@ namespace Tiledriver.DataModelGenerator.MapInfo.MetadataModel
         string ClassName,
         ImmutableArray<Property> Metadata,
         ImmutableArray<Property> Properties,
-        SerializationType Serialization = SerializationType.Normal) : IBlock
+        SerializationType Serialization = SerializationType.Normal
+    ) : IBlock
     {
         public string Name => FormatName;
 
@@ -20,14 +21,8 @@ namespace Tiledriver.DataModelGenerator.MapInfo.MetadataModel
             string FormatName,
             ImmutableArray<Property> Metadata,
             ImmutableArray<Property> Properties,
-            SerializationType Serialization = SerializationType.Normal)
-            : this(
-                FormatName,
-                FormatName.Pascalize(),
-                Metadata,
-                Properties,
-                Serialization)
-        {
-        }
+            SerializationType Serialization = SerializationType.Normal
+        )
+            : this(FormatName, FormatName.Pascalize(), Metadata, Properties, Serialization) { }
     }
 }

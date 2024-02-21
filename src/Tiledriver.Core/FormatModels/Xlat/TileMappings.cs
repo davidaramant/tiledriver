@@ -10,5 +10,6 @@ namespace Tiledriver.Core.FormatModels.Xlat
         ImmutableArray<ChangeTriggerModzone> ChangeTriggerModzones,
         ImmutableArray<TileTemplate> TileTemplates,
         ImmutableArray<TriggerTemplate> TriggerTemplates,
-        ImmutableArray<ZoneTemplate> ZoneTemplates);
+        ImmutableArray<ZoneTemplate> ZoneTemplates
+    );
 }

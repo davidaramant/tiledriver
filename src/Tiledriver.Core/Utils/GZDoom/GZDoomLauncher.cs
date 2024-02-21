@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 
 using System.Collections.Generic;
@@ -37,16 +37,9 @@ namespace Tiledriver.Core.Utils.GZDoom
         /// <param name="wadFilePath">
         /// (Optional) The path to the WAD to create. If not specified, something will be created in the temporary directory.
         /// </param>
-        public void LoadMap(
-            MapData udmfMap,
-            string? wadFilePath = null)
+        public void LoadMap(MapData udmfMap, string? wadFilePath = null)
         {
-            var wad = new List<ILump>
-            {
-                new Marker("MAP01"),
-                new UdmfLump("TEXTMAP", udmfMap),
-                new Marker("ENDMAP")
-            };
+            var wad = new List<ILump> { new Marker("MAP01"), new UdmfLump("TEXTMAP", udmfMap), new Marker("ENDMAP") };
 
             CreateAndLoadWad(wad, wadFilePath);
         }
@@ -58,14 +51,12 @@ namespace Tiledriver.Core.Utils.GZDoom
         /// <param name="wadFilePath">
         /// (Optional) The path to the WAD to create. If not specified, something will be created in the temporary directory.
         /// </param>
-        public void CreateAndLoadWad(
-            IEnumerable<ILump> lumps,
-            string? wadFilePath = null)
+        public void CreateAndLoadWad(IEnumerable<ILump> lumps, string? wadFilePath = null)
         {
             wadFilePath ??= Path.Combine(Path.GetTempPath(), "demo.lumps");
             var pathToLoad = Path.GetFullPath(wadFilePath);
 
-            WadWriter.SaveTo(lumps,pathToLoad);
+            WadWriter.SaveTo(lumps, pathToLoad);
 
             LoadWad(pathToLoad);
         }
@@ -74,7 +65,8 @@ namespace Tiledriver.Core.Utils.GZDoom
         {
             Process.Start(
                 _config.GZDoomExePath,
-                $"-iwad \"{_config.Doom2IwadPath}\" -file \"{wadPath}\" -skill 4 -warp 01");
+                $"-iwad \"{_config.Doom2IwadPath}\" -file \"{wadPath}\" -skill 4 -warp 01"
+            );
         }
     }
 }

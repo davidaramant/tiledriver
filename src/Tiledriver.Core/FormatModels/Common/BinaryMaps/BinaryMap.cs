@@ -21,11 +21,7 @@ namespace Tiledriver.Core.FormatModels.Common.BinaryMaps
 
         private readonly ushort[][] _planes;
 
-        public BinaryMap(
-            string name,
-            ushort width,
-            ushort height,
-            IEnumerable<ushort[]> planes)
+        public BinaryMap(string name, ushort width, ushort height, IEnumerable<ushort[]> planes)
         {
             Name = name;
             Size = new Size(width, height);

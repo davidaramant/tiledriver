@@ -25,7 +25,9 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures.Writing
                     new Patch("RW45_1", 0, 0, Rotate: PatchRotation.Rotate90),
                     new Patch("RW45_1", 0, 64, Rotate: PatchRotation.Rotate90),
                     new Patch("RW45_1", 0, 128, Rotate: PatchRotation.Rotate90),
-                    new Patch("RW45_1", 0, 172, Rotate: PatchRotation.Rotate90)));
+                    new Patch("RW45_1", 0, 172, Rotate: PatchRotation.Rotate90)
+                )
+            );
 
             var actual = GetText(texture);
 
@@ -48,7 +50,8 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures.Writing
                 "\t{",
                 "\t\tRotate 90",
                 "\t}",
-                "}");
+                "}"
+            );
 
             actual.Should().Be(expected);
         }
@@ -63,15 +66,10 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures.Writing
                 XScale: 4,
                 YScale: 4,
                 Patches: ImmutableArray.Create(
-                    new Patch(
-                        "AG_512_2",
-                        0,
-                        0),
-                    new Patch(
-                        "MSW1_UP",
-                        64,
-                        288,
-                        Style: RenderStyle.CopyAlpha)));
+                    new Patch("AG_512_2", 0, 0),
+                    new Patch("MSW1_UP", 64, 288, Style: RenderStyle.CopyAlpha)
+                )
+            );
 
             var actual = GetText(texture);
 
@@ -85,7 +83,8 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures.Writing
                 "\t{",
                 "\t\tStyle CopyAlpha",
                 "\t}",
-                "}");
+                "}"
+            );
 
             actual.Should().Be(expected);
         }
@@ -98,15 +97,12 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures.Writing
                 10,
                 10,
                 Offset: new TextureOffset(5, 6),
-                Patches: ImmutableArray<Patch>.Empty);
+                Patches: ImmutableArray<Patch>.Empty
+            );
 
             var actual = GetText(texture);
 
-            var expected = Assemble(
-                "Texture Name, 10, 10",
-                "{",
-                "\tOffset 5, 6",
-                "}");
+            var expected = Assemble("Texture Name, 10, 10", "{", "\tOffset 5, 6", "}");
 
             actual.Should().Be(expected);
         }
@@ -118,12 +114,8 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures.Writing
                 "Name",
                 10,
                 10,
-                Patches: ImmutableArray.Create(
-                    new Patch(
-                        "Name2",
-                        0,
-                        0,
-                        Translation: new Translation.Blue())));
+                Patches: ImmutableArray.Create(new Patch("Name2", 0, 0, Translation: new Translation.Blue()))
+            );
 
             var actual = GetText(texture);
 
@@ -134,7 +126,8 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures.Writing
                 "\t{",
                 "\t\tTranslation Blue",
                 "\t}",
-                "}");
+                "}"
+            );
 
             actual.Should().Be(expected);
         }
@@ -147,11 +140,9 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures.Writing
                 10,
                 10,
                 Patches: ImmutableArray.Create(
-                    new Patch(
-                        "Name2",
-                        0,
-                        0,
-                        Translation: new Translation.Custom("SomeString"))));
+                    new Patch("Name2", 0, 0, Translation: new Translation.Custom("SomeString"))
+                )
+            );
 
             var actual = GetText(texture);
 
@@ -162,7 +153,8 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures.Writing
                 "\t{",
                 "\t\tTranslation \"SomeString\"",
                 "\t}",
-                "}");
+                "}"
+            );
 
             actual.Should().Be(expected);
         }
@@ -174,12 +166,8 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures.Writing
                 "Name",
                 10,
                 10,
-                Patches: ImmutableArray.Create(
-                    new Patch(
-                        "Name2",
-                        0,
-                        0,
-                        Translation: new Translation.Desaturate(20))));
+                Patches: ImmutableArray.Create(new Patch("Name2", 0, 0, Translation: new Translation.Desaturate(20)))
+            );
 
             var actual = GetText(texture);
 
@@ -190,7 +178,8 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures.Writing
                 "\t{",
                 "\t\tTranslation Desaturate, 20",
                 "\t}",
-                "}");
+                "}"
+            );
 
             actual.Should().Be(expected);
         }
@@ -202,19 +191,12 @@ namespace Tiledriver.Core.Tests.FormatModels.Textures.Writing
                 "Name",
                 10,
                 10,
-                Patches: ImmutableArray.Create(
-                    new Patch(
-                        "Name2",
-                        0,
-                        0)));
+                Patches: ImmutableArray.Create(new Patch("Name2", 0, 0))
+            );
 
             var actual = GetText(texture);
 
-            var expected = Assemble(
-                "Texture Name, 10, 10",
-                "{",
-                "\tPatch Name2, 0, 0",
-                "}");
+            var expected = Assemble("Texture Name, 10, 10", "{", "\tPatch Name2, 0, 0", "}");
 
             actual.Should().Be(expected);
         }

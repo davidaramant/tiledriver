@@ -1,10 +1,10 @@
 ﻿// Copyright (c) 2019, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using FluentAssertions;
 using System.IO;
 using System.Linq;
 using System.Text;
+using FluentAssertions;
 using Tiledriver.Core.DemoMaps.Wolf3D;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Common.Reading;
@@ -75,23 +75,19 @@ namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Reading
             {
                 new IdentifierToken(FilePosition.StartOfFile, new Identifier("planemap")),
                 new OpenBraceToken(FilePosition.StartOfFile),
-
                 new OpenBraceToken(FilePosition.StartOfFile),
-                new IntegerToken(FilePosition.StartOfFile,1),
+                new IntegerToken(FilePosition.StartOfFile, 1),
                 new CommaToken(FilePosition.StartOfFile),
-                new IntegerToken(FilePosition.StartOfFile,2),
+                new IntegerToken(FilePosition.StartOfFile, 2),
                 new CloseBraceToken(FilePosition.StartOfFile),
-
                 new CommaToken(FilePosition.StartOfFile),
-
                 new OpenBraceToken(FilePosition.StartOfFile),
-                new IntegerToken(FilePosition.StartOfFile,1),
+                new IntegerToken(FilePosition.StartOfFile, 1),
                 new CommaToken(FilePosition.StartOfFile),
-                new IntegerToken(FilePosition.StartOfFile,2),
+                new IntegerToken(FilePosition.StartOfFile, 2),
                 new CommaToken(FilePosition.StartOfFile),
-                new IntegerToken(FilePosition.StartOfFile,3),
+                new IntegerToken(FilePosition.StartOfFile, 3),
                 new CloseBraceToken(FilePosition.StartOfFile),
-
                 new CloseBraceToken(FilePosition.StartOfFile),
             };
 

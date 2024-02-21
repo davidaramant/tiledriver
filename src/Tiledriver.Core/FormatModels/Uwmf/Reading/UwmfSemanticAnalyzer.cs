@@ -13,16 +13,23 @@ namespace Tiledriver.Core.FormatModels.Uwmf.Reading
         private static MapSquare ReadMapSquare(IntTuple tuple) =>
             tuple.Values.Length switch
             {
-                3 => new MapSquare(
-                    Tile: tuple.Values[0].Value,
-                    Sector: tuple.Values[1].Value,
-                    Zone: tuple.Values[2].Value),
-                4 => new MapSquare(
-                    Tile: tuple.Values[0].Value,
-                    Sector: tuple.Values[1].Value,
-                    Zone: tuple.Values[2].Value,
-                    Tag: tuple.Values[3].Value),
-                _ => throw new ParsingException($"Unexpected number of integers in MapSquare at {tuple.StartLocation} - expected 3 or 4.")
+                3
+                    => new MapSquare(
+                        Tile: tuple.Values[0].Value,
+                        Sector: tuple.Values[1].Value,
+                        Zone: tuple.Values[2].Value
+                    ),
+                4
+                    => new MapSquare(
+                        Tile: tuple.Values[0].Value,
+                        Sector: tuple.Values[1].Value,
+                        Zone: tuple.Values[2].Value,
+                        Tag: tuple.Values[3].Value
+                    ),
+                _
+                    => throw new ParsingException(
+                        $"Unexpected number of integers in MapSquare at {tuple.StartLocation} - expected 3 or 4."
+                    )
             };
 
         private static ImmutableArray<MapSquare> ReadPlaneMap(IntTupleBlock block)

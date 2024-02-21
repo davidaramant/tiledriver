@@ -38,29 +38,31 @@ namespace Tiledriver.Core.Utils.CellularAutomata
 
         public static CellBoard RemoveNoise(this CellBoard board)
         {
-            var aliveAreas =
-                ConnectedAreaAnalyzer
-                    .FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Alive)
-                    .Where(area => area.Area > 64)
-                    .ToArray();
+            var aliveAreas = ConnectedAreaAnalyzer
+                .FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Alive)
+                .Where(area => area.Area > 64)
+                .ToArray();
 
-            return new CellBoard(board.Dimensions, pos => aliveAreas.Any(a => a.Contains(pos)) ? CellType.Alive : CellType.Dead);
+            return new CellBoard(
+                board.Dimensions,
+                pos => aliveAreas.Any(a => a.Contains(pos)) ? CellType.Alive : CellType.Dead
+            );
         }
 
         public static CellBoard TrimToLargestDeadArea(this CellBoard board)
         {
-            var (largestArea, newSize) =
-                TrimToLargestDeadConnectedArea(board);
+            var (largestArea, newSize) = TrimToLargestDeadConnectedArea(board);
 
-            return new CellBoard(newSize,
-                typeAtPosition: p => largestArea.Contains(p) ? CellType.Dead : CellType.Alive);
+            return new CellBoard(
+                newSize,
+                typeAtPosition: p => largestArea.Contains(p) ? CellType.Dead : CellType.Alive
+            );
         }
 
         public static (ConnectedArea, Size) TrimToLargestDeadConnectedArea(this CellBoard board) =>
-                ConnectedAreaAnalyzer
-                    .FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Dead)
-                    .MaxBy(component => component.Area)
-                    ?.TrimExcess(1) ??
-                throw new InvalidOperationException("This can't happen");
+            ConnectedAreaAnalyzer
+                .FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Dead)
+                .MaxBy(component => component.Area)
+                ?.TrimExcess(1) ?? throw new InvalidOperationException("This can't happen");
     }
 }

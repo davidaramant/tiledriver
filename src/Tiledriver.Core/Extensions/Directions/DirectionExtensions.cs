@@ -1,5 +1,5 @@
 // Copyright (c) 2016, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Collections.Generic;
@@ -21,7 +21,8 @@ namespace Tiledriver.Core.Extensions.Directions
             this Position origin,
             Size bounds,
             bool clockWise = true,
-            Direction start = Direction.North)
+            Direction start = Direction.North
+        )
         {
             foreach (var direction in GetDirections(start, clockWise))
             {
@@ -53,7 +54,7 @@ namespace Tiledriver.Core.Extensions.Directions
             }
         }
 
-        public static Direction Reverse(this Direction direction) => 
+        public static Direction Reverse(this Direction direction) =>
             direction switch
             {
                 Direction.East => Direction.West,

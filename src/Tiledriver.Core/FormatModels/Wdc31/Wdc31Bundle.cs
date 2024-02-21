@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2017, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Generic;
 using System.IO;
@@ -35,7 +35,9 @@ namespace Tiledriver.Core.FormatModels.Wdc31
 
             foreach (var mapIndex in Enumerable.Range(0, header.NumberOfMaps))
             {
-                var mapName = new string(reader.ReadChars(header.MaxMapNameLength).TakeWhile(c=>c!=0).ToArray()).Trim();
+                var mapName = new string(
+                    reader.ReadChars(header.MaxMapNameLength).TakeWhile(c => c != 0).ToArray()
+                ).Trim();
                 var mapWidth = reader.ReadUInt16();
                 var mapHeight = reader.ReadUInt16();
                 var planes = new List<ushort[]>();
@@ -50,11 +52,7 @@ namespace Tiledriver.Core.FormatModels.Wdc31
                     planes.Add(planeData);
                 }
 
-                yield return new BinaryMap(
-                    mapName,
-                    width: mapWidth,
-                    height: mapHeight,
-                    planes: planes);
+                yield return new BinaryMap(mapName, width: mapWidth, height: mapHeight, planes: planes);
             }
         }
     }

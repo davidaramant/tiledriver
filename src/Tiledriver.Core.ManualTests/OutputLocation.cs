@@ -13,6 +13,8 @@ namespace Tiledriver.Core.ManualTests
                 Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
                     "Tiledriver Visualizations",
-                    folderName));
+                    folderName
+                )
+            );
     }
 }

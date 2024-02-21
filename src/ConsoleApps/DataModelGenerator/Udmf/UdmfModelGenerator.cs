@@ -30,14 +30,13 @@ namespace Tiledriver.DataModelGenerator.Udmf
 
         static void WriteRecord(string basePath, Block block)
         {
-            using var blockStream =
-                File.CreateText(Path.Combine(basePath, block.ClassName + ".Generated.cs"));
+            using var blockStream = File.CreateText(Path.Combine(basePath, block.ClassName + ".Generated.cs"));
             using var output = new IndentedWriter(blockStream);
 
             var containsTexture = block.Properties.Any(p => p is TextureProperty);
             var containsCollection = block.Properties.Any(p => p is CollectionProperty);
 
-            List<string> includes = new() {"System.CodeDom.Compiler"};
+            List<string> includes = new() { "System.CodeDom.Compiler" };
             if (containsTexture)
             {
                 includes.Add("Tiledriver.Core.FormatModels.Common");
@@ -59,24 +58,23 @@ namespace Tiledriver.DataModelGenerator.Udmf
 
         static void WriteBuilder(string basePath, Block block)
         {
-            using var blockStream =
-                File.CreateText(Path.Combine(basePath, block.ClassName + "Builder.Generated.cs"));
+            using var blockStream = File.CreateText(Path.Combine(basePath, block.ClassName + "Builder.Generated.cs"));
             using var output = new IndentedWriter(blockStream);
 
             var containsTexture = block.Properties.Any(p => p is TextureProperty);
             var containsNullables = block.Properties.Any(p => !p.HasDefault);
-            List<string> includes = new() {"System.CodeDom.Compiler", "System"};
+            List<string> includes = new() { "System.CodeDom.Compiler", "System" };
             if (containsTexture)
             {
                 includes.Add("Tiledriver.Core.FormatModels.Common");
             }
 
             output
-                .WriteHeader("Tiledriver.Core.FormatModels.Udmf", includes, enableNullables:containsNullables)
+                .WriteHeader("Tiledriver.Core.FormatModels.Udmf", includes, enableNullables: containsNullables)
                 .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
                 .Line($"public sealed partial class {block.ClassName}Builder")
                 .OpenParen()
-                .JoinLines("",block.OrderedProperties.Select(GetBuilderPropertyDefinition))
+                .JoinLines("", block.OrderedProperties.Select(GetBuilderPropertyDefinition))
                 .Line()
                 .Line($"public {block.ClassName} Build() =>")
                 .IncreaseIndent()
@@ -119,7 +117,7 @@ namespace Tiledriver.DataModelGenerator.Udmf
 
         static string GetBuilderPropertyAssignment(Property property)
         {
-            var normalAssignment =  $"{property.PropertyName}: {property.PropertyName}";
+            var normalAssignment = $"{property.PropertyName}: {property.PropertyName}";
 
             if (!property.HasDefault)
             {

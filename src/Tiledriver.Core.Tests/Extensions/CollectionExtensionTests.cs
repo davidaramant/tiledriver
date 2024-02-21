@@ -1,8 +1,8 @@
 ﻿// Copyright (c) 2022, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using FluentAssertions;
 using System.Collections.Generic;
+using FluentAssertions;
 using Tiledriver.Core.Extensions.Collections;
 using Xunit;
 

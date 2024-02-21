@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.IO;
 using System.Linq;
@@ -37,6 +37,5 @@ namespace Tiledriver.Core.Tests.FormatModels.MapInfo.Reading
             var lexer = MapInfoLexer.Create(textReader);
             var result = lexer.Scan().ToArray();
         }
-
     }
 }

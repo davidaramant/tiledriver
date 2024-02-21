@@ -10,7 +10,7 @@ namespace Tiledriver.Core.FormatModels.MapMetadata.Extensions
 {
     public static class ExtensionMethods
     {
-        public static Position GetPosition(this Thing thing) => new((int) thing.X, (int) thing.Y);
+        public static Position GetPosition(this Thing thing) => new((int)thing.X, (int)thing.Y);
 
         public static void AddAllSurrounding(this Queue<Position> positions, Position p)
         {
@@ -22,12 +22,7 @@ namespace Tiledriver.Core.FormatModels.MapMetadata.Extensions
 
         public static bool Contains(this Size bounds, Position position)
         {
-            return
-                position.X >= 0 &&
-                position.X < bounds.Width &&
-                position.Y >= 0 &&
-                position.Y < bounds.Height;
+            return position.X >= 0 && position.X < bounds.Width && position.Y >= 0 && position.Y < bounds.Height;
         }
-        
     }
 }

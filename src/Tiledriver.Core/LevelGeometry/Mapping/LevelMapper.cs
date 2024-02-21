@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2017, Leon Organ and Aaron Alexander
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Collections.Generic;
@@ -86,24 +86,41 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                 var fromLocation = locationsToProcess[0];
                 locationsToProcess.RemoveAt(0);
 
-                var n = TryExpand(loc => loc.CanMoveNorth(), loc => loc.North(), room, fromLocation, locationsToProcess);
+                var n = TryExpand(
+                    loc => loc.CanMoveNorth(),
+                    loc => loc.North(),
+                    room,
+                    fromLocation,
+                    locationsToProcess
+                );
                 var w = TryExpand(loc => loc.CanMoveWest(), loc => loc.West(), room, fromLocation, locationsToProcess);
-                var s = TryExpand(loc => loc.CanMoveSouth(), loc => loc.South(), room, fromLocation, locationsToProcess);
+                var s = TryExpand(
+                    loc => loc.CanMoveSouth(),
+                    loc => loc.South(),
+                    room,
+                    fromLocation,
+                    locationsToProcess
+                );
                 var e = TryExpand(loc => loc.CanMoveEast(), loc => loc.East(), room, fromLocation, locationsToProcess);
 
                 fromLocation.Cooridor = (n && s && !e && !w) || (!n && !s && e && w);
             }
 
-            _hasGold |= room.Locations.Any(loc => _goldLocations.Any(key => (int)key.X == loc.X && (int)key.Y == loc.Y));
-            _hasSilver |= room.Locations.Any(loc => _silverLocations.Any(key => (int)key.X == loc.X && (int)key.Y == loc.Y));
+            _hasGold |= room.Locations.Any(loc =>
+                _goldLocations.Any(key => (int)key.X == loc.X && (int)key.Y == loc.Y)
+            );
+            _hasSilver |= room.Locations.Any(loc =>
+                _silverLocations.Any(key => (int)key.X == loc.X && (int)key.Y == loc.Y)
+            );
         }
 
         private static bool TryExpand(
-            Func<MapLocation, bool> moveCheck, 
-            Func<MapLocation, MapLocation?> targetTile, 
-            IRoom room, 
-            MapLocation fromLocation, 
-            List<MapLocation> locationsToProcess)
+            Func<MapLocation, bool> moveCheck,
+            Func<MapLocation, MapLocation?> targetTile,
+            IRoom room,
+            MapLocation fromLocation,
+            List<MapLocation> locationsToProcess
+        )
         {
             if (moveCheck(fromLocation))
             {
@@ -129,14 +146,38 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
 
             foreach (var location in room.Locations)
             {
-                TryPassage(loc => loc.North(), t => isNSDoor(t) || isPushWall(t),
-                    loc => loc.Tile == null || !loc.Tile.BlockingSouth, location, room, passages);
-                TryPassage(loc => loc.West(), t => isEWDoor(t) || isPushWall(t),
-                    loc => loc.Tile == null || !loc.Tile.BlockingEast, location, room, passages);
-                TryPassage(loc => loc.South(), t => isNSDoor(t) || isPushWall(t),
-                    loc => loc.Tile == null || !loc.Tile.BlockingNorth, location, room, passages);
-                TryPassage(loc => loc.East(), t => isEWDoor(t) || isPushWall(t),
-                    loc => loc.Tile == null || !loc.Tile.BlockingWest, location, room, passages);
+                TryPassage(
+                    loc => loc.North(),
+                    t => isNSDoor(t) || isPushWall(t),
+                    loc => loc.Tile == null || !loc.Tile.BlockingSouth,
+                    location,
+                    room,
+                    passages
+                );
+                TryPassage(
+                    loc => loc.West(),
+                    t => isEWDoor(t) || isPushWall(t),
+                    loc => loc.Tile == null || !loc.Tile.BlockingEast,
+                    location,
+                    room,
+                    passages
+                );
+                TryPassage(
+                    loc => loc.South(),
+                    t => isNSDoor(t) || isPushWall(t),
+                    loc => loc.Tile == null || !loc.Tile.BlockingNorth,
+                    location,
+                    room,
+                    passages
+                );
+                TryPassage(
+                    loc => loc.East(),
+                    t => isEWDoor(t) || isPushWall(t),
+                    loc => loc.Tile == null || !loc.Tile.BlockingWest,
+                    location,
+                    room,
+                    passages
+                );
             }
             return passages;
         }
@@ -147,7 +188,8 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             Func<MapLocation, bool> moveBackCheck,
             MapLocation fromLocation,
             IRoom fromRoom,
-            Dictionary<IList<Passage>, MapLocation> passages)
+            Dictionary<IList<Passage>, MapLocation> passages
+        )
         {
             var passageTrail = new List<Passage>();
 
@@ -170,21 +212,48 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                         case LockLevel.Silver:
                             if (!_hasSilver)
                             {
-                                _lockedWays.Add(new LockedWay((LockLevel)targetPassage.Arg3, getNext, hasProperFormattedPassage, moveBackCheck, fromLocation, fromRoom));
+                                _lockedWays.Add(
+                                    new LockedWay(
+                                        (LockLevel)targetPassage.Arg3,
+                                        getNext,
+                                        hasProperFormattedPassage,
+                                        moveBackCheck,
+                                        fromLocation,
+                                        fromRoom
+                                    )
+                                );
                                 return;
                             }
                             break;
                         case LockLevel.Gold:
                             if (!_hasGold)
                             {
-                                _lockedWays.Add(new LockedWay((LockLevel)targetPassage.Arg3, getNext, hasProperFormattedPassage, moveBackCheck, fromLocation, fromRoom));
+                                _lockedWays.Add(
+                                    new LockedWay(
+                                        (LockLevel)targetPassage.Arg3,
+                                        getNext,
+                                        hasProperFormattedPassage,
+                                        moveBackCheck,
+                                        fromLocation,
+                                        fromRoom
+                                    )
+                                );
                                 return;
                             }
                             break;
                         case LockLevel.Both:
                             if (!_hasSilver || !_hasGold)
                             {
-                                _lockedWays.Add(new LockedWay((LockLevel)targetPassage.Arg3, getNext, hasProperFormattedPassage, moveBackCheck, fromLocation, fromRoom));
+                                _lockedWays.Add(
+                                    new LockedWay(
+                                        (LockLevel)targetPassage.Arg3,
+                                        getNext,
+                                        hasProperFormattedPassage,
+                                        moveBackCheck,
+                                        fromLocation,
+                                        fromRoom
+                                    )
+                                );
                                 return;
                             }
                             break;
@@ -208,17 +277,16 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                 }
 
                 fromLocation = targetPassageSpace;
-
             } while (true);
-
         }
 
         private void ExplorePassages(Dictionary<IList<Passage>, MapLocation> passages, IRoom room)
         {
             foreach (var passage in passages)
             {
-                var existingRoom = _discoveredRooms.FirstOrDefault(
-                    r => r.Locations.Any(loc => loc.X == passage.Value.X && loc.Y == passage.Value.Y));
+                var existingRoom = _discoveredRooms.FirstOrDefault(r =>
+                    r.Locations.Any(loc => loc.X == passage.Value.X && loc.Y == passage.Value.Y)
+                );
                 if (existingRoom != null)
                 {
                     if (room != existingRoom)
@@ -244,7 +312,14 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                         {
                             _lockedWays.Remove(lockedWay);
                             Dictionary<IList<Passage>, MapLocation> passages = new();
-                            TryPassage(lockedWay.GetNext, lockedWay.HasProperFormattedPassage, lockedWay.MoveBackCheck, lockedWay.FromLocation, lockedWay.FromRoom, passages);
+                            TryPassage(
+                                lockedWay.GetNext,
+                                lockedWay.HasProperFormattedPassage,
+                                lockedWay.MoveBackCheck,
+                                lockedWay.FromLocation,
+                                lockedWay.FromRoom,
+                                passages
+                            );
                             ExplorePassages(passages, lockedWay.FromRoom);
                         }
                         break;
@@ -253,7 +328,14 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                         {
                             _lockedWays.Remove(lockedWay);
                             Dictionary<IList<Passage>, MapLocation> passages = new();
-                            TryPassage(lockedWay.GetNext, lockedWay.HasProperFormattedPassage, lockedWay.MoveBackCheck, lockedWay.FromLocation, lockedWay.FromRoom, passages);
+                            TryPassage(
+                                lockedWay.GetNext,
+                                lockedWay.HasProperFormattedPassage,
+                                lockedWay.MoveBackCheck,
+                                lockedWay.FromLocation,
+                                lockedWay.FromRoom,
+                                passages
+                            );
                             ExplorePassages(passages, lockedWay.FromRoom);
                         }
                         break;
@@ -262,7 +344,14 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
                         {
                             _lockedWays.Remove(lockedWay);
                             Dictionary<IList<Passage>, MapLocation> passages = new();
-                            TryPassage(lockedWay.GetNext, lockedWay.HasProperFormattedPassage, lockedWay.MoveBackCheck, lockedWay.FromLocation, lockedWay.FromRoom, passages);
+                            TryPassage(
+                                lockedWay.GetNext,
+                                lockedWay.HasProperFormattedPassage,
+                                lockedWay.MoveBackCheck,
+                                lockedWay.FromLocation,
+                                lockedWay.FromRoom,
+                                passages
+                            );
                             ExplorePassages(passages, lockedWay.FromRoom);
                         }
                         break;
@@ -279,7 +368,14 @@ namespace Tiledriver.Core.LevelGeometry.Mapping
             public MapLocation FromLocation { get; }
             public IRoom FromRoom { get; }
 
-            public LockedWay(LockLevel lockLevel, Func<MapLocation, MapLocation?> getNext, Func<Trigger, bool> hasProperFormattedPassage, Func<MapLocation, bool> moveBackCheck, MapLocation fromLocation, IRoom fromRoom)
+            public LockedWay(
+                LockLevel lockLevel,
+                Func<MapLocation, MapLocation?> getNext,
+                Func<Trigger, bool> hasProperFormattedPassage,
+                Func<MapLocation, bool> moveBackCheck,
+                MapLocation fromLocation,
+                IRoom fromRoom
+            )
             {
                 LockLevel = lockLevel;
                 GetNext = getNext;

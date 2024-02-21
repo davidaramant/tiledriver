@@ -23,7 +23,7 @@ namespace Tiledriver.Core.Tests.FormatModels.Wad
                     new UwmfLump("TEXTMAP", ThingDemoMap.Create()),
                     new Marker("ENDMAP")
                 };
-                WadWriter.SaveTo(lumps,fileInfo.FullName);
+                WadWriter.SaveTo(lumps, fileInfo.FullName);
             }
             finally
             {

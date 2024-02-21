@@ -7,8 +7,7 @@ namespace Tiledriver.DataModelGenerator.MetadataModel
     {
         public override string PropertyType => $"ImmutableArray<{ElementTypeName}>";
 
-        public BlockListProperty(string name, string? elementType = null) : base(name, elementType)
-        {
-        }
+        public BlockListProperty(string name, string? elementType = null)
+            : base(name, elementType) { }
     }
 }

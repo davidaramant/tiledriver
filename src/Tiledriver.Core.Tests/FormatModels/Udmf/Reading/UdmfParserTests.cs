@@ -1,10 +1,10 @@
 ﻿// Copyright (c) 2019, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using FluentAssertions;
 using System.IO;
 using System.Linq;
 using System.Text;
+using FluentAssertions;
 using Tiledriver.Core.DemoMaps.Doom;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Common.Reading;
@@ -66,7 +66,6 @@ namespace Tiledriver.Core.Tests.FormatModels.Udmf.Reading
             results.Should().HaveCount(1);
             results[0].Should().BeOfType<Block>().Which.Fields.Should().HaveCount(1);
         }
-
 
         [Fact]
         public void ShouldHandleParsingDemoMap()

@@ -1,5 +1,5 @@
 // Copyright (c) 2016, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Diagnostics;
@@ -37,15 +37,19 @@ namespace Tiledriver.Core.FormatModels.Wad
         #region Equality stuff
         public bool Equals(LumpName? other)
         {
-            if (other is null) return false;
-            if (ReferenceEquals(this, other)) return true;
+            if (other is null)
+                return false;
+            if (ReferenceEquals(this, other))
+                return true;
             return string.Equals(_name, other._name);
         }
 
         public override bool Equals(object? obj)
         {
-            if (obj is null) return false;
-            if (ReferenceEquals(this, obj)) return true;
+            if (obj is null)
+                return false;
+            if (ReferenceEquals(this, obj))
+                return true;
             return obj is LumpName name && Equals(name);
         }
 

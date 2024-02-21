@@ -1,9 +1,9 @@
 ﻿// Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
+using System.IO;
 using NUnit.Framework;
 using SkiaSharp;
-using System.IO;
 using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.Utils.Images;
 
@@ -22,7 +22,8 @@ public sealed class SkiaSharpPlayground
         using var img = GenericVisualizer.RenderPalette(
             new Size(10, 10),
             pos => SKColor.FromHsv(0, 100 * (pos.X / 10f), 100 * (pos.Y / 10f)),
-            scale: 20);
+            scale: 20
+        );
 
         Save(img, "HSV with Saturation x Value");
     }
@@ -33,7 +34,8 @@ public sealed class SkiaSharpPlayground
         using var img = GenericVisualizer.RenderPalette(
             new Size(10, 10),
             pos => SKColor.FromHsl(0, 100 * (pos.X / 10f), 100 * (pos.Y / 10f)),
-            scale: 20);
+            scale: 20
+        );
 
         Save(img, "HSL with Saturation x Luminosity");
     }

@@ -1,11 +1,11 @@
 ﻿// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using Humanizer;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using Humanizer;
 using Tiledriver.DataModelGenerator.MetadataModel;
 
 namespace Tiledriver.DataModelGenerator.MapInfo.MetadataModel
@@ -26,7 +26,8 @@ namespace Tiledriver.DataModelGenerator.MapInfo.MetadataModel
             string formatName,
             Func<AbstractBlock> getBaseClass,
             IEnumerable<Property> metadata,
-            IEnumerable<Property> properties)
+            IEnumerable<Property> properties
+        )
         {
             FormatName = formatName;
             _metadata = metadata.ToList();

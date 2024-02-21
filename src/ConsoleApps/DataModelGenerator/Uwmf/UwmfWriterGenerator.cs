@@ -1,5 +1,5 @@
 // Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.IO;
@@ -23,7 +23,10 @@ namespace Tiledriver.DataModelGenerator.Uwmf
             using var output = new IndentedWriter(stream);
 
             output
-                .WriteHeader("Tiledriver.Core.FormatModels.Uwmf.Writing", new[] { "System.CodeDom.Compiler", "System.IO" })
+                .WriteHeader(
+                    "Tiledriver.Core.FormatModels.Uwmf.Writing",
+                    new[] { "System.CodeDom.Compiler", "System.IO" }
+                )
                 .Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
                 .Line($"public static partial class UwmfWriter")
                 .OpenParen();
@@ -38,15 +41,11 @@ namespace Tiledriver.DataModelGenerator.Uwmf
 
         private static void CreateBlockWriter(IndentedWriter output, Block block)
         {
-            output
-                .Line($"private static void Write(StreamWriter writer, {block.ClassName} {block.Name})")
-                .OpenParen();
+            output.Line($"private static void Write(StreamWriter writer, {block.ClassName} {block.Name})").OpenParen();
 
             if (block.Serialization == SerializationType.Normal)
             {
-                output
-                    .Line($"writer.WriteLine(\"{block.Name}\");")
-                    .Line("writer.WriteLine(\"{\");");
+                output.Line($"writer.WriteLine(\"{block.Name}\");").Line("writer.WriteLine(\"{\");");
             }
 
             foreach (var p in block.Properties)
@@ -58,11 +57,14 @@ namespace Tiledriver.DataModelGenerator.Uwmf
                     string optionalDefault = defaultValue != null ? ", " + defaultValue : string.Empty;
                     string indent = block.Serialization == SerializationType.Normal ? string.Empty : ", indent:false";
 
-                    output.Line($"WriteProperty(writer, \"{sp.FormatName}\", {block.Name}.{sp.PropertyName}{optionalDefault}{indent});");
+                    output.Line(
+                        $"WriteProperty(writer, \"{sp.FormatName}\", {block.Name}.{sp.PropertyName}{optionalDefault}{indent});"
+                    );
                 }
                 else if (p is CollectionProperty cp)
                 {
-                    output.Line($"foreach(var block in {block.Name}.{cp.PropertyName})")
+                    output
+                        .Line($"foreach(var block in {block.Name}.{cp.PropertyName})")
                         .OpenParen()
                         .Line($"Write(writer, block);")
                         .CloseParen();

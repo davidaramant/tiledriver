@@ -20,16 +20,14 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
 
         public static MetaMap Analyze(MapData mapData, bool includeAllEmptyAreas = false)
         {
-            var doorLocations =
-                mapData.Triggers
-                    .Where(t => t.Action == ActionSpecial.DoorOpen)
-                    .Select(t => new Position(t.X, t.Y))
-                    .ToImmutableHashSet();
-            var pushWallLocations =
-                mapData.Triggers
-                    .Where(t => t.Action == ActionSpecial.PushwallMove)
-                    .Select(t => new Position(t.X, t.Y))
-                    .ToImmutableHashSet();
+            var doorLocations = mapData
+                .Triggers.Where(t => t.Action == ActionSpecial.DoorOpen)
+                .Select(t => new Position(t.X, t.Y))
+                .ToImmutableHashSet();
+            var pushWallLocations = mapData
+                .Triggers.Where(t => t.Action == ActionSpecial.PushwallMove)
+                .Select(t => new Position(t.X, t.Y))
+                .ToImmutableHashSet();
 
             MapSquare GetSpace(int x, int y) => mapData.PlaneMaps[0][y * mapData.Width + x];
 
@@ -63,9 +61,11 @@ namespace Tiledriver.Core.FormatModels.MapMetadata
             else
             {
                 spotsToCheck.AddRange(
-                    Enumerable.Range(0, mapData.Width * mapData.Height).
-                    Select(i => new Position(i % mapData.Width, i / mapData.Width)).
-                    Where(p => GetTileType(p) == TileType.Empty));
+                    Enumerable
+                        .Range(0, mapData.Width * mapData.Height)
+                        .Select(i => new Position(i % mapData.Width, i / mapData.Width))
+                        .Where(p => GetTileType(p) == TileType.Empty)
+                );
             }
 
             while (spotsToCheck.Any())

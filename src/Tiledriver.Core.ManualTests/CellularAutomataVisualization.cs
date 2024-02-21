@@ -1,12 +1,12 @@
 // Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using NUnit.Framework;
-using SkiaSharp;
 using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using NUnit.Framework;
+using SkiaSharp;
 using Tiledriver.Core.Extensions.Enumerable;
 using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.LevelGeometry.Extensions;
@@ -30,18 +30,20 @@ namespace Tiledriver.Core.ManualTests
 
             var path = dir.FullName;
 
-            var trials =
-                (from seed in Enumerable.Range(0, 3)
-                 from size in new[] { 96, 128 }
-                 from probAlive in new[] { 0.48, 0.5, 0.52 }
-                 select (seed, size, probAlive)).ToArray();
+            var trials = (
+                from seed in Enumerable.Range(0, 3)
+                from size in new[] { 96, 128 }
+                from probAlive in new[] { 0.48, 0.5, 0.52 }
+                select (seed, size, probAlive)
+            ).ToArray();
 
-            Parallel.ForEach(trials, trial =>
-            {
-                var random = new Random(trial.seed);
+            Parallel.ForEach(
+                trials,
+                trial =>
+                {
+                    var random = new Random(trial.seed);
 
-                var board =
-                    new CellBoard(new Size(trial.size, trial.size))
+                    var board = new CellBoard(new Size(trial.size, trial.size))
                         .Fill(random, probabilityAlive: trial.probAlive)
                         .MakeBorderAlive(thickness: 1)
                         .GenerateStandardCave()
@@ -49,13 +51,19 @@ namespace Tiledriver.Core.ManualTests
                         .ScaleAndSmooth()
                         .ScaleAndSmooth();
 
-                using var img = Visualize(board, showOnlyLargestArea:false);
+                    using var img = Visualize(board, showOnlyLargestArea: false);
 
-                img.Save(Path.Combine(path, $"Size {trial.size}" +
-                                            $" - ProbAlive {trial.probAlive:F2}" +
-                                            $" - Seed {trial.seed}" +
-                                            $".png"));
-            });
+                    img.Save(
+                        Path.Combine(
+                            path,
+                            $"Size {trial.size}"
+                                + $" - ProbAlive {trial.probAlive:F2}"
+                                + $" - Seed {trial.seed}"
+                                + $".png"
+                        )
+                    );
+                }
+            );
         }
 
         [Test, Explicit]
@@ -78,11 +86,10 @@ namespace Tiledriver.Core.ManualTests
 
             var random = new Random(0);
 
-            var board =
-                new CellBoard(new Size(128, 128))
-                    .Fill(random, probabilityAlive: 0.5)
-                    .MakeBorderAlive(thickness: 1)
-                    .GenerateStandardCave();
+            var board = new CellBoard(new Size(128, 128))
+                .Fill(random, probabilityAlive: 0.5)
+                .MakeBorderAlive(thickness: 1)
+                .GenerateStandardCave();
 
             Save(board, "1. board", 8);
 
@@ -98,12 +105,16 @@ namespace Tiledriver.Core.ManualTests
                 {
                     scaled = scaled.Quadruple().AddNoise(random, noise).RunGenerations(1);
 
-                    Save(scaled, $"{scalingIteration + 1}. board {1 << scalingIteration}x - noise {noise:F2}",  8 / (1 << scalingIteration));
+                    Save(
+                        scaled,
+                        $"{scalingIteration + 1}. board {1 << scalingIteration}x - noise {noise:F2}",
+                        8 / (1 << scalingIteration)
+                    );
 
                     last = scaled;
                 }
             }
-        }        
+        }
 
         static IFastImage Visualize(CellBoard board, bool showOnlyLargestArea, int scale = 1)
         {
@@ -113,22 +124,25 @@ namespace Tiledriver.Core.ManualTests
                     ConnectedAreaAnalyzer
                         .FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Dead)
                         .MaxBy(component => component.Area)
-                        ?.TrimExcess(1) ??
-                    throw new InvalidOperationException("This can't happen");
+                        ?.TrimExcess(1) ?? throw new InvalidOperationException("This can't happen");
 
-                return GenericVisualizer.RenderBinary(size,
+                return GenericVisualizer.RenderBinary(
+                    size,
                     isTrue: area.Contains,
                     trueColor: SKColors.White,
                     falseColor: SKColors.Black,
-                    scale: scale);
+                    scale: scale
+                );
             }
             else
             {
-                return GenericVisualizer.RenderBinary(board.Dimensions,
+                return GenericVisualizer.RenderBinary(
+                    board.Dimensions,
                     isTrue: p => board[p] == CellType.Dead,
                     trueColor: SKColors.White,
                     falseColor: SKColors.Black,
-                    scale: scale);
+                    scale: scale
+                );
             }
         }
     }

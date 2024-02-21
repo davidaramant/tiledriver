@@ -11,6 +11,7 @@ namespace Tiledriver.DataModelGenerator.MetadataModel
         public abstract string PropertyType { get; }
         public virtual string? DefaultString => null;
         public bool HasDefault => DefaultString != null;
+
         protected Property(string name) => Name = name;
     }
 }

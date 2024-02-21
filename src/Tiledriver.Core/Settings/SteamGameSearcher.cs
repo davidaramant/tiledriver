@@ -1,5 +1,5 @@
 ﻿// Copyright (c) 2017, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
+// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using Tiledriver.Core.Utils;
 
@@ -37,9 +37,10 @@ namespace Tiledriver.Core.Settings
             var sodPath = PathUtil.Combine(steamPath, "Spear of Destiny", "base");
 
             return new GamePaths(
-                Wolf3D: PathUtil.VerifyPathExists(wolf3DPath), 
+                Wolf3D: PathUtil.VerifyPathExists(wolf3DPath),
                 SpearOfDestiny: PathUtil.VerifyPathExists(sodPath),
-                Doom: string.Empty);
+                Doom: string.Empty
+            );
         }
     }
 }
