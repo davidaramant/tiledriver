@@ -10,27 +10,27 @@ using Xunit;
 
 namespace Tiledriver.Core.Tests.FormatModels.Xlat.Reading
 {
-    public sealed class XlatParserTests
-    {
-        [Fact]
-        public void ShouldParseWolf3DXlat()
-        {
-            using var stream = TestFile.Xlat.wolf3d;
-            using var textReader = new StreamReader(stream, Encoding.ASCII);
-            var lexer = XlatLexer.Create(textReader);
-            var translator = XlatParser.Parse(lexer.Scan(), Mock.Of<IResourceProvider>());
-        }
+	public sealed class XlatParserTests
+	{
+		[Fact]
+		public void ShouldParseWolf3DXlat()
+		{
+			using var stream = TestFile.Xlat.wolf3d;
+			using var textReader = new StreamReader(stream, Encoding.ASCII);
+			var lexer = XlatLexer.Create(textReader);
+			var translator = XlatParser.Parse(lexer.Scan(), Mock.Of<IResourceProvider>());
+		}
 
-        [Fact]
-        public void ShouldParseSpearXlat()
-        {
-            var mockProvider = new Mock<IResourceProvider>();
-            mockProvider.Setup(_ => _.Lookup("xlat/wolf3d.txt")).Returns(TestFile.Xlat.wolf3d);
+		[Fact]
+		public void ShouldParseSpearXlat()
+		{
+			var mockProvider = new Mock<IResourceProvider>();
+			mockProvider.Setup(_ => _.Lookup("xlat/wolf3d.txt")).Returns(TestFile.Xlat.wolf3d);
 
-            using var stream = TestFile.Xlat.spear;
-            using var textReader = new StreamReader(stream, Encoding.ASCII);
-            var lexer = XlatLexer.Create(textReader);
-            var translator = XlatParser.Parse(lexer.Scan(), mockProvider.Object);
-        }
-    }
+			using var stream = TestFile.Xlat.spear;
+			using var textReader = new StreamReader(stream, Encoding.ASCII);
+			var lexer = XlatLexer.Create(textReader);
+			var translator = XlatParser.Parse(lexer.Scan(), mockProvider.Object);
+		}
+	}
 }

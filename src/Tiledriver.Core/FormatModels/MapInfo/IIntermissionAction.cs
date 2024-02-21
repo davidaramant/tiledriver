@@ -3,5 +3,5 @@
 
 namespace Tiledriver.Core.FormatModels.MapInfo
 {
-    public interface IIntermissionAction { }
+	public interface IIntermissionAction { }
 }

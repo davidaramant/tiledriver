@@ -5,48 +5,48 @@ using Tiledriver.Core.FormatModels.Wad.StreamExtensions;
 
 namespace Tiledriver.Core.FormatModels.Wad
 {
-    public static class WadWriter
-    {
-        public static void SaveTo(IEnumerable<ILump> lumps, string filePath)
-        {
-            using var fs = File.Open(filePath, FileMode.Create);
-            WriteTo(lumps, fs);
-        }
+	public static class WadWriter
+	{
+		public static void SaveTo(IEnumerable<ILump> lumps, string filePath)
+		{
+			using var fs = File.Open(filePath, FileMode.Create);
+			WriteTo(lumps, fs);
+		}
 
-        public static void WriteTo(IEnumerable<ILump> lumps, Stream stream)
-        {
-            var lumpList = lumps.ToList();
+		public static void WriteTo(IEnumerable<ILump> lumps, Stream stream)
+		{
+			var lumpList = lumps.ToList();
 
-            stream.WriteText("PWAD");
-            stream.WriteInt(lumpList.Count);
+			stream.WriteText("PWAD");
+			stream.WriteInt(lumpList.Count);
 
-            // Fill in this position after writing the data
-            int directoryOffsetPosition = (int)stream.Position;
-            stream.Position += 4;
+			// Fill in this position after writing the data
+			int directoryOffsetPosition = (int)stream.Position;
+			stream.Position += 4;
 
-            var metadata = new List<LumpMetadata>();
-            foreach (var lump in lumpList)
-            {
-                int startOfLump = (int)stream.Position;
+			var metadata = new List<LumpMetadata>();
+			foreach (var lump in lumpList)
+			{
+				int startOfLump = (int)stream.Position;
 
-                lump.WriteTo(stream);
+				lump.WriteTo(stream);
 
-                metadata.Add(
-                    new LumpMetadata(Position: startOfLump, Size: (int)stream.Position - startOfLump, Name: lump.Name)
-                );
-            }
+				metadata.Add(
+					new LumpMetadata(Position: startOfLump, Size: (int)stream.Position - startOfLump, Name: lump.Name)
+				);
+			}
 
-            int startOfDirectory = (int)stream.Position;
+			int startOfDirectory = (int)stream.Position;
 
-            // Write directory
-            foreach (var lumpMetadata in metadata)
-            {
-                lumpMetadata.WriteTo(stream);
-            }
+			// Write directory
+			foreach (var lumpMetadata in metadata)
+			{
+				lumpMetadata.WriteTo(stream);
+			}
 
-            // Go back and set the directory position
-            stream.Position = directoryOffsetPosition;
-            stream.WriteInt(startOfDirectory);
-        }
-    }
+			// Go back and set the directory position
+			stream.Position = directoryOffsetPosition;
+			stream.WriteInt(startOfDirectory);
+		}
+	}
 }

@@ -7,5 +7,5 @@ using Tiledriver.Core.FormatModels.Common.Reading.AbstractSyntaxTree;
 
 namespace Tiledriver.Core.FormatModels.Xlat.Reading.AbstractSyntaxTree
 {
-    public sealed record Statement(ImmutableArray<IdentifierToken> Components) : IExpression;
+	public sealed record Statement(ImmutableArray<IdentifierToken> Components) : IExpression;
 }

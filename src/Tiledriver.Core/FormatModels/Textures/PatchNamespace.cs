@@ -3,10 +3,10 @@
 
 namespace Tiledriver.Core.FormatModels.Textures
 {
-    public enum PatchNamespace
-    {
-        Patch,
-        Graphic,
-        Sprite
-    }
+	public enum PatchNamespace
+	{
+		Patch,
+		Graphic,
+		Sprite
+	}
 }

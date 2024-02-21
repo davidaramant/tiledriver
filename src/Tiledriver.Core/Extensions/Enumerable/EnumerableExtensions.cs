@@ -6,28 +6,28 @@ using System.Collections.Generic;
 
 namespace Tiledriver.Core.Extensions.Enumerable
 {
-    public static class EnumerableExtensions
-    {
-        public static int MinIndex<T>(this IEnumerable<T> sequence, Func<T, double> selector)
-        {
-            int minIndex = 0;
-            double min = double.MaxValue;
+	public static class EnumerableExtensions
+	{
+		public static int MinIndex<T>(this IEnumerable<T> sequence, Func<T, double> selector)
+		{
+			int minIndex = 0;
+			double min = double.MaxValue;
 
-            int index = 0;
-            foreach (var value in sequence)
-            {
-                var current = selector(value);
+			int index = 0;
+			foreach (var value in sequence)
+			{
+				var current = selector(value);
 
-                if (current < min)
-                {
-                    minIndex = index;
-                    min = current;
-                }
+				if (current < min)
+				{
+					minIndex = index;
+					min = current;
+				}
 
-                index++;
-            }
+				index++;
+			}
 
-            return minIndex;
-        }
-    }
+			return minIndex;
+		}
+	}
 }

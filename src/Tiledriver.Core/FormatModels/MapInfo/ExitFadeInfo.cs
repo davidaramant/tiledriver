@@ -3,5 +3,5 @@
 
 namespace Tiledriver.Core.FormatModels.MapInfo
 {
-    public sealed record ExitFadeInfo(string Color, double Duration);
+	public sealed record ExitFadeInfo(string Color, double Duration);
 }

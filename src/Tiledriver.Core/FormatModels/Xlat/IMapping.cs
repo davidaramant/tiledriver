@@ -3,8 +3,8 @@
 
 namespace Tiledriver.Core.FormatModels.Xlat
 {
-    public interface IMapping
-    {
-        ushort OldNum { get; }
-    }
+	public interface IMapping
+	{
+		ushort OldNum { get; }
+	}
 }

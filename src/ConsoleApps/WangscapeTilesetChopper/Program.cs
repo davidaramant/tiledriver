@@ -16,7 +16,7 @@ var outputDirectory = Path.Combine(wangscapeDirectory, "tiles");
 
 if (!Directory.Exists(inputDirectory))
 {
-    throw new DirectoryNotFoundException("Have you run Wangscape? Could not find: " + inputDirectory);
+	throw new DirectoryNotFoundException("Have you run Wangscape? Could not find: " + inputDirectory);
 }
 
 var tilesJsonFile = Path.Combine(inputDirectory, "tiles.json");
@@ -28,7 +28,7 @@ var tilesetDefinition = Deserialize<List<TilesetDefinition>>(tilesetsJsonFile).S
 
 if (Directory.Exists(outputDirectory))
 {
-    Directory.Delete(outputDirectory, recursive: true);
+	Directory.Delete(outputDirectory, recursive: true);
 }
 Directory.CreateDirectory(outputDirectory);
 
@@ -37,37 +37,37 @@ using var tileSheet = SKBitmap.FromImage(SKImage.FromEncodedData(tileSheetStream
 
 foreach (var definition in tileDefinitions)
 {
-    using var tile = new SKBitmap(tilesetDefinition.Width, tilesetDefinition.Height);
-    using (var tileCanvas = new SKCanvas(tile))
-    {
-        tileCanvas.DrawBitmap(
-            tileSheet,
-            SKRect.Create(definition.X, definition.Y, tilesetDefinition.Width, tilesetDefinition.Height),
-            SKRect.Create(0, 0, tilesetDefinition.Width, tilesetDefinition.Height)
-        );
-    }
+	using var tile = new SKBitmap(tilesetDefinition.Width, tilesetDefinition.Height);
+	using (var tileCanvas = new SKCanvas(tile))
+	{
+		tileCanvas.DrawBitmap(
+			tileSheet,
+			SKRect.Create(definition.X, definition.Y, tilesetDefinition.Width, tilesetDefinition.Height),
+			SKRect.Create(0, 0, tilesetDefinition.Width, tilesetDefinition.Height)
+		);
+	}
 
-    using var tileStream = File.Open(Path.Combine(outputDirectory, definition.GetFileName()), FileMode.Create);
-    tile.Encode(tileStream, SKEncodedImageFormat.Png, quality: 100);
+	using var tileStream = File.Open(Path.Combine(outputDirectory, definition.GetFileName()), FileMode.Create);
+	tile.Encode(tileStream, SKEncodedImageFormat.Png, quality: 100);
 }
 
 static string FindSolutionPath()
 {
-    var path = "..";
+	var path = "..";
 
-    while (!File.Exists(Path.Combine(path, "Tiledriver.sln")))
-    {
-        path = Path.Combine(path, "..");
-    }
+	while (!File.Exists(Path.Combine(path, "Tiledriver.sln")))
+	{
+		path = Path.Combine(path, "..");
+	}
 
-    return Path.GetFullPath(path);
+	return Path.GetFullPath(path);
 }
 
 static T Deserialize<T>(string filePath)
 {
-    // TODO: Is there seriously no better way to read from a file?
-    var serialized = File.ReadAllText(filePath);
+	// TODO: Is there seriously no better way to read from a file?
+	var serialized = File.ReadAllText(filePath);
 
-    return JsonSerializer.Deserialize<T>(serialized, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
-        ?? throw new ArgumentException($"Bad format for {Path.GetFileName(filePath)}");
+	return JsonSerializer.Deserialize<T>(serialized, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
+		?? throw new ArgumentException($"Bad format for {Path.GetFileName(filePath)}");
 }

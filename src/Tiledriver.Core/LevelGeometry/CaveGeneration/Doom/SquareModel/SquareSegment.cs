@@ -17,15 +17,15 @@ namespace Tiledriver.Core.LevelGeometry.CaveGeneration.Doom.SquareModel;
 /// </remarks>
 public enum SquareSegment
 {
-    UpperLeftOuter = 0,
-    UpperLeftInner = 1,
+	UpperLeftOuter = 0,
+	UpperLeftInner = 1,
 
-    UpperRightOuter = 2,
-    UpperRightInner = 3,
+	UpperRightOuter = 2,
+	UpperRightInner = 3,
 
-    LowerRightOuter = 4,
-    LowerRightInner = 5,
+	LowerRightOuter = 4,
+	LowerRightInner = 5,
 
-    LowerLeftOuter = 6,
-    LowerLeftInner = 7,
+	LowerLeftOuter = 6,
+	LowerLeftInner = 7,
 }

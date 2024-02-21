@@ -7,13 +7,13 @@ using Tiledriver.Core.Utils.GZDoom;
 
 namespace Tiledriver.Core.Settings
 {
-    public sealed record TiledriverConfig(string ECWolfPath, string GZDoomPath, GamePaths GamePaths)
-    {
-        public ECWolfLauncher CreateECWolfLauncher() => new(ECWolfPath);
+	public sealed record TiledriverConfig(string ECWolfPath, string GZDoomPath, GamePaths GamePaths)
+	{
+		public ECWolfLauncher CreateECWolfLauncher() => new(ECWolfPath);
 
-        public GZDoomLauncher CreateGZDoomLauncher() =>
-            new(
-                new DoomConfig(GZDoomPath, GamePaths.Doom2IWad ?? throw new ArgumentException("No Doom path specified"))
-            );
-    }
+		public GZDoomLauncher CreateGZDoomLauncher() =>
+			new(
+				new DoomConfig(GZDoomPath, GamePaths.Doom2IWad ?? throw new ArgumentException("No Doom path specified"))
+			);
+	}
 }

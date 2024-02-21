@@ -7,8 +7,8 @@ using Tiledriver.Core.FormatModels.Common.Reading;
 
 namespace Tiledriver.Core.FormatModels.MapInfo.Reading.AbstractSyntaxTree
 {
-    public sealed record VariableAssignment(IdentifierToken Id, ImmutableArray<Token> Values)
-    {
-        public bool HasValues => Values.Any();
-    }
+	public sealed record VariableAssignment(IdentifierToken Id, ImmutableArray<Token> Values)
+	{
+		public bool HasValues => Values.Any();
+	}
 }

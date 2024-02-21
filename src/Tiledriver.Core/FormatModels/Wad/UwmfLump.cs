@@ -8,26 +8,26 @@ using Tiledriver.Core.FormatModels.Uwmf.Writing;
 
 namespace Tiledriver.Core.FormatModels.Wad
 {
-    public sealed class UwmfLump : ILump
-    {
-        private readonly MapData _mapData;
-        public LumpName Name { get; }
-        public bool HasData => true;
+	public sealed class UwmfLump : ILump
+	{
+		private readonly MapData _mapData;
+		public LumpName Name { get; }
+		public bool HasData => true;
 
-        public UwmfLump(LumpName name, MapData mapData)
-        {
-            Name = name;
-            _mapData = mapData;
-        }
+		public UwmfLump(LumpName name, MapData mapData)
+		{
+			Name = name;
+			_mapData = mapData;
+		}
 
-        public void WriteTo(Stream stream)
-        {
-            _mapData.WriteTo(stream);
-        }
+		public void WriteTo(Stream stream)
+		{
+			_mapData.WriteTo(stream);
+		}
 
-        public byte[] GetData()
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public byte[] GetData()
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

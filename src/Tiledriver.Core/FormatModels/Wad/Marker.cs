@@ -6,24 +6,24 @@ using System.IO;
 
 namespace Tiledriver.Core.FormatModels.Wad
 {
-    public sealed class Marker : ILump
-    {
-        public LumpName Name { get; }
-        public bool HasData => false;
+	public sealed class Marker : ILump
+	{
+		public LumpName Name { get; }
+		public bool HasData => false;
 
-        public Marker(LumpName name)
-        {
-            Name = name;
-        }
+		public Marker(LumpName name)
+		{
+			Name = name;
+		}
 
-        public void WriteTo(Stream stream)
-        {
-            // Do nothing; no data
-        }
+		public void WriteTo(Stream stream)
+		{
+			// Do nothing; no data
+		}
 
-        public byte[] GetData()
-        {
-            return Array.Empty<byte>();
-        }
-    }
+		public byte[] GetData()
+		{
+			return Array.Empty<byte>();
+		}
+	}
 }

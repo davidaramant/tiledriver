@@ -7,12 +7,12 @@ using Tiledriver.Core.FormatModels.Common.Reading;
 
 namespace Tiledriver.Core.FormatModels.Udmf.Reading
 {
-    public static class UdmfReader
-    {
-        public static MapData Read(Stream stream)
-        {
-            using var textReader = new StreamReader(stream, Encoding.ASCII, leaveOpen: true);
-            return UdmfSemanticAnalyzer.ReadMapData(UdmfParser.Parse(new UnifiedLexer(textReader).Scan()));
-        }
-    }
+	public static class UdmfReader
+	{
+		public static MapData Read(Stream stream)
+		{
+			using var textReader = new StreamReader(stream, Encoding.ASCII, leaveOpen: true);
+			return UdmfSemanticAnalyzer.ReadMapData(UdmfParser.Parse(new UnifiedLexer(textReader).Scan()));
+		}
+	}
 }

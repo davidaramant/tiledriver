@@ -6,18 +6,18 @@ using System.Linq;
 
 namespace Tiledriver.Core.LevelGeometry.Mapping
 {
-    public class LevelMap
-    {
-        public IRoom StartingRoom { get; }
+	public class LevelMap
+	{
+		public IRoom StartingRoom { get; }
 
-        public IEnumerable<IRoom> AllRooms { get; }
+		public IEnumerable<IRoom> AllRooms { get; }
 
-        public LevelMap(IRoom startingRoom, IEnumerable<IRoom> allRooms)
-        {
-            StartingRoom = startingRoom;
-            AllRooms = allRooms;
-        }
+		public LevelMap(IRoom startingRoom, IEnumerable<IRoom> allRooms)
+		{
+			StartingRoom = startingRoom;
+			AllRooms = allRooms;
+		}
 
-        public IEnumerable<IRoom> EndingRooms => AllRooms.Where(room => room.IsEndingRoom);
-    }
+		public IEnumerable<IRoom> EndingRooms => AllRooms.Where(room => room.IsEndingRoom);
+	}
 }

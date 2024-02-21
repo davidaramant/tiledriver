@@ -15,71 +15,71 @@ using Xunit;
 
 namespace Tiledriver.Core.Tests.FormatModels.Udmf.Reading
 {
-    public sealed class UdmfParserTests
-    {
-        [Fact]
-        public void ShouldParseAssignment()
-        {
-            var tokenStream = new Token[]
-            {
-                new IdentifierToken(FilePosition.StartOfFile, new Identifier("id")),
-                new EqualsToken(FilePosition.StartOfFile),
-                new IntegerToken(FilePosition.StartOfFile, 5),
-                new SemicolonToken(FilePosition.StartOfFile),
-            };
+	public sealed class UdmfParserTests
+	{
+		[Fact]
+		public void ShouldParseAssignment()
+		{
+			var tokenStream = new Token[]
+			{
+				new IdentifierToken(FilePosition.StartOfFile, new Identifier("id")),
+				new EqualsToken(FilePosition.StartOfFile),
+				new IntegerToken(FilePosition.StartOfFile, 5),
+				new SemicolonToken(FilePosition.StartOfFile),
+			};
 
-            var results = UdmfParser.Parse(tokenStream).ToArray();
-            results.Should().HaveCount(1);
-            results[0].Should().BeOfType<Assignment>();
-        }
+			var results = UdmfParser.Parse(tokenStream).ToArray();
+			results.Should().HaveCount(1);
+			results[0].Should().BeOfType<Assignment>();
+		}
 
-        [Fact]
-        public void ShouldParseEmptyBlock()
-        {
-            var tokenStream = new Token[]
-            {
-                new IdentifierToken(FilePosition.StartOfFile, new Identifier("blockName")),
-                new OpenBraceToken(FilePosition.StartOfFile),
-                new CloseBraceToken(FilePosition.StartOfFile),
-            };
+		[Fact]
+		public void ShouldParseEmptyBlock()
+		{
+			var tokenStream = new Token[]
+			{
+				new IdentifierToken(FilePosition.StartOfFile, new Identifier("blockName")),
+				new OpenBraceToken(FilePosition.StartOfFile),
+				new CloseBraceToken(FilePosition.StartOfFile),
+			};
 
-            var results = UdmfParser.Parse(tokenStream).ToArray();
-            results.Should().HaveCount(1);
-            results[0].Should().BeOfType<Block>().Which.Fields.Should().BeEmpty();
-        }
+			var results = UdmfParser.Parse(tokenStream).ToArray();
+			results.Should().HaveCount(1);
+			results[0].Should().BeOfType<Block>().Which.Fields.Should().BeEmpty();
+		}
 
-        [Fact]
-        public void ShouldParseBlock()
-        {
-            var tokenStream = new Token[]
-            {
-                new IdentifierToken(FilePosition.StartOfFile, new Identifier("blockName")),
-                new OpenBraceToken(FilePosition.StartOfFile),
-                new IdentifierToken(FilePosition.StartOfFile, new Identifier("id")),
-                new EqualsToken(FilePosition.StartOfFile),
-                new IntegerToken(FilePosition.StartOfFile, 5),
-                new SemicolonToken(FilePosition.StartOfFile),
-                new CloseBraceToken(FilePosition.StartOfFile),
-            };
+		[Fact]
+		public void ShouldParseBlock()
+		{
+			var tokenStream = new Token[]
+			{
+				new IdentifierToken(FilePosition.StartOfFile, new Identifier("blockName")),
+				new OpenBraceToken(FilePosition.StartOfFile),
+				new IdentifierToken(FilePosition.StartOfFile, new Identifier("id")),
+				new EqualsToken(FilePosition.StartOfFile),
+				new IntegerToken(FilePosition.StartOfFile, 5),
+				new SemicolonToken(FilePosition.StartOfFile),
+				new CloseBraceToken(FilePosition.StartOfFile),
+			};
 
-            var results = UdmfParser.Parse(tokenStream).ToArray();
-            results.Should().HaveCount(1);
-            results[0].Should().BeOfType<Block>().Which.Fields.Should().HaveCount(1);
-        }
+			var results = UdmfParser.Parse(tokenStream).ToArray();
+			results.Should().HaveCount(1);
+			results[0].Should().BeOfType<Block>().Which.Fields.Should().HaveCount(1);
+		}
 
-        [Fact]
-        public void ShouldHandleParsingDemoMap()
-        {
-            var map = DemoMap.Create();
+		[Fact]
+		public void ShouldHandleParsingDemoMap()
+		{
+			var map = DemoMap.Create();
 
-            using var stream = new MemoryStream();
-            map.WriteTo(stream);
+			using var stream = new MemoryStream();
+			map.WriteTo(stream);
 
-            stream.Position = 0;
+			stream.Position = 0;
 
-            using var textReader = new StreamReader(stream, Encoding.ASCII);
-            var lexer = new UnifiedLexer(textReader);
-            var result = UdmfParser.Parse(lexer.Scan()).ToArray();
-        }
-    }
+			using var textReader = new StreamReader(stream, Encoding.ASCII);
+			var lexer = new UnifiedLexer(textReader);
+			var result = UdmfParser.Parse(lexer.Scan()).ToArray();
+		}
+	}
 }

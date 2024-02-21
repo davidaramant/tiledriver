@@ -3,15 +3,15 @@
 
 namespace Tiledriver.DataModelGenerator.MetadataModel
 {
-    abstract class Property
-    {
-        public string Name { get; }
-        public virtual string FormatName => Name;
-        public abstract string PropertyName { get; }
-        public abstract string PropertyType { get; }
-        public virtual string? DefaultString => null;
-        public bool HasDefault => DefaultString != null;
+	abstract class Property
+	{
+		public string Name { get; }
+		public virtual string FormatName => Name;
+		public abstract string PropertyName { get; }
+		public abstract string PropertyType { get; }
+		public virtual string? DefaultString => null;
+		public bool HasDefault => DefaultString != null;
 
-        protected Property(string name) => Name = name;
-    }
+		protected Property(string name) => Name = name;
+	}
 }

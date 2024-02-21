@@ -9,21 +9,21 @@ using Tiledriver.Core.FormatModels.Textures;
 
 namespace Tiledriver.Core.ManualTests
 {
-    public class RenderedTextureTests
-    {
-        private readonly DirectoryInfo _dirInfo = OutputLocation.CreateDirectory("Rendered Textures");
+	public class RenderedTextureTests
+	{
+		private readonly DirectoryInfo _dirInfo = OutputLocation.CreateDirectory("Rendered Textures");
 
-        [Test, Explicit]
-        public void RenderTexture()
-        {
-            var filePath = Path.Combine(_dirInfo.FullName, "Text.png");
+		[Test, Explicit]
+		public void RenderTexture()
+		{
+			var filePath = Path.Combine(_dirInfo.FullName, "Text.png");
 
-            using var stream = File.Open(filePath, FileMode.Create);
-            var texture = new RenderedTexture(
-                BackgroundColor: SKColors.White,
-                Text: "Line 1\nLine 2\nLINE THREE\nLine Four"
-            );
-            texture.RenderTo(stream);
-        }
-    }
+			using var stream = File.Open(filePath, FileMode.Create);
+			var texture = new RenderedTexture(
+				BackgroundColor: SKColors.White,
+				Text: "Line 1\nLine 2\nLINE THREE\nLine Four"
+			);
+			texture.RenderTo(stream);
+		}
+	}
 }
