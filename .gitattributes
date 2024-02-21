@@ -3,6 +3,7 @@
 * text=auto
 
 *.cs     diff=csharp
+*.sh text eol=lf
 
 # Custom for Visual Studio
 *.sln text eol=crlf

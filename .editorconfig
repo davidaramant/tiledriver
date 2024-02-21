@@ -1,0 +1,34 @@
+root = true
+
+[*]
+charset = utf-8
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = tab
+max_line_length = 120
+
+[*.cs]
+csharp_style_namespace_declarations = file_scoped:error
+dotnet_diagnostic.IDE0161.severity = error
+
+# Xml project files
+[*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,nativeproj,locproj}]
+tab_width = 2
+
+# Xml files
+[*.{xml,stylecop,resx,ruleset}]
+tab_width = 2
+
+# Xml config files
+[*.{props,targets,config,nuspec}]
+tab_width = 2
+
+# YAML config files
+[*.{yml,yaml}]
+tab_width = 2
+
+# Shell scripts
+[*.sh]
+end_of_line = lf
+[*.{cmd,bat}]
+end_of_line = crlf
