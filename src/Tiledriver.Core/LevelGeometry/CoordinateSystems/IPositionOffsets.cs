@@ -1,4 +1,4 @@
-﻿namespace Tiledriver.Core.LevelGeometry.CoordinateSystems;
+namespace Tiledriver.Core.LevelGeometry.CoordinateSystems;
 
 public interface IPositionOffsets
 {

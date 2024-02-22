@@ -1,9 +1,8 @@
-﻿// Copyright (c) 2021, David Aramant
+// Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.IO;
-using System.Text;
 using Tiledriver.Core.DemoMaps.Wolf3D;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.LevelGeometry;

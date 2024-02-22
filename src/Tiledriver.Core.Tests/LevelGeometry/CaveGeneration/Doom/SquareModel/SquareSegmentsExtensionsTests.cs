@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Tiledriver.Core.LevelGeometry.CaveGeneration.Doom.SquareModel;
 using Xunit;
 

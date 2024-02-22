@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using FluentAssertions;
 using Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 using Tiledriver.Core.LevelGeometry.CaveGeneration.Doom.SquareModel;

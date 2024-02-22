@@ -7,7 +7,6 @@ using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using SkiaSharp;
-using Tiledriver.Core.Extensions.Enumerable;
 using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.LevelGeometry.Extensions;
 using Tiledriver.Core.Utils.CellularAutomata;

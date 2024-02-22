@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2016, David Aramant
+// Copyright (c) 2016, David Aramant
 // Copyright (c) 2017, David Aramant and Aaron Alexander
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
@@ -6,30 +6,21 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using ShellProgressBar;
 using Tiledriver.Core.FormatModels;
 using Tiledriver.Core.FormatModels.Common;
-using Tiledriver.Core.FormatModels.GameMaps;
-using Tiledriver.Core.FormatModels.MapInfo.Reading;
 using Tiledriver.Core.FormatModels.MapMetadata;
 using Tiledriver.Core.FormatModels.MapMetadata.Writing;
 using Tiledriver.Core.FormatModels.Pk3;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Uwmf.Reading;
-using Tiledriver.Core.FormatModels.Uwmf.Writing;
 using Tiledriver.Core.FormatModels.Wad;
-using Tiledriver.Core.FormatModels.Wdc31;
 using Tiledriver.Core.FormatModels.Xlat;
-using Tiledriver.Core.FormatModels.Xlat.Reading;
-using Tiledriver.Core.LevelGeometry.Lighting;
-using Tiledriver.Core.MapConversion;
 using Tiledriver.Core.Settings;
 
 namespace TestRunner;

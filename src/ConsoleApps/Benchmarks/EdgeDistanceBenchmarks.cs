@@ -1,16 +1,14 @@
-﻿// Copyright (c) 2021, David Aramant
+// Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using BenchmarkDotNet.Attributes;
-using SkiaSharp;
 using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.LevelGeometry.Extensions;
 using Tiledriver.Core.Utils.CellularAutomata;
 using Tiledriver.Core.Utils.ConnectedComponentLabeling;
-using Tiledriver.Core.Utils.Images;
 
 namespace Benchmarks;
 
