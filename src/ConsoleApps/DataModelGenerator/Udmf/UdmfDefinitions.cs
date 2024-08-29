@@ -8,11 +8,11 @@ namespace Tiledriver.DataModelGenerator.Udmf;
 
 static class UdmfDefinitions
 {
-	public static readonly ImmutableArray<Block> Blocks = ImmutableArray.Create(
+	public static readonly ImmutableArray<Block> Blocks = [
 		new Block(
 			FormatName: "linedef",
 			ClassName: "LineDef",
-			Properties: ImmutableArray.Create<Property>(
+			Properties: [
 				new IntegerProperty("id", defaultValue: -1),
 				new IntegerProperty("v1"),
 				new IntegerProperty("v2"),
@@ -34,12 +34,12 @@ static class UdmfDefinitions
 				new IntegerProperty("sideFront"),
 				new IntegerProperty("sideBack", defaultValue: -1),
 				new StringProperty("comment", defaultValue: string.Empty)
-			)
+			]
 		),
 		new Block(
 			FormatName: "sidedef",
 			ClassName: "SideDef",
-			Properties: ImmutableArray.Create<Property>(
+			Properties: [
 				new IntegerProperty("offsetX", defaultValue: 0),
 				new IntegerProperty("offsetY", defaultValue: 0),
 				new TextureProperty("textureTop", optional: true),
@@ -47,19 +47,19 @@ static class UdmfDefinitions
 				new TextureProperty("textureMiddle", optional: true),
 				new IntegerProperty("sector"),
 				new StringProperty("comment", defaultValue: string.Empty)
-			)
+			]
 		),
 		new Block(
 			FormatName: "vertex",
-			Properties: ImmutableArray.Create<Property>(
+			Properties: [
 				new DoubleProperty("x"),
 				new DoubleProperty("y"),
 				new StringProperty("comment", defaultValue: string.Empty)
-			)
+			]
 		),
 		new Block(
 			FormatName: "sector",
-			Properties: ImmutableArray.Create<Property>(
+			Properties: [
 				new IntegerProperty("heightFloor", defaultValue: 0),
 				new IntegerProperty("heightCeiling", defaultValue: 0),
 				new TextureProperty("textureFloor"),
@@ -68,11 +68,11 @@ static class UdmfDefinitions
 				new IntegerProperty("special", defaultValue: 0),
 				new IntegerProperty("id", defaultValue: 0),
 				new StringProperty("comment", defaultValue: string.Empty)
-			)
+			]
 		),
 		new Block(
 			FormatName: "thing",
-			Properties: ImmutableArray.Create<Property>(
+			Properties: [
 				new IntegerProperty("id", defaultValue: 0),
 				new DoubleProperty("x"),
 				new DoubleProperty("y"),
@@ -89,11 +89,11 @@ static class UdmfDefinitions
 				new BooleanProperty("dm", defaultValue: false),
 				new BooleanProperty("coop", defaultValue: false),
 				new StringProperty("comment", defaultValue: string.Empty)
-			)
+			]
 		),
 		new Block(
 			"mapData",
-			Properties: ImmutableArray.Create<Property>(
+			Properties: [
 				new StringProperty("nameSpace", formatName: "namespace"),
 				new StringProperty("comment", defaultValue: string.Empty),
 				new BlockListProperty("lineDef"),
@@ -101,8 +101,8 @@ static class UdmfDefinitions
 				new BlockListProperty("vertices", elementType: "vertex"),
 				new BlockListProperty("sector"),
 				new BlockListProperty("thing")
-			),
+			],
 			Serialization: SerializationType.TopLevel
 		)
-	);
+	];
 }
