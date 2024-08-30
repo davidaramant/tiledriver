@@ -62,7 +62,9 @@ public static class UdmfSemanticAnalyzerGenerator
 	{
 		var getValue = property switch
 		{
-			DoubleProperty => $"fields.GetRequiredDoubleFieldValue({context}, \"{property.FormatName}\")",
+			DoubleProperty dp => dp.Default == null
+				? $"fields.GetRequiredDoubleFieldValue({context}, \"{property.FormatName}\")"
+				: $"fields.GetOptionalDoubleFieldValue(\"{property.FormatName}\", {dp.Default})",
 			TextureProperty tp
 				=> !tp.IsOptional
 					? $"fields.GetRequiredTextureFieldValue({context}, \"{property.FormatName}\")"

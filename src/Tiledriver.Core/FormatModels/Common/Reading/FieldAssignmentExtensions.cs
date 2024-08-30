@@ -13,20 +13,20 @@ public static class FieldAssignmentExtensions
 		Identifier fieldName
 	)
 	{
-		if (!fields.ContainsKey(fieldName))
+		if (!fields.TryGetValue(fieldName, out var token))
 		{
 			throw new ParsingException(
-				$"Missing required field {fieldName} in {contextName.Id} defined on {contextName.Location}"
+				$"Missing required field '{fieldName}' in '{contextName.Id}' defined on {contextName.Location}"
 			);
 		}
 
-		return fields[fieldName];
+		return token;
 	}
 
 	private static T GetTokenValue<T>(Identifier fieldName, Token token) =>
 		token is ValueToken<T> valueToken
 			? valueToken.Value
-			: throw new ParsingException($"Expected {typeof(T).Name} for {fieldName} on {token.Location}");
+			: throw new ParsingException($"Expected {typeof(T).Name} for '{fieldName}' on {token.Location}");
 
 	public static T GetRequiredFieldValue<T>(
 		this IReadOnlyDictionary<Identifier, Token> fields,
@@ -79,5 +79,19 @@ public static class FieldAssignmentExtensions
 	{
 		Token token = GetRequiredToken(fields, blockName, fieldName);
 		return GetDoubleTokenValue(fieldName, token);
+	}
+
+	public static double GetOptionalDoubleFieldValue(
+		this IReadOnlyDictionary<Identifier, Token> fields,
+		Identifier fieldName,
+		double defaultValue
+	)
+	{
+		if (fields.TryGetValue(fieldName, out var token))
+		{
+			return GetDoubleTokenValue(fieldName, token);
+		}
+
+		return defaultValue;
 	}
 }

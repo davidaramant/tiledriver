@@ -88,7 +88,7 @@ public static partial class UdmfSemanticAnalyzer
 			Y: fields.GetRequiredDoubleFieldValue(block.Name, "y"),
 			Type: fields.GetRequiredFieldValue<int>(block.Name, "type"),
 			Id: fields.GetOptionalFieldValue<int>("id", 0),
-			Height: fields.GetRequiredDoubleFieldValue(block.Name, "height"),
+			Height: fields.GetOptionalDoubleFieldValue("height", 0),
 			Angle: fields.GetOptionalFieldValue<int>("angle", 0),
 			Skill1: fields.GetOptionalFieldValue<bool>("skill1", false),
 			Skill2: fields.GetOptionalFieldValue<bool>("skill2", false),
