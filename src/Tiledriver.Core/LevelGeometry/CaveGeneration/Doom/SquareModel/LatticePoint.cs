@@ -30,7 +30,7 @@ public sealed class LatticePoint : IEquatable<LatticePoint?>
 		{
 			SquarePoint.RightMiddle => (square + CoordinateSystem.BottomLeft.Right, SquarePoint.LeftMiddle),
 			SquarePoint.TopMiddle => (square + CoordinateSystem.BottomLeft.Up, SquarePoint.BottomMiddle),
-			_ => (square, point)
+			_ => (square, point),
 		};
 	}
 

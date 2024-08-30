@@ -131,7 +131,7 @@ public class MapLocation : IEquatable<MapLocation>
 			Actor.MechaHitler.ClassName,
 			Actor.Schabbs.ClassName,
 			Actor.Gift.ClassName,
-			Actor.FatFace.ClassName
+			Actor.FatFace.ClassName,
 		};
 		if (Things.Any(thing => exitBosses.Contains(thing.Type)))
 			return true;

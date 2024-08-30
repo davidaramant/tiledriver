@@ -54,6 +54,6 @@ public static class Corner
 			Corners.UpperLeftAndLowerRight => SquareSegments.Corners_UpperLeftAndLowerRight,
 			Corners.UpperRightAndLowerLeft => SquareSegments.Corners_UpperRightAndLowerLeft,
 
-			_ => SquareSegments.All
+			_ => SquareSegments.All,
 		};
 }

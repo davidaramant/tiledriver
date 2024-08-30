@@ -27,7 +27,7 @@ public sealed class WadFileTests
 			{
 				new Marker("MAP01"),
 				new UwmfLump("TEXTMAP", ThingDemoMap.Create()),
-				new Marker("ENDMAP")
+				new Marker("ENDMAP"),
 			};
 			WadWriter.SaveTo(lumps, fileInfo.FullName);
 
@@ -37,7 +37,7 @@ public sealed class WadFileTests
 			wad.Select(l => l.Name)
 				.Should()
 				.BeEquivalentTo(
-					new[] { new LumpName("MAP01"), new LumpName("TEXTMAP"), new LumpName("ENDMAP"), },
+					new[] { new LumpName("MAP01"), new LumpName("TEXTMAP"), new LumpName("ENDMAP") },
 					"correct lump names should have been read."
 				);
 

@@ -13,7 +13,7 @@ enum SerializationType
 	Normal,
 	Custom,
 	TopLevel,
-	OrderedProperties
+	OrderedProperties,
 }
 
 sealed record Block(

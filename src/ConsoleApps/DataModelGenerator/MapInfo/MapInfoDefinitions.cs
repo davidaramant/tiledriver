@@ -189,7 +189,7 @@ static class MapInfoDefinitions
 			"Fader",
 			getBaseClass: () => Blocks.OfType<AbstractBlock>().Single(b => b.ClassName == "BaseIntermissionAction"),
 			metadata: ImmutableArray<Property>.Empty,
-			properties: new Property[] { new IdentifierProperty("fadeType"), }
+			properties: new Property[] { new IdentifierProperty("fadeType") }
 		),
 		new NormalBlock(
 			"GoToTitile",
@@ -228,7 +228,7 @@ static class MapInfoDefinitions
 			"TextScreenPosition",
 			Serialization: SerializationType.OrderedProperties,
 			Metadata: ImmutableArray<Property>.Empty,
-			Properties: new Property[] { new IntegerProperty("x"), new IntegerProperty("y"), }.ToImmutableArray()
+			Properties: new Property[] { new IntegerProperty("x"), new IntegerProperty("y") }.ToImmutableArray()
 		),
 		new NormalBlock(
 			"VictoryStats",

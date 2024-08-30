@@ -22,7 +22,7 @@ public sealed record MapPalette(
 			TileType.Door => Door,
 			TileType.PushWall => PushWall,
 			TileType.Unreachable => Unreachable,
-			_ => Unknown
+			_ => Unknown,
 		};
 
 	public static readonly MapPalette HighlightWalls =

@@ -21,7 +21,7 @@ public sealed class WadWriterTests
 			{
 				new Marker("MAP01"),
 				new UwmfLump("TEXTMAP", ThingDemoMap.Create()),
-				new Marker("ENDMAP")
+				new Marker("ENDMAP"),
 			};
 			WadWriter.SaveTo(lumps, fileInfo.FullName);
 		}

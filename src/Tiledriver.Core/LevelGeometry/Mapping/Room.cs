@@ -123,7 +123,7 @@ public class Room : IRoom
 		Actor.Hans.ClassName,
 		Actor.Gretel.ClassName,
 		Actor.FatFace.ClassName,
-		Actor.Schabbs.ClassName
+		Actor.Schabbs.ClassName,
 	};
 
 	private readonly string[] enemyTypes = new[]
@@ -133,7 +133,7 @@ public class Room : IRoom
 		Actor.Mutant.ClassName,
 		Actor.Guard.ClassName,
 		Actor.Officer.ClassName,
-		Actor.WolfensteinSS.ClassName
+		Actor.WolfensteinSS.ClassName,
 	};
 
 	private readonly string[] WeaponTypes = new[] { Actor.GatlingGunUpgrade.ClassName, Actor.MachineGun.ClassName };
@@ -143,7 +143,7 @@ public class Room : IRoom
 		Actor.Chalice.ClassName,
 		Actor.ChestofJewels.ClassName,
 		Actor.Cross.ClassName,
-		Actor.Crown.ClassName
+		Actor.Crown.ClassName,
 	};
 
 	private readonly string[] HealthTypes = new[]
@@ -152,6 +152,6 @@ public class Room : IRoom
 		Actor.Dog.ClassName,
 		Actor.Food.ClassName,
 		Actor.Gibs.ClassName,
-		Actor.Medikit.ClassName
+		Actor.Medikit.ClassName,
 	};
 }

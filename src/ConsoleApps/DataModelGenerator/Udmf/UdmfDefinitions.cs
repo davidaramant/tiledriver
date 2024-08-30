@@ -8,11 +8,13 @@ namespace Tiledriver.DataModelGenerator.Udmf;
 
 static class UdmfDefinitions
 {
-	public static readonly ImmutableArray<Block> Blocks = [
+	public static readonly ImmutableArray<Block> Blocks =
+	[
 		new Block(
 			FormatName: "linedef",
 			ClassName: "LineDef",
-			Properties: [
+			Properties:
+			[
 				new IntegerProperty("id", defaultValue: -1),
 				new IntegerProperty("v1"),
 				new IntegerProperty("v2"),
@@ -33,33 +35,36 @@ static class UdmfDefinitions
 				new IntegerProperty("arg4", defaultValue: 0),
 				new IntegerProperty("sideFront"),
 				new IntegerProperty("sideBack", defaultValue: -1),
-				new StringProperty("comment", defaultValue: string.Empty)
+				new StringProperty("comment", defaultValue: string.Empty),
 			]
 		),
 		new Block(
 			FormatName: "sidedef",
 			ClassName: "SideDef",
-			Properties: [
+			Properties:
+			[
 				new IntegerProperty("offsetX", defaultValue: 0),
 				new IntegerProperty("offsetY", defaultValue: 0),
 				new TextureProperty("textureTop", optional: true),
 				new TextureProperty("textureBottom", optional: true),
 				new TextureProperty("textureMiddle", optional: true),
 				new IntegerProperty("sector"),
-				new StringProperty("comment", defaultValue: string.Empty)
+				new StringProperty("comment", defaultValue: string.Empty),
 			]
 		),
 		new Block(
 			FormatName: "vertex",
-			Properties: [
+			Properties:
+			[
 				new DoubleProperty("x"),
 				new DoubleProperty("y"),
-				new StringProperty("comment", defaultValue: string.Empty)
+				new StringProperty("comment", defaultValue: string.Empty),
 			]
 		),
 		new Block(
 			FormatName: "sector",
-			Properties: [
+			Properties:
+			[
 				new IntegerProperty("heightFloor", defaultValue: 0),
 				new IntegerProperty("heightCeiling", defaultValue: 0),
 				new TextureProperty("textureFloor"),
@@ -67,12 +72,13 @@ static class UdmfDefinitions
 				new IntegerProperty("lightLevel", defaultValue: 160),
 				new IntegerProperty("special", defaultValue: 0),
 				new IntegerProperty("id", defaultValue: 0),
-				new StringProperty("comment", defaultValue: string.Empty)
+				new StringProperty("comment", defaultValue: string.Empty),
 			]
 		),
 		new Block(
 			FormatName: "thing",
-			Properties: [
+			Properties:
+			[
 				new IntegerProperty("id", defaultValue: 0),
 				new DoubleProperty("x"),
 				new DoubleProperty("y"),
@@ -88,21 +94,22 @@ static class UdmfDefinitions
 				new BooleanProperty("single", defaultValue: false),
 				new BooleanProperty("dm", defaultValue: false),
 				new BooleanProperty("coop", defaultValue: false),
-				new StringProperty("comment", defaultValue: string.Empty)
+				new StringProperty("comment", defaultValue: string.Empty),
 			]
 		),
 		new Block(
 			"mapData",
-			Properties: [
+			Properties:
+			[
 				new StringProperty("nameSpace", formatName: "namespace"),
 				new StringProperty("comment", defaultValue: string.Empty),
 				new BlockListProperty("lineDef"),
 				new BlockListProperty("sideDef"),
 				new BlockListProperty("vertices", elementType: "vertex"),
 				new BlockListProperty("sector"),
-				new BlockListProperty("thing")
+				new BlockListProperty("thing"),
 			],
 			Serialization: SerializationType.TopLevel
-		)
+		),
 	];
 }

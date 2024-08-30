@@ -21,7 +21,7 @@ public sealed class TokenSourceTests
 		var tokens = new Token[]
 		{
 			new IdentifierToken(FilePosition.StartOfFile, "id1"),
-			new IdentifierToken(FilePosition.StartOfFile, "id2")
+			new IdentifierToken(FilePosition.StartOfFile, "id2"),
 		};
 
 		var stream = new TokenSource(
@@ -43,7 +43,7 @@ public sealed class TokenSourceTests
 			new IdentifierToken(FilePosition.StartOfFile, "include"),
 			new StringToken(FilePosition.StartOfFile, "otherFile"),
 			new IdentifierToken(FilePosition.StartOfFile, "id1"),
-			new IdentifierToken(FilePosition.StartOfFile, "id2")
+			new IdentifierToken(FilePosition.StartOfFile, "id2"),
 		};
 
 		using var otherFileStream = new MemoryStream();
@@ -68,7 +68,7 @@ public sealed class TokenSourceTests
 					new IdentifierToken(FilePosition.StartOfFile, "otherId1"),
 					new IdentifierToken(new FilePosition(1, 10), "otherId2"),
 					new IdentifierToken(FilePosition.StartOfFile, "id1"),
-					new IdentifierToken(FilePosition.StartOfFile, "id2")
+					new IdentifierToken(FilePosition.StartOfFile, "id2"),
 				}
 			);
 	}

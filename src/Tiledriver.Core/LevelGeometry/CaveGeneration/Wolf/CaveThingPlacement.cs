@@ -69,7 +69,7 @@ public static class CaveThingPlacement
 		var scoredLocations = edge.Select(p => new
 			{
 				Location = p,
-				Score = area.CountAdjacentWalls(p) * -floorLighting[p]
+				Score = area.CountAdjacentWalls(p) * -floorLighting[p],
 			})
 			.OrderBy(scoredLocation => scoredLocation.Score)
 			.Where(scoredLocation => scoredLocation.Score >= cutOff)

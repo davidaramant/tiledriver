@@ -17,7 +17,7 @@ public enum Neighborhood
 	/// <summary>
 	/// 8-way neighborhood
 	/// </summary>
-	Moore
+	Moore,
 }
 
 public static class PositionExtensions
@@ -59,6 +59,6 @@ public static class PositionExtensions
 		{
 			Neighborhood.Moore => p.GetMooreNeighbors(),
 			Neighborhood.VonNeumann => p.GetVonNeumannNeighbors(),
-			_ => throw new Exception("Unknown type")
+			_ => throw new Exception("Unknown type"),
 		};
 }

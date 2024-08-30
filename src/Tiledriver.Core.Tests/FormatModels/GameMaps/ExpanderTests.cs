@@ -70,7 +70,7 @@ public sealed class ExpanderTests
 			0x11,
 			0x22,
 			0x33,
-			0x44
+			0x44,
 		};
 		var expected = new byte[] { 0x55, 0x66 }
 			.Concat(Repeat(new byte[] { 0xFF, 0xFF }, 8))

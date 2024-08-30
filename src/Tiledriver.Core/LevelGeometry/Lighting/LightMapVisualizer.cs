@@ -44,7 +44,7 @@ public static class LightMapVisualizer
 					LightHeight.Ceiling => SKColors.Orange,
 					LightHeight.Middle => SKColors.HotPink,
 					LightHeight.Floor => SKColors.Red,
-					_ => throw new Exception("Impossible")
+					_ => throw new Exception("Impossible"),
 				}
 			);
 		}

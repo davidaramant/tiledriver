@@ -23,7 +23,7 @@ public static class SquareLayerTransition
 			distance switch
 			{
 				-1 => -1,
-				_ => distance / 2
+				_ => distance / 2,
 			};
 
 		var upperLeft = Normalize(interiorDistances.GetValueOr(bottomLeft + PositionOffset.Up, -1));

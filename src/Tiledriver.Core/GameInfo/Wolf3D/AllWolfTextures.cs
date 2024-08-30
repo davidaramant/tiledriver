@@ -118,5 +118,6 @@ public static class AllWolfTextures
 		"DOOR2_2", // Elevator Door E/W
 		"DOOR3_1", // Locked Door N/S
 		"DOOR3_2" // Locked Door E/W
+		,
 	};
 }

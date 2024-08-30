@@ -73,7 +73,7 @@ internal static partial class DoomActorGenerator
 						$"Id: {actor.Id}",
 						$"Description: \"{actor.Description}\"",
 						$"Width: {actor.Width}",
-						$"Height: {actor.Height}"
+						$"Height: {actor.Height}",
 					}
 				)
 				.DecreaseIndent()

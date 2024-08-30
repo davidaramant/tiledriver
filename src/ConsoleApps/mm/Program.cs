@@ -19,7 +19,7 @@ class Program
 	{
 		CarveOutRooms,
 		HighlightWalls,
-		Full
+		Full,
 	}
 
 	/// <summary>

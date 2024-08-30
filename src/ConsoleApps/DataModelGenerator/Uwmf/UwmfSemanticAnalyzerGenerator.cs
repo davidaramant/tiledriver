@@ -65,10 +65,9 @@ public static class UwmfSemanticAnalyzerGenerator
 		{
 			DoubleProperty => $"fields.GetRequiredDoubleFieldValue({context}, \"{property.FormatName}\")",
 			TextureProperty => $"fields.GetRequiredTextureFieldValue({context}, \"{property.FormatName}\")",
-			_
-				=> property.DefaultString == null
-					? $"fields.GetRequiredFieldValue<{property.PropertyType}>({context}, \"{property.FormatName}\")"
-					: $"fields.GetOptionalFieldValue<{property.PropertyType}>(\"{property.FormatName}\", {property.DefaultString})"
+			_ => property.DefaultString == null
+				? $"fields.GetRequiredFieldValue<{property.PropertyType}>({context}, \"{property.FormatName}\")"
+				: $"fields.GetOptionalFieldValue<{property.PropertyType}>(\"{property.FormatName}\", {property.DefaultString})",
 		};
 
 		return $"{property.PropertyName}: {getValue}";

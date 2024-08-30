@@ -26,7 +26,6 @@ public static partial class MapDeclarationParser
 			switch (tokenStream.Current)
 			{
 				case IdentifierToken mapId when mapId.Id == "map":
-
 					{
 						var (mapLump, mapName, isMapNameLookup) = ParseMapHeader(mapId, tokenStream);
 						var assignmentLookup = GetAssignmentLookup(tokenStream, alreadyOpened: true);
@@ -36,7 +35,6 @@ public static partial class MapDeclarationParser
 					break;
 
 				case IdentifierToken defaultMapId when defaultMapId.Id == "defaultMap":
-
 					{
 						var assignmentLookup = GetAssignmentLookup(tokenStream);
 						defaultMap = ParseDefaultMap(assignmentLookup);
@@ -44,7 +42,6 @@ public static partial class MapDeclarationParser
 					break;
 
 				case IdentifierToken addDefaultMapId when addDefaultMapId.Id == "addDefaultMap":
-
 					{
 						var assignmentLookup = GetAssignmentLookup(tokenStream);
 						var addDefaultMap = ParseAddDefaultMap(assignmentLookup);
@@ -205,7 +202,7 @@ public static partial class MapDeclarationParser
 		{
 			0 => null,
 			1 => assignments[0],
-			_ => throw new ParsingException($"Multiple assignments to {formatName}")
+			_ => throw new ParsingException($"Multiple assignments to {formatName}"),
 		};
 	}
 

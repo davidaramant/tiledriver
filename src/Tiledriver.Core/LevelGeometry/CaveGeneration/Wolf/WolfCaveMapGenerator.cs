@@ -139,7 +139,7 @@ public static class WolfCaveMapGenerator
 				0 => 0,
 				int pos when pos > 0 => pos * lightStep,
 				int neg when neg < 0 => -neg * darkStep,
-				_ => throw new InvalidOperationException("Impossible")
+				_ => throw new InvalidOperationException("Impossible"),
 			};
 
 		string GetTextureName(Corners corners, int light, bool isEastWest = false)

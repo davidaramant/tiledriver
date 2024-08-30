@@ -9,5 +9,5 @@ public enum TextureNamespace
 	Sprite,
 	Graphic,
 	WallTexture,
-	Flat
+	Flat,
 }

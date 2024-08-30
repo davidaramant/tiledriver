@@ -7,5 +7,5 @@ public enum PatchNamespace
 {
 	Patch,
 	Graphic,
-	Sprite
+	Sprite,
 }

@@ -132,7 +132,7 @@ actor FloorCrystal
 						),
 						new Marker("MAP01"),
 						new UwmfLump("TEXTMAP", map),
-						new Marker("ENDMAP")
+						new Marker("ENDMAP"),
 					}
 				)
 		);
@@ -175,7 +175,7 @@ actor FloorCrystal
 						{
 							new Marker($"MAP{index + 1:00}"),
 							new UwmfLump("TEXTMAP", map),
-							new Marker("ENDMAP")
+							new Marker("ENDMAP"),
 						}
 				)
 			);

@@ -9,5 +9,5 @@ public enum SquarePoint
 	TopMiddle,
 	RightMiddle,
 	BottomMiddle,
-	Center
+	Center,
 }

@@ -89,15 +89,15 @@ public static class MapInfoParserGenerator
 			ScalarProperty { PropertyName: "MapName" } => "mapName",
 			ScalarProperty { PropertyName: "MapLump" } => "mapLump",
 			ScalarProperty { PropertyName: "IsMapNameLookup" } => "isMapNameLookup",
-			FlagProperty
-				=> $"ReadFlag(assignmentLookup, \"{property.FormatName}\") ?? defaultMap.{property.PropertyName}",
-			ScalarProperty sp
-				=> $"Read{sp.BasePropertyType.Pascalize()}Assignment(assignmentLookup, \"{property.FormatName}\") ?? defaultMap.{property.PropertyName}",
-			CollectionProperty { PropertyName: "SpecialActions" }
-				=> "ReadSpecialActionAssignments(assignmentLookup).AddRange(defaultMap.SpecialActions)",
-			CollectionProperty
-				=> $"ReadListAssignment(assignmentLookup, \"{property.FormatName}\").AddRange(defaultMap.{property.PropertyName})",
-			_ => throw new Exception("What type of property is this??")
+			FlagProperty =>
+				$"ReadFlag(assignmentLookup, \"{property.FormatName}\") ?? defaultMap.{property.PropertyName}",
+			ScalarProperty sp =>
+				$"Read{sp.BasePropertyType.Pascalize()}Assignment(assignmentLookup, \"{property.FormatName}\") ?? defaultMap.{property.PropertyName}",
+			CollectionProperty { PropertyName: "SpecialActions" } =>
+				"ReadSpecialActionAssignments(assignmentLookup).AddRange(defaultMap.SpecialActions)",
+			CollectionProperty =>
+				$"ReadListAssignment(assignmentLookup, \"{property.FormatName}\").AddRange(defaultMap.{property.PropertyName})",
+			_ => throw new Exception("What type of property is this??"),
 		};
 
 	private static string GetPropertyReader(Property property) =>
@@ -105,11 +105,11 @@ public static class MapInfoParserGenerator
 		+ property switch
 		{
 			FlagProperty => $"ReadFlag(assignmentLookup, \"{property.FormatName}\")",
-			ScalarProperty sp
-				=> $"Read{sp.BasePropertyType.Pascalize()}Assignment(assignmentLookup, \"{property.FormatName}\")",
+			ScalarProperty sp =>
+				$"Read{sp.BasePropertyType.Pascalize()}Assignment(assignmentLookup, \"{property.FormatName}\")",
 			CollectionProperty { PropertyName: "SpecialActions" } => "ReadSpecialActionAssignments(assignmentLookup)",
 			CollectionProperty => $"ReadListAssignment(assignmentLookup, \"{property.FormatName}\")",
-			_ => throw new Exception("What type of property is this??")
+			_ => throw new Exception("What type of property is this??"),
 		};
 
 	private static void WriteDefaultMapUpdater(IndentedWriter output, IBlock block)
@@ -133,6 +133,6 @@ public static class MapInfoParserGenerator
 		{
 			ScalarProperty sp => $"addDefaultMap.{sp.PropertyName} ?? defaultMap.{sp.PropertyName}",
 			CollectionProperty cp => $"defaultMap.{cp.PropertyName}.AddRange(addDefaultMap.{cp.PropertyName})",
-			_ => throw new Exception("What type of property is this??")
+			_ => throw new Exception("What type of property is this??"),
 		};
 }

@@ -9,7 +9,7 @@ public enum LightHeight
 {
 	Middle,
 	Floor,
-	Ceiling
+	Ceiling,
 }
 
 public sealed record LightDefinition(
@@ -38,7 +38,7 @@ public sealed record LightDefinition(
 				LightHeight.Middle => (brightness, brightness),
 				LightHeight.Floor => (brightness, ReduceBrightness(brightness)),
 				LightHeight.Ceiling => (ReduceBrightness(brightness), brightness),
-				_ => throw new InvalidProgramException("Unknown LightHeight")
+				_ => throw new InvalidProgramException("Unknown LightHeight"),
 			};
 
 		var d2 = Center.DistanceSquared(location);

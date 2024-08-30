@@ -15,7 +15,7 @@ public sealed record Assignment(IdentifierToken Name, Token Value) : IExpression
 			FloatToken f => ToStringWithDecimal(f.Value),
 			BooleanToken b => b.Value.ToString().ToLowerInvariant(),
 			StringToken s => '"' + s.Value + '"',
-			_ => Value.ToString()
+			_ => Value.ToString(),
 		};
 
 	public override string ToString() => $"{Name.Id}: {ValueAsString()} ({Value.GetType()})";

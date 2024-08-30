@@ -54,5 +54,5 @@ public enum SquareSegments : byte
 
 	Corners_All = Corners_Upper | Corners_Lower,
 
-	All = 255
+	All = 255,
 }

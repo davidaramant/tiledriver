@@ -76,7 +76,7 @@ public sealed class DoomDemoMaps
 						{
 							new Marker($"MAP{index + 1:00}"),
 							new UdmfLump("TEXTMAP", map),
-							new Marker("ENDMAP")
+							new Marker("ENDMAP"),
 						}
 				)
 			);

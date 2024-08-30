@@ -16,5 +16,5 @@ public enum LineSlope
 	/// <summary>
 	/// As X increases, Y decreases
 	/// </summary>
-	DecreasingY
+	DecreasingY,
 }

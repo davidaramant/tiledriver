@@ -61,12 +61,12 @@ public static class DirectionExtensions
 			Direction.North => Direction.South,
 			Direction.South => Direction.North,
 			Direction.West => Direction.East,
-			_ => throw new ArgumentException("Unknown direction: " + direction)
+			_ => throw new ArgumentException("Unknown direction: " + direction),
 		};
 
 	public static IEnumerable<Direction> GetDirections(Direction start, bool clockWise)
 	{
-		var directions = new[] { Direction.East, Direction.North, Direction.West, Direction.South, };
+		var directions = new[] { Direction.East, Direction.North, Direction.West, Direction.South };
 
 		for (int i = 0; i < 4; i++)
 		{

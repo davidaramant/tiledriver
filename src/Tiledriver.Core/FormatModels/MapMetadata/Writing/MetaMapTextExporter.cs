@@ -23,7 +23,7 @@ public static class MetaMapTextExporter
 				TileType.Door => "□",
 				TileType.PushWall => "□",
 				TileType.Unreachable => unreachableIsSolid ? "█" : " ",
-				_ => "!"
+				_ => "!",
 			};
 
 		for (int y = 0; y < map.Height; y++)

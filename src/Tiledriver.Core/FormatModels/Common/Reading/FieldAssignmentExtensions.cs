@@ -68,7 +68,7 @@ public static class FieldAssignmentExtensions
 		{
 			IntegerToken it => it.Value,
 			FloatToken ft => ft.Value,
-			_ => throw new ParsingException($"Expected double for {fieldName} on {token.Location}")
+			_ => throw new ParsingException($"Expected double for {fieldName} on {token.Location}"),
 		};
 
 	public static double GetRequiredDoubleFieldValue(

@@ -19,6 +19,6 @@ public static class CellRule
 		{
 			CellType.Dead => countAlive(1) > 5,
 			CellType.Alive => countAlive(1) > 2,
-			_ => throw new Exception("Can't happen")
+			_ => throw new Exception("Can't happen"),
 		};
 }

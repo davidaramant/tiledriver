@@ -38,7 +38,7 @@ public sealed partial class FixKickAttack
 
 						return c;
 					})
-					.ToArray()
+					.ToArray(),
 			}
 		);
 

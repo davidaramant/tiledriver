@@ -60,7 +60,7 @@ public sealed class UwmfWriterTests
 			"{",
 			"\t{1,2,3},",
 			"\t{4,5,6,7}",
-			"}"
+			"}",
 		};
 
 		var sb = new StringBuilder();

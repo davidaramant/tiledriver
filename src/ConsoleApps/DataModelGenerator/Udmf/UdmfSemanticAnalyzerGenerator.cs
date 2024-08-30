@@ -65,14 +65,12 @@ public static class UdmfSemanticAnalyzerGenerator
 			DoubleProperty dp => dp.Default == null
 				? $"fields.GetRequiredDoubleFieldValue({context}, \"{property.FormatName}\")"
 				: $"fields.GetOptionalDoubleFieldValue(\"{property.FormatName}\", {dp.Default})",
-			TextureProperty tp
-				=> !tp.IsOptional
-					? $"fields.GetRequiredTextureFieldValue({context}, \"{property.FormatName}\")"
-					: $"fields.GetOptionalTextureFieldValue(\"{property.FormatName}\")",
-			_
-				=> property.DefaultString == null
-					? $"fields.GetRequiredFieldValue<{property.PropertyType}>({context}, \"{property.FormatName}\")"
-					: $"fields.GetOptionalFieldValue<{property.PropertyType}>(\"{property.FormatName}\", {property.DefaultString})"
+			TextureProperty tp => !tp.IsOptional
+				? $"fields.GetRequiredTextureFieldValue({context}, \"{property.FormatName}\")"
+				: $"fields.GetOptionalTextureFieldValue(\"{property.FormatName}\")",
+			_ => property.DefaultString == null
+				? $"fields.GetRequiredFieldValue<{property.PropertyType}>({context}, \"{property.FormatName}\")"
+				: $"fields.GetOptionalFieldValue<{property.PropertyType}>(\"{property.FormatName}\", {property.DefaultString})",
 		};
 
 		return $"{property.PropertyName}: {getValue}";

@@ -67,7 +67,7 @@ public sealed class FastImage : IFastImage
 					Width = resizedWidth,
 					Height = resizedHeight,
 					ColorType = SKImageInfo.PlatformColorType,
-					AlphaType = SKAlphaType.Premul
+					AlphaType = SKAlphaType.Premul,
 				}
 			);
 			using var paint = new SKPaint { IsAntialias = false, FilterQuality = SKFilterQuality.None };
@@ -82,7 +82,7 @@ public sealed class FastImage : IFastImage
 			{
 				".jpg" => newImg.Encode(SKEncodedImageFormat.Jpeg, quality: 85),
 				".png" => newImg.Encode(SKEncodedImageFormat.Png, quality: 100),
-				_ => throw new ArgumentException("Unsupported file format.")
+				_ => throw new ArgumentException("Unsupported file format."),
 			};
 
 			data.SaveTo(stream);

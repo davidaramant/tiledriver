@@ -319,7 +319,7 @@ public sealed class CaveGenerationVisualization
 					LightHeight.Ceiling => SKColors.Orange,
 					LightHeight.Middle => SKColors.HotPink,
 					LightHeight.Floor => SKColors.Red,
-					_ => throw new Exception("Impossible")
+					_ => throw new Exception("Impossible"),
 				}
 			);
 		}

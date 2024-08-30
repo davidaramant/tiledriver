@@ -55,7 +55,7 @@ public sealed class SquareLayerTransitionTests
 	[Fact]
 	public void ShouldReturnCorrectHeightsForLeftUpperCorner() =>
 		TestHeightLookup(
-			new Dictionary<Position, int> { { new Position(0, 0), 0 }, },
+			new Dictionary<Position, int> { { new Position(0, 0), 0 } },
 			new Dictionary<SquareSegment, int>()
 			{
 				{ SquareSegment.UpperLeftOuter, -1 },
@@ -72,7 +72,7 @@ public sealed class SquareLayerTransitionTests
 	[Fact]
 	public void ShouldReturnCorrectHeightsForUpperHalf() =>
 		TestHeightLookup(
-			new Dictionary<Position, int> { { new Position(0, 0), 0 }, { new Position(1, 0), 0 }, },
+			new Dictionary<Position, int> { { new Position(0, 0), 0 }, { new Position(1, 0), 0 } },
 			new Dictionary<SquareSegment, int>()
 			{
 				{ SquareSegment.UpperLeftOuter, -1 },

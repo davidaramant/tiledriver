@@ -66,7 +66,7 @@ public sealed class DoomCaveMapGenerator
 			SquarePoint.LeftMiddle => new(lp.Square.X * LogicalUnitSize, (lp.Square.Y + 0.5) * LogicalUnitSize),
 			SquarePoint.BottomMiddle => new((lp.Square.X + 0.5) * LogicalUnitSize, lp.Square.Y * LogicalUnitSize),
 			SquarePoint.Center => new((lp.Square.X + 0.5) * LogicalUnitSize, (lp.Square.Y + 0.5) * LogicalUnitSize),
-			_ => throw new Exception("Impossible; Vertices should have been normalized to prevent this")
+			_ => throw new Exception("Impossible; Vertices should have been normalized to prevent this"),
 		};
 
 	private static LineDef ConvertToLineDef(
