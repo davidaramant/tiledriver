@@ -56,3 +56,5 @@
 
 - [ ] Should CellBoard and ConnectedArea be combined????
 - [x] Making the detailed cave is super slow; profile what the issue is
+- [ ] Async IO for reading/writing stuff
+- [ ] Reading/writing WAD files doesn't feel right. Maybe `SectorDirector`'s version is better
