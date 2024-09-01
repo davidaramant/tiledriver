@@ -3,13 +3,16 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Udmf;
 using Tiledriver.Core.FormatModels.Udmf.Reading;
+using Tiledriver.Core.FormatModels.Udmf.Writing;
 using Tiledriver.Core.FormatModels.Wad;
 
 namespace Tiledriver.Core.ManualTests;
@@ -66,9 +69,40 @@ public sealed partial class FixKickAttack
 	{
 		var (kickTextures, patches) = GetUsedTexturesAndPatches();
 
+		var replace = kickTextures.Select(t => t.Name).ToHashSet();
+
 		var wad = WadFile.Read(@"/Users/david/RiderProjects/sep-doom-presentation/sep/maps/KICK.wad");
 
 		var mapData = UdmfReader.Read(new MemoryStream(wad.Single(l => l.Name == "TEXTMAP").GetData()));
+
+		using var origFs = File.Open(@"/Users/david/RiderProjects/sep-doom-presentation/orig.udmf", FileMode.Create);
+		mapData.WriteTo(origFs);
+
+		var fixedMap = mapData with
+		{
+			SideDefs =
+			[
+				.. mapData.SideDefs.Select(sd =>
+					sd with
+					{
+						TextureBottom = ReplaceTexture(sd.TextureBottom),
+						TextureMiddle = ReplaceTexture(sd.TextureMiddle),
+						TextureTop = ReplaceTexture(sd.TextureTop),
+					}
+				)
+			]
+		};
+
+		using var newFs = File.Open(@"/Users/david/RiderProjects/sep-doom-presentation/fixed.udmf", FileMode.Create);
+		fixedMap.WriteTo(newFs);
+
+		using var newWadFs = File.Open(
+			@"/Users/david/RiderProjects/sep-doom-presentation/sep/maps/KICK.wad",
+			FileMode.Create
+		);
+		WadWriter.WriteTo([new Marker("MAP01"), new UdmfLump("TEXTMAP", fixedMap), new Marker("ENDMAP"),], newWadFs);
+
+		Texture ReplaceTexture(Texture texture) => replace.Contains(texture.Name) ? "KA_" + texture.Name : texture;
 	}
 
 	private static (IReadOnlyList<WallTexture>, IReadOnlySet<string> Patches) GetUsedTexturesAndPatches()
