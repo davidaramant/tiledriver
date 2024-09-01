@@ -9,25 +9,14 @@ namespace Tiledriver.Core.FormatModels.Wad.StreamExtensions;
 
 public static class Extensions
 {
-	public static void WriteInt(this Stream stream, int value)
-	{
-		stream.WriteArray(BitConverter.GetBytes(value));
-	}
+	public static void WriteInt(this Stream stream, int value) => stream.WriteArray(BitConverter.GetBytes(value));
 
-	public static void WriteText(this Stream stream, string text)
-	{
-		WriteText(stream, text, text.Length);
-	}
+	public static void WriteText(this Stream stream, string text) => WriteText(stream, text, text.Length);
 
-	public static void WriteText(this Stream stream, string text, int totalLength)
-	{
+	public static void WriteText(this Stream stream, string text, int totalLength) =>
 		WriteArray(stream, Encoding.ASCII.GetBytes(text), totalLength);
-	}
 
-	public static void WriteArray(this Stream stream, byte[] bytes)
-	{
-		WriteArray(stream, bytes, bytes.Length);
-	}
+	public static void WriteArray(this Stream stream, byte[] bytes) => WriteArray(stream, bytes, bytes.Length);
 
 	public static void WriteArray(this Stream stream, byte[] bytes, int totalLength)
 	{
@@ -39,15 +28,9 @@ public static class Extensions
 		}
 	}
 
-	public static string ReadText(this Stream stream, int length)
-	{
-		return Encoding.ASCII.GetString(stream.ReadArray(length));
-	}
+	public static string ReadText(this Stream stream, int length) => Encoding.ASCII.GetString(stream.ReadArray(length));
 
-	public static int ReadInt(this Stream stream)
-	{
-		return BitConverter.ToInt32(stream.ReadArray(4), 0);
-	}
+	public static int ReadInt(this Stream stream) => BitConverter.ToInt32(stream.ReadArray(4), 0);
 
 	public static byte[] ReadArray(this Stream stream, int length)
 	{
