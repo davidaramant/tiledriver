@@ -35,22 +35,25 @@ public sealed class UdmfWriterTests
 		var lines = new[]
 		{
 			"namespace = \"Doom\";",
-			"sidedef",
+			"vertex // 0",
 			"{",
-			"\ttextureMiddle = \"texture\";",
-			"\tsector = 0;",
+			"x = 1.0;",
+			"y = 2.0;",
 			"}",
-			"vertex",
+			"",
+			"sidedef // 0",
 			"{",
-			"\tx = 1;",
-			"\ty = 2;",
+			"sector = 0;",
+			"textureMiddle = \"texture\";",
 			"}",
+			"",
 		};
 
 		var sb = new StringBuilder();
 		foreach (var line in lines)
 		{
-			sb.AppendLine(line);
+			sb.Append(line);
+			sb.Append("\r\n");
 		}
 
 		actual.Should().Be(sb.ToString());

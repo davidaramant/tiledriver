@@ -13,8 +13,7 @@ public sealed partial record SideDef
 		Texture? textureBottom = null,
 		Texture? textureMiddle = null,
 		int offsetX = 0,
-		int offsetY = 0,
-		string comment = ""
+		int offsetY = 0
 	)
 		: this(
 			TextureTop: textureTop ?? Texture.None,
@@ -23,6 +22,6 @@ public sealed partial record SideDef
 			Sector: sector,
 			OffsetX: offsetX,
 			OffsetY: offsetY,
-			Comment: comment
+			Comment: string.Empty
 		) { }
 }

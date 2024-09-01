@@ -23,7 +23,7 @@ public static class UdmfWriterGenerator
 		output
 			.WriteHeader(
 				"Tiledriver.Core.FormatModels.Udmf.Writing",
-				new[] { "System.CodeDom.Compiler", "System.IO", "Tiledriver.Core.FormatModels.Common" }
+				["System.CodeDom.Compiler", "System.IO", "Tiledriver.Core.FormatModels.Common"]
 			)
 			.Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
 			.Line($"public static partial class UdmfWriter")
@@ -39,11 +39,13 @@ public static class UdmfWriterGenerator
 
 	private static void CreateBlockWriter(IndentedWriter output, Block block)
 	{
-		output.Line($"private static void Write(StreamWriter writer, {block.ClassName} {block.Name})").OpenParen();
+		output
+			.Line($"private static void Write(StreamWriter writer, {block.ClassName} {block.Name}, int index = 0)")
+			.OpenParen();
 
 		if (block.Serialization == SerializationType.Normal)
 		{
-			output.Line($"writer.WriteLine(\"{block.Name}\");").Line("writer.WriteLine(\"{\");");
+			output.Line($"writer.WriteLine($\"{block.Name} // {{index}}\");").Line("writer.WriteLine(\"{\");");
 		}
 
 		foreach (var p in block.Properties)
@@ -57,25 +59,24 @@ public static class UdmfWriterGenerator
 				}
 
 				string optionalDefault = defaultValue != null ? ", " + defaultValue : string.Empty;
-				string indent = block.Serialization == SerializationType.Normal ? string.Empty : ", indent:false";
 
 				output.Line(
-					$"WriteProperty(writer, \"{sp.FormatName}\", {block.Name}.{sp.PropertyName}{optionalDefault}{indent});"
+					$"WriteProperty(writer, \"{sp.FormatName}\", {block.Name}.{sp.PropertyName}{optionalDefault});"
 				);
 			}
 			else if (p is CollectionProperty cp)
 			{
 				output
-					.Line($"foreach(var block in {block.Name}.{cp.PropertyName})")
+					.Line($"for(int i = 0; i < {block.Name}.{cp.PropertyName}.Length; i++)")
 					.OpenParen()
-					.Line($"Write(writer, block);")
+					.Line($"Write(writer, {block.Name}.{cp.PropertyName}[i], i);")
 					.CloseParen();
 			}
 		}
 
 		if (block.Serialization == SerializationType.Normal)
 		{
-			output.Line("writer.WriteLine(\"}\");");
+			output.Line("writer.WriteLine(\"}\");").Line("writer.WriteLine();");
 		}
 		output.CloseParen();
 	}
