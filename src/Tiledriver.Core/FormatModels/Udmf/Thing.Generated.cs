@@ -18,8 +18,8 @@ public sealed partial record Thing(
 	bool Skill4 = false,
 	bool Skill5 = false,
 	bool Single = false,
-	bool Ambush = false,
-	bool Dm = false,
 	bool Coop = false,
+	bool Dm = false,
+	bool Ambush = false,
 	string Comment = ""
 );

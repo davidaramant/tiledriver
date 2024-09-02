@@ -21,9 +21,9 @@ public sealed partial class ThingBuilder
 	bool Skill4 { get; set; } = false;
 	bool Skill5 { get; set; } = false;
 	bool Single { get; set; } = false;
-	bool Ambush { get; set; } = false;
-	bool Dm { get; set; } = false;
 	bool Coop { get; set; } = false;
+	bool Dm { get; set; } = false;
+	bool Ambush { get; set; } = false;
 	string Comment { get; set; } = "";
 
 	public Thing Build() =>
@@ -40,9 +40,9 @@ public sealed partial class ThingBuilder
 			Skill4: Skill4,
 			Skill5: Skill5,
 			Single: Single,
-			Ambush: Ambush,
-			Dm: Dm,
 			Coop: Coop,
+			Dm: Dm,
+			Ambush: Ambush,
 			Comment: Comment
 		);
 }

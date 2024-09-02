@@ -29,9 +29,9 @@ public static partial class UdmfSemanticAnalyzer
 			Skill4: fields.GetOptionalFieldValue<bool>("skill4", false),
 			Skill5: fields.GetOptionalFieldValue<bool>("skill5", false),
 			Single: fields.GetOptionalFieldValue<bool>("single", false),
-			Ambush: fields.GetOptionalFieldValue<bool>("ambush", false),
-			Dm: fields.GetOptionalFieldValue<bool>("dm", false),
 			Coop: fields.GetOptionalFieldValue<bool>("coop", false),
+			Dm: fields.GetOptionalFieldValue<bool>("dm", false),
+			Ambush: fields.GetOptionalFieldValue<bool>("ambush", false),
 			Comment: fields.GetOptionalFieldValue<string>("comment", "")
 		);
 	}
@@ -62,13 +62,16 @@ public static partial class UdmfSemanticAnalyzer
 			Arg3: fields.GetOptionalFieldValue<int>("arg3", 0),
 			Arg4: fields.GetOptionalFieldValue<int>("arg4", 0),
 			TwoSided: fields.GetOptionalFieldValue<bool>("twoSided", false),
-			PlayerUse: fields.GetOptionalFieldValue<bool>("playerUse", false),
 			DontPegTop: fields.GetOptionalFieldValue<bool>("dontPegTop", false),
 			DontPegBottom: fields.GetOptionalFieldValue<bool>("dontPegBottom", false),
-			Blocking: fields.GetOptionalFieldValue<bool>("blocking", false),
 			BlockMonsters: fields.GetOptionalFieldValue<bool>("blockMonsters", false),
-			Secret: fields.GetOptionalFieldValue<bool>("secret", false),
 			BlockSound: fields.GetOptionalFieldValue<bool>("blockSound", false),
+			Secret: fields.GetOptionalFieldValue<bool>("secret", false),
+			MonsterActivate: fields.GetOptionalFieldValue<bool>("monsterActivate", false),
+			PlayerUse: fields.GetOptionalFieldValue<bool>("playerUse", false),
+			Blocking: fields.GetOptionalFieldValue<bool>("blocking", false),
+			RepeatSpecial: fields.GetOptionalFieldValue<bool>("repeatSpecial", false),
+			PlayerCross: fields.GetOptionalFieldValue<bool>("playerCross", false),
 			DontDraw: fields.GetOptionalFieldValue<bool>("dontDraw", false),
 			Mapped: fields.GetOptionalFieldValue<bool>("mapped", false),
 			Comment: fields.GetOptionalFieldValue<string>("comment", "")

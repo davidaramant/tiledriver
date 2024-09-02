@@ -21,13 +21,16 @@ public sealed partial class LineDefBuilder
 	int Arg3 { get; set; } = 0;
 	int Arg4 { get; set; } = 0;
 	bool TwoSided { get; set; } = false;
-	bool PlayerUse { get; set; } = false;
 	bool DontPegTop { get; set; } = false;
 	bool DontPegBottom { get; set; } = false;
-	bool Blocking { get; set; } = false;
 	bool BlockMonsters { get; set; } = false;
-	bool Secret { get; set; } = false;
 	bool BlockSound { get; set; } = false;
+	bool Secret { get; set; } = false;
+	bool MonsterActivate { get; set; } = false;
+	bool PlayerUse { get; set; } = false;
+	bool Blocking { get; set; } = false;
+	bool RepeatSpecial { get; set; } = false;
+	bool PlayerCross { get; set; } = false;
 	bool DontDraw { get; set; } = false;
 	bool Mapped { get; set; } = false;
 	string Comment { get; set; } = "";
@@ -46,13 +49,16 @@ public sealed partial class LineDefBuilder
 			Arg3: Arg3,
 			Arg4: Arg4,
 			TwoSided: TwoSided,
-			PlayerUse: PlayerUse,
 			DontPegTop: DontPegTop,
 			DontPegBottom: DontPegBottom,
-			Blocking: Blocking,
 			BlockMonsters: BlockMonsters,
-			Secret: Secret,
 			BlockSound: BlockSound,
+			Secret: Secret,
+			MonsterActivate: MonsterActivate,
+			PlayerUse: PlayerUse,
+			Blocking: Blocking,
+			RepeatSpecial: RepeatSpecial,
+			PlayerCross: PlayerCross,
 			DontDraw: DontDraw,
 			Mapped: Mapped,
 			Comment: Comment
