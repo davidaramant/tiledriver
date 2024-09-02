@@ -1,7 +1,10 @@
 // Copyright (c) 2024, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -11,13 +14,16 @@ using Tiledriver.Core.Extensions.Collections;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Udmf;
 using Tiledriver.Core.FormatModels.Udmf.Reading;
-using Tiledriver.Core.FormatModels.Udmf.Writing;
 using Tiledriver.Core.FormatModels.Wad;
+using Tiledriver.Core.GameInfo.Doom;
 
 namespace Tiledriver.Core.ManualTests;
 
 public sealed partial class FixKickAttack
 {
+	private const string ProjectPath = @"/Users/david/RiderProjects/sep-doom-presentation/sep";
+	private const string GZDoomProjectPath = @"/Users/david/Doom/Mac/gzdoom_pk3";
+
 	[GeneratedRegex(@"WallTexture ""(\w+)"", (\d+), (\d+)")]
 	private static partial Regex TextureDefinitionRegex();
 
@@ -44,10 +50,7 @@ public sealed partial class FixKickAttack
 			}
 		);
 
-		await using var fs = File.Open(
-			@"/Users/david/RiderProjects/sep-doom-presentation/sep/TEXTURES.kick",
-			FileMode.Create
-		);
+		await using var fs = File.Open(Path.Combine(ProjectPath, "TEXTURES.kick"), FileMode.Create);
 		await using var writer = new StreamWriter(fs);
 		foreach (var t in newTextures)
 		{
@@ -70,9 +73,6 @@ public sealed partial class FixKickAttack
 
 		var replace = kickTextures.Select(t => t.Name).ToHashSet();
 
-		using var origFs = File.Open(@"/Users/david/RiderProjects/sep-doom-presentation/orig.udmf", FileMode.Create);
-		mapData.WriteTo(origFs);
-
 		var fixedMap = mapData with
 		{
 			SideDefs =
@@ -88,21 +88,64 @@ public sealed partial class FixKickAttack
 			],
 		};
 
-		using var newFs = File.Open(@"/Users/david/RiderProjects/sep-doom-presentation/fixed.udmf", FileMode.Create);
-		fixedMap.WriteTo(newFs);
-
-		using var newWadFs = File.Open(
-			@"/Users/david/RiderProjects/sep-doom-presentation/sep/maps/KICK.wad",
-			FileMode.Create
-		);
+		using var newWadFs = File.Open(Path.Combine(ProjectPath, "maps", "KICK.wad"), FileMode.Create);
 		WadWriter.WriteTo([new Marker("MAP01"), new UdmfLump("TEXTMAP", fixedMap), new Marker("ENDMAP")], newWadFs);
 
 		Texture ReplaceTexture(Texture texture) => replace.Contains(texture.Name) ? "KA_" + texture.Name : texture;
 	}
 
+	[Test, Explicit]
+	public void RenameSprites()
+	{
+		var path = Path.Combine(ProjectPath, "sprites", "kick");
+
+		var spriteNames = new ConcurrentDictionary<string, int>();
+
+		foreach (var file in Directory.EnumerateFiles(path, "*.png"))
+		{
+			var fileName = Path.GetFileName(file);
+
+			var sn = fileName[3..7];
+
+			spriteNames.AddOrUpdate(sn, _ => 1, (_, i) => i + 1);
+		}
+
+		Console.Out.WriteLine($"{spriteNames.Count} sprite classes");
+		foreach (var s in spriteNames)
+		{
+			Console.Out.WriteLine($" - {s}");
+		}
+	}
+
+	[Test, Explicit]
+	public void ConstructNewActorsAndReplaceThingsInLevel()
+	{
+		var wad = WadFile.Read(Path.Combine(ProjectPath, "maps", "KICK.wad"));
+		var mapData = UdmfReader.Read(new MemoryStream(wad.Single(l => l.Name == "TEXTMAP").GetData()));
+
+		var uniqueThingIds = mapData.Things.Select(t => t.Type).Distinct();
+		var usedActors = uniqueThingIds
+			.Select(id => Actor.AllById[id])
+			.Where(a => a.Category != ActorCategory.Player && a.Category != ActorCategory.Teleport)
+			.ToList();
+
+		Console.Out.WriteLine($"{usedActors.Count} distinct actors used.");
+		Console.Out.WriteLine();
+		foreach (var cat in usedActors.GroupBy(a => a.Category))
+		{
+			Console.Out.WriteLine($"{cat.Key}:");
+			foreach (var a in cat)
+			{
+				Console.Out.WriteLine($" - {a.ClassName}");
+			}
+
+			Console.Out.WriteLine();
+		}
+	}
+
 	private static (IReadOnlyList<WallTexture>, IReadOnlySet<string> Patches, MapData) GetUsedTexturesAndPatches()
 	{
-		var path = @"/Users/david/RiderProjects/sep-doom-presentation/sep/patches/kick";
+		var path = Path.Combine(ProjectPath, "patches", "kick");
 		var patches = Directory
 			.GetFiles(path)
 			.Select(f => Path.GetFileNameWithoutExtension(f)!)
@@ -142,7 +185,7 @@ public sealed partial class FixKickAttack
 
 		textures.Add(new WallTexture(name, width, height, contents.ToArray()));
 
-		var wad = WadFile.Read(@"/Users/david/RiderProjects/sep-doom-presentation/sep/maps/KICK.wad");
+		var wad = WadFile.Read(Path.Combine(ProjectPath, "maps", "KICK.wad"));
 		var mapData = UdmfReader.Read(new MemoryStream(wad.Single(l => l.Name == "TEXTMAP").GetData()));
 		var usedTextures = mapData
 			.SideDefs.SelectMany(sd => new[] { sd.TextureMiddle, sd.TextureBottom, sd.TextureTop })
