@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -118,16 +119,22 @@ public sealed partial class FixKickAttack
 	}
 
 	[Test, Explicit]
-	public void ConstructNewActorsAndReplaceThingsInLevel()
+	public void ReplaceThingsInLevel()
 	{
 		var wad = WadFile.Read(Path.Combine(ProjectPath, "maps", "KICK.wad"));
 		var mapData = UdmfReader.Read(new MemoryStream(wad.Single(l => l.Name == "TEXTMAP").GetData()));
 
+		IReadOnlySet<Actor> actorsNotModified = new HashSet<Actor> { };
+
 		var uniqueThingIds = mapData.Things.Select(t => t.Type).Distinct();
 		var usedActors = uniqueThingIds
-			.Select(id => Actor.AllById[id])
+			.Select(id => Actor.AllById[id % 30_000])
 			.Where(a => a.Category != ActorCategory.Player && a.Category != ActorCategory.Teleport)
 			.ToList();
+
+		IReadOnlySet<int> convertedActors = new Actor[] { }
+			.Select(a => a.Id)
+			.ToHashSet();
 
 		Console.Out.WriteLine($"{usedActors.Count} distinct actors used.");
 		Console.Out.WriteLine();
@@ -136,11 +143,26 @@ public sealed partial class FixKickAttack
 			Console.Out.WriteLine($"## {cat.Key}");
 			foreach (var a in cat)
 			{
-				Console.Out.WriteLine($" - [ ] {a.ClassName}");
+				var unmodified = actorsNotModified.Contains(a);
+				var done = convertedActors.Contains(a.Id) || unmodified ? "x" : " ";
+
+				Console.Out.WriteLine(
+					$" - [{done}] {a.ClassName} ({a.Id})" + (unmodified ? " UNMODIFIED" : string.Empty)
+				);
 			}
 
 			Console.Out.WriteLine();
 		}
+
+		var fixedMap = mapData with
+		{
+			Things = mapData
+				.Things.Select(t => t with { Type = convertedActors.Contains(t.Type) ? t.Type + 30_000 : t.Type })
+				.ToImmutableArray(),
+		};
+
+		using var newWadFs = File.Open(Path.Combine(ProjectPath, "maps", "KICK.wad"), FileMode.Create);
+		WadWriter.WriteTo([new Marker("MAP01"), new UdmfLump("TEXTMAP", fixedMap), new Marker("ENDMAP")], newWadFs);
 	}
 
 	private static (IReadOnlyList<WallTexture>, IReadOnlySet<string> Patches, MapData) GetUsedTexturesAndPatches()
