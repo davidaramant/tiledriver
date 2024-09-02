@@ -11,7 +11,7 @@ using Tiledriver.DataModelGenerator.Utilities;
 
 namespace Tiledriver.DataModelGenerator.DoomGameInfo;
 
-internal static partial class DoomActorGenerator
+internal static class DoomActorGenerator
 {
 	public static void WriteToPath(string basePath)
 	{
@@ -56,6 +56,13 @@ internal static partial class DoomActorGenerator
 				"Tiledriver.Core.GameInfo.Doom",
 				new[] { "System.Collections.Generic", "System.CodeDom.Compiler" }
 			)
+			.Line()
+			.Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
+			.Line("public enum ActorCategory")
+			.OpenParen()
+			.Lines(actors.Select(a => a.CategoryName).Distinct().Select(c => c + ","))
+			.CloseParen()
+			.Line()
 			.Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
 			.Line($"public sealed partial record Actor")
 			.OpenParen();
@@ -74,6 +81,8 @@ internal static partial class DoomActorGenerator
 						$"Description: \"{actor.Description}\"",
 						$"Width: {actor.Width}",
 						$"Height: {actor.Height}",
+						$"ClassName: \"{actor.Name}\"",
+						$"Category: ActorCategory.{actor.CategoryName}",
 					}
 				)
 				.DecreaseIndent()
@@ -81,17 +90,26 @@ internal static partial class DoomActorGenerator
 				.Line();
 		}
 
+		output
+			.Line("public static readonly IReadOnlyDictionary<int, Actor> AllById = new Dictionary<int, Actor>")
+			.OpenParen()
+			.Lines(actors.Select(a => $"{{{a.Id}, {a.SafeName}}},"))
+			.CloseParen(withSemicolon: true)
+			.Line();
+
 		foreach (var category in actors.GroupBy(c => c.CategoryName))
 		{
 			output
 				.Line($"public static class {category.Key}")
 				.OpenParen()
 				.Lines(category.Select(actor => $"public static Actor {actor.SafeName} => Actor.{actor.SafeName};"))
-				.Line("public static IEnumerable<Actor> GetAll()")
+				.Line()
+				.Line("public static readonly IReadOnlyDictionary<int, Actor> AllById = new Dictionary<int, Actor>")
 				.OpenParen()
-				.Lines(category.Select(actor => $"yield return {actor.SafeName};"))
+				.Lines(category.Select(a => $"{{{a.Id}, {a.SafeName}}},"))
+				.CloseParen(withSemicolon: true)
 				.CloseParen()
-				.CloseParen();
+				.Line();
 		}
 
 		output.CloseParen();

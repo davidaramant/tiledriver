@@ -5,7 +5,14 @@ using Tiledriver.Core.FormatModels.Udmf;
 
 namespace Tiledriver.Core.GameInfo.Doom;
 
-public sealed partial record Actor(int Id, string Description, int Width, int Height)
+public sealed partial record Actor(
+	int Id,
+	string Description,
+	int Width,
+	int Height,
+	string ClassName,
+	ActorCategory Category
+)
 {
 	public Thing MakeThing(double x, double y, int angle) =>
 		new(

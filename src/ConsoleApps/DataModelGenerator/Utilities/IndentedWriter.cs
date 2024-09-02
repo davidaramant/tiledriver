@@ -62,7 +62,8 @@ public sealed class IndentedWriter : IDisposable
 
 	public IndentedWriter OpenParen() => Line("{").IncreaseIndent();
 
-	public IndentedWriter CloseParen() => DecreaseIndent().Line("}");
+	public IndentedWriter CloseParen(bool withSemicolon = false) =>
+		DecreaseIndent().Line("}" + (withSemicolon ? ";" : string.Empty));
 
 	public IndentedWriter Line(string line)
 	{
