@@ -133,10 +133,10 @@ public sealed partial class FixKickAttack
 		Console.Out.WriteLine();
 		foreach (var cat in usedActors.GroupBy(a => a.Category))
 		{
-			Console.Out.WriteLine($"{cat.Key}:");
+			Console.Out.WriteLine($"## {cat.Key}");
 			foreach (var a in cat)
 			{
-				Console.Out.WriteLine($" - {a.ClassName}");
+				Console.Out.WriteLine($" - [ ] {a.ClassName}");
 			}
 
 			Console.Out.WriteLine();
