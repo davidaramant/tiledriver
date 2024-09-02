@@ -1,14 +1,13 @@
 // Copyright (c) 2024, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using Tiledriver.Core.Extensions.Collections;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Udmf;
 using Tiledriver.Core.FormatModels.Udmf.Reading;
@@ -25,7 +24,7 @@ public sealed partial class FixKickAttack
 	[Test, Explicit]
 	public async Task CreateKickTextures()
 	{
-		var (kickTextures, patches) = GetUsedTexturesAndPatches();
+		var (kickTextures, patches, _) = GetUsedTexturesAndPatches();
 
 		var newTextures = kickTextures.Select(t =>
 			t with
@@ -67,13 +66,9 @@ public sealed partial class FixKickAttack
 	[Test, Explicit]
 	public void ReplaceTexturesInLevel()
 	{
-		var (kickTextures, patches) = GetUsedTexturesAndPatches();
+		var (kickTextures, patches, mapData) = GetUsedTexturesAndPatches();
 
 		var replace = kickTextures.Select(t => t.Name).ToHashSet();
-
-		var wad = WadFile.Read(@"/Users/david/RiderProjects/sep-doom-presentation/sep/maps/KICK.wad");
-
-		var mapData = UdmfReader.Read(new MemoryStream(wad.Single(l => l.Name == "TEXTMAP").GetData()));
 
 		using var origFs = File.Open(@"/Users/david/RiderProjects/sep-doom-presentation/orig.udmf", FileMode.Create);
 		mapData.WriteTo(origFs);
@@ -89,8 +84,8 @@ public sealed partial class FixKickAttack
 						TextureMiddle = ReplaceTexture(sd.TextureMiddle),
 						TextureTop = ReplaceTexture(sd.TextureTop),
 					}
-				)
-			]
+				),
+			],
 		};
 
 		using var newFs = File.Open(@"/Users/david/RiderProjects/sep-doom-presentation/fixed.udmf", FileMode.Create);
@@ -100,12 +95,12 @@ public sealed partial class FixKickAttack
 			@"/Users/david/RiderProjects/sep-doom-presentation/sep/maps/KICK.wad",
 			FileMode.Create
 		);
-		WadWriter.WriteTo([new Marker("MAP01"), new UdmfLump("TEXTMAP", fixedMap), new Marker("ENDMAP"),], newWadFs);
+		WadWriter.WriteTo([new Marker("MAP01"), new UdmfLump("TEXTMAP", fixedMap), new Marker("ENDMAP")], newWadFs);
 
 		Texture ReplaceTexture(Texture texture) => replace.Contains(texture.Name) ? "KA_" + texture.Name : texture;
 	}
 
-	private static (IReadOnlyList<WallTexture>, IReadOnlySet<string> Patches) GetUsedTexturesAndPatches()
+	private static (IReadOnlyList<WallTexture>, IReadOnlySet<string> Patches, MapData) GetUsedTexturesAndPatches()
 	{
 		var path = @"/Users/david/RiderProjects/sep-doom-presentation/sep/patches/kick";
 		var patches = Directory
@@ -147,9 +142,24 @@ public sealed partial class FixKickAttack
 
 		textures.Add(new WallTexture(name, width, height, contents.ToArray()));
 
-		var kickTextures = textures.Where(t => t.Contents.Any(c => patches.Any(c.Contains))).ToList();
+		var wad = WadFile.Read(@"/Users/david/RiderProjects/sep-doom-presentation/sep/maps/KICK.wad");
+		var mapData = UdmfReader.Read(new MemoryStream(wad.Single(l => l.Name == "TEXTMAP").GetData()));
+		var usedTextures = mapData
+			.SideDefs.SelectMany(sd => new[] { sd.TextureMiddle, sd.TextureBottom, sd.TextureTop })
+			.Where(tex => tex != Texture.None)
+			.Select(tex => tex.Name)
+			.ToHashSet();
 
-		return (kickTextures, patches);
+		var usedSwitches = usedTextures.Where(n => n.StartsWith("SW1"));
+		var switchCounterParts = usedSwitches.Select(n => n.Replace("SW1", "SW2")).ToList();
+
+		usedTextures.AddRange(switchCounterParts);
+
+		var kickTextures = textures
+			.Where(t => usedTextures.Contains(t.Name) && t.Contents.Any(c => patches.Any(c.Contains)))
+			.ToList();
+
+		return (kickTextures, patches, mapData);
 	}
 
 	sealed record WallTexture(string Name, int Width, int Height, IReadOnlyList<string> Contents);
