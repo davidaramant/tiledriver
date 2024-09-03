@@ -168,6 +168,8 @@ public sealed partial class FixKickAttack
 			progressWriter.WriteLine();
 		}
 
+		// TODO: Rename the sprites - that is way too error prone to do manually
+
 		var fixedMap = mapData with
 		{
 			Things = mapData
