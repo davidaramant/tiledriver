@@ -56,6 +56,17 @@ public sealed class WadFile : IEnumerable<ILump>
 		);
 	}
 
+	public static IEnumerable<string> ReadDirectory(Stream stream)
+	{
+		var identification = stream.ReadText(4);
+		var numLumps = stream.ReadInt();
+		var directoryPosition = stream.ReadInt();
+
+		stream.Position = directoryPosition;
+
+		return Enumerable.Range(1, numLumps).Select(_ => LumpMetadata.ReadFrom(stream).Name.ToString());
+	}
+
 	IEnumerator IEnumerable.GetEnumerator()
 	{
 		return GetEnumerator();

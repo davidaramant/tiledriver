@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 using Tiledriver.Core.Extensions.Collections;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Udmf;
@@ -98,6 +99,8 @@ public sealed partial class FixKickAttack
 	[Test, Explicit]
 	public void RenameSprites()
 	{
+		var doomPrefixes = GetStringPrefixesFromDoom2();
+
 		var path = Path.Combine(ProjectPath, "sprites", "kick");
 
 		var spriteNames = new ConcurrentDictionary<string, int>();
@@ -110,6 +113,8 @@ public sealed partial class FixKickAttack
 
 			spriteNames.AddOrUpdate(sn, _ => 1, (_, i) => i + 1);
 		}
+
+		Console.Out.WriteLine($"Any conflicts? " + spriteNames.Keys.Any(k => doomPrefixes.Contains('K' + k[1..])));
 
 		Console.Out.WriteLine($"{spriteNames.Count} sprite classes");
 		foreach (var s in spriteNames)
@@ -163,6 +168,21 @@ public sealed partial class FixKickAttack
 
 		using var newWadFs = File.Open(Path.Combine(ProjectPath, "maps", "KICK.wad"), FileMode.Create);
 		WadWriter.WriteTo([new Marker("MAP01"), new UdmfLump("TEXTMAP", fixedMap), new Marker("ENDMAP")], newWadFs);
+	}
+
+	private static IReadOnlySet<string> GetStringPrefixesFromDoom2()
+	{
+		var path = Path.Combine("/Users/david/Doom/IWADs", "DOOM2.WAD");
+
+		using var fs = File.OpenRead(path);
+		return WadFile
+			.ReadDirectory(fs)
+			.SkipWhile(n => n != "S_START")
+			.Skip(1)
+			.TakeWhile(n => n != "S_END")
+			.Select(s => s[..4])
+			.Distinct()
+			.ToHashSet();
 	}
 
 	private static (IReadOnlyList<WallTexture>, IReadOnlySet<string> Patches, MapData) GetUsedTexturesAndPatches()

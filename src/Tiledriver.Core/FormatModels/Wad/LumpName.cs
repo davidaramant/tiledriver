@@ -8,17 +8,20 @@ using System.Text.RegularExpressions;
 namespace Tiledriver.Core.FormatModels.Wad;
 
 [DebuggerDisplay("{ToString()}")]
-public sealed class LumpName : IEquatable<LumpName>
+public sealed partial class LumpName : IEquatable<LumpName>
 {
 	public const int MaxLength = 8;
 	private readonly string _name;
+
+	[GeneratedRegex(@"[^A-Z0-9\[\]\-_\\]", RegexOptions.Compiled)]
+	private static partial Regex LumpNameRegex();
 
 	public LumpName(string name)
 	{
 		if (string.IsNullOrWhiteSpace(name))
 			throw new ArgumentException("Name cannot be null or whitespace.", nameof(name));
 
-		if (Regex.IsMatch(name, @"[^A-Z0-9\[\]\-_]", RegexOptions.Compiled))
+		if (LumpNameRegex().IsMatch(name))
 		{
 			throw new ArgumentException($"'{name}' has invalid characters.", nameof(name));
 		}
@@ -67,5 +70,6 @@ public sealed class LumpName : IEquatable<LumpName>
 	{
 		return !Equals(left, right);
 	}
+
 	#endregion
 }
