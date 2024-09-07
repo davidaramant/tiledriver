@@ -124,26 +124,11 @@ public sealed partial class FixKickAttack
 	}
 
 	[Test, Explicit]
-	public void ReplaceThingsInLevel()
+	public async Task ReplaceThingsInLevel()
 	{
 		const int idOffset = 30_000;
 
 		var actorDefs = GetActorDefinitions().ToDictionary(ad => ad.Name);
-
-		var wad = WadFile.Read(Path.Combine(ProjectPath, "maps", "KICK.wad"));
-		var mapData = UdmfReader.Read(new MemoryStream(wad.Single(l => l.Name == "TEXTMAP").GetData()));
-
-		var actorsNotModified = new HashSet<Actor>();
-
-		var uniqueThingIds = mapData.Things.Select(t => t.Type).Distinct();
-		var usedActors = uniqueThingIds
-			.Select(id => Actor.AllById[id % idOffset])
-			.Where(a => a.Category != ActorCategory.Player && a.Category != ActorCategory.Teleport)
-			.ToList();
-
-		IReadOnlySet<int> convertedActors = new Actor[] { }
-			.Select(a => a.Id)
-			.ToHashSet();
 
 		var frameDir = Path.Combine(ProjectPath, "sprites", "kick");
 		var framesToConvert = Directory
@@ -151,64 +136,73 @@ public sealed partial class FixKickAttack
 			.Select(p => Path.GetFileName(p)!)
 			.ToLookup(name => name[3..7]);
 
+		var wad = WadFile.Read(Path.Combine(ProjectPath, "maps", "KICK.wad"));
+		var mapData = UdmfReader.Read(new MemoryStream(wad.Single(l => l.Name == "TEXTMAP").GetData()));
+
+		var uniqueThingIds = mapData.Things.Select(t => t.Type).Distinct();
+		var usedActors = uniqueThingIds
+			.Select(id => Actor.AllById[id % idOffset])
+			.Where(a => a.Category != ActorCategory.Player && a.Category != ActorCategory.Teleport)
+			.Where(a => framesToConvert.Contains(actorDefs[a.ClassName].SpritePrefix))
+			.ToList();
+
+		var convertedActors = usedActors.Select(a => a.Id).ToHashSet();
+
+		int prefixNum = 0;
+
 		var outputDefFile = Path.Combine(ProjectPath, "zscript", "kick.zs");
-		foreach (var actor in usedActors)
+		await using var fs = File.Open(outputDefFile, FileMode.Create);
+		await using var w = new StreamWriter(fs);
+		foreach (var category in usedActors.GroupBy(a => a.Category))
 		{
-			var definition = actorDefs[actor.ClassName];
-			var spritePrefix = definition.GetSpritePrefix();
-			Console.Out.WriteLine($"{actor.ClassName} : {spritePrefix}");
-			if (!framesToConvert.Contains(spritePrefix))
+			await w.WriteLineAsync($"// {category.Key}");
+			await w.WriteLineAsync();
+
+			foreach (var actor in category)
 			{
-				actorsNotModified.Add(actor);
-				continue;
+				prefixNum++;
+
+				var newSpritePrefix = $"K{prefixNum:000}";
+
+				var definition = actorDefs[actor.ClassName];
+				var spritePrefix = definition.SpritePrefix;
+
+				foreach (var frameName in framesToConvert[spritePrefix])
+				{
+					var newFrameName = newSpritePrefix + frameName[7..];
+					await Console.Out.WriteLineAsync($"{frameName} => {newFrameName}");
+					File.Move(Path.Combine(frameDir, frameName), Path.Combine(frameDir, newFrameName));
+				}
+
+				// Write definition
+				await w.WriteLineAsync($"class Kick{actor.ClassName} : {actor.ClassName}");
+				await w.WriteLineAsync("{");
+				await w.WriteLineAsync("\tStates");
+				await w.WriteLineAsync("\t{");
+				foreach (var line in definition.StateLines)
+				{
+					await w.WriteLineAsync(line.Replace(definition.SpritePrefix, newSpritePrefix));
+				}
+				await w.WriteLineAsync("\t}");
+				await w.WriteLineAsync("}");
+				await w.WriteLineAsync();
 			}
-
-			foreach (var frameName in framesToConvert[spritePrefix])
-			{
-				File.Move(Path.Combine(frameDir, frameName), Path.Combine(frameDir, "K" + frameName[4..]));
-			}
-
-			// Write definition
-
-			// Write translation to MapInfo
 		}
 
-		// using var progressFs = File.Open(
-		// 	"/Users/david/RiderProjects/tiledriver/src/Tiledriver.Core.ManualTests/Kick Actor Progress.md",
-		// 	FileMode.Create
-		// );
-		// using var progressWriter = new StreamWriter(progressFs);
-		// progressWriter.WriteLine("# Progress For Converting Kick Attack Actors");
-		// progressWriter.WriteLine();
-		// progressWriter.WriteLine($"{convertedActors.Count + actorsNotModified.Count}/{usedActors.Count} actors done.");
-		// progressWriter.WriteLine();
-		// foreach (var cat in usedActors.GroupBy(a => a.Category))
-		// {
-		// 	progressWriter.WriteLine($"## {cat.Key}");
-		// 	foreach (var a in cat)
-		// 	{
-		// 		var unmodified = actorsNotModified.Contains(a);
-		// 		var done = convertedActors.Contains(a.Id) || unmodified ? "x" : " ";
-		//
-		// 		progressWriter.WriteLine(
-		// 			$" - [{done}] {a.ClassName} ({a.Id})" + (unmodified ? " UNMODIFIED" : string.Empty)
-		// 		);
-		// 	}
-		//
-		// 	progressWriter.WriteLine();
-		// }
-		//
-		// // TODO: Rename the sprites - that is way too error prone to do manually
-		//
-		// var fixedMap = mapData with
-		// {
-		// 	Things = mapData
-		// 		.Things.Select(t => t with { Type = convertedActors.Contains(t.Type) ? t.Type + idOffset : t.Type })
-		// 		.ToImmutableArray(),
-		// };
-		//
-		// using var newWadFs = File.Open(Path.Combine(ProjectPath, "maps", "KICK.wad"), FileMode.Create);
-		// WadWriter.WriteTo([new Marker("MAP01"), new UdmfLump("TEXTMAP", fixedMap), new Marker("ENDMAP")], newWadFs);
+		// TODO: Weapons have multiple sprite prefixes
+		// TODO: Manually add in the actor definitions that don't show up in the map (plasma, rocket, fist, pistol)
+		// TODO: Write translation to MapInfo
+		// TODO: Sounds (there's 24 of them, so probably script something...)
+
+		var fixedMap = mapData with
+		{
+			Things = mapData
+				.Things.Select(t => t with { Type = convertedActors.Contains(t.Type) ? t.Type + idOffset : t.Type })
+				.ToImmutableArray(),
+		};
+
+		await using var newWadFs = File.Open(Path.Combine(ProjectPath, "maps", "KICK.wad"), FileMode.Create);
+		WadWriter.WriteTo([new Marker("MAP01"), new UdmfLump("TEXTMAP", fixedMap), new Marker("ENDMAP")], newWadFs);
 	}
 
 	private static IReadOnlySet<string> GetStringPrefixesFromDoom2()
@@ -290,22 +284,29 @@ public sealed partial class FixKickAttack
 
 	sealed record WallTexture(string Name, int Width, int Height, IReadOnlyList<string> Contents);
 
-	sealed record ActorDef(string Name, IReadOnlyList<string> Contents)
+	sealed record ActorDef(string Name, string BaseClass, IReadOnlyList<string> Contents)
 	{
-		public IEnumerable<string> GetStateLines() =>
-			Contents.SkipWhile(l => l.Trim() != "States").Skip(2).TakeWhile(l => l.Trim() != "}");
-
-		public string GetSpritePrefix()
-		{
-			foreach (var line in GetStateLines())
+		private Lazy<(IReadOnlyCollection<string>, string Prefix)> _stateLinesAndPrefix =
+			new(() =>
 			{
-				var match = FrameRegex().Match(line);
-				if (match.Success)
-					return match.Groups[1].Value;
-			}
+				var lines = Contents
+					.SkipWhile(l => l.Trim() != "States")
+					.Skip(2)
+					.TakeWhile(l => l.Trim() != "}")
+					.ToList();
+				foreach (var line in lines)
+				{
+					var match = FrameRegex().Match(line);
+					if (match.Success)
+						return (lines, match.Groups[1].Value);
+				}
 
-			throw new Exception("Could not find a valid sprite prefix for " + Name);
-		}
+				throw new Exception("Could not find a valid sprite prefix for " + Name);
+			});
+
+		public IReadOnlyCollection<string> StateLines => _stateLinesAndPrefix.Value.Item1;
+
+		public string SpritePrefix => _stateLinesAndPrefix.Value.Prefix;
 	}
 
 	[GeneratedRegex(@"(\w{4}) \w")]
@@ -332,6 +333,7 @@ public sealed partial class FixKickAttack
 	{
 		var contents = new List<string>();
 		var name = string.Empty;
+		var baseClass = string.Empty;
 
 		var state = ActorParseState.None;
 
@@ -346,6 +348,7 @@ public sealed partial class FixKickAttack
 						if (match.Success)
 						{
 							name = match.Groups[1].Value;
+							baseClass = match.Groups[2].Value;
 							state = ActorParseState.Open;
 						}
 					}
@@ -360,7 +363,7 @@ public sealed partial class FixKickAttack
 					if (line == "}")
 					{
 						state = ActorParseState.None;
-						yield return new ActorDef(name, contents.ToList());
+						yield return new ActorDef(name, baseClass, contents.ToList());
 						contents.Clear();
 					}
 					else
