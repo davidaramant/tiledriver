@@ -126,7 +126,7 @@ public sealed partial class FixKickAttack
 	[Test, Explicit]
 	public async Task ReplaceThingsInLevel()
 	{
-		const int idOffset = 30_000;
+		const int idOffset = 5_000;
 
 		var actorDefs = GetActorDefinitions().ToDictionary(ad => ad.Name);
 
@@ -143,61 +143,83 @@ public sealed partial class FixKickAttack
 		var usedActors = uniqueThingIds
 			.Select(id => Actor.AllById[id % idOffset])
 			.Where(a => a.Category != ActorCategory.Player && a.Category != ActorCategory.Teleport)
-			.Where(a => framesToConvert.Contains(actorDefs[a.ClassName].SpritePrefix))
+			.Where(a => actorDefs[a.ClassName].SpritePrefixes.Any(prefix => framesToConvert.Contains(prefix)))
 			.ToList();
-
-		var convertedActors = usedActors.Select(a => a.Id).ToHashSet();
 
 		int prefixNum = 0;
 
-		var outputDefFile = Path.Combine(ProjectPath, "zscript", "kick.zs");
-		await using var fs = File.Open(outputDefFile, FileMode.Create);
-		await using var w = new StreamWriter(fs);
-		foreach (var category in usedActors.GroupBy(a => a.Category))
 		{
-			await w.WriteLineAsync($"// {category.Key}");
-			await w.WriteLineAsync();
-
-			foreach (var actor in category)
+			var outputDefFile = Path.Combine(ProjectPath, "zscript", "kick.zs");
+			await using var fs = File.Open(outputDefFile, FileMode.Create);
+			await using var w = new StreamWriter(fs);
+			foreach (var category in usedActors.GroupBy(a => a.Category))
 			{
-				prefixNum++;
-
-				var newSpritePrefix = $"K{prefixNum:000}";
-
-				var definition = actorDefs[actor.ClassName];
-				var spritePrefix = definition.SpritePrefix;
-
-				foreach (var frameName in framesToConvert[spritePrefix])
-				{
-					var newFrameName = newSpritePrefix + frameName[7..];
-					await Console.Out.WriteLineAsync($"{frameName} => {newFrameName}");
-					File.Move(Path.Combine(frameDir, frameName), Path.Combine(frameDir, newFrameName));
-				}
-
-				// Write definition
-				await w.WriteLineAsync($"class Kick{actor.ClassName} : {actor.ClassName}");
-				await w.WriteLineAsync("{");
-				await w.WriteLineAsync("\tStates");
-				await w.WriteLineAsync("\t{");
-				foreach (var line in definition.StateLines)
-				{
-					await w.WriteLineAsync(line.Replace(definition.SpritePrefix, newSpritePrefix));
-				}
-				await w.WriteLineAsync("\t}");
-				await w.WriteLineAsync("}");
+				await w.WriteLineAsync($"// {category.Key}");
 				await w.WriteLineAsync();
+
+				foreach (var actor in category)
+				{
+					var definition = actorDefs[actor.ClassName];
+
+					var prefixReplacements = definition
+						.SpritePrefixes.Select(prefix => (OldPrefix: prefix, NewPrefix: $"K{prefixNum++:000}"))
+						.ToList();
+
+					foreach (var (spritePrefix, newPrefix) in prefixReplacements)
+					{
+						foreach (var frameName in framesToConvert[spritePrefix])
+						{
+							var newFrameName = newPrefix + frameName[7..];
+							await Console.Out.WriteLineAsync($"{frameName} => {newFrameName}");
+							File.Move(Path.Combine(frameDir, frameName), Path.Combine(frameDir, newFrameName));
+						}
+					}
+
+					// Write definition
+					await w.WriteLineAsync($"class Kick{actor.ClassName} : {actor.ClassName}");
+					await w.WriteLineAsync("{");
+					await w.WriteLineAsync("\tStates");
+					await w.WriteLineAsync("\t{");
+					foreach (var line in definition.StateLines)
+					{
+						await w.WriteLineAsync(
+							prefixReplacements.Aggregate(line, (l, pair) => l.Replace(pair.OldPrefix, pair.NewPrefix))
+						);
+					}
+
+					await w.WriteLineAsync("\t}");
+					await w.WriteLineAsync("}");
+					await w.WriteLineAsync();
+				}
 			}
 		}
 
-		// TODO: Weapons have multiple sprite prefixes
-		// TODO: Manually add in the actor definitions that don't show up in the map (plasma, rocket, fist, pistol)
-		// TODO: Write translation to MapInfo
-		// TODO: Sounds (there's 24 of them, so probably script something...)
+		// TODO: Manually add in the actor definitions that don't show up in the map (plasma, rocket, fist, pistol, imp fireball)
+		// TODO: Sounds for monsters
+		// TODO: Sounds for weapons
+		// TODO: Shotgun Guy drops Doom Shotgun, not Kick Shotgun
+
+		var idConversion = usedActors
+			.Select((a, i) => (a.Id, i))
+			.ToDictionary(pair => pair.Id, pair => idOffset + pair.i);
+
+		// Add MapInfo definitions
+		var mapInfoPath = Path.Combine(ProjectPath, "mapinfo.txt");
+		var lines = await File.ReadAllLinesAsync(mapInfoPath);
+		var startLine = lines.FindIndex(l => l.Contains("// Kick Attack!")) + 1;
+		File.WriteAllLines(
+			mapInfoPath,
+			[
+				.. lines[..startLine],
+				.. usedActors.Select(a => $"\t{idConversion[a.Id]}=Kick{a.ClassName}"),
+				.. lines[startLine..],
+			]
+		);
 
 		var fixedMap = mapData with
 		{
 			Things = mapData
-				.Things.Select(t => t with { Type = convertedActors.Contains(t.Type) ? t.Type + idOffset : t.Type })
+				.Things.Select(t => t with { Type = idConversion.TryGetValue(t.Type, out var newId) ? newId : t.Type })
 				.ToImmutableArray(),
 		};
 
@@ -286,7 +308,10 @@ public sealed partial class FixKickAttack
 
 	sealed record ActorDef(string Name, string BaseClass, IReadOnlyList<string> Contents)
 	{
-		private Lazy<(IReadOnlyCollection<string>, string Prefix)> _stateLinesAndPrefix =
+		private readonly Lazy<(
+			IReadOnlyCollection<string> StateLines,
+			IReadOnlyCollection<string> Prefixes
+		)> _stateLinesAndPrefix =
 			new(() =>
 			{
 				var lines = Contents
@@ -294,22 +319,23 @@ public sealed partial class FixKickAttack
 					.Skip(2)
 					.TakeWhile(l => l.Trim() != "}")
 					.ToList();
-				foreach (var line in lines)
-				{
-					var match = FrameRegex().Match(line);
-					if (match.Success)
-						return (lines, match.Groups[1].Value);
-				}
 
-				throw new Exception("Could not find a valid sprite prefix for " + Name);
+				var prefixes = lines
+					.Select(l => FrameRegex().Match(l))
+					.Where(l => l.Success)
+					.Select(m => m.Groups[1].Value)
+					.Distinct()
+					.ToList();
+
+				return (lines, prefixes);
 			});
 
-		public IReadOnlyCollection<string> StateLines => _stateLinesAndPrefix.Value.Item1;
+		public IReadOnlyCollection<string> StateLines => _stateLinesAndPrefix.Value.StateLines;
 
-		public string SpritePrefix => _stateLinesAndPrefix.Value.Prefix;
+		public IReadOnlyCollection<string> SpritePrefixes => _stateLinesAndPrefix.Value.Prefixes;
 	}
 
-	[GeneratedRegex(@"(\w{4}) \w")]
+	[GeneratedRegex(@"([A-Z0-9]{4}) \w")]
 	private static partial Regex FrameRegex();
 
 	enum ActorParseState
@@ -370,6 +396,7 @@ public sealed partial class FixKickAttack
 					{
 						contents.Add(line);
 					}
+
 					break;
 			}
 		}

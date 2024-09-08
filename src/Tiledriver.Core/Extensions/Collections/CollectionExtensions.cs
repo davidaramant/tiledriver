@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Tiledriver.Core.Extensions.Collections;
 
@@ -38,7 +39,11 @@ public static class CollectionExtensions
 
 	// Cheat because it's absurd that interface doesn't have this
 	public static int FindIndex<T>(this IReadOnlyList<T> list, Predicate<T> predicate) =>
-		((List<T>)list).FindIndex(predicate);
+		list switch
+		{
+			List<T> l => l.FindIndex(predicate),
+			_ => list.Select((item, i) => (item, i)).First(pair => predicate(pair.item)).i,
+		};
 
 	public static void Shuffle<T>(this IList<T> list, Random? random = null)
 	{
