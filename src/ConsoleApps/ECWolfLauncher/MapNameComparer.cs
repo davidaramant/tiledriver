@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace TestRunner;
+namespace ECWolfLauncher;
 
 sealed class MapNameComparer : Comparer<string>
 {

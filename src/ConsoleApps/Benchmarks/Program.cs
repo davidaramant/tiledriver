@@ -4,4 +4,4 @@
 using BenchmarkDotNet.Running;
 using Benchmarks;
 
-var summary = BenchmarkRunner.Run<EdgeDistanceBenchmarks>();
+BenchmarkRunner.Run<EdgeDistanceBenchmarks>();

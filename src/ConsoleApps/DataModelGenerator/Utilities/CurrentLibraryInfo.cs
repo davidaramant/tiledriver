@@ -8,7 +8,7 @@ namespace Tiledriver.DataModelGenerator.Utilities;
 
 static class CurrentLibraryInfo
 {
-	private static readonly Lazy<(string Name, Version Version)> _info =
+	private static readonly Lazy<(string Name, Version Version)> Info =
 		new(() =>
 		{
 			var currentAssembly =
@@ -22,6 +22,6 @@ static class CurrentLibraryInfo
 			);
 		});
 
-	public static string Name => _info.Value.Name;
-	public static Version Version => _info.Value.Version;
+	public static string Name => Info.Value.Name;
+	public static Version Version => Info.Value.Version;
 }

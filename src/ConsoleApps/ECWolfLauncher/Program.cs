@@ -23,18 +23,18 @@ using Tiledriver.Core.FormatModels.Wad;
 using Tiledriver.Core.FormatModels.Xlat;
 using Tiledriver.Core.Settings;
 
-namespace TestRunner;
+namespace ECWolfLauncher;
 
 /// <summary>
 /// Convenience program to directly launch the output in ECWolf from inside Visual Studio.
 /// </summary>
 class Program
 {
-	static void Main(string[] args)
+	static void Main()
 	{
 		try
 		{
-			var desktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+			//var desktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 
 			//Parallel.ForEach(Directory.EnumerateFiles(@"C:\Users\david\Desktop\Wolf3D Maps\tiledriver_ltsm"),
 			//    file =>
@@ -202,7 +202,7 @@ class Program
 		{
 			Directory.Delete(outputPath, recursive: true);
 		}
-		Directory.CreateDirectory(outputPath);
+		Directory.CreateDirectory(outputPath!);
 
 		using var progress = new ProgressBar(allFiles.Length, "Converting images...");
 		Parallel.ForEach(
@@ -213,6 +213,7 @@ class Program
 				var metaMap = MetaMap.Load(mapPath);
 
 				MetaMapImageExporter.Export(metaMap, MapPalette.Full, imagePath, scale: 4);
+				// ReSharper disable once AccessToDisposedClosure
 				progress.Tick();
 			}
 		);
@@ -363,37 +364,36 @@ class Program
 		{
 			var fileName = Path.GetFileNameWithoutExtension(path) + " " + postfix;
 
-			return Path.Combine(Path.GetDirectoryName(path), fileName + ".metamap");
+			return Path.Combine(Path.GetDirectoryName(path)!, fileName + ".metamap");
 		}
 
 		var filesToGoThrough = Directory.GetFiles(inputPath, "*.metamap", SearchOption.AllDirectories);
 
-		using (var progress = new ProgressBar(filesToGoThrough.Length, "Duplicating maps..."))
-		{
-			Parallel.ForEach(
-				filesToGoThrough,
-				metaMapPath =>
-				{
-					var map = MetaMap.Load(metaMapPath);
+		using var progress = new ProgressBar(filesToGoThrough.Length, "Duplicating maps...");
+		Parallel.ForEach(
+			filesToGoThrough,
+			metaMapPath =>
+			{
+				var map = MetaMap.Load(metaMapPath);
 
-					map.Mirror().Save(MutateFileName(metaMapPath, "m"));
+				map.Mirror().Save(MutateFileName(metaMapPath, "m"));
 
-					var rotated90 = map.Rotate90();
-					rotated90.Save(MutateFileName(metaMapPath, "r1"));
-					rotated90.Mirror().Save(MutateFileName(metaMapPath, "r1m"));
+				var rotated90 = map.Rotate90();
+				rotated90.Save(MutateFileName(metaMapPath, "r1"));
+				rotated90.Mirror().Save(MutateFileName(metaMapPath, "r1m"));
 
-					var rotated180 = rotated90.Rotate90();
-					rotated180.Save(MutateFileName(metaMapPath, "r2"));
-					rotated180.Mirror().Save(MutateFileName(metaMapPath, "r2m"));
+				var rotated180 = rotated90.Rotate90();
+				rotated180.Save(MutateFileName(metaMapPath, "r2"));
+				rotated180.Mirror().Save(MutateFileName(metaMapPath, "r2m"));
 
-					var rotated270 = rotated180.Rotate90();
-					rotated270.Save(MutateFileName(metaMapPath, "r3"));
-					rotated270.Mirror().Save(MutateFileName(metaMapPath, "r3m"));
+				var rotated270 = rotated180.Rotate90();
+				rotated270.Save(MutateFileName(metaMapPath, "r3"));
+				rotated270.Mirror().Save(MutateFileName(metaMapPath, "r3m"));
 
-					progress.Tick();
-				}
-			);
-		}
+				// ReSharper disable once AccessToDisposedClosure
+				progress.Tick();
+			}
+		);
 	}
 
 	public static void TestMapNameComparer()
@@ -403,14 +403,9 @@ class Program
 			var actualType = MapNameComparer.DetermineType(name);
 
 			Console.WriteLine($"Checking type for ({name})...");
-			if (actualType != expectedType)
-			{
-				Console.WriteLine($"  FAILED!\n  Expected:\t{expectedType}\n  Actual:\t{actualType}");
-			}
-			else
-			{
-				Console.WriteLine("  Passed!");
-			}
+			Console.WriteLine(actualType != expectedType
+				? $"  FAILED!\n  Expected:\t{expectedType}\n  Actual:\t{actualType}"
+				: "  Passed!");
 		}
 
 		TestTypeDetermination("Wolf3D Map 1", MapNameComparer.Type.Wolf3D);
@@ -440,14 +435,7 @@ class Program
 		{
 			Console.WriteLine($"Testing comparison for ({x}) and ({y})...");
 			var actual = new MapNameComparer().Compare(x, y);
-			if (actual != expected)
-			{
-				Console.WriteLine($"  FAILED!\n  Expected {expected} but got {actual}");
-			}
-			else
-			{
-				Console.WriteLine("  Passed!");
-			}
+			Console.WriteLine(actual != expected ? $"  FAILED!\n  Expected {expected} but got {actual}" : "  Passed!");
 		}
 
 		TestComparison("Wolf3D Map 1", "Custom Map", -1);
@@ -467,11 +455,9 @@ class Program
 			.AsParallel()
 			.Select(filePath =>
 			{
-				using (var md5 = MD5.Create())
-				using (var fs = File.OpenRead(filePath))
-				{
-					return (filePath: filePath, hash: BitConverter.ToString(md5.ComputeHash(fs)));
-				}
+				using var md5 = MD5.Create();
+				using var fs = File.OpenRead(filePath);
+				return (filePath: filePath, hash: BitConverter.ToString(md5.ComputeHash(fs)));
 			})
 			.GroupBy(tuple => tuple.hash)
 			.Where(group => group.Count() > 1)
@@ -603,51 +589,49 @@ class Program
 
 		var autoMapper = autoMapperConfig.CreateMapper();
 
-		using (var resources = new CompoundResourceProvider())
-		using (var basePk3 = Pk3File.Open(ecWolfPk3Path))
-		using (var pk3 = Pk3File.Open(pk3Path))
-		{
-			resources.AddProvider(basePk3);
-			resources.AddProvider(pk3);
+		using var resources = new CompoundResourceProvider();
+		using var basePk3 = Pk3File.Open(ecWolfPk3Path);
+		using var pk3 = Pk3File.Open(pk3Path);
+		resources.AddProvider(basePk3);
+		resources.AddProvider(pk3);
 
-			throw new NotImplementedException("Move to suitable project and fix");
-			//var mapInfos = LoadMapInfo(resources, mapInfoStream: resources.TryLookup("MAPINFO.txt").Or(() => resources.TryLookup("MAPINFO")).Value);
-			//var xlat = LoadXlat(resources, resources.Lookup(mapInfos.GameInfo.Value.Translator.Value));
-			//var translator = new BinaryMapTranslator(translatorInfo: xlat, autoMapper: autoMapper);
+		throw new NotImplementedException("Move to suitable project and fix");
+		//var mapInfos = LoadMapInfo(resources, mapInfoStream: resources.TryLookup("MAPINFO.txt").Or(() => resources.TryLookup("MAPINFO")).Value);
+		//var xlat = LoadXlat(resources, resources.Lookup(mapInfos.GameInfo.Value.Translator.Value));
+		//var translator = new BinaryMapTranslator(translatorInfo: xlat, autoMapper: autoMapper);
 
-			//for (int mapIndex = 0; mapIndex < mapInfos.Maps.Count; mapIndex++)
-			//{
-			//    var mapInfo = mapInfos.Maps[mapIndex];
+		//for (int mapIndex = 0; mapIndex < mapInfos.Maps.Count; mapIndex++)
+		//{
+		//    var mapInfo = mapInfos.Maps[mapIndex];
 
-			//    using (var wadStream = new MemoryStream())
-			//    {
-			//        resources.Lookup($"maps/{mapInfo.MapLump}.wad").CopyTo(wadStream);
-			//        wadStream.Position = 0;
+		//    using (var wadStream = new MemoryStream())
+		//    {
+		//        resources.Lookup($"maps/{mapInfo.MapLump}.wad").CopyTo(wadStream);
+		//        wadStream.Position = 0;
 
-			//        var wad = WadFile.Read(wadStream);
-			//        var mapFileBytes = wad[1].GetData();
-			//        using (var ms = new MemoryStream(mapFileBytes))
-			//        {
-			//            var binaryMap = Wdc31Bundle.ReadMaps(ms).Single();
+		//        var wad = WadFile.Read(wadStream);
+		//        var mapFileBytes = wad[1].GetData();
+		//        using (var ms = new MemoryStream(mapFileBytes))
+		//        {
+		//            var binaryMap = Wdc31Bundle.ReadMaps(ms).Single();
 
-			//            var uwmfMap = translator.Translate(binaryMap, mapInfo);
+		//            var uwmfMap = translator.Translate(binaryMap, mapInfo);
 
-			//            var fileSafeName = uwmfMap.Name;
-			//            foreach (var invalidChar in Path.GetInvalidFileNameChars())
-			//            {
-			//                fileSafeName = fileSafeName.Replace(invalidChar.ToString(), string.Empty);
-			//            }
-			//            fileSafeName = fileSafeName.Trim();
+		//            var fileSafeName = uwmfMap.Name;
+		//            foreach (var invalidChar in Path.GetInvalidFileNameChars())
+		//            {
+		//                fileSafeName = fileSafeName.Replace(invalidChar.ToString(), string.Empty);
+		//            }
+		//            fileSafeName = fileSafeName.Trim();
 
-			//            using (var outStream =
-			//                File.OpenWrite(Path.Combine(outputPath, $"{levelSetName} {mapIndex + 1} - {fileSafeName}.uwmf")))
-			//            {
-			//                uwmfMap.WriteTo(outStream);
-			//            }
-			//        }
-			//    }
-			//}
-		}
+		//            using (var outStream =
+		//                File.OpenWrite(Path.Combine(outputPath, $"{levelSetName} {mapIndex + 1} - {fileSafeName}.uwmf")))
+		//            {
+		//                uwmfMap.WriteTo(outStream);
+		//            }
+		//        }
+		//    }
+		//}
 	}
 
 	//private static void Flatten()
@@ -806,51 +790,49 @@ class Program
 
 		var autoMapper = autoMapperConfig.CreateMapper();
 
-		using (var resources = Pk3File.Open(ecWolfPk3Path))
-		{
-			throw new NotImplementedException("WHY IS ALL THIS STUFF HERE?????");
-			//var mapInfos =
-			//    LoadMapInfo(resources, mapInfoStream: resources.Lookup("mapinfo/spear.txt"));
-			//var xlat = XlatReader.Read()
-			//    LoadXlat(resources, resources.Lookup(mapInfos.GameInfo.Value.Translator.Value));
-			//var translator = new BinaryMapTranslator(translatorInfo: xlat, autoMapper: autoMapper);
+		using var resources = Pk3File.Open(ecWolfPk3Path);
+		throw new NotImplementedException("WHY IS ALL THIS STUFF HERE?????");
+		//var mapInfos =
+		//    LoadMapInfo(resources, mapInfoStream: resources.Lookup("mapinfo/spear.txt"));
+		//var xlat = XlatReader.Read()
+		//    LoadXlat(resources, resources.Lookup(mapInfos.GameInfo.Value.Translator.Value));
+		//var translator = new BinaryMapTranslator(translatorInfo: xlat, autoMapper: autoMapper);
 
-			//foreach (var levelSet in levelSets)
-			//{
-			//    Console.WriteLine(levelSet.name);
-			//    try
-			//    {
-			//        using (var headerStream = File.OpenRead(levelSet.mapHeadPath()))
-			//        using (var mapsStream = File.OpenRead(levelSet.gameMapsPath()))
-			//        {
-			//            var gameMaps = GameMapsBundle.Load(headerStream, mapsStream);
-			//            for (int mapIndex = 0; mapIndex < gameMaps.Maps.Length; mapIndex++)
-			//            {
-			//                var bMap = gameMaps.LoadMap(mapIndex, mapsStream);
+		//foreach (var levelSet in levelSets)
+		//{
+		//    Console.WriteLine(levelSet.name);
+		//    try
+		//    {
+		//        using (var headerStream = File.OpenRead(levelSet.mapHeadPath()))
+		//        using (var mapsStream = File.OpenRead(levelSet.gameMapsPath()))
+		//        {
+		//            var gameMaps = GameMapsBundle.Load(headerStream, mapsStream);
+		//            for (int mapIndex = 0; mapIndex < gameMaps.Maps.Length; mapIndex++)
+		//            {
+		//                var bMap = gameMaps.LoadMap(mapIndex, mapsStream);
 
-			//                var uwmfMap = translator.Translate(bMap, mapInfos.Maps[mapIndex]);
+		//                var uwmfMap = translator.Translate(bMap, mapInfos.Maps[mapIndex]);
 
-			//                var fileName = $"{levelSet.name} {mapIndex + 1:00} - {uwmfMap.Name}.uwmf";
+		//                var fileName = $"{levelSet.name} {mapIndex + 1:00} - {uwmfMap.Name}.uwmf";
 
-			//                foreach (char c in Path.GetInvalidFileNameChars())
-			//                {
-			//                    fileName = fileName.Replace(c.ToString(), "");
-			//                }
+		//                foreach (char c in Path.GetInvalidFileNameChars())
+		//                {
+		//                    fileName = fileName.Replace(c.ToString(), "");
+		//                }
 
-			//                using (var outStream = File.OpenWrite(Path.Combine(outputPath, fileName)))
-			//                {
-			//                    uwmfMap.WriteTo(outStream);
-			//                }
-			//            }
-			//        }
+		//                using (var outStream = File.OpenWrite(Path.Combine(outputPath, fileName)))
+		//                {
+		//                    uwmfMap.WriteTo(outStream);
+		//                }
+		//            }
+		//        }
 
-			//    }
-			//    catch (Exception e)
-			//    {
-			//        Console.WriteLine($"\n\t{levelSet.name} FAILED:\n\t" + e + "\n");
-			//    }
-			//}
-		}
+		//    }
+		//    catch (Exception e)
+		//    {
+		//        Console.WriteLine($"\n\t{levelSet.name} FAILED:\n\t" + e + "\n");
+		//    }
+		//}
 	}
 
 	private static void TranslateGameMapsFormat(
@@ -872,37 +854,35 @@ class Program
 
 		var autoMapper = autoMapperConfig.CreateMapper();
 
-		using (var resources = Pk3File.Open(ecWolfPk3Path))
-		{
-			throw new NotImplementedException("Move to a suitable project and fix");
-			//var mapInfos = LoadMapInfo(resources, mapInfoStream: resources.Lookup("mapinfo/spear.txt"));
-			//var xlat = LoadXlat(resources, resources.Lookup(mapInfos.GameInfo.Value.Translator.Value));
-			//var translator = new BinaryMapTranslator(translatorInfo: xlat, autoMapper: autoMapper);
+		using var resources = Pk3File.Open(ecWolfPk3Path);
+		throw new NotImplementedException("Move to a suitable project and fix");
+		//var mapInfos = LoadMapInfo(resources, mapInfoStream: resources.Lookup("mapinfo/spear.txt"));
+		//var xlat = LoadXlat(resources, resources.Lookup(mapInfos.GameInfo.Value.Translator.Value));
+		//var translator = new BinaryMapTranslator(translatorInfo: xlat, autoMapper: autoMapper);
 
-			//using (var headerStream = File.OpenRead(mapHeadPath))
-			//using (var mapsStream = File.OpenRead(gameMapsPath))
-			//{
-			//    var gameMaps = GameMapsBundle.Load(headerStream, mapsStream);
-			//    for (int mapIndex = 0; mapIndex < gameMaps.Maps.Length; mapIndex++)
-			//    {
-			//        var bMap = gameMaps.LoadMap(mapIndex, mapsStream);
+		//using (var headerStream = File.OpenRead(mapHeadPath))
+		//using (var mapsStream = File.OpenRead(gameMapsPath))
+		//{
+		//    var gameMaps = GameMapsBundle.Load(headerStream, mapsStream);
+		//    for (int mapIndex = 0; mapIndex < gameMaps.Maps.Length; mapIndex++)
+		//    {
+		//        var bMap = gameMaps.LoadMap(mapIndex, mapsStream);
 
-			//        var uwmfMap = translator.Translate(bMap, mapInfos.Maps[mapIndex]);
+		//        var uwmfMap = translator.Translate(bMap, mapInfos.Maps[mapIndex]);
 
-			//        var fileName = $"{levelSetName} {mapIndex + 1:00} - {uwmfMap.Name}.uwmf";
+		//        var fileName = $"{levelSetName} {mapIndex + 1:00} - {uwmfMap.Name}.uwmf";
 
-			//        foreach (char c in Path.GetInvalidFileNameChars())
-			//        {
-			//            fileName = fileName.Replace(c.ToString(), "");
-			//        }
+		//        foreach (char c in Path.GetInvalidFileNameChars())
+		//        {
+		//            fileName = fileName.Replace(c.ToString(), "");
+		//        }
 
-			//        using (var outStream = File.OpenWrite(Path.Combine(outputPath, fileName)))
-			//        {
-			//            uwmfMap.WriteTo(outStream);
-			//        }
-			//    }
-			//}
-		}
+		//        using (var outStream = File.OpenWrite(Path.Combine(outputPath, fileName)))
+		//        {
+		//            uwmfMap.WriteTo(outStream);
+		//        }
+		//    }
+		//}
 	}
 
 	private static void LoadMapInEcWolf(MapData uwmfMap, string projectPath)

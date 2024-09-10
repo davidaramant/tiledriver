@@ -12,7 +12,7 @@ namespace Tiledriver.DataModelGenerator;
 
 class Program
 {
-	static void Main(string[] args)
+	static void Main()
 	{
 		var basePath = FindSolutionPath();
 

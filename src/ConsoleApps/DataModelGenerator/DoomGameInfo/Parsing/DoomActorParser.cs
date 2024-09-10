@@ -31,7 +31,7 @@ static class DoomActorParser
 	static readonly Parser<char, string> Identifier = Token(char.IsLower).ManyString();
 
 	static readonly Parser<char, Assignment> Assignment = Map(
-		(id, equalsSign, value, semicolon) => new Assignment(id, value),
+		(id, _, value, _) => new Assignment(id, value),
 		Identifier.Before(Separator),
 		Equal.Before(Separator),
 		Value.Before(Separator),
