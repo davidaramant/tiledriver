@@ -1,8 +1,6 @@
 // Copyright (c) 2017, Leon Organ
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using System;
-using System.Linq;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.GameInfo.Wolf3D;
 

@@ -2,9 +2,6 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Tiledriver.Core.FormatModels.Wad.StreamExtensions;
 
 namespace Tiledriver.Core.FormatModels.Wad;

@@ -1,5 +1,3 @@
-using System.Linq;
-
 namespace Tiledriver.Core.FormatModels.Udmf;
 
 public sealed partial record MapData

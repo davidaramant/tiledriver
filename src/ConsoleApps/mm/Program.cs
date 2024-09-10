@@ -1,8 +1,6 @@
 // Copyright (c) 2018, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using System;
-using System.IO;
 using Tiledriver.Core.FormatModels.MapMetadata;
 using Tiledriver.Core.FormatModels.MapMetadata.Writing;
 
@@ -13,7 +11,7 @@ namespace mm;
 /// </summary>
 class Program
 {
-	record Options(string InputMapPath, ImagePalette Theme, string ImageName, int Scale);
+	record Options(string InputMapPath, ImagePalette Theme, string? ImageName, int Scale);
 
 	public enum ImagePalette
 	{
@@ -29,7 +27,7 @@ class Program
 	/// <param name="theme">Theme to use for the image.</param>
 	/// <param name="imageName">Name of the image file (by default, use the map name)</param>
 	/// <param name="scale">How much to scale the output image.</param>
-	static void Main(string inputMapPath, ImagePalette theme, string imageName = null, int scale = 1)
+	static void Main(string inputMapPath, ImagePalette theme, string? imageName = null, int scale = 1)
 	{
 		RunOptionsAndReturnExitCode(new Options(inputMapPath, theme, imageName, scale));
 	}
@@ -59,7 +57,7 @@ class Program
 				_ => MapPalette.CarveOutRooms,
 			};
 
-		var imagePath = Path.Combine(Path.GetDirectoryName(opts.InputMapPath), imageName);
+		var imagePath = Path.Combine(Path.GetDirectoryName(opts.InputMapPath)!, imageName);
 		MetaMapImageExporter.Export(map, PickPalette(opts.Theme), imagePath, scale: opts.Scale);
 
 		Console.WriteLine($"Wrote {imagePath} with color theme {opts.Theme} at scale {opts.Scale}x.");

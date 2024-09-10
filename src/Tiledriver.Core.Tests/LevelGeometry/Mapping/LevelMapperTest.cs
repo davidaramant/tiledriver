@@ -1,9 +1,7 @@
 // Copyright (c) 2017, Aaron Alexander
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using System;
 using System.Collections.Immutable;
-using System.Linq;
 using FluentAssertions;
 using Tiledriver.Core.DemoMaps.Wolf3D;
 using Tiledriver.Core.FormatModels.Uwmf;

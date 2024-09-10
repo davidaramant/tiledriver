@@ -2,9 +2,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using Tiledriver.Core.FormatModels.Udmf;
 using Tiledriver.Core.FormatModels.Wad;
 using Tiledriver.Core.Settings;

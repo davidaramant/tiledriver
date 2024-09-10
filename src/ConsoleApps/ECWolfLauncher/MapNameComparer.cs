@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-
 namespace ECWolfLauncher;
 
 sealed class MapNameComparer : Comparer<string>
@@ -58,10 +54,10 @@ sealed class MapNameComparer : Comparer<string>
 		return type;
 	}
 
-	public override int Compare(string x, string y)
+	public override int Compare(string? x, string? y)
 	{
-		var xType = DetermineType(x);
-		var yType = DetermineType(y);
+		var xType = DetermineType(x!);
+		var yType = DetermineType(y!);
 
 		return xType.CompareTo(yType);
 	}

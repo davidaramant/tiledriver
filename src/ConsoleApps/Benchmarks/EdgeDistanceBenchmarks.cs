@@ -1,9 +1,6 @@
 // Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using BenchmarkDotNet.Attributes;
 using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.LevelGeometry.Extensions;
@@ -14,7 +11,7 @@ namespace Benchmarks;
 
 public class EdgeDistanceBenchmarks
 {
-	private ConnectedArea _area;
+	private ConnectedArea _area = default!;
 
 	[GlobalSetup]
 	public void Setup()

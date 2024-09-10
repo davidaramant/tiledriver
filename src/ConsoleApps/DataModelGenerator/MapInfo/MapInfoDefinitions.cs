@@ -2,7 +2,6 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Immutable;
-using System.Linq;
 using Tiledriver.DataModelGenerator.MapInfo.MetadataModel;
 using Tiledriver.DataModelGenerator.MetadataModel;
 

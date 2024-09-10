@@ -2,14 +2,9 @@
 // Copyright (c) 2017, David Aramant and Aaron Alexander
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Threading.Tasks;
 using AutoMapper;
 using ShellProgressBar;
 using Tiledriver.Core.FormatModels;
@@ -234,16 +229,16 @@ class Program
 	{
 		var goodFiles = Directory
 			.GetFiles(pathForGoodImages)
-			.Select(Path.GetFileNameWithoutExtension)
+			.Select(path=>Path.GetFileNameWithoutExtension(path)!)
 			.ToImmutableHashSet();
 
 		var endings = new[] { " m", " r1", " r1m", " r2", " r2m", " r3", " r3m" };
 
-		string GetRawMapName(string filename)
+		string GetRawMapName(string? filename)
 		{
 			foreach (var ending in endings)
 			{
-				if (filename.EndsWith(ending))
+				if (filename!.EndsWith(ending))
 				{
 					throw new NotImplementedException("What was this doing");
 					//filename = filename.RemoveLast(ending.Length);
@@ -251,13 +246,13 @@ class Program
 				}
 			}
 
-			return filename;
+			return filename!;
 		}
 
 		var allFiles = Directory
 			.GetFiles(metaMapPath)
 			.Select(Path.GetFileNameWithoutExtension)
-			.Select(GetRawMapName)
+			.Select(path=>GetRawMapName(path)!)
 			.ToImmutableHashSet();
 
 		var badFiles = allFiles.Except(goodFiles);

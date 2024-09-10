@@ -1,9 +1,6 @@
 // Copyright (c) 2017, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using System.IO;
-using System.Linq;
-
 namespace Tiledriver.Core.Utils;
 
 public static class PathUtil

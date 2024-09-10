@@ -1,17 +1,10 @@
 // Copyright (c) 2024, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
 using Tiledriver.Core.Extensions.Collections;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Udmf;

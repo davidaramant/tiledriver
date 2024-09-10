@@ -1,8 +1,6 @@
 // Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using System;
-using System.Linq;
 using BenchmarkDotNet.Attributes;
 using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.Utils.CellularAutomata;
@@ -14,7 +12,7 @@ public class ConnectedComponentLabelingBenchmarks
 {
 	private const int Seed = 3;
 	private readonly Size _dimensions = new(1024, 1024);
-	private CellBoard _board;
+	private CellBoard _board = default!;
 
 	[GlobalSetup]
 	public void Setup()
