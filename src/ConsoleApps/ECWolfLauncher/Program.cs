@@ -229,7 +229,7 @@ class Program
 	{
 		var goodFiles = Directory
 			.GetFiles(pathForGoodImages)
-			.Select(path=>Path.GetFileNameWithoutExtension(path)!)
+			.Select(path => Path.GetFileNameWithoutExtension(path)!)
 			.ToImmutableHashSet();
 
 		var endings = new[] { " m", " r1", " r1m", " r2", " r2m", " r3", " r3m" };
@@ -252,7 +252,7 @@ class Program
 		var allFiles = Directory
 			.GetFiles(metaMapPath)
 			.Select(Path.GetFileNameWithoutExtension)
-			.Select(path=>GetRawMapName(path)!)
+			.Select(path => GetRawMapName(path)!)
 			.ToImmutableHashSet();
 
 		var badFiles = allFiles.Except(goodFiles);
@@ -398,9 +398,11 @@ class Program
 			var actualType = MapNameComparer.DetermineType(name);
 
 			Console.WriteLine($"Checking type for ({name})...");
-			Console.WriteLine(actualType != expectedType
-				? $"  FAILED!\n  Expected:\t{expectedType}\n  Actual:\t{actualType}"
-				: "  Passed!");
+			Console.WriteLine(
+				actualType != expectedType
+					? $"  FAILED!\n  Expected:\t{expectedType}\n  Actual:\t{actualType}"
+					: "  Passed!"
+			);
 		}
 
 		TestTypeDetermination("Wolf3D Map 1", MapNameComparer.Type.Wolf3D);
