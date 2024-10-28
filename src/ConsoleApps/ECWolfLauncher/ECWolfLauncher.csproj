@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
 		<Nullable>enable</Nullable>
@@ -6,15 +6,15 @@
 		<TargetFramework>net8.0-windows</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="13.0.1" />
-    <PackageReference Include="Castle.Core" Version="5.1.1" />
-    <PackageReference Include="Functional.Maybe" Version="2.0.20" />
-    <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
-    <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
-    <PackageReference Include="Moq" Version="4.20.70" />
-    <PackageReference Include="ShellProgressBar" Version="5.2.0" />
-    <PackageReference Include="System.Collections.Immutable" Version="8.0.0" />
-    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+    <PackageReference Include="AutoMapper" />
+    <PackageReference Include="Castle.Core" />
+    <PackageReference Include="Functional.Maybe" />
+    <PackageReference Include="JetBrains.Annotations" />
+    <PackageReference Include="Microsoft.Win32.Registry" />
+    <PackageReference Include="Moq" />
+    <PackageReference Include="ShellProgressBar" />
+    <PackageReference Include="System.Collections.Immutable" />
+    <PackageReference Include="System.ValueTuple" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Tiledriver.Core\Tiledriver.Core.csproj" />

@@ -6,8 +6,8 @@
 		<ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="HsluvS" Version="1.0.1" />
-    <PackageReference Include="SkiaSharp" Version="2.88.7" />
+    <PackageReference Include="HsluvS" />
+    <PackageReference Include="SkiaSharp" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DemoMaps" />
