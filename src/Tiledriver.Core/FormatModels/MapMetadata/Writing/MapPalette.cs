@@ -25,33 +25,30 @@ public sealed record MapPalette(
 			_ => Unknown,
 		};
 
-	public static readonly MapPalette HighlightWalls =
-		new(
-			Empty: SKColors.Black,
-			Wall: SKColors.White,
-			Door: SKColors.Red,
-			PushWall: SKColors.Red,
-			Unreachable: SKColors.Black,
-			Unknown: SKColors.Fuchsia
-		);
+	public static readonly MapPalette HighlightWalls = new(
+		Empty: SKColors.Black,
+		Wall: SKColors.White,
+		Door: SKColors.Red,
+		PushWall: SKColors.Red,
+		Unreachable: SKColors.Black,
+		Unknown: SKColors.Fuchsia
+	);
 
-	public static readonly MapPalette CarveOutRooms =
-		new(
-			Empty: SKColors.White,
-			Wall: SKColors.Black,
-			Door: SKColors.Red,
-			PushWall: SKColors.Red,
-			Unreachable: SKColors.Black,
-			Unknown: SKColors.Fuchsia
-		);
+	public static readonly MapPalette CarveOutRooms = new(
+		Empty: SKColors.White,
+		Wall: SKColors.Black,
+		Door: SKColors.Red,
+		PushWall: SKColors.Red,
+		Unreachable: SKColors.Black,
+		Unknown: SKColors.Fuchsia
+	);
 
-	public static readonly MapPalette Full =
-		new(
-			Empty: SKColors.DarkCyan,
-			Wall: SKColors.Black,
-			Door: SKColors.Red,
-			PushWall: SKColors.Orange,
-			Unreachable: SKColors.Gray,
-			Unknown: SKColors.Fuchsia
-		);
+	public static readonly MapPalette Full = new(
+		Empty: SKColors.DarkCyan,
+		Wall: SKColors.Black,
+		Door: SKColors.Red,
+		PushWall: SKColors.Orange,
+		Unreachable: SKColors.Gray,
+		Unknown: SKColors.Fuchsia
+	);
 }

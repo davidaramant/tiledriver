@@ -380,24 +380,19 @@ public sealed partial class FixKickAttack
 		private readonly Lazy<(
 			IReadOnlyCollection<string> StateLines,
 			IReadOnlyCollection<string> Prefixes
-		)> _stateLinesAndPrefix =
-			new(() =>
-			{
-				var lines = Contents
-					.SkipWhile(l => l.Trim() != "States")
-					.Skip(2)
-					.TakeWhile(l => l.Trim() != "}")
-					.ToList();
+		)> _stateLinesAndPrefix = new(() =>
+		{
+			var lines = Contents.SkipWhile(l => l.Trim() != "States").Skip(2).TakeWhile(l => l.Trim() != "}").ToList();
 
-				var prefixes = lines
-					.Select(l => FrameRegex().Match(l))
-					.Where(l => l.Success)
-					.Select(m => m.Groups[1].Value)
-					.Distinct()
-					.ToList();
+			var prefixes = lines
+				.Select(l => FrameRegex().Match(l))
+				.Where(l => l.Success)
+				.Select(m => m.Groups[1].Value)
+				.Distinct()
+				.ToList();
 
-				return (lines, prefixes);
-			});
+			return (lines, prefixes);
+		});
 
 		public IReadOnlyCollection<string> StateLines => _stateLinesAndPrefix.Value.StateLines;
 
