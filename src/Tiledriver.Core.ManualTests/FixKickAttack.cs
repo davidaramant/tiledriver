@@ -117,6 +117,45 @@ public sealed partial class FixKickAttack
 	}
 
 	[Test, Explicit]
+	public void RenameSounds()
+	{
+		var path = Path.Combine(ProjectPath, "sounds", "kick_attack");
+
+		foreach (var soundPath in Directory.EnumerateFiles(path, "*.lmp"))
+		{
+			var fileName = Path.GetFileName(soundPath);
+
+			File.Move(soundPath, Path.Combine(path, "KA" + fileName[2..]));
+		}
+	}
+
+	[Test, Explicit]
+	public void DefineKickSounds()
+	{
+		var doomSoundInfoFile = Path.Combine(GZDoomProjectPath, "filter", "game-doomchex", "sndinfo.txt");
+		var kickSoundsPath = Path.Combine(ProjectPath, "sounds", "kick_attack");
+
+		var kickSoundFiles = Directory
+			.EnumerateFiles(kickSoundsPath, "*.lmp")
+			.Select(Path.GetFileNameWithoutExtension)
+			.Select(fn => "ds" + fn![2..].ToLowerInvariant())
+			.ToList();
+
+		var matched = File.ReadLines(doomSoundInfoFile).Where(line => kickSoundFiles.Any(line.Contains)).ToList();
+
+		foreach (var line in matched)
+		{
+			var newLine = line;
+			foreach (var ks in kickSoundFiles)
+			{
+				newLine = newLine.Replace(ks, "ka" + ks[2..]);
+			}
+
+			Console.Out.WriteLine(newLine);
+		}
+	}
+
+	[Test, Explicit]
 	public async Task ReplaceThingsInLevel()
 	{
 		const int idOffset = 5_000;
@@ -168,29 +207,44 @@ public sealed partial class FixKickAttack
 						}
 					}
 
-					// Write definition
-					await w.WriteLineAsync($"class Kick{actor.ClassName} : {actor.ClassName}");
-					await w.WriteLineAsync("{");
-					await w.WriteLineAsync("\tStates");
-					await w.WriteLineAsync("\t{");
-					foreach (var line in definition.StateLines)
-					{
-						await w.WriteLineAsync(
-							prefixReplacements.Aggregate(line, (l, pair) => l.Replace(pair.OldPrefix, pair.NewPrefix))
-						);
-					}
-
-					await w.WriteLineAsync("\t}");
-					await w.WriteLineAsync("}");
-					await w.WriteLineAsync();
+					await WriteActorAsync(w, definition, prefixReplacements);
 				}
+			}
+
+			await w.WriteLineAsync("// Misc");
+			await w.WriteLineAsync();
+
+			var additionalDefinitions = new[]
+			{
+				"BulletPuff",
+				"DoomImpBall",
+				"PlasmaBall",
+				"Rocket",
+				"Fist",
+				"Pistol",
+			}.Select(name => actorDefs[name]);
+
+			foreach (var definition in additionalDefinitions)
+			{
+				var prefixReplacements = definition
+					.SpritePrefixes.Select(prefix => (OldPrefix: prefix, NewPrefix: $"K{prefixNum++:000}"))
+					.ToList();
+
+				foreach (var (spritePrefix, newPrefix) in prefixReplacements)
+				{
+					foreach (var frameName in framesToConvert[spritePrefix])
+					{
+						var newFrameName = newPrefix + frameName[7..];
+						await Console.Out.WriteLineAsync($"{frameName} => {newFrameName}");
+						File.Move(Path.Combine(frameDir, frameName), Path.Combine(frameDir, newFrameName));
+					}
+				}
+
+				await WriteActorAsync(w, definition, prefixReplacements);
 			}
 		}
 
-		// TODO: Manually add in the actor definitions that don't show up in the map (plasma, rocket, fist, pistol, imp fireball)
-		// TODO: Sounds for monsters
-		// TODO: Sounds for weapons
-		// TODO: Shotgun Guy drops Doom Shotgun, not Kick Shotgun
+		// TODO: Keys don't work - something with LOCKDEFS
 
 		var idConversion = usedActors
 			.Select((a, i) => (a.Id, i))
@@ -218,6 +272,28 @@ public sealed partial class FixKickAttack
 
 		await using var newWadFs = File.Open(Path.Combine(ProjectPath, "maps", "KICK.wad"), FileMode.Create);
 		WadWriter.WriteTo([new Marker("MAP01"), new UdmfLump("TEXTMAP", fixedMap), new Marker("ENDMAP")], newWadFs);
+
+		static async Task WriteActorAsync(
+			StreamWriter w,
+			ActorDef definition,
+			List<(string OldPrefix, string NewPrefix)> prefixReplacements
+		)
+		{
+			await w.WriteLineAsync($"class Kick{definition.Name} : {definition.Name}");
+			await w.WriteLineAsync("{");
+			await w.WriteLineAsync("\tStates");
+			await w.WriteLineAsync("\t{");
+			foreach (var line in definition.StateLines)
+			{
+				await w.WriteLineAsync(
+					prefixReplacements.Aggregate(line, (l, pair) => l.Replace(pair.OldPrefix, pair.NewPrefix))
+				);
+			}
+
+			await w.WriteLineAsync("\t}");
+			await w.WriteLineAsync("}");
+			await w.WriteLineAsync();
+		}
 	}
 
 	private static IReadOnlySet<string> GetStringPrefixesFromDoom2()
