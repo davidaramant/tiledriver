@@ -3,7 +3,7 @@
 
 using System.Collections.Immutable;
 using System.Text;
-using FluentAssertions;
+using Shouldly;
 using Tiledriver.Core.FormatModels.Udmf;
 using Tiledriver.Core.FormatModels.Udmf.Writing;
 using Xunit;
@@ -17,9 +17,9 @@ public sealed class UdmfWriterTests
 	{
 		var map = new MapData(
 			NameSpace: "Doom",
-			Vertices: ImmutableArray.Create(new Vertex(1, 2)),
+			Vertices: [new Vertex(1, 2)],
 			LineDefs: ImmutableArray<LineDef>.Empty,
-			SideDefs: ImmutableArray.Create(new SideDef(sector: 0, textureMiddle: "texture")),
+			SideDefs: [new SideDef(sector: 0, textureMiddle: "texture")],
 			Sectors: ImmutableArray<Sector>.Empty,
 			Things: ImmutableArray<Thing>.Empty
 		);
@@ -55,6 +55,6 @@ public sealed class UdmfWriterTests
 			sb.Append("\r\n");
 		}
 
-		actual.Should().Be(sb.ToString());
+		actual.ShouldBe(sb.ToString());
 	}
 }

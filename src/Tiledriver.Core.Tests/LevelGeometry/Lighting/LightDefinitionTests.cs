@@ -1,7 +1,7 @@
 // Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using FluentAssertions;
+using Shouldly;
 using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.LevelGeometry.Lighting;
 using Xunit;
@@ -36,6 +36,6 @@ public sealed class LightDefinitionTests
 	{
 		var light = new LightDefinition(Center: new Position(3, 3), Brightness: 6, Radius: 2, Height: height);
 
-		light.GetBrightness(location).Should().Be(brightness);
+		light.GetBrightness(location).ShouldBe(brightness);
 	}
 }

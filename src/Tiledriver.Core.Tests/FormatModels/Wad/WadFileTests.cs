@@ -1,7 +1,7 @@
 // Copyright (c) 2016, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using FluentAssertions;
+using Shouldly;
 using Tiledriver.Core.DemoMaps.Wolf3D;
 using Tiledriver.Core.FormatModels.Uwmf.Reading;
 using Tiledriver.Core.FormatModels.Wad;
@@ -29,12 +29,11 @@ public sealed class WadFileTests
 			WadWriter.SaveTo(lumps, fileInfo.FullName);
 
 			var wad = WadFile.Read(fileInfo.FullName);
-			wad.Should().HaveCount(3);
+			wad.Count.ShouldBe(3);
 
 			wad.Select(l => l.Name)
-				.Should()
-				.BeEquivalentTo(
-					new[] { new LumpName("MAP01"), new LumpName("TEXTMAP"), new LumpName("ENDMAP") },
+				.ShouldBe(
+					[new LumpName("MAP01"), new LumpName("TEXTMAP"), new LumpName("ENDMAP")],
 					"correct lump names should have been read."
 				);
 

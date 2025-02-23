@@ -2,7 +2,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Immutable;
-using FluentAssertions;
+using Shouldly;
 using Tiledriver.Core.FormatModels.Uwmf;
 
 namespace Tiledriver.Core.Tests.FormatModels.Uwmf.Reading;
@@ -11,13 +11,13 @@ public static class UwmfComparison
 {
 	public static void AssertEqual(MapData actual, MapData expected)
 	{
-		actual.NameSpace.Should().Be(expected.NameSpace);
-		actual.TileSize.Should().Be(expected.TileSize);
-		actual.Name.Should().Be(expected.Name);
-		actual.Width.Should().Be(expected.Width);
-		actual.Height.Should().Be(expected.Height);
-		actual.TileSize.Should().Be(expected.TileSize);
-		actual.Width.Should().Be(expected.Width);
+		actual.NameSpace.ShouldBe(expected.NameSpace);
+		actual.TileSize.ShouldBe(expected.TileSize);
+		actual.Name.ShouldBe(expected.Name);
+		actual.Width.ShouldBe(expected.Width);
+		actual.Height.ShouldBe(expected.Height);
+		actual.TileSize.ShouldBe(expected.TileSize);
+		actual.Width.ShouldBe(expected.Width);
 
 		CompareCollections(actual: actual.Planes, expected: expected.Planes);
 		CompareCollections(actual: actual.Sectors, expected: expected.Sectors);
@@ -26,19 +26,18 @@ public static class UwmfComparison
 		CompareCollections(actual: actual.Triggers, expected: expected.Triggers);
 		CompareCollections(actual: actual.Zones, expected: expected.Zones);
 
-		actual.PlaneMaps.Should().HaveCount(expected.PlaneMaps.Length);
+		actual.PlaneMaps.Length.ShouldBe(expected.PlaneMaps.Length);
 
 		for (int index = 0; index < actual.PlaneMaps.Length; index++)
 		{
 			actual
 				.PlaneMaps[index]
-				.Should()
-				.BeEquivalentTo(expected.PlaneMaps[index], options => options.ComparingByMembers<MapSquare>());
+				.ShouldBeEquivalentTo(expected.PlaneMaps[index]);
 		}
 	}
 
 	private static void CompareCollections<T>(ImmutableArray<T> actual, ImmutableArray<T> expected)
 	{
-		actual.Should().BeEquivalentTo(expected, options => options.ComparingByMembers<T>());
+		actual.ShouldBeEquivalentTo(expected);
 	}
 }

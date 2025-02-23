@@ -2,7 +2,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Text;
-using FluentAssertions;
+using Shouldly;
 using Tiledriver.Core.DemoMaps.Wolf3D;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Common.Reading;
@@ -24,8 +24,8 @@ public sealed class UnifiedLexerTests
 	public void ShouldLexInteger(string input, int expected)
 	{
 		var tokens = Scan(input);
-		tokens.Should().HaveCount(1);
-		tokens[0].Should().BeOfType<IntegerToken>().Which.Value.Should().Be(expected);
+		tokens.Length.ShouldBe(1);
+		tokens[0].ShouldBeOfType<IntegerToken>().Value.ShouldBe(expected);
 	}
 
 	[Theory]
@@ -37,8 +37,8 @@ public sealed class UnifiedLexerTests
 	public void ShouldLexFloat(string input, double expected)
 	{
 		var tokens = Scan(input);
-		tokens.Should().HaveCount(1);
-		tokens[0].Should().BeOfType<FloatToken>().Which.Value.Should().Be(expected);
+		tokens.Length.ShouldBe(1);
+		tokens[0].ShouldBeOfType<FloatToken>().Value.ShouldBe(expected);
 	}
 
 	[Theory]
@@ -47,8 +47,8 @@ public sealed class UnifiedLexerTests
 	public void ShouldLexBoolean(string input, bool expected)
 	{
 		var tokens = Scan(input);
-		tokens.Should().HaveCount(1);
-		tokens[0].Should().BeOfType<BooleanToken>().Which.Value.Should().Be(expected);
+		tokens.Length.ShouldBe(1);
+		tokens[0].ShouldBeOfType<BooleanToken>().Value.ShouldBe(expected);
 	}
 
 	[Theory]
@@ -57,8 +57,8 @@ public sealed class UnifiedLexerTests
 	public void ShouldLexString(string input, string expected)
 	{
 		var tokens = Scan(input);
-		tokens.Should().HaveCount(1);
-		tokens[0].Should().BeOfType<StringToken>().Which.Value.Should().Be(expected);
+		tokens.Length.ShouldBe(1);
+		tokens[0].ShouldBeOfType<StringToken>().Value.ShouldBe(expected);
 	}
 
 	[Theory]
@@ -71,8 +71,8 @@ public sealed class UnifiedLexerTests
 	public void ShouldLexIdentifier(string id)
 	{
 		var tokens = Scan(id);
-		tokens.Should().HaveCount(1);
-		tokens[0].Should().BeOfType<IdentifierToken>().Which.Id.Should().Be(new Identifier(id));
+		tokens.Length.ShouldBe(1);
+		tokens[0].ShouldBeOfType<IdentifierToken>().Id.ShouldBe(new Identifier(id));
 	}
 
 	[Theory]
@@ -85,47 +85,47 @@ public sealed class UnifiedLexerTests
 	public void ShouldLexAssignment(string input)
 	{
 		var tokens = Scan(input);
-		tokens.Should().HaveCount(4);
-		tokens[0].Should().BeOfType<IdentifierToken>();
-		tokens[1].Should().BeOfType<EqualsToken>();
-		tokens[2].Should().BeOfType<IntegerToken>();
-		tokens[3].Should().BeOfType<SemicolonToken>();
+		tokens.Length.ShouldBe(4);
+		tokens[0].ShouldBeOfType<IdentifierToken>();
+		tokens[1].ShouldBeOfType<EqualsToken>();
+		tokens[2].ShouldBeOfType<IntegerToken>();
+		tokens[3].ShouldBeOfType<SemicolonToken>();
 	}
 
 	[Fact]
 	public void ShouldLexBlock()
 	{
 		var tokens = Scan("blockName{}");
-		tokens.Should().HaveCount(3);
-		tokens[0].Should().BeOfType<IdentifierToken>();
-		tokens[1].Should().BeOfType<OpenBraceToken>();
-		tokens[2].Should().BeOfType<CloseBraceToken>();
+		tokens.Length.ShouldBe(3);
+		tokens[0].ShouldBeOfType<IdentifierToken>();
+		tokens[1].ShouldBeOfType<OpenBraceToken>();
+		tokens[2].ShouldBeOfType<CloseBraceToken>();
 	}
 
 	[Fact]
 	public void ShouldLexNewLines()
 	{
 		var tokens = Scan("blockName\n{\n}\n", createLexer: reader => new UnifiedLexer(reader, reportNewlines: true));
-		tokens.Should().HaveCount(6);
-		tokens[0].Should().BeOfType<IdentifierToken>();
-		tokens[1].Should().BeOfType<NewLineToken>();
-		tokens[2].Should().BeOfType<OpenBraceToken>();
-		tokens[3].Should().BeOfType<NewLineToken>();
-		tokens[4].Should().BeOfType<CloseBraceToken>();
+		tokens.Length.ShouldBe(6);
+		tokens[0].ShouldBeOfType<IdentifierToken>();
+		tokens[1].ShouldBeOfType<NewLineToken>();
+		tokens[2].ShouldBeOfType<OpenBraceToken>();
+		tokens[3].ShouldBeOfType<NewLineToken>();
+		tokens[4].ShouldBeOfType<CloseBraceToken>();
 	}
 
 	[Fact]
 	public void ShouldLexTuple()
 	{
 		var tokens = Scan("{1,2,-3}");
-		tokens.Should().HaveCount(7);
-		tokens[0].Should().BeOfType<OpenBraceToken>();
-		tokens[1].Should().BeOfType<IntegerToken>().Which.Value.Should().Be(1);
-		tokens[2].Should().BeOfType<CommaToken>();
-		tokens[3].Should().BeOfType<IntegerToken>().Which.Value.Should().Be(2);
-		tokens[4].Should().BeOfType<CommaToken>();
-		tokens[5].Should().BeOfType<IntegerToken>().Which.Value.Should().Be(-3);
-		tokens[6].Should().BeOfType<CloseBraceToken>();
+		tokens.Length.ShouldBe(7);
+		tokens[0].ShouldBeOfType<OpenBraceToken>();
+		tokens[1].ShouldBeOfType<IntegerToken>().Value.ShouldBe(1);
+		tokens[2].ShouldBeOfType<CommaToken>();
+		tokens[3].ShouldBeOfType<IntegerToken>().Value.ShouldBe(2);
+		tokens[4].ShouldBeOfType<CommaToken>();
+		tokens[5].ShouldBeOfType<IntegerToken>().Value.ShouldBe(-3);
+		tokens[6].ShouldBeOfType<CloseBraceToken>();
 	}
 
 	[Fact]
@@ -138,8 +138,8 @@ public sealed class UnifiedLexerTests
 	public void ShouldNotThrowIfExpectingDollarSign()
 	{
 		var tokens = Scan("$id", r => new UnifiedLexer(r, allowDollarIdentifiers: true));
-		tokens.Should().HaveCount(1);
-		tokens[0].Should().BeOfType<IdentifierToken>().Which.Id.ToLower().Should().Be("$id");
+		tokens.Length.ShouldBe(1);
+		tokens[0].ShouldBeOfType<IdentifierToken>().Id.ToLower().ShouldBe("$id");
 	}
 
 	[Fact]
@@ -152,8 +152,8 @@ public sealed class UnifiedLexerTests
 	public void ShouldNotThrowIfExpectingPipe()
 	{
 		var tokens = Scan("|", r => new UnifiedLexer(r, allowPipes: true));
-		tokens.Should().HaveCount(1);
-		tokens[0].Should().BeOfType<PipeToken>();
+		tokens.Length.ShouldBe(1);
+		tokens[0].ShouldBeOfType<PipeToken>();
 	}
 
 	private static Token[] Scan(string input, Func<StringReader, UnifiedLexer>? createLexer = null)

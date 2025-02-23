@@ -2,7 +2,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Immutable;
-using FluentAssertions;
+using Shouldly;
 using Tiledriver.Core.DemoMaps.Wolf3D;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.GameInfo.Wolf3D;
@@ -57,8 +57,8 @@ public class LevelMapperTest
 		var levelMap = new LevelMapper().Map(_data);
 		var room = levelMap.StartingRoom;
 
-		room.Should().NotBeNull();
-		room.Locations.Count.Should().Be(1);
+		room.ShouldNotBeNull();
+		room.Locations.Count.ShouldBe(1);
 		AssertLocationInRoom(room, 2, 2);
 	}
 
@@ -79,8 +79,8 @@ public class LevelMapperTest
 		var levelMap = new LevelMapper().Map(_data);
 		var room = levelMap.StartingRoom;
 
-		room.Should().NotBeNull();
-		room.Locations.Count.Should().Be(4);
+		room.ShouldNotBeNull();
+		room.Locations.Count.ShouldBe(4);
 		AssertLocationInRoom(room, 2, 2);
 		AssertLocationInRoom(room, 3, 2);
 		AssertLocationInRoom(room, 2, 3);
@@ -113,8 +113,8 @@ public class LevelMapperTest
 		var levelMap = new LevelMapper().Map(_data);
 		var room = levelMap.StartingRoom;
 
-		room.Should().NotBeNull();
-		room.Locations.Count.Should().Be(9);
+		room.ShouldNotBeNull();
+		room.Locations.Count.ShouldBe(9);
 
 		AssertLocationInRoom(room, 2, 2);
 		AssertLocationInRoom(room, 3, 2);
@@ -156,8 +156,8 @@ public class LevelMapperTest
 		var levelMap = new LevelMapper().Map(_data);
 		var room = levelMap.StartingRoom;
 
-		room.Should().NotBeNull();
-		room.Locations.Count.Should().Be(11);
+		room.ShouldNotBeNull();
+		room.Locations.Count.ShouldBe(11);
 
 		AssertLocationInRoom(room, 2, 2);
 		AssertLocationInRoom(room, 3, 2);
@@ -192,8 +192,8 @@ public class LevelMapperTest
 		var levelMap = new LevelMapper().Map(_data);
 		var room = levelMap.StartingRoom;
 
-		room.Should().NotBeNull();
-		room.Locations.Count.Should().Be(3);
+		room.ShouldNotBeNull();
+		room.Locations.Count.ShouldBe(3);
 		AssertLocationInRoom(room, 2, 2);
 		AssertLocationInRoom(room, 3, 2);
 		AssertLocationInRoom(room, 2, 3);
@@ -227,8 +227,8 @@ public class LevelMapperTest
 		var levelMap = new LevelMapper().Map(_data);
 		var room = levelMap.StartingRoom;
 
-		room.Should().NotBeNull();
-		room.Locations.Count.Should().Be(3);
+		room.ShouldNotBeNull();
+		room.Locations.Count.ShouldBe(3);
 		AssertLocationInRoom(room, 2, 2);
 		AssertLocationInRoom(room, 3, 2);
 		AssertLocationInRoom(room, 2, 3);
@@ -260,8 +260,8 @@ public class LevelMapperTest
 		var levelMap = new LevelMapper().Map(_data);
 		var room = levelMap.StartingRoom;
 
-		room.Should().NotBeNull();
-		room.Locations.Count.Should().Be(1);
+		room.ShouldNotBeNull();
+		room.Locations.Count.ShouldBe(1);
 
 		AssertLocationInRoom(room, 3, 3);
 	}
@@ -289,21 +289,20 @@ public class LevelMapperTest
 		var levelMap = new LevelMapper().Map(_data);
 		var room = levelMap.StartingRoom;
 
-		room.Should().NotBeNull();
+		room.ShouldNotBeNull();
 
-		room.Locations.Count.Should().Be(4);
+		room.Locations.Count.ShouldBe(4);
 		AssertLocationInRoom(room, 2, 2);
 		AssertLocationInRoom(room, 3, 2);
 		AssertLocationInRoom(room, 2, 3);
 		AssertLocationInRoom(room, 3, 3);
 
-		room.AdjacentRooms.Count.Should().Be(1);
+		room.AdjacentRooms.Count.ShouldBe(1);
 
 		var firstTransition = room.AdjacentRooms.First();
 
-		firstTransition.Key.Count.Should().Be(1);
-		firstTransition.Should().NotBeNull();
-		firstTransition.Value.Locations.Count.Should().Be(2);
+		firstTransition.Key.Count.ShouldBe(1);
+		firstTransition.Value.Locations.Count.ShouldBe(2);
 		AssertLocationInRoom(firstTransition.Value, 5, 2);
 		AssertLocationInRoom(firstTransition.Value, 5, 3);
 	}
@@ -333,21 +332,20 @@ public class LevelMapperTest
 		var levelMap = new LevelMapper().Map(_data);
 		var room = levelMap.StartingRoom;
 
-		room.Should().NotBeNull();
+		room.ShouldNotBeNull();
 
-		room.Locations.Count.Should().Be(4);
+		room.Locations.Count.ShouldBe(4);
 		AssertLocationInRoom(room, 2, 2);
 		AssertLocationInRoom(room, 3, 2);
 		AssertLocationInRoom(room, 2, 3);
 		AssertLocationInRoom(room, 3, 3);
 
-		room.AdjacentRooms.Count.Should().Be(1);
+		room.AdjacentRooms.Count.ShouldBe(1);
 
 		var firstTransition = room.AdjacentRooms.First();
 
-		firstTransition.Key.Count.Should().Be(3);
-		firstTransition.Should().NotBeNull();
-		firstTransition.Value.Locations.Count.Should().Be(2);
+		firstTransition.Key.Count.ShouldBe(3);
+		firstTransition.Value.Locations.Count.ShouldBe(2);
 		AssertLocationInRoom(firstTransition.Value, 7, 2);
 		AssertLocationInRoom(firstTransition.Value, 7, 3);
 	}
@@ -375,15 +373,15 @@ public class LevelMapperTest
 		var levelMap = new LevelMapper().Map(_data);
 		var room = levelMap.StartingRoom;
 
-		room.Should().NotBeNull();
+		room.ShouldNotBeNull();
 
-		room.Locations.Count.Should().Be(4);
+		room.Locations.Count.ShouldBe(4);
 		AssertLocationInRoom(room, 2, 2);
 		AssertLocationInRoom(room, 3, 2);
 		AssertLocationInRoom(room, 2, 3);
 		AssertLocationInRoom(room, 3, 3);
 
-		room.AdjacentRooms.Count.Should().Be(0);
+		room.AdjacentRooms.Count.ShouldBe(0);
 	}
 
 	/// <remarks>
@@ -410,21 +408,20 @@ public class LevelMapperTest
 		var levelMap = new LevelMapper().Map(_data);
 		var room = levelMap.StartingRoom;
 
-		room.Should().NotBeNull();
+		room.ShouldNotBeNull();
 
-		room.Locations.Count.Should().Be(4);
+		room.Locations.Count.ShouldBe(4);
 		AssertLocationInRoom(room, 2, 2);
 		AssertLocationInRoom(room, 3, 2);
 		AssertLocationInRoom(room, 2, 3);
 		AssertLocationInRoom(room, 3, 3);
 
-		room.AdjacentRooms.Count.Should().Be(1);
+		room.AdjacentRooms.Count.ShouldBe(1);
 
 		var firstTransition = room.AdjacentRooms.First();
 
-		firstTransition.Key.Count.Should().Be(1);
-		firstTransition.Should().NotBeNull();
-		firstTransition.Value.Locations.Count.Should().Be(2);
+		firstTransition.Key.Count.ShouldBe(1);
+		firstTransition.Value.Locations.Count.ShouldBe(2);
 		AssertLocationInRoom(firstTransition.Value, 5, 2);
 		AssertLocationInRoom(firstTransition.Value, 5, 3);
 	}
@@ -452,21 +449,20 @@ public class LevelMapperTest
 		var levelMap = new LevelMapper().Map(_data);
 		var room = levelMap.StartingRoom;
 
-		room.Should().NotBeNull();
+		room.ShouldNotBeNull();
 
-		room.Locations.Count.Should().Be(4);
+		room.Locations.Count.ShouldBe(4);
 		AssertLocationInRoom(room, 2, 2);
 		AssertLocationInRoom(room, 3, 2);
 		AssertLocationInRoom(room, 2, 3);
 		AssertLocationInRoom(room, 3, 3);
 
-		room.AdjacentRooms.Count.Should().Be(1);
+		room.AdjacentRooms.Count.ShouldBe(1);
 
 		var firstTransition = room.AdjacentRooms.First();
 
-		firstTransition.Key.Count.Should().Be(1);
-		firstTransition.Should().NotBeNull();
-		firstTransition.Value.Locations.Count.Should().Be(2);
+		firstTransition.Key.Count.ShouldBe(1);
+		firstTransition.Value.Locations.Count.ShouldBe(2);
 		AssertLocationInRoom(firstTransition.Value, 5, 2);
 		AssertLocationInRoom(firstTransition.Value, 5, 3);
 	}
@@ -582,6 +578,6 @@ public class LevelMapperTest
 
 	private static void AssertLocationInRoom(IRoom room, int x, int y)
 	{
-		room.Locations.Should().Contain(location => location.X == x && location.Y == y);
+		room.Locations.ShouldContain(location => location.X == x && location.Y == y);
 	}
 }

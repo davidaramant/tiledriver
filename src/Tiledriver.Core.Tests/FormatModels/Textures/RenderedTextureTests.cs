@@ -1,7 +1,7 @@
 // Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using FluentAssertions;
+using Shouldly;
 using SkiaSharp;
 using Tiledriver.Core.FormatModels.Textures;
 using Xunit;
@@ -16,6 +16,6 @@ public sealed class RenderedTextureTests
 		using var stream = new MemoryStream();
 		var texture = new RenderedTexture(BackgroundColor: SKColors.White, Text: "Test");
 		texture.RenderTo(stream);
-		stream.Length.Should().BeGreaterThan(0);
+		stream.Length.ShouldBeGreaterThan(0);
 	}
 }

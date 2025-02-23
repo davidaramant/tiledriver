@@ -3,7 +3,7 @@
 
 using System.Collections.Immutable;
 using System.Text;
-using FluentAssertions;
+using Shouldly;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.FormatModels.Uwmf.Writing;
 using Xunit;
@@ -21,15 +21,17 @@ public sealed class UwmfWriterTests
 			Name: "Some Name",
 			Width: 2,
 			Height: 1,
-			Tiles: ImmutableArray.Create(
+			Tiles:
+			[
 				new Tile(TextureEast: "east", TextureNorth: "north", TextureWest: "west", TextureSouth: "south")
-			),
+			],
 			Sectors: ImmutableArray<Sector>.Empty,
 			Zones: ImmutableArray<Zone>.Empty,
 			Planes: ImmutableArray<Plane>.Empty,
-			PlaneMaps: ImmutableArray.Create(
+			PlaneMaps:
+			[
 				new[] { new MapSquare(1, 2, 3), new MapSquare(4, 5, 6, 7) }.ToImmutableArray()
-			),
+			],
 			Things: ImmutableArray<Thing>.Empty,
 			Triggers: ImmutableArray<Trigger>.Empty
 		);
@@ -68,6 +70,6 @@ public sealed class UwmfWriterTests
 			sb.AppendLine(line);
 		}
 
-		actual.Should().Be(sb.ToString());
+		actual.ShouldBe(sb.ToString());
 	}
 }

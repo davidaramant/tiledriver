@@ -1,7 +1,7 @@
 // Copyright (c) 2022, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using FluentAssertions;
+using Shouldly;
 using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 using Tiledriver.Core.LevelGeometry.CaveGeneration.Doom.SquareModel;
@@ -15,8 +15,7 @@ public sealed class SectorEdgeGraphTests
 	public void ShouldConnectTwoEdges()
 	{
 		var graph = SectorEdgeGraph.FromEdges(
-			new[]
-			{
+			[
 				BuildEdge(
 					Position.Origin,
 					EdgeSegmentId.DiagBottomRight,
@@ -28,20 +27,19 @@ public sealed class SectorEdgeGraphTests
 					EdgeSegmentId.DiagTopLeft,
 					left: SquarePoint.LeftMiddle,
 					right: SquarePoint.TopMiddle
-				),
-			}
+				)
+			]
 		);
 
-		graph.EdgeCount.Should().Be(2);
-		graph.GetEdgesConnectedTo(new LatticePoint(Position.Origin, SquarePoint.RightMiddle)).Should().HaveCount(2);
+		graph.EdgeCount.ShouldBe(2);
+		graph.GetEdgesConnectedTo(new LatticePoint(Position.Origin, SquarePoint.RightMiddle)).Count().ShouldBe(2);
 	}
 
 	[Fact]
 	public void ShouldSimplifyHorizontalEdges()
 	{
 		var graph = SectorEdgeGraph.FromEdges(
-			new[]
-			{
+			[
 				BuildEdge(
 					new Position(0, 0),
 					EdgeSegmentId.HorizontalLeft,
@@ -65,24 +63,23 @@ public sealed class SectorEdgeGraphTests
 					EdgeSegmentId.HorizontalRight,
 					left: SquarePoint.Center,
 					right: SquarePoint.RightMiddle
-				),
-			}
+				)
+			]
 		);
 
 		var simpleGraph = graph.Simplify();
 
-		simpleGraph.EdgeCount.Should().Be(1);
+		simpleGraph.EdgeCount.ShouldBe(1);
 		var edge = simpleGraph.GetAllEdges().First();
-		edge.Start.Should().Be(new LatticePoint(new Position(0, 0), SquarePoint.LeftMiddle));
-		edge.End.Should().Be(new LatticePoint(new Position(1, 0), SquarePoint.RightMiddle));
+		edge.Start.ShouldBe(new LatticePoint(new Position(0, 0), SquarePoint.LeftMiddle));
+		edge.End.ShouldBe(new LatticePoint(new Position(1, 0), SquarePoint.RightMiddle));
 	}
 
 	[Fact]
 	public void ShouldSimplifyVerticalEdges()
 	{
 		var graph = SectorEdgeGraph.FromEdges(
-			new[]
-			{
+			[
 				BuildEdge(
 					new Position(0, 0),
 					EdgeSegmentId.VerticalTop,
@@ -106,24 +103,23 @@ public sealed class SectorEdgeGraphTests
 					EdgeSegmentId.VerticalBottom,
 					left: SquarePoint.Center,
 					right: SquarePoint.BottomMiddle
-				),
-			}
+				)
+			]
 		);
 
 		var simpleGraph = graph.Simplify();
 
-		simpleGraph.EdgeCount.Should().Be(1);
+		simpleGraph.EdgeCount.ShouldBe(1);
 		var edge = simpleGraph.GetAllEdges().First();
-		edge.Start.Should().Be(new LatticePoint(new Position(0, 0), SquarePoint.TopMiddle));
-		edge.End.Should().Be(new LatticePoint(new Position(0, -1), SquarePoint.BottomMiddle));
+		edge.Start.ShouldBe(new LatticePoint(new Position(0, 0), SquarePoint.TopMiddle));
+		edge.End.ShouldBe(new LatticePoint(new Position(0, -1), SquarePoint.BottomMiddle));
 	}
 
 	[Fact]
 	public void ShouldSimplifyPositiveSlopedEdges()
 	{
 		var graph = SectorEdgeGraph.FromEdges(
-			new[]
-			{
+			[
 				BuildEdge(
 					new Position(0, 0),
 					EdgeSegmentId.DiagTopLeft,
@@ -147,16 +143,16 @@ public sealed class SectorEdgeGraphTests
 					EdgeSegmentId.DiagBottomRight,
 					left: SquarePoint.BottomMiddle,
 					right: SquarePoint.RightMiddle
-				),
-			}
+				)
+			]
 		);
 
 		var simpleGraph = graph.Simplify();
 
-		simpleGraph.EdgeCount.Should().Be(1);
+		simpleGraph.EdgeCount.ShouldBe(1);
 		var edge = simpleGraph.GetAllEdges().First();
-		edge.Start.Should().Be(new LatticePoint(new Position(0, 0), SquarePoint.LeftMiddle));
-		edge.End.Should().Be(new LatticePoint(new Position(1, 2), SquarePoint.RightMiddle));
+		edge.Start.ShouldBe(new LatticePoint(new Position(0, 0), SquarePoint.LeftMiddle));
+		edge.End.ShouldBe(new LatticePoint(new Position(1, 2), SquarePoint.RightMiddle));
 	}
 
 	private static SectorEdge BuildEdge(Position square, EdgeSegmentId id, SquarePoint left, SquarePoint right) =>

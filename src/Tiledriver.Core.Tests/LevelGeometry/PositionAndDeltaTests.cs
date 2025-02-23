@@ -1,7 +1,7 @@
 // Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using FluentAssertions;
+using Shouldly;
 using Tiledriver.Core.LevelGeometry;
 using Xunit;
 
@@ -18,7 +18,7 @@ public sealed class PositionAndDeltaTests
 		var delta = p2 - p1;
 		var p3 = p1 + delta;
 
-		p3.Should().Be(p2);
+		p3.ShouldBe(p2);
 	}
 
 	[Fact]
@@ -29,6 +29,6 @@ public sealed class PositionAndDeltaTests
 
 		var d3 = d1 - d2;
 
-		d3.Should().Be(d2);
+		d3.ShouldBe(d2);
 	}
 }

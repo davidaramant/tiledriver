@@ -1,7 +1,7 @@
 // Copyright (c) 2022, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using FluentAssertions;
+using Shouldly;
 using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 using Tiledriver.Core.LevelGeometry.CaveGeneration.Doom.SquareModel;
@@ -94,7 +94,7 @@ public sealed class SquareLayerTransitionTests
 
 		foreach (var segmentAndHeight in expectedHeight)
 		{
-			lookup(segmentAndHeight.Key).Should().Be(segmentAndHeight.Value);
+			lookup(segmentAndHeight.Key).ShouldBe(segmentAndHeight.Value);
 		}
 	}
 }

@@ -1,7 +1,7 @@
 // Copyright (c) 2022, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using FluentAssertions;
+using Shouldly;
 using Tiledriver.Core.Extensions.Collections;
 using Xunit;
 
@@ -13,6 +13,6 @@ public sealed class CollectionExtensionTests
 	public void ShouldReturnDefaultFromGetValueOrIfValueDoesNotExist()
 	{
 		var dict = new Dictionary<int, int>();
-		dict.GetValueOr(0, 1).Should().Be(1);
+		dict.GetValueOr(0, 1).ShouldBe(1);
 	}
 }

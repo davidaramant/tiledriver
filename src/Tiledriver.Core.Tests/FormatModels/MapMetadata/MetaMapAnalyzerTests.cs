@@ -2,7 +2,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Collections.Immutable;
-using FluentAssertions;
+using Shouldly;
 using Tiledriver.Core.FormatModels.MapMetadata;
 using Tiledriver.Core.FormatModels.Uwmf;
 using Tiledriver.Core.GameInfo.Wolf3D;
@@ -190,7 +190,7 @@ public sealed class MetaMapAnalyzerTests
 			}
 		}
 
-		failures.Should().BeEmpty();
+		failures.ShouldBeEmpty();
 	}
 
 	private static TileType ExpandTile(char shortHandType) =>
@@ -252,7 +252,8 @@ public sealed class MetaMapAnalyzerTests
 			Name: "To Analyze",
 			Width: width,
 			Height: height,
-			Tiles: ImmutableArray.Create(
+			Tiles:
+			[
 				new Tile(
 					TextureNorth: "GSTONEA1",
 					TextureSouth: "GSTONEA1",
@@ -271,11 +272,11 @@ public sealed class MetaMapAnalyzerTests
 					BlockingEast: false,
 					Comment: "HoloWall"
 				)
-			),
-			Sectors: ImmutableArray.Create(new Sector(TextureCeiling: "#C0C0C0", TextureFloor: "#A0A0A0")),
-			Zones: ImmutableArray.Create(new Zone()),
-			Planes: ImmutableArray.Create(new Plane(Depth: 64)),
-			PlaneMaps: ImmutableArray.Create(planeMap.ToImmutableArray()),
+			],
+			Sectors: [new Sector(TextureCeiling: "#C0C0C0", TextureFloor: "#A0A0A0")],
+			Zones: [new Zone()],
+			Planes: [new Plane(Depth: 64)],
+			PlaneMaps: [planeMap.ToImmutableArray()],
 			Things: things.ToImmutableArray(),
 			Triggers: triggers.ToImmutableArray()
 		);

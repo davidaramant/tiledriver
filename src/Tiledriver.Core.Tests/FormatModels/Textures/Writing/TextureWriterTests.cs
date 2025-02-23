@@ -3,7 +3,7 @@
 
 using System.Collections.Immutable;
 using System.Text;
-using FluentAssertions;
+using Shouldly;
 using Tiledriver.Core.FormatModels.Textures;
 using Tiledriver.Core.FormatModels.Textures.Writing;
 using Xunit;
@@ -19,12 +19,13 @@ public sealed class TextureWriterTests
 			"ALADDER2",
 			72,
 			256,
-			Patches: ImmutableArray.Create(
+			Patches:
+			[
 				new Patch("RW45_1", 0, 0, Rotate: PatchRotation.Rotate90),
 				new Patch("RW45_1", 0, 64, Rotate: PatchRotation.Rotate90),
 				new Patch("RW45_1", 0, 128, Rotate: PatchRotation.Rotate90),
 				new Patch("RW45_1", 0, 172, Rotate: PatchRotation.Rotate90)
-			)
+			]
 		);
 
 		var actual = GetText(texture);
@@ -51,7 +52,7 @@ public sealed class TextureWriterTests
 			"}"
 		);
 
-		actual.Should().Be(expected);
+		actual.ShouldBe(expected);
 	}
 
 	[Fact]
@@ -63,10 +64,11 @@ public sealed class TextureWriterTests
 			512,
 			XScale: 4,
 			YScale: 4,
-			Patches: ImmutableArray.Create(
+			Patches:
+			[
 				new Patch("AG_512_2", 0, 0),
 				new Patch("MSW1_UP", 64, 288, Style: RenderStyle.CopyAlpha)
-			)
+			]
 		);
 
 		var actual = GetText(texture);
@@ -84,7 +86,7 @@ public sealed class TextureWriterTests
 			"}"
 		);
 
-		actual.Should().Be(expected);
+		actual.ShouldBe(expected);
 	}
 
 	[Fact]
@@ -102,7 +104,7 @@ public sealed class TextureWriterTests
 
 		var expected = Assemble("Texture Name, 10, 10", "{", "\tOffset 5, 6", "}");
 
-		actual.Should().Be(expected);
+		actual.ShouldBe(expected);
 	}
 
 	[Fact]
@@ -112,7 +114,7 @@ public sealed class TextureWriterTests
 			"Name",
 			10,
 			10,
-			Patches: ImmutableArray.Create(new Patch("Name2", 0, 0, Translation: new Translation.Blue()))
+			Patches: [new Patch("Name2", 0, 0, Translation: new Translation.Blue())]
 		);
 
 		var actual = GetText(texture);
@@ -127,7 +129,7 @@ public sealed class TextureWriterTests
 			"}"
 		);
 
-		actual.Should().Be(expected);
+		actual.ShouldBe(expected);
 	}
 
 	[Fact]
@@ -137,7 +139,7 @@ public sealed class TextureWriterTests
 			"Name",
 			10,
 			10,
-			Patches: ImmutableArray.Create(new Patch("Name2", 0, 0, Translation: new Translation.Custom("SomeString")))
+			Patches: [new Patch("Name2", 0, 0, Translation: new Translation.Custom("SomeString"))]
 		);
 
 		var actual = GetText(texture);
@@ -152,7 +154,7 @@ public sealed class TextureWriterTests
 			"}"
 		);
 
-		actual.Should().Be(expected);
+		actual.ShouldBe(expected);
 	}
 
 	[Fact]
@@ -162,7 +164,7 @@ public sealed class TextureWriterTests
 			"Name",
 			10,
 			10,
-			Patches: ImmutableArray.Create(new Patch("Name2", 0, 0, Translation: new Translation.Desaturate(20)))
+			Patches: [new Patch("Name2", 0, 0, Translation: new Translation.Desaturate(20))]
 		);
 
 		var actual = GetText(texture);
@@ -177,19 +179,19 @@ public sealed class TextureWriterTests
 			"}"
 		);
 
-		actual.Should().Be(expected);
+		actual.ShouldBe(expected);
 	}
 
 	[Fact]
 	public void ShouldNotWritePatchParentsIfNoContent()
 	{
-		var texture = new CompositeTexture("Name", 10, 10, Patches: ImmutableArray.Create(new Patch("Name2", 0, 0)));
+		var texture = new CompositeTexture("Name", 10, 10, Patches: [new Patch("Name2", 0, 0)]);
 
 		var actual = GetText(texture);
 
 		var expected = Assemble("Texture Name, 10, 10", "{", "\tPatch Name2, 0, 0", "}");
 
-		actual.Should().Be(expected);
+		actual.ShouldBe(expected);
 	}
 
 	private static string GetText(CompositeTexture compositeTexture)

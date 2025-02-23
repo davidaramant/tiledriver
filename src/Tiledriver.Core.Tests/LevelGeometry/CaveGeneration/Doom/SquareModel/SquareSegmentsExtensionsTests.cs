@@ -1,4 +1,4 @@
-using FluentAssertions;
+using Shouldly;
 using Tiledriver.Core.LevelGeometry.CaveGeneration.Doom.SquareModel;
 using Xunit;
 
@@ -16,5 +16,5 @@ public sealed class SquareSegmentsExtensionsTests
 	[InlineData(SquareSegment.UpperRightInner, SquareSegments.UpperRightInner)]
 	[InlineData(SquareSegment.UpperRightOuter, SquareSegments.UpperRightOuter)]
 	public void ShouldConvertSquareSegmentEnumToSegments(SquareSegment segment, SquareSegments expectedSegments) =>
-		segment.ToSquareSegments().Should().Be(expectedSegments);
+		segment.ToSquareSegments().ShouldBe(expectedSegments);
 }

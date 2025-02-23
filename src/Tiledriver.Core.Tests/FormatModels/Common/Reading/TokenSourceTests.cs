@@ -1,7 +1,7 @@
 // Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using FluentAssertions;
+using Shouldly;
 using Moq;
 using Tiledriver.Core.FormatModels;
 using Tiledriver.Core.FormatModels.Common;
@@ -29,7 +29,7 @@ public sealed class TokenSourceTests
 
 		var actualTokens = stream.ToArray();
 
-		actualTokens.Should().BeEquivalentTo(tokens);
+		actualTokens.ShouldBe(tokens);
 	}
 
 	[Fact]
@@ -58,15 +58,13 @@ public sealed class TokenSourceTests
 		var actualTokens = stream.ToArray();
 
 		actualTokens
-			.Should()
-			.BeEquivalentTo(
-				new Token[]
-				{
+			.ShouldBe(
+				[
 					new IdentifierToken(FilePosition.StartOfFile, "otherId1"),
 					new IdentifierToken(new FilePosition(1, 10), "otherId2"),
 					new IdentifierToken(FilePosition.StartOfFile, "id1"),
-					new IdentifierToken(FilePosition.StartOfFile, "id2"),
-				}
+					new IdentifierToken(FilePosition.StartOfFile, "id2")
+				]
 			);
 	}
 }

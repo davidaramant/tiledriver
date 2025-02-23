@@ -1,7 +1,7 @@
 // Copyright (c) 2017, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using FluentAssertions;
+using Shouldly;
 using Tiledriver.Core.FormatModels.MapMetadata;
 using Xunit;
 
@@ -30,13 +30,13 @@ public sealed class MetaMapTests
 			m.Save(tempPath);
 			var roundTripped = MetaMap.Load(tempPath);
 
-			roundTripped.Width.Should().Be(m.Width);
-			roundTripped.Height.Should().Be(m.Height);
+			roundTripped.Width.ShouldBe(m.Width);
+			roundTripped.Height.ShouldBe(m.Height);
 			for (int y = 0; y < m.Height; y++)
 			{
 				for (int x = 0; x < m.Width; x++)
 				{
-					roundTripped[x, y].Should().Be(m[x, y], $"should have matched at ({x},{y})");
+					roundTripped[x, y].ShouldBe(m[x, y], $"should have matched at ({x},{y})");
 				}
 			}
 		}

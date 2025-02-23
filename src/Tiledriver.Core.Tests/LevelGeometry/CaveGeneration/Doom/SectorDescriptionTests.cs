@@ -1,7 +1,7 @@
 // Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using FluentAssertions;
+using Shouldly;
 using Tiledriver.Core.LevelGeometry.CaveGeneration.Doom;
 using Xunit;
 
@@ -12,8 +12,8 @@ public sealed class SectorDescriptionTests
 	[Fact]
 	public void ShouldIdentifyOutsideOfLevel()
 	{
-		SectorDescription.OutsideLevel.IsOutsideLevel.Should().BeTrue();
-		new SectorDescription(HeightLevel: 2).IsOutsideLevel.Should().BeFalse();
+		SectorDescription.OutsideLevel.IsOutsideLevel.ShouldBeTrue();
+		new SectorDescription(HeightLevel: 2).IsOutsideLevel.ShouldBeFalse();
 	}
 
 	[Fact]
@@ -22,8 +22,8 @@ public sealed class SectorDescriptionTests
 		var d = new SectorDescription(HeightLevel: 2);
 		var outside = SectorDescription.OutsideLevel;
 
-		d.Should().BeLessThan(outside);
-		outside.Should().BeGreaterThan(d);
+		d.ShouldBeLessThan(outside);
+		outside.ShouldBeGreaterThan(d);
 	}
 
 	[Fact]
@@ -32,7 +32,7 @@ public sealed class SectorDescriptionTests
 		var d1 = new SectorDescription(HeightLevel: 2);
 		var d2 = new SectorDescription(HeightLevel: 3);
 
-		d1.Should().BeLessThan(d2);
-		d2.Should().BeGreaterThan(d1);
+		d1.ShouldBeLessThan(d2);
+		d2.ShouldBeGreaterThan(d1);
 	}
 }

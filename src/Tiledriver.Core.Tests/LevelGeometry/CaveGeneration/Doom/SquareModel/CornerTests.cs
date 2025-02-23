@@ -1,7 +1,7 @@
 // Copyright (c) 2022, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using FluentAssertions;
+using Shouldly;
 using Tiledriver.Core.LevelGeometry.CaveGeneration;
 using Tiledriver.Core.LevelGeometry.CaveGeneration.Doom.SquareModel;
 using Xunit;
@@ -28,5 +28,5 @@ public sealed class CornerTests
 	[InlineData(Corners.UpperLeftAndLowerRight, SquareSegments.Corners_UpperLeftAndLowerRight)]
 	[InlineData(Corners.UpperRightAndLowerLeft, SquareSegments.Corners_UpperRightAndLowerLeft)]
 	public void ShouldConvertCornersToSquareSegments(Corners corners, SquareSegments expectedSegments) =>
-		corners.ToSquareSegments().Should().Be(expectedSegments);
+		corners.ToSquareSegments().ShouldBe(expectedSegments);
 }

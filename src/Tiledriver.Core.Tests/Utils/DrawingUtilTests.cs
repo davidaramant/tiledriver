@@ -1,7 +1,7 @@
 // Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using FluentAssertions;
+using Shouldly;
 using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.Utils;
 using Xunit;
@@ -15,16 +15,16 @@ public sealed class DrawingUtilTests
 		public BresenhamTestData()
 		{
 			// Right, left, Up, Down
-			Add(new Position(4, 2), new Position[] { new(2, 2), new(3, 2), new(4, 2) });
-			Add(new Position(0, 2), new Position[] { new(2, 2), new(1, 2), new(0, 2) });
-			Add(new Position(2, 0), new Position[] { new(2, 2), new(2, 1), new(2, 0) });
-			Add(new Position(2, 4), new Position[] { new(2, 2), new(2, 3), new(2, 4) });
+			Add(new Position(4, 2), [new(2, 2), new(3, 2), new(4, 2)]);
+			Add(new Position(0, 2), [new(0, 2), new(1, 2), new(2, 2)]);
+			Add(new Position(2, 0), [new(2, 0), new(2, 1), new(2, 2)]);
+			Add(new Position(2, 4), [new(2, 2), new(2, 3), new(2, 4)]);
 
 			// UpRight, UpLeft, DownLeft, DownRight
-			Add(new Position(4, 0), new Position[] { new(2, 2), new(3, 1), new(4, 0) });
-			Add(new Position(0, 0), new Position[] { new(2, 2), new(1, 1), new(0, 0) });
-			Add(new Position(0, 4), new Position[] { new(2, 2), new(1, 3), new(0, 4) });
-			Add(new Position(4, 4), new Position[] { new(2, 2), new(3, 3), new(4, 4) });
+			Add(new Position(4, 0), [new(2, 2), new(3, 1), new(4, 0)]);
+			Add(new Position(0, 0), [new(0, 0), new(1, 1), new(2, 2)]);
+			Add(new Position(0, 4), [new(0, 4), new(1, 3), new(2, 2)]);
+			Add(new Position(4, 4), [new(2, 2), new(3, 3), new(4, 4)]);
 		}
 	}
 
@@ -34,6 +34,6 @@ public sealed class DrawingUtilTests
 	{
 		var center = new Position(2, 2);
 
-		DrawingUtil.BresenhamLine(center, destination).Should().BeEquivalentTo(expected);
+		DrawingUtil.BresenhamLine(center, destination).ShouldBe(expected);
 	}
 }

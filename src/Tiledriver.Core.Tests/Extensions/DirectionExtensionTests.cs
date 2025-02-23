@@ -1,7 +1,7 @@
 // Copyright (c) 2016, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using FluentAssertions;
+using Shouldly;
 using Tiledriver.Core.Extensions.Directions;
 using Tiledriver.Core.LevelGeometry;
 using Xunit;
@@ -27,8 +27,7 @@ public sealed class DirectionExtensionTests
 
 		location
 			.GetAdjacentPoints(bounds, clockWise: false, start: Direction.East)
-			.Should()
-			.HaveCount(expectedAdjacent);
+			.Count().ShouldBe(expectedAdjacent);
 	}
 
 	[Fact]
@@ -37,7 +36,7 @@ public sealed class DirectionExtensionTests
 		VerifyDirections(
 			clockWise: false,
 			start: Direction.East,
-			expectedDirections: new[] { Direction.East, Direction.North, Direction.West, Direction.South }
+			expectedDirections: [Direction.East, Direction.North, Direction.West, Direction.South]
 		);
 	}
 
@@ -47,7 +46,7 @@ public sealed class DirectionExtensionTests
 		VerifyDirections(
 			clockWise: true,
 			start: Direction.West,
-			expectedDirections: new[] { Direction.West, Direction.North, Direction.East, Direction.South }
+			expectedDirections: [Direction.West, Direction.North, Direction.East, Direction.South]
 		);
 	}
 
@@ -57,7 +56,7 @@ public sealed class DirectionExtensionTests
 		var actual = DirectionExtensions.GetDirections(start: Direction.North, clockWise: false).ToArray();
 		var expected = new[] { Direction.North, Direction.West, Direction.South, Direction.East };
 
-		actual.Should().BeEquivalentTo(expected);
+		actual.ShouldBe(expected);
 	}
 
 	[Fact]
@@ -66,7 +65,7 @@ public sealed class DirectionExtensionTests
 		var actual = DirectionExtensions.GetDirections(start: Direction.North, clockWise: true).ToArray();
 		var expected = new[] { Direction.North, Direction.East, Direction.South, Direction.West };
 
-		actual.Should().BeEquivalentTo(expected);
+		actual.ShouldBe(expected);
 	}
 
 	private static void VerifyDirections(bool clockWise, Direction start, IEnumerable<Direction> expectedDirections)
@@ -76,6 +75,6 @@ public sealed class DirectionExtensionTests
 			.Select(tuple => tuple.direction)
 			.ToArray();
 
-		directions.Should().BeEquivalentTo(expectedDirections);
+		directions.ShouldBe(expectedDirections);
 	}
 }

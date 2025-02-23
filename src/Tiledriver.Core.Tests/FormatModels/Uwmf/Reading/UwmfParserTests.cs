@@ -2,7 +2,7 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Text;
-using FluentAssertions;
+using Shouldly;
 using Tiledriver.Core.DemoMaps.Wolf3D;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Common.Reading;
@@ -28,8 +28,8 @@ public sealed class UwmfParserTests
 		};
 
 		var results = UwmfParser.Parse(tokenStream).ToArray();
-		results.Should().HaveCount(1);
-		results[0].Should().BeOfType<Assignment>();
+		results.Length.ShouldBe(1);
+		results[0].ShouldBeOfType<Assignment>();
 	}
 
 	[Fact]
@@ -43,8 +43,8 @@ public sealed class UwmfParserTests
 		};
 
 		var results = UwmfParser.Parse(tokenStream).ToArray();
-		results.Should().HaveCount(1);
-		results[0].Should().BeOfType<Block>().Which.Fields.Should().BeEmpty();
+		results.Length.ShouldBe(1);
+		results[0].ShouldBeOfType<Block>().Fields.ShouldBeEmpty();
 	}
 
 	[Fact]
@@ -62,8 +62,8 @@ public sealed class UwmfParserTests
 		};
 
 		var results = UwmfParser.Parse(tokenStream).ToArray();
-		results.Should().HaveCount(1);
-		results[0].Should().BeOfType<Block>().Which.Fields.Should().HaveCount(1);
+		results.Length.ShouldBe(1);
+		results[0].ShouldBeOfType<Block>().Fields.Length.ShouldBe(1);
 	}
 
 	[Fact]
@@ -90,8 +90,8 @@ public sealed class UwmfParserTests
 		};
 
 		var results = UwmfParser.Parse(tokenStream).ToArray();
-		results.Should().HaveCount(1);
-		results[0].Should().BeOfType<IntTupleBlock>().Which.Tuples.Should().HaveCount(2);
+		results.Length.ShouldBe(1);
+		results[0].ShouldBeOfType<IntTupleBlock>().Tuples.Length.ShouldBe(2);
 	}
 
 	[Fact]
