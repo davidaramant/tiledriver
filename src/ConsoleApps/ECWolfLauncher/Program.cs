@@ -727,7 +727,7 @@ class Program
 	{
 		var paths = SteamGameSearcher.GetGamePaths();
 
-		var basePath = Path.Combine(paths.Wolf3D, "base");
+		var basePath = Path.Combine(paths.Wolf3D!, "base");
 		var mapHeadPath = Path.Combine(basePath, "MAPHEAD.WL6");
 		var gameMapsPath = Path.Combine(basePath, "GAMEMAPS.WL6");
 

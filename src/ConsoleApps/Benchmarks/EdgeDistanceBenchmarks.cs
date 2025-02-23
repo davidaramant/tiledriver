@@ -26,7 +26,7 @@ public class EdgeDistanceBenchmarks
 
 		_area = ConnectedAreaAnalyzer
 			.FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Dead)
-			.MaxBy(a => a.Area);
+			.MaxBy(a => a.Area)!;
 	}
 
 	[Benchmark]
