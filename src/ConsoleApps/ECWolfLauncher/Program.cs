@@ -5,7 +5,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using System.Security.Cryptography;
-using AutoMapper;
 using ShellProgressBar;
 using Tiledriver.Core.FormatModels;
 using Tiledriver.Core.FormatModels.Common;
@@ -577,20 +576,20 @@ class Program
 		}
 		Directory.CreateDirectory(outputPath);
 
-		var autoMapperConfig = new MapperConfiguration(cfg =>
-		{
-			cfg.CreateMap<TriggerTemplate, Trigger>();
-			cfg.CreateMap<ZoneTemplate, Zone>();
-			cfg.CreateMap<TileTemplate, Tile>();
-		});
-
-		var autoMapper = autoMapperConfig.CreateMapper();
-
-		using var resources = new CompoundResourceProvider();
-		using var basePk3 = Pk3File.Open(ecWolfPk3Path);
-		using var pk3 = Pk3File.Open(pk3Path);
-		resources.AddProvider(basePk3);
-		resources.AddProvider(pk3);
+		// var autoMapperConfig = new MapperConfiguration(cfg =>
+		// {
+		// 	cfg.CreateMap<TriggerTemplate, Trigger>();
+		// 	cfg.CreateMap<ZoneTemplate, Zone>();
+		// 	cfg.CreateMap<TileTemplate, Tile>();
+		// });
+		//
+		// var autoMapper = autoMapperConfig.CreateMapper();
+		//
+		// using var resources = new CompoundResourceProvider();
+		// using var basePk3 = Pk3File.Open(ecWolfPk3Path);
+		// using var pk3 = Pk3File.Open(pk3Path);
+		// resources.AddProvider(basePk3);
+		// resources.AddProvider(pk3);
 
 		throw new NotImplementedException("Move to suitable project and fix");
 		//var mapInfos = LoadMapInfo(resources, mapInfoStream: resources.TryLookup("MAPINFO.txt").Or(() => resources.TryLookup("MAPINFO")).Value);
@@ -778,14 +777,14 @@ class Program
 		var config = ConfigLoader.Load();
 		var ecWolfPk3Path = Path.ChangeExtension(config.ECWolfPath, "pk3");
 
-		var autoMapperConfig = new MapperConfiguration(cfg =>
-		{
-			cfg.CreateMap<TriggerTemplate, Trigger>();
-			cfg.CreateMap<ZoneTemplate, Zone>();
-			cfg.CreateMap<TileTemplate, Tile>();
-		});
-
-		var autoMapper = autoMapperConfig.CreateMapper();
+		// var autoMapperConfig = new MapperConfiguration(cfg =>
+		// {
+		// 	cfg.CreateMap<TriggerTemplate, Trigger>();
+		// 	cfg.CreateMap<ZoneTemplate, Zone>();
+		// 	cfg.CreateMap<TileTemplate, Tile>();
+		// });
+		//
+		// var autoMapper = autoMapperConfig.CreateMapper();
 
 		using var resources = Pk3File.Open(ecWolfPk3Path);
 		throw new NotImplementedException("WHY IS ALL THIS STUFF HERE?????");
@@ -842,14 +841,14 @@ class Program
 		var config = ConfigLoader.Load();
 		var ecWolfPk3Path = Path.ChangeExtension(config.ECWolfPath, "pk3");
 
-		var autoMapperConfig = new MapperConfiguration(cfg =>
-		{
-			cfg.CreateMap<TriggerTemplate, Trigger>();
-			cfg.CreateMap<ZoneTemplate, Zone>();
-			cfg.CreateMap<TileTemplate, Tile>();
-		});
-
-		var autoMapper = autoMapperConfig.CreateMapper();
+		// var autoMapperConfig = new MapperConfiguration(cfg =>
+		// {
+		// 	cfg.CreateMap<TriggerTemplate, Trigger>();
+		// 	cfg.CreateMap<ZoneTemplate, Zone>();
+		// 	cfg.CreateMap<TileTemplate, Tile>();
+		// });
+		//
+		// var autoMapper = autoMapperConfig.CreateMapper();
 
 		using var resources = Pk3File.Open(ecWolfPk3Path);
 		throw new NotImplementedException("Move to a suitable project and fix");

@@ -6,7 +6,6 @@
 		<TargetFramework>net9.0-windows</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AutoMapper" />
     <PackageReference Include="Castle.Core" />
     <PackageReference Include="Functional.Maybe" />
     <PackageReference Include="JetBrains.Annotations" />
