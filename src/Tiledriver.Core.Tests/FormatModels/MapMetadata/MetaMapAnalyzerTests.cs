@@ -271,7 +271,7 @@ public sealed class MetaMapAnalyzerTests
 					BlockingWest: false,
 					BlockingEast: false,
 					Comment: "HoloWall"
-				)
+				),
 			],
 			Sectors: [new Sector(TextureCeiling: "#C0C0C0", TextureFloor: "#A0A0A0")],
 			Zones: [new Zone()],

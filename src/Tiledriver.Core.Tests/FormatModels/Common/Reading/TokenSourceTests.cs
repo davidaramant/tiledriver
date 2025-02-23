@@ -1,8 +1,8 @@
 // Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using Shouldly;
 using Moq;
+using Shouldly;
 using Tiledriver.Core.FormatModels;
 using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Common.Reading;
@@ -57,14 +57,13 @@ public sealed class TokenSourceTests
 
 		var actualTokens = stream.ToArray();
 
-		actualTokens
-			.ShouldBe(
-				[
-					new IdentifierToken(FilePosition.StartOfFile, "otherId1"),
-					new IdentifierToken(new FilePosition(1, 10), "otherId2"),
-					new IdentifierToken(FilePosition.StartOfFile, "id1"),
-					new IdentifierToken(FilePosition.StartOfFile, "id2")
-				]
-			);
+		actualTokens.ShouldBe(
+			[
+				new IdentifierToken(FilePosition.StartOfFile, "otherId1"),
+				new IdentifierToken(new FilePosition(1, 10), "otherId2"),
+				new IdentifierToken(FilePosition.StartOfFile, "id1"),
+				new IdentifierToken(FilePosition.StartOfFile, "id2"),
+			]
+		);
 	}
 }

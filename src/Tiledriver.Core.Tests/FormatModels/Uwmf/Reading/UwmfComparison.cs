@@ -30,9 +30,7 @@ public static class UwmfComparison
 
 		for (int index = 0; index < actual.PlaneMaps.Length; index++)
 		{
-			actual
-				.PlaneMaps[index]
-				.ShouldBeEquivalentTo(expected.PlaneMaps[index]);
+			actual.PlaneMaps[index].ShouldBeEquivalentTo(expected.PlaneMaps[index]);
 		}
 	}
 

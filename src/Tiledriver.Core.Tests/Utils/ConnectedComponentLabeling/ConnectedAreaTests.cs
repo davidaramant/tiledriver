@@ -20,10 +20,7 @@ public class ConnectedAreaTests
 		var (trimmed, dimensions) = area.TrimExcess(border);
 
 		dimensions.ShouldBe(new Size(2 + 2 * border, 2 + 2 * border));
-		trimmed
-			.ShouldBe(
-				[new(0 + border, 0 + border), new(1 + border, 0 + border), new(1 + border, 1 + border)]
-			);
+		trimmed.ShouldBe([new(0 + border, 0 + border), new(1 + border, 0 + border), new(1 + border, 1 + border)]);
 	}
 
 	[Fact]

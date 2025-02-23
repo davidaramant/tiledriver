@@ -30,7 +30,7 @@ public sealed class LightTracerManualTests
 				new(new Position(1, 1), Brightness: 20, Radius: 20),
 				new(new Position(map.Width - 2, map.Height - 2), Brightness: 20, Radius: 20),
 				new(new Position(map.Width - 2, 1), Brightness: 20, Radius: 20),
-				new(new Position(1, map.Height - 2), Brightness: 20, Radius: 20)
+				new(new Position(1, map.Height - 2), Brightness: 20, Radius: 20),
 			]
 		);
 

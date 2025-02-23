@@ -24,7 +24,7 @@ public sealed class TextureWriterTests
 				new Patch("RW45_1", 0, 0, Rotate: PatchRotation.Rotate90),
 				new Patch("RW45_1", 0, 64, Rotate: PatchRotation.Rotate90),
 				new Patch("RW45_1", 0, 128, Rotate: PatchRotation.Rotate90),
-				new Patch("RW45_1", 0, 172, Rotate: PatchRotation.Rotate90)
+				new Patch("RW45_1", 0, 172, Rotate: PatchRotation.Rotate90),
 			]
 		);
 
@@ -64,11 +64,7 @@ public sealed class TextureWriterTests
 			512,
 			XScale: 4,
 			YScale: 4,
-			Patches:
-			[
-				new Patch("AG_512_2", 0, 0),
-				new Patch("MSW1_UP", 64, 288, Style: RenderStyle.CopyAlpha)
-			]
+			Patches: [new Patch("AG_512_2", 0, 0), new Patch("MSW1_UP", 64, 288, Style: RenderStyle.CopyAlpha)]
 		);
 
 		var actual = GetText(texture);

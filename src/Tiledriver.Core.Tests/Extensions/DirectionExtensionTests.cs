@@ -25,9 +25,7 @@ public sealed class DirectionExtensionTests
 		var location = new Position(x, y);
 		var bounds = new Size(width, height);
 
-		location
-			.GetAdjacentPoints(bounds, clockWise: false, start: Direction.East)
-			.Count().ShouldBe(expectedAdjacent);
+		location.GetAdjacentPoints(bounds, clockWise: false, start: Direction.East).Count().ShouldBe(expectedAdjacent);
 	}
 
 	[Fact]

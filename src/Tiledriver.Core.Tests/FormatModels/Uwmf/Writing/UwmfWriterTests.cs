@@ -21,17 +21,11 @@ public sealed class UwmfWriterTests
 			Name: "Some Name",
 			Width: 2,
 			Height: 1,
-			Tiles:
-			[
-				new Tile(TextureEast: "east", TextureNorth: "north", TextureWest: "west", TextureSouth: "south")
-			],
+			Tiles: [new Tile(TextureEast: "east", TextureNorth: "north", TextureWest: "west", TextureSouth: "south")],
 			Sectors: ImmutableArray<Sector>.Empty,
 			Zones: ImmutableArray<Zone>.Empty,
 			Planes: ImmutableArray<Plane>.Empty,
-			PlaneMaps:
-			[
-				new[] { new MapSquare(1, 2, 3), new MapSquare(4, 5, 6, 7) }.ToImmutableArray()
-			],
+			PlaneMaps: [new[] { new MapSquare(1, 2, 3), new MapSquare(4, 5, 6, 7) }.ToImmutableArray()],
 			Things: ImmutableArray<Thing>.Empty,
 			Triggers: ImmutableArray<Trigger>.Empty
 		);

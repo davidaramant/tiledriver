@@ -27,7 +27,7 @@ public sealed class SectorEdgeGraphTests
 					EdgeSegmentId.DiagTopLeft,
 					left: SquarePoint.LeftMiddle,
 					right: SquarePoint.TopMiddle
-				)
+				),
 			]
 		);
 
@@ -63,7 +63,7 @@ public sealed class SectorEdgeGraphTests
 					EdgeSegmentId.HorizontalRight,
 					left: SquarePoint.Center,
 					right: SquarePoint.RightMiddle
-				)
+				),
 			]
 		);
 
@@ -103,7 +103,7 @@ public sealed class SectorEdgeGraphTests
 					EdgeSegmentId.VerticalBottom,
 					left: SquarePoint.Center,
 					right: SquarePoint.BottomMiddle
-				)
+				),
 			]
 		);
 
@@ -143,7 +143,7 @@ public sealed class SectorEdgeGraphTests
 					EdgeSegmentId.DiagBottomRight,
 					left: SquarePoint.BottomMiddle,
 					right: SquarePoint.RightMiddle
-				)
+				),
 			]
 		);
 

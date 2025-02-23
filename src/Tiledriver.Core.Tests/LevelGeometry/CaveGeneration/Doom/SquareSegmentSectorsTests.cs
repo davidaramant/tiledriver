@@ -22,7 +22,7 @@ public sealed class SquareSegmentSectorsTests
 				outside, // LowerRightOuter = 4,
 				outside, // LowerRightInner = 5,
 				outside, // LowerLeftOuter = 6,
-				outside // LowerLeftInner = 7,
+				outside, // LowerLeftInner = 7,
 			]
 		);
 
@@ -53,7 +53,7 @@ public sealed class SquareSegmentSectorsTests
 				inside, // LowerRightOuter = 4,
 				inside, // LowerRightInner = 5,
 				inside, // LowerLeftOuter = 6,
-				inside // LowerLeftInner = 7,
+				inside, // LowerLeftInner = 7,
 			]
 		);
 
@@ -84,7 +84,7 @@ public sealed class SquareSegmentSectorsTests
 				inside, // LowerRightOuter = 4,
 				inside, // LowerRightInner = 5,
 				outside, // LowerLeftOuter = 6,
-				outside // LowerLeftInner = 7,
+				outside, // LowerLeftInner = 7,
 			]
 		);
 
