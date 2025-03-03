@@ -18,8 +18,8 @@ jobs:
       with:
         dotnet-version: 9.0.x
     - name: Restore dependencies
-      run: dotnet restore src\Tiledriver.sln
+      run: dotnet restore src\Tiledriver.slnx
     - name: Build
-      run: dotnet build --no-restore --configuration Release src\Tiledriver.sln
+      run: dotnet build --no-restore --configuration Release src\Tiledriver.slnx
     - name: Test
-      run: dotnet test --no-build --configuration Release --verbosity normal src\Tiledriver.sln
+      run: dotnet test --no-build --configuration Release --verbosity normal src\Tiledriver.slnx

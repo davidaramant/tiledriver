@@ -1,0 +1,19 @@
+﻿<Solution>
+  <Folder Name="/ConsoleApps/">
+    <Project Path="ConsoleApps\Benchmarks\Benchmarks.csproj" Type="Classic C#" />
+    <Project Path="ConsoleApps\DataModelGenerator\DataModelGenerator.csproj" />
+    <Project Path="ConsoleApps\ECWolfLauncher\ECWolfLauncher.csproj" />
+    <Project Path="ConsoleApps\mm\mm.csproj" />
+    <Project Path="ConsoleApps\WangscapeTilesetChopper\WangscapeTilesetChopper.csproj" />
+    <File Path="ConsoleApps\readme.md" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="..\LICENSE" />
+    <File Path="..\README.md" />
+    <File Path="..\TODO.md" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Project Path="Tiledriver.Core.ManualTests\Tiledriver.Core.ManualTests.csproj" Type="Classic C#" />
+  <Project Path="Tiledriver.Core.Tests\Tiledriver.Core.Tests.csproj" />
+  <Project Path="Tiledriver.Core\Tiledriver.Core.csproj" />
+</Solution>
