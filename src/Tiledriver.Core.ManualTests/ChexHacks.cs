@@ -9,8 +9,10 @@ namespace Tiledriver.Core.ManualTests;
 
 public sealed class ChexHacks
 {
-	private const string ProjectPath = @"C:\src\Personal\sep-doom-presentation\sep";
-	private const string ChexProjectPath = @"C:\Users\dbaramant\Downloads\chex3gzd-rc5\chex3gzd-rc5";
+	// private const string ProjectPath = @"C:\src\Personal\sep-doom-presentation\sep";
+	// private const string ChexProjectPath = @"C:\Users\dbaramant\Downloads\chex3gzd-rc5\chex3gzd-rc5";
+	private const string ProjectPath = @"/Users/david/RiderProjects/sep-doom-presentation/sep";
+	private const string ChexProjectPath = @"/Users/david/Desktop/chex3gzd-rc5";
 
 	private static readonly IReadOnlyDictionary<int, string> ThingLookup = new Dictionary<int, string>
 	{
@@ -75,6 +77,12 @@ public sealed class ChexHacks
 	{
 		var wad = WadFile.Read(Path.Combine(ProjectPath, "maps", "CHEX.wad"));
 		var mapData = UdmfReader.Read(new MemoryStream(wad.Single(l => l.Name == "TEXTMAP").GetData()));
+
+		var usedFlats = mapData
+			.Sectors.SelectMany(s => new[] { s.TextureCeiling, s.TextureFloor })
+			.Select(tex => tex.Name)
+			.ToHashSet();
+
 		var usedTextures = mapData
 			.SideDefs.SelectMany(sd => new[] { sd.TextureMiddle, sd.TextureBottom, sd.TextureTop })
 			.Where(tex => tex != Texture.None)
@@ -83,6 +91,14 @@ public sealed class ChexHacks
 
 		var usedThings = mapData.Things.Select(t => t.Type).ToHashSet();
 
+		Console.Out.WriteLine($"{usedFlats.Count} flats");
+
+		foreach (var flat in usedFlats.Order())
+		{
+			Console.WriteLine($" * {flat}");
+		}
+
+		Console.Out.WriteLine();
 		Console.Out.WriteLine($"{usedTextures.Count} textures");
 
 		foreach (var tex in usedTextures.Order())
@@ -103,11 +119,16 @@ public sealed class ChexHacks
 		//	- Decorations
 		//  - Enemies
 		//  - Weapons
+		// - For each flat used:
+		//  - Is it a Doom FLAT?
+		//    - NO: Copy from Chex
+		//    - YES: Does it exist in Chex?
+		//      - YES: Copy from Chex
+		//      - NO: Do nothing
 		// - For each texture used:
 		//  - Is it a Doom replacement? UGH - need renames like KICK did
 		//  - If it's brand new:
 		//		- Get patches needed
 		//		- Texture definition
-		// - Sky definition
 	}
 }
