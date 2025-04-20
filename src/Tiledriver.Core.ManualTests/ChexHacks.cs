@@ -124,11 +124,7 @@ public sealed partial class ChexHacks
 		//	- Decorations
 		//  - Enemies
 		//  - Weapons
-		// - For each texture used:
-		//  - Is it a Doom replacement? UGH - need renames like KICK did
-		//  - If it's brand new:
-		//		- Get patches needed
-		//		- Texture definition
+		// - Sound for door action
 	}
 
 	[Test, Explicit]
@@ -195,16 +191,16 @@ public sealed partial class ChexHacks
 		var chexTex2 = ParseTextures(await File.ReadAllTextAsync(Path.Combine(ChexProjectPath, "TEXTURES 2.txt")))
 			.ToDictionary(w => w.Name);
 
-		var doom2Textures = GetDoom2Textures().ToDictionary(w => w.Name);
-
-		var doom2Patches = doom2Textures
-			.Values.SelectMany(t => t.Contents.Select(c => PatchDefinitionRegex().Match(c).Groups[1].Value))
-			.ToHashSet();
-		doom2Patches.Remove("");
+		// var doom2Textures = GetDoom2Textures().ToDictionary(w => w.Name);
+		//
+		// var doom2Patches = doom2Textures
+		// 	.Values.SelectMany(t => t.Patches.Select(c => PatchDefinitionRegex().Match(c).Groups[1].Value))
+		// 	.ToHashSet();
+		// doom2Patches.Remove("");
 
 		var chexDefinitions = usedTextures.Select(n => LookupDefinition(chexTex1, chexTex2, n)).ToList();
 		var chexPatches = chexDefinitions
-			.SelectMany(d => d.Contents.Select(c => PatchDefinitionRegex().Match(c).Groups[1].Value))
+			.SelectMany(d => d.Patches.Select(p => p.Name))
 			.Distinct()
 			.Except([""])
 			.Select(n => n.ToUpper())
@@ -234,46 +230,48 @@ public sealed partial class ChexHacks
 			);
 		}
 
-		var newTextures = new List<WallTexture>();
+		var newTextures = new List<WallTexture>
+		{
+			new("CQ_SKY", 512, 240, [new Patch("patches/chex/CQ_SKY.png", 0, 0)]),
+		};
 
 		// Patches have been copied over
 
 		var textureNameTransform = new Dictionary<string, string>();
 
+		int textureIndex = 0;
 		foreach (var tex in usedTextures)
 		{
 			await Console.Out.WriteLineAsync(tex);
 
 			var chexDefinition = LookupDefinition(chexTex1, chexTex2, tex);
 
-			// TODO: Transform definitions to reference new patch names
-			// TODO: Transform texture names to new names (IE: fill out textureNameTransform)
-
-			if (doom2Textures.TryGetValue(tex, out var doomDefinition))
-			{
-				await Console.Out.WriteLineAsync("\tExisting");
-			}
-			else
-			{
-				await Console.Out.WriteLineAsync("\tBrand new");
-
-				var patches = chexDefinition
-					.Contents.Select(c => PatchDefinitionRegex().Match(c).Groups[1].Value)
-					.ToList();
-
-				foreach (var p in patches)
+			var newName = $"CQT{textureIndex:00}";
+			newTextures.Add(
+				chexDefinition with
 				{
-					if (doom2Patches.Contains(p))
-					{
-						await Console.Out.WriteLineAsync($"\tPatch exists in Doom 2: {p}");
-					}
+					Name = newName,
+					Patches =
+					[
+						.. chexDefinition.Patches.Select(p =>
+							p with
+							{
+								Name =
+									"patches/chex/"
+									+ chexPatchNewNameLookup[p.Name]
+									+ Path.GetExtension(existingChexPatchLookup[p.Name]),
+							}
+						),
+					],
 				}
+			);
 
-				newTextures.Add(chexDefinition);
-			}
+			textureNameTransform.Add(tex, newName);
+
+			textureIndex++;
 		}
 
-		await WriteTextureDefinitionsAsync(Path.Combine(ProjectPath, "TEXTURES.chex"), newTextures);
+		await WriteTextureDefinitionsAsync(Path.Combine(ProjectPath, "TEXTURES.chexquest"), newTextures);
 
 		var updatedMap = mapData with
 		{
@@ -321,9 +319,9 @@ public sealed partial class ChexHacks
 		{
 			await writer.WriteLineAsync($"WallTexture \"{t.Name}\", {t.Width}, {t.Height}");
 			await writer.WriteLineAsync("{");
-			foreach (var c in t.Contents)
+			foreach (var p in t.Patches)
 			{
-				await writer.WriteLineAsync($"\t{c}");
+				await writer.WriteLineAsync($"\tPatch \"{p.Name}\", {p.X}, {p.Y}");
 			}
 
 			await writer.WriteLineAsync("}");
@@ -345,11 +343,38 @@ public sealed partial class ChexHacks
 			var line in definition.Split('\n').Select(l => l.Trim()).Where(l => l.Length > 0 && l != "{" && l != "}")
 		)
 		{
+			if (line.StartsWith("//"))
+				continue;
+
+			if (line.Contains("NullTexture"))
+				continue;
+
 			if (line.StartsWith("WallTexture"))
 			{
 				if (contents.Count > 0)
 				{
-					textures.Add(new WallTexture(name, width, height, contents.ToArray()));
+					textures.Add(
+						new WallTexture(
+							name,
+							width,
+							height,
+							contents
+								.Select(c =>
+								{
+									var m = PatchDefinitionRegex().Match(c);
+
+									if (!m.Success)
+										throw new Exception($"Failed to parse patch definition: {c}");
+
+									return new Patch(
+										m.Groups[1].Value,
+										int.Parse(m.Groups[2].Value),
+										int.Parse(m.Groups[3].Value)
+									);
+								})
+								.ToArray()
+						)
+					);
 				}
 
 				contents.Clear();
@@ -366,17 +391,36 @@ public sealed partial class ChexHacks
 			}
 		}
 
-		textures.Add(new WallTexture(name, width, height, contents.ToArray()));
+		textures.Add(
+			new WallTexture(
+				name,
+				width,
+				height,
+				contents
+					.Select(c =>
+					{
+						var m = PatchDefinitionRegex().Match(c);
+
+						if (!m.Success)
+							throw new Exception($"Failed to parse patch definition: {c}");
+
+						return new Patch(m.Groups[1].Value, int.Parse(m.Groups[2].Value), int.Parse(m.Groups[3].Value));
+					})
+					.ToArray()
+			)
+		);
 
 		return textures;
 	}
 
-	sealed record WallTexture(string Name, int Width, int Height, IReadOnlyList<string> Contents);
+	sealed record WallTexture(string Name, int Width, int Height, IReadOnlyList<Patch> Patches);
+
+	sealed record Patch(string Name, int X, int Y);
 
 	[GeneratedRegex(@"WallTexture ""(\w+)"", (\d+), (\d+)")]
 	private static partial Regex TextureDefinitionRegex();
 
-	[GeneratedRegex(@"Patch ""(\w+)""")]
+	[GeneratedRegex(@"Patch ""(\w+)"", (-?\d+), (-?\d+)")]
 	private static partial Regex PatchDefinitionRegex();
 
 	private const string Doom2TexturesDefinition = """
