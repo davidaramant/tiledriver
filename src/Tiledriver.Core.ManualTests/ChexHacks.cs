@@ -6,6 +6,7 @@ using Tiledriver.Core.FormatModels.Common;
 using Tiledriver.Core.FormatModels.Textures;
 using Tiledriver.Core.FormatModels.Udmf.Reading;
 using Tiledriver.Core.FormatModels.Wad;
+using Tiledriver.Core.GameInfo.Doom;
 
 // ReSharper disable LocalizableElement
 
@@ -18,7 +19,7 @@ public sealed partial class ChexHacks
 	private const string ProjectPath = @"/Users/david/RiderProjects/sep-doom-presentation/sep";
 	private const string ChexProjectPath = @"/Users/david/Desktop/chex3gzd-rc5";
 
-	private static readonly IReadOnlyDictionary<int, string> ThingLookup = new Dictionary<int, string>
+	private static readonly IReadOnlyDictionary<int, string> ChexThingLookup = new Dictionary<int, string>
 	{
 		{ 7, "Flembomination" },
 		{ 16, "Snotfolus" },
@@ -115,7 +116,9 @@ public sealed partial class ChexHacks
 		Console.Out.WriteLine($"{usedThings.Count} things");
 		foreach (var thingId in usedThings.Order())
 		{
-			var description = ThingLookup.GetValueOrDefault(thingId, "Doom thing");
+			var description = Actor.AllById.TryGetValue(thingId, out var actor)
+				? actor.Description
+				: ChexThingLookup.GetValueOrDefault(thingId, "UNKNOWN");
 			Console.WriteLine($" * {thingId}: {description}");
 		}
 
@@ -126,6 +129,99 @@ public sealed partial class ChexHacks
 		//  - Weapons
 		// - Sound for door action
 	}
+
+	[Test, Explicit]
+	public async Task FixThings()
+	{
+		var wad = WadFile.Read(Path.Combine(ProjectPath, "maps", "CHEX.wad"));
+		var mapData = UdmfReader.Read(new MemoryStream(wad.Single(l => l.Name == "TEXTMAP").GetData()));
+
+		IReadOnlySet<int> ignoredIds = new HashSet<int>(
+			[
+				// Player 1 start
+				1,
+				// Deathmatch start
+				11,
+				// Slope thing
+				9500,
+			]
+		);
+
+		var usedThings = mapData.Things.Select(t => t.Type).Where(id => !ignoredIds.Contains(id)).ToHashSet();
+
+		foreach (var thingId in usedThings.Order())
+		{
+			var description = Actor.AllById.TryGetValue(thingId, out var actor)
+				? actor.Description
+				: ChexThingLookup.GetValueOrDefault(thingId, "UNKNOWN");
+			Console.WriteLine($" * {thingId}: {description}");
+		}
+
+		// Enemies
+
+		// 9 = shotgun guy
+		// 3004 = former human
+
+		// IReadOnlyCollection<ThingTransform> spriteTransforms =
+		// [
+		// 	new(new("SPOS", 9), new("CQ01", 6000)),
+		// 	new(new("POSS", 3004), new("CQ02", 6001)),
+		// ];
+		//
+		// var chexSpriteOutputDir = Path.Combine(ProjectPath, "sprites", "chex");
+		// if (!Directory.Exists(chexSpriteOutputDir))
+		// 	Directory.CreateDirectory(chexSpriteOutputDir);
+		//
+		// var chexInputEnemiesDir = Path.Combine(ChexProjectPath, "sprites", "flemoids");
+		//
+		// foreach (var transform in spriteTransforms)
+		// {
+		// 	var chexSprites = Directory.GetFiles(chexInputEnemiesDir, transform.Old.SpriteName + "*");
+		// 	foreach (var chexSprite in chexSprites)
+		// 	{
+		// 		File.Copy(
+		// 			chexSprite,
+		// 			Path.Combine(
+		// 				chexSpriteOutputDir,
+		// 				Path.GetFileName(chexSprite)!.Replace(transform.Old.SpriteName, transform.New.SpriteName)
+		// 			),
+		// 			overwrite: true
+		// 		);
+		// 	}
+		// }
+
+		IReadOnlyDictionary<int, int> idLookup = new Dictionary<int, int>
+		{
+			{ 35, 6002 },
+			{ 37, 6003 },
+			{ 59, 6004 },
+			{ 61, 6005 },
+			//{ 2001: Shotgun
+			//{ 2011: Stimpack
+			//{ 2012: Medikit
+			//{ 2015: Armor bonus
+			//{ 2018: Green armor
+			//{ 2048: Box of Ammo
+			//{ 2049: Box of Shells
+		}; //spriteTransforms.ToDictionary(t => t.Old.Id, t => t.New.Id);
+		IReadOnlySet<int> toDelete = new HashSet<int>([8]);
+		var updatedMap = mapData with
+		{
+			Things =
+			[
+				.. mapData
+					.Things.Where(t => !toDelete.Contains(t.Type))
+					.Select(t => t with { Type = idLookup.GetValueOrDefault(t.Type, t.Type) }),
+			],
+		};
+
+		await using var newWadFs = File.Open(Path.Combine(ProjectPath, "maps", "CHEX.wad"), FileMode.Create);
+		WadWriter.WriteTo([new Marker("MAP01"), new UdmfLump("TEXTMAP", updatedMap), new Marker("ENDMAP")], newWadFs);
+	}
+
+	sealed record ThingInfo(string SpriteName, int Id);
+
+	sealed record ThingTransform(ThingInfo Old, ThingInfo New);
 
 	[Test, Explicit]
 	public async Task FixFlats()
