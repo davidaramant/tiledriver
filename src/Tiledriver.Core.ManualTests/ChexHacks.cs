@@ -95,8 +95,6 @@ public sealed partial class ChexHacks
 		}
 
 		// TODOs for conversion:
-		// - pickup sound (is this possible?)
-		// - pistol sound from flemoid
 		// - spork weapon
 		// - more ammo for zorcher
 		// - kill the bullet ammo
