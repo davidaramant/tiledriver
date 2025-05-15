@@ -83,36 +83,8 @@ public sealed partial class ChexHacks
 		var wad = WadFile.Read(Path.Combine(ProjectPath, "maps", "CHEX.wad"));
 		var mapData = UdmfReader.Read(new MemoryStream(wad.Single(l => l.Name == "TEXTMAP").GetData()));
 
-		var usedFlats = mapData
-			.Sectors.SelectMany(s => new[] { s.TextureCeiling, s.TextureFloor })
-			.Select(tex => tex.Name)
-			.Except(["F_SKY1"])
-			.ToHashSet();
-
-		var usedTextures = mapData
-			.SideDefs.SelectMany(sd => new[] { sd.TextureMiddle, sd.TextureBottom, sd.TextureTop })
-			.Where(tex => tex != Texture.None)
-			.Select(tex => tex.Name)
-			.ToHashSet();
-
 		var usedThings = mapData.Things.Select(t => t.Type).ToHashSet();
 
-		Console.Out.WriteLine($"{usedFlats.Count} flats");
-
-		foreach (var flat in usedFlats.Order())
-		{
-			Console.WriteLine($" * {flat}");
-		}
-
-		Console.Out.WriteLine();
-		Console.Out.WriteLine($"{usedTextures.Count} textures");
-
-		foreach (var tex in usedTextures.Order())
-		{
-			Console.WriteLine($" * {tex}");
-		}
-
-		Console.Out.WriteLine();
 		Console.Out.WriteLine($"{usedThings.Count} things");
 		foreach (var thingId in usedThings.Order())
 		{
@@ -123,11 +95,11 @@ public sealed partial class ChexHacks
 		}
 
 		// TODOs for conversion:
-		// - Get list of things required in level (not sure what is doing on with the TIDs...)
-		//	- Decorations
-		//  - Enemies
-		//  - Weapons
-		// - Sound for door action
+		// - pickup sound (is this possible?)
+		// - pistol sound from flemoid
+		// - spork weapon
+		// - more ammo for zorcher
+		// - kill the bullet ammo
 	}
 
 	[Test, Explicit]
@@ -196,15 +168,15 @@ public sealed partial class ChexHacks
 			{ 37, 6003 },
 			{ 59, 6004 },
 			{ 61, 6005 },
-			//{ 2001: Shotgun
-			//{ 2011: Stimpack
-			//{ 2012: Medikit
-			//{ 2015: Armor bonus
-			//{ 2018: Green armor
-			//{ 2048: Box of Ammo
-			//{ 2049: Box of Shells
+			{ 2011, 6006 }, // Stimpack
+			{ 2012, 6007 }, // Medikit
+			{ 2015, 6008 }, // Armor bonus
+			{ 2018, 6009 }, // Green armor
+			{ 2048, 6010 }, // Box of Ammo
+			{ 2049, 6011 }, // Box of Shells
+			{ 2001, 6012 }, // Shotgun
 		}; //spriteTransforms.ToDictionary(t => t.Old.Id, t => t.New.Id);
-		IReadOnlySet<int> toDelete = new HashSet<int>([8]);
+		IReadOnlySet<int> toDelete = new HashSet<int>([8, 11]);
 		var updatedMap = mapData with
 		{
 			Things =
