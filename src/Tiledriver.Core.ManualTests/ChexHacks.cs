@@ -95,9 +95,9 @@ public sealed partial class ChexHacks
 		}
 
 		// TODOs for conversion:
-		// - spork weapon
 		// - more ammo for zorcher
 		// - kill the bullet ammo
+		// - yellow key
 	}
 
 	[Test, Explicit]
@@ -173,6 +173,7 @@ public sealed partial class ChexHacks
 			{ 2048, 6010 }, // Box of Ammo
 			{ 2049, 6011 }, // Box of Shells
 			{ 2001, 6012 }, // Shotgun
+			{ 2005, 6013 }, // Chainsaw
 		}; //spriteTransforms.ToDictionary(t => t.Old.Id, t => t.New.Id);
 		IReadOnlySet<int> toDelete = new HashSet<int>([8, 11]);
 		var updatedMap = mapData with
