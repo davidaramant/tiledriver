@@ -68,11 +68,9 @@ public sealed class FastImage : IFastImage
 					AlphaType = SKAlphaType.Premul,
 				}
 			);
-			using var paint = new SKPaint { IsAntialias = false, FilterQuality = SKFilterQuality.None };
-
 			using var img = SKImage.FromBitmap(_bitmap);
 
-			surface.Canvas.DrawImage(img, new SKRectI(0, 0, resizedWidth, resizedHeight), paint);
+			surface.Canvas.DrawImage(img, new SKRectI(0, 0, resizedWidth, resizedHeight), SKSamplingOptions.Default);
 			surface.Canvas.Flush();
 
 			using var newImg = surface.Snapshot();

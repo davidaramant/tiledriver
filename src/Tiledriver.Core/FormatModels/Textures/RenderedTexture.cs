@@ -47,18 +47,20 @@ public sealed record RenderedTexture(
 
 				using var typeFace = SKTypeface.FromFamilyName("Impact");
 				using var font = new SKFont(typeFace, size: 32);
-				using var textPaint = new SKPaint
-				{
-					Color = TextColor,
-					IsAntialias = true,
-					TextAlign = SKTextAlign.Center,
-				};
+				using var textPaint = new SKPaint { Color = TextColor, IsAntialias = true };
 
 				var lineHeight = size / lines.Length;
 				var halfLineHeight = lineHeight / 2;
 				for (int i = 0; i < lines.Length; i++)
 				{
-					canvas.DrawText(lines[i], size / 2f, halfLineHeight + (i * lineHeight), font, textPaint);
+					var textWidth = font.MeasureText(lines[i]);
+					canvas.DrawText(
+						lines[i],
+						(size - textWidth) / 2f,
+						halfLineHeight + (i * lineHeight),
+						font,
+						textPaint
+					);
 				}
 			}
 		}
