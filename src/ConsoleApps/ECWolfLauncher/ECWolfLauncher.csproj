@@ -9,11 +9,8 @@
     <PackageReference Include="Castle.Core" />
     <PackageReference Include="Functional.Maybe" />
     <PackageReference Include="JetBrains.Annotations" />
-    <PackageReference Include="Microsoft.Win32.Registry" />
     <PackageReference Include="Moq" />
     <PackageReference Include="ShellProgressBar" />
-    <PackageReference Include="System.Collections.Immutable" />
-    <PackageReference Include="System.ValueTuple" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Tiledriver.Core\Tiledriver.Core.csproj" />
