@@ -25,7 +25,7 @@ public sealed class GameMapsBundle
 		var headers = offsetData.Offsets.Select(offset =>
 		{
 			mapsStream.Position = offset;
-			mapsStream.Read(headerBuffer, 0, headerBuffer.Length);
+			mapsStream.ReadExactly(headerBuffer, 0, headerBuffer.Length);
 			return MapHeader.Parse(headerBuffer);
 		});
 
@@ -56,7 +56,7 @@ public sealed class GameMapsBundle
 	{
 		var buffer = new byte[planeInfo.CompressedLength];
 		mapsStream.Position = planeInfo.Offset;
-		mapsStream.Read(buffer, 0, buffer.Length);
+		mapsStream.ReadExactly(buffer, 0, buffer.Length);
 
 		var uncarmacked = Expander.DecompressCarmack(buffer);
 

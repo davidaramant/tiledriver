@@ -19,7 +19,7 @@ public sealed class OffsetData
 	public static OffsetData ReadOffsets(Stream stream)
 	{
 		var buffer = new byte[2 + 4 * MaxLevelOffsets];
-		stream.Read(buffer, 0, buffer.Length);
+		stream.ReadExactly(buffer, 0, buffer.Length);
 		var rlewMarker = BitConverter.ToUInt16(buffer, 0);
 
 		var offsets = new List<uint>();
