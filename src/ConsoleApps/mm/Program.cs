@@ -1,6 +1,8 @@
 // Copyright (c) 2018, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
+using System.CommandLine;
+using System.CommandLine.Parsing;
 using Tiledriver.Core.FormatModels.MapMetadata;
 using Tiledriver.Core.FormatModels.MapMetadata.Writing;
 
@@ -20,19 +22,48 @@ class Program
 		Full,
 	}
 
-	/// <summary>
-	/// Entry point
-	/// </summary>
-	/// <param name="inputMapPath">Input path of metamap</param>
-	/// <param name="theme">Theme to use for the image.</param>
-	/// <param name="imageName">Name of the image file (by default, use the map name)</param>
-	/// <param name="scale">How much to scale the output image.</param>
-	static void Main(string inputMapPath, ImagePalette theme, string? imageName = null, int scale = 1)
+	static int Main(string[] args)
 	{
-		RunOptionsAndReturnExitCode(new Options(inputMapPath, theme, imageName, scale));
+		Option<string> inputMapPathOption = new("-i", "Input path of metamap");
+		Option<ImagePalette> themeOption = new("-t", "Theme to use for the image.");
+		Option<string?> imageNameOption = new("-n", "Name of the image file (by default, use the map name)")
+		{
+			Required = false,
+		};
+		Option<int> scaleOption = new("-s", "How much to scale the output image.")
+		{
+			Required = false,
+			DefaultValueFactory = _ => 1,
+		};
+
+		RootCommand root = new("Turns a metamap into an image");
+		root.Options.Add(inputMapPathOption);
+		root.Options.Add(themeOption);
+		root.Options.Add(imageNameOption);
+		root.Options.Add(scaleOption);
+
+		ParseResult parseResult = root.Parse(args);
+		if (parseResult.Errors.Count == 0)
+		{
+			RunOptions(
+				new Options(
+					InputMapPath: parseResult.GetRequiredValue(inputMapPathOption),
+					Theme: parseResult.GetRequiredValue(themeOption),
+					ImageName: parseResult.GetValue(imageNameOption),
+					Scale: parseResult.GetRequiredValue(scaleOption)
+				)
+			);
+			return 0;
+		}
+		foreach (ParseError error in parseResult.Errors)
+		{
+			Console.Error.WriteLine(error.Message);
+		}
+
+		return 1;
 	}
 
-	private static void RunOptionsAndReturnExitCode(Options opts)
+	private static void RunOptions(Options opts)
 	{
 		var map = MetaMap.Load(opts.InputMapPath);
 

@@ -8,11 +8,11 @@
 	</PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.CommandLine.DragonFruit" />
+    <ProjectReference Include="..\..\Tiledriver.Core\Tiledriver.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Tiledriver.Core\Tiledriver.Core.csproj" />
+    <PackageReference Include="System.CommandLine" />
   </ItemGroup>
 
 </Project>
