@@ -1,23 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net10.0</TargetFramework>
-    <Nullable>enable</Nullable>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net10.0</TargetFramework>
+		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>Tiledriver.DataModelGenerator</RootNamespace>
-  </PropertyGroup>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="DoomGameInfo\DoomActors.txt" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="DoomGameInfo\DoomActors.txt" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="DoomGameInfo\DoomActors.txt" />
-  </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="DoomGameInfo\DoomActors.txt" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Humanizer" />
-    <PackageReference Include="Pidgin" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Humanizer" />
+		<PackageReference Include="Pidgin" />
+	</ItemGroup>
 </Project>

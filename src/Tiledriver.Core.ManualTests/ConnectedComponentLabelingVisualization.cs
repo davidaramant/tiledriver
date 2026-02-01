@@ -88,7 +88,8 @@ public class ConnectedComponentLabelingVisualization
 		var largestComponent =
 			ConnectedAreaAnalyzer
 				.FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Dead)
-				.MaxBy(component => component.Area) ?? throw new InvalidOperationException("This can't happen");
+				.MaxBy(component => component.Area)
+			?? throw new InvalidOperationException("This can't happen");
 
 		foreach (var neighborhood in new[] { Neighborhood.Moore, Neighborhood.VonNeumann })
 		{

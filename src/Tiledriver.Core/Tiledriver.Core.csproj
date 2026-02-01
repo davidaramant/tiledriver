@@ -1,15 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <Nullable>enable</Nullable>
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="HsluvS" />
-    <PackageReference Include="SkiaSharp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DemoMaps" />
-  </ItemGroup>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="HsluvS" />
+		<PackageReference Include="SkiaSharp" />
+	</ItemGroup>
+	<ItemGroup>
+		<Folder Include="DemoMaps" />
+	</ItemGroup>
 </Project>

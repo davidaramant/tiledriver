@@ -21,7 +21,6 @@ public sealed class BinaryMapTranslator
 	{
 		// TODO: MapInfo - specialActions
 
-
 		// TODO: Support map name lookups.  This requires parsing the LANGUAGE lump
 
 		// Plane 0 - map geometry

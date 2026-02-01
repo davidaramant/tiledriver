@@ -57,13 +57,11 @@ public sealed class TokenSourceTests
 
 		var actualTokens = stream.ToArray();
 
-		actualTokens.ShouldBe(
-			[
-				new IdentifierToken(FilePosition.StartOfFile, "otherId1"),
-				new IdentifierToken(new FilePosition(1, 10), "otherId2"),
-				new IdentifierToken(FilePosition.StartOfFile, "id1"),
-				new IdentifierToken(FilePosition.StartOfFile, "id2"),
-			]
-		);
+		actualTokens.ShouldBe([
+			new IdentifierToken(FilePosition.StartOfFile, "otherId1"),
+			new IdentifierToken(new FilePosition(1, 10), "otherId2"),
+			new IdentifierToken(FilePosition.StartOfFile, "id1"),
+			new IdentifierToken(FilePosition.StartOfFile, "id2"),
+		]);
 	}
 }

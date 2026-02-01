@@ -14,22 +14,20 @@ public sealed class SectorEdgeGraphTests
 	[Fact]
 	public void ShouldConnectTwoEdges()
 	{
-		var graph = SectorEdgeGraph.FromEdges(
-			[
-				BuildEdge(
-					Position.Origin,
-					EdgeSegmentId.DiagBottomRight,
-					left: SquarePoint.BottomMiddle,
-					right: SquarePoint.RightMiddle
-				),
-				BuildEdge(
-					new Position(1, 0),
-					EdgeSegmentId.DiagTopLeft,
-					left: SquarePoint.LeftMiddle,
-					right: SquarePoint.TopMiddle
-				),
-			]
-		);
+		var graph = SectorEdgeGraph.FromEdges([
+			BuildEdge(
+				Position.Origin,
+				EdgeSegmentId.DiagBottomRight,
+				left: SquarePoint.BottomMiddle,
+				right: SquarePoint.RightMiddle
+			),
+			BuildEdge(
+				new Position(1, 0),
+				EdgeSegmentId.DiagTopLeft,
+				left: SquarePoint.LeftMiddle,
+				right: SquarePoint.TopMiddle
+			),
+		]);
 
 		graph.EdgeCount.ShouldBe(2);
 		graph.GetEdgesConnectedTo(new LatticePoint(Position.Origin, SquarePoint.RightMiddle)).Count().ShouldBe(2);
@@ -38,34 +36,32 @@ public sealed class SectorEdgeGraphTests
 	[Fact]
 	public void ShouldSimplifyHorizontalEdges()
 	{
-		var graph = SectorEdgeGraph.FromEdges(
-			[
-				BuildEdge(
-					new Position(0, 0),
-					EdgeSegmentId.HorizontalLeft,
-					left: SquarePoint.LeftMiddle,
-					right: SquarePoint.Center
-				),
-				BuildEdge(
-					new Position(0, 0),
-					EdgeSegmentId.HorizontalRight,
-					left: SquarePoint.Center,
-					right: SquarePoint.RightMiddle
-				),
-				BuildEdge(
-					new Position(1, 0),
-					EdgeSegmentId.HorizontalLeft,
-					left: SquarePoint.LeftMiddle,
-					right: SquarePoint.Center
-				),
-				BuildEdge(
-					new Position(1, 0),
-					EdgeSegmentId.HorizontalRight,
-					left: SquarePoint.Center,
-					right: SquarePoint.RightMiddle
-				),
-			]
-		);
+		var graph = SectorEdgeGraph.FromEdges([
+			BuildEdge(
+				new Position(0, 0),
+				EdgeSegmentId.HorizontalLeft,
+				left: SquarePoint.LeftMiddle,
+				right: SquarePoint.Center
+			),
+			BuildEdge(
+				new Position(0, 0),
+				EdgeSegmentId.HorizontalRight,
+				left: SquarePoint.Center,
+				right: SquarePoint.RightMiddle
+			),
+			BuildEdge(
+				new Position(1, 0),
+				EdgeSegmentId.HorizontalLeft,
+				left: SquarePoint.LeftMiddle,
+				right: SquarePoint.Center
+			),
+			BuildEdge(
+				new Position(1, 0),
+				EdgeSegmentId.HorizontalRight,
+				left: SquarePoint.Center,
+				right: SquarePoint.RightMiddle
+			),
+		]);
 
 		var simpleGraph = graph.Simplify();
 
@@ -78,34 +74,32 @@ public sealed class SectorEdgeGraphTests
 	[Fact]
 	public void ShouldSimplifyVerticalEdges()
 	{
-		var graph = SectorEdgeGraph.FromEdges(
-			[
-				BuildEdge(
-					new Position(0, 0),
-					EdgeSegmentId.VerticalTop,
-					left: SquarePoint.TopMiddle,
-					right: SquarePoint.Center
-				),
-				BuildEdge(
-					new Position(0, 0),
-					EdgeSegmentId.VerticalBottom,
-					left: SquarePoint.Center,
-					right: SquarePoint.BottomMiddle
-				),
-				BuildEdge(
-					new Position(0, -1),
-					EdgeSegmentId.VerticalTop,
-					left: SquarePoint.TopMiddle,
-					right: SquarePoint.Center
-				),
-				BuildEdge(
-					new Position(0, -1),
-					EdgeSegmentId.VerticalBottom,
-					left: SquarePoint.Center,
-					right: SquarePoint.BottomMiddle
-				),
-			]
-		);
+		var graph = SectorEdgeGraph.FromEdges([
+			BuildEdge(
+				new Position(0, 0),
+				EdgeSegmentId.VerticalTop,
+				left: SquarePoint.TopMiddle,
+				right: SquarePoint.Center
+			),
+			BuildEdge(
+				new Position(0, 0),
+				EdgeSegmentId.VerticalBottom,
+				left: SquarePoint.Center,
+				right: SquarePoint.BottomMiddle
+			),
+			BuildEdge(
+				new Position(0, -1),
+				EdgeSegmentId.VerticalTop,
+				left: SquarePoint.TopMiddle,
+				right: SquarePoint.Center
+			),
+			BuildEdge(
+				new Position(0, -1),
+				EdgeSegmentId.VerticalBottom,
+				left: SquarePoint.Center,
+				right: SquarePoint.BottomMiddle
+			),
+		]);
 
 		var simpleGraph = graph.Simplify();
 
@@ -118,34 +112,32 @@ public sealed class SectorEdgeGraphTests
 	[Fact]
 	public void ShouldSimplifyPositiveSlopedEdges()
 	{
-		var graph = SectorEdgeGraph.FromEdges(
-			[
-				BuildEdge(
-					new Position(0, 0),
-					EdgeSegmentId.DiagTopLeft,
-					left: SquarePoint.LeftMiddle,
-					right: SquarePoint.TopMiddle
-				),
-				BuildEdge(
-					new Position(0, 1),
-					EdgeSegmentId.DiagBottomRight,
-					left: SquarePoint.BottomMiddle,
-					right: SquarePoint.RightMiddle
-				),
-				BuildEdge(
-					new Position(1, 1),
-					EdgeSegmentId.DiagTopLeft,
-					left: SquarePoint.LeftMiddle,
-					right: SquarePoint.TopMiddle
-				),
-				BuildEdge(
-					new Position(1, 2),
-					EdgeSegmentId.DiagBottomRight,
-					left: SquarePoint.BottomMiddle,
-					right: SquarePoint.RightMiddle
-				),
-			]
-		);
+		var graph = SectorEdgeGraph.FromEdges([
+			BuildEdge(
+				new Position(0, 0),
+				EdgeSegmentId.DiagTopLeft,
+				left: SquarePoint.LeftMiddle,
+				right: SquarePoint.TopMiddle
+			),
+			BuildEdge(
+				new Position(0, 1),
+				EdgeSegmentId.DiagBottomRight,
+				left: SquarePoint.BottomMiddle,
+				right: SquarePoint.RightMiddle
+			),
+			BuildEdge(
+				new Position(1, 1),
+				EdgeSegmentId.DiagTopLeft,
+				left: SquarePoint.LeftMiddle,
+				right: SquarePoint.TopMiddle
+			),
+			BuildEdge(
+				new Position(1, 2),
+				EdgeSegmentId.DiagBottomRight,
+				left: SquarePoint.BottomMiddle,
+				right: SquarePoint.RightMiddle
+			),
+		]);
 
 		var simpleGraph = graph.Simplify();
 

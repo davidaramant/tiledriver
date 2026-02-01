@@ -56,5 +56,6 @@ public static class CellBoardExtensions
 		ConnectedAreaAnalyzer
 			.FindForegroundAreas(board.Dimensions, p => board[p] == CellType.Dead)
 			.MaxBy(component => component.Area)
-			?.TrimExcess(1) ?? throw new InvalidOperationException("This can't happen");
+			?.TrimExcess(1)
+		?? throw new InvalidOperationException("This can't happen");
 }

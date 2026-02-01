@@ -1,49 +1,47 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <Nullable>enable</Nullable>
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<IsPackable>false</IsPackable>
-  </PropertyGroup>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="TestFiles\MapInfo\spear.txt" />
-    <None Remove="TestFiles\MapInfo\wolf3d.txt" />
-    <None Remove="TestFiles\MapInfo\wolfcommon.txt" />
-    <None Remove="TestFiles\Uwmf\TEXTMAP.txt" />
-    <None Remove="TestFiles\Xlat\spear.txt" />
-    <None Remove="TestFiles\Xlat\wolf3d.txt" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="TestFiles\MapInfo\spear.txt" />
+		<None Remove="TestFiles\MapInfo\wolf3d.txt" />
+		<None Remove="TestFiles\MapInfo\wolfcommon.txt" />
+		<None Remove="TestFiles\Uwmf\TEXTMAP.txt" />
+		<None Remove="TestFiles\Xlat\spear.txt" />
+		<None Remove="TestFiles\Xlat\wolf3d.txt" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="TestFiles\MapInfo\spear.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TestFiles\MapInfo\wolf3d.txt" />
-    <EmbeddedResource Include="TestFiles\MapInfo\wolfcommon.txt" />
-    <EmbeddedResource Include="TestFiles\Uwmf\TEXTMAP.txt" />
-    <EmbeddedResource Include="TestFiles\Xlat\spear.txt" />
-    <EmbeddedResource Include="TestFiles\Xlat\wolf3d.txt" />
-  </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="TestFiles\MapInfo\spear.txt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="TestFiles\MapInfo\wolf3d.txt" />
+		<EmbeddedResource Include="TestFiles\MapInfo\wolfcommon.txt" />
+		<EmbeddedResource Include="TestFiles\Uwmf\TEXTMAP.txt" />
+		<EmbeddedResource Include="TestFiles\Xlat\spear.txt" />
+		<EmbeddedResource Include="TestFiles\Xlat\wolf3d.txt" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="Moq" />
-    <PackageReference Include="Shouldly" />
-    <PackageReference Include="xunit" />
-    <PackageReference Include="xunit.runner.visualstudio">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="coverlet.collector">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" />
+		<PackageReference Include="Moq" />
+		<PackageReference Include="Shouldly" />
+		<PackageReference Include="xunit" />
+		<PackageReference Include="xunit.runner.visualstudio">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="coverlet.collector">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Tiledriver.Core\Tiledriver.Core.csproj" />
-  </ItemGroup>
-
+	<ItemGroup>
+		<ProjectReference Include="..\Tiledriver.Core\Tiledriver.Core.csproj" />
+	</ItemGroup>
 </Project>

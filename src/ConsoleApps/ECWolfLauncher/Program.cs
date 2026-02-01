@@ -69,7 +69,6 @@ class Program
 			//        mapImage.Save(outputFile);
 			//    });
 
-
 			//var fileNames = new[]
 			//{
 			////    "10levels 01 - Wolf1 Map1.uwmf",
@@ -696,7 +695,6 @@ class Program
 	//    // Add top/bottom
 	//    ts2.InsertRange(0, Enumerable.Repeat(solidTile, 66));
 	//    ts2.InsertRange(4290, Enumerable.Repeat(solidTile, 66));
-
 
 	//    LoadMapInEcWolf(map, "flatland.wad");
 	//}
