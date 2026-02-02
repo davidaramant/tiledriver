@@ -35,7 +35,7 @@ public sealed class DoomDemoMaps
 
 	static IEnumerable<ILump> CreateWadContents(
 		IEnumerable<Func<TextureQueue, MapData>> mapCreators,
-		IEnumerable<(string Name, byte[] Data)>? extraTextures = null
+		IReadOnlyCollection<(string Name, byte[] Data)>? extraTextures = null
 	)
 	{
 		extraTextures ??= [];
