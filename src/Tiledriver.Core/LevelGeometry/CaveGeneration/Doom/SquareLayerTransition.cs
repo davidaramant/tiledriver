@@ -24,10 +24,10 @@ public static class SquareLayerTransition
 				_ => distance / 2,
 			};
 
-		var upperLeft = Normalize(interiorDistances.GetValueOr(bottomLeft + PositionOffset.Up, -1));
-		var upperRight = Normalize(interiorDistances.GetValueOr(bottomLeft + PositionOffset.UpAndRight, -1));
-		var lowerLeft = Normalize(interiorDistances.GetValueOr(bottomLeft, -1));
-		var lowerRight = Normalize(interiorDistances.GetValueOr(bottomLeft + PositionOffset.Right, -1));
+		var upperLeft = Normalize(interiorDistances.GetValueOrDefault(bottomLeft + PositionOffset.Up, -1));
+		var upperRight = Normalize(interiorDistances.GetValueOrDefault(bottomLeft + PositionOffset.UpAndRight, -1));
+		var lowerLeft = Normalize(interiorDistances.GetValueOrDefault(bottomLeft, -1));
+		var lowerRight = Normalize(interiorDistances.GetValueOrDefault(bottomLeft + PositionOffset.Right, -1));
 
 		// Because this is operating on internal distances from walls, there are only 1 or 2 different values for the
 		// corners.

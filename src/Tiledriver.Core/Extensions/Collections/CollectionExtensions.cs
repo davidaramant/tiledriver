@@ -21,12 +21,6 @@ public static class CollectionExtensions
 		}
 	}
 
-	public static IList<T> AddAndContinue<T>(this IList<T> list, params T[] items)
-	{
-		list.AddRange(items);
-		return list;
-	}
-
 	public static IList<T> AddRangeAndContinue<T>(this IList<T> list, IEnumerable<T> items)
 	{
 		list.AddRange(items);
@@ -43,7 +37,7 @@ public static class CollectionExtensions
 
 	public static void Shuffle<T>(this IList<T> list, Random? random = null)
 	{
-		var rng = random ?? new Random();
+		var rng = random ?? Random.Shared;
 
 		int n = list.Count;
 		while (n > 1)
@@ -53,11 +47,4 @@ public static class CollectionExtensions
 			(list[k], list[n]) = (list[n], list[k]);
 		}
 	}
-
-	public static TValue GetValueOr<TKey, TValue>(
-		this IReadOnlyDictionary<TKey, TValue> dict,
-		TKey key,
-		TValue defaultValue
-	)
-		where TValue : struct => dict.TryGetValue(key, out var value) ? value : defaultValue;
 }
