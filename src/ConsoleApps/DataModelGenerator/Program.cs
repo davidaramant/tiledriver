@@ -56,7 +56,7 @@ class Program
 	{
 		var path = "..";
 
-		while (!File.Exists(Path.Combine(path, "Tiledriver.sln")))
+		while (!File.Exists(Path.Combine(path, "Tiledriver.slnx")))
 		{
 			path = Path.Combine(path, "..");
 		}
