@@ -6,17 +6,17 @@ using Tiledriver.Core.FormatModels.Udmf;
 using Tiledriver.Core.FormatModels.Wad;
 using Tiledriver.Core.Settings;
 
-namespace Tiledriver.Core.Utils.GZDoom;
+namespace Tiledriver.Core.Utils.UZDoom;
 
-public sealed class GZDoomLauncher
+public sealed class UZDoomLauncher
 {
 	private readonly DoomConfig _config;
 
-	public GZDoomLauncher(DoomConfig config)
+	public UZDoomLauncher(DoomConfig config)
 	{
-		if (!File.Exists(config.GZDoomExePath))
+		if (!File.Exists(config.UZDoomExePath))
 		{
-			throw new FileNotFoundException("Could not find GZDoom EXE: " + config.GZDoomExePath);
+			throw new FileNotFoundException("Could not find UZDoom EXE: " + config.UZDoomExePath);
 		}
 
 		if (!File.Exists(config.Doom2IwadPath))
@@ -61,7 +61,7 @@ public sealed class GZDoomLauncher
 	public void LoadWad(string wadPath)
 	{
 		Process.Start(
-			_config.GZDoomExePath,
+			_config.UZDoomExePath,
 			$"-iwad \"{_config.Doom2IwadPath}\" -file \"{wadPath}\" -skill 4 -warp 01"
 		);
 	}

@@ -23,9 +23,9 @@ public static class ConfigLoader
 			config = config with { ECWolfPath = Path.Combine(config.ECWolfPath, "ecwolf.exe") };
 		}
 
-		if (!config.GZDoomPath.EndsWith("gzdoom.exe", StringComparison.InvariantCultureIgnoreCase))
+		if (!config.UZDoomPath.EndsWith("uzdoom.exe", StringComparison.InvariantCultureIgnoreCase))
 		{
-			config = config with { GZDoomPath = Path.Combine(config.GZDoomPath, "gzdoom.exe") };
+			config = config with { UZDoomPath = Path.Combine(config.UZDoomPath, "uzdoom.exe") };
 		}
 
 		if (!config.GamePaths.Complete)

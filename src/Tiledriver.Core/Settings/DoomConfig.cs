@@ -1,3 +1,3 @@
 namespace Tiledriver.Core.Settings;
 
-public sealed record DoomConfig(string GZDoomExePath, string Doom2IwadPath);
+public sealed record DoomConfig(string UZDoomExePath, string Doom2IwadPath);

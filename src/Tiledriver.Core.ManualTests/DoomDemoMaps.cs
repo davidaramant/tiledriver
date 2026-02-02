@@ -29,7 +29,7 @@ public sealed class DoomDemoMaps
 	{
 		ConfigLoader
 			.Load()
-			.CreateGZDoomLauncher()
+			.CreateUZDoomLauncher()
 			.CreateAndLoadWad(contents, Path.Combine(_dirInfo.FullName, (name ?? "demo") + ".wad"));
 	}
 

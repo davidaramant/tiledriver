@@ -2,14 +2,14 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using Tiledriver.Core.Utils.ECWolf;
-using Tiledriver.Core.Utils.GZDoom;
+using Tiledriver.Core.Utils.UZDoom;
 
 namespace Tiledriver.Core.Settings;
 
-public sealed record TiledriverConfig(string ECWolfPath, string GZDoomPath, GamePaths GamePaths)
+public sealed record TiledriverConfig(string ECWolfPath, string UZDoomPath, GamePaths GamePaths)
 {
 	public ECWolfLauncher CreateECWolfLauncher() => new(ECWolfPath);
 
-	public GZDoomLauncher CreateGZDoomLauncher() =>
-		new(new DoomConfig(GZDoomPath, GamePaths.Doom2IWad ?? throw new ArgumentException("No Doom path specified")));
+	public UZDoomLauncher CreateUZDoomLauncher() =>
+		new(new DoomConfig(UZDoomPath, GamePaths.Doom2IWad ?? throw new ArgumentException("No Doom path specified")));
 }
