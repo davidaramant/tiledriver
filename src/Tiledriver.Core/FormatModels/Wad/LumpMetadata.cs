@@ -14,12 +14,10 @@ public sealed record LumpMetadata(int Position, int Size, LumpName Name)
 		stream.WriteText(Name.ToString(), totalLength: LumpName.MaxLength);
 	}
 
-	public static LumpMetadata ReadFrom(Stream stream)
-	{
-		return new LumpMetadata(
+	public static LumpMetadata ReadFrom(Stream stream) =>
+		new(
 			Position: stream.ReadInt(),
 			Size: stream.ReadInt(),
 			Name: stream.ReadText(LumpName.MaxLength).TrimEnd((char)0)
 		);
-	}
 }

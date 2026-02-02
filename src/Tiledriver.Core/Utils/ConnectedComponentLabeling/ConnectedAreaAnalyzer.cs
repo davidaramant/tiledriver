@@ -123,7 +123,7 @@ public static class ConnectedAreaAnalyzer
 		Neighborhood neighborhood
 	)
 	{
-		var edges = DetermineInteriorContours(area, neighborhood);
+		var edges = area.DetermineInteriorContours(neighborhood);
 
 		var output = new Dictionary<Position, int>();
 		for (int distance = 0; distance < edges.Count; distance++)

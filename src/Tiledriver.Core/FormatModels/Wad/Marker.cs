@@ -3,15 +3,9 @@
 
 namespace Tiledriver.Core.FormatModels.Wad;
 
-public sealed class Marker : ILump
+public sealed record Marker(LumpName Name) : ILump
 {
-	public LumpName Name { get; }
 	public bool HasData => false;
-
-	public Marker(LumpName name)
-	{
-		Name = name;
-	}
 
 	public void WriteTo(Stream stream)
 	{

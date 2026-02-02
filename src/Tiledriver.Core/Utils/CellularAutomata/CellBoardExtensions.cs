@@ -47,7 +47,7 @@ public static class CellBoardExtensions
 
 	public static CellBoard TrimToLargestDeadArea(this CellBoard board)
 	{
-		var (largestArea, newSize) = TrimToLargestDeadConnectedArea(board);
+		var (largestArea, newSize) = board.TrimToLargestDeadConnectedArea();
 
 		return new CellBoard(newSize, typeAtPosition: p => largestArea.Contains(p) ? CellType.Dead : CellType.Alive);
 	}

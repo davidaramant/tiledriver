@@ -6,25 +6,11 @@ using Tiledriver.Core.FormatModels.Udmf.Writing;
 
 namespace Tiledriver.Core.FormatModels.Wad;
 
-public sealed class UdmfLump : ILump
+public sealed record UdmfLump(LumpName Name, MapData Map) : ILump
 {
-	private readonly MapData _mapData;
-	public LumpName Name { get; }
 	public bool HasData => true;
 
-	public UdmfLump(LumpName name, MapData mapData)
-	{
-		Name = name;
-		_mapData = mapData;
-	}
+	public void WriteTo(Stream stream) => Map.WriteTo(stream);
 
-	public void WriteTo(Stream stream)
-	{
-		_mapData.WriteTo(stream);
-	}
-
-	public byte[] GetData()
-	{
-		throw new NotImplementedException();
-	}
+	public byte[] GetData() => throw new NotImplementedException();
 }

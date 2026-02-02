@@ -3,28 +3,13 @@
 
 namespace Tiledriver.Core.FormatModels.Wdc31;
 
-public sealed class Header
+public sealed record Header(string FileVersion, int NumberOfMaps, ushort NumberOfMapPlanes, ushort MaxMapNameLength)
 {
-	public Header(string fileVersion, int numberOfMaps, ushort numberOfMapPlanes, ushort maxMapNameLength)
-	{
-		FileVersion = fileVersion;
-		NumberOfMaps = numberOfMaps;
-		NumberOfMapPlanes = numberOfMapPlanes;
-		MaxMapNameLength = maxMapNameLength;
-	}
-
-	public string FileVersion { get; }
-	public int NumberOfMaps { get; }
-	public ushort NumberOfMapPlanes { get; }
-	public ushort MaxMapNameLength { get; }
-
-	public static Header Read(BinaryReader reader)
-	{
-		return new Header(
-			fileVersion: new string(reader.ReadChars(6)),
-			numberOfMaps: reader.ReadInt32(),
-			numberOfMapPlanes: reader.ReadUInt16(),
-			maxMapNameLength: reader.ReadUInt16()
+	public static Header Read(BinaryReader reader) =>
+		new(
+			FileVersion: new string(reader.ReadChars(6)),
+			NumberOfMaps: reader.ReadInt32(),
+			NumberOfMapPlanes: reader.ReadUInt16(),
+			MaxMapNameLength: reader.ReadUInt16()
 		);
-	}
 }

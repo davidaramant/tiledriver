@@ -9,7 +9,7 @@ namespace Tiledriver.Core.FormatModels.Common;
 /// A case-insensitive identifier.
 /// </summary>
 [DebuggerDisplay("{" + nameof(_name) + "}")]
-public readonly struct Identifier
+public readonly struct Identifier : IEquatable<Identifier>
 {
 	private readonly string _name;
 
@@ -25,7 +25,7 @@ public readonly struct Identifier
 
 	#region Equality members
 
-	private bool Equals(Identifier other) =>
+	public bool Equals(Identifier other) =>
 		string.Equals(_name, other._name, StringComparison.InvariantCultureIgnoreCase);
 
 	public override bool Equals(object? obj)

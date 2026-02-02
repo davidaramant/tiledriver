@@ -1,83 +1,84 @@
 // Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using System.Collections.Immutable;
 using Tiledriver.Core.FormatModels.Common.Reading.AbstractSyntaxTree;
 
 namespace Tiledriver.Core.FormatModels.Common.Reading;
 
 public static class TokenStreamExtensions
 {
-	public static Token? GetNext(this IEnumerator<Token> enumerator) =>
-		enumerator.MoveNext() ? enumerator.Current : null;
-
-	public static Token? GetNextSkippingNewlines(this IEnumerator<Token> enumerator)
+	extension(IEnumerator<Token> enumerator)
 	{
-		while (enumerator.MoveNext())
+		public Token? GetNext() => enumerator.MoveNext() ? enumerator.Current : null;
+
+		public Token? GetNextSkippingNewlines()
 		{
-			if (enumerator.Current is not NewLineToken)
+			while (enumerator.MoveNext())
 			{
-				return enumerator.Current;
+				if (enumerator.Current is not NewLineToken)
+				{
+					return enumerator.Current;
+				}
+			}
+
+			return null;
+		}
+
+		public TExpected ExpectNext<TExpected>()
+			where TExpected : Token
+		{
+			var nextToken = enumerator.GetNext();
+			return nextToken as TExpected ?? throw ParsingException.CreateError<TExpected>(nextToken);
+		}
+
+		public TExpected ExpectNextSkippingNewlines<TExpected>()
+			where TExpected : Token
+		{
+			var nextToken = enumerator.GetNextSkippingNewlines();
+			return nextToken as TExpected ?? throw ParsingException.CreateError<TExpected>(nextToken);
+		}
+
+		public Block ParseBlock(IdentifierToken name)
+		{
+			var assignments = new List<Assignment>();
+
+			while (true)
+			{
+				var token = enumerator.GetNext();
+				switch (token)
+				{
+					case IdentifierToken i:
+						enumerator.ExpectNext<EqualsToken>();
+						assignments.Add(enumerator.ParseAssignment(i));
+						break;
+					case CloseBraceToken:
+						return new Block(name, [.. assignments]);
+					default:
+						throw ParsingException.CreateError(token, "identifier or end of block");
+				}
 			}
 		}
 
-		return null;
-	}
-
-	public static TExpected ExpectNext<TExpected>(this IEnumerator<Token> tokenStream)
-		where TExpected : Token
-	{
-		var nextToken = GetNext(tokenStream);
-		return nextToken is TExpected token ? token : throw ParsingException.CreateError<TExpected>(nextToken);
-	}
-
-	public static TExpected ExpectNextSkippingNewlines<TExpected>(this IEnumerator<Token> tokenStream)
-		where TExpected : Token
-	{
-		var nextToken = GetNextSkippingNewlines(tokenStream);
-		return nextToken is TExpected token ? token : throw ParsingException.CreateError<TExpected>(nextToken);
-	}
-
-	public static Block ParseBlock(this IEnumerator<Token> tokenStream, IdentifierToken name)
-	{
-		var assignments = new List<Assignment>();
-
-		while (true)
+		public Assignment ParseAssignment(IdentifierToken id)
 		{
-			var token = GetNext(tokenStream);
-			switch (token)
+			var valueToken = enumerator.GetNext();
+			switch (valueToken)
 			{
-				case IdentifierToken i:
-					ExpectNext<EqualsToken>(tokenStream);
-					assignments.Add(tokenStream.ParseAssignment(i));
+				case IntegerToken:
 					break;
-				case CloseBraceToken:
-					return new Block(name, [.. assignments]);
+				case FloatToken:
+					break;
+				case BooleanToken:
+					break;
+				case StringToken:
+					break;
 				default:
-					throw ParsingException.CreateError(token, "identifier or end of block");
+					throw ParsingException.CreateError(valueToken, "value");
 			}
+
+			enumerator.ExpectNext<SemicolonToken>();
+
+			return new Assignment(id, valueToken);
 		}
-	}
-
-	public static Assignment ParseAssignment(this IEnumerator<Token> tokenStream, IdentifierToken id)
-	{
-		var valueToken = GetNext(tokenStream);
-		switch (valueToken)
-		{
-			case IntegerToken:
-				break;
-			case FloatToken:
-				break;
-			case BooleanToken:
-				break;
-			case StringToken:
-				break;
-			default:
-				throw ParsingException.CreateError(valueToken, "value");
-		}
-
-		ExpectNext<SemicolonToken>(tokenStream);
-
-		return new Assignment(id, valueToken);
 	}
 }

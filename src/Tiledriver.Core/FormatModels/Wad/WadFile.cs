@@ -14,10 +14,7 @@ public sealed class WadFile : IEnumerable<ILump>
 
 	public ILump this[int index] => _lumps[index];
 
-	private WadFile(IEnumerable<ILump> lumps)
-	{
-		_lumps.AddRange(lumps);
-	}
+	private WadFile(IEnumerable<ILump> lumps) => _lumps.AddRange(lumps);
 
 	public static WadFile Read(string filePath)
 	{
@@ -64,13 +61,7 @@ public sealed class WadFile : IEnumerable<ILump>
 		return Enumerable.Range(1, numLumps).Select(_ => LumpMetadata.ReadFrom(stream).Name.ToString());
 	}
 
-	IEnumerator IEnumerable.GetEnumerator()
-	{
-		return GetEnumerator();
-	}
+	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-	public IEnumerator<ILump> GetEnumerator()
-	{
-		return _lumps.GetEnumerator();
-	}
+	public IEnumerator<ILump> GetEnumerator() => _lumps.GetEnumerator();
 }

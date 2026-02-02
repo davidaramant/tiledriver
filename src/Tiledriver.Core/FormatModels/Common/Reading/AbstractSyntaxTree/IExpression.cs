@@ -3,4 +3,4 @@
 
 namespace Tiledriver.Core.FormatModels.Common.Reading.AbstractSyntaxTree;
 
-public interface IExpression { }
+public interface IExpression;

@@ -9,12 +9,12 @@ public static class Extensions
 {
 	public static void WriteInt(this Stream stream, int value) => stream.WriteArray(BitConverter.GetBytes(value));
 
-	public static void WriteText(this Stream stream, string text) => WriteText(stream, text, text.Length);
+	public static void WriteText(this Stream stream, string text) => stream.WriteText(text, text.Length);
 
 	public static void WriteText(this Stream stream, string text, int totalLength) =>
-		WriteArray(stream, Encoding.ASCII.GetBytes(text), totalLength);
+		stream.WriteArray(Encoding.ASCII.GetBytes(text), totalLength);
 
-	public static void WriteArray(this Stream stream, byte[] bytes) => WriteArray(stream, bytes, bytes.Length);
+	public static void WriteArray(this Stream stream, byte[] bytes) => stream.WriteArray(bytes, bytes.Length);
 
 	public static void WriteArray(this Stream stream, byte[] bytes, int totalLength)
 	{

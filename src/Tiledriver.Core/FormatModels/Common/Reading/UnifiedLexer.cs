@@ -69,7 +69,7 @@ public sealed class UnifiedLexer
 					SkipChar();
 					break;
 
-				case char digit when char.IsDigit(next):
+				case var digit when char.IsDigit(next):
 					yield return LexNumber(digit);
 					break;
 				case '-':
@@ -81,7 +81,7 @@ public sealed class UnifiedLexer
 					yield return LexString();
 					break;
 
-				case char when char.IsLetter(next):
+				case var c when char.IsLetter(c):
 				case '_':
 					yield return LexIdentifier();
 					break;
@@ -96,7 +96,7 @@ public sealed class UnifiedLexer
 					_currentPosition = _currentPosition.NextLine();
 					break;
 
-				case char when char.IsWhiteSpace(next):
+				case var c when char.IsWhiteSpace(c):
 					SkipChar();
 					break;
 

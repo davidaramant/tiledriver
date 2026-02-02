@@ -7,15 +7,9 @@ public sealed class CompoundResourceProvider : IResourceProvider
 {
 	private readonly Stack<IResourceProvider> _providers = new();
 
-	public void AddProvider(IResourceProvider provider)
-	{
-		_providers.Push(provider);
-	}
+	public void AddProvider(IResourceProvider provider) => _providers.Push(provider);
 
-	public Stream Lookup(string path)
-	{
-		return TryLookup(path) ?? throw new EntryNotFoundException(path);
-	}
+	public Stream Lookup(string path) => TryLookup(path) ?? throw new EntryNotFoundException(path);
 
 	public Stream? TryLookup(string path)
 	{

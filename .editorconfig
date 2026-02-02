@@ -8,6 +8,9 @@ indent_style = tab
 max_line_length = 120
 
 [*.cs]
+# Do not suggest primary constructors
+dotnet_diagnostic.IDE0290.severity = none
+
 # Force file-scoped namespaces
 csharp_style_namespace_declarations = file_scoped:error
 dotnet_diagnostic.IDE0161.severity = error

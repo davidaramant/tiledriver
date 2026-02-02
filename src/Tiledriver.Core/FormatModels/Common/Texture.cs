@@ -7,7 +7,7 @@ namespace Tiledriver.Core.FormatModels.Common;
 
 public sealed record Texture(string Name)
 {
-	public bool IsColor => Name.StartsWith("#");
+	public bool IsColor => Name.StartsWith('#');
 
 	public static readonly Texture None = new("-");
 

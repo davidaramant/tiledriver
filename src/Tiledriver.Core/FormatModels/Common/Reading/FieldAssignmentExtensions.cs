@@ -48,7 +48,7 @@ public static class FieldAssignmentExtensions
 		Identifier fieldName
 	)
 	{
-		var name = GetRequiredFieldValue<string>(fields, contextName, fieldName);
+		var name = fields.GetRequiredFieldValue<string>(contextName, fieldName);
 		return new Texture(name);
 	}
 
@@ -57,7 +57,7 @@ public static class FieldAssignmentExtensions
 		Identifier fieldName
 	)
 	{
-		var name = GetOptionalFieldValue(fields, fieldName, "-");
+		var name = fields.GetOptionalFieldValue(fieldName, "-");
 		return name is null or "-" ? Texture.None : new Texture(name);
 	}
 
