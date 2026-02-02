@@ -8,8 +8,8 @@ namespace Tiledriver.Core.GameInfo.Wolf3D;
 /// </summary>
 public static class AllWolfTextures
 {
-	public static readonly IEnumerable<string> AllTextures = new[]
-	{
+	public static readonly IEnumerable<string> AllTextures =
+	[
 		"GSTONEA1", // Gray Stone 1 N/S
 		"GSTONEA2", // Gray Stone 1 E/W
 		"GSTONEB1", // Gray Stone 2 N/S
@@ -115,7 +115,6 @@ public static class AllWolfTextures
 		"DOOR2_1", // Elevator Door N/S
 		"DOOR2_2", // Elevator Door E/W
 		"DOOR3_1", // Locked Door N/S
-		"DOOR3_2" // Locked Door E/W
-		,
-	};
+		"DOOR3_2", // Locked Door E/W
+	];
 }

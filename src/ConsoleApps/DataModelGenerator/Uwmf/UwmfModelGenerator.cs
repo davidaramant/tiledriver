@@ -29,7 +29,7 @@ public static class UwmfModelGenerator
 		var containsTexture = block.Properties.Any(p => p is TextureProperty);
 		var containsCollection = block.Properties.Any(p => p is CollectionProperty);
 
-		List<string> includes = new() { "System.CodeDom.Compiler" };
+		List<string> includes = ["System.CodeDom.Compiler"];
 		if (containsTexture)
 		{
 			includes.Add("Tiledriver.Core.FormatModels.Common");

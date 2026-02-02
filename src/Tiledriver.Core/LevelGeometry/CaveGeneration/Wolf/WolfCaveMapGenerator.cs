@@ -105,10 +105,10 @@ public static class WolfCaveMapGenerator
 			Height: size.Height,
 			Tiles: tiles,
 			Sectors: sectors,
-			Zones: ImmutableArray.Create(new Zone()),
-			Planes: ImmutableArray.Create(new Plane(Depth: 64)),
-			PlaneMaps: ImmutableArray.Create(planeMap),
-			Things: things.ToImmutableArray(),
+			Zones: [new Zone()],
+			Planes: [new Plane(Depth: 64)],
+			PlaneMaps: [planeMap],
+			Things: [.. things],
 			Triggers: ImmutableArray<Trigger>.Empty
 		);
 	}
@@ -253,11 +253,7 @@ public static class WolfCaveMapGenerator
 			}
 		}
 
-		return (
-			planeMap.ToPlaneMap(),
-			sectorSequence.GetDefinitions().ToImmutableArray(),
-			tileSequence.GetDefinitions().ToImmutableArray()
-		);
+		return (planeMap.ToPlaneMap(), [.. sectorSequence.GetDefinitions()], [.. tileSequence.GetDefinitions()]);
 	}
 
 	private sealed record SectorDescription(Corners Floor, Corners Ceiling, int FloorLight, int CeilingLight);

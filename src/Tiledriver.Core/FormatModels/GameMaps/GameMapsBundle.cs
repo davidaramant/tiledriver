@@ -29,7 +29,7 @@ public sealed class GameMapsBundle
 			return MapHeader.Parse(headerBuffer);
 		});
 
-		return new GameMapsBundle(offsetData.RlewMarker, headers.ToImmutableArray());
+		return new GameMapsBundle(offsetData.RlewMarker, [.. headers]);
 	}
 
 	public BinaryMap LoadMap(int mapIndex, Stream mapsStream)
@@ -48,7 +48,7 @@ public sealed class GameMapsBundle
 			name: header.Name,
 			width: header.Width,
 			height: header.Height,
-			planes: new[] { plane0Data, plane1Data, plane2Data }
+			planes: [plane0Data, plane1Data, plane2Data]
 		);
 	}
 

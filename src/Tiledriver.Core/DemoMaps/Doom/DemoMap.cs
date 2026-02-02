@@ -12,7 +12,8 @@ public sealed class DemoMap
 	{
 		return new MapData(
 			NameSpace: "Doom",
-			Vertices: ImmutableArray.Create(
+			Vertices:
+			[
 				new Vertex // 0
 				(X: 0, Y: 0),
 				new Vertex // 1
@@ -32,9 +33,10 @@ public sealed class DemoMap
 				new Vertex // 8
 				(X: 96, Y: 528),
 				new Vertex // 9
-				(X: 160, Y: 528)
-			),
-			LineDefs: ImmutableArray.Create(
+				(X: 160, Y: 528),
+			],
+			LineDefs:
+			[
 				new LineDef // 0
 				(V1: 0, V2: 1, SideFront: 0, Blocking: true),
 				new LineDef // 1
@@ -58,9 +60,10 @@ public sealed class DemoMap
 				new LineDef // 10
 				(V1: 3, V2: 7, SideFront: 11, SideBack: 12, TwoSided: true, DontPegTop: true, DontPegBottom: true),
 				new LineDef // 11
-				(V1: 3, V2: 8, SideFront: 13, Blocking: true)
-			),
-			SideDefs: ImmutableArray.Create(
+				(V1: 3, V2: 8, SideFront: 13, Blocking: true),
+			],
+			SideDefs:
+			[
 				new SideDef // 0
 				(sector: 0, textureMiddle: "STARTAN2"),
 				new SideDef // 1
@@ -88,9 +91,10 @@ public sealed class DemoMap
 				new SideDef // 12
 				(sector: 2),
 				new SideDef // 13
-				(sector: 2, textureMiddle: "SHAWN2")
-			),
-			Sectors: ImmutableArray.Create(
+				(sector: 2, textureMiddle: "SHAWN2"),
+			],
+			Sectors:
+			[
 				new Sector(
 					HeightFloor: 0,
 					HeightCeiling: 128,
@@ -111,9 +115,10 @@ public sealed class DemoMap
 					TextureFloor: "FLAT23",
 					TextureCeiling: "FLAT23",
 					LightLevel: 255
-				)
-			),
-			Things: ImmutableArray.Create(
+				),
+			],
+			Things:
+			[
 				new Thing(
 					X: 128,
 					Y: 64,
@@ -127,8 +132,8 @@ public sealed class DemoMap
 					Single: true,
 					Dm: true,
 					Coop: true
-				)
-			)
+				),
+			]
 		);
 	}
 }

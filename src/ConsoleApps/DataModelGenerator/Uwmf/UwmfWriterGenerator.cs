@@ -19,7 +19,7 @@ public static class UwmfWriterGenerator
 		using var output = new IndentedWriter(stream);
 
 		output
-			.WriteHeader("Tiledriver.Core.FormatModels.Uwmf.Writing", new[] { "System.CodeDom.Compiler", "System.IO" })
+			.WriteHeader("Tiledriver.Core.FormatModels.Uwmf.Writing", ["System.CodeDom.Compiler", "System.IO"])
 			.Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
 			.Line($"public static partial class UwmfWriter")
 			.OpenParen();

@@ -112,7 +112,7 @@ public sealed class SectorEdgeGraph
 			}
 			else
 			{
-				pointToEdges.Add(point, new HashSet<SectorEdge> { edge });
+				pointToEdges.Add(point, [edge]);
 			}
 		}
 		AddPoint(edge.Start);

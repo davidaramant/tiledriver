@@ -20,6 +20,6 @@ public sealed class Marker : ILump
 
 	public byte[] GetData()
 	{
-		return Array.Empty<byte>();
+		return [];
 	}
 }

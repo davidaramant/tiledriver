@@ -25,28 +25,22 @@ public class WolfensteinDemoMaps
 	public void All()
 	{
 		Load(
-			CreateWadContents(
-				new Func<TextureQueue, MapData>[]
-				{
-					TexturesDemoMap.CreateMapAndTextures,
-					TileDemoMap.CreateMapAndTextures,
-					ThingDemoMap.CreateMapAndTextures,
-				}
-			)
+			CreateWadContents([
+				TexturesDemoMap.CreateMapAndTextures,
+				TileDemoMap.CreateMapAndTextures,
+				ThingDemoMap.CreateMapAndTextures,
+			])
 		);
 	}
 
 	[Test, Explicit]
-	public void TexturesDemo() =>
-		Load(CreateWadContents(new Func<TextureQueue, MapData>[] { TexturesDemoMap.CreateMapAndTextures }));
+	public void TexturesDemo() => Load(CreateWadContents([TexturesDemoMap.CreateMapAndTextures]));
 
 	[Test, Explicit]
-	public void TileDemo() =>
-		Load(CreateWadContents(new Func<TextureQueue, MapData>[] { TileDemoMap.CreateMapAndTextures }));
+	public void TileDemo() => Load(CreateWadContents([TileDemoMap.CreateMapAndTextures]));
 
 	[Test, Explicit]
-	public void ThingDemo() =>
-		Load(CreateWadContents(new Func<TextureQueue, MapData>[] { ThingDemoMap.CreateMapAndTextures }));
+	public void ThingDemo() => Load(CreateWadContents([ThingDemoMap.CreateMapAndTextures]));
 
 	[Test, Explicit]
 	public void CaveMap()
@@ -62,7 +56,7 @@ public class WolfensteinDemoMaps
 				XScale: 2,
 				YScale: 2,
 				Offset: new TextureOffset(17, 32),
-				Patches: ImmutableArray.Create(new Patch("CRYSTAL", 0, 0))
+				Patches: [new Patch("CRYSTAL", 0, 0)]
 			),
 			new CompositeTexture(
 				"CRSCA0",
@@ -72,7 +66,7 @@ public class WolfensteinDemoMaps
 				XScale: 2,
 				YScale: 2,
 				Offset: new TextureOffset(17, 133),
-				Patches: ImmutableArray.Create(new Patch("CRYSTAL", 0, 0, FlipY: true))
+				Patches: [new Patch("CRYSTAL", 0, 0, FlipY: true)]
 			)
 		);
 
@@ -94,20 +88,18 @@ public class WolfensteinDemoMaps
 				.AddRangeAndContinue(
 					textureQueue.RenderQueue.Select(r => DataLump.ReadFromStream(r.Item2.Name, r.Item1.RenderTo))
 				)
-				.AddRangeAndContinue(
-					new ILump[]
-					{
-						new Marker("P_END"),
-						new Marker("S_START"),
-						new DataLump("CRYSTAL", Resource.crystal),
-						new Marker("S_END"),
-						DataLump.ReadFromStream(
-							"TEXTURES",
-							stream => TexturesWriter.Write(textureQueue.Definitions, stream)
-						),
-						new DataLump(
-							"DECORATE",
-							@"actor CeilingCrystal
+				.AddRangeAndContinue([
+					new Marker("P_END"),
+					new Marker("S_START"),
+					new DataLump("CRYSTAL", Resource.crystal),
+					new Marker("S_END"),
+					DataLump.ReadFromStream(
+						"TEXTURES",
+						stream => TexturesWriter.Write(textureQueue.Definitions, stream)
+					),
+					new DataLump(
+						"DECORATE",
+						@"actor CeilingCrystal
 {
 	states
 	{
@@ -125,12 +117,11 @@ actor FloorCrystal
 			stop
 	}
 }"
-						),
-						new Marker("MAP01"),
-						new UwmfLump("TEXTMAP", map),
-						new Marker("ENDMAP"),
-					}
-				)
+					),
+					new Marker("MAP01"),
+					new UwmfLump("TEXTMAP", map),
+					new Marker("ENDMAP"),
+				])
 		);
 	}
 

@@ -31,7 +31,8 @@ public static class ThingDemoMap
 			Name: "Thing Demo",
 			Width: width,
 			Height: height,
-			Tiles: ImmutableArray.Create(
+			Tiles:
+			[
 				new Tile(
 					TextureNorth: "GSTONEA1",
 					TextureSouth: "GSTONEA1",
@@ -49,16 +50,17 @@ public static class ThingDemoMap
 					BlockingSouth: true,
 					BlockingWest: true,
 					BlockingEast: true
-				)
-			),
-			Sectors: ImmutableArray.Create(
+				),
+			],
+			Sectors:
+			[
 				new Sector(TextureCeiling: "#C0C0C0", TextureFloor: "#A0A0A0"),
 				new Sector(TextureCeiling: "#00FF00", TextureFloor: "#00FF00", Comment: "Good thing"),
-				new Sector(TextureCeiling: "#FF0000", TextureFloor: "#FF0000", Comment: "Invalid thing")
-			),
-			Zones: ImmutableArray.Create(new Zone()),
-			Planes: ImmutableArray.Create(new Plane(Depth: 64)),
-			PlaneMaps: ImmutableArray.Create(CreateGeometry(width: width, height: height, things).ToImmutableArray()),
+				new Sector(TextureCeiling: "#FF0000", TextureFloor: "#FF0000", Comment: "Invalid thing"),
+			],
+			Zones: [new Zone()],
+			Planes: [new Plane(Depth: 64)],
+			PlaneMaps: [CreateGeometry(width: width, height: height, things).ToImmutableArray()],
 			Things: things.Add(
 				new Thing(
 					Type: Actor.Player1Start.ClassName,
@@ -73,7 +75,8 @@ public static class ThingDemoMap
 					Skill4: true
 				)
 			),
-			Triggers: ImmutableArray.Create(
+			Triggers:
+			[
 				new Trigger(
 					X: 2,
 					Y: 1,
@@ -93,8 +96,8 @@ public static class ThingDemoMap
 					PlayerCross: false,
 					Repeatable: true,
 					Secret: false
-				)
-			)
+				),
+			]
 		);
 	}
 

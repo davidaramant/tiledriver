@@ -16,8 +16,8 @@ sealed class InheritedBlock : IBlock
 	public IBlock BaseClass => _baseClass.Value;
 	public string FormatName { get; }
 	public string ClassName => FormatName.Pascalize();
-	public ImmutableArray<Property> Metadata => _metadata.Concat(BaseClass.Metadata).ToImmutableArray();
-	public ImmutableArray<Property> Properties => _properties.Concat(BaseClass.Properties).ToImmutableArray();
+	public ImmutableArray<Property> Metadata => [.. _metadata.Concat(BaseClass.Metadata)];
+	public ImmutableArray<Property> Properties => [.. _properties.Concat(BaseClass.Properties)];
 
 	public InheritedBlock(
 		string formatName,

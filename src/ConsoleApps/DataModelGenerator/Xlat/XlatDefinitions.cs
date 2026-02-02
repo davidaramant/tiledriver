@@ -9,28 +9,27 @@ namespace Tiledriver.DataModelGenerator.Xlat;
 
 static class XlatDefinitions
 {
-	public static readonly ImmutableArray<Block> Blocks = ImmutableArray.Create(
-		new Block(
-			"elevator",
-			Serialization: SerializationType.Custom,
-			Properties: ImmutableArray.Create<Property>(new UShortProperty("oldNum"))
-		),
+	public static readonly ImmutableArray<Block> Blocks =
+	[
+		new Block("elevator", Serialization: SerializationType.Custom, Properties: [new UShortProperty("oldNum")]),
 		new Block(
 			"thingTemplate",
 			Serialization: SerializationType.Custom,
-			Properties: ImmutableArray.Create<Property>(
+			Properties:
+			[
 				new UShortProperty("oldNum"),
 				new StringProperty("type"),
 				new IntegerProperty("angles"),
 				new BooleanProperty("holowall"),
 				new BooleanProperty("pathing"),
 				new BooleanProperty("ambush"),
-				new IntegerProperty("minskill")
-			)
+				new IntegerProperty("minskill"),
+			]
 		),
 		new Block(
 			"triggerTemplate",
-			Properties: ImmutableArray.Create<Property>(
+			Properties:
+			[
 				new UShortProperty("oldNum"),
 				new StringProperty("action"),
 				new IntegerProperty("arg0", defaultValue: 0),
@@ -47,30 +46,29 @@ static class XlatDefinitions
 				new BooleanProperty("monsterUse", defaultValue: false),
 				new BooleanProperty("repeatable", defaultValue: false),
 				new BooleanProperty("secret", defaultValue: false),
-				new StringProperty("comment", defaultValue: string.Empty)
-			)
+				new StringProperty("comment", defaultValue: string.Empty),
+			]
 		),
 		new Block(
 			"ambushModzone",
 			Serialization: SerializationType.Custom,
-			Properties: ImmutableArray.Create<Property>(
-				new UShortProperty("oldNum"),
-				new BooleanProperty("fillzone", defaultValue: false)
-			)
+			Properties: [new UShortProperty("oldNum"), new BooleanProperty("fillzone", defaultValue: false)]
 		),
 		new Block(
 			"changeTriggerModzone",
 			Serialization: SerializationType.Custom,
-			Properties: ImmutableArray.Create<Property>(
+			Properties:
+			[
 				new UShortProperty("oldNum"),
 				new BooleanProperty("fillzone", defaultValue: false),
 				new StringProperty("action"),
-				new BlockProperty("triggerTemplate")
-			)
+				new BlockProperty("triggerTemplate"),
+			]
 		),
 		new Block(
 			"tileTemplate",
-			Properties: ImmutableArray.Create<Property>(
+			Properties:
+			[
 				new UShortProperty("oldNum"),
 				new StringProperty("textureEast"),
 				new StringProperty("textureNorth"),
@@ -86,25 +84,23 @@ static class XlatDefinitions
 				new IntegerProperty("mapped", defaultValue: 0),
 				new StringProperty("soundSequence", defaultValue: string.Empty),
 				new StringProperty("textureOverhead", defaultValue: string.Empty),
-				new StringProperty("comment", defaultValue: string.Empty)
-			)
+				new StringProperty("comment", defaultValue: string.Empty),
+			]
 		),
 		new Block(
 			"zoneTemplate",
 			Serialization: SerializationType.Custom,
-			Properties: ImmutableArray.Create<Property>(
-				new UShortProperty("oldNum"),
-				new StringProperty("comment", defaultValue: string.Empty)
-			)
+			Properties: [new UShortProperty("oldNum"), new StringProperty("comment", defaultValue: string.Empty)]
 		),
 		new Block(
 			"flats",
 			ClassName: "FlatMappings",
 			Serialization: SerializationType.TopLevel,
-			Properties: ImmutableArray.Create<Property>(
+			Properties:
+			[
 				new ArrayProperty("ceiling", elementType: "string"),
-				new ArrayProperty("floor", elementType: "string")
-			)
-		)
-	);
+				new ArrayProperty("floor", elementType: "string"),
+			]
+		),
+	];
 }

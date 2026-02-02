@@ -11,9 +11,9 @@ public static partial class XlatParser
 {
 	public static MapTranslation Parse(IEnumerable<Token> tokens, IResourceProvider resourceProvider)
 	{
-		List<TileMappings> tileMappings = new();
-		List<IMapping> thingMappings = new();
-		List<FlatMappings> flatMappings = new();
+		List<TileMappings> tileMappings = [];
+		List<IMapping> thingMappings = [];
+		List<FlatMappings> flatMappings = [];
 
 		var tokenSource = new TokenSource(tokens, resourceProvider, XlatLexer.Create);
 		using var tokenStream = tokenSource.GetEnumerator();
@@ -76,11 +76,11 @@ public static partial class XlatParser
 		}
 
 		return new TileMappings(
-			ambushModzones.ToImmutableArray(),
-			changeTriggerModzones.ToImmutableArray(),
-			tileTemplates.ToImmutableArray(),
-			triggerTemplates.ToImmutableArray(),
-			zoneTemplates.ToImmutableArray()
+			[.. ambushModzones],
+			[.. changeTriggerModzones],
+			[.. tileTemplates],
+			[.. triggerTemplates],
+			[.. zoneTemplates]
 		);
 	}
 
@@ -125,11 +125,11 @@ public static partial class XlatParser
 
 				case CloseBraceToken:
 					return new TileMappings(
-						ambushModzones.ToImmutableArray(),
-						changeTriggerModzones.ToImmutableArray(),
-						tileTemplates.ToImmutableArray(),
-						triggerTemplates.ToImmutableArray(),
-						zoneTemplates.ToImmutableArray()
+						[.. ambushModzones],
+						[.. changeTriggerModzones],
+						[.. tileTemplates],
+						[.. triggerTemplates],
+						[.. zoneTemplates]
 					);
 
 				default:
@@ -252,7 +252,7 @@ public static partial class XlatParser
 					break;
 
 				case CloseBraceToken:
-					return new FlatMappings(ceilings.ToImmutableArray(), floors.ToImmutableArray());
+					return new FlatMappings([.. ceilings], [.. floors]);
 
 				default:
 					throw ParsingException.CreateError(token, "identifier or end of block");

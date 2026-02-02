@@ -33,7 +33,7 @@ public static class UdmfModelGenerator
 		var containsTexture = block.Properties.Any(p => p is TextureProperty);
 		var containsCollection = block.Properties.Any(p => p is CollectionProperty);
 
-		List<string> includes = new() { "System.CodeDom.Compiler" };
+		List<string> includes = ["System.CodeDom.Compiler"];
 		if (containsTexture)
 		{
 			includes.Add("Tiledriver.Core.FormatModels.Common");
@@ -60,7 +60,7 @@ public static class UdmfModelGenerator
 
 		var containsTexture = block.Properties.Any(p => p is TextureProperty);
 		var containsNullables = block.Properties.Any(p => !p.HasDefault);
-		List<string> includes = new() { "System.CodeDom.Compiler", "System" };
+		List<string> includes = ["System.CodeDom.Compiler", "System"];
 		if (containsTexture)
 		{
 			includes.Add("Tiledriver.Core.FormatModels.Common");

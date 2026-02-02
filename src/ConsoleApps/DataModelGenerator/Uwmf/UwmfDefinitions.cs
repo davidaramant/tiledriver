@@ -9,10 +9,12 @@ namespace Tiledriver.DataModelGenerator.Uwmf;
 
 static class UwmfDefinitions
 {
-	public static readonly ImmutableArray<Block> Blocks = ImmutableArray.Create(
+	public static readonly ImmutableArray<Block> Blocks =
+	[
 		new Block(
 			"tile",
-			Properties: ImmutableArray.Create<Property>(
+			Properties:
+			[
 				new TextureProperty("textureEast"),
 				new TextureProperty("textureNorth"),
 				new TextureProperty("textureWest"),
@@ -27,41 +29,38 @@ static class UwmfDefinitions
 				new IntegerProperty("mapped", defaultValue: 0),
 				new StringProperty("soundSequence", defaultValue: string.Empty),
 				new StringProperty("textureOverhead", defaultValue: string.Empty),
-				new StringProperty("comment", defaultValue: string.Empty)
-			)
+				new StringProperty("comment", defaultValue: string.Empty),
+			]
 		),
 		new Block(
 			"sector",
-			Properties: ImmutableArray.Create<Property>(
+			Properties:
+			[
 				new TextureProperty("textureCeiling"),
 				new TextureProperty("textureFloor"),
-				new StringProperty("comment", defaultValue: string.Empty)
-			)
+				new StringProperty("comment", defaultValue: string.Empty),
+			]
 		),
-		new Block(
-			"zone",
-			Properties: ImmutableArray.Create<Property>(new StringProperty("comment", defaultValue: string.Empty))
-		),
+		new Block("zone", Properties: [new StringProperty("comment", defaultValue: string.Empty)]),
 		new Block(
 			"plane",
-			Properties: ImmutableArray.Create<Property>(
-				new IntegerProperty("depth"),
-				new StringProperty("comment", defaultValue: string.Empty)
-			)
+			Properties: [new IntegerProperty("depth"), new StringProperty("comment", defaultValue: string.Empty)]
 		),
 		new Block(
 			"mapSquare",
-			Properties: ImmutableArray.Create<Property>(
+			Properties:
+			[
 				new IntegerProperty("tile"),
 				new IntegerProperty("sector"),
 				new IntegerProperty("zone"),
-				new IntegerProperty("tag", defaultValue: 0)
-			),
+				new IntegerProperty("tag", defaultValue: 0),
+			],
 			Serialization: SerializationType.Custom
 		),
 		new Block(
 			"thing",
-			Properties: ImmutableArray.Create<Property>(
+			Properties:
+			[
 				new StringProperty("type"),
 				new DoubleProperty("x"),
 				new DoubleProperty("y"),
@@ -73,12 +72,13 @@ static class UwmfDefinitions
 				new BooleanProperty("skill2", defaultValue: false),
 				new BooleanProperty("skill3", defaultValue: false),
 				new BooleanProperty("skill4", defaultValue: false),
-				new StringProperty("comment", defaultValue: string.Empty)
-			)
+				new StringProperty("comment", defaultValue: string.Empty),
+			]
 		),
 		new Block(
 			"trigger",
-			Properties: ImmutableArray.Create<Property>(
+			Properties:
+			[
 				new IntegerProperty("x"),
 				new IntegerProperty("y"),
 				new IntegerProperty("z"),
@@ -97,12 +97,13 @@ static class UwmfDefinitions
 				new BooleanProperty("monsterUse", defaultValue: false),
 				new BooleanProperty("repeatable", defaultValue: false),
 				new BooleanProperty("secret", defaultValue: false),
-				new StringProperty("comment", defaultValue: string.Empty)
-			)
+				new StringProperty("comment", defaultValue: string.Empty),
+			]
 		),
 		new Block(
 			"mapData",
-			Properties: ImmutableArray.Create<Property>(
+			Properties:
+			[
 				new StringProperty("nameSpace", formatName: "namespace"),
 				new IntegerProperty("tileSize"),
 				new StringProperty("name"),
@@ -115,9 +116,9 @@ static class UwmfDefinitions
 				new BlockListProperty("plane"),
 				new PlaneMapsProperty(),
 				new BlockListProperty("thing"),
-				new BlockListProperty("trigger")
-			),
+				new BlockListProperty("trigger"),
+			],
 			Serialization: SerializationType.TopLevel
-		)
-	);
+		),
+	];
 }

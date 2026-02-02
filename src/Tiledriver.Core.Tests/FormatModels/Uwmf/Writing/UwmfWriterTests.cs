@@ -25,7 +25,10 @@ public sealed class UwmfWriterTests
 			Sectors: ImmutableArray<Sector>.Empty,
 			Zones: ImmutableArray<Zone>.Empty,
 			Planes: ImmutableArray<Plane>.Empty,
-			PlaneMaps: [new[] { new MapSquare(1, 2, 3), new MapSquare(4, 5, 6, 7) }.ToImmutableArray()],
+			PlaneMaps:
+			[
+				[new MapSquare(1, 2, 3), new MapSquare(4, 5, 6, 7)],
+			],
 			Things: ImmutableArray<Thing>.Empty,
 			Triggers: ImmutableArray<Trigger>.Empty
 		);

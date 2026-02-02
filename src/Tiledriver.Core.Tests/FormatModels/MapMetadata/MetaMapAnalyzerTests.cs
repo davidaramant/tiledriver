@@ -276,7 +276,10 @@ public sealed class MetaMapAnalyzerTests
 			Sectors: [new Sector(TextureCeiling: "#C0C0C0", TextureFloor: "#A0A0A0")],
 			Zones: [new Zone()],
 			Planes: [new Plane(Depth: 64)],
-			PlaneMaps: [planeMap.ToImmutableArray()],
+			PlaneMaps:
+			[
+				[.. planeMap],
+			],
 			Things: things.ToImmutableArray(),
 			Triggers: triggers.ToImmutableArray()
 		);

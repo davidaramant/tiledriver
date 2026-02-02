@@ -42,12 +42,13 @@ public static class TileDemoMap
 			Name: "Tile Demo",
 			Width: mapSize.Width,
 			Height: mapSize.Height,
-			Tiles: originalTiles.Select(ot => ot.Tile).ToImmutableArray(),
+			Tiles: [.. originalTiles.Select(ot => ot.Tile)],
 			Sectors: sectors,
-			Zones: ImmutableArray.Create(new Zone()),
-			Planes: ImmutableArray.Create(new Plane(Depth: 64)),
-			PlaneMaps: ImmutableArray.Create(planeMap),
-			Things: ImmutableArray.Create(
+			Zones: [new Zone()],
+			Planes: [new Plane(Depth: 64)],
+			PlaneMaps: [planeMap],
+			Things:
+			[
 				new Thing(
 					Type: Actor.Player1Start.ClassName,
 					X: 1.5,
@@ -58,8 +59,8 @@ public static class TileDemoMap
 					Skill2: true,
 					Skill3: true,
 					Skill4: true
-				)
-			),
+				),
+			],
 			Triggers: ImmutableArray<Trigger>.Empty
 		);
 	}

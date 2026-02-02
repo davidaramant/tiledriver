@@ -42,6 +42,6 @@ public static partial class UwmfSemanticAnalyzer
 			tileSpaces.Add(cache[ts]);
 		}
 
-		return tileSpaces.ToImmutableArray();
+		return [.. tileSpaces];
 	}
 }

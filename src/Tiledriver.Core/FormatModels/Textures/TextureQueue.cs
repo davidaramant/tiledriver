@@ -8,9 +8,9 @@ namespace Tiledriver.Core.FormatModels.Textures;
 
 public sealed class TextureQueue
 {
-	private readonly List<CompositeTexture> _definitions = new();
-	private readonly HashSet<string> _compositeNames = new();
-	private readonly List<(RenderedTexture, Texture)> _renderQueue = new();
+	private readonly List<CompositeTexture> _definitions = [];
+	private readonly HashSet<string> _compositeNames = [];
+	private readonly List<(RenderedTexture, Texture)> _renderQueue = [];
 	private readonly Dictionary<RenderedTexture, Texture> _renderNameLookup = new();
 
 	public IReadOnlyList<CompositeTexture> Definitions => _definitions;
@@ -50,7 +50,7 @@ public sealed class TextureQueue
 					256,
 					XScale: 4,
 					YScale: 4,
-					Patches: ImmutableArray.Create(new Patch(tex.Name, 0, 0, Rotate: renderedTexture.Rotation))
+					Patches: [new Patch(tex.Name, 0, 0, Rotate: renderedTexture.Rotation)]
 				)
 			);
 			_renderNameLookup.Add(renderedTexture, compositeName);

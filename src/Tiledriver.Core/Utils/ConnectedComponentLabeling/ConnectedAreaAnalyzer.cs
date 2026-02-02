@@ -66,7 +66,7 @@ public static class ConnectedAreaAnalyzer
 		var rawAreas = new List<Position>[label];
 		for (int i = 0; i < label; i++)
 		{
-			rawAreas[i] = new List<Position>();
+			rawAreas[i] = [];
 		}
 
 		foreach (var pair in covered)
@@ -96,7 +96,7 @@ public static class ConnectedAreaAnalyzer
 				: PositionExtensions.GetVonNeumannNeighbors;
 
 		HashSet<Position> remainingPositions = new(area);
-		List<IReadOnlySet<Position>> edges = new();
+		List<IReadOnlySet<Position>> edges = [];
 
 		// Find outer edge
 

@@ -49,10 +49,7 @@ internal static class DoomActorGenerator
 		using var output = new IndentedWriter(blockStream);
 
 		output
-			.WriteHeader(
-				"Tiledriver.Core.GameInfo.Doom",
-				new[] { "System.Collections.Generic", "System.CodeDom.Compiler" }
-			)
+			.WriteHeader("Tiledriver.Core.GameInfo.Doom", ["System.Collections.Generic", "System.CodeDom.Compiler"])
 			.Line()
 			.Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
 			.Line("public enum ActorCategory")
@@ -72,15 +69,14 @@ internal static class DoomActorGenerator
 				.IncreaseIndent()
 				.JoinLines(
 					",",
-					new[]
-					{
+					[
 						$"Id: {actor.Id}",
 						$"Description: \"{actor.Description}\"",
 						$"Width: {actor.Width}",
 						$"Height: {actor.Height}",
 						$"ClassName: \"{actor.Name}\"",
 						$"Category: ActorCategory.{actor.CategoryName}",
-					}
+					]
 				)
 				.DecreaseIndent()
 				.Line(");")

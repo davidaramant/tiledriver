@@ -20,7 +20,7 @@ public class Room : IRoom
 	{
 		Name = $"#{roomNumber}";
 		AdjacentRooms = new Dictionary<IList<Passage>, IRoom>();
-		_locations = new ObservableCollection<MapLocation>();
+		_locations = [];
 		Bosses = new List<Thing>();
 		Enemies = new List<Thing>();
 		Weapons = new List<Thing>();
@@ -113,42 +113,42 @@ public class Room : IRoom
 
 	private string DebuggerDisplay => $"Room: Name={Name}; Locations={Locations.Count})";
 
-	private readonly string[] bossTypes = new[]
-	{
+	private readonly string[] bossTypes =
+	[
 		Actor.MechaHitler.ClassName,
 		Actor.Gift.ClassName,
 		Actor.Hans.ClassName,
 		Actor.Gretel.ClassName,
 		Actor.FatFace.ClassName,
 		Actor.Schabbs.ClassName,
-	};
+	];
 
-	private readonly string[] enemyTypes = new[]
-	{
+	private readonly string[] enemyTypes =
+	[
 		Actor.Dog.ClassName,
 		Actor.FakeHitler.ClassName,
 		Actor.Mutant.ClassName,
 		Actor.Guard.ClassName,
 		Actor.Officer.ClassName,
 		Actor.WolfensteinSS.ClassName,
-	};
+	];
 
-	private readonly string[] WeaponTypes = new[] { Actor.GatlingGunUpgrade.ClassName, Actor.MachineGun.ClassName };
+	private readonly string[] WeaponTypes = [Actor.GatlingGunUpgrade.ClassName, Actor.MachineGun.ClassName];
 
-	private readonly string[] TreasureTypes = new[]
-	{
+	private readonly string[] TreasureTypes =
+	[
 		Actor.Chalice.ClassName,
 		Actor.ChestofJewels.ClassName,
 		Actor.Cross.ClassName,
 		Actor.Crown.ClassName,
-	};
+	];
 
-	private readonly string[] HealthTypes = new[]
-	{
+	private readonly string[] HealthTypes =
+	[
 		Actor.Blood.ClassName,
 		Actor.Dog.ClassName,
 		Actor.Food.ClassName,
 		Actor.Gibs.ClassName,
 		Actor.Medikit.ClassName,
-	};
+	];
 }

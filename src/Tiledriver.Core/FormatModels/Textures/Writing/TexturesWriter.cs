@@ -78,7 +78,7 @@ public static class TexturesWriter
 
 	private sealed class WriterUtil
 	{
-		private readonly List<string> _lines = new();
+		private readonly List<string> _lines = [];
 		private readonly WriterUtil? _parent;
 		private readonly int _indentationLevel = 0;
 

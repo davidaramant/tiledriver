@@ -468,7 +468,7 @@ class Program
 
 			string fileToKeep = filePaths.First();
 
-			var filesToRemove = filePaths.Except(new[] { fileToKeep });
+			var filesToRemove = filePaths.Except([fileToKeep]);
 			deletedFiles.Add(
 				$"{Path.GetFileName(fileToKeep)} - Duplicates: "
 					+ string.Join(", ", filesToRemove.Select(Path.GetFileName))

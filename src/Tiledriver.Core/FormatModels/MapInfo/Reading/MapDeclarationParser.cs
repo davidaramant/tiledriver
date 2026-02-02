@@ -185,7 +185,7 @@ public static partial class MapDeclarationParser
 	)
 	{
 		var id = new Identifier(formatName);
-		return assignmentLookup.Contains(id) ? assignmentLookup[id].ToArray() : Array.Empty<VariableAssignment>();
+		return assignmentLookup.Contains(id) ? assignmentLookup[id].ToArray() : [];
 	}
 
 	private static VariableAssignment? GetSingleAssignment(
@@ -254,7 +254,7 @@ public static partial class MapDeclarationParser
 	)
 	{
 		var id = new Identifier("SpecialAction");
-		var assignments = assignmentLookup.Contains(id) ? assignmentLookup[id] : Enumerable.Empty<VariableAssignment>();
+		var assignments = assignmentLookup.Contains(id) ? assignmentLookup[id] : [];
 
 		static TToken MustGet<TToken>(IdentifierToken id, Queue<Token> valueQueue)
 			where TToken : Token
@@ -273,8 +273,9 @@ public static partial class MapDeclarationParser
 			return t;
 		}
 
-		return assignments
-			.Select(va =>
+		return
+		[
+			.. assignments.Select(va =>
 			{
 				var valueQueue = new Queue<Token>(va.Values);
 				var actorClassToken = MustGet<StringToken>(va.Id, valueQueue);
@@ -306,8 +307,8 @@ public static partial class MapDeclarationParser
 					args[3],
 					args[4]
 				);
-			})
-			.ToImmutableArray();
+			}),
+		];
 	}
 
 	private static TToken? GetSingleToken<TToken>(

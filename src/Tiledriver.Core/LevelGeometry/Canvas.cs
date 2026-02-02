@@ -105,7 +105,7 @@ public sealed class Canvas : ICanvas
 			tileSpaces[i] = new MapSquare(_tiles[i], _sectors[i], _zones[i], _tags[i]);
 		}
 
-		return tileSpaces.ToImmutableArray();
+		return [.. tileSpaces];
 	}
 
 	public ICanvas ToCanvas() => new Canvas(Dimensions).Fill(ToPlaneMap());

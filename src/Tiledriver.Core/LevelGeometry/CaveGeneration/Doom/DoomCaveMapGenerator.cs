@@ -43,17 +43,18 @@ public sealed class DoomCaveMapGenerator
 
 		return new MapData(
 			NameSpace: "Doom",
-			LineDefs: lineCache.GetDefinitions().ToImmutableArray(),
-			SideDefs: sideDefCache.GetDefinitions().ToImmutableArray(),
-			Vertices: vertexCache.GetDefinitions().ToImmutableArray(),
-			Sectors: sectorCache.GetDefinitions().ToImmutableArray(),
-			Things: ImmutableArray.Create(
+			LineDefs: [.. lineCache.GetDefinitions()],
+			SideDefs: [.. sideDefCache.GetDefinitions()],
+			Vertices: [.. vertexCache.GetDefinitions()],
+			Sectors: [.. sectorCache.GetDefinitions()],
+			Things:
+			[
 				Actor.Player1Start.MakeThing(
 					x: playerLogicalSpot.X * LogicalUnitSize + LogicalUnitSize / 2,
 					y: playerLogicalSpot.Y * LogicalUnitSize + LogicalUnitSize / 2,
 					angle: 90
-				)
-			)
+				),
+			]
 		);
 	}
 

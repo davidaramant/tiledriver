@@ -30,7 +30,7 @@ public static class MapInfoModelGenerator
 		var containsCollection = block.OrderedProperties.Any(p => p is CollectionProperty);
 		var containsIdentifier = block.OrderedProperties.Any(p => p is IdentifierProperty);
 
-		List<string> includes = new() { "System.CodeDom.Compiler" };
+		List<string> includes = ["System.CodeDom.Compiler"];
 		if (containsCollection)
 		{
 			includes.Add("System.Collections.Immutable");

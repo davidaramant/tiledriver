@@ -52,7 +52,7 @@ public static class TokenStreamExtensions
 					assignments.Add(tokenStream.ParseAssignment(i));
 					break;
 				case CloseBraceToken:
-					return new Block(name, assignments.ToImmutableArray());
+					return new Block(name, [.. assignments]);
 				default:
 					throw ParsingException.CreateError(token, "identifier or end of block");
 			}

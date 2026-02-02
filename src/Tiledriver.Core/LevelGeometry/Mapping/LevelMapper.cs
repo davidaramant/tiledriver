@@ -8,8 +8,8 @@ namespace Tiledriver.Core.LevelGeometry.Mapping;
 
 public sealed class LevelMapper
 {
-	private List<Thing> _silverLocations = new();
-	private List<Thing> _goldLocations = new();
+	private List<Thing> _silverLocations = [];
+	private List<Thing> _goldLocations = [];
 	private bool _hasSilver;
 	private bool _hasGold;
 	private readonly IList<IRoom> _discoveredRooms = new List<IRoom>();

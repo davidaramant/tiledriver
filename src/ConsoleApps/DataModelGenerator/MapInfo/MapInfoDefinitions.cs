@@ -9,42 +9,36 @@ namespace Tiledriver.DataModelGenerator.MapInfo;
 
 static class MapInfoDefinitions
 {
-	public static readonly ImmutableArray<IBlock> Blocks = new IBlock[]
-	{
-		// AUTOMAP
-
+	public static readonly ImmutableArray<IBlock> Blocks =
+	[
 		new NormalBlock(
 			"autoMap",
 			Metadata: ImmutableArray<Property>.Empty,
-			Properties: new Property[]
-			{
+			Properties:
+			[
 				new StringProperty(formatName: "background", name: "Background"),
 				new StringProperty(formatName: "doorColor", name: "DoorColor"),
 				new StringProperty(formatName: "floorColor", name: "FloorColor"),
 				new StringProperty(formatName: "fontColor", name: "FontColor"),
 				new StringProperty(formatName: "wallColor", name: "WallColor"),
 				new StringProperty(formatName: "yourColor", name: "YourColor"),
-			}.ToImmutableArray()
+			]
 		),
-		// CLUSTER
-
 		new NormalBlock(
 			"cluster",
 			Metadata: ImmutableArray<Property>.Empty.Add(new IntegerProperty("id")),
-			Properties: new Property[]
-			{
+			Properties:
+			[
 				new BlockProperty("exitText", propertyType: "ClusterExitText"),
 				new FlagProperty("exitTextIsLump"),
 				new FlagProperty("exitTextIsMessage"),
-			}.ToImmutableArray()
+			]
 		),
-		// EPISODE
-
 		new NormalBlock(
 			"episode",
 			Metadata: ImmutableArray.Create<Property>().Add(new StringProperty("map")),
-			Properties: new Property[]
-			{
+			Properties:
+			[
 				new CharProperty("key"),
 				new StringProperty("lookup"),
 				new StringProperty("name"),
@@ -52,15 +46,13 @@ static class MapInfoDefinitions
 				new FlagProperty("optional"),
 				new StringProperty("picName"),
 				new FlagProperty("remove"),
-			}.ToImmutableArray()
+			]
 		),
-		// GAMEINFO
-
 		new NormalBlock(
 			"gameInfo",
 			Metadata: ImmutableArray<Property>.Empty,
-			Properties: new Property[]
-			{
+			Properties:
+			[
 				new StringProperty("advisoryColor"),
 				new StringProperty("advisoryPic"),
 				new BlockProperty("border", propertyType: "IGameBorder"),
@@ -110,85 +102,70 @@ static class MapInfoDefinitions
 				new StringProperty("translator"),
 				new StringProperty("victoryMusic"),
 				new StringProperty("victoryPic"),
-			}.ToImmutableArray()
+			]
 		),
 		new NormalBlock(
 			"MenuColors",
 			Metadata: ImmutableArray<Property>.Empty,
 			Serialization: SerializationType.OrderedProperties,
-			Properties: new Property[]
-			{
+			Properties:
+			[
 				new StringProperty("border1"),
 				new StringProperty("border2"),
 				new StringProperty("border3"),
 				new StringProperty("background"),
 				new StringProperty("stripe"),
 				new StringProperty("stripeBg"),
-			}.ToImmutableArray()
+			]
 		),
 		new NormalBlock(
 			"MenuWindowColors",
 			Metadata: ImmutableArray<Property>.Empty,
 			Serialization: SerializationType.OrderedProperties,
-			Properties: new Property[]
-			{
+			Properties:
+			[
 				new StringProperty("background"),
 				new StringProperty("top"),
 				new StringProperty("bottom"),
 				new StringProperty("indexBackground"),
 				new StringProperty("indexTop"),
 				new StringProperty("indexBottom"),
-			}.ToImmutableArray()
+			]
 		),
 		new NormalBlock(
 			"MessageColors",
 			Serialization: SerializationType.OrderedProperties,
 			Metadata: ImmutableArray<Property>.Empty,
-			Properties: new Property[]
-			{
-				new StringProperty("background"),
-				new StringProperty("top"),
-				new StringProperty("bottom"),
-			}.ToImmutableArray()
+			Properties: [new StringProperty("background"), new StringProperty("top"), new StringProperty("bottom")]
 		),
-		// INTERMISSION
-
 		new NormalBlock(
 			"intermission",
 			Serialization: SerializationType.Custom,
 			Metadata: ImmutableArray<Property>.Empty.Add(new StringProperty("name")),
-			Properties: new Property[]
-			{
-				new ArrayProperty("intermissionActions", elementType: "IIntermissionAction"),
-			}.ToImmutableArray()
+			Properties: [new ArrayProperty("intermissionActions", elementType: "IIntermissionAction")]
 		),
 		new NormalBlock(
 			"IntermissionDraw",
 			Serialization: SerializationType.OrderedProperties,
 			Metadata: ImmutableArray<Property>.Empty,
-			Properties: new Property[]
-			{
-				new StringProperty("texture"),
-				new IntegerProperty("x"),
-				new IntegerProperty("y"),
-			}.ToImmutableArray()
+			Properties: [new StringProperty("texture"), new IntegerProperty("x"), new IntegerProperty("y")]
 		),
 		new AbstractBlock(
 			"BaseIntermissionAction",
 			Metadata: ImmutableArray<Property>.Empty,
-			Properties: new Property[]
-			{
+			Properties:
+			[
 				new BlockProperty("background", propertyType: "IntermissionBackground"),
 				new BlockProperty("draw", propertyType: "IntermissionDraw"),
 				new StringProperty("music"),
 				new DoubleProperty("time"),
-			}.ToImmutableArray()
+			]
 		),
 		new InheritedBlock(
 			"Fader",
 			getBaseClass: () => Blocks.OfType<AbstractBlock>().Single(b => b.ClassName == "BaseIntermissionAction"),
 			metadata: ImmutableArray<Property>.Empty,
-			properties: new Property[] { new IdentifierProperty("fadeType") }
+			properties: [new IdentifierProperty("fadeType")]
 		),
 		new NormalBlock(
 			"GoToTitile",
@@ -212,8 +189,8 @@ static class MapInfoDefinitions
 			"TextScreen",
 			getBaseClass: () => Blocks.OfType<AbstractBlock>().Single(b => b.ClassName == "BaseIntermissionAction"),
 			metadata: ImmutableArray<Property>.Empty,
-			properties: new Property[]
-			{
+			properties:
+			[
 				new ArrayProperty("text", elementType: "string"),
 				new IdentifierProperty("textAlignment"),
 				new IdentifierProperty("textAnchor"),
@@ -221,33 +198,31 @@ static class MapInfoDefinitions
 				new DoubleProperty("textDelay"),
 				new IntegerProperty("textSpeed"),
 				new BlockProperty("position", propertyType: "TextScreenPosition"),
-			}.ToImmutableArray()
+			]
 		),
 		new NormalBlock(
 			"TextScreenPosition",
 			Serialization: SerializationType.OrderedProperties,
 			Metadata: ImmutableArray<Property>.Empty,
-			Properties: new Property[] { new IntegerProperty("x"), new IntegerProperty("y") }.ToImmutableArray()
+			Properties: [new IntegerProperty("x"), new IntegerProperty("y")]
 		),
 		new NormalBlock(
 			"VictoryStats",
 			Serialization: SerializationType.Normal,
 			Metadata: ImmutableArray<Property>.Empty,
-			Properties: new Property[]
-			{
+			Properties:
+			[
 				new BlockProperty("background", propertyType: "IntermissionBackground"),
 				new BlockProperty("draw", propertyType: "IntermissionDraw"),
 				new StringProperty("music"),
 				new DoubleProperty("time"),
-			}.ToImmutableArray()
+			]
 		),
-		// MAP
-
 		new AbstractBlock(
 			"BaseMap",
 			Metadata: ImmutableArray<Property>.Empty,
-			Properties: new Property[]
-			{
+			Properties:
+			[
 				new StringProperty("borderTexture", isNullable: true),
 				new IntegerProperty("cluster", isNullable: true),
 				new StringProperty("completionString", isNullable: true),
@@ -270,7 +245,7 @@ static class MapInfoDefinitions
 				new FlagProperty("noIntermission", isNullable: true),
 				new IntegerProperty("par", isNullable: true),
 				new StringProperty("translator", isNullable: true),
-			}.ToImmutableArray()
+			]
 		),
 		new InheritedBlock(
 			"defaultMap",
@@ -287,20 +262,20 @@ static class MapInfoDefinitions
 		new InheritedBlock(
 			"map",
 			getBaseClass: () => Blocks.OfType<AbstractBlock>().Single(b => b.ClassName == "BaseMap"),
-			metadata: new Property[]
-			{
+			metadata:
+			[
 				new StringProperty("mapLump"),
 				new StringProperty("mapName", isNullable: true),
 				new BooleanProperty("isMapNameLookup", defaultValue: false),
-			}.ToImmutableArray(),
+			],
 			properties: ImmutableArray<Property>.Empty
 		),
 		new NormalBlock(
 			"specialAction",
 			Serialization: SerializationType.Custom,
 			Metadata: ImmutableArray<Property>.Empty,
-			Properties: new Property[]
-			{
+			Properties:
+			[
 				new StringProperty(formatName: "actorclass", name: "actorClass"),
 				new StringProperty("special"),
 				new IntegerProperty("arg0", defaultValue: 0),
@@ -308,16 +283,14 @@ static class MapInfoDefinitions
 				new IntegerProperty("arg2", defaultValue: 0),
 				new IntegerProperty("arg3", defaultValue: 0),
 				new IntegerProperty("arg4", defaultValue: 0),
-			}.ToImmutableArray()
+			]
 		),
-		// SKILL
-
 		new NormalBlock(
 			"skill",
 			Serialization: SerializationType.Normal,
 			Metadata: ImmutableArray<Property>.Empty.Add(new IdentifierProperty("id")),
-			Properties: new Property[]
-			{
+			Properties:
+			[
 				new DoubleProperty("damageFactor"),
 				new FlagProperty("fastMontsters"),
 				new IntegerProperty("lives"),
@@ -329,7 +302,7 @@ static class MapInfoDefinitions
 				new BooleanProperty("quizHints"),
 				new DoubleProperty("scoreMultiplier"),
 				new IntegerProperty("spawnFilter"),
-			}.ToImmutableArray()
+			]
 		),
-	}.ToImmutableArray();
+	];
 }

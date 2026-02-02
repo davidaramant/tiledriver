@@ -20,11 +20,10 @@ public sealed class DoomDemoMaps
 	private readonly DirectoryInfo _dirInfo = OutputLocation.CreateDirectory("Doom Demo Maps");
 
 	[Test, Explicit]
-	public void BoxDemo() => Load(CreateWadContents(new Func<TextureQueue, MapData>[] { tq => DemoMap.Create() }));
+	public void BoxDemo() => Load(CreateWadContents([tq => DemoMap.Create()]));
 
 	[Test, Explicit]
-	public void CaveMap() =>
-		Load(CreateWadContents(new Func<TextureQueue, MapData>[] { tq => DoomCaveMapGenerator.Create(seed: 13, tq) }));
+	public void CaveMap() => Load(CreateWadContents([tq => DoomCaveMapGenerator.Create(seed: 13, tq)]));
 
 	void Load(IEnumerable<ILump> contents, [CallerMemberName] string? name = null)
 	{
@@ -39,7 +38,7 @@ public sealed class DoomDemoMaps
 		IEnumerable<(string Name, byte[] Data)>? extraTextures = null
 	)
 	{
-		extraTextures ??= Enumerable.Empty<(string Name, byte[] Data)>();
+		extraTextures ??= [];
 		var textureQueue = new TextureQueue();
 		var maps = mapCreators.Select(creator => creator(textureQueue)).ToList();
 

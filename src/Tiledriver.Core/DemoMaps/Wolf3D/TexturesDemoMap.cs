@@ -32,11 +32,12 @@ public static class TexturesDemoMap
 			Width: mapSize.Width,
 			Height: mapSize.Height,
 			Tiles: tiles,
-			Sectors: ImmutableArray.Create(new Sector(TextureCeiling: "#C0C0C0", TextureFloor: "#A0A0A0")),
-			Zones: ImmutableArray.Create(new Zone()),
-			Planes: ImmutableArray.Create(new Plane(Depth: 64)),
-			PlaneMaps: ImmutableArray.Create(planeMap),
-			Things: ImmutableArray.Create(
+			Sectors: [new Sector(TextureCeiling: "#C0C0C0", TextureFloor: "#A0A0A0")],
+			Zones: [new Zone()],
+			Planes: [new Plane(Depth: 64)],
+			PlaneMaps: [planeMap],
+			Things:
+			[
 				new Thing(
 					Type: Actor.Player1Start.ClassName,
 					X: 1.5,
@@ -47,8 +48,8 @@ public static class TexturesDemoMap
 					Skill2: true,
 					Skill3: true,
 					Skill4: true
-				)
-			),
+				),
+			],
 			Triggers: ImmutableArray<Trigger>.Empty
 		);
 	}
@@ -95,10 +96,10 @@ public static class TexturesDemoMap
 					newNS,
 					64,
 					64,
-					ImmutableArray.Create(
+					[
 						new Patch(nsTexture, 0, 0),
-						new Patch(nsTexture, 0, 0, Blend: new ColorBlend("000000", Alpha: 0.1 * darkLevel))
-					)
+						new Patch(nsTexture, 0, 0, Blend: new ColorBlend("000000", Alpha: 0.1 * darkLevel)),
+					]
 				)
 			);
 			textureQueue.Add(
@@ -106,10 +107,10 @@ public static class TexturesDemoMap
 					newEW,
 					64,
 					64,
-					ImmutableArray.Create(
+					[
 						new Patch(ewTexture, 0, 0),
-						new Patch(ewTexture, 0, 0, Blend: new ColorBlend("000000", Alpha: 0.1 * darkLevel))
-					)
+						new Patch(ewTexture, 0, 0, Blend: new ColorBlend("000000", Alpha: 0.1 * darkLevel)),
+					]
 				)
 			);
 		}
@@ -136,10 +137,10 @@ public static class TexturesDemoMap
 					newNS,
 					64,
 					64,
-					ImmutableArray.Create(
+					[
 						new Patch(nsTexture, 0, 0),
-						new Patch(nsTexture, 0, 0, Blend: new ColorBlend("FFFFFF", Alpha: 0.1 * lightLevel))
-					)
+						new Patch(nsTexture, 0, 0, Blend: new ColorBlend("FFFFFF", Alpha: 0.1 * lightLevel)),
+					]
 				)
 			);
 			textureQueue.Add(
@@ -147,14 +148,14 @@ public static class TexturesDemoMap
 					newEW,
 					64,
 					64,
-					ImmutableArray.Create(
+					[
 						new Patch(ewTexture, 0, 0),
-						new Patch(ewTexture, 0, 0, Blend: new ColorBlend("FFFFFF", Alpha: 0.1 * lightLevel))
-					)
+						new Patch(ewTexture, 0, 0, Blend: new ColorBlend("FFFFFF", Alpha: 0.1 * lightLevel)),
+					]
 				)
 			);
 		}
 
-		return (board.ToPlaneMap(), tiles.ToImmutableArray());
+		return (board.ToPlaneMap(), [.. tiles]);
 	}
 }
