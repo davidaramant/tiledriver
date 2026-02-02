@@ -1,6 +1,7 @@
 // Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
+using System.Runtime.InteropServices;
 using System.Text.Json;
 
 namespace Tiledriver.Core.Settings;
@@ -18,14 +19,17 @@ public static class ConfigLoader
 	{
 		var config = Deserialize<TiledriverConfig>(ConfigPath);
 
-		if (!config.ECWolfPath.EndsWith("ecwolf.exe", StringComparison.InvariantCultureIgnoreCase))
+		if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 		{
-			config = config with { ECWolfPath = Path.Combine(config.ECWolfPath, "ecwolf.exe") };
-		}
+			if (!config.ECWolfPath.EndsWith("ecwolf.exe", StringComparison.InvariantCultureIgnoreCase))
+			{
+				config = config with { ECWolfPath = Path.Combine(config.ECWolfPath, "ecwolf.exe") };
+			}
 
-		if (!config.UZDoomPath.EndsWith("uzdoom.exe", StringComparison.InvariantCultureIgnoreCase))
-		{
-			config = config with { UZDoomPath = Path.Combine(config.UZDoomPath, "uzdoom.exe") };
+			if (!config.UZDoomPath.EndsWith("uzdoom.exe", StringComparison.InvariantCultureIgnoreCase))
+			{
+				config = config with { UZDoomPath = Path.Combine(config.UZDoomPath, "uzdoom.exe") };
+			}
 		}
 
 		if (!config.GamePaths.Complete)
