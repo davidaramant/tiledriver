@@ -11,4 +11,13 @@
 	<ItemGroup>
 		<Folder Include="DemoMaps" />
 	</ItemGroup>
+	<Target Name="husky" AfterTargets="Restore;CollectPackageReferences" Condition="'$(HUSKY)' != '0'">
+		<Exec Command="dotnet tool restore" StandardOutputImportance="Low" StandardErrorImportance="High" />
+		<Exec
+			Command="dotnet husky install"
+			StandardOutputImportance="Low"
+			StandardErrorImportance="High"
+			WorkingDirectory="$(MSBuildThisFileDirectory)..\.."
+		/>
+	</Target>
 </Project>
