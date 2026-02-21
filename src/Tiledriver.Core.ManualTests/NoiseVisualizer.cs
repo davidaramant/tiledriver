@@ -55,8 +55,8 @@ public sealed class NoiseVisualizer
 	[Test, Explicit]
 	public void Octaves()
 	{
-		const int width = 1024;
-		const int height = 1024;
+		const int width = 512;
+		const int height = 512;
 
 		foreach (var imagePath in Directory.GetFiles(_dirInfo.FullName, "*.png"))
 		{
@@ -64,35 +64,104 @@ public sealed class NoiseVisualizer
 				File.Delete(imagePath);
 		}
 
-		IReadOnlyList<(double Frequency, double Amplitude)> octaves = [(5, 1), (10, 0.5), (50, 0.25), (100, 0.125)];
-		var amSum = octaves.Select(o => o.Amplitude).Sum();
+		IReadOnlyCollection<IReadOnlyCollection<Octave>> octaveSets =
+		[
+			[new(5, 1), new(10, 0.5), new(20, 0.25), new(40, 0.125)],
+			[new(1, 1), new(2, 0.5), new(4, 0.25), new(8, 0.125)],
+			[new(2, 1), new(4, 0.5), new(8, 0.25), new(16, 0.125)],
+		];
 
-		using var image = new FastImage(width, height);
-
-		for (int y = 0; y < height; y++)
-		{
-			for (int x = 0; x < width; x++)
+		Parallel.ForEach(
+			octaveSets,
+			octaves =>
 			{
-				double nx = (double)x / width - 0.5;
-				double ny = (double)y / height - 0.5;
+				var amSum = octaves.Select(o => o.Amplitude).Sum();
 
-				float elevation = (float)(
-					octaves
-						.AsParallel()
-						.Select(o =>
-							o.Amplitude * (NoiseGenerator.Generate2D(o.Frequency * nx, o.Frequency * ny) + 1) / 2f
-						)
-						.Sum() / amSum
-				);
+				using var image = new FastImage(width, height, scale: 4);
 
-				// h: 0 - 360
-				// s: 0 - 100
-				// v: 0 - 100
-				image.SetPixel(x, y, SKColor.FromHsv(0, 0, elevation * 100));
+				for (int y = 0; y < height; y++)
+				{
+					for (int x = 0; x < width; x++)
+					{
+						double nx = (double)x / width - 0.5;
+						double ny = (double)y / height - 0.5;
+
+						float elevation = (float)(
+							octaves
+								.Select(
+									(o, i) =>
+										o.Amplitude
+										* (NoiseGenerator.Generate2D(o.Frequency * nx, o.Frequency * ny, seed: i) + 1)
+										/ 2f
+								)
+								.Sum() / amSum
+						);
+
+						// h: 0 - 360
+						// s: 0 - 100
+						// v: 0 - 100
+						image.SetPixel(x, y, SKColor.FromHsv(0, 0, elevation * 100));
+					}
+				}
+
+				var description = string.Join(" - ", octaves.Select(o => $"f{o.Frequency:N} a{o.Amplitude:N3}"));
+				SaveImage(image, $"octaves - {description}.png");
 			}
+		);
+	}
+
+	[Test, Explicit]
+	public void RedistributedOctaves()
+	{
+		const int width = 512;
+		const int height = 512;
+
+		foreach (var imagePath in Directory.GetFiles(_dirInfo.FullName, "*.png"))
+		{
+			if (Path.GetFileName(imagePath).StartsWith("redistributed"))
+				File.Delete(imagePath);
 		}
 
-		SaveImage(image, $"octaves.png");
+		IReadOnlyCollection<Octave> octaves = [new(5, 1), new(10, 0.5), new(20, 0.25), new(40, 0.125)];
+		IReadOnlyCollection<double> redistributionPowers = [1, 2, 3];
+
+		Parallel.ForEach(
+			redistributionPowers,
+			power =>
+			{
+				var amSum = octaves.Select(o => o.Amplitude).Sum();
+
+				using var image = new FastImage(width, height, scale: 4);
+
+				for (int y = 0; y < height; y++)
+				{
+					for (int x = 0; x < width; x++)
+					{
+						double nx = (double)x / width - 0.5;
+						double ny = (double)y / height - 0.5;
+
+						var e =
+							octaves
+								.Select(
+									(o, i) =>
+										o.Amplitude
+										* (NoiseGenerator.Generate2D(o.Frequency * nx, o.Frequency * ny, seed: i) + 1)
+										/ 2f
+								)
+								.Sum() / amSum;
+
+						var elevation = (float)Math.Pow(e, power);
+
+						// h: 0 - 360
+						// s: 0 - 100
+						// v: 0 - 100
+						image.SetPixel(x, y, SKColor.FromHsv(0, 0, elevation * 100));
+					}
+				}
+
+				SaveImage(image, $"redistributed - {power:N2}.png");
+			}
+		);
 	}
 
 	[Test, Explicit]
