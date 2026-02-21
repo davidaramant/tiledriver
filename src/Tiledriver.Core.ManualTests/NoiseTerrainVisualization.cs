@@ -1,4 +1,5 @@
-﻿using SkiaSharp;
+﻿using System.Numerics;
+using SkiaSharp;
 using Tiledriver.Core.Utils.Images;
 using Tiledriver.Core.Utils.Noise;
 
@@ -126,11 +127,11 @@ public class NoiseTerrainVisualization
 	}
 
 	[Test, Explicit]
-	public void BiomeWithMoisture()
+	public void Islands()
 	{
-		const int width = 512;
-		const int height = 512;
-		const string prefix = "biome - moisture";
+		const int width = 1024;
+		const int height = width;
+		const string prefix = "islands - basic";
 
 		foreach (var imagePath in Directory.GetFiles(_dirInfo.FullName, "*.png"))
 		{
@@ -141,51 +142,152 @@ public class NoiseTerrainVisualization
 		IReadOnlyCollection<Octave> octaves = [new(5, 1), new(10, 0.5), new(20, 0.25), new(40, 0.125)];
 		const double power = 2;
 
-		{
-			var amSum = octaves.Select(o => o.Amplitude).Sum();
+		IReadOnlyCollection<double> mixes = [0.5, 0.55, 0.6];
 
-			using var image = new FastImage(width, height, scale: 4);
-
-			for (int y = 0; y < height; y++)
+		Parallel.ForEach(
+			mixes,
+			mix =>
 			{
-				for (int x = 0; x < width; x++)
+				var amSum = octaves.Select(o => o.Amplitude).Sum();
+
+				using var image = new FastImage(width, height, scale: 2);
+
+				for (int y = 0; y < height; y++)
 				{
-					double nx = (double)x / width - 0.5;
-					double ny = (double)y / height - 0.5;
+					for (int x = 0; x < width; x++)
+					{
+						double nx = 2d * x / width - 1;
+						double ny = 2d * y / height - 1;
 
-					var e =
-						octaves
-							.Select(
-								(o, i) =>
-									o.Amplitude
-									* (NoiseGenerator.Generate2D(o.Frequency * nx, o.Frequency * ny, seed: i) + 1)
-									/ 2f
-							)
-							.Sum() / amSum;
+						// Square bump
+						var d = 1 - (1 - nx * nx) * (1 - ny * ny);
 
-					var moisture =
-						octaves
-							.Select(
-								(o, i) =>
-									o.Amplitude
-									* (NoiseGenerator.Generate2D(o.Frequency * nx, o.Frequency * ny, seed: i + 1) + 1)
-									/ 2f
-							)
-							.Sum() / amSum;
+						var e =
+							octaves
+								.Select(
+									(o, i) =>
+										o.Amplitude
+										* (NoiseGenerator.Generate2D(o.Frequency * nx, o.Frequency * ny, seed: i) + 1)
+										/ 2f
+								)
+								.Sum() / amSum;
 
-					var elevation = (float)Math.Pow(e, power);
+						var moisture =
+							octaves
+								.Select(
+									(o, i) =>
+										o.Amplitude
+										* (
+											NoiseGenerator.Generate2D(o.Frequency * nx, o.Frequency * ny, seed: i + 1)
+											+ 1
+										)
+										/ 2f
+								)
+								.Sum() / amSum;
 
-					var biome = GetBiome(elevation, (float)moisture);
-					var color = BiomeToColor(biome);
+						e = double.Lerp(e, 1 - d, mix);
+						var elevation = (float)Math.Pow(e, power);
 
-					// h: 0 - 360
-					// s: 0 - 100
-					// v: 0 - 100
-					image.SetPixel(x, y, color);
+						var biome = GetBiome(elevation, (float)moisture);
+						var color = BiomeToColor(biome);
+
+						// h: 0 - 360
+						// s: 0 - 100
+						// v: 0 - 100
+						image.SetPixel(x, y, color);
+					}
 				}
-			}
 
-			SaveImage(image, $"{prefix}.png");
+				SaveImage(image, $"{prefix} - {mix:N2}.png");
+			}
+		);
+	}
+
+	[Test, Explicit]
+	public void TerracedIslands()
+	{
+		const int width = 1024;
+		const int height = width;
+		const string prefix = "islands - terraced";
+
+		foreach (var imagePath in Directory.GetFiles(_dirInfo.FullName, "*.png"))
+		{
+			if (Path.GetFileName(imagePath).StartsWith(prefix))
+				File.Delete(imagePath);
 		}
+
+		IReadOnlyCollection<Octave> octaves = [new(5, 1), new(10, 0.5), new(20, 0.25), new(40, 0.125)];
+		const double power = 2;
+		const double mix = 0.6;
+		var numBiomes = Enum.GetValues<Biome>().Length;
+		IReadOnlyCollection<int> terraceOptions = [2 * numBiomes, 3 * numBiomes, 4 * numBiomes];
+
+		Parallel.ForEach(
+			terraceOptions,
+			numTerraces =>
+			{
+				var amSum = octaves.Select(o => o.Amplitude).Sum();
+
+				using var image = new FastImage(width, height, scale: 2);
+
+				for (int y = 0; y < height; y++)
+				{
+					for (int x = 0; x < width; x++)
+					{
+						double nx = 2d * x / width - 1;
+						double ny = 2d * y / height - 1;
+
+						// Square bump
+						var d = 1 - (1 - nx * nx) * (1 - ny * ny);
+
+						var e =
+							octaves
+								.Select(
+									(o, i) =>
+										o.Amplitude
+										* (NoiseGenerator.Generate2D(o.Frequency * nx, o.Frequency * ny, seed: i) + 1)
+										/ 2f
+								)
+								.Sum() / amSum;
+
+						var moisture =
+							octaves
+								.Select(
+									(o, i) =>
+										o.Amplitude
+										* (
+											NoiseGenerator.Generate2D(o.Frequency * nx, o.Frequency * ny, seed: i + 1)
+											+ 1
+										)
+										/ 2f
+								)
+								.Sum() / amSum;
+
+						e = double.Lerp(e, 1 - d, mix);
+						var elevation = (float)Math.Pow(e, power);
+
+						var step = (int)MathF.Round(elevation * numTerraces);
+						elevation = step / (float)numTerraces;
+
+						var biome = GetBiome(elevation, (float)moisture);
+						var color = BiomeToColor(biome);
+
+						// Adjust even steps to create visible terrace banding
+						if (step % 2 == 0)
+						{
+							color.ToHsv(out float h, out float s, out float v);
+							color = SKColor.FromHsv(h, Math.Max(0, s - 10), Math.Max(0, v - 10));
+						}
+
+						// h: 0 - 360
+						// s: 0 - 100
+						// v: 0 - 100
+						image.SetPixel(x, y, color);
+					}
+				}
+
+				SaveImage(image, $"{prefix} - terraces {numTerraces:D2}.png");
+			}
+		);
 	}
 }
