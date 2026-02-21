@@ -16,11 +16,12 @@ public sealed class NoiseVisualizer
 	public void BasicNoise()
 	{
 		const int width = 1024;
-		const int height = 1024;
+		const int height = width;
+		const string prefix = "basic";
 
 		foreach (var imagePath in Directory.GetFiles(_dirInfo.FullName, "*.png"))
 		{
-			if (Path.GetFileName(imagePath).StartsWith("basic"))
+			if (Path.GetFileName(imagePath).StartsWith(prefix))
 				File.Delete(imagePath);
 		}
 
@@ -47,7 +48,7 @@ public sealed class NoiseVisualizer
 					}
 				}
 
-				SaveImage(image, $"basic - frequency {frequency}.png");
+				SaveImage(image, $"{prefix} - frequency {frequency}.png");
 			}
 		);
 	}
@@ -56,11 +57,12 @@ public sealed class NoiseVisualizer
 	public void Octaves()
 	{
 		const int width = 512;
-		const int height = 512;
+		const int height = width;
+		const string prefix = "octaves";
 
 		foreach (var imagePath in Directory.GetFiles(_dirInfo.FullName, "*.png"))
 		{
-			if (Path.GetFileName(imagePath).StartsWith("octaves"))
+			if (Path.GetFileName(imagePath).StartsWith(prefix))
 				File.Delete(imagePath);
 		}
 
@@ -105,7 +107,7 @@ public sealed class NoiseVisualizer
 				}
 
 				var description = string.Join(" - ", octaves.Select(o => $"f{o.Frequency:N} a{o.Amplitude:N3}"));
-				SaveImage(image, $"octaves - {description}.png");
+				SaveImage(image, $"{prefix} - {description}.png");
 			}
 		);
 	}
@@ -114,11 +116,12 @@ public sealed class NoiseVisualizer
 	public void RedistributedOctaves()
 	{
 		const int width = 512;
-		const int height = 512;
+		const int height = width;
+		const string prefix = "redistributed";
 
 		foreach (var imagePath in Directory.GetFiles(_dirInfo.FullName, "*.png"))
 		{
-			if (Path.GetFileName(imagePath).StartsWith("redistributed"))
+			if (Path.GetFileName(imagePath).StartsWith(prefix))
 				File.Delete(imagePath);
 		}
 
@@ -159,7 +162,7 @@ public sealed class NoiseVisualizer
 					}
 				}
 
-				SaveImage(image, $"redistributed - {power:N2}.png");
+				SaveImage(image, $"{prefix} - {power:N2}.png");
 			}
 		);
 	}

@@ -16,11 +16,12 @@ public sealed class VoronoiDiagramVisualizer
 	public void DrawVoronoiDiagrams()
 	{
 		const int width = 2048;
-		const int height = 2048;
+		const int height = width;
+		const string prefix = "Voronoi";
 
 		foreach (var imagePath in Directory.GetFiles(_dirInfo.FullName, "*.png"))
 		{
-			if (Path.GetFileName(imagePath).StartsWith("Voronoi"))
+			if (Path.GetFileName(imagePath).StartsWith(prefix))
 				File.Delete(imagePath);
 		}
 
@@ -78,7 +79,7 @@ public sealed class VoronoiDiagramVisualizer
 
 				using var image = FastImage.WrapSKBitmap(bitmap, scale: 1);
 
-				SaveImage(image, $"Voronoi - iterations {relaxArgs.iterations}  - factor {relaxArgs.strength}");
+				SaveImage(image, $"{prefix} - iterations {relaxArgs.iterations}  - factor {relaxArgs.strength}");
 			}
 		);
 	}

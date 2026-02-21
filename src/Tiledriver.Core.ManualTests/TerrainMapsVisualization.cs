@@ -12,7 +12,7 @@ public sealed class TerrainMapsVisualization
 		image.Save(Path.Combine(_dirInfo.FullName, $"{description}.png"));
 
 	[Test, Explicit]
-	public void DrawImage()
+	public void DrawMesh()
 	{
 		using var image = TerrainMapGenerator.Create(width: 2048, height: 2048);
 		SaveImage(image, "Test");

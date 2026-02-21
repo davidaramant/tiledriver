@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using SkiaSharp;
+﻿using SkiaSharp;
 using Tiledriver.Core.LevelGeometry.TerrainMaps;
 using Tiledriver.Core.Utils.Images;
 using Tiledriver.Core.Utils.Noise;
@@ -65,7 +64,7 @@ public class NoiseTerrainVisualization
 	public void BasicBiome()
 	{
 		const int width = 512;
-		const int height = 512;
+		const int height = width;
 		const string prefix = "biome";
 
 		foreach (var imagePath in Directory.GetFiles(_dirInfo.FullName, "*.png"))
