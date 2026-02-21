@@ -7,7 +7,6 @@
 	<ItemGroup>
 		<PackageReference Include="HsluvS" />
 		<PackageReference Include="SharpVoronoiLib" />
-		<PackageReference Include="SimplexNoise" />
 		<PackageReference Include="SkiaSharp" />
 	</ItemGroup>
 	<ItemGroup>

@@ -4,7 +4,7 @@ using Tiledriver.Core.Utils.Images;
 namespace Tiledriver.Core.ManualTests;
 
 [TestFixture]
-public class TerrainMapsVisualization
+public sealed class TerrainMapsVisualization
 {
 	private readonly DirectoryInfo _dirInfo = OutputLocation.CreateDirectory("Terrain Maps");
 
