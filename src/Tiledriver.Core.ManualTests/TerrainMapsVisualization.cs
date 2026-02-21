@@ -1,7 +1,4 @@
-﻿// Copyright (c) 2026, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
-
-using SkiaSharp;
+﻿using SkiaSharp;
 using Tiledriver.Core.Utils.Images;
 
 namespace Tiledriver.Core.ManualTests;

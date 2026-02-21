@@ -1,6 +1,3 @@
-// Copyright (c) 2021, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
-
 using System.Runtime.CompilerServices;
 using Tiledriver.Core.DemoMaps.Doom;
 using Tiledriver.Core.Extensions.Collections;

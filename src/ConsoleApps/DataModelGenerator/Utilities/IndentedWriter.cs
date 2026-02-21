@@ -1,6 +1,3 @@
-// Copyright (c) 2016, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
-
 namespace Tiledriver.DataModelGenerator.Utilities;
 
 public sealed class IndentedWriter : IDisposable
@@ -18,12 +15,6 @@ public sealed class IndentedWriter : IDisposable
 		bool enableNullables = false
 	)
 	{
-		Line(
-			$@"// Copyright (c) {DateTime.Today.Year}, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE."
-		);
-		Line();
-
 		foreach (var usingNamespace in usingNamespaces.OrderBy(text => text))
 		{
 			Line($"using {usingNamespace};");

@@ -1,7 +1,3 @@
-// Copyright (c) 2016, David Aramant
-// Copyright (c) 2017, David Aramant and Aaron Alexander
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
-
 using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using System.Security.Cryptography;

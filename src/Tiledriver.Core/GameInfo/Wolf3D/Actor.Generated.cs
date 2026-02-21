@@ -1,6 +1,3 @@
-﻿// Copyright (c) 2016, David Aramant
-// Distributed under the 3-clause BSD license.  For full terms see the file LICENSE. 
-
 // TODO: This used the old T4 generator. Port this over to DataModelGenerator
 
 using System.Collections.Generic;
