@@ -2,7 +2,6 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Diagnostics;
-using NUnit.Framework;
 using SkiaSharp;
 using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.LevelGeometry.CaveGeneration.Wolf;

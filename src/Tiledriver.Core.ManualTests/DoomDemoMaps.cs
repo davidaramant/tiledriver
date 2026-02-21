@@ -2,7 +2,6 @@
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
 using System.Runtime.CompilerServices;
-using NUnit.Framework;
 using Tiledriver.Core.DemoMaps.Doom;
 using Tiledriver.Core.Extensions.Collections;
 using Tiledriver.Core.FormatModels.Textures;

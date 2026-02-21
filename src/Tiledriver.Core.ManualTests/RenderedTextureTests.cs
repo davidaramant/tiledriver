@@ -1,7 +1,6 @@
 // Copyright (c) 2021, David Aramant
 // Distributed under the 3-clause BSD license.  For full terms see the file LICENSE.
 
-using NUnit.Framework;
 using SkiaSharp;
 using Tiledriver.Core.FormatModels.Textures;
 

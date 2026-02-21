@@ -4,7 +4,6 @@
 using System.Collections.Immutable;
 using System.Globalization;
 using System.Runtime.CompilerServices;
-using NUnit.Framework;
 using Tiledriver.Core.DemoMaps.Wolf3D;
 using Tiledriver.Core.Extensions.Collections;
 using Tiledriver.Core.FormatModels.Textures;
