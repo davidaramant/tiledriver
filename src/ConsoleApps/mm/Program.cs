@@ -8,9 +8,9 @@ namespace mm;
 /// <summary>
 /// Turns a metamap into an image
 /// </summary>
-class Program
+sealed class Program
 {
-	record Options(string InputMapPath, ImagePalette Theme, string? ImageName, int Scale);
+	sealed record Options(string InputMapPath, ImagePalette Theme, string? ImageName, int Scale);
 
 	public enum ImagePalette
 	{

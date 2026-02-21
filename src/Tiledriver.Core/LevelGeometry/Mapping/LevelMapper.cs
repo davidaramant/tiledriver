@@ -339,7 +339,7 @@ public sealed class LevelMapper
 		}
 	}
 
-	private class LockedWay
+	private sealed class LockedWay
 	{
 		public LockLevel LockLevel { get; }
 		public Func<MapLocation, MapLocation?> GetNext { get; }

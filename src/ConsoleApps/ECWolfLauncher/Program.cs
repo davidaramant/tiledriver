@@ -18,7 +18,7 @@ namespace ECWolfLauncher;
 /// <summary>
 /// Convenience program to directly launch the output in ECWolf from inside Visual Studio.
 /// </summary>
-class Program
+sealed class Program
 {
 	static void Main()
 	{

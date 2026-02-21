@@ -6,7 +6,7 @@ using Tiledriver.DataModelGenerator.Xlat;
 
 namespace Tiledriver.DataModelGenerator;
 
-class Program
+sealed class Program
 {
 	static void Main()
 	{

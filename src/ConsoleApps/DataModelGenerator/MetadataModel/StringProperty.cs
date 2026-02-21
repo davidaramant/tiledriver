@@ -1,6 +1,6 @@
 namespace Tiledriver.DataModelGenerator.MetadataModel;
 
-class StringProperty : ScalarProperty
+sealed class StringProperty : ScalarProperty
 {
 	public override string FormatName { get; }
 

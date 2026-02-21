@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace WangscapeTilesetChopper.Model;
 
-internal record TileDefinition(
+internal sealed record TileDefinition(
 	[property: JsonPropertyName("corners")] ImmutableArray<string> CornerTextures,
 	string Filename,
 	int X,
