@@ -1,4 +1,5 @@
 ﻿using SkiaSharp;
+using Tiledriver.Core.LevelGeometry.TerrainMaps;
 using Tiledriver.Core.Utils.Images;
 
 namespace Tiledriver.Core.ManualTests;
@@ -14,7 +15,7 @@ public class TerrainMapsVisualization
 	[Test, Explicit]
 	public void DrawImage()
 	{
-		using var image = new FastImage(new(1024, 1024));
+		using var image = TerrainMapGenerator.Create(width: 1024, height: 1024);
 		image.Fill(SKColors.White);
 		SaveImage(image, "Test");
 	}
