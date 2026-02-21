@@ -22,6 +22,16 @@ public sealed class FastImage : IFastImage
 		_bitmap = new SKBitmap(width, height);
 	}
 
+	private FastImage(SKBitmap bitmap, int scale = 1)
+	{
+		_scale = scale;
+		Width = bitmap.Width;
+		Height = bitmap.Height;
+		_bitmap = bitmap;
+	}
+
+	public static FastImage WrapSKBitmap(SKBitmap bitmap, int scale = 1) => new FastImage(bitmap, scale);
+
 	public void Fill(SKColor color)
 	{
 		using var canvas = new SKCanvas(_bitmap);
