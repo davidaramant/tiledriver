@@ -1,3 +1,6 @@
+using Tiledriver.Core.DemoMaps.Wolf3D;
+using Tiledriver.Core.FormatModels.Uwmf;
+using Tiledriver.Core.LevelGeometry;
 using Tiledriver.Core.LevelGeometry.CaveGeneration.Wolf;
 using Tiledriver.Core.LevelGeometry.Extensions;
 using Tiledriver.Core.LevelGeometry.Lighting;
@@ -13,12 +16,31 @@ public class LightTracerVisualization
 	private readonly DirectoryInfo _dirInfo = OutputLocation.CreateDirectory("Light Tracer");
 	private const int Seed = 13;
 
+	void SaveImage(IFastImage image, string description) =>
+		image.Save(Path.Combine(_dirInfo.FullName, $"{description}.png"));
+
+	[Test, Explicit]
+	public void ShouldGenerateVisualizationOfSimpleLightMap()
+	{
+		MapData map = TileDemoMap.Create();
+		var (floorLights, _) = LightTracer.Trace(
+			map,
+			new LightRange(DarkLevels: 10, LightLevels: 10),
+			[
+				new(new Position(1, 1), Brightness: 20, Radius: 20),
+				new(new Position(map.Width - 2, map.Height - 2), Brightness: 20, Radius: 20),
+				new(new Position(map.Width - 2, 1), Brightness: 20, Radius: 20),
+				new(new Position(1, map.Height - 2), Brightness: 20, Radius: 20),
+			]
+		);
+
+		using var image = LightMapVisualizer.Render(floorLights, scale: 20);
+		SaveImage(image, "Simple Light Map");
+	}
+
 	[Test, Explicit]
 	public void ShowFloorVsCeilingLighting()
 	{
-		void SaveImage(IFastImage image, string description) =>
-			image.Save(Path.Combine(_dirInfo.FullName, $"{description}.png"));
-
 		var random = new Random(Seed);
 		var board = new CellBoard(new(128, 128))
 			.Fill(random, probabilityAlive: 0.5)
