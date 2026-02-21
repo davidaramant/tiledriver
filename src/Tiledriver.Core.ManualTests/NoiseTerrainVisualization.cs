@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using SkiaSharp;
+using Tiledriver.Core.LevelGeometry.TerrainMaps;
 using Tiledriver.Core.Utils.Images;
 using Tiledriver.Core.Utils.Noise;
 
@@ -12,18 +13,6 @@ public class NoiseTerrainVisualization
 
 	void SaveImage(IFastImage image, string description) =>
 		image.Save(Path.Combine(_dirInfo.FullName, $"{description}.png"));
-
-	enum Biome
-	{
-		Water,
-		Beach,
-		Forest,
-		Jungle,
-		Savannah,
-		Desert,
-		BareRock,
-		Snow,
-	}
 
 	static Biome ElevationToBiome(float elevation) =>
 		elevation switch
@@ -40,14 +29,14 @@ public class NoiseTerrainVisualization
 	static SKColor BiomeToColor(Biome biome) =>
 		biome switch
 		{
-			Biome.Water => SKColors.Blue,
-			Biome.Beach => SKColors.Yellow,
-			Biome.Forest => SKColors.Green,
+			Biome.Water => SKColors.RoyalBlue,
+			Biome.Beach => SKColors.SandyBrown,
+			Biome.Forest => SKColors.ForestGreen,
 			Biome.Jungle => SKColors.DarkGreen,
-			Biome.Savannah => SKColors.Khaki,
-			Biome.Desert => SKColors.SandyBrown,
+			Biome.Savannah => SKColors.DarkGoldenrod,
+			Biome.Desert => SKColors.Khaki,
 			Biome.Snow => SKColors.White,
-			Biome.BareRock => SKColors.Gray,
+			Biome.BareRock => SKColors.DimGray,
 			_ => throw new ArgumentOutOfRangeException(nameof(biome), biome, null),
 		};
 
@@ -77,7 +66,7 @@ public class NoiseTerrainVisualization
 	{
 		const int width = 512;
 		const int height = 512;
-		const string prefix = "biome - basic";
+		const string prefix = "biome";
 
 		foreach (var imagePath in Directory.GetFiles(_dirInfo.FullName, "*.png"))
 		{
