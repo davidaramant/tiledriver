@@ -1,0 +1,121 @@
+﻿using SharpVoronoiLib;
+using SkiaSharp;
+using Tiledriver.Core.LevelGeometry;
+using Tiledriver.Core.LevelGeometry.TerrainMaps;
+using Tiledriver.Core.Utils.CellularAutomata;
+using Tiledriver.Core.Utils.Images;
+
+namespace Tiledriver.Core.ManualTests;
+
+[TestFixture]
+public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon Terrain")
+{
+	[Test, Explicit]
+	public void OverlayCellularAutomata()
+	{
+		const string prefix = "overlay";
+		DeleteImages(prefix);
+
+		const int size = 2048;
+
+		var voronoiParams = (
+			Width: size,
+			Height: size,
+			NumberOfSites: 1000,
+			RelaxIterations: 3,
+			RelaxStrength: 0.25f,
+			PointMethod: PointGenerationMethod.Uniform
+		);
+		var caParams = (ProbabalityAlive: 0.48, Size: 32, RandomSeed: 0);
+
+		var random = new Random(caParams.RandomSeed);
+
+		var caBoard = new CellBoard(new Size(caParams.Size, caParams.Size))
+			.Fill(random, probabilityAlive: caParams.ProbabalityAlive)
+			.MakeBorderAlive(thickness: 1)
+			.GenerateStandardCave();
+
+		var caScale = (double)voronoiParams.Width / caBoard.Width;
+
+		VoronoiPlane plane = new(0, 0, voronoiParams.Width, voronoiParams.Height);
+		plane.GenerateRandomSites(voronoiParams.NumberOfSites, voronoiParams.PointMethod);
+		plane.Tessellate();
+		plane.Relax(voronoiParams.RelaxIterations, voronoiParams.RelaxStrength);
+
+		var sites = plane.Sites.Where(s => !s.SkippedAsDuplicate).ToList();
+
+		foreach (var markRegions in new[] { false, true })
+		{
+			var bitmap = new SKBitmap(voronoiParams.Width, voronoiParams.Height);
+			using var canvas = new SKCanvas(bitmap);
+			canvas.Clear(SKColors.White);
+
+			// Draw CA board
+			{
+				for (int y = 0; y < caBoard.Height; y++)
+				{
+					for (int x = 0; x < caBoard.Width; x++)
+					{
+						if (caBoard[new Position(x, y)] == CellType.Dead)
+						{
+							canvas.DrawRect(
+								(float)(x * caScale),
+								(float)(y * caScale),
+								(float)caScale,
+								(float)caScale,
+								new SKPaint { Color = SKColors.LightGray, Style = SKPaintStyle.Fill }
+							);
+						}
+					}
+				}
+			}
+
+			// Draw sites
+			foreach (var site in sites)
+			{
+				if (markRegions)
+				{
+					var caX = (int)(site.X / caScale);
+					var caY = (int)(site.Y / caScale);
+					var siteCenterInDeadCell = caBoard[new Position(caX, caY)] == CellType.Dead;
+
+					if (siteCenterInDeadCell)
+					{
+						var points = site.ClockwisePoints.Select(p => new SKPoint((float)p.X, (float)p.Y)).ToArray();
+						using var path = new SKPath();
+						path.AddPoly(points, close: true);
+						canvas.DrawPath(
+							path,
+							new SKPaint { Color = SKColors.LightGreen.WithAlpha(128), Style = SKPaintStyle.Fill }
+						);
+					}
+				}
+
+				canvas.DrawPoint(
+					new SKPoint((float)site.X, (float)site.Y),
+					new SKPaint
+					{
+						Color = SKColors.Red,
+						Style = SKPaintStyle.Fill,
+						StrokeWidth = 3,
+					}
+				);
+			}
+
+			// Draw region edges
+			foreach (var edge in plane.Edges)
+			{
+				canvas.DrawLine(
+					(float)edge.Start.X,
+					(float)edge.Start.Y,
+					(float)edge.End.X,
+					(float)edge.End.Y,
+					new SKPaint { Color = SKColors.Black, StrokeWidth = 1 }
+				);
+			}
+
+			using var image = FastImage.WrapSKBitmap(bitmap, scale: 1);
+			SaveImage(image, $"{prefix} - mark regions {markRegions}");
+		}
+	}
+}
