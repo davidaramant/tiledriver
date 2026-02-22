@@ -6,13 +6,8 @@ using Tiledriver.Core.Utils.Noise;
 namespace Tiledriver.Core.ManualTests;
 
 [TestFixture]
-public sealed class NoiseVisualizer
+public sealed class NoiseVisualizer() : BaseVisualization("Noise")
 {
-	private readonly DirectoryInfo _dirInfo = OutputLocation.CreateDirectory("Noise");
-
-	void SaveImage(IFastImage image, string description) =>
-		image.Save(Path.Combine(_dirInfo.FullName, $"{description}.png"));
-
 	[Test, Explicit]
 	public void BasicNoise()
 	{
@@ -20,11 +15,7 @@ public sealed class NoiseVisualizer
 		const int height = width;
 		const string prefix = "basic";
 
-		foreach (var imagePath in Directory.GetFiles(_dirInfo.FullName, "*.png"))
-		{
-			if (Path.GetFileName(imagePath).StartsWith(prefix))
-				File.Delete(imagePath);
-		}
+		DeleteImages(prefix);
 
 		double[] frequencies = [5, 10, 50, 100];
 
@@ -61,11 +52,7 @@ public sealed class NoiseVisualizer
 		const int height = width;
 		const string prefix = "octaves";
 
-		foreach (var imagePath in Directory.GetFiles(_dirInfo.FullName, "*.png"))
-		{
-			if (Path.GetFileName(imagePath).StartsWith(prefix))
-				File.Delete(imagePath);
-		}
+		DeleteImages(prefix);
 
 		IReadOnlyCollection<IReadOnlyCollection<Octave>> octaveSets =
 		[
@@ -120,11 +107,7 @@ public sealed class NoiseVisualizer
 		const int height = width;
 		const string prefix = "redistributed";
 
-		foreach (var imagePath in Directory.GetFiles(_dirInfo.FullName, "*.png"))
-		{
-			if (Path.GetFileName(imagePath).StartsWith(prefix))
-				File.Delete(imagePath);
-		}
+		DeleteImages(prefix);
 
 		IReadOnlyCollection<Octave> octaves = [new(5, 1), new(10, 0.5), new(20, 0.25), new(40, 0.125)];
 		IReadOnlyCollection<double> redistributionPowers = [1, 2, 3];
@@ -175,11 +158,7 @@ public sealed class NoiseVisualizer
 		const int height = width;
 		const string prefix = "binary";
 
-		foreach (var imagePath in Directory.GetFiles(_dirInfo.FullName, "*.png"))
-		{
-			if (Path.GetFileName(imagePath).StartsWith(prefix))
-				File.Delete(imagePath);
-		}
+		DeleteImages(prefix);
 
 		const int frequency = 5;
 		const double power = 2;

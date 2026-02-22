@@ -5,13 +5,8 @@ using Tiledriver.Core.Utils.Images;
 namespace Tiledriver.Core.ManualTests;
 
 [TestFixture]
-public sealed class VoronoiDiagramVisualizer
+public sealed class VoronoiDiagramVisualizer() : BaseVisualization("Voronoi Diagrams")
 {
-	private readonly DirectoryInfo _dirInfo = OutputLocation.CreateDirectory("Voronoi Diagrams");
-
-	void SaveImage(IFastImage image, string description) =>
-		image.Save(Path.Combine(_dirInfo.FullName, $"{description}.png"));
-
 	[Test, Explicit]
 	public void RelaxingTriangulation()
 	{
@@ -19,11 +14,7 @@ public sealed class VoronoiDiagramVisualizer
 		const int height = width;
 		const string prefix = "relaxing";
 
-		foreach (var imagePath in Directory.GetFiles(_dirInfo.FullName, "*.png"))
-		{
-			if (Path.GetFileName(imagePath).StartsWith(prefix))
-				File.Delete(imagePath);
-		}
+		DeleteImages(prefix);
 
 		const int numberOfSites = 1000;
 
@@ -104,11 +95,7 @@ public sealed class VoronoiDiagramVisualizer
 		const int height = width;
 		const string prefix = "mesh";
 
-		foreach (var imagePath in Directory.GetFiles(_dirInfo.FullName, "*.png"))
-		{
-			if (Path.GetFileName(imagePath).StartsWith(prefix))
-				File.Delete(imagePath);
-		}
+		DeleteImages(prefix);
 
 		const int numberOfSites = 1000;
 		const int relaxIterations = 3;
@@ -176,11 +163,7 @@ public sealed class VoronoiDiagramVisualizer
 		const int height = width;
 		const string prefix = "center";
 
-		foreach (var imagePath in Directory.GetFiles(_dirInfo.FullName, "*.png"))
-		{
-			if (Path.GetFileName(imagePath).StartsWith(prefix))
-				File.Delete(imagePath);
-		}
+		DeleteImages(prefix);
 
 		const int numberOfSites = 1000;
 		const int relaxIterations = 3;
