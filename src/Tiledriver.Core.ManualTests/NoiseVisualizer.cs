@@ -181,12 +181,10 @@ public sealed class NoiseVisualizer
 				File.Delete(imagePath);
 		}
 
-		IReadOnlyCollection<Octave> octaves = [new(5, 1), new(10, 0.5), new(20, 0.25), new(40, 0.125)];
+		const int frequency = 5;
 		const double power = 2;
 
 		IReadOnlyList<double> cutOffs = [0.1, 0.15, 0.2, 0.4, 0.6];
-
-		var amSum = octaves.Select(o => o.Amplitude).Sum();
 
 		using var images = new DisposableList<FastImage>(cutOffs.Select(_ => new FastImage(width, height, scale: 4)));
 
@@ -200,15 +198,7 @@ public sealed class NoiseVisualizer
 				// Square bump
 				var d = 1 - (1 - nx * nx) * (1 - ny * ny);
 
-				var e =
-					octaves
-						.Select(
-							(o, i) =>
-								o.Amplitude
-								* (NoiseGenerator.Generate2D(o.Frequency * nx, o.Frequency * ny, seed: i) + 1)
-								/ 2f
-						)
-						.Sum() / amSum;
+				var e = (NoiseGenerator.Generate2D(frequency * nx, frequency * ny) + 1) / 2d;
 
 				e = double.Lerp(e, 1 - d, 0.55);
 				var elevation = (float)Math.Pow(e, power);
