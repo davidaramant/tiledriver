@@ -25,20 +25,6 @@ public class NoiseTerrainVisualization
 			_ => Biome.Snow,
 		};
 
-	static SKColor BiomeToColor(Biome biome) =>
-		biome switch
-		{
-			Biome.Water => SKColors.RoyalBlue,
-			Biome.Beach => SKColors.SandyBrown,
-			Biome.Forest => SKColors.ForestGreen,
-			Biome.Jungle => SKColors.DarkGreen,
-			Biome.Savannah => SKColors.DarkGoldenrod,
-			Biome.Desert => SKColors.Khaki,
-			Biome.Snow => SKColors.White,
-			Biome.BareRock => SKColors.DimGray,
-			_ => throw new ArgumentOutOfRangeException(nameof(biome), biome, null),
-		};
-
 	static Biome GetBiome(float elevation, float moisture)
 	{
 		if (elevation < 0.2)
@@ -101,7 +87,7 @@ public class NoiseTerrainVisualization
 					var elevation = (float)Math.Pow(e, power);
 
 					var biome = ElevationToBiome(elevation);
-					var color = BiomeToColor(biome);
+					var color = biome.ToColor();
 
 					// h: 0 - 360
 					// s: 0 - 100
@@ -177,7 +163,7 @@ public class NoiseTerrainVisualization
 						var elevation = (float)Math.Pow(e, power);
 
 						var biome = GetBiome(elevation, (float)moisture);
-						var color = BiomeToColor(biome);
+						var color = biome.ToColor();
 
 						// h: 0 - 360
 						// s: 0 - 100
@@ -258,7 +244,7 @@ public class NoiseTerrainVisualization
 						elevation = step / (float)numTerraces;
 
 						var biome = GetBiome(elevation, (float)moisture);
-						var color = BiomeToColor(biome);
+						var color = biome.ToColor();
 
 						// Adjust even steps to create visible terrace banding
 						if (step % 2 == 0)
