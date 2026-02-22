@@ -1,4 +1,5 @@
-﻿using SkiaSharp;
+﻿using System.Collections;
+using SkiaSharp;
 using Tiledriver.Core.Utils.Images;
 using Tiledriver.Core.Utils.Noise;
 
@@ -165,5 +166,96 @@ public sealed class NoiseVisualizer
 				SaveImage(image, $"{prefix} - {power:N2}.png");
 			}
 		);
+	}
+
+	[Test, Explicit]
+	public void RedistributedOctavesBinary()
+	{
+		const int width = 512;
+		const int height = width;
+		const string prefix = "binary";
+
+		foreach (var imagePath in Directory.GetFiles(_dirInfo.FullName, "*.png"))
+		{
+			if (Path.GetFileName(imagePath).StartsWith(prefix))
+				File.Delete(imagePath);
+		}
+
+		IReadOnlyCollection<Octave> octaves = [new(5, 1), new(10, 0.5), new(20, 0.25), new(40, 0.125)];
+		const double power = 2;
+
+		IReadOnlyList<double> cutOffs = [0.1, 0.15, 0.2, 0.4, 0.6];
+
+		var amSum = octaves.Select(o => o.Amplitude).Sum();
+
+		using var images = new DisposableList<FastImage>(cutOffs.Select(_ => new FastImage(width, height, scale: 4)));
+
+		for (int y = 0; y < height; y++)
+		{
+			for (int x = 0; x < width; x++)
+			{
+				double nx = 2d * x / width - 1;
+				double ny = 2d * y / height - 1;
+
+				// Square bump
+				var d = 1 - (1 - nx * nx) * (1 - ny * ny);
+
+				var e =
+					octaves
+						.Select(
+							(o, i) =>
+								o.Amplitude
+								* (NoiseGenerator.Generate2D(o.Frequency * nx, o.Frequency * ny, seed: i) + 1)
+								/ 2f
+						)
+						.Sum() / amSum;
+
+				e = double.Lerp(e, 1 - d, 0.55);
+				var elevation = (float)Math.Pow(e, power);
+
+				for (int i = 0; i < cutOffs.Count; i++)
+				{
+					var cutOff = cutOffs[i];
+					var image = images[i];
+
+					var isLand = elevation > cutOff;
+					var color = isLand ? SKColors.White : SKColors.Black;
+
+					// h: 0 - 360
+					// s: 0 - 100
+					// v: 0 - 100
+					image.SetPixel(x, y, color);
+				}
+			}
+		}
+
+		for (int i = 0; i < cutOffs.Count; i++)
+		{
+			var cutOff = cutOffs[i];
+			var image = images[i];
+			SaveImage(image, $"{prefix} - cutoff {cutOff:N2}.png");
+		}
+	}
+
+	private sealed class DisposableList<T> : IReadOnlyList<T>, IDisposable
+		where T : IDisposable
+	{
+		private readonly List<T> _items;
+
+		public DisposableList(IEnumerable<T> items) => _items = items.ToList();
+
+		public IEnumerator<T> GetEnumerator() => _items.GetEnumerator();
+
+		IEnumerator IEnumerable.GetEnumerator() => _items.GetEnumerator();
+
+		public int Count => _items.Count;
+
+		public T this[int index] => _items[index];
+
+		public void Dispose()
+		{
+			foreach (var item in _items)
+				item.Dispose();
+		}
 	}
 }
