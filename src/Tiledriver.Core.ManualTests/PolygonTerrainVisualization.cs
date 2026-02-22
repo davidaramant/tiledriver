@@ -86,7 +86,12 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 					(float)edge.Start.Y,
 					(float)edge.End.X,
 					(float)edge.End.Y,
-					new SKPaint { Color = SKColors.Black, StrokeWidth = 1 }
+					new SKPaint
+					{
+						Color = SKColors.Black,
+						StrokeWidth = 2,
+						IsAntialias = true,
+					}
 				);
 			}
 
@@ -251,7 +256,12 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 						(float)edge.Start.Y,
 						(float)edge.End.X,
 						(float)edge.End.Y,
-						new SKPaint { Color = SKColors.Black, StrokeWidth = 1 }
+						new SKPaint
+						{
+							Color = SKColors.Black,
+							StrokeWidth = 2,
+							IsAntialias = true,
+						}
 					);
 				}
 
@@ -269,7 +279,7 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 
 		const int size = 2048;
 
-		var voronoiParams = new VoronoiParams(
+		var vpParams = new VoronoiParams(
 			Width: size,
 			Height: size,
 			NumberOfSites: 4000,
@@ -279,108 +289,141 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 		);
 		var caParams = new CellularAutomataParams(ProbabalityAlive: 0.48, Size: 32, RandomSeed: 0);
 
-		var random = new Random(caParams.RandomSeed);
-
-		var caBoard = new CellBoard(new Size(caParams.Size, caParams.Size))
-			.Fill(random, probabilityAlive: caParams.ProbabalityAlive)
-			.MakeBorderAlive(thickness: 1)
-			.GenerateStandardCave();
-
-		var caScale = (double)voronoiParams.Width / caBoard.Width;
-
-		VoronoiPlane plane = new(0, 0, voronoiParams.Width, voronoiParams.Height);
-		plane.GenerateRandomSites(voronoiParams.NumberOfSites, voronoiParams.PointMethod);
-		plane.Tessellate();
-		plane.Relax(voronoiParams.RelaxIterations, voronoiParams.RelaxStrength);
-
-		var sites = plane.Sites.Where(s => !s.SkippedAsDuplicate).ToList();
-
-		var isLand = sites.ToDictionary(
-			s => s,
-			s => caBoard[new Position((int)(s.X / caScale), (int)(s.Y / caScale))] == CellType.Dead
-		);
-
-		// Multi-source BFS: water sites start at distance 0; land sites get
-		// the shortest hop-count to the nearest water neighbor.
-		var distances = new Dictionary<VoronoiSite, int>();
-		var queue = new Queue<VoronoiSite>();
-
-		foreach (var site in sites.Where(s => !isLand[s]))
-		{
-			distances[site] = 0;
-			queue.Enqueue(site);
-		}
-
-		while (queue.Count > 0)
-		{
-			var current = queue.Dequeue();
-			var nextDist = distances[current] + 1;
-
-			foreach (var neighbour in current.Neighbours)
+		IReadOnlyCollection<VoronoiParams> voronoiTrials =
+		[
+			vpParams,
+			vpParams with
 			{
-				if (neighbour.SkippedAsDuplicate || distances.ContainsKey(neighbour))
-					continue;
-
-				distances[neighbour] = nextDist;
-				queue.Enqueue(neighbour);
-			}
-		}
-
-		var regions = sites
-			.Select(s => new Region(s, IsLand: isLand[s], DistanceFromWater: distances.GetValueOrDefault(s, -1)))
-			.ToDictionary(region => region.Site);
-
-		var maxDistance = regions.Values.Where(r => r.IsLand).Max(r => r.DistanceFromWater);
-
-		var bitmap = new SKBitmap(voronoiParams.Width, voronoiParams.Height);
-		using var canvas = new SKCanvas(bitmap);
-
-		// Draw regions
-		foreach (var region in regions.Values)
-		{
-			// Site polygons
-
-			SKColor color;
-			if (!region.IsLand)
+				RelaxStrength = 0.5f,
+			},
+			vpParams with
 			{
-				color = SKColors.RoyalBlue;
-			}
-			else
+				RelaxStrength = 0.7f,
+			},
+			vpParams with
 			{
-				// Interpolate from LightGreen (distance 1) to DarkGreen (max distance).
-				var t =
-					maxDistance > 1
-						? Math.Clamp((region.DistanceFromWater - 1.0) / (maxDistance - 1.0), 0.0, 1.0)
-						: 0.0;
-				color = Lerp(SKColors.LightGreen, SKColors.DarkGreen, t);
-			}
+				RelaxIterations = 4,
+			},
+		];
 
-			var points = region.Site.ClockwisePoints.Select(p => new SKPoint((float)p.X, (float)p.Y)).ToArray();
-			using var path = new SKPath();
-			path.AddPoly(points, close: true);
-			canvas.DrawPath(path, new SKPaint { Color = color, Style = SKPaintStyle.Fill });
-
-			// Outline
-			foreach (var edge in region.Site.Edges.Where(e => e.Right is not null && e.Left is not null))
+		Parallel.ForEach(
+			voronoiTrials,
+			voronoiParams =>
 			{
-				var leftRegion = regions[edge.Left!];
-				var rightRegion = regions[edge.Right!];
+				var caBoard = new CellBoard(new Size(caParams.Size, caParams.Size))
+					.Fill(new Random(caParams.RandomSeed), probabilityAlive: caParams.ProbabalityAlive)
+					.MakeBorderAlive(thickness: 1)
+					.GenerateStandardCave();
 
-				if (leftRegion.DistanceFromWater != rightRegion.DistanceFromWater)
+				var caScale = (double)voronoiParams.Width / caBoard.Width;
+
+				VoronoiPlane plane = new(0, 0, voronoiParams.Width, voronoiParams.Height);
+				plane.GenerateRandomSites(voronoiParams.NumberOfSites, voronoiParams.PointMethod);
+				plane.Tessellate();
+				plane.Relax(voronoiParams.RelaxIterations, voronoiParams.RelaxStrength);
+
+				var sites = plane.Sites.Where(s => !s.SkippedAsDuplicate).ToList();
+
+				var isLand = sites.ToDictionary(
+					s => s,
+					s => caBoard[new Position((int)(s.X / caScale), (int)(s.Y / caScale))] == CellType.Dead
+				);
+
+				// Multi-source BFS: water sites start at distance 0; land sites get
+				// the shortest hop-count to the nearest water neighbor.
+				var distances = new Dictionary<VoronoiSite, int>();
+				var queue = new Queue<VoronoiSite>();
+
+				foreach (var site in sites.Where(s => !isLand[s]))
 				{
-					canvas.DrawLine(
-						(float)edge.Start.X,
-						(float)edge.Start.Y,
-						(float)edge.End.X,
-						(float)edge.End.Y,
-						new SKPaint { Color = SKColors.Black, StrokeWidth = 1 }
-					);
+					distances[site] = 0;
+					queue.Enqueue(site);
 				}
-			}
-		}
 
-		using var image = FastImage.WrapSKBitmap(bitmap, scale: 1);
-		SaveImage(image, $"{prefix}");
+				while (queue.Count > 0)
+				{
+					var current = queue.Dequeue();
+					var nextDist = distances[current] + 1;
+
+					foreach (var neighbour in current.Neighbours)
+					{
+						if (neighbour.SkippedAsDuplicate || distances.ContainsKey(neighbour))
+							continue;
+
+						distances[neighbour] = nextDist;
+						queue.Enqueue(neighbour);
+					}
+				}
+
+				var regions = sites
+					.Select(s => new Region(
+						s,
+						IsLand: isLand[s],
+						DistanceFromWater: distances.GetValueOrDefault(s, -1)
+					))
+					.ToDictionary(region => region.Site);
+
+				var maxDistance = regions.Values.Where(r => r.IsLand).Max(r => r.DistanceFromWater);
+
+				var bitmap = new SKBitmap(voronoiParams.Width, voronoiParams.Height);
+				using var canvas = new SKCanvas(bitmap);
+
+				// Draw regions
+				foreach (var region in regions.Values)
+				{
+					// Site polygons
+
+					SKColor color;
+					if (!region.IsLand)
+					{
+						color = SKColors.RoyalBlue;
+					}
+					else
+					{
+						// Interpolate from LightGreen (distance 1) to DarkGreen (max distance).
+						var t =
+							maxDistance > 1
+								? Math.Clamp((region.DistanceFromWater - 1.0) / (maxDistance - 1.0), 0.0, 1.0)
+								: 0.0;
+						color = Lerp(SKColors.LightGreen, SKColors.DarkGreen, t);
+					}
+
+					var points = region.Site.ClockwisePoints.Select(p => new SKPoint((float)p.X, (float)p.Y)).ToArray();
+					using var path = new SKPath();
+					path.AddPoly(points, close: true);
+					canvas.DrawPath(path, new SKPaint { Color = color, Style = SKPaintStyle.Fill });
+
+					// Outline
+					foreach (var edge in region.Site.Edges.Where(e => e.Right is not null && e.Left is not null))
+					{
+						var leftRegion = regions[edge.Left!];
+						var rightRegion = regions[edge.Right!];
+
+						if (leftRegion.DistanceFromWater != rightRegion.DistanceFromWater)
+						{
+							canvas.DrawLine(
+								(float)edge.Start.X,
+								(float)edge.Start.Y,
+								(float)edge.End.X,
+								(float)edge.End.Y,
+								new SKPaint
+								{
+									Color = SKColors.Black,
+									StrokeWidth = 2,
+									IsAntialias = true,
+								}
+							);
+						}
+					}
+				}
+
+				using var image = FastImage.WrapSKBitmap(bitmap, scale: 1);
+				SaveImage(
+					image,
+					$"{prefix} - relax iterations {voronoiParams.RelaxIterations} - relax strength {voronoiParams.RelaxStrength:N2}"
+				);
+			}
+		);
 	}
 
 	private sealed record CellularAutomataParams(double ProbabalityAlive, int Size, int RandomSeed);
