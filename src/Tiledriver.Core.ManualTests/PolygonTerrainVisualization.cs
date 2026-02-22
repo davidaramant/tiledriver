@@ -21,7 +21,7 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 		var voronoiParams = (
 			Width: size,
 			Height: size,
-			NumberOfSites: 1000,
+			NumberOfSites: 4000,
 			RelaxIterations: 3,
 			RelaxStrength: 0.25f,
 			PointMethod: PointGenerationMethod.Uniform
@@ -126,7 +126,7 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 		var voronoiParams = (
 			Width: size,
 			Height: size,
-			NumberOfSites: 1000,
+			NumberOfSites: 4000,
 			RelaxIterations: 3,
 			RelaxStrength: 0.25f,
 			PointMethod: PointGenerationMethod.Uniform
@@ -149,13 +149,42 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 
 		var sites = plane.Sites.Where(s => !s.SkippedAsDuplicate).ToList();
 
+		var isLand = sites.ToDictionary(
+			s => s,
+			s => caBoard[new Position((int)(s.X / caScale), (int)(s.Y / caScale))] == CellType.Dead
+		);
+
+		// Multi-source BFS: water sites start at distance 0; land sites get
+		// the shortest hop-count to the nearest water neighbour.
+		var distances = new Dictionary<VoronoiSite, int>();
+		var queue = new Queue<VoronoiSite>();
+
+		foreach (var site in sites.Where(s => !isLand[s]))
+		{
+			distances[site] = 0;
+			queue.Enqueue(site);
+		}
+
+		while (queue.Count > 0)
+		{
+			var current = queue.Dequeue();
+			var nextDist = distances[current] + 1;
+
+			foreach (var neighbour in current.Neighbours)
+			{
+				if (neighbour.SkippedAsDuplicate || distances.ContainsKey(neighbour))
+					continue;
+
+				distances[neighbour] = nextDist;
+				queue.Enqueue(neighbour);
+			}
+		}
+
 		var regions = sites
-			.Select(s => new Region(
-				s,
-				IsLand: caBoard[new Position((int)(s.X / caScale), (int)(s.Y / caScale))] == CellType.Dead,
-				DistanceFromWater: -1
-			))
+			.Select(s => new Region(s, IsLand: isLand[s], DistanceFromWater: distances.GetValueOrDefault(s, -1)))
 			.ToList();
+
+		var maxDistance = regions.Where(r => r.IsLand).Max(r => r.DistanceFromWater);
 
 		var bitmap = new SKBitmap(voronoiParams.Width, voronoiParams.Height);
 		using var canvas = new SKCanvas(bitmap);
@@ -165,7 +194,20 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 		{
 			// Site polygons
 
-			var color = region.IsLand ? SKColors.LightGreen : SKColors.RoyalBlue;
+			SKColor color;
+			if (!region.IsLand)
+			{
+				color = SKColors.RoyalBlue;
+			}
+			else
+			{
+				// Interpolate from LightGreen (distance 1) to DarkGreen (max distance).
+				var t =
+					maxDistance > 1
+						? Math.Clamp((region.DistanceFromWater - 1.0) / (maxDistance - 1.0), 0.0, 1.0)
+						: 0.0;
+				color = Lerp(SKColors.LightGreen, SKColors.DarkGreen, t);
+			}
 
 			var points = region.Site.ClockwisePoints.Select(p => new SKPoint((float)p.X, (float)p.Y)).ToArray();
 			using var path = new SKPath();
@@ -206,6 +248,13 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 		using var image = FastImage.WrapSKBitmap(bitmap, scale: 1);
 		SaveImage(image, $"{prefix}");
 	}
+
+	private static SKColor Lerp(SKColor from, SKColor to, double t) =>
+		new(
+			(byte)(from.Red + (to.Red - from.Red) * t),
+			(byte)(from.Green + (to.Green - from.Green) * t),
+			(byte)(from.Blue + (to.Blue - from.Blue) * t)
+		);
 
 	private sealed record Region(VoronoiSite Site, bool IsLand, int DistanceFromWater);
 }
