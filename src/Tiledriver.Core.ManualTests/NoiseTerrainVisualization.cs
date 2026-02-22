@@ -6,13 +6,8 @@ using Tiledriver.Core.Utils.Noise;
 namespace Tiledriver.Core.ManualTests;
 
 [TestFixture]
-public class NoiseTerrainVisualization
+public sealed class NoiseTerrainVisualization() : BaseVisualization("Noise Terrain")
 {
-	private readonly DirectoryInfo _dirInfo = OutputLocation.CreateDirectory("Noise Terrain");
-
-	void SaveImage(IFastImage image, string description) =>
-		image.Save(Path.Combine(_dirInfo.FullName, $"{description}.png"));
-
 	static Biome ElevationToBiome(float elevation) =>
 		elevation switch
 		{
@@ -53,11 +48,7 @@ public class NoiseTerrainVisualization
 		const int height = width;
 		const string prefix = "biome";
 
-		foreach (var imagePath in Directory.GetFiles(_dirInfo.FullName, "*.png"))
-		{
-			if (Path.GetFileName(imagePath).StartsWith(prefix))
-				File.Delete(imagePath);
-		}
+		DeleteImages(prefix);
 
 		IReadOnlyCollection<Octave> octaves = [new(5, 1), new(10, 0.5), new(20, 0.25), new(40, 0.125)];
 		const double power = 2;
@@ -107,11 +98,7 @@ public class NoiseTerrainVisualization
 		const int height = width;
 		const string prefix = "islands - basic";
 
-		foreach (var imagePath in Directory.GetFiles(_dirInfo.FullName, "*.png"))
-		{
-			if (Path.GetFileName(imagePath).StartsWith(prefix))
-				File.Delete(imagePath);
-		}
+		DeleteImages(prefix);
 
 		IReadOnlyCollection<Octave> octaves = [new(5, 1), new(10, 0.5), new(20, 0.25), new(40, 0.125)];
 		const double power = 2;
@@ -184,11 +171,7 @@ public class NoiseTerrainVisualization
 		const int height = width;
 		const string prefix = "islands - terraced";
 
-		foreach (var imagePath in Directory.GetFiles(_dirInfo.FullName, "*.png"))
-		{
-			if (Path.GetFileName(imagePath).StartsWith(prefix))
-				File.Delete(imagePath);
-		}
+		DeleteImages(prefix);
 
 		IReadOnlyCollection<Octave> octaves = [new(5, 1), new(10, 0.5), new(20, 0.25), new(40, 0.125)];
 		const double power = 2;
