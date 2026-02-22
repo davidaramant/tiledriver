@@ -221,7 +221,7 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 							maxDistance > 1
 								? Math.Clamp((region.DistanceFromWater - 1.0) / (maxDistance - 1.0), 0.0, 1.0)
 								: 0.0;
-						color = Lerp(SKColors.LightGreen, SKColors.DarkGreen, t);
+						color = Lerp(SKColors.DarkGreen, SKColors.LightGreen, t);
 					}
 
 					var points = region.Site.ClockwisePoints.Select(p => new SKPoint((float)p.X, (float)p.Y)).ToArray();
@@ -294,15 +294,15 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 			vpParams,
 			vpParams with
 			{
-				RelaxStrength = 0.5f,
-			},
-			vpParams with
-			{
-				RelaxStrength = 0.7f,
-			},
-			vpParams with
-			{
+				NumberOfSites = 6000,
 				RelaxIterations = 4,
+				RelaxStrength = 1,
+			},
+			vpParams with
+			{
+				NumberOfSites = 8000,
+				RelaxIterations = 4,
+				RelaxStrength = 1,
 			},
 		];
 
@@ -385,7 +385,7 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 							maxDistance > 1
 								? Math.Clamp((region.DistanceFromWater - 1.0) / (maxDistance - 1.0), 0.0, 1.0)
 								: 0.0;
-						color = Lerp(SKColors.LightGreen, SKColors.DarkGreen, t);
+						color = Lerp(SKColors.DarkGreen, SKColors.LightGreen, t);
 					}
 
 					var points = region.Site.ClockwisePoints.Select(p => new SKPoint((float)p.X, (float)p.Y)).ToArray();
@@ -420,7 +420,7 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 				using var image = FastImage.WrapSKBitmap(bitmap, scale: 1);
 				SaveImage(
 					image,
-					$"{prefix} - relax iterations {voronoiParams.RelaxIterations} - relax strength {voronoiParams.RelaxStrength:N2}"
+					$"{prefix} - number of sites {voronoiParams.NumberOfSites} - relax iterations {voronoiParams.RelaxIterations} - relax strength {voronoiParams.RelaxStrength:N2}"
 				);
 			}
 		);
