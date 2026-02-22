@@ -114,68 +114,58 @@ public sealed class VoronoiDiagramVisualizer
 		const int relaxIterations = 3;
 		const float relaxStrength = 0.25f;
 
-		VoronoiPlane plane = new VoronoiPlane(0, 0, width, height);
+		Parallel.ForEach(
+			[PointGenerationMethod.Uniform, PointGenerationMethod.Gaussian],
+			pointGenerationMethod =>
+			{
+				VoronoiPlane plane = new VoronoiPlane(0, 0, width, height);
 
-		plane.GenerateRandomSites(numberOfSites, PointGenerationMethod.Uniform);
+				plane.GenerateRandomSites(numberOfSites, pointGenerationMethod);
 
-		plane.Tessellate();
+				plane.Tessellate();
 
-		List<VoronoiEdge> edges = plane.Relax(relaxIterations, relaxStrength);
+				plane.Relax(relaxIterations, relaxStrength);
 
-		var edgesBitmap = new SKBitmap(width, height);
-		using var edgesCanvas = new SKCanvas(edgesBitmap);
-		edgesCanvas.Clear(SKColors.White);
+				var sites = plane.Sites.Where(s => !s.SkippedAsDuplicate).ToList();
 
-		foreach (var edge in edges)
-		{
-			edgesCanvas.DrawLine(
-				(float)edge.Start.X,
-				(float)edge.Start.Y,
-				(float)edge.End.X,
-				(float)edge.End.Y,
-				new SKPaint { Color = SKColors.Black, StrokeWidth = 1 }
-			);
-		}
+				var meshBitmap = new SKBitmap(width, height);
+				using var meshCanvas = new SKCanvas(meshBitmap);
 
-		using var image = FastImage.WrapSKBitmap(edgesBitmap, scale: 1);
-
-		SaveImage(image, $"{prefix} - edges");
-
-		var sites = plane.Sites.Where(s => !s.SkippedAsDuplicate).ToList();
-
-		var meshBitmap = new SKBitmap(width, height);
-		using var meshCanvas = new SKCanvas(meshBitmap);
-		meshCanvas.Clear(SKColors.White);
-
-		for (int index = 0; index < sites.Count; index++)
-		{
-			var site = sites[index];
-			var points = site.ClockwisePoints.Select(p => new SKPoint((float)p.X, (float)p.Y)).ToArray();
-			using var path = new SKPath();
-			path.AddPoly(points, close: true);
-			meshCanvas.DrawPath(
-				path,
-				new SKPaint
+				for (int index = 0; index < sites.Count; index++)
 				{
-					// Golden angle spacing ensures maximally distinct, evenly distributed hues
-					Color = SKColor.FromHsv((index * 137.508f) % 360f, 70f + (index % 4) * 10f, 75f + (index % 3) * 8f),
-					Style = SKPaintStyle.Fill,
+					var site = sites[index];
+					var points = site.ClockwisePoints.Select(p => new SKPoint((float)p.X, (float)p.Y)).ToArray();
+					using var path = new SKPath();
+					path.AddPoly(points, close: true);
+					meshCanvas.DrawPath(
+						path,
+						new SKPaint
+						{
+							// Golden angle spacing ensures maximally distinct, evenly distributed hues
+							Color = SKColor.FromHsv(
+								(index * 137.508f) % 360f,
+								70f + (index % 4) * 10f,
+								75f + (index % 3) * 8f
+							),
+							Style = SKPaintStyle.Fill,
+						}
+					);
+
+					meshCanvas.DrawPoint(
+						new SKPoint((float)site.X, (float)site.Y),
+						new SKPaint
+						{
+							Color = SKColors.Black,
+							Style = SKPaintStyle.Fill,
+							StrokeWidth = 3,
+						}
+					);
 				}
-			);
 
-			meshCanvas.DrawPoint(
-				new SKPoint((float)site.X, (float)site.Y),
-				new SKPaint
-				{
-					Color = SKColors.Black,
-					Style = SKPaintStyle.Fill,
-					StrokeWidth = 3,
-				}
-			);
-		}
+				using var meshImage = FastImage.WrapSKBitmap(meshBitmap, scale: 1);
 
-		using var meshImage = FastImage.WrapSKBitmap(meshBitmap, scale: 1);
-
-		SaveImage(meshImage, $"{prefix} - polygons");
+				SaveImage(meshImage, $"{prefix} - {pointGenerationMethod}");
+			}
+		);
 	}
 }
