@@ -6,19 +6,14 @@ using Tiledriver.Core.Utils.Images;
 
 namespace Tiledriver.Core.ManualTests;
 
-public class CellularAutomataVisualization
+[TestFixture]
+public sealed class CellularAutomataVisualization() : BaseVisualization("Cellular Automata")
 {
 	[Test, Explicit]
 	public void RenderABunchOfOptions()
 	{
-		var dir = OutputLocation.CreateDirectory("Cellular Automata Trials");
-
-		foreach (var file in dir.GetFiles())
-		{
-			file.Delete();
-		}
-
-		var path = dir.FullName;
+		const string prefix = "Trial";
+		DeleteImages(prefix);
 
 		var trials = (
 			from seed in Enumerable.Range(0, 3)
@@ -43,12 +38,7 @@ public class CellularAutomataVisualization
 
 				using var img = Visualize(board, showOnlyLargestArea: false);
 
-				img.Save(
-					Path.Combine(
-						path,
-						$"Size {trial.size}" + $" - ProbAlive {trial.probAlive:F2}" + $" - Seed {trial.seed}" + $".png"
-					)
-				);
+				SaveImage(img, $"{prefix} - Size {trial.size} - ProbAlive {trial.probAlive:F2} - Seed {trial.seed}");
 			}
 		);
 	}
@@ -56,19 +46,13 @@ public class CellularAutomataVisualization
 	[Test, Explicit]
 	public void ScaleBoard()
 	{
-		var dir = OutputLocation.CreateDirectory("Cellular Automata Scaling");
-
-		foreach (var file in dir.GetFiles())
-		{
-			file.Delete();
-		}
-
-		var path = dir.FullName;
+		const string prefix = "Scaling";
+		DeleteImages(prefix);
 
 		void Save(CellBoard board, string name, int scale)
 		{
 			using var img = Visualize(board, false, scale);
-			img.Save(Path.Combine(path, $"{name}.png"));
+			SaveImage(img, $"{prefix} - {name}");
 		}
 
 		var random = new Random(0);
@@ -101,6 +85,38 @@ public class CellularAutomataVisualization
 				last = scaled;
 			}
 		}
+	}
+
+	[Test, Explicit]
+	public void RenderAnIslandShape()
+	{
+		const string prefix = "Islands";
+		DeleteImages(prefix);
+
+		var trials = (
+			from seed in Enumerable.Range(0, 3)
+			from size in new[] { 32, 48 }
+			from probAlive in new[] { 0.48, 0.5, 0.52 }
+			select (seed, size, probAlive)
+		).ToArray();
+		// Decent islands: size 32, probAlive 0.48
+
+		Parallel.ForEach(
+			trials,
+			trial =>
+			{
+				var random = new Random(trial.seed);
+
+				var board = new CellBoard(new Size(trial.size, trial.size))
+					.Fill(random, probabilityAlive: trial.probAlive)
+					.MakeBorderAlive(thickness: 1)
+					.GenerateStandardCave();
+
+				using var img = Visualize(board, showOnlyLargestArea: false, scale: 20);
+
+				SaveImage(img, $"{prefix} - Size {trial.size} - ProbAlive {trial.probAlive:F2} - Seed {trial.seed}");
+			}
+		);
 	}
 
 	static IFastImage Visualize(CellBoard board, bool showOnlyLargestArea, int scale = 1)
