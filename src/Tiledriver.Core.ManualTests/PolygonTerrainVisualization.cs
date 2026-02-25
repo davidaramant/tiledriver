@@ -38,7 +38,11 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 		var caScale = (double)voronoiParams.Width / caBoard.Width;
 
 		VoronoiPlane plane = new(0, 0, voronoiParams.Width, voronoiParams.Height);
-		plane.GenerateRandomSites(voronoiParams.NumberOfSites, voronoiParams.PointMethod);
+		plane.GenerateRandomSites(
+			voronoiParams.NumberOfSites,
+			voronoiParams.PointMethod,
+			random: new SeededRandomNumberGenerator(caParams.RandomSeed)
+		);
 		plane.Tessellate();
 		plane.Relax(voronoiParams.RelaxIterations, voronoiParams.RelaxStrength);
 
@@ -138,10 +142,21 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 		);
 		var caParams = new CellularAutomataParams(ProbabalityAlive: 0.48, Size: 32, RandomSeed: 0);
 
+		IReadOnlyCollection<(VoronoiParams vParams, bool drawDistances)> trials =
+		[
+			(vParams, true),
+			(vParams with { PointMethod = PointGenerationMethod.Gaussian }, true),
+			(vParams, false),
+			(vParams with { NumberOfSites = 6000 }, false),
+			(vParams with { NumberOfSites = 8000 }, false),
+		];
+
 		Parallel.ForEach(
-			[vParams, vParams with { PointMethod = PointGenerationMethod.Gaussian }],
-			voronoiParams =>
+			trials,
+			trial =>
 			{
+				var voronoiParams = trial.vParams;
+
 				var random = new Random(caParams.RandomSeed);
 
 				var caBoard = new CellBoard(new Size(caParams.Size, caParams.Size))
@@ -152,7 +167,11 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 				var caScale = (double)voronoiParams.Width / caBoard.Width;
 
 				VoronoiPlane plane = new(0, 0, voronoiParams.Width, voronoiParams.Height);
-				plane.GenerateRandomSites(voronoiParams.NumberOfSites, voronoiParams.PointMethod);
+				plane.GenerateRandomSites(
+					voronoiParams.NumberOfSites,
+					voronoiParams.PointMethod,
+					random: new SeededRandomNumberGenerator(caParams.RandomSeed)
+				);
 				plane.Tessellate();
 				plane.Relax(voronoiParams.RelaxIterations, voronoiParams.RelaxStrength);
 
@@ -165,15 +184,22 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 						&& s.Edges.All(e => e.Right != null && e.Left != null)
 				);
 
-				// Multi-source BFS: water sites start at distance 0; land sites get
-				// the shortest hop-count to the nearest water neighbour.
+				// Multi-source BFS from coast: coastal sites (land neighboring water, or water
+				// neighboring land) start at distance 0. Distance increases moving away from
+				// the coast in both directions.
 				var distances = new Dictionary<VoronoiSite, int>();
 				var queue = new Queue<VoronoiSite>();
 
-				foreach (var site in sites.Where(s => !isLand[s]))
+				foreach (var site in sites)
 				{
-					distances[site] = 0;
-					queue.Enqueue(site);
+					var isCoastal = site.Neighbours.Any(n =>
+						!n.SkippedAsDuplicate && isLand.ContainsKey(n) && isLand[n] != isLand[site]
+					);
+					if (isCoastal)
+					{
+						distances[site] = 0;
+						queue.Enqueue(site);
+					}
 				}
 
 				while (queue.Count > 0)
@@ -183,10 +209,9 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 
 					foreach (var neighbour in current.Neighbours)
 					{
-						if (neighbour.SkippedAsDuplicate || distances.ContainsKey(neighbour))
+						if (neighbour.SkippedAsDuplicate || !distances.TryAdd(neighbour, nextDist))
 							continue;
 
-						distances[neighbour] = nextDist;
 						queue.Enqueue(neighbour);
 					}
 				}
@@ -199,7 +224,8 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 					))
 					.ToList();
 
-				var maxDistance = regions.Where(r => r.IsLand).Max(r => r.DistanceFromWater);
+				var maxLandDistance = regions.Where(r => r.IsLand).Max(r => r.DistanceFromWater);
+				var maxWaterDistance = regions.Where(r => !r.IsLand).Max(r => r.DistanceFromWater);
 
 				var bitmap = new SKBitmap(voronoiParams.Width, voronoiParams.Height);
 				using var canvas = new SKCanvas(bitmap);
@@ -208,21 +234,12 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 				foreach (var region in regions)
 				{
 					// Site polygons
-
-					SKColor color;
-					if (!region.IsLand)
-					{
-						color = SKColors.RoyalBlue;
-					}
-					else
-					{
-						// Interpolate from LightGreen (distance 1) to DarkGreen (max distance).
-						var t =
-							maxDistance > 1
-								? Math.Clamp((region.DistanceFromWater - 1.0) / (maxDistance - 1.0), 0.0, 1.0)
-								: 0.0;
-						color = Lerp(SKColors.DarkGreen, SKColors.LightGreen, t);
-					}
+					var (darkColor, lightColor, maxDist) = region.IsLand
+						? (SKColors.DarkGreen, SKColors.LightGreen, maxLandDistance)
+						: (SKColors.MidnightBlue, SKColors.RoyalBlue, maxWaterDistance);
+					var t =
+						maxDist > 0 ? Math.Clamp(1.0 - (region.DistanceFromWater / (double)maxDist), 0.0, 1.0) : 1.0;
+					var color = Lerp(darkColor, lightColor, t);
 
 					var points = region.Site.ClockwisePoints.Select(p => new SKPoint((float)p.X, (float)p.Y)).ToArray();
 					using var path = new SKPath();
@@ -230,7 +247,7 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 					canvas.DrawPath(path, new SKPaint { Color = color, Style = SKPaintStyle.Fill });
 
 					// Distance text
-					if (region.IsLand)
+					if (trial.drawDistances)
 					{
 						var text = region.DistanceFromWater.ToString();
 
@@ -248,179 +265,30 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 					}
 				}
 
-				// Draw region edges
-				foreach (var edge in plane.Edges)
+				if (trial.drawDistances)
 				{
-					canvas.DrawLine(
-						(float)edge.Start.X,
-						(float)edge.Start.Y,
-						(float)edge.End.X,
-						(float)edge.End.Y,
-						new SKPaint
-						{
-							Color = SKColors.Black,
-							StrokeWidth = 2,
-							IsAntialias = true,
-						}
-					);
-				}
-
-				using var image = FastImage.WrapSKBitmap(bitmap, scale: 1);
-				SaveImage(image, $"{prefix} - {voronoiParams.PointMethod}");
-			}
-		);
-	}
-
-	[Test, Explicit]
-	public void MergeRegions()
-	{
-		const string prefix = "merged";
-		DeleteImages(prefix);
-
-		const int size = 2048;
-
-		var vpParams = new VoronoiParams(
-			Width: size,
-			Height: size,
-			NumberOfSites: 4000,
-			RelaxIterations: 3,
-			RelaxStrength: 0.25f,
-			PointMethod: PointGenerationMethod.Uniform
-		);
-		var caParams = new CellularAutomataParams(ProbabalityAlive: 0.48, Size: 32, RandomSeed: 0);
-
-		IReadOnlyCollection<VoronoiParams> voronoiTrials =
-		[
-			vpParams,
-			vpParams with
-			{
-				NumberOfSites = 6000,
-				RelaxIterations = 4,
-				RelaxStrength = 1,
-			},
-			vpParams with
-			{
-				NumberOfSites = 8000,
-				RelaxIterations = 4,
-				RelaxStrength = 1,
-			},
-		];
-
-		Parallel.ForEach(
-			voronoiTrials,
-			voronoiParams =>
-			{
-				var caBoard = new CellBoard(new Size(caParams.Size, caParams.Size))
-					.Fill(new Random(caParams.RandomSeed), probabilityAlive: caParams.ProbabalityAlive)
-					.MakeBorderAlive(thickness: 1)
-					.GenerateStandardCave();
-
-				var caScale = (double)voronoiParams.Width / caBoard.Width;
-
-				VoronoiPlane plane = new(0, 0, voronoiParams.Width, voronoiParams.Height);
-				plane.GenerateRandomSites(voronoiParams.NumberOfSites, voronoiParams.PointMethod);
-				plane.Tessellate();
-				plane.Relax(voronoiParams.RelaxIterations, voronoiParams.RelaxStrength);
-
-				var sites = plane.Sites.Where(s => !s.SkippedAsDuplicate).ToList();
-
-				var isLand = sites.ToDictionary(
-					s => s,
-					s => caBoard[new Position((int)(s.X / caScale), (int)(s.Y / caScale))] == CellType.Dead
-				);
-
-				// Multi-source BFS: water sites start at distance 0; land sites get
-				// the shortest hop-count to the nearest water neighbor.
-				var distances = new Dictionary<VoronoiSite, int>();
-				var queue = new Queue<VoronoiSite>();
-
-				foreach (var site in sites.Where(s => !isLand[s]))
-				{
-					distances[site] = 0;
-					queue.Enqueue(site);
-				}
-
-				while (queue.Count > 0)
-				{
-					var current = queue.Dequeue();
-					var nextDist = distances[current] + 1;
-
-					foreach (var neighbour in current.Neighbours)
+					// Draw region edges
+					foreach (var edge in plane.Edges)
 					{
-						if (neighbour.SkippedAsDuplicate || distances.ContainsKey(neighbour))
-							continue;
-
-						distances[neighbour] = nextDist;
-						queue.Enqueue(neighbour);
-					}
-				}
-
-				var regions = sites
-					.Select(s => new Region(
-						s,
-						IsLand: isLand[s],
-						DistanceFromWater: distances.GetValueOrDefault(s, -1)
-					))
-					.ToDictionary(region => region.Site);
-
-				var maxDistance = regions.Values.Where(r => r.IsLand).Max(r => r.DistanceFromWater);
-
-				var bitmap = new SKBitmap(voronoiParams.Width, voronoiParams.Height);
-				using var canvas = new SKCanvas(bitmap);
-
-				// Draw regions
-				foreach (var region in regions.Values)
-				{
-					// Site polygons
-
-					SKColor color;
-					if (!region.IsLand)
-					{
-						color = SKColors.RoyalBlue;
-					}
-					else
-					{
-						// Interpolate from LightGreen (distance 1) to DarkGreen (max distance).
-						var t =
-							maxDistance > 1
-								? Math.Clamp((region.DistanceFromWater - 1.0) / (maxDistance - 1.0), 0.0, 1.0)
-								: 0.0;
-						color = Lerp(SKColors.DarkGreen, SKColors.LightGreen, t);
-					}
-
-					var points = region.Site.ClockwisePoints.Select(p => new SKPoint((float)p.X, (float)p.Y)).ToArray();
-					using var path = new SKPath();
-					path.AddPoly(points, close: true);
-					canvas.DrawPath(path, new SKPaint { Color = color, Style = SKPaintStyle.Fill });
-
-					// Outline
-					foreach (var edge in region.Site.Edges.Where(e => e.Right is not null && e.Left is not null))
-					{
-						var leftRegion = regions[edge.Left!];
-						var rightRegion = regions[edge.Right!];
-
-						if (leftRegion.DistanceFromWater != rightRegion.DistanceFromWater)
-						{
-							canvas.DrawLine(
-								(float)edge.Start.X,
-								(float)edge.Start.Y,
-								(float)edge.End.X,
-								(float)edge.End.Y,
-								new SKPaint
-								{
-									Color = SKColors.Black,
-									StrokeWidth = 2,
-									IsAntialias = true,
-								}
-							);
-						}
+						canvas.DrawLine(
+							(float)edge.Start.X,
+							(float)edge.Start.Y,
+							(float)edge.End.X,
+							(float)edge.End.Y,
+							new SKPaint
+							{
+								Color = SKColors.Black,
+								StrokeWidth = 2,
+								IsAntialias = true,
+							}
+						);
 					}
 				}
 
 				using var image = FastImage.WrapSKBitmap(bitmap, scale: 1);
 				SaveImage(
 					image,
-					$"{prefix} - number of sites {voronoiParams.NumberOfSites} - relax iterations {voronoiParams.RelaxIterations} - relax strength {voronoiParams.RelaxStrength:N2}"
+					$"{prefix} - {voronoiParams.PointMethod} x{voronoiParams.NumberOfSites} - distances {trial.drawDistances}"
 				);
 			}
 		);

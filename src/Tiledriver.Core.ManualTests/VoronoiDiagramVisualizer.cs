@@ -19,7 +19,7 @@ public sealed class VoronoiDiagramVisualizer() : BaseVisualization("Voronoi Diag
 		const int numberOfSites = 1000;
 
 		VoronoiPlane plane = new VoronoiPlane(0, 0, width, height);
-		plane.GenerateRandomSites(numberOfSites);
+		plane.GenerateRandomSites(numberOfSites, random: new SeededRandomNumberGenerator(0));
 		plane.Tessellate();
 
 		var bitmap = new SKBitmap(width, height);
@@ -127,14 +127,9 @@ public sealed class VoronoiDiagramVisualizer() : BaseVisualization("Voronoi Diag
 			combinations,
 			relaxArgs =>
 			{
-				List<VoronoiSite> sites = Enumerable
-					.Range(1, numberOfSites)
-					.Select(_ => new VoronoiSite(Random.Shared.Next(width), Random.Shared.Next(height)))
-					.ToList();
-
 				VoronoiPlane plane = new VoronoiPlane(0, 0, width, height);
 
-				plane.SetSites(sites);
+				plane.GenerateRandomSites(numberOfSites, random: new SeededRandomNumberGenerator(0));
 
 				plane.Tessellate();
 
@@ -203,7 +198,11 @@ public sealed class VoronoiDiagramVisualizer() : BaseVisualization("Voronoi Diag
 			{
 				VoronoiPlane plane = new VoronoiPlane(0, 0, width, height);
 
-				plane.GenerateRandomSites(numberOfSites, pointGenerationMethod);
+				plane.GenerateRandomSites(
+					numberOfSites,
+					pointGenerationMethod,
+					random: new SeededRandomNumberGenerator(0)
+				);
 
 				plane.Tessellate();
 
@@ -248,89 +247,6 @@ public sealed class VoronoiDiagramVisualizer() : BaseVisualization("Voronoi Diag
 				using var meshImage = FastImage.WrapSKBitmap(meshBitmap, scale: 1);
 
 				SaveImage(meshImage, $"{prefix} - {pointGenerationMethod}");
-			}
-		);
-	}
-
-	[Test, Explicit]
-	public void FindCenterRegion()
-	{
-		const int width = 2048;
-		const int height = width;
-		const string prefix = "center";
-
-		DeleteImages(prefix);
-
-		const int numberOfSites = 1000;
-		const int relaxIterations = 3;
-		const float relaxStrength = 0.25f;
-
-		IReadOnlyList<PointGenerationMethod> pointGenerationMethods =
-		[
-			.. Enumerable.Repeat(PointGenerationMethod.Uniform, 3),
-			.. Enumerable.Repeat(PointGenerationMethod.Gaussian, 3),
-		];
-
-		Parallel.For(
-			0,
-			pointGenerationMethods.Count,
-			pointIndex =>
-			{
-				var pointGenerationMethod = pointGenerationMethods[pointIndex];
-
-				VoronoiPlane plane = new VoronoiPlane(0, 0, width, height);
-
-				plane.GenerateRandomSites(numberOfSites, pointGenerationMethod);
-
-				plane.Tessellate();
-
-				plane.Relax(relaxIterations, relaxStrength);
-
-				var sites = plane.Sites.Where(s => !s.SkippedAsDuplicate).ToList();
-
-				VoronoiSite centerSite = sites.MinBy(s =>
-					Math.Pow(s.X - width / 2d, 2) + Math.Pow(s.Y - height / 2d, 2)
-				)!;
-
-				var bitmap = new SKBitmap(width, height);
-				using var canvas = new SKCanvas(bitmap);
-				canvas.Clear(SKColors.White);
-
-				foreach (var site in sites)
-				{
-					if (site == centerSite)
-					{
-						var points = site.ClockwisePoints.Select(p => new SKPoint((float)p.X, (float)p.Y)).ToArray();
-						using var path = new SKPath();
-						path.AddPoly(points, close: true);
-						canvas.DrawPath(path, new SKPaint { Color = SKColors.Gray, Style = SKPaintStyle.Fill });
-					}
-
-					canvas.DrawPoint(
-						new SKPoint((float)site.X, (float)site.Y),
-						new SKPaint
-						{
-							Color = SKColors.Red,
-							Style = SKPaintStyle.Fill,
-							StrokeWidth = 3,
-						}
-					);
-				}
-
-				foreach (var edge in plane.Edges)
-				{
-					canvas.DrawLine(
-						(float)edge.Start.X,
-						(float)edge.Start.Y,
-						(float)edge.End.X,
-						(float)edge.End.Y,
-						new SKPaint { Color = SKColors.Black, StrokeWidth = 1 }
-					);
-				}
-
-				using var meshImage = FastImage.WrapSKBitmap(bitmap, scale: 1);
-
-				SaveImage(meshImage, $"{prefix} - {pointIndex} ({pointGenerationMethod}");
 			}
 		);
 	}
