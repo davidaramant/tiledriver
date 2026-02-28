@@ -17,8 +17,9 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 		DeleteImages(prefix);
 
 		const int size = 2048;
+		const int randomSeed = 0;
 
-		var voronoiParams = new VoronoiParams(
+		var vp = new VoronoiParams(
 			Width: size,
 			Height: size,
 			NumberOfSites: 4000,
@@ -26,102 +27,128 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 			RelaxStrength: 0.25f,
 			PointMethod: PointGenerationMethod.Uniform
 		);
-		var caParams = new CellularAutomataParams(ProbabalityAlive: 0.48, Size: 32, RandomSeed: 0);
+		var cap = new CellularAutomataParams(ProbabilityAlive: 0.48, Size: 32, UpscaleTimes: 0);
 
-		var random = new Random(caParams.RandomSeed);
+		IReadOnlyCollection<(VoronoiParams vParams, CellularAutomataParams caParams)> trials =
+		[
+			(vp, cap),
+			(vp, cap with { UpscaleTimes = 1 }),
+			(vp, cap with { UpscaleTimes = 2 }),
+			(vp, cap with { UpscaleTimes = 3 }),
+			(vp with { NumberOfSites = 8000 }, cap with { UpscaleTimes = 3 }),
+		];
 
-		var caBoard = new CellBoard(new Size(caParams.Size, caParams.Size))
-			.Fill(random, probabilityAlive: caParams.ProbabalityAlive)
-			.MakeBorderAlive(thickness: 1)
-			.GenerateStandardCave();
-
-		var caScale = (double)voronoiParams.Width / caBoard.Width;
-
-		VoronoiPlane plane = new(0, 0, voronoiParams.Width, voronoiParams.Height);
-		plane.GenerateRandomSites(
-			voronoiParams.NumberOfSites,
-			voronoiParams.PointMethod,
-			random: new SeededRandomNumberGenerator(caParams.RandomSeed)
-		);
-		plane.Tessellate();
-		plane.Relax(voronoiParams.RelaxIterations, voronoiParams.RelaxStrength);
-
-		var sites = plane.Sites.Where(s => !s.SkippedAsDuplicate).ToList();
-
-		foreach (var markRegions in new[] { false, true })
-		{
-			var bitmap = new SKBitmap(voronoiParams.Width, voronoiParams.Height);
-			using var canvas = new SKCanvas(bitmap);
-			canvas.Clear(SKColors.White);
-
-			// Draw sites
-			foreach (var site in sites)
+		Parallel.ForEach(
+			trials,
+			trial =>
 			{
-				if (markRegions)
-				{
-					var caX = (int)(site.X / caScale);
-					var caY = (int)(site.Y / caScale);
-					var siteCenterInDeadCell = caBoard[new Position(caX, caY)] == CellType.Dead;
+				var random = new Random(randomSeed);
+				var (voronoiParams, caParams) = trial;
 
-					var color = siteCenterInDeadCell ? SKColors.LightGreen : SKColors.RoyalBlue;
+				var caBoard = new CellBoard(new Size(caParams.Size, caParams.Size))
+					.Fill(random, probabilityAlive: caParams.ProbabilityAlive)
+					.MakeBorderAlive(thickness: 1)
+					.GenerateStandardCave()
+					.ScaleAndSmooth(caParams.UpscaleTimes);
 
-					var points = site.ClockwisePoints.Select(p => new SKPoint((float)p.X, (float)p.Y)).ToArray();
-					using var path = new SKPath();
-					path.AddPoly(points, close: true);
-					canvas.DrawPath(path, new SKPaint { Color = color, Style = SKPaintStyle.Fill });
-				}
+				var caScale = (double)voronoiParams.Width / caBoard.Width;
 
-				canvas.DrawPoint(
-					new SKPoint((float)site.X, (float)site.Y),
-					new SKPaint
-					{
-						Color = SKColors.Red,
-						Style = SKPaintStyle.Fill,
-						StrokeWidth = 3,
-					}
+				VoronoiPlane plane = new(0, 0, voronoiParams.Width, voronoiParams.Height);
+				plane.GenerateRandomSites(
+					voronoiParams.NumberOfSites,
+					voronoiParams.PointMethod,
+					random: new SeededRandomNumberGenerator(randomSeed)
 				);
-			}
+				plane.Tessellate();
+				plane.Relax(voronoiParams.RelaxIterations, voronoiParams.RelaxStrength);
 
-			// Draw region edges
-			foreach (var edge in plane.Edges)
-			{
-				canvas.DrawLine(
-					(float)edge.Start.X,
-					(float)edge.Start.Y,
-					(float)edge.End.X,
-					(float)edge.End.Y,
-					new SKPaint
-					{
-						Color = SKColors.Black,
-						StrokeWidth = 2,
-						IsAntialias = true,
-					}
-				);
-			}
+				var sites = plane.Sites.Where(s => !s.SkippedAsDuplicate).ToList();
 
-			// Draw CA board
-			{
-				for (int y = 0; y < caBoard.Height; y++)
+				foreach (var markRegions in new[] { false, true })
 				{
-					for (int x = 0; x < caBoard.Width; x++)
+					var bitmap = new SKBitmap(voronoiParams.Width, voronoiParams.Height);
+					using var canvas = new SKCanvas(bitmap);
+					canvas.Clear(SKColors.White);
+
+					// Draw sites
+					foreach (var site in sites)
 					{
-						if (caBoard[new Position(x, y)] == CellType.Dead)
+						if (markRegions)
 						{
-							canvas.DrawRect(
-								(float)(x * caScale),
-								(float)(y * caScale),
-								(float)caScale,
-								(float)caScale,
-								new SKPaint { Color = SKColors.SlateGray.WithAlpha(128), Style = SKPaintStyle.Fill }
-							);
+							var caX = (int)(site.X / caScale);
+							var caY = (int)(site.Y / caScale);
+							var siteCenterInDeadCell = caBoard[new Position(caX, caY)] == CellType.Dead;
+
+							var color = siteCenterInDeadCell ? SKColors.LightGreen : SKColors.RoyalBlue;
+
+							var points = site
+								.ClockwisePoints.Select(p => new SKPoint((float)p.X, (float)p.Y))
+								.ToArray();
+							using var path = new SKPath();
+							path.AddPoly(points, close: true);
+							canvas.DrawPath(path, new SKPaint { Color = color, Style = SKPaintStyle.Fill });
+						}
+
+						canvas.DrawPoint(
+							new SKPoint((float)site.X, (float)site.Y),
+							new SKPaint
+							{
+								Color = SKColors.Red,
+								Style = SKPaintStyle.Fill,
+								StrokeWidth = 3,
+							}
+						);
+					}
+
+					// Draw region edges
+					foreach (var edge in plane.Edges)
+					{
+						canvas.DrawLine(
+							(float)edge.Start.X,
+							(float)edge.Start.Y,
+							(float)edge.End.X,
+							(float)edge.End.Y,
+							new SKPaint
+							{
+								Color = SKColors.Black,
+								StrokeWidth = 2,
+								IsAntialias = true,
+							}
+						);
+					}
+
+					// Draw CA board
+					{
+						for (int y = 0; y < caBoard.Height; y++)
+						{
+							for (int x = 0; x < caBoard.Width; x++)
+							{
+								if (caBoard[new Position(x, y)] == CellType.Dead)
+								{
+									canvas.DrawRect(
+										(float)(x * caScale),
+										(float)(y * caScale),
+										(float)caScale,
+										(float)caScale,
+										new SKPaint
+										{
+											Color = SKColors.SlateGray.WithAlpha(128),
+											Style = SKPaintStyle.Fill,
+										}
+									);
+								}
+							}
 						}
 					}
+
+					using var image = FastImage.WrapSKBitmap(bitmap, scale: 1);
+					SaveImage(
+						image,
+						$"{prefix} - x{voronoiParams.NumberOfSites} - scale {caParams.UpscaleTimes} - mark regions {markRegions}"
+					);
 				}
 			}
-
-			using var image = FastImage.WrapSKBitmap(bitmap, scale: 1);
-			SaveImage(image, $"{prefix} - mark regions {markRegions}");
-		}
+		);
 	}
 
 	[Test, Explicit]
@@ -131,8 +158,9 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 		DeleteImages(prefix);
 
 		const int size = 2048;
+		const int randomSeed = 0;
 
-		var vParams = new VoronoiParams(
+		var vp = new VoronoiParams(
 			Width: size,
 			Height: size,
 			NumberOfSites: 4000,
@@ -140,15 +168,16 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 			RelaxStrength: 0.25f,
 			PointMethod: PointGenerationMethod.Uniform
 		);
-		var caParams = new CellularAutomataParams(ProbabalityAlive: 0.48, Size: 32, RandomSeed: 0);
+		var cap = new CellularAutomataParams(ProbabilityAlive: 0.48, Size: 32, UpscaleTimes: 0);
 
-		IReadOnlyCollection<(VoronoiParams vParams, bool drawDistances)> trials =
+		IReadOnlyCollection<(VoronoiParams vParams, CellularAutomataParams caParams, bool drawDistances)> trials =
 		[
-			(vParams, true),
-			(vParams with { PointMethod = PointGenerationMethod.Gaussian }, true),
-			(vParams, false),
-			(vParams with { NumberOfSites = 6000 }, false),
-			(vParams with { NumberOfSites = 8000 }, false),
+			(vp, cap, true),
+			(vp with { PointMethod = PointGenerationMethod.Gaussian }, cap, true),
+			(vp, cap, false),
+			(vp with { NumberOfSites = 6000 }, cap, false),
+			(vp with { NumberOfSites = 8000 }, cap, false),
+			(vp with { NumberOfSites = 8000 }, cap with { UpscaleTimes = 3 }, false),
 		];
 
 		Parallel.ForEach(
@@ -157,12 +186,13 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 			{
 				var voronoiParams = trial.vParams;
 
-				var random = new Random(caParams.RandomSeed);
+				var random = new Random(randomSeed);
 
-				var caBoard = new CellBoard(new Size(caParams.Size, caParams.Size))
-					.Fill(random, probabilityAlive: caParams.ProbabalityAlive)
+				var caBoard = new CellBoard(new Size(trial.caParams.Size, trial.caParams.Size))
+					.Fill(random, probabilityAlive: trial.caParams.ProbabilityAlive)
 					.MakeBorderAlive(thickness: 1)
-					.GenerateStandardCave();
+					.GenerateStandardCave()
+					.ScaleAndSmooth(times: trial.caParams.UpscaleTimes);
 
 				var caScale = (double)voronoiParams.Width / caBoard.Width;
 
@@ -170,7 +200,7 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 				plane.GenerateRandomSites(
 					voronoiParams.NumberOfSites,
 					voronoiParams.PointMethod,
-					random: new SeededRandomNumberGenerator(caParams.RandomSeed)
+					random: new SeededRandomNumberGenerator(randomSeed)
 				);
 				plane.Tessellate();
 				plane.Relax(voronoiParams.RelaxIterations, voronoiParams.RelaxStrength);
@@ -288,13 +318,13 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 				using var image = FastImage.WrapSKBitmap(bitmap, scale: 1);
 				SaveImage(
 					image,
-					$"{prefix} - {voronoiParams.PointMethod} x{voronoiParams.NumberOfSites} - distances {trial.drawDistances}"
+					$"{prefix} - {voronoiParams.PointMethod} x{voronoiParams.NumberOfSites} - distances {trial.drawDistances} - caUpscale {trial.caParams.UpscaleTimes}"
 				);
 			}
 		);
 	}
 
-	private sealed record CellularAutomataParams(double ProbabalityAlive, int Size, int RandomSeed);
+	private sealed record CellularAutomataParams(double ProbabilityAlive, int Size, int UpscaleTimes);
 
 	private sealed record VoronoiParams(
 		int Width,
