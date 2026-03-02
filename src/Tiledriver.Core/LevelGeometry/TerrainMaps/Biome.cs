@@ -2,12 +2,23 @@
 
 public enum Biome
 {
-	Water,
-	Beach,
-	Forest,
-	Jungle,
-	Savannah,
-	Desert,
-	BareRock,
+	DeepWater,
+	ShallowWater,
+
+	Taiga,
+	Shrubland,
+	TemperateDesert,
+
+	TemperateRainForest,
+	TemperateDeciduousForest,
+	Grassland,
+
+	TropicalRainForest,
+	TropicalSeasonalForest,
+	SubtropicalDesert,
+
 	Snow,
+	Tundra,
+	Bare,
+	Scorched,
 }

@@ -11,33 +11,33 @@ public sealed class NoiseTerrainVisualization() : BaseVisualization("Noise Terra
 	static Biome ElevationToBiome(float elevation) =>
 		elevation switch
 		{
-			< 0.2f => Biome.Water,
-			< 0.3f => Biome.Beach,
-			< 0.4f => Biome.Forest,
-			< 0.5f => Biome.Jungle,
-			< 0.7f => Biome.Savannah,
-			< 0.8f => Biome.Desert,
+			< 0.2f => Biome.ShallowWater,
+			< 0.3f => Biome.SubtropicalDesert,
+			< 0.4f => Biome.TemperateDeciduousForest,
+			< 0.5f => Biome.TropicalRainForest,
+			< 0.7f => Biome.Grassland,
+			< 0.8f => Biome.SubtropicalDesert,
 			_ => Biome.Snow,
 		};
 
 	static Biome GetBiome(float elevation, float moisture)
 	{
 		if (elevation < 0.2)
-			return Biome.Water;
+			return Biome.ShallowWater;
 		if (elevation < 0.3)
-			return Biome.Beach;
+			return Biome.SubtropicalDesert;
 
 		if (elevation > 0.8)
 		{
-			return moisture > 0.5 ? Biome.Snow : Biome.BareRock;
+			return moisture > 0.5 ? Biome.Snow : Biome.Bare;
 		}
 
 		return moisture switch
 		{
-			< 0.2f => Biome.Desert,
-			< 0.4f => Biome.Savannah,
-			< 0.8f => Biome.Forest,
-			_ => Biome.Jungle,
+			< 0.2f => Biome.SubtropicalDesert,
+			< 0.4f => Biome.Grassland,
+			< 0.8f => Biome.TropicalSeasonalForest,
+			_ => Biome.TropicalRainForest,
 		};
 	}
 
