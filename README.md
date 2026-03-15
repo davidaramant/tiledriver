@@ -1,7 +1,6 @@
 # Tiledriver
 
-[![.NET Windows](https://github.com/davidaramant/tiledriver/actions/workflows/dotnet-windows.yml/badge.svg)](https://github.com/davidaramant/tiledriver/actions/workflows/dotnet-windows.yml)
-[![.NET macOS](https://github.com/davidaramant/tiledriver/actions/workflows/dotnet-macos.yml/badge.svg)](https://github.com/davidaramant/tiledriver/actions/workflows/dotnet-macos.yml)
+[![.NET](https://github.com/davidaramant/tiledriver/actions/workflows/CI.yml/badge.svg)](https://github.com/davidaramant/tiledriver/actions/workflows/CI.yml)
 
 Tiledriver is a .NET toolkit for [Unified Wolfenstein Mapping Format (UWMF)](https://maniacsvault.net/ecwolf/wiki/Universal_Wolfenstein_Map_Format) and [Unified Doom Mapping Format (UDMF)](https://doomwiki.org/wiki/UDMF) levels, supported by [ECWolf](http://maniacsvault.net/ecwolf/) and [ZDoom](https://zdoom.org).
 
