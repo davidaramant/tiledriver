@@ -51,13 +51,22 @@ sealed class Program
 
 	private static string FindSolutionPath()
 	{
-		var path = "..";
+		const string solutionFileName = "Tiledriver.slnx";
 
-		while (!File.Exists(Path.Combine(path, "Tiledriver.slnx")))
+		for (
+			var directory = new DirectoryInfo(AppContext.BaseDirectory);
+			directory is not null;
+			directory = directory.Parent
+		)
 		{
-			path = Path.Combine(path, "..");
+			if (File.Exists(Path.Combine(directory.FullName, solutionFileName)))
+			{
+				return directory.FullName;
+			}
 		}
 
-		return Path.GetFullPath(path);
+		throw new DirectoryNotFoundException(
+			$"Could not find {solutionFileName} by walking parent directories from '{AppContext.BaseDirectory}'."
+		);
 	}
 }
