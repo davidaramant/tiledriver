@@ -21,14 +21,14 @@ public sealed class DataLump : ILump
 	{
 		using var tempStream = new MemoryStream();
 		stream.CopyTo(tempStream);
-		return new DataLump(name, tempStream.GetBuffer());
+		return new DataLump(name, tempStream.ToArray());
 	}
 
 	public static DataLump ReadFromStream(LumpName name, Action<Stream> getData)
 	{
 		using var stream = new MemoryStream();
 		getData(stream);
-		return new DataLump(name, stream.GetBuffer());
+		return new DataLump(name, stream.ToArray());
 	}
 
 	public void WriteTo(Stream stream)
