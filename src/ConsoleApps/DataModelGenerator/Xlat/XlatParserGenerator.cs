@@ -18,12 +18,12 @@ public static class XlatParserGenerator
 		var includes = new[]
 		{
 			"System.CodeDom.Compiler",
-			"Tiledriver.Core.FormatModels.Common.Reading",
-			"Tiledriver.Core.FormatModels.Common.Reading.AbstractSyntaxTree",
+			"Tiledriver.FormatModels.Common.Reading",
+			"Tiledriver.FormatModels.Common.Reading.AbstractSyntaxTree",
 		};
 
 		output
-			.WriteHeader("Tiledriver.Core.FormatModels.Xlat.Reading", includes)
+			.WriteHeader("Tiledriver.FormatModels.Xlat.Reading", includes)
 			.Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
 			.Line($"public static partial class XlatParser")
 			.OpenParen();

@@ -1,0 +1,13 @@
+using Tiledriver.LevelGeometry.CaveGeneration.Doom.SquareModel;
+
+namespace Tiledriver.LevelGeometry.CaveGeneration.Doom;
+
+public sealed record SectorEdge(LatticePoint Start, LatticePoint End, EdgeSegment Segment, int NumSquares)
+{
+	public bool IsSingleSided => Segment.Back.IsOutsideLevel;
+
+	public LatticePoint GetPointAtEnd(bool leftSide) => leftSide ? Start : End;
+
+	public static SectorEdge FromPosition(Position square, EdgeSegment segment) =>
+		new(Start: new(square, segment.Left), End: new(square, segment.Right), Segment: segment, NumSquares: 1);
+}

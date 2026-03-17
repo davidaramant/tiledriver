@@ -35,7 +35,7 @@ public static class MapInfoModelGenerator
 
 		if (containsIdentifier)
 		{
-			includes.Add("Tiledriver.Core.FormatModels.Common");
+			includes.Add("Tiledriver.FormatModels.Common");
 		}
 
 		var qualifier = block is AbstractBlock ? "abstract" : "sealed";
@@ -47,7 +47,7 @@ public static class MapInfoModelGenerator
 		}
 
 		output
-			.WriteHeader("Tiledriver.Core.FormatModels.MapInfo", includes)
+			.WriteHeader("Tiledriver.FormatModels.MapInfo", includes)
 			.Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
 			.Line($"public {qualifier} partial record {block.ClassName}(")
 			.IncreaseIndent()

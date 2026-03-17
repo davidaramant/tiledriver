@@ -2,16 +2,16 @@ using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using System.Security.Cryptography;
 using ShellProgressBar;
-using Tiledriver.Core.FormatModels;
-using Tiledriver.Core.FormatModels.Common;
-using Tiledriver.Core.FormatModels.MapMetadata;
-using Tiledriver.Core.FormatModels.MapMetadata.Writing;
-using Tiledriver.Core.FormatModels.Pk3;
-using Tiledriver.Core.FormatModels.Uwmf;
-using Tiledriver.Core.FormatModels.Uwmf.Reading;
-using Tiledriver.Core.FormatModels.Wad;
-using Tiledriver.Core.FormatModels.Xlat;
-using Tiledriver.Core.Settings;
+using Tiledriver.FormatModels;
+using Tiledriver.FormatModels.Common;
+using Tiledriver.FormatModels.MapMetadata;
+using Tiledriver.FormatModels.MapMetadata.Writing;
+using Tiledriver.FormatModels.Pk3;
+using Tiledriver.FormatModels.Uwmf;
+using Tiledriver.FormatModels.Uwmf.Reading;
+using Tiledriver.FormatModels.Wad;
+using Tiledriver.FormatModels.Xlat;
+using Tiledriver.Settings;
 
 namespace ECWolfLauncher;
 

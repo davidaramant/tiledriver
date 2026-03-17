@@ -11,6 +11,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\Tiledriver.Core\Tiledriver.Core.csproj" />
+		<ProjectReference Include="..\..\Tiledriver\Tiledriver.csproj" />
 	</ItemGroup>
 </Project>

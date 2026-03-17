@@ -1,7 +1,7 @@
 using System.CommandLine;
 using System.CommandLine.Parsing;
-using Tiledriver.Core.FormatModels.MapMetadata;
-using Tiledriver.Core.FormatModels.MapMetadata.Writing;
+using Tiledriver.FormatModels.MapMetadata;
+using Tiledriver.FormatModels.MapMetadata.Writing;
 
 namespace mm;
 

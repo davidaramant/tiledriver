@@ -46,7 +46,7 @@ internal static class DoomActorGenerator
 		using var output = new IndentedWriter(blockStream);
 
 		output
-			.WriteHeader("Tiledriver.Core.GameInfo.Doom", ["System.Collections.Generic", "System.CodeDom.Compiler"])
+			.WriteHeader("Tiledriver.GameInfo.Doom", ["System.Collections.Generic", "System.CodeDom.Compiler"])
 			.Line()
 			.Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
 			.Line("public enum ActorCategory")

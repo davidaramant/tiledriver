@@ -13,7 +13,7 @@ public class NoiseBenchmarks
 
 		for (int i = 0; i < Points; i++)
 		{
-			sum += Tiledriver.Core.Utils.Noise.OpenSimplex2S.Noise2(0, i, i);
+			sum += Tiledriver.Utils.Noise.OpenSimplex2S.Noise2(0, i, i);
 		}
 
 		return sum;
@@ -26,7 +26,7 @@ public class NoiseBenchmarks
 
 		for (int i = 0; i < Points; i++)
 		{
-			sum += Tiledriver.Core.Utils.Noise.OpenSimplex2.Noise2(0, i, i);
+			sum += Tiledriver.Utils.Noise.OpenSimplex2.Noise2(0, i, i);
 		}
 
 		return sum;

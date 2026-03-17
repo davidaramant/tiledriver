@@ -1,0 +1,17 @@
+namespace Tiledriver.FormatModels.MapInfo;
+
+public sealed class ClusterExitText
+{
+	public string Message { get; }
+	public bool MessageIsLookup { get; }
+
+	private ClusterExitText(string message, bool messageIsLookup)
+	{
+		Message = message;
+		MessageIsLookup = messageIsLookup;
+	}
+
+	public static ClusterExitText FromMessage(string message) => new(message, false);
+
+	public static ClusterExitText FromLookup(string lookup) => new(lookup, true);
+}

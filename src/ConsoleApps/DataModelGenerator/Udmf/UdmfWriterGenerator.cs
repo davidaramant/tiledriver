@@ -17,8 +17,8 @@ public static class UdmfWriterGenerator
 
 		output
 			.WriteHeader(
-				"Tiledriver.Core.FormatModels.Udmf.Writing",
-				["System.CodeDom.Compiler", "System.IO", "Tiledriver.Core.FormatModels.Common"]
+				"Tiledriver.FormatModels.Udmf.Writing",
+				["System.CodeDom.Compiler", "System.IO", "Tiledriver.FormatModels.Common"]
 			)
 			.Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
 			.Line($"public static partial class UdmfWriter")

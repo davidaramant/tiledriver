@@ -20,13 +20,13 @@ public static class UdmfSemanticAnalyzerGenerator
 			"System.CodeDom.Compiler",
 			"System.Collections.Generic",
 			"System.Collections.Immutable",
-			"Tiledriver.Core.FormatModels.Common",
-			"Tiledriver.Core.FormatModels.Common.Reading",
-			"Tiledriver.Core.FormatModels.Common.Reading.AbstractSyntaxTree",
+			"Tiledriver.FormatModels.Common",
+			"Tiledriver.FormatModels.Common.Reading",
+			"Tiledriver.FormatModels.Common.Reading.AbstractSyntaxTree",
 		};
 
 		output
-			.WriteHeader("Tiledriver.Core.FormatModels.Udmf.Reading", includes)
+			.WriteHeader("Tiledriver.FormatModels.Udmf.Reading", includes)
 			.Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
 			.Line($"public static partial class UdmfSemanticAnalyzer")
 			.OpenParen();

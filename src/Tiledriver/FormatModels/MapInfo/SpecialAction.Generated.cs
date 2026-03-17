@@ -1,0 +1,13 @@
+using System.CodeDom.Compiler;
+
+namespace Tiledriver.FormatModels.MapInfo;
+[GeneratedCode("DataModelGenerator", "1.0.0.0")]
+public sealed partial record SpecialAction(
+	string ActorClass,
+	string Special,
+	int Arg0 = 0,
+	int Arg1 = 0,
+	int Arg2 = 0,
+	int Arg3 = 0,
+	int Arg4 = 0
+);

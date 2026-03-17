@@ -12,7 +12,7 @@ sealed class Program
 	{
 		var basePath = FindSolutionPath();
 
-		var corePath = Path.Combine(basePath, "Tiledriver.Core");
+		var corePath = Path.Combine(basePath, "Tiledriver");
 		var formatModelsPath = Path.Combine(corePath, "FormatModels");
 
 		var udmfPath = Path.Combine(formatModelsPath, "Udmf");

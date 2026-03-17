@@ -1,7 +1,7 @@
 using BenchmarkDotNet.Attributes;
-using Tiledriver.Core.LevelGeometry;
-using Tiledriver.Core.Utils.CellularAutomata;
-using Tiledriver.Core.Utils.ConnectedComponentLabeling;
+using Tiledriver.LevelGeometry;
+using Tiledriver.Utils.CellularAutomata;
+using Tiledriver.Utils.ConnectedComponentLabeling;
 
 namespace Benchmarks;
 

@@ -29,7 +29,7 @@ public static class UwmfModelGenerator
 		List<string> includes = ["System.CodeDom.Compiler"];
 		if (containsTexture)
 		{
-			includes.Add("Tiledriver.Core.FormatModels.Common");
+			includes.Add("Tiledriver.FormatModels.Common");
 		}
 		if (containsCollection)
 		{
@@ -37,7 +37,7 @@ public static class UwmfModelGenerator
 		}
 
 		output
-			.WriteHeader("Tiledriver.Core.FormatModels.Uwmf", includes)
+			.WriteHeader("Tiledriver.FormatModels.Uwmf", includes)
 			.Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
 			.Line($"public sealed partial record {block.ClassName}(")
 			.IncreaseIndent()

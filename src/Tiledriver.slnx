@@ -14,7 +14,7 @@
 		<File Path="Directory.Packages.props" />
 		<File Path="..\.editorconfig" />
 	</Folder>
-	<Project Path="Tiledriver.Core.ManualTests\Tiledriver.Core.ManualTests.csproj" Type="Classic C#" />
-	<Project Path="Tiledriver.Core.Tests\Tiledriver.Core.Tests.csproj" />
-	<Project Path="Tiledriver.Core\Tiledriver.Core.csproj" />
+	<Project Path="Tiledriver.ManualTests\Tiledriver.ManualTests.csproj" Type="Classic C#" />
+	<Project Path="Tiledriver.Tests\Tiledriver.Tests.csproj" />
+	<Project Path="Tiledriver\Tiledriver.csproj" />
 </Solution>

@@ -33,7 +33,7 @@ public static class UdmfModelGenerator
 		List<string> includes = ["System.CodeDom.Compiler"];
 		if (containsTexture)
 		{
-			includes.Add("Tiledriver.Core.FormatModels.Common");
+			includes.Add("Tiledriver.FormatModels.Common");
 		}
 		if (containsCollection)
 		{
@@ -41,7 +41,7 @@ public static class UdmfModelGenerator
 		}
 
 		output
-			.WriteHeader("Tiledriver.Core.FormatModels.Udmf", includes)
+			.WriteHeader("Tiledriver.FormatModels.Udmf", includes)
 			.Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
 			.Line($"public sealed partial record {block.ClassName}(")
 			.IncreaseIndent()
@@ -60,11 +60,11 @@ public static class UdmfModelGenerator
 		List<string> includes = ["System.CodeDom.Compiler", "System"];
 		if (containsTexture)
 		{
-			includes.Add("Tiledriver.Core.FormatModels.Common");
+			includes.Add("Tiledriver.FormatModels.Common");
 		}
 
 		output
-			.WriteHeader("Tiledriver.Core.FormatModels.Udmf", includes, enableNullables: containsNullables)
+			.WriteHeader("Tiledriver.FormatModels.Udmf", includes, enableNullables: containsNullables)
 			.Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
 			.Line($"public sealed partial class {block.ClassName}Builder")
 			.OpenParen()

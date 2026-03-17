@@ -34,11 +34,11 @@ public static class XlatModelGenerator
 
 		if (includeConverter)
 		{
-			includes.Add("Tiledriver.Core.FormatModels.Uwmf");
+			includes.Add("Tiledriver.FormatModels.Uwmf");
 		}
 
 		output
-			.WriteHeader("Tiledriver.Core.FormatModels.Xlat", includes)
+			.WriteHeader("Tiledriver.FormatModels.Xlat", includes)
 			.Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
 			.Line($"public sealed partial record {block.ClassName}(")
 			.IncreaseIndent()

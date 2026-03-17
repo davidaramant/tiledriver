@@ -1,0 +1,9 @@
+namespace Tiledriver.Utils;
+
+public static class PathUtil
+{
+	public static string? VerifyPathExists(string? path) => Directory.Exists(path) ? path : null;
+
+	public static string? Combine(params string?[] paths) =>
+		paths.Any(p => p is null) ? null : Path.Combine(paths.Select(p => p!).ToArray());
+}

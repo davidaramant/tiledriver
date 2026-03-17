@@ -21,13 +21,13 @@ public static class MapInfoParserGenerator
 		{
 			"System.CodeDom.Compiler",
 			"System.Linq",
-			"Tiledriver.Core.FormatModels.Common",
-			"Tiledriver.Core.FormatModels.MapInfo.Reading.AbstractSyntaxTree",
+			"Tiledriver.FormatModels.Common",
+			"Tiledriver.FormatModels.MapInfo.Reading.AbstractSyntaxTree",
 		};
 
 		output
 			.Line("#nullable enable")
-			.WriteHeader("Tiledriver.Core.FormatModels.MapInfo.Reading", includes)
+			.WriteHeader("Tiledriver.FormatModels.MapInfo.Reading", includes)
 			.Line($"[GeneratedCode(\"{CurrentLibraryInfo.Name}\", \"{CurrentLibraryInfo.Version}\")]")
 			.Line($"public static partial class MapDeclarationParser")
 			.OpenParen();
