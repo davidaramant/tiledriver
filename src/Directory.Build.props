@@ -1,0 +1,11 @@
+<Project>
+	<PropertyGroup>
+		<TargetFramework Condition="'$(TargetFramework)' == ''">net10.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.Tests')) Or $([System.String]::Copy('$(MSBuildProjectName)').EndsWith('.ManualTests'))">
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+</Project>
