@@ -1,9 +1,8 @@
 namespace Tiledriver.FormatModels.Wad;
 
-public interface ILump
+public interface ILumpReader
 {
 	LumpName Name { get; }
 	bool HasData { get; }
-
-	void WriteTo(Stream stream);
+	byte[] GetData();
 }

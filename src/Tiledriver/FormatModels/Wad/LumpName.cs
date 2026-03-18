@@ -1,31 +1,25 @@
 using System.Diagnostics;
-using System.Text.RegularExpressions;
 
 namespace Tiledriver.FormatModels.Wad;
 
 [DebuggerDisplay("{ToString()}")]
-public sealed partial class LumpName : IEquatable<LumpName>
+public sealed class LumpName : IEquatable<LumpName>
 {
 	public const int MaxLength = 8;
 	private readonly string _name;
 
-	[GeneratedRegex(@"[^A-Z0-9\[\]\-_\\]", RegexOptions.Compiled)]
-	private static partial Regex LumpNameRegex();
-
 	public LumpName(string name)
 	{
-		if (string.IsNullOrWhiteSpace(name))
-			throw new ArgumentException("Name cannot be null or whitespace.", nameof(name));
-
-		if (LumpNameRegex().IsMatch(name))
-		{
-			throw new ArgumentException($"'{name}' has invalid characters.", nameof(name));
-		}
-
 		if (name.Length > MaxLength)
 		{
 			throw new ArgumentException($"'{name}' is too long.", nameof(name));
 		}
+
+		if (name.Any(ch => ch == '\0' || ch > 0x7f))
+		{
+			throw new ArgumentException($"'{name}' has invalid characters.", nameof(name));
+		}
+
 		_name = name;
 	}
 

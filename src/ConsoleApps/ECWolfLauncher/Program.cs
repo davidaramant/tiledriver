@@ -709,7 +709,7 @@ sealed class Program
 
 	private static MapData OpenWadFile(string filePath)
 	{
-		var wad = WadFile.Read(filePath);
+		var wad = WadReader.Read(filePath);
 
 		var mapBytes = wad[1].GetData();
 		using var ms = new MemoryStream(mapBytes);

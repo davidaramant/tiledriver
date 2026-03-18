@@ -35,9 +35,4 @@ public sealed class DataLump : ILump
 	{
 		stream.Write(_data, 0, _data.Length);
 	}
-
-	public byte[] GetData()
-	{
-		return _data;
-	}
 }
