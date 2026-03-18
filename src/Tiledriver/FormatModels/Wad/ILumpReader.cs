@@ -4,5 +4,5 @@ public interface ILumpReader
 {
 	LumpName Name { get; }
 	bool HasData { get; }
-	byte[] GetData();
+	Stream GetData();
 }

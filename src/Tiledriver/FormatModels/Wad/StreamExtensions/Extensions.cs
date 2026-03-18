@@ -120,18 +120,6 @@ public static class Extensions
 		return BinaryPrimitives.ReadInt32LittleEndian(buffer);
 	}
 
-	public static byte[] ReadArray(this Stream stream, int length)
-	{
-		if (length < 0)
-		{
-			throw new ArgumentOutOfRangeException(nameof(length));
-		}
-
-		var data = new byte[length];
-		stream.ReadExactly(data);
-		return data;
-	}
-
 	private static void WritePadding(Stream stream, int padding)
 	{
 		if (padding <= 0)

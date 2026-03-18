@@ -78,13 +78,13 @@ public sealed class WadWriterTests
 		Assert.Equal("PWAD", stream.ReadText(4));
 		Assert.Equal(2, stream.ReadInt());
 		Assert.Equal(15, stream.ReadInt());
-		Assert.Equal(new byte[] { 1, 2, 3 }, stream.ReadArray(3));
+		Assert.Equal(new byte[] { 1, 2, 3 }, ReadBytes(stream, 3));
 		Assert.Equal(12, stream.ReadInt());
 		Assert.Equal(3, stream.ReadInt());
-		Assert.Equal("DATA", Encoding.ASCII.GetString(stream.ReadArray(LumpName.MaxLength)).TrimEnd('\0'));
+		Assert.Equal("DATA", Encoding.ASCII.GetString(ReadBytes(stream, LumpName.MaxLength)).TrimEnd('\0'));
 		Assert.Equal(15, stream.ReadInt());
 		Assert.Equal(0, stream.ReadInt());
-		Assert.Equal("END", Encoding.ASCII.GetString(stream.ReadArray(LumpName.MaxLength)).TrimEnd('\0'));
+		Assert.Equal("END", Encoding.ASCII.GetString(ReadBytes(stream, LumpName.MaxLength)).TrimEnd('\0'));
 	}
 
 	[Theory]
@@ -129,5 +129,17 @@ public sealed class WadWriterTests
 			get => throw new NotSupportedException();
 			set => throw new NotSupportedException();
 		}
+	}
+
+	private static byte[] ReadBytes(Stream stream, int length)
+	{
+		if (length < 0)
+		{
+			throw new ArgumentOutOfRangeException(nameof(length));
+		}
+
+		var data = new byte[length];
+		stream.ReadExactly(data);
+		return data;
 	}
 }

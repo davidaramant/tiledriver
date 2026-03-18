@@ -155,19 +155,19 @@ public sealed class WadReader : IReadOnlyList<ILumpReader>, IDisposable
 		}
 	}
 
-	private byte[] ReadLumpData(int position, int size)
+	private int ReadLumpData(int position, long relativePosition, Span<byte> buffer)
 	{
 		ObjectDisposedException.ThrowIf(_disposed, this);
 
-		if (size == 0)
+		if (buffer.IsEmpty)
 		{
-			return [];
+			return 0;
 		}
 
 		lock (_syncRoot)
 		{
-			_stream.Position = position;
-			return _stream.ReadArray(size);
+			_stream.Position = position + relativePosition;
+			return _stream.Read(buffer);
 		}
 	}
 
@@ -188,6 +188,117 @@ public sealed class WadReader : IReadOnlyList<ILumpReader>, IDisposable
 		public LumpName Name { get; }
 		public bool HasData => _size > 0;
 
-		public byte[] GetData() => _owner.ReadLumpData(_position, _size);
+		public Stream GetData() => new LumpStream(_owner, _position, _size);
+	}
+
+	private sealed class LumpStream : Stream
+	{
+		private readonly WadReader _owner;
+		private readonly int _start;
+		private readonly int _length;
+		private long _position;
+		private bool _disposed;
+
+		public LumpStream(WadReader owner, int start, int length)
+		{
+			_owner = owner;
+			_start = start;
+			_length = length;
+		}
+
+		public override bool CanRead => !_disposed;
+		public override bool CanSeek => !_disposed;
+		public override bool CanWrite => false;
+		public override long Length
+		{
+			get
+			{
+				ThrowIfDisposed();
+				return _length;
+			}
+		}
+
+		public override long Position
+		{
+			get
+			{
+				ThrowIfDisposed();
+				return _position;
+			}
+			set
+			{
+				ThrowIfDisposed();
+				if (value < 0 || value > _length)
+				{
+					throw new ArgumentOutOfRangeException(nameof(value));
+				}
+
+				_position = value;
+			}
+		}
+
+		public override void Flush()
+		{
+			ThrowIfDisposed();
+		}
+
+		public override int Read(byte[] buffer, int offset, int count)
+		{
+			ThrowIfDisposed();
+			return Read(buffer.AsSpan(offset, count));
+		}
+
+		public override int Read(Span<byte> buffer)
+		{
+			ThrowIfDisposed();
+			ObjectDisposedException.ThrowIf(_owner._disposed, _owner);
+
+			var remaining = _length - _position;
+			if (remaining <= 0)
+			{
+				return 0;
+			}
+
+			var count = (int)Math.Min(buffer.Length, remaining);
+			var bytesRead = _owner.ReadLumpData(_start, _position, buffer[..count]);
+			_position += bytesRead;
+			return bytesRead;
+		}
+
+		public override long Seek(long offset, SeekOrigin origin)
+		{
+			ThrowIfDisposed();
+
+			var newPosition = origin switch
+			{
+				SeekOrigin.Begin => offset,
+				SeekOrigin.Current => _position + offset,
+				SeekOrigin.End => _length + offset,
+				_ => throw new ArgumentOutOfRangeException(nameof(origin)),
+			};
+
+			if (newPosition < 0 || newPosition > _length)
+			{
+				throw new IOException("Attempted to seek outside the bounds of the lump.");
+			}
+
+			_position = newPosition;
+			return _position;
+		}
+
+		public override void SetLength(long value) => throw new NotSupportedException();
+
+		public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+
+		protected override void Dispose(bool disposing)
+		{
+			_disposed = true;
+			base.Dispose(disposing);
+		}
+
+		private void ThrowIfDisposed()
+		{
+			ObjectDisposedException.ThrowIf(_disposed, this);
+		}
 	}
 }

@@ -709,11 +709,9 @@ sealed class Program
 
 	private static MapData OpenWadFile(string filePath)
 	{
-		var wad = WadReader.Read(filePath);
-
-		var mapBytes = wad[1].GetData();
-		using var ms = new MemoryStream(mapBytes);
-		return UwmfReader.Read(ms);
+		using var wad = WadReader.Read(filePath);
+		using var mapStream = wad[1].GetData();
+		return UwmfReader.Read(mapStream);
 	}
 
 	private static void TranslateAllWolf3DMaps()

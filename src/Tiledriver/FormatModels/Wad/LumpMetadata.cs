@@ -17,8 +17,10 @@ public sealed record LumpMetadata(int Position, int Size, LumpName Name)
 
 	private static LumpName ReadName(Stream stream)
 	{
-		var rawName = stream.ReadArray(LumpName.MaxLength);
-		var terminatorIndex = Array.IndexOf(rawName, (byte)0);
+		Span<byte> rawName = stackalloc byte[LumpName.MaxLength];
+		stream.ReadExactly(rawName);
+
+		var terminatorIndex = rawName.IndexOf((byte)0);
 		var nameLength = terminatorIndex >= 0 ? terminatorIndex : rawName.Length;
 
 		for (var index = 0; index < nameLength; index++)
@@ -29,6 +31,6 @@ public sealed record LumpMetadata(int Position, int Size, LumpName Name)
 			}
 		}
 
-		return new LumpName(Encoding.ASCII.GetString(rawName, 0, nameLength));
+		return new LumpName(Encoding.ASCII.GetString(rawName[..nameLength]));
 	}
 }

@@ -30,9 +30,8 @@ public sealed class WadReaderTests
 					"correct lump names should have been read."
 				);
 
-			var mapBytes = wad[1].GetData();
-			using var ms = new MemoryStream(mapBytes);
-			var roundTripped = UwmfReader.Read(ms);
+			using var mapStream = wad[1].GetData();
+			var roundTripped = UwmfReader.Read(mapStream);
 
 			UwmfComparison.AssertEqual(roundTripped, map);
 		}
@@ -52,7 +51,7 @@ public sealed class WadReaderTests
 		using var wad = WadReader.Read(stream, leaveOpen: true);
 
 		wad[0].HasData.ShouldBeFalse();
-		wad[0].GetData().ShouldBeEmpty();
+		ReadAllBytes(wad[0].GetData()).ShouldBeEmpty();
 	}
 
 	[Fact]
@@ -61,8 +60,8 @@ public sealed class WadReaderTests
 		using var stream = BuildWad("PWAD", 12, [(44, 4, Name("ONE")), (44, 4, Name("TWO"))], [1, 2, 3, 4]);
 		using var wad = WadReader.Read(stream, leaveOpen: true);
 
-		wad[0].GetData().ShouldBe([1, 2, 3, 4]);
-		wad[1].GetData().ShouldBe([1, 2, 3, 4]);
+		ReadAllBytes(wad[0].GetData()).ShouldBe([1, 2, 3, 4]);
+		ReadAllBytes(wad[1].GetData()).ShouldBe([1, 2, 3, 4]);
 	}
 
 	[Fact]
@@ -71,8 +70,8 @@ public sealed class WadReaderTests
 		using var stream = BuildWad("PWAD", 12, [(44, 4, Name("ONE")), (46, 4, Name("TWO"))], [1, 2, 3, 4, 5, 6]);
 		using var wad = WadReader.Read(stream, leaveOpen: true);
 
-		wad[0].GetData().ShouldBe([1, 2, 3, 4]);
-		wad[1].GetData().ShouldBe([3, 4, 5, 6]);
+		ReadAllBytes(wad[0].GetData()).ShouldBe([1, 2, 3, 4]);
+		ReadAllBytes(wad[1].GetData()).ShouldBe([3, 4, 5, 6]);
 	}
 
 	[Fact]
@@ -91,7 +90,7 @@ public sealed class WadReaderTests
 		using var wad = WadReader.Read(stream, leaveOpen: true);
 
 		wad[0].Name.ShouldBe(new LumpName("Data"));
-		wad[0].GetData().ShouldBe([9, 8, 7, 6]);
+		ReadAllBytes(wad[0].GetData()).ShouldBe([9, 8, 7, 6]);
 	}
 
 	[Fact]
@@ -110,7 +109,7 @@ public sealed class WadReaderTests
 
 		using var wad = WadReader.Read(stream, leaveOpen: true);
 
-		wad[0].GetData().ShouldBe([5, 4, 3, 2]);
+		ReadAllBytes(wad[0].GetData()).ShouldBe([5, 4, 3, 2]);
 	}
 
 	[Fact]
@@ -217,7 +216,20 @@ public sealed class WadReaderTests
 
 		wad.Dispose();
 
-		Assert.Throws<ObjectDisposedException>(() => lump.GetData());
+		using var lumpStream = lump.GetData();
+		Assert.Throws<ObjectDisposedException>(() => ReadAllBytes(lumpStream));
+	}
+
+	[Fact]
+	public void ShouldExposeBoundedStreamLengthAndSeekWithinLump()
+	{
+		using var stream = BuildWad("PWAD", 12, [(28, 4, Name("DATA"))], [1, 2, 3, 4]);
+		using var wad = WadReader.Read(stream, leaveOpen: true);
+		using var lumpStream = wad[0].GetData();
+
+		lumpStream.Length.ShouldBe(4);
+		lumpStream.Seek(2, SeekOrigin.Begin).ShouldBe(2);
+		ReadAllBytes(lumpStream).ShouldBe([3, 4]);
 	}
 
 	private static MemoryStream BuildWad(
@@ -262,6 +274,13 @@ public sealed class WadReaderTests
 		}
 
 		return bytes;
+	}
+
+	private static byte[] ReadAllBytes(Stream stream)
+	{
+		using var copy = new MemoryStream();
+		stream.CopyTo(copy);
+		return copy.ToArray();
 	}
 
 	private sealed class NonReadableMemoryStream : MemoryStream
