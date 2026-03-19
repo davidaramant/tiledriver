@@ -1,6 +1,6 @@
 namespace Tiledriver.FormatModels.Common;
 
-public sealed record FilePosition(int Line, int Column)
+public readonly record struct FilePosition(int Line, int Column)
 {
 	public static readonly FilePosition StartOfFile = new(1, 1);
 
