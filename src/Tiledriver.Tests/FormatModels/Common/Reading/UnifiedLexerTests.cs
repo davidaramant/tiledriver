@@ -146,6 +146,27 @@ public sealed class UnifiedLexerTests
 	}
 
 	[Fact]
+	public void ShouldThrowOnUnterminatedString()
+	{
+		var ex = Assert.Throws<ParsingException>(() => Scan("\"unterminated"));
+		ex.Message.ShouldContain("Unterminated string");
+	}
+
+	[Fact]
+	public void ShouldThrowOnUnterminatedBlockComment()
+	{
+		var ex = Assert.Throws<ParsingException>(() => Scan("/* unterminated"));
+		ex.Message.ShouldContain("Unterminated block comment");
+	}
+
+	[Fact]
+	public void ShouldThrowOnUnterminatedBlockCommentWithStar()
+	{
+		var ex = Assert.Throws<ParsingException>(() => Scan("/* almost done *"));
+		ex.Message.ShouldContain("Unterminated block comment");
+	}
+
+	[Fact]
 	public void ShouldNotThrowIfExpectingPipe()
 	{
 		var tokens = Scan("|", r => new UnifiedLexer(r, allowPipes: true));

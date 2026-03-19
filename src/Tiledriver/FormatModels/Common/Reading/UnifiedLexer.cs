@@ -120,6 +120,7 @@ public sealed class UnifiedLexer
 	private Token LexNumber(char first)
 	{
 		var start = _currentPosition;
+		_tokenBuffer.Clear();
 		ConsumeChar();
 
 		if (first == '0' && PeekChar() == 'x')
@@ -167,6 +168,10 @@ public sealed class UnifiedLexer
 
 		while (PeekChar() != '"')
 		{
+			if (PeekChar() == Null)
+			{
+				throw new ParsingException("Unterminated string starting at " + start);
+			}
 			ConsumeChar();
 		}
 		SkipChar();
@@ -220,6 +225,10 @@ public sealed class UnifiedLexer
 				{
 					while (PeekChar() != '*')
 					{
+						if (PeekChar() == Null)
+						{
+							throw new ParsingException("Unterminated block comment starting at " + start);
+						}
 						SkipChar();
 					}
 					SkipChar();
@@ -227,6 +236,10 @@ public sealed class UnifiedLexer
 					{
 						SkipChar();
 						inside = false;
+					}
+					else if (PeekChar() == Null)
+					{
+						throw new ParsingException("Unterminated block comment starting at " + start);
 					}
 				}
 				break;
