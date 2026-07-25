@@ -49,6 +49,6 @@ public static class TerrainMapGenerator
 			}
 		}
 
-		return FastImage.WrapSKBitmap(bitmap, scale: 1);
+		return FastImage.WrapSKBitmap(bitmap);
 	}
 }
