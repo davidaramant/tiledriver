@@ -20,7 +20,7 @@ public static class GenericVisualizer
 		{
 			for (int x = 0; x < dimensions.Width; x++)
 			{
-				image.SetPixel(x, y, getColor(new Position(x, y)));
+				image.SetColor(x, y, getColor(new Position(x, y)));
 			}
 		}
 

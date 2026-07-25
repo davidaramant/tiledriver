@@ -83,7 +83,7 @@ public sealed class NoiseTerrainVisualization() : BaseVisualization("Noise Terra
 					// h: 0 - 360
 					// s: 0 - 100
 					// v: 0 - 100
-					image.SetPixel(x, y, color);
+					image.SetColor(x, y, color);
 				}
 			}
 
@@ -155,7 +155,7 @@ public sealed class NoiseTerrainVisualization() : BaseVisualization("Noise Terra
 						// h: 0 - 360
 						// s: 0 - 100
 						// v: 0 - 100
-						image.SetPixel(x, y, color);
+						image.SetColor(x, y, color);
 					}
 				}
 
@@ -239,7 +239,7 @@ public sealed class NoiseTerrainVisualization() : BaseVisualization("Noise Terra
 						// h: 0 - 360
 						// s: 0 - 100
 						// v: 0 - 100
-						image.SetPixel(x, y, color);
+						image.SetColor(x, y, color);
 					}
 				}
 

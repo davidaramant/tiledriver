@@ -18,7 +18,7 @@ public static class LightMapVisualizer
 				var light = lightMap[x, y];
 				byte intensity = (byte)((((double)light + lightMap.Range.DarkLevels) / lightMap.Range.Total) * 256);
 
-				image.SetPixel(x, y, new SKColor(intensity, intensity, intensity));
+				image.SetColor(x, y, new SKColor(intensity, intensity, intensity));
 			}
 		}
 
@@ -30,7 +30,7 @@ public static class LightMapVisualizer
 		var image = Render(lightMap);
 		foreach (var light in lights)
 		{
-			image.SetPixel(
+			image.SetColor(
 				light.Center.X,
 				light.Center.Y,
 				light.Height switch
@@ -52,7 +52,7 @@ public static class LightMapVisualizer
 
 		foreach (var position in lightMap.Size.GetAllPositions().Where(p => !area.Contains(p)))
 		{
-			image.SetPixel(position.X, position.Y, SKColors.DarkSlateBlue);
+			image.SetColor(position.X, position.Y, SKColors.DarkSlateBlue);
 		}
 
 		return image;

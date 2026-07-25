@@ -1,45 +1,62 @@
-﻿using System.Drawing;
-using Tiledriver.Extensions.Drawing;
+﻿using SkiaSharp;
+using Tiledriver.Extensions.Skia;
 
 namespace Tiledriver.Rendering;
 
 public interface IPixelBuffer
 {
-	Color this[Point p] { get; }
-	Color this[int x, int y] { get; }
-
-	Size Dimensions { get; }
 	int Height { get; }
 	int Width { get; }
+	SKSizeI Dimensions { get; }
 
-	void Clear();
-	void Clear(Rectangle area);
+	SKColor this[SKPointI p] { get; }
+	SKColor this[int x, int y] { get; }
 
-	void SetColor(int x, int y, Color c);
-	void AddColor(int x, int y, Color c);
+	void Fill(SKColor color);
+	void Fill(SKColor color, SKRectI area);
+
+	void SetColor(int pixelIndex, SKColor color);
+	void SetColor(int x, int y, SKColor c);
+	void SetColor(SKPointI p, SKColor color);
+
+	void AddColor(int pixelIndex, SKColor color);
+	void AddColor(int x, int y, SKColor color);
+	void AddColor(SKPointI p, SKColor color);
+
+	void Save(string filePath, int scale = 1);
 }
 
 public sealed class PixelBuffer : IPixelBuffer
 {
-	readonly Color[] _buffer;
+	readonly SKColor[] _buffer;
 
-	public PixelBuffer(Size size)
-		: this(size, new Color[size.Area()]) { }
+	public PixelBuffer(SKSizeI size)
+		: this(size, new SKColor[size.Area()]) { }
 
-	private PixelBuffer(Size size, Color[] buffer)
+	private PixelBuffer(SKSizeI size, SKColor[] buffer)
 	{
 		Dimensions = size;
 		_buffer = buffer;
 	}
 
-	public Size Dimensions { get; }
+	public SKSizeI Dimensions { get; }
 	public int Width => Dimensions.Width;
 	public int Height => Dimensions.Height;
 
-	public Color this[Point p] => _buffer[p.Y * Width + p.X];
-	public Color this[int x, int y] => _buffer[y * Width + x];
+	public SKColor this[SKPointI p] => _buffer[p.Y * Width + p.X];
+	public SKColor this[int x, int y] => _buffer[y * Width + x];
 
-	public void SetColor(int x, int y, Color c)
+	public void SetColor(int pixelIndex, SKColor color)
+	{
+		var x = pixelIndex % Width;
+		var y = pixelIndex / Width;
+
+		SetColor(x, y, color);
+	}
+
+	public void SetColor(SKPointI p, SKColor color) => SetColor(p.X, p.Y, color);
+
+	public void SetColor(int x, int y, SKColor c)
 	{
 		if (x >= 0 && x < Width && y >= 0 && y < Height)
 		{
@@ -47,43 +64,104 @@ public sealed class PixelBuffer : IPixelBuffer
 		}
 	}
 
-	public void AddColor(int x, int y, Color c)
+	public void AddColor(int pixelIndex, SKColor color)
+	{
+		var x = pixelIndex % Width;
+		var y = pixelIndex / Width;
+
+		AddColor(x, y, color);
+	}
+
+	public void AddColor(SKPointI p, SKColor color) => AddColor(p.X, p.Y, color);
+
+	public void AddColor(int x, int y, SKColor c)
 	{
 		if (x >= 0 && x < Width && y >= 0 && y < Height)
 		{
-			ref Color current = ref _buffer[y * Width + x];
+			ref SKColor current = ref _buffer[y * Width + x];
 
-			current = Color.FromArgb(
-				Math.Min(current.R + c.R, 255),
-				Math.Min(current.G + c.G, 255),
-				Math.Min(current.B + c.B, 255)
+			current = new SKColor(
+				(byte)Math.Min(current.Red + c.Red, 255),
+				(byte)Math.Min(current.Green + c.Green, 255),
+				(byte)Math.Min(current.Blue + c.Blue, 255)
 			);
 		}
 	}
 
-	public void Clear() => Array.Clear(_buffer, 0, _buffer.Length);
+	public void Fill(SKColor color) => Array.Fill(_buffer, color);
 
-	public void Clear(Rectangle area)
+	public void Fill(SKColor color, SKRectI area)
 	{
 		for (int row = 0; row < area.Height; row++)
 		{
-			Array.Clear(_buffer, (row + area.Y) * Width + area.X, area.Width);
+			Array.Fill(_buffer, color, (row + area.Top) * Width + area.Left, area.Width);
 		}
 	}
 
-	public void CopyFrom(Color[] texture, Point textureSize, Point destination)
+	public void Save(string filePath, int scale = 1)
+	{
+		using var bitmap = new SKBitmap(Width, Height);
+		bitmap.Pixels = _buffer;
+		using var stream = File.Open(filePath, FileMode.Create);
+
+		if (scale != 1)
+		{
+			var resizedWidth = scale * Width;
+			var resizedHeight = scale * Height;
+
+			using var surface = SKSurface.Create(
+				new SKImageInfo
+				{
+					Width = resizedWidth,
+					Height = resizedHeight,
+					ColorType = SKImageInfo.PlatformColorType,
+					AlphaType = SKAlphaType.Premul,
+				}
+			);
+			using var image = SKImage.FromBitmap(bitmap);
+
+			surface.Canvas.DrawImage(image, new SKRectI(0, 0, resizedWidth, resizedHeight), SKSamplingOptions.Default);
+			surface.Canvas.Flush();
+
+			using var resizedImage = surface.Snapshot();
+			using var data = Path.GetExtension(filePath).ToLowerInvariant() switch
+			{
+				".jpg" => resizedImage.Encode(SKEncodedImageFormat.Jpeg, quality: 85),
+				".png" => resizedImage.Encode(SKEncodedImageFormat.Png, quality: 100),
+				_ => throw new ArgumentException("Unsupported file format."),
+			};
+
+			data.SaveTo(stream);
+		}
+		else
+		{
+			switch (Path.GetExtension(filePath))
+			{
+				case ".jpg":
+					bitmap.Encode(stream, SKEncodedImageFormat.Jpeg, quality: 85);
+					break;
+				case ".png":
+					bitmap.Encode(stream, SKEncodedImageFormat.Png, quality: 100);
+					break;
+				default:
+					throw new ArgumentException("Unsupported file format.");
+			}
+		}
+	}
+
+	public void CopyFrom(SKColor[] texture, SKSizeI textureSize, SKPointI destination)
 	{
 		var xMargin = Width - destination.X;
-		var xToCopy = Math.Min(xMargin, textureSize.X);
+		var xToCopy = Math.Min(xMargin, textureSize.Width);
 
 		var yMargin = Height - destination.Y;
-		var yToCopy = Math.Min(yMargin, textureSize.Y);
+		var yToCopy = Math.Min(yMargin, textureSize.Height);
 
 		for (int y = 0; y < yToCopy; y++)
 		{
 			Array.Copy(
 				sourceArray: texture,
-				sourceIndex: y * textureSize.X,
+				sourceIndex: y * textureSize.Width,
 				destinationArray: _buffer,
 				destinationIndex: (destination.Y + y) * Width + destination.X,
 				length: xToCopy

@@ -36,7 +36,7 @@ public sealed class NoiseVisualizer() : BaseVisualization("Noise")
 						// h: 0 - 360
 						// s: 0 - 100
 						// v: 0 - 100
-						image.SetPixel(x, y, SKColor.FromHsv(0, 0, noise * 100));
+						image.SetColor(x, y, SKColor.FromHsv(0, 0, noise * 100));
 					}
 				}
 
@@ -90,7 +90,7 @@ public sealed class NoiseVisualizer() : BaseVisualization("Noise")
 						// h: 0 - 360
 						// s: 0 - 100
 						// v: 0 - 100
-						image.SetPixel(x, y, SKColor.FromHsv(0, 0, elevation * 100));
+						image.SetColor(x, y, SKColor.FromHsv(0, 0, elevation * 100));
 					}
 				}
 
@@ -142,7 +142,7 @@ public sealed class NoiseVisualizer() : BaseVisualization("Noise")
 						// h: 0 - 360
 						// s: 0 - 100
 						// v: 0 - 100
-						image.SetPixel(x, y, SKColor.FromHsv(0, 0, elevation * 100));
+						image.SetColor(x, y, SKColor.FromHsv(0, 0, elevation * 100));
 					}
 				}
 
@@ -193,7 +193,7 @@ public sealed class NoiseVisualizer() : BaseVisualization("Noise")
 					// h: 0 - 360
 					// s: 0 - 100
 					// v: 0 - 100
-					image.SetPixel(x, y, color);
+					image.SetColor(x, y, color);
 				}
 			}
 		}

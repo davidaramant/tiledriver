@@ -57,7 +57,7 @@ public class ConnectedComponentLabelingVisualization
 			var largestComponent = components.First();
 			foreach (var p in largestComponent)
 			{
-				componentsImg.SetPixel(p.X, p.Y, SKColors.White);
+				componentsImg.SetColor(p.X, p.Y, SKColors.White);
 			}
 
 			var hueShift = 360d / (components.Length - 1);
@@ -67,7 +67,7 @@ public class ConnectedComponentLabelingVisualization
 			{
 				foreach (var p in c)
 				{
-					componentsImg.SetPixel(p.X, p.Y, SKColor.FromHsl((float)hue, 100, 50));
+					componentsImg.SetColor(p.X, p.Y, SKColor.FromHsl((float)hue, 100, 50));
 				}
 
 				hue += hueShift;

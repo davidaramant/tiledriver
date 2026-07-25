@@ -12,7 +12,7 @@ public sealed class MetaMapImageExporter
 			for (var tileX = 0; tileX < map.Width; tileX++)
 			{
 				var tileColor = palette.PickColor(map[tileX, tileY]);
-				image.SetPixel(tileX, tileY, tileColor);
+				image.SetColor(tileX, tileY, tileColor);
 			}
 		}
 

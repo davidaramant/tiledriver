@@ -225,7 +225,7 @@ public sealed class CaveGenerationVisualization
 		var largestComponent = components.First();
 		foreach (var p in largestComponent)
 		{
-			componentsImg.SetPixel(p.X, p.Y, SKColors.White);
+			componentsImg.SetColor(p.X, p.Y, SKColors.White);
 		}
 
 		var hueShift = 360d / (components.Length - 1);
@@ -235,7 +235,7 @@ public sealed class CaveGenerationVisualization
 		{
 			foreach (var p in c)
 			{
-				componentsImg.SetPixel(p.X, p.Y, SKColor.FromHsl((float)hue, 100, 50));
+				componentsImg.SetColor(p.X, p.Y, SKColor.FromHsl((float)hue, 100, 50));
 			}
 
 			hue += hueShift;
@@ -301,7 +301,7 @@ public sealed class CaveGenerationVisualization
 
 		foreach (var light in lights)
 		{
-			largestComponentImg.SetPixel(
+			largestComponentImg.SetColor(
 				light.Center.X,
 				light.Center.Y,
 				light.Height switch
@@ -340,7 +340,7 @@ public sealed class CaveGenerationVisualization
 
 		foreach (var t in treasures)
 		{
-			lightImg.SetPixel(t.Location.X, t.Location.Y, SKColors.Gold);
+			lightImg.SetColor(t.Location.X, t.Location.Y, SKColors.Gold);
 		}
 
 		SaveImage(lightImg, ++step, "Treasure");

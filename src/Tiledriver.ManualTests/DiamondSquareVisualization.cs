@@ -62,7 +62,7 @@ public sealed class DiamondSquareVisualization() : BaseVisualization("Diamond Sq
 						var value = map[y, x];
 						if (value is < 0 or > 1)
 							throw new InvalidOperationException("Map value out of range [0, 1]");
-						image.SetPixel(x, y, SKColor.FromHsv(0, 0, (float)value * 100));
+						image.SetColor(x, y, SKColor.FromHsv(0, 0, (float)value * 100));
 					}
 				}
 

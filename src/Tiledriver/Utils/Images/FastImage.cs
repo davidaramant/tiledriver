@@ -1,42 +1,33 @@
 using SkiaSharp;
+using Tiledriver.Rendering;
 
 namespace Tiledriver.Utils.Images;
 
-public interface IFastImage : IDisposable
-{
-	int Height { get; }
-	int PixelCount { get; }
-	int Width { get; }
-
-	void Fill(SKColor color);
-	void Save(string filePath, int scale = 1);
-	void SetPixel(int pixelIndex, SKColor color);
-	void SetPixel(int x, int y, SKColor color);
-	void SetPixel(SKPointI p, SKColor color);
-}
+public interface IFastImage : IPixelBuffer, IDisposable { }
 
 public sealed class FastImage : IFastImage
 {
 	private readonly SKBitmap _bitmap;
 
-	public int Width { get; }
-	public int Height { get; }
-	public int PixelCount => Width * Height;
+	public SKSizeI Dimensions { get; }
+	public int Width => Dimensions.Width;
+	public int Height => Dimensions.Height;
+
+	public SKColor this[SKPointI p] => this[p.X, p.Y];
+	public SKColor this[int x, int y] => _bitmap.GetPixel(x, y);
 
 	public FastImage(SKSizeI resolution)
-		: this(resolution.Width, resolution.Height) { }
+	{
+		Dimensions = resolution;
+		_bitmap = new SKBitmap(resolution.Width, resolution.Height);
+	}
 
 	public FastImage(int width, int height)
-	{
-		Width = width;
-		Height = height;
-		_bitmap = new SKBitmap(width, height);
-	}
+		: this(new SKSizeI(width, height)) { }
 
 	private FastImage(SKBitmap bitmap)
 	{
-		Width = bitmap.Width;
-		Height = bitmap.Height;
+		Dimensions = new SKSizeI(bitmap.Width, bitmap.Height);
 		_bitmap = bitmap;
 	}
 
@@ -48,19 +39,50 @@ public sealed class FastImage : IFastImage
 		canvas.Clear(color);
 	}
 
-	public void SetPixel(SKPointI p, SKColor color) => SetPixel(p.X, p.Y, color);
-
-	public void SetPixel(int x, int y, SKColor color)
+	public void Fill(SKColor color, SKRectI area)
 	{
-		_bitmap.SetPixel(x, y, color);
+		using var canvas = new SKCanvas(_bitmap);
+		using var paint = new SKPaint();
+		paint.Color = color;
+		canvas.DrawRect(area, paint);
 	}
 
-	public void SetPixel(int pixelIndex, SKColor color)
+	public void SetColor(SKPointI p, SKColor color) => SetColor(p.X, p.Y, color);
+
+	public void SetColor(int x, int y, SKColor color) => _bitmap.SetPixel(x, y, color);
+
+	public void SetColor(int pixelIndex, SKColor color)
 	{
 		var x = pixelIndex % Width;
 		var y = pixelIndex / Width;
 
-		SetPixel(x, y, color);
+		SetColor(x, y, color);
+	}
+
+	public void AddColor(SKPointI p, SKColor color) => AddColor(p.X, p.Y, color);
+
+	public void AddColor(int x, int y, SKColor color)
+	{
+		var current = this[x, y];
+
+		SetColor(
+			x,
+			y,
+			new SKColor(
+				(byte)Math.Min(current.Red + color.Red, byte.MaxValue),
+				(byte)Math.Min(current.Green + color.Green, byte.MaxValue),
+				(byte)Math.Min(current.Blue + color.Blue, byte.MaxValue),
+				current.Alpha
+			)
+		);
+	}
+
+	public void AddColor(int pixelIndex, SKColor color)
+	{
+		var x = pixelIndex % Width;
+		var y = pixelIndex / Width;
+
+		AddColor(x, y, color);
 	}
 
 	/// <summary>
