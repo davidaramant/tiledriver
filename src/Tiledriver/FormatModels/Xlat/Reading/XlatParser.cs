@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using Tiledriver.FormatModels.Common;
 using Tiledriver.FormatModels.Common.Reading;
 

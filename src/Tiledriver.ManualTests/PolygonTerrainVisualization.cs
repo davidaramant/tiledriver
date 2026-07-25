@@ -1,7 +1,6 @@
 ﻿using SharpVoronoiLib;
 using SkiaSharp;
 using Tiledriver.LevelGeometry;
-using Tiledriver.LevelGeometry.TerrainMaps;
 using Tiledriver.Utils.CellularAutomata;
 using Tiledriver.Utils.Images;
 

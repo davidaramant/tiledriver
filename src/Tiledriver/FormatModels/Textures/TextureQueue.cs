@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using Tiledriver.FormatModels.Common;
 
 namespace Tiledriver.FormatModels.Textures;

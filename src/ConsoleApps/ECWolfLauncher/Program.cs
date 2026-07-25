@@ -2,7 +2,6 @@ using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using System.Security.Cryptography;
 using ShellProgressBar;
-using Tiledriver.FormatModels;
 using Tiledriver.FormatModels.Common;
 using Tiledriver.FormatModels.MapMetadata;
 using Tiledriver.FormatModels.MapMetadata.Writing;
@@ -10,7 +9,6 @@ using Tiledriver.FormatModels.Pk3;
 using Tiledriver.FormatModels.Uwmf;
 using Tiledriver.FormatModels.Uwmf.Reading;
 using Tiledriver.FormatModels.Wad;
-using Tiledriver.FormatModels.Xlat;
 using Tiledriver.Settings;
 
 namespace ECWolfLauncher;

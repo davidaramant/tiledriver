@@ -1,5 +1,4 @@
 using Tiledriver.FormatModels.Common;
-using Tiledriver.FormatModels.Common.Reading;
 
 namespace Tiledriver.FormatModels.Udmf.Reading;
 

@@ -3,7 +3,6 @@ using Tiledriver.DemoMaps.Wolf3D;
 using Tiledriver.FormatModels.Wad;
 using Tiledriver.FormatModels.Wad.StreamExtensions;
 using Xunit;
-using Xunit.Sdk;
 
 namespace Tiledriver.Tests.FormatModels.Wad;
 

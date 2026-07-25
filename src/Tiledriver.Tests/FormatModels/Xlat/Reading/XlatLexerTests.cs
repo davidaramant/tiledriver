@@ -1,5 +1,4 @@
 using System.Text;
-using Tiledriver.FormatModels.Common.Reading;
 using Tiledriver.FormatModels.Xlat.Reading;
 using Xunit;
 

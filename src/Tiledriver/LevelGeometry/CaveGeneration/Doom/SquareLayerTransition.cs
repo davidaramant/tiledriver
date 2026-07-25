@@ -1,4 +1,3 @@
-using Tiledriver.Extensions.Collections;
 using Tiledriver.LevelGeometry.CaveGeneration.Doom.SquareModel;
 using Tiledriver.LevelGeometry.CoordinateSystems;
 using static Tiledriver.Utils.MathUtil;
