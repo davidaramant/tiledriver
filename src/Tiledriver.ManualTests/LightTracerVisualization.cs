@@ -1,3 +1,4 @@
+using SkiaSharp;
 using Tiledriver.DemoMaps.Wolf3D;
 using Tiledriver.FormatModels.Uwmf;
 using Tiledriver.LevelGeometry;
@@ -16,8 +17,8 @@ public class LightTracerVisualization
 	private readonly DirectoryInfo _dirInfo = OutputLocation.CreateDirectory("Light Tracer");
 	private const int Seed = 13;
 
-	void SaveImage(IFastImage image, string description) =>
-		image.Save(Path.Combine(_dirInfo.FullName, $"{description}.png"));
+	void SaveImage(IFastImage image, string description, int scale) =>
+		image.Save(Path.Combine(_dirInfo.FullName, $"{description}.png"), scale);
 
 	[Test, Explicit]
 	public void ShouldGenerateVisualizationOfSimpleLightMap()
@@ -34,8 +35,8 @@ public class LightTracerVisualization
 			]
 		);
 
-		using var image = LightMapVisualizer.Render(floorLights, scale: 20);
-		SaveImage(image, "Simple Light Map");
+		using var image = LightMapVisualizer.Render(floorLights);
+		SaveImage(image, "Simple Light Map", scale: 20);
 	}
 
 	[Test, Explicit]
@@ -74,10 +75,10 @@ public class LightTracerVisualization
 			lights
 		);
 
-		using var floorImg = LightMapVisualizer.Render(floorLighting, lights, largestComponent, scale: 5);
-		using var ceilingImg = LightMapVisualizer.Render(ceilingLight, lights, largestComponent, scale: 5);
+		using var floorImg = LightMapVisualizer.Render(floorLighting, lights, largestComponent);
+		using var ceilingImg = LightMapVisualizer.Render(ceilingLight, lights, largestComponent);
 
-		SaveImage(floorImg, "Floor");
-		SaveImage(ceilingImg, "Ceiling");
+		SaveImage(floorImg, "Floor", scale: 5);
+		SaveImage(ceilingImg, "Ceiling", scale: 5);
 	}
 }

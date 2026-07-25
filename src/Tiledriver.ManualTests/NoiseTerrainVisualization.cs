@@ -56,7 +56,7 @@ public sealed class NoiseTerrainVisualization() : BaseVisualization("Noise Terra
 		{
 			var amSum = octaves.Select(o => o.Amplitude).Sum();
 
-			using var image = new FastImage(width, height, scale: 4);
+			using var image = new FastImage(width, height);
 
 			for (int y = 0; y < height; y++)
 			{
@@ -87,7 +87,7 @@ public sealed class NoiseTerrainVisualization() : BaseVisualization("Noise Terra
 				}
 			}
 
-			SaveImage(image, $"{prefix}.png");
+			SaveImage(image, $"{prefix}.png", scale: 4);
 		}
 	}
 
@@ -111,7 +111,7 @@ public sealed class NoiseTerrainVisualization() : BaseVisualization("Noise Terra
 			{
 				var amSum = octaves.Select(o => o.Amplitude).Sum();
 
-				using var image = new FastImage(width, height, scale: 2);
+				using var image = new FastImage(width, height);
 
 				for (int y = 0; y < height; y++)
 				{
@@ -159,7 +159,7 @@ public sealed class NoiseTerrainVisualization() : BaseVisualization("Noise Terra
 					}
 				}
 
-				SaveImage(image, $"{prefix} - {mix:N2}.png");
+				SaveImage(image, $"{prefix} - {mix:N2}.png", scale: 2);
 			}
 		);
 	}
@@ -185,7 +185,7 @@ public sealed class NoiseTerrainVisualization() : BaseVisualization("Noise Terra
 			{
 				var amSum = octaves.Select(o => o.Amplitude).Sum();
 
-				using var image = new FastImage(width, height, scale: 2);
+				using var image = new FastImage(width, height);
 
 				for (int y = 0; y < height; y++)
 				{
@@ -243,7 +243,7 @@ public sealed class NoiseTerrainVisualization() : BaseVisualization("Noise Terra
 					}
 				}
 
-				SaveImage(image, $"{prefix} - terraces {numTerraces:D2}.png");
+				SaveImage(image, $"{prefix} - terraces {numTerraces:D2}.png", scale: 2);
 			}
 		);
 	}

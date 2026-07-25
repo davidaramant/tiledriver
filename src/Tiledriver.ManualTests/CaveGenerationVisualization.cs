@@ -43,13 +43,12 @@ public sealed class CaveGenerationVisualization
 		var stepTime = Stopwatch.StartNew();
 		var dir = OutputLocation.CreateDirectory("Detailed Cave");
 
-		static IFastImage Visualize(CellBoard board, int scale = 1) =>
+		static IFastImage Visualize(CellBoard board) =>
 			GenericVisualizer.RenderBinary(
 				board.Dimensions,
 				isTrue: p => board[p] == CellType.Dead,
 				trueColor: SKColors.White,
-				falseColor: SKColors.Black,
-				scale: scale
+				falseColor: SKColors.Black
 			);
 
 		foreach (var file in dir.GetFiles())
@@ -65,16 +64,16 @@ public sealed class CaveGenerationVisualization
 			stepTime.Restart();
 		}
 
-		void SaveImage(IFastImage image, string name)
+		void SaveImage(IFastImage image, string name, int scale = 1)
 		{
-			image.Save(Path.Combine(path, $"{name}.png"));
+			image.Save(Path.Combine(path, $"{name}.png"), scale);
 			LogProgress(name);
 		}
 
 		void Save(CellBoard board, string name, int scale)
 		{
-			using var img = Visualize(board, scale);
-			SaveImage(img, name);
+			using var img = Visualize(board);
+			SaveImage(img, name, scale);
 		}
 
 		var random = new Random(1);
@@ -146,8 +145,7 @@ public sealed class CaveGenerationVisualization
 					return SKColor.FromHsv(0, (1 - ((d / levelSize) / (float)numLevels)) * 100, 100);
 				}
 				return SKColors.Black;
-			},
-			scale: 1
+			}
 		);
 
 		SaveImage(interiorImg, $"{step++}. interior");
@@ -167,7 +165,10 @@ public sealed class CaveGenerationVisualization
 		DirectoryInfo dirInfo = OutputLocation.CreateDirectory(folderName);
 
 		void SaveImage(IFastImage image, int step, string description) =>
-			image.Save(Path.Combine(dirInfo.FullName, $"Seed {seed:00} - Step {step:00} - {description}.png"));
+			image.Save(
+				Path.Combine(dirInfo.FullName, $"Seed {seed:00} - Step {step:00} - {description}.png"),
+				scale: ImageScale
+			);
 
 		void SaveBoard(CellBoard boardToSave, int generation)
 		{
@@ -175,8 +176,7 @@ public sealed class CaveGenerationVisualization
 				dimensions,
 				isTrue: p => boardToSave[p] == CellType.Alive,
 				trueColor: SKColors.DarkSlateBlue,
-				falseColor: SKColors.White,
-				scale: ImageScale
+				falseColor: SKColors.White
 			);
 			SaveImage(img, generation, $"Cellular Generation {generation}");
 		}
@@ -219,7 +219,7 @@ public sealed class CaveGenerationVisualization
 
 		Log($"Seed {seed} - {components.Length} connected areas found");
 
-		using var componentsImg = new FastImage(board.Width, board.Height, scale: 10);
+		using var componentsImg = new FastImage(board.Width, board.Height);
 		componentsImg.Fill(SKColors.DarkSlateBlue);
 
 		var largestComponent = components.First();
@@ -255,8 +255,7 @@ public sealed class CaveGenerationVisualization
 			dimensions,
 			isTrue: largestComponent.Contains,
 			trueColor: SKColors.White,
-			falseColor: SKColors.DarkSlateBlue,
-			scale: ImageScale
+			falseColor: SKColors.DarkSlateBlue
 		);
 
 		step++;
@@ -278,8 +277,7 @@ public sealed class CaveGenerationVisualization
 				if (distanceToEdge.TryGetValue(p, out int d) && d == 0)
 					return SKColors.Gray;
 				return SKColors.White;
-			},
-			scale: ImageScale
+			}
 		);
 
 		step++;

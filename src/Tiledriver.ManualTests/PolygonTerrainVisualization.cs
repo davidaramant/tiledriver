@@ -140,7 +140,7 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 						}
 					}
 
-					using var image = FastImage.WrapSKBitmap(bitmap, scale: 1);
+					using var image = FastImage.WrapSKBitmap(bitmap);
 					SaveImage(
 						image,
 						$"{prefix} - x{voronoiParams.NumberOfSites} - scale {caParams.UpscaleTimes} - mark regions {markRegions}"
@@ -314,7 +314,7 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 					}
 				}
 
-				using var image = FastImage.WrapSKBitmap(bitmap, scale: 1);
+				using var image = FastImage.WrapSKBitmap(bitmap);
 				SaveImage(
 					image,
 					$"{prefix} - {voronoiParams.PointMethod} x{voronoiParams.NumberOfSites} - distances {trial.drawDistances} - caUpscale {trial.caParams.UpscaleTimes}"

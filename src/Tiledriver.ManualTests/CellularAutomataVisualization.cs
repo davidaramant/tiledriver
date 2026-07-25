@@ -51,8 +51,8 @@ public sealed class CellularAutomataVisualization() : BaseVisualization("Cellula
 
 		void Save(CellBoard board, string name, int scale)
 		{
-			using var img = Visualize(board, false, scale);
-			SaveImage(img, $"{prefix} - {name}");
+			using var img = Visualize(board, false);
+			SaveImage(img, $"{prefix} - {name}", scale);
 		}
 
 		var random = new Random(0);
@@ -112,14 +112,18 @@ public sealed class CellularAutomataVisualization() : BaseVisualization("Cellula
 					.MakeBorderAlive(thickness: 1)
 					.GenerateStandardCave();
 
-				using var img = Visualize(board, showOnlyLargestArea: false, scale: 20);
+				using var img = Visualize(board, showOnlyLargestArea: false);
 
-				SaveImage(img, $"{prefix} - Size {trial.size} - ProbAlive {trial.probAlive:F2} - Seed {trial.seed}");
+				SaveImage(
+					img,
+					$"{prefix} - Size {trial.size} - ProbAlive {trial.probAlive:F2} - Seed {trial.seed}",
+					scale: 20
+				);
 			}
 		);
 	}
 
-	static IFastImage Visualize(CellBoard board, bool showOnlyLargestArea, int scale = 1)
+	static IFastImage Visualize(CellBoard board, bool showOnlyLargestArea)
 	{
 		if (showOnlyLargestArea)
 		{
@@ -134,8 +138,7 @@ public sealed class CellularAutomataVisualization() : BaseVisualization("Cellula
 				size,
 				isTrue: area.Contains,
 				trueColor: SKColors.White,
-				falseColor: SKColors.Black,
-				scale: scale
+				falseColor: SKColors.Black
 			);
 		}
 		else
@@ -144,8 +147,7 @@ public sealed class CellularAutomataVisualization() : BaseVisualization("Cellula
 				board.Dimensions,
 				isTrue: p => board[p] == CellType.Dead,
 				trueColor: SKColors.White,
-				falseColor: SKColors.Black,
-				scale: scale
+				falseColor: SKColors.Black
 			);
 		}
 	}

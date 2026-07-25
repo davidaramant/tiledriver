@@ -25,8 +25,8 @@ public class ConnectedComponentLabelingVisualization
 			.RunGenerations(generations);
 	}
 
-	void SaveImage(IFastImage image, string description) =>
-		image.Save(Path.Combine(_dirInfo.FullName, $"{description}.png"));
+	void SaveImage(IFastImage image, string description, int scale) =>
+		image.Save(Path.Combine(_dirInfo.FullName, $"{description}.png"), scale);
 
 	[Test, Explicit]
 	public void VisualizeComponents()
@@ -51,7 +51,7 @@ public class ConnectedComponentLabelingVisualization
 
 			Console.Out.WriteLine($"{components.Length} connected areas found");
 
-			using var componentsImg = new FastImage(board.Width, board.Height, scale: 10);
+			using var componentsImg = new FastImage(board.Width, board.Height);
 			componentsImg.Fill(SKColors.DarkSlateBlue);
 
 			var largestComponent = components.First();
@@ -73,7 +73,7 @@ public class ConnectedComponentLabelingVisualization
 				hue += hueShift;
 			}
 
-			SaveImage(componentsImg, Description);
+			SaveImage(componentsImg, Description, scale: 10);
 		}
 	}
 
@@ -101,11 +101,10 @@ public class ConnectedComponentLabelingVisualization
 
 			var image = GenericVisualizer.RenderPalette(
 				board.Dimensions,
-				p => interiorInfo.TryGetValue(p, out var distance) ? palette[distance] : SKColors.DarkSlateGray,
-				scale: 5
+				p => interiorInfo.TryGetValue(p, out var distance) ? palette[distance] : SKColors.DarkSlateGray
 			);
 
-			SaveImage(image, $"Distance - {neighborhood} Neighborhood");
+			SaveImage(image, $"Distance - {neighborhood} Neighborhood", scale: 5);
 		}
 	}
 }

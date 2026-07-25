@@ -9,13 +9,12 @@ public static class GenericVisualizer
 		Size dimensions,
 		Func<Position, bool> isTrue,
 		SKColor trueColor,
-		SKColor falseColor,
-		int scale = 1
-	) => RenderPalette(dimensions, getColor: p => isTrue(p) ? trueColor : falseColor, scale);
+		SKColor falseColor
+	) => RenderPalette(dimensions, getColor: p => isTrue(p) ? trueColor : falseColor);
 
-	public static IFastImage RenderPalette(Size dimensions, Func<Position, SKColor> getColor, int scale = 1)
+	public static IFastImage RenderPalette(Size dimensions, Func<Position, SKColor> getColor)
 	{
-		var image = new FastImage(dimensions.Width, dimensions.Height, scale);
+		var image = new FastImage(dimensions.Width, dimensions.Height);
 
 		for (int y = 0; y < dimensions.Height; y++)
 		{

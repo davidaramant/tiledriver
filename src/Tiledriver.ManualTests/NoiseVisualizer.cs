@@ -67,7 +67,7 @@ public sealed class NoiseVisualizer() : BaseVisualization("Noise")
 			{
 				var amSum = octaves.Select(o => o.Amplitude).Sum();
 
-				using var image = new FastImage(width, height, scale: 4);
+				using var image = new FastImage(width, height);
 
 				for (int y = 0; y < height; y++)
 				{
@@ -95,7 +95,7 @@ public sealed class NoiseVisualizer() : BaseVisualization("Noise")
 				}
 
 				var description = string.Join(" - ", octaves.Select(o => $"f{o.Frequency:N} a{o.Amplitude:N3}"));
-				SaveImage(image, $"{prefix} - {description}.png");
+				SaveImage(image, $"{prefix} - {description}.png", scale: 4);
 			}
 		);
 	}
@@ -118,7 +118,7 @@ public sealed class NoiseVisualizer() : BaseVisualization("Noise")
 			{
 				var amSum = octaves.Select(o => o.Amplitude).Sum();
 
-				using var image = new FastImage(width, height, scale: 4);
+				using var image = new FastImage(width, height);
 
 				for (int y = 0; y < height; y++)
 				{
@@ -146,7 +146,7 @@ public sealed class NoiseVisualizer() : BaseVisualization("Noise")
 					}
 				}
 
-				SaveImage(image, $"{prefix} - {power:N2}.png");
+				SaveImage(image, $"{prefix} - {power:N2}.png", scale: 4);
 			}
 		);
 	}
@@ -165,7 +165,7 @@ public sealed class NoiseVisualizer() : BaseVisualization("Noise")
 
 		IReadOnlyList<double> cutOffs = [0.1, 0.15, 0.2, 0.4, 0.6];
 
-		using var images = new DisposableList<FastImage>(cutOffs.Select(_ => new FastImage(width, height, scale: 4)));
+		using var images = new DisposableList<FastImage>(cutOffs.Select(_ => new FastImage(width, height)));
 
 		for (int y = 0; y < height; y++)
 		{
@@ -202,7 +202,7 @@ public sealed class NoiseVisualizer() : BaseVisualization("Noise")
 		{
 			var cutOff = cutOffs[i];
 			var image = images[i];
-			SaveImage(image, $"{prefix} - cutoff {cutOff:N2}.png");
+			SaveImage(image, $"{prefix} - cutoff {cutOff:N2}.png", scale: 4);
 		}
 	}
 

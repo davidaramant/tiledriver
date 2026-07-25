@@ -7,9 +7,9 @@ namespace Tiledriver.LevelGeometry.Lighting;
 
 public static class LightMapVisualizer
 {
-	public static IFastImage Render(LightMap lightMap, int scale = 10)
+	public static IFastImage Render(LightMap lightMap)
 	{
-		var image = new FastImage(lightMap.Size.Width, lightMap.Size.Height, scale);
+		var image = new FastImage(lightMap.Size.Width, lightMap.Size.Height);
 
 		for (int y = 0; y < lightMap.Size.Height; y++)
 		{
@@ -25,9 +25,9 @@ public static class LightMapVisualizer
 		return image;
 	}
 
-	public static IFastImage Render(LightMap lightMap, IEnumerable<LightDefinition> lights, int scale = 10)
+	public static IFastImage Render(LightMap lightMap, IEnumerable<LightDefinition> lights)
 	{
-		var image = Render(lightMap, scale);
+		var image = Render(lightMap);
 		foreach (var light in lights)
 		{
 			image.SetPixel(
@@ -46,14 +46,9 @@ public static class LightMapVisualizer
 		return image;
 	}
 
-	public static IFastImage Render(
-		LightMap lightMap,
-		IEnumerable<LightDefinition> lights,
-		ConnectedArea area,
-		int scale = 10
-	)
+	public static IFastImage Render(LightMap lightMap, IEnumerable<LightDefinition> lights, ConnectedArea area)
 	{
-		var image = Render(lightMap, lights, scale);
+		var image = Render(lightMap, lights);
 
 		foreach (var position in lightMap.Size.GetAllPositions().Where(p => !area.Contains(p)))
 		{

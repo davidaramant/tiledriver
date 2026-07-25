@@ -6,8 +6,8 @@ public abstract class BaseVisualization(string prefix)
 {
 	private readonly DirectoryInfo _dirInfo = OutputLocation.CreateDirectory(prefix);
 
-	protected void SaveImage(IFastImage image, string description) =>
-		image.Save(Path.Combine(_dirInfo.FullName, $"{description}.png"));
+	protected void SaveImage(IFastImage image, string description, int scale = 1) =>
+		image.Save(Path.Combine(_dirInfo.FullName, $"{description}.png"), scale: scale);
 
 	protected void DeleteImages(string prefix)
 	{

@@ -2,35 +2,45 @@ using SkiaSharp;
 
 namespace Tiledriver.Utils.Images;
 
+public interface IFastImage : IDisposable
+{
+	int Height { get; }
+	int PixelCount { get; }
+	int Width { get; }
+
+	void Fill(SKColor color);
+	void Save(string filePath, int scale = 1);
+	void SetPixel(int pixelIndex, SKColor color);
+	void SetPixel(int x, int y, SKColor color);
+	void SetPixel(SKPointI p, SKColor color);
+}
+
 public sealed class FastImage : IFastImage
 {
-	private readonly int _scale;
 	private readonly SKBitmap _bitmap;
 
 	public int Width { get; }
 	public int Height { get; }
 	public int PixelCount => Width * Height;
 
-	public FastImage(SKSizeI resolution, int scale = 1)
-		: this(resolution.Width, resolution.Height, scale) { }
+	public FastImage(SKSizeI resolution)
+		: this(resolution.Width, resolution.Height) { }
 
-	public FastImage(int width, int height, int scale = 1)
+	public FastImage(int width, int height)
 	{
-		_scale = scale;
 		Width = width;
 		Height = height;
 		_bitmap = new SKBitmap(width, height);
 	}
 
-	private FastImage(SKBitmap bitmap, int scale = 1)
+	private FastImage(SKBitmap bitmap)
 	{
-		_scale = scale;
 		Width = bitmap.Width;
 		Height = bitmap.Height;
 		_bitmap = bitmap;
 	}
 
-	public static FastImage WrapSKBitmap(SKBitmap bitmap, int scale = 1) => new FastImage(bitmap, scale);
+	public static FastImage WrapSKBitmap(SKBitmap bitmap) => new(bitmap);
 
 	public void Fill(SKColor color)
 	{
@@ -57,14 +67,15 @@ public sealed class FastImage : IFastImage
 	/// Saves the image to the specified file path.
 	/// </summary>
 	/// <param name="filePath">The file path.</param>
-	public void Save(string filePath)
+	/// <param name="scale">The integer scale of the image.</param>
+	public void Save(string filePath, int scale = 1)
 	{
 		using var stream = File.Open(filePath, FileMode.Create);
 
-		if (_scale != 1)
+		if (scale != 1)
 		{
-			var resizedWidth = _scale * Width;
-			var resizedHeight = _scale * Height;
+			var resizedWidth = scale * Width;
+			var resizedHeight = scale * Height;
 
 			using var surface = SKSurface.Create(
 				new SKImageInfo

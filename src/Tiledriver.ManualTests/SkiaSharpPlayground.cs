@@ -9,18 +9,18 @@ public sealed class SkiaSharpPlayground
 {
 	private readonly DirectoryInfo _dirInfo = OutputLocation.CreateDirectory("SkiaSharp Playground");
 
-	private void Save(IFastImage image, string name) => image.Save(Path.Combine(_dirInfo.FullName, name + ".png"));
+	private void Save(IFastImage image, string name, int scale) =>
+		image.Save(Path.Combine(_dirInfo.FullName, name + ".png"), scale);
 
 	[Test, Explicit]
 	public void HsvColor()
 	{
 		using var img = GenericVisualizer.RenderPalette(
 			new Size(10, 10),
-			pos => SKColor.FromHsv(0, 100 * (pos.X / 10f), 100 * (pos.Y / 10f)),
-			scale: 20
+			pos => SKColor.FromHsv(0, 100 * (pos.X / 10f), 100 * (pos.Y / 10f))
 		);
 
-		Save(img, "HSV with Saturation x Value");
+		Save(img, "HSV with Saturation x Value", scale: 20);
 	}
 
 	[Test, Explicit]
@@ -28,10 +28,9 @@ public sealed class SkiaSharpPlayground
 	{
 		using var img = GenericVisualizer.RenderPalette(
 			new Size(10, 10),
-			pos => SKColor.FromHsl(0, 100 * (pos.X / 10f), 100 * (pos.Y / 10f)),
-			scale: 20
+			pos => SKColor.FromHsl(0, 100 * (pos.X / 10f), 100 * (pos.Y / 10f))
 		);
 
-		Save(img, "HSL with Saturation x Luminosity");
+		Save(img, "HSL with Saturation x Luminosity", scale: 20);
 	}
 }

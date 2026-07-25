@@ -38,8 +38,8 @@ public sealed class VoronoiDiagramVisualizer() : BaseVisualization("Voronoi Diag
 				}
 			);
 		}
-		using var image = FastImage.WrapSKBitmap(bitmap, scale: 1);
-		SaveImage(FastImage.WrapSKBitmap(bitmap, scale: 1), $"{prefix} - 1 sites");
+		using var image = FastImage.WrapSKBitmap(bitmap);
+		SaveImage(image, $"{prefix} - 1 sites");
 
 		foreach (var edge in plane.Edges)
 		{
@@ -99,7 +99,7 @@ public sealed class VoronoiDiagramVisualizer() : BaseVisualization("Voronoi Diag
 			);
 		}
 
-		using var justEdgesImage = FastImage.WrapSKBitmap(justEdgesBitmap, scale: 1);
+		using var justEdgesImage = FastImage.WrapSKBitmap(justEdgesBitmap);
 		SaveImage(justEdgesImage, $"{prefix} - 4 voronoi");
 	}
 
@@ -150,7 +150,7 @@ public sealed class VoronoiDiagramVisualizer() : BaseVisualization("Voronoi Diag
 					);
 				}
 
-				using var image = FastImage.WrapSKBitmap(bitmap, scale: 1);
+				using var image = FastImage.WrapSKBitmap(bitmap);
 
 				SaveImage(
 					image,
@@ -244,7 +244,7 @@ public sealed class VoronoiDiagramVisualizer() : BaseVisualization("Voronoi Diag
 					);
 				}
 
-				using var meshImage = FastImage.WrapSKBitmap(meshBitmap, scale: 1);
+				using var meshImage = FastImage.WrapSKBitmap(meshBitmap);
 
 				SaveImage(meshImage, $"{prefix} - {pointGenerationMethod}");
 			}
