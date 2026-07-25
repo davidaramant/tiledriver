@@ -10,9 +10,16 @@
       "rollForward": false
     },
     "husky": {
-      "version": "0.8.0",
+      "version": "0.9.1",
       "commands": [
         "husky"
+      ],
+      "rollForward": false
+    },
+    "dotnet-mgcb": {
+      "version": "3.8.4.1",
+      "commands": [
+        "mgcb"
       ],
       "rollForward": false
     }
