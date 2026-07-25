@@ -23,32 +23,31 @@ public static partial class XlatParser
 				throw new ParsingException($"Unexpected token: {tokenStream.Current}");
 			}
 
-			switch (id.Id.ToLower())
+			if (id.Id.EqualsIgnoreCase("enable") || id.Id.EqualsIgnoreCase("disable"))
 			{
-				case "enable":
-				case "disable":
-					// global flag, ignore
-					tokenStream.ExpectNext<IdentifierToken>();
-					tokenStream.ExpectNext<SemicolonToken>();
-					break;
-
-				case "music":
-					throw new ParsingException("This should be ignored");
-
-				case "tiles":
-					tileMappings.Add(ParseTileMappings(tokenStream));
-					break;
-
-				case "things":
-					thingMappings.AddRange(ParseThingMappings(tokenStream));
-					break;
-
-				case "flats":
-					flatMappings.Add(ParseFlatMappings(tokenStream));
-					break;
-
-				default:
-					throw new ParsingException($"Unexpected identifier: {id}");
+				// global flag, ignore
+				tokenStream.ExpectNext<IdentifierToken>();
+				tokenStream.ExpectNext<SemicolonToken>();
+			}
+			else if (id.Id.EqualsIgnoreCase("music"))
+			{
+				throw new ParsingException("This should be ignored");
+			}
+			else if (id.Id.EqualsIgnoreCase("tiles"))
+			{
+				tileMappings.Add(ParseTileMappings(tokenStream));
+			}
+			else if (id.Id.EqualsIgnoreCase("things"))
+			{
+				thingMappings.AddRange(ParseThingMappings(tokenStream));
+			}
+			else if (id.Id.EqualsIgnoreCase("flats"))
+			{
+				flatMappings.Add(ParseFlatMappings(tokenStream));
+			}
+			else
+			{
+				throw new ParsingException($"Unexpected identifier: {id}");
 			}
 		}
 
@@ -97,26 +96,25 @@ public static partial class XlatParser
 			switch (token)
 			{
 				case IdentifierToken id:
-					switch (id.Id.ToLower())
+					if (id.Id.EqualsIgnoreCase("modzone"))
 					{
-						case "modzone":
-							ParseModzone(tokenStream, id, ambushModzones, changeTriggerModzones);
-							break;
-
-						case "tile":
-							tileTemplates.Add(ParseTileTemplate(tokenStream, id));
-							break;
-
-						case "trigger":
-							triggerTemplates.Add(ParseTriggerTemplate(tokenStream, id));
-							break;
-
-						case "zone":
-							zoneTemplates.Add(ParseZone(tokenStream, id));
-							break;
-
-						default:
-							throw ParsingException.CreateError(id, "unknown identifier");
+						ParseModzone(tokenStream, id, ambushModzones, changeTriggerModzones);
+					}
+					else if (id.Id.EqualsIgnoreCase("tile"))
+					{
+						tileTemplates.Add(ParseTileTemplate(tokenStream, id));
+					}
+					else if (id.Id.EqualsIgnoreCase("trigger"))
+					{
+						triggerTemplates.Add(ParseTriggerTemplate(tokenStream, id));
+					}
+					else if (id.Id.EqualsIgnoreCase("zone"))
+					{
+						zoneTemplates.Add(ParseZone(tokenStream, id));
+					}
+					else
+					{
+						throw ParsingException.CreateError(id, "unknown identifier");
 					}
 					break;
 
@@ -150,19 +148,19 @@ public static partial class XlatParser
 
 		var next = tokenStream.ExpectNext<IdentifierToken>();
 
-		if (next.Id.ToLower() == "fillzone")
+		if (next.Id.EqualsIgnoreCase("fillzone"))
 		{
 			fillZone = true;
 			next = tokenStream.ExpectNext<IdentifierToken>();
 		}
 
-		if (next.Id.ToLower() == "ambush")
+		if (next.Id.EqualsIgnoreCase("ambush"))
 		{
 			tokenStream.ExpectNext<SemicolonToken>();
 
 			ambushModzones.Add(new AmbushModzone(oldNum, fillZone));
 		}
-		else if (next.Id.ToLower() == "changetrigger")
+		else if (next.Id.EqualsIgnoreCase("changetrigger"))
 		{
 			var action = tokenStream.ExpectNext<StringToken>().Value;
 
@@ -233,18 +231,17 @@ public static partial class XlatParser
 			switch (token)
 			{
 				case IdentifierToken id:
-					switch (id.Id.ToLower())
+					if (id.Id.EqualsIgnoreCase("ceiling"))
 					{
-						case "ceiling":
-							ceilings.AddRange(ParseStringList(tokenStream));
-							break;
-
-						case "floor":
-							floors.AddRange(ParseStringList(tokenStream));
-							break;
-
-						default:
-							throw ParsingException.CreateError(id, "unknown identifier");
+						ceilings.AddRange(ParseStringList(tokenStream));
+					}
+					else if (id.Id.EqualsIgnoreCase("floor"))
+					{
+						floors.AddRange(ParseStringList(tokenStream));
+					}
+					else
+					{
+						throw ParsingException.CreateError(id, "unknown identifier");
 					}
 					break;
 
@@ -296,18 +293,17 @@ public static partial class XlatParser
 			switch (token)
 			{
 				case IdentifierToken id:
-					switch (id.Id.ToLower())
+					if (id.Id.EqualsIgnoreCase("elevator"))
 					{
-						case "elevator":
-							thingMappings.Add(ParseElevator(tokenStream, id));
-							break;
-
-						case "trigger":
-							thingMappings.Add(ParseTriggerTemplate(tokenStream, id));
-							break;
-
-						default:
-							throw ParsingException.CreateError(id, "unknown identifier");
+						thingMappings.Add(ParseElevator(tokenStream, id));
+					}
+					else if (id.Id.EqualsIgnoreCase("trigger"))
+					{
+						thingMappings.Add(ParseTriggerTemplate(tokenStream, id));
+					}
+					else
+					{
+						throw ParsingException.CreateError(id, "unknown identifier");
 					}
 					break;
 
@@ -350,7 +346,7 @@ public static partial class XlatParser
 
 		tokenStream.ExpectNext<CommaToken>();
 
-		var flags = new HashSet<string>();
+		var flags = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
 		var next = tokenStream.GetNext();
 
@@ -365,7 +361,7 @@ public static partial class XlatParser
 		}
 		else if (next is IdentifierToken flagToken)
 		{
-			flags.Add(flagToken.Id.ToLower());
+			flags.Add(flagToken.Id.ToString());
 
 			while (true)
 			{
@@ -377,7 +373,7 @@ public static partial class XlatParser
 				}
 				else if (next is PipeToken)
 				{
-					flags.Add(tokenStream.ExpectNext<IdentifierToken>().Id.ToLower());
+					flags.Add(tokenStream.ExpectNext<IdentifierToken>().Id.ToString());
 				}
 				else
 				{

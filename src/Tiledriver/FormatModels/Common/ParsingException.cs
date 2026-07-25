@@ -7,11 +7,13 @@ public sealed class ParsingException : Exception
 	public ParsingException(string message)
 		: base(message) { }
 
+	public static ParsingException UnexpectedEndOfFile() => new("Unexpected end of file");
+
 	public static ParsingException CreateError(Token? token, string expected)
 	{
 		if (token == null)
 		{
-			return new ParsingException("Unexpected end of file");
+			return UnexpectedEndOfFile();
 		}
 		return new ParsingException(
 			$"Unexpected token {token.GetType().Name} (expected {expected}) on {token.Location}"

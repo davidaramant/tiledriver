@@ -9,10 +9,13 @@ namespace Tiledriver.FormatModels.Common;
 public readonly struct Identifier : IEquatable<Identifier>
 {
 	private readonly string _name;
+	private static readonly StringComparer Comparer = StringComparer.OrdinalIgnoreCase;
 
 	public Identifier(string name) => _name = name;
 
 	public string ToLower() => _name.ToLowerInvariant();
+
+	public bool EqualsIgnoreCase(string? other) => Comparer.Equals(_name, other);
 
 	public override string ToString() => _name;
 
@@ -22,8 +25,7 @@ public readonly struct Identifier : IEquatable<Identifier>
 
 	#region Equality members
 
-	public bool Equals(Identifier other) =>
-		string.Equals(_name, other._name, StringComparison.InvariantCultureIgnoreCase);
+	public bool Equals(Identifier other) => Comparer.Equals(_name, other._name);
 
 	public override bool Equals(object? obj)
 	{
@@ -32,7 +34,7 @@ public readonly struct Identifier : IEquatable<Identifier>
 		return obj is Identifier identifier && Equals(identifier);
 	}
 
-	public override int GetHashCode() => StringComparer.InvariantCultureIgnoreCase.GetHashCode(_name);
+	public override int GetHashCode() => Comparer.GetHashCode(_name);
 
 	public static bool operator ==(Identifier left, Identifier right) => Equals(left, right);
 

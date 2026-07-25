@@ -4,5 +4,6 @@ namespace Tiledriver.FormatModels.MapInfo.Reading;
 
 public static class MapInfoLexer
 {
-	public static UnifiedLexer Create(TextReader reader) => new(reader, reportNewlines: true);
+	public static ITokenScanner Create(TextReader reader) =>
+		new TokenScanner(reader, new TokenScannerOptions(ReportNewlines: true));
 }

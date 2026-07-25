@@ -1,4 +1,4 @@
+using System.Reflection;
 using BenchmarkDotNet.Running;
-using Benchmarks;
 
-BenchmarkRunner.Run<NoiseBenchmarks>();
+BenchmarkSwitcher.FromAssembly(Assembly.GetExecutingAssembly()).Run(args);

@@ -500,9 +500,8 @@ sealed class Program
 		//        try
 		//        {
 		//            using (var stream = File.OpenRead(uwmfFilePath))
-		//            using (var textReader = new StreamReader(stream, Encoding.ASCII))
 		//            {
-		//                var mapData = UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader)));
+		//                var mapData = UwmfReader.Read(stream);
 		//                var metaMap = MetaMapAnalyzer.Analyze(mapData);
 		//                metaMap.Save(Path.Combine(outputPath, filename + ".metamap"));
 		//            }
@@ -543,9 +542,8 @@ sealed class Program
 		//    Console.WriteLine($"File: {current}/{filesToGoThrough.Length}");
 
 		//    using (var stream = File.OpenRead(uwmfFilePath))
-		//    using (var textReader = new StreamReader(stream, Encoding.ASCII))
 		//    {
-		//        var mapData = UwmfParser.Parse(sa.Analyze(new UwmfLexer(textReader)));
+		//        var mapData = UwmfReader.Read(stream);
 		//        var metaMap = MetaMapAnalyzer.Analyze(mapData);
 
 		//        foreach (var output in outputDirsWithSaveMethods)

@@ -1,5 +1,6 @@
 using System.Text;
 using Tiledriver.FormatModels.Common.Reading;
+using Tiledriver.FormatModels.Xlat.Reading;
 using Xunit;
 
 namespace Tiledriver.Tests.FormatModels.Xlat.Reading;
@@ -11,7 +12,7 @@ public sealed class XlatLexerTests
 	{
 		using var stream = TestFile.Xlat.wolf3d;
 		using var textReader = new StreamReader(stream, Encoding.ASCII);
-		var lexer = new UnifiedLexer(textReader, allowDollarIdentifiers: true, allowPipes: true);
+		var lexer = XlatLexer.Create(textReader);
 		var result = lexer.Scan().ToArray();
 	}
 
@@ -20,7 +21,7 @@ public sealed class XlatLexerTests
 	{
 		using var stream = TestFile.Xlat.spear;
 		using var textReader = new StreamReader(stream, Encoding.ASCII);
-		var lexer = new UnifiedLexer(textReader, allowDollarIdentifiers: true, allowPipes: true);
+		var lexer = XlatLexer.Create(textReader);
 		var result = lexer.Scan().ToArray();
 	}
 }

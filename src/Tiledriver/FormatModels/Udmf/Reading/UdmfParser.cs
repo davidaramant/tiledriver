@@ -1,70 +1,78 @@
 using System.Collections.Immutable;
 using Tiledriver.FormatModels.Common;
-using Tiledriver.FormatModels.Common.Reading;
-using Tiledriver.FormatModels.Common.Reading.AbstractSyntaxTree;
 
 namespace Tiledriver.FormatModels.Udmf.Reading;
 
-public static class UdmfParser
+public sealed partial class UdmfParser
 {
-	public static IEnumerable<IExpression> Parse(IEnumerable<Token> tokens)
+	private readonly IDirectLexer _lexer;
+	private string? _namespace;
+	private string _comment = "";
+	private readonly ImmutableArray<Thing>.Builder _thingBuilder = ImmutableArray.CreateBuilder<Thing>();
+	private readonly ImmutableArray<Vertex>.Builder _verticesBuilder = ImmutableArray.CreateBuilder<Vertex>();
+	private readonly ImmutableArray<LineDef>.Builder _lineDefBuilder = ImmutableArray.CreateBuilder<LineDef>();
+	private readonly ImmutableArray<SideDef>.Builder _sideDefBuilder = ImmutableArray.CreateBuilder<SideDef>();
+	private readonly ImmutableArray<Sector>.Builder _sectorBuilder = ImmutableArray.CreateBuilder<Sector>();
+
+	public UdmfParser(IDirectLexer lexer)
 	{
-		using var tokenStream = tokens.GetEnumerator();
-		while (tokenStream.MoveNext())
+		ArgumentNullException.ThrowIfNull(lexer);
+		_lexer = lexer;
+	}
+
+	public MapData Parse()
+	{
+		while (_lexer.TryReadIdentifier(out Identifier identifier))
 		{
-			if (tokenStream.Current is IdentifierToken i)
+			if (_lexer.TryExpectEquals())
 			{
-				switch (tokenStream.GetNext())
-				{
-					case OpenBraceToken _:
-						yield return ParseBlock(i, tokenStream);
-						break;
-					case EqualsToken _:
-						yield return tokenStream.ParseAssignment(i);
-						break;
-					default:
-						throw ParsingException.CreateError(tokenStream.Current, "open brace or equals");
-				}
+				ParseTopLevelAssignment(identifier);
+			}
+			else if (_lexer.TryExpectOpenBrace())
+			{
+				AddParsedBlock(identifier);
 			}
 			else
 			{
-				throw ParsingException.CreateError<IdentifierToken>(tokenStream.Current);
+				throw new ParsingException($"Expected '=' or '{{' after identifier '{identifier}'");
 			}
 		}
+
+		return CreateMapData();
 	}
 
-	private static IExpression ParseBlock(IdentifierToken name, IEnumerator<Token> tokenStream)
+	private void ParseTopLevelAssignment(Identifier identifier)
 	{
-		var token = tokenStream.GetNext();
-		return token switch
+		if (identifier.EqualsIgnoreCase("namespace"))
 		{
-			CloseBraceToken _ => new Block(name, ImmutableArray<Assignment>.Empty),
-			IdentifierToken i => ParseBlock(name, i, tokenStream),
-			_ => throw ParsingException.CreateError(token, "identifier or end of block"),
-		};
-	}
-
-	private static Block ParseBlock(IdentifierToken name, IdentifierToken fieldName, IEnumerator<Token> tokenStream)
-	{
-		var assignments = new List<Assignment>();
-
-		tokenStream.ExpectNext<EqualsToken>();
-		assignments.Add(tokenStream.ParseAssignment(fieldName));
-
-		while (true)
-		{
-			var token = tokenStream.GetNext();
-			switch (token)
+			if (_namespace is not null)
 			{
-				case IdentifierToken i:
-					tokenStream.ExpectNext<EqualsToken>();
-					assignments.Add(tokenStream.ParseAssignment(i));
-					break;
-				case CloseBraceToken:
-					return new Block(name, [.. assignments]);
-				default:
-					throw ParsingException.CreateError(token, "identifier or end of block");
+				throw DuplicateField(identifier);
 			}
+
+			_namespace = _lexer.ReadString();
+			_lexer.ExpectSemicolon();
+		}
+		else if (identifier.EqualsIgnoreCase("comment"))
+		{
+			_comment = _lexer.ReadString();
+			_lexer.ExpectSemicolon();
+		}
+		else
+		{
+			_lexer.SkipValueAndSemicolon();
 		}
 	}
+
+	private Texture ParseTextureFieldValue(bool optional)
+	{
+		string name = _lexer.ReadString();
+		return optional && name == "-" ? Texture.None : new Texture(name);
+	}
+
+	private static ParsingException DuplicateField(Identifier fieldName) =>
+		new($"Duplicate field definition found: {fieldName}");
+
+	private static ParsingException MissingRequiredField(Identifier blockName, string fieldName) =>
+		new($"Missing required field '{fieldName}' in '{blockName}'");
 }

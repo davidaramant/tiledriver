@@ -15,17 +15,17 @@ public sealed class TokenSource : IEnumerable<Token>
 {
 	private readonly IEnumerable<Token> _tokens;
 	private readonly IResourceProvider _provider;
-	private readonly Func<TextReader, UnifiedLexer> _createLexer;
+	private readonly Func<TextReader, ITokenScanner> _createScanner;
 
 	public TokenSource(
 		IEnumerable<Token> tokens,
 		IResourceProvider provider,
-		Func<TextReader, UnifiedLexer> createLexer
+		Func<TextReader, ITokenScanner> createScanner
 	)
 	{
 		_tokens = tokens;
 		_provider = provider;
-		_createLexer = createLexer;
+		_createScanner = createScanner;
 	}
 
 	public IEnumerator<Token> GetEnumerator()
@@ -34,7 +34,7 @@ public sealed class TokenSource : IEnumerable<Token>
 
 		while (enumerator.MoveNext())
 		{
-			if (enumerator.Current is IdentifierToken include && include.Id.ToLower() == "include")
+			if (enumerator.Current is IdentifierToken include && include.Id.EqualsIgnoreCase("include"))
 			{
 				if (!enumerator.MoveNext() || enumerator.Current is not StringToken)
 				{
@@ -47,8 +47,8 @@ public sealed class TokenSource : IEnumerable<Token>
 
 				using var includeStream = _provider.Lookup(path);
 				using var reader = new StreamReader(includeStream, Encoding.ASCII, leaveOpen: true);
-				var lexer = _createLexer(reader);
-				var nestedTokenStream = new TokenSource(lexer.Scan(), _provider, _createLexer);
+				var scanner = _createScanner(reader);
+				var nestedTokenStream = new TokenSource(scanner.Scan(), _provider, _createScanner);
 				foreach (var token in nestedTokenStream)
 				{
 					yield return token;

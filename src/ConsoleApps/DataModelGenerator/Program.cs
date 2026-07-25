@@ -34,11 +34,11 @@ sealed class Program
 
 		UwmfModelGenerator.WriteToPath(uwmfPath);
 		UwmfWriterGenerator.WriteToPath(uwmfWritingPath);
-		UwmfSemanticAnalyzerGenerator.WriteToPath(uwmfReadingPath);
+		UwmfParserGenerator.WriteToPath(uwmfReadingPath);
 
 		UdmfModelGenerator.WriteToPath(udmfPath);
 		UdmfWriterGenerator.WriteToPath(udmfWritingPath);
-		UdmfSemanticAnalyzerGenerator.WriteToPath(udmfReadingPath);
+		UdmfParserGenerator.WriteToPath(udmfReadingPath);
 
 		XlatModelGenerator.WriteToPath(xlatPath);
 		XlatParserGenerator.WriteToPath(xlatReadingPath);

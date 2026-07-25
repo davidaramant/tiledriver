@@ -50,7 +50,7 @@ public sealed class TokenSourceTests
 		var mockProvider = new Mock<IResourceProvider>();
 		mockProvider.Setup(_ => _.Lookup("otherFile")).Returns(otherFileStream);
 
-		var stream = new TokenSource(firstFileTokens, mockProvider.Object, reader => new UnifiedLexer(reader));
+		var stream = new TokenSource(firstFileTokens, mockProvider.Object, reader => new TokenScanner(reader));
 
 		var actualTokens = stream.ToArray();
 

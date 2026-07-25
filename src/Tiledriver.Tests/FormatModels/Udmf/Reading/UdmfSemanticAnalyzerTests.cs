@@ -1,6 +1,4 @@
-using System.Text;
 using Tiledriver.DemoMaps.Doom;
-using Tiledriver.FormatModels.Common.Reading;
 using Tiledriver.FormatModels.Udmf.Reading;
 using Tiledriver.FormatModels.Udmf.Writing;
 using Xunit;
@@ -19,8 +17,7 @@ public sealed class UdmfSemanticAnalyzerTests
 
 		stream.Position = 0;
 
-		using var textReader = new StreamReader(stream, Encoding.ASCII);
-		var roundTripped = UdmfSemanticAnalyzer.ReadMapData(UdmfParser.Parse(new UnifiedLexer(textReader).Scan()));
+		var roundTripped = UdmfReader.Read(stream);
 
 		UdmfComparison.AssertEqual(roundTripped, map);
 	}

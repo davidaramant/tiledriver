@@ -66,7 +66,7 @@ public static partial class MapDeclarationParser
 		}
 		else if (next is IdentifierToken lookupToken)
 		{
-			if (lookupToken.Id.ToLower() != "lookup")
+			if (!lookupToken.Id.EqualsIgnoreCase("lookup"))
 			{
 				throw ParsingException.CreateError(lookupToken, "lookup");
 			}
@@ -424,7 +424,7 @@ public static partial class MapDeclarationParser
 					throw ParsingException.CreateError(assignment.Values[0], "identifier");
 				}
 
-				if (idToken.Id.ToLower() != "endsequence")
+				if (!idToken.Id.EqualsIgnoreCase("endsequence"))
 				{
 					throw new ParsingException($"Expected EndSequence, but got something else: {idToken}");
 				}
