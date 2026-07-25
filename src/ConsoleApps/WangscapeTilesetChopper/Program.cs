@@ -36,7 +36,8 @@ foreach (var definition in tileDefinitions)
 		tileCanvas.DrawBitmap(
 			tileSheet,
 			SKRect.Create(definition.X, definition.Y, tilesetDefinition.Width, tilesetDefinition.Height),
-			SKRect.Create(0, 0, tilesetDefinition.Width, tilesetDefinition.Height)
+			SKRect.Create(0, 0, tilesetDefinition.Width, tilesetDefinition.Height),
+			new SKSamplingOptions()
 		);
 	}
 

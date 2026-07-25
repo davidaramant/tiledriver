@@ -83,8 +83,9 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 							var points = site
 								.ClockwisePoints.Select(p => new SKPoint((float)p.X, (float)p.Y))
 								.ToArray();
-							using var path = new SKPath();
-							path.AddPoly(points, close: true);
+							using var pathBuilder = new SKPathBuilder();
+							pathBuilder.AddPoly(points, close: true);
+							using var path = pathBuilder.Detach();
 							canvas.DrawPath(path, new SKPaint { Color = color, Style = SKPaintStyle.Fill });
 						}
 
@@ -271,8 +272,9 @@ public sealed class PolygonTerrainVisualization() : BaseVisualization("Polygon T
 					var color = Lerp(darkColor, lightColor, t);
 
 					var points = region.Site.ClockwisePoints.Select(p => new SKPoint((float)p.X, (float)p.Y)).ToArray();
-					using var path = new SKPath();
-					path.AddPoly(points, close: true);
+					using var pathBuilder = new SKPathBuilder();
+					pathBuilder.AddPoly(points, close: true);
+					using var path = pathBuilder.Detach();
 					canvas.DrawPath(path, new SKPaint { Color = color, Style = SKPaintStyle.Fill });
 
 					// Distance text

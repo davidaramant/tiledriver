@@ -55,6 +55,7 @@ public sealed record RenderedTexture(
 						lines[i],
 						(size - textWidth) / 2f,
 						halfLineHeight + (i * lineHeight),
+						SKTextAlign.Left,
 						font,
 						textPaint
 					);

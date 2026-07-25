@@ -217,8 +217,9 @@ public sealed class VoronoiDiagramVisualizer() : BaseVisualization("Voronoi Diag
 				{
 					var site = sites[index];
 					var points = site.ClockwisePoints.Select(p => new SKPoint((float)p.X, (float)p.Y)).ToArray();
-					using var path = new SKPath();
-					path.AddPoly(points, close: true);
+					using var pathBuilder = new SKPathBuilder();
+					pathBuilder.AddPoly(points, close: true);
+					using var path = pathBuilder.Detach();
 					meshCanvas.DrawPath(
 						path,
 						new SKPaint
