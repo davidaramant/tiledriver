@@ -16,4 +16,11 @@ public static class ColorExtensions
 	}
 
 	public static SKColor ToColor(this HslColor hsl) => hsl.ToTuple().ToSKColor();
+
+	public static SKColor Multiply(this SKColor c, double scale)
+	{
+		return new SKColor(Clamp((byte)(c.Red * scale)), Clamp((byte)(c.Green * scale)), Clamp((byte)(c.Blue * scale)));
+
+		static byte Clamp(byte v) => Math.Clamp(v, byte.MinValue, byte.MaxValue);
+	}
 }

@@ -1,4 +1,3 @@
-using SkiaSharp;
 using Tiledriver.DemoMaps.Wolf3D;
 using Tiledriver.FormatModels.Uwmf;
 using Tiledriver.LevelGeometry;

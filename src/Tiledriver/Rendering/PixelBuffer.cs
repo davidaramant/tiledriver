@@ -30,6 +30,9 @@ public sealed class PixelBuffer : IPixelBuffer
 {
 	readonly SKColor[] _buffer;
 
+	public PixelBuffer(int width, int height)
+		: this(new SKSizeI(width, height)) { }
+
 	public PixelBuffer(SKSizeI size)
 		: this(size, new SKColor[size.Area()]) { }
 
