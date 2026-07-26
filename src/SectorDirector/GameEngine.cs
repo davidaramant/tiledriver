@@ -20,6 +20,7 @@ public sealed class GameEngine : Game
 	private PixelBuffer _screenBuffer = null!;
 	private SpriteFont _messageFont = null!;
 	private PlayerInfo _playerInfo = null!;
+	private Point _windowedClientSize = new(800, 600);
 
 	public GameEngine()
 	{
@@ -28,6 +29,7 @@ public sealed class GameEngine : Game
 			PreferredBackBufferWidth = 800,
 			PreferredBackBufferHeight = 600,
 			IsFullScreen = false,
+			HardwareModeSwitch = false,
 			SynchronizeWithVerticalRetrace = true,
 		};
 		Content.RootDirectory = "Content";
@@ -41,11 +43,24 @@ public sealed class GameEngine : Game
 		_keyToggles.FullScreen += KeyToggled_FullScreen;
 	}
 
-	private Point CurrentScreenSize =>
-		new Point(x: _graphics.PreferredBackBufferWidth, y: _graphics.PreferredBackBufferHeight);
+	private void UpdateScreenBufferWithNewSize(object? sender, EventArgs e)
+	{
+		var clientSize = Window.ClientBounds.Size;
+		if (clientSize.X == 0 || clientSize.Y == 0)
+			return;
 
-	private void UpdateScreenBufferWithNewSize(object? sender, EventArgs e) =>
-		UpdateScreenBuffer(CurrentScreenSize.DivideBy(_settings.RenderScale));
+		if (_graphics.PreferredBackBufferWidth != clientSize.X || _graphics.PreferredBackBufferHeight != clientSize.Y)
+		{
+			_graphics.PreferredBackBufferWidth = clientSize.X;
+			_graphics.PreferredBackBufferHeight = clientSize.Y;
+			_graphics.ApplyChanges();
+		}
+
+		if (_screenBuffer is null)
+			return;
+
+		UpdateScreenBuffer(clientSize.DivideBy(_settings.RenderScale));
+	}
 
 	private void RecreateRenderer()
 	{
@@ -59,18 +74,25 @@ public sealed class GameEngine : Game
 
 	private void KeyToggled_FullScreen(object? sender, EventArgs e)
 	{
-		_graphics.IsFullScreen = !_graphics.IsFullScreen;
-		if (_graphics.IsFullScreen)
+		var enteringFullscreen = !_graphics.IsFullScreen;
+		if (enteringFullscreen)
 		{
+			_windowedClientSize = Window.ClientBounds.Size;
 			_graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
 			_graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
 		}
 		else
 		{
-			_graphics.PreferredBackBufferWidth = 800;
-			_graphics.PreferredBackBufferHeight = 600;
+			_graphics.PreferredBackBufferWidth = _windowedClientSize.X;
+			_graphics.PreferredBackBufferHeight = _windowedClientSize.Y;
 		}
+		_graphics.IsFullScreen = enteringFullscreen;
 		_graphics.ApplyChanges();
+		UpdateScreenBuffer(
+			new Point(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight).DivideBy(
+				_settings.RenderScale
+			)
+		);
 	}
 
 	protected override void Initialize()
@@ -83,17 +105,15 @@ public sealed class GameEngine : Game
 	{
 		_spriteBatch = new SpriteBatch(GraphicsDevice);
 
+		var renderSize = Window.ClientBounds.Size.DivideBy(_settings.RenderScale);
 		_outputTexture = new Texture2D(
 			_graphics.GraphicsDevice,
-			width: CurrentScreenSize.X,
-			height: CurrentScreenSize.Y,
+			width: renderSize.X,
+			height: renderSize.Y,
 			mipmap: false,
 			format: SurfaceFormat.Bgra32
 		);
-		_screenBuffer = new PixelBuffer(
-			width: _graphics.PreferredBackBufferWidth,
-			height: _graphics.PreferredBackBufferHeight
-		);
+		_screenBuffer = new PixelBuffer(renderSize.X, renderSize.Y);
 
 		_messageFont = Content.Load<SpriteFont>("Fonts/ScreenMessage");
 		//var testMapsPath = Path.Combine(AppContext.BaseDirectory, "testmaps.wad");
@@ -118,10 +138,6 @@ public sealed class GameEngine : Game
 
 		if (keyboard.IsKeyDown(Keys.Escape))
 		{
-			// It randomly crashes if exiting in fullscreen for whatever reason
-			_graphics.IsFullScreen = false;
-			_graphics.ApplyChanges();
-
 			Exit();
 		}
 
@@ -191,10 +207,11 @@ public sealed class GameEngine : Game
 
 	protected override void Draw(GameTime gameTime)
 	{
+		var viewport = GraphicsDevice.Viewport;
 		_spriteBatch.Begin(
 			sortMode: SpriteSortMode.Immediate,
 			blendState: BlendState.Opaque,
-			samplerState: SamplerState.PointWrap,
+			samplerState: SamplerState.PointClamp,
 			depthStencilState: DepthStencilState.None,
 			rasterizerState: RasterizerState.CullNone
 		);
@@ -209,10 +226,15 @@ public sealed class GameEngine : Game
 
 		_outputTexture.SetData(_screenBuffer.Pixels);
 
-		_spriteBatch.Draw(
-			texture: _outputTexture,
-			destinationRectangle: new Rectangle(x: 0, y: 0, width: CurrentScreenSize.X, height: CurrentScreenSize.Y),
-			color: Color.White
+		_spriteBatch.Draw(texture: _outputTexture, destinationRectangle: viewport.Bounds, color: Color.White);
+		_spriteBatch.End();
+
+		_spriteBatch.Begin(
+			sortMode: SpriteSortMode.Immediate,
+			blendState: BlendState.AlphaBlend,
+			samplerState: SamplerState.LinearClamp,
+			depthStencilState: DepthStencilState.None,
+			rasterizerState: RasterizerState.CullNone
 		);
 
 		var message = _screenMessage.MaybeGetTextToShow(gameTime);
@@ -225,7 +247,7 @@ public sealed class GameEngine : Game
 		{
 			var text = $"Average render time: {_frameTimeAggregator.GetAverageFrameTimeInMs():#0.00}ms";
 			var size = _messageFont.MeasureString(text);
-			DrawShadowedString(_messageFont, text, new Vector2(0, CurrentScreenSize.Y - size.Y), Color.Red);
+			DrawShadowedString(_messageFont, text, new Vector2(0, viewport.Height - size.Y), Color.Red);
 		}
 
 		_spriteBatch.End();
