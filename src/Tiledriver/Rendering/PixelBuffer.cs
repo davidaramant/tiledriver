@@ -46,6 +46,9 @@ public sealed class PixelBuffer : IPixelBuffer
 	public int Width => Dimensions.Width;
 	public int Height => Dimensions.Height;
 
+	// Not on the interface. This is needed to copy the pixels directly to the output texture.
+	public SKColor[] Pixels => _buffer;
+
 	public SKColor this[SKPointI p] => _buffer[p.Y * Width + p.X];
 	public SKColor this[int x, int y] => _buffer[y * Width + x];
 

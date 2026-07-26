@@ -4,11 +4,14 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<MonoGamePlatform>DesktopVK</MonoGamePlatform>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="MonoGame.Content.Builder.Task" />
-		<PackageReference Include="MonoGame.Framework.DesktopGL" />
+		<PackageReference Include="MonoGame.Framework.Native" />
+		<PackageReference Include="MonoGame.Runtime.Mac.Vulkan" />
+		<PackageReference Include="MonoGame.Runtime.Windows.Vulkan" />
 	</ItemGroup>
 
 	<ItemGroup>

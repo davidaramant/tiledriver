@@ -85,7 +85,9 @@ public sealed class GameEngine : Game
 		_outputTexture = new Texture2D(
 			_graphics.GraphicsDevice,
 			width: CurrentScreenSize.X,
-			height: CurrentScreenSize.Y
+			height: CurrentScreenSize.Y,
+			mipmap: false,
+			format: SurfaceFormat.Bgra32
 		);
 		_screenBuffer = new PixelBuffer(
 			width: _graphics.PreferredBackBufferWidth,
@@ -167,7 +169,13 @@ public sealed class GameEngine : Game
 			_frameTimeAggregator.Reset();
 			_screenMessage.ShowMessage($"Changing screen buffer to {renderSize.X}x{renderSize.Y}");
 			_outputTexture.Dispose();
-			_outputTexture = new Texture2D(_graphics.GraphicsDevice, width: renderSize.X, height: renderSize.Y);
+			_outputTexture = new Texture2D(
+				_graphics.GraphicsDevice,
+				width: renderSize.X,
+				height: renderSize.Y,
+				mipmap: false,
+				format: SurfaceFormat.Bgra32
+			);
 			_screenBuffer = new PixelBuffer(renderSize.X, renderSize.Y);
 		}
 	}
@@ -190,8 +198,7 @@ public sealed class GameEngine : Game
 		if (_settings.ShowRenderTime)
 			_frameTimeAggregator.StopTiming();
 
-		//_screenBuffer.CopyToTexture(_outputTexture);
-		//_outputTexture.SetData();
+		_outputTexture.SetData(_screenBuffer.Pixels);
 
 		_spriteBatch.Draw(
 			texture: _outputTexture,
