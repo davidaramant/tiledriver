@@ -19,6 +19,7 @@ public sealed class GameEngine : Game
 	private Texture2D _outputTexture = null!;
 	private PixelBuffer _screenBuffer = null!;
 	private SpriteFont _messageFont = null!;
+	private PlayerInfo _playerInfo = null!;
 
 	public GameEngine()
 	{
@@ -99,6 +100,8 @@ public sealed class GameEngine : Game
 		//_maps = WadLoader.Load(testMapsPath).Select(pair => pair.Map).ToList();
 
 		//SwitchToMap(0);
+		_renderer = new LineTestRenderer(_settings, _screenMessage);
+		_playerInfo = new PlayerInfo();
 	}
 
 	protected override void UnloadContent()
@@ -152,11 +155,17 @@ public sealed class GameEngine : Game
 		if (keyboard.IsKeyDown(Keys.Z))
 			continuousInputs |= ContinuousInputs.ResetZoom;
 
+		var gameClock = new GameClock(
+			TotalGameTime: gameTime.TotalGameTime,
+			ElapsedGameTime: gameTime.ElapsedGameTime,
+			IsRunningSlowly: gameTime.IsRunningSlowly
+		);
+
 		if (_settings.FollowMode)
 		{
-			//	_playerInfo.Update(_continuousInputs, gameTime);
+			_playerInfo.Update(continuousInputs, gameClock);
 		}
-		//_renderer.Update(_continuousInputs, gameTime);
+		_renderer.Update(continuousInputs, gameClock);
 		_settings.Update(discreteInput);
 
 		base.Update(gameTime);
@@ -193,7 +202,7 @@ public sealed class GameEngine : Game
 		if (_settings.ShowRenderTime)
 			_frameTimeAggregator.StartTiming();
 
-		//_renderer.Render(_screenBuffer, _playerInfo);
+		_renderer.Render(_screenBuffer, _playerInfo);
 
 		if (_settings.ShowRenderTime)
 			_frameTimeAggregator.StopTiming();

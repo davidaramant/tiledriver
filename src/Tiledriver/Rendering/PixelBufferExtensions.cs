@@ -17,6 +17,9 @@ public static class PixelBufferExtensions
 
 	public static void AddColor(this IPixelBuffer buffer, SKPointI p, SKColor c) => buffer.AddColor(p.X, p.Y, c);
 
+	public static void DrawLine(this IPixelBuffer buffer, SKPointI p0, SKPointI p1, SKColor color, LineMode mode) =>
+		DrawLine(buffer, p0.X, p0.Y, p1.X, p1.Y, color, mode);
+
 	public static void DrawLine(this IPixelBuffer buffer, int x0, int y0, int x1, int y1, SKColor color, LineMode mode)
 	{
 		switch (mode)

@@ -1,3 +1,4 @@
+using SectorDirector.Input;
 using Tiledriver.Rendering;
 
 namespace SectorDirector.Renderers;
@@ -19,9 +20,11 @@ public static class RendererTypeExtensions
 		(RendererType)(((int)type + 1) % Enum.GetValues(typeof(RendererType)).Length);
 }
 
+public readonly record struct GameClock(TimeSpan TotalGameTime, TimeSpan ElapsedGameTime, bool IsRunningSlowly);
+
 public interface IRenderer
 {
-	//void Update(ContinuousInputs inputs, GameTime gameTime);
+	void Update(ContinuousInputs inputs, GameClock gameTime);
 
-	//void Render(IPixelBuffer screen, PlayerInfo player);
+	void Render(IPixelBuffer screen, PlayerInfo player);
 }
