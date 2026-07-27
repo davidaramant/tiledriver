@@ -58,29 +58,25 @@ public sealed class LineTestRenderer : IRenderer
 	{
 		screen.Fill(SKColors.Black);
 
-		var center = new SKPointI(screen.Dimensions.Width / 2, screen.Dimensions.Height / 2);
+		var center = new Vector2(screen.Dimensions.Width / 2, screen.Dimensions.Height / 2);
 		var shortestSide = Math.Min(center.X, center.Y);
 
 		var radius = 0.9f * shortestSide;
 
 		const int numSegments = 5;
-		var radianOffset = 2 * Math.PI / numSegments / 2;
+		var radianOffset = MathF.Tau / numSegments / 2;
 
 		// This fixes jittering
 		var pixelOffset = new Vector2(0.5f, 0.5f);
 
 		foreach (var segment in Enumerable.Range(0, numSegments))
 		{
-			// TODO: Figure out the equivalent using System.Numerics
-
-			// var rotation = Matrix.CreateRotationZ(segment * radianOffset + _angle);
-			// var direction = Vector2.Transform(Vector2.UnitX, rotation);
-			//
-			// var start = (center - direction * radius + pixelOffset).ToPoint();
-			// var end = (center + direction * radius + pixelOffset).ToPoint();
-
-			var start = SKPointI.Empty;
-			var end = new SKPointI(screen.Width, screen.Height);
+			var rotation = Matrix3x2.CreateRotation(segment * radianOffset + _angle);
+			var direction = Vector2.Transform(Vector2.UnitX, rotation);
+			var startVector = center - direction * radius + pixelOffset;
+			var endVector = center + direction * radius + pixelOffset;
+			var start = new SKPointI((int)startVector.X, (int)startVector.Y);
+			var end = new SKPointI((int)endVector.X, (int)endVector.Y);
 
 			screen.DrawLine(
 				start,
@@ -89,5 +85,7 @@ public sealed class LineTestRenderer : IRenderer
 				mode: _settings.DrawAntiAliased ? LineMode.Smooth : LineMode.Exact
 			);
 		}
+
+		screen.DrawCircle(screen.Dimensions.Width / 2, screen.Dimensions.Height / 2, (int)radius, SKColors.Red);
 	}
 }
